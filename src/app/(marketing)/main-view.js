@@ -7,7 +7,7 @@ import React from "react";
 export const MainView = () => {
     return (
         <Box>
-            Homepage content will be here soon.
+            Homepage content will be here very soon.
         </Box>
     )
 }
