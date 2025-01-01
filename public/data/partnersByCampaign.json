@@ -1,0 +1,178 @@
+{
+    "data": [
+        {
+            "id": "3f4b7c8e-6e6c-4b6a-b101-65f5f689334f",
+            "name": "REVO Walking Pad",
+            "campaign_status": "active",
+            "stakeholders": [
+                "Tevin",
+                "Combina",
+                "Angelica",
+                "Francis",
+                "Jamica",
+                "Arnie",
+                "Arianne",
+                "Bizzy"
+            ],
+            "start_date": "7/15/2023",
+            "end_date": "",
+            "total_content_engagement": "416616",
+            "total_expense": "0",
+            "image_guidelines": [],
+            "video_guidelines": [],
+            "guidelines": "",
+            "budget": "",
+            "full_description": "",
+            "contributing_partners": [
+                {
+                    "id": "3f4b7c8e-6e6c-4b6a-b101-65f5f689334f",
+                    "name": "Onleilove Chika Alston 2",
+                    "avatar": "https://avatar.iran.liara.run/public/1",
+                    "instagram": "https://www.instagram.com/chika_alston",
+                    "instagram_following": "150",
+                    "stackholders": [
+                        "Angelica",
+                        "Francis"
+                    ],
+                    "affiliate_platforms": [
+                        "vento"
+                    ],
+                    "profile_image": "https://avatar.iran.liara.run/public/1",
+                    "notes": "Notes go here",
+                    "journey_step": "awating_amazon_review",
+                    "revo_status": "content_review",
+                    "campaign": [
+                        {
+                            "name": "REVO Cupper (Cellulite)",
+                            "guidelines": "required fields are empty",
+                            "total_content_engagement": "416616"
+                        }
+                    ],
+                    "products": [
+                        {
+                            "name": "REVO Cupper (Cellulite)",
+                            "guidelines": "required fields are empty",
+                            "total_content_engagement": "416616"
+                        }
+                    ],
+                    "contracts": [
+                        "https://streaklinks.com/BpweGaqVVbjKidWmgwozeBXv/https%3A%2F%2Fwww.revoma"
+                    ],
+                    "revo_content_performance": [
+                        {
+                            "name": "REVO Cupper (Cellulite)",
+                            "revo_pinteres": "https://www.pinterest.com/pin/927530485746584292/",
+                            "pin_accounts_used": "@revomadic"
+                        }
+                    ],
+                    "linkedin_connection": "",
+                    "youtube_following": "12",
+                    "snapchat_follwing": "0",
+                    "x_follwing": "132",
+                    "pinterest_following": "0"
+                },
+                {
+                    "id": "3f4b7c8e-6e6c-4b6a-b101-8455f689334f",
+                    "name": "Olive Hamster",
+                    "avatar": "https://avatar.iran.liara.run/public/2",
+                    "instagram": "https://www.instagram.com/chika_alston",
+                    "instagram_following": "150"
+                }
+            ],
+            "content_hq": [
+                {
+                    "id": "3f4b7c8e-6e6c-4b6a-b101-65f5f689334f",
+                    "name": "Janette The Pill Pad ",
+                    "avatar": "https://avatar.iran.liara.run/public/1",
+                    "revo_pinterest": "https://www.pinterest.com/p/3f4b7c8e-6e6c",
+                    "pin_account": "@revomadic"
+                },
+                {
+                    "id": "3f4b7c8e-6e6c-4b6a-b101-65f5f686534f",
+                    "name": "Janette The Got dum",
+                    "avatar": "https://avatar.iran.liara.run/public/1",
+                    "revo_pinterest": "https://www.pinterest.com/p/3f4b7c8e-346c",
+                    "pin_account": "@revomadic"
+                }
+            ],
+            "retail_partners": []
+        },
+        {
+            "id": "3f4b7c8e-6e6c-4b6a-b101-65f5f689334f",
+            "name": "REVO Cupper (Cellulite)",
+            "campaign_status": "inactive",
+            "stakeholders": [
+                "Tevin",
+                "Combina",
+                "Angelica",
+                "Francis",
+                "Jamica",
+                "Arnie",
+                "Arianne",
+                "Bizzy"
+            ],
+            "start_date": "7/15/2023",
+            "end_date": "",
+            "total_content_engagement": "416616",
+            "total_expense": "0",
+            "image_guidelines": [],
+            "video_guidelines": [],
+            "guidelines": "",
+            "budget": "",
+            "full_description": "",
+            "contributing_partners": [
+                {
+                    "id": "3f4b7c8e-6e6c-4b6a-b101-65f5f689334f",
+                    "name": "Onleilove Chika Alston",
+                    "avatar": "https://avatar.iran.liara.run/public/1",
+                    "instagram": "https://www.instagram.com/chika_alston/",
+                    "instagram_following": "150",
+                    "stackholder": [
+                        "Angelica",
+                        "Francis"
+                    ],
+                    "affiliate_platform": "",
+                    "profile_image": "https://avatar.iran.liara.run/public/1",
+                    "journey_step": "awating_amazon_review",
+                    "revo_status": "content_review",
+                    "campaign": [
+                        {
+                            "name": "REVO Cupper (Cellulite)",
+                            "guidelines": "required fields are empty",
+                            "total_content_engagement": "416616"
+                        }
+                    ],
+                    "products": [
+                        "The pill",
+                        "Smart Cupper"
+                    ],
+                    "contracts": [
+                        "https://streaklinks.com/BpweGaqVVbjKidWmgwozeBXv/https%3A%2F%2Fwww.revoma"
+                    ],
+                    "revo_content_performance": [
+                        {
+                            "title": "REVO Cupper (Cellulite)",
+                            "revo_pinteres": "https://www.pinterest.com/pin/927530485746584292/",
+                            "pin_accounts_used": "@revomadic"
+                        }
+                    ],
+                    "linkedin_connection": "",
+                    "youtube_following": "12",
+                    "snapchat_follwing": "12",
+                    "x_follwing": "12",
+                    "pinterest_following": "12"
+                }
+            ],
+            "content_hq": [
+                {
+                    "id": "3f4b7c8e-6e6c-4b6a-b101-65f5f689334f",
+                    "name": "Janette The Pill Pad Ad (Pro) Photo 2",
+                    "avatar": "https://avatar.iran.liara.run/public/1",
+                    "revo_pinterest": "https://www.pinterest.com/p/3f4b7c8e",
+                    "pin_account": "@revomadic"
+                }
+            ],
+            "retail_partners": []
+        }
+    ]
+}
