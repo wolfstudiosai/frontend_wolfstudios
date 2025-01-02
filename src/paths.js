@@ -17,10 +17,8 @@ export const paths = {
     // admin
     users: '/dashboard/users',
 
-
     // can be removed later on
     settings: {
-
       account: '/dashboard/settings/account',
       billing: '/dashboard/settings/billing',
       integrations: '/dashboard/settings/integrations',
@@ -91,10 +89,10 @@ export const paths = {
   },
 
   public: {
-    portfolio: "/portfolio",
-    campaign: "/campaign",
+    portfolio: '/portfolio',
+    campaign: '/campaign',
+    profile: '/profile',
   },
-
 
   // will be removed
   auth: {
