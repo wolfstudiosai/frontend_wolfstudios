@@ -23,4 +23,9 @@ export const typography = {
   h4: { fontSize: '2rem', fontWeight: 500, lineHeight: 1.2 },
   h5: { fontSize: '1.5rem', fontWeight: 500, lineHeight: 1.2 },
   h6: { fontSize: '1.125rem', fontWeight: 500, lineHeight: 1.2 },
+
+  // PortFolio typography
+  portfolioTitle: {fontFamily:'Montserrat, sans-serif',fontSize: '38px', lineHeight:'44px', fontWeight: 300},
+  portfolioCardTitle: {fontFamily:'Montserrat, sans-serif',fontSize: '1.125rem', fontWeight: 300},
+  portfolioCardSubTitle: {fontFamily:'Montserrat, sans-serif',fontSize: '.875rem', fontWeight: 300},
 };

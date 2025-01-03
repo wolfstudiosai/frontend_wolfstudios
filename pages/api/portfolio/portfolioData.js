@@ -1,14 +1,4 @@
-'use client';
-import { textShortner } from '@/utils/utils';
-import { Box, Button, Paper, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
-
-import { PortfolioFilter } from './components/portfolio-filter';
-import PortfolioSlider from './components/portfolio-slider';
-import Link from 'next/link';
-
-export const PortfolioView = () => {
-  const portfolioData = [
+export const portfolios = [
     {
       title: 'Mary Ann',
       slug: 'mary-ann',
@@ -119,57 +109,3 @@ export const PortfolioView = () => {
       image: 'https://picsum.photos/300/200?random=12', // Placeholder image
     },
   ];
-
-  return (
-    <Box sx={{ py: 4 }}>
-      <PortfolioSlider />
-      <Typography variant='portfolioTitle'
-        gutterBottom
-      >
-        PORTFOLIOS
-      </Typography>
-      <PortfolioFilter />
-      <Grid container spacing={2}>
-        {portfolioData.map((portfolio, index) => (
-          <Grid item size={{ xs: 12, md: 3 }} key={index}>
-            <PortfolioCard portfolio={portfolio} />
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
-  );
-};
-
-const PortfolioCard = ({ portfolio }) => {
-  return (
-    <Box>
-      <Paper elevation={3} sx={{ backgroundColor: '#ebebeb',boxShadow:'none' }}>
-        <Box
-          component="img"
-          src={portfolio.image}
-          sx={{ height: 200, width: '100%', objectFit: 'cover', border: 0, borderRadius: '20px',boxShadow: '0 2px 5px #0003' }}
-        />
-        <Box py={2}>
-          <Typography variant='portfolioCardTitle' sx={{ display: 'block', width: '100%' }}>
-            {portfolio.title}
-          </Typography>
-          <Typography variant="portfolioCardSubTitle" color="text.secondary" sx={{ display: 'block', width: '100%' }}>
-            {textShortner(portfolio.description, 80)}
-          </Typography>
-          <Typography variant="portfolioCardSubTitle" color="text.secondary" sx={{ display: 'block', width: '100%' }}>
-            Model: {portfolio.model || '-'}
-          </Typography>
-          <Link
-            href={`portfolio/${portfolio.slug}`}
-            style={{
-              fontSize: '0.9rem',
-              color: "var(--mui-palette-text-secondary)",
-            }}
-          >
-            View Project
-          </Link>
-        </Box>
-      </Paper>
-    </Box>
-  );
-};
