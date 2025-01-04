@@ -29,15 +29,15 @@ export const ConversionRate = () => {
   ];
 
   return (
-    <Card sx={{ padding: { xs: 3, md: 4 } }}>
+    <Card sx={{ padding: { xs: 1, md: 2 } }}>
       <Grid container>
         <Grid item size={{ xs: 12, md: 8 }}>
-          <Stack direction="row" spacing={3} justifyContent={'center'} alignItems={'center'}>
+          <Stack direction="row" spacing={2} justifyContent={'space-between'} alignItems={'end'} pr={4}>
             <Box>
-              <Typography color="primary" sx={{ fontWeight: 500, fontSize: pxToRem(24) }}>
+              <Typography color="primary" sx={{ fontWeight: 500, fontSize: pxToRem(24), mb: 1 }}>
                 Conversion Rate
               </Typography>
-              <TableContainer component={Paper}>
+              <TableContainer component={Paper} >
                 <Table size="small" aria-label="a dense table">
                   <TableHead>
                     <TableRow>
