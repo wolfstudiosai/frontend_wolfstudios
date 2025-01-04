@@ -14,7 +14,7 @@ export function DemographicOverview() {
     <Card sx={{ padding: { xs: 1, md: 2 }, mt: 2 }}>
       <Grid container spacing={2}>
         <Grid item size={{ xs: 12, md: 6 }}>
-          <Typography color="primary" sx={{ fontWeight: 500, fontSize: pxToRem(24) }}>
+          <Typography color="text.primary" sx={{ fontWeight: 500, fontSize: pxToRem(20), mb: 1 }}>
             Demographic
           </Typography>
           <CustomPieGraph
@@ -31,7 +31,7 @@ export function DemographicOverview() {
           />
         </Grid>
         <Grid item size={{ xs: 12, md: 6 }}>
-          <Typography color="primary" sx={{ fontWeight: 500, fontSize: pxToRem(24) }}>
+          <Typography color="text.primary" sx={{ fontWeight: 500, fontSize: pxToRem(20), mb: 1, textAlign: 'center' }}>
             Demographic segmentation by campaign
           </Typography>
           <CustomBarGraph

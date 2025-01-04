@@ -34,7 +34,7 @@ export const ConversionRate = () => {
         <Grid item size={{ xs: 12, md: 8 }}>
           <Stack direction="row" spacing={2} justifyContent={'space-between'} alignItems={'end'} pr={4}>
             <Box>
-              <Typography color="primary" sx={{ fontWeight: 500, fontSize: pxToRem(24), mb: 1 }}>
+              <Typography color="text.primary" sx={{ fontWeight: 500, fontSize: pxToRem(20), mb: 1 }}>
                 Conversion Rate
               </Typography>
               <TableContainer component={Paper} >
