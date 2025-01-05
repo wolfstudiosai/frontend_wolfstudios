@@ -29,15 +29,22 @@ export const ConversionRate = () => {
   ];
 
   return (
-    <Card sx={{ padding: { xs: 1, md: 2 } }}>
+    <Card sx={{ padding: { xs: 1, md: 2 }, mt: 2 }}>
       <Grid container>
         <Grid item size={{ xs: 12, md: 8 }}>
-          <Stack direction="row" spacing={2} justifyContent={'space-between'} alignItems={'end'} pr={4}>
-            <Box>
+          <Stack
+            direction={{ md: 'row', sm: 'column' }}
+            spacing={2}
+            justifyContent={'space-between'}
+            alignItems={'end'}
+            pr={{ xs: 2, md: 4 }}
+            pl={{ xs: 1}}
+          >
+            <Box sx={{ width: '100%' }}>
               <Typography color="text.primary" sx={{ fontWeight: 500, fontSize: pxToRem(20), mb: 1 }}>
                 Conversion Rate
               </Typography>
-              <TableContainer component={Paper} >
+              <TableContainer component={Paper}>
                 <Table size="small" aria-label="a dense table">
                   <TableHead>
                     <TableRow>
@@ -63,24 +70,32 @@ export const ConversionRate = () => {
               </TableContainer>
             </Box>
 
-            <Box>
-              <Typography color="primary" sx={{ fontWeight: 500, fontSize: pxToRem(24) }}>
-                32,456
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Regular Customers
-              </Typography>
-              <IconText icon="mdi:arrow-drop-up" text="32,456" />
-            </Box>
-            <Box>
-              <Typography color="primary" sx={{ fontWeight: 500, fontSize: pxToRem(24) }}>
-                32,456
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Regular Customers
-              </Typography>
-              <IconText icon="mdi:arrow-drop-up" text="32,456" />
-            </Box>
+            <Stack
+              direction="row"
+              spacing={2}
+              justifyContent={'space-between'}
+              alignItems={'space-between'}
+              sx={{ width: '100%', py: 2 }}
+            >
+              <Box>
+                <Typography color="primary" sx={{ fontWeight: 500, fontSize: pxToRem(24) }}>
+                  32,456
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Regular Customers
+                </Typography>
+                <IconText icon="mdi:arrow-drop-up" text="32,456" />
+              </Box>
+              <Box>
+                <Typography color="primary" sx={{ fontWeight: 500, fontSize: pxToRem(24) }}>
+                  32,456
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Regular Customers
+                </Typography>
+                <IconText icon="mdi:arrow-drop-up" text="32,456" />
+              </Box>
+            </Stack>
           </Stack>
         </Grid>
         <Grid item size={{ xs: 12, md: 4 }}>
