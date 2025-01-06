@@ -2,7 +2,7 @@ export const defaultCampaign = {
   name: '',
   thumbnail: '',
   stackholder: '',
-  status: 'PENDING', //todo
+  status: 'PENDING', 
   start_date: '', 
   end_date: '', 
   description: '',

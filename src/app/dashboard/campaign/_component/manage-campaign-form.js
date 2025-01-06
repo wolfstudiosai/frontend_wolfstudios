@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, Button, CircularProgress, FormControl } from '@mui/material';
+import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -200,6 +200,23 @@ export const ManageCampaignForm = ({ data }) => {
             </FormControl>
           </Grid>
           <Grid size={{ md: 3, xs: 12 }}>
+            <FormControl fullWidth error={Boolean(errors.role)}>
+              <InputLabel>Status</InputLabel>
+              <Select
+                labelId="role"
+                label="Status"
+                id="role"
+                value={values.role}
+                onChange={(event) => setFieldValue('role', event.target.value)}
+              >
+                <MenuItem value={'PENDING'}>Pending</MenuItem>
+                <MenuItem value={'DECLINED'}>Declined</MenuItem>
+                <MenuItem value={'ACTIVE'}>Active</MenuItem>
+                <MenuItem value={'COMPLETED'}>Completed</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="partner_expense"
@@ -222,13 +239,16 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          <Button
-            variant="contained"
-            type={loading ? 'button' : 'submit'}
-            startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
-          >
-            Create
-          </Button>
+
+          <Grid item size={12}>
+            <Button
+              variant="contained"
+              type={loading ? 'button' : 'submit'}
+              startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
+            >
+              Create
+            </Button>
+          </Grid>
         </Grid>
       </form>
     </Box>
