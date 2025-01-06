@@ -4,6 +4,7 @@ import * as React from 'react';
 import { dashboardItems } from '@/router';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { config } from '@/config';
 import { useSettings } from '@/hooks/use-settings';
@@ -11,6 +12,7 @@ import { useSettings } from '@/hooks/use-settings';
 import { layoutConfig } from '../config';
 import { MainNav } from './main-nav';
 import { SideNav } from './side-nav';
+import { LocalizationProvider } from '@/components/core/localization-provider';
 
 export function VerticalLayout({ children }) {
   const { settings } = useSettings();
@@ -38,26 +40,28 @@ export function VerticalLayout({ children }) {
           minHeight: '100%',
         }}
       >
-        <SideNav color={settings.navColor} items={dashboardItems} />
-        <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: 'var(--SideNav-width)' } }}>
-          <MainNav items={dashboardItems} />
-          <Box
-            component="main"
-            sx={{
-              '--Content-margin': '0 auto',
-              '--Content-maxWidth': 'var(--maxWidth-xl)',
-              '--Content-paddingX': '24px',
-              '--Content-paddingY': { xs: '24px', lg: '24px' },
-              '--Content-padding': 'var(--Content-paddingY) var(--Content-paddingX)',
-              '--Content-width': '100%',
-              display: 'flex',
-              flex: '1 1 auto',
-              flexDirection: 'column',
-            }}
-          >
-            {children}
+        <LocalizationProvider>
+          <SideNav color={settings.navColor} items={dashboardItems} />
+          <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: 'var(--SideNav-width)' } }}>
+            <MainNav items={dashboardItems} />
+            <Box
+              component="main"
+              sx={{
+                '--Content-margin': '0 auto',
+                '--Content-maxWidth': 'var(--maxWidth-xl)',
+                '--Content-paddingX': '24px',
+                '--Content-paddingY': { xs: '24px', lg: '24px' },
+                '--Content-padding': 'var(--Content-paddingY) var(--Content-paddingX)',
+                '--Content-width': '100%',
+                display: 'flex',
+                flex: '1 1 auto',
+                flexDirection: 'column',
+              }}
+            >
+              {children}
+            </Box>
           </Box>
-        </Box>
+        </LocalizationProvider>
       </Box>
     </React.Fragment>
   );

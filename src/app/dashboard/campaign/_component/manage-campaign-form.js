@@ -1,16 +1,12 @@
 'use client';
 
-import {
-  Box,
-  Button,
-  CircularProgress,
-  FormControl
-} from '@mui/material';
+import React from 'react';
+import { Box, Button, CircularProgress, FormControl } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 import { useFormik } from 'formik';
-import React from 'react';
-
 
 import { defaultCampaign } from '../_lib/types';
 
@@ -46,12 +42,12 @@ export const ManageCampaignForm = ({ data }) => {
     <Box>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
-          <Grid size={{ md: 4, xs: 12 }}>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField name="name" label="Campaign Name" value={values.name} onChange={handleChange} />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="stackholder"
@@ -61,13 +57,37 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          
-          <Grid size={{ md: 4, xs: 12 }}>
+
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField name="goal" label="Goal" value={values.goal} onChange={handleChange} />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
+          <Grid size={{ md: 3, xs: 12 }}>
+            <FormControl fullWidth error={Boolean(errors.from_date)}>
+              <DatePicker
+                format="DD-MM-YYYY"
+                label="From Date"
+                onChange={() => {
+                  // noop
+                }}
+                value={dayjs(values.start_date)}
+              />
+            </FormControl>
+          </Grid>
+          <Grid size={{ md: 3, xs: 12 }}>
+            <FormControl fullWidth error={Boolean(errors.end_date)}>
+              <DatePicker
+                format="DD-MM-YYYY"
+                label="End Date"
+                onChange={() => {
+                  // noop
+                }}
+                value={dayjs(values.end_date)}
+              />
+            </FormControl>
+          </Grid>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="partner_compensation"
@@ -77,7 +97,7 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="partner_deliverables"
@@ -87,7 +107,7 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="contributed_partners"
@@ -97,7 +117,7 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="prospected_partners"
@@ -107,7 +127,7 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="content_guidelines"
@@ -117,7 +137,7 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="content_guidelines"
@@ -127,7 +147,7 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="image_inspiration"
@@ -137,7 +157,7 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="video_inspiration"
@@ -147,7 +167,7 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="video_inspiration"
@@ -157,7 +177,7 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="content_engagement"
@@ -168,7 +188,7 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="product_expense"
@@ -179,7 +199,7 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
+          <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="partner_expense"
