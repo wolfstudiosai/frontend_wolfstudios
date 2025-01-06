@@ -1,10 +1,10 @@
-export const defaultUser = {
+export const defaultCampaign = {
   name: '',
   thumbnail: '',
   stackholder: '',
-  status: 'PENDING',
-  start_date: '',
-  end_date: '',
+  status: 'PENDING',//todo
+  start_date: '', //todo
+  end_date: '', //todo
   description: '',
   goal: '',
   partner_compensation: 0,

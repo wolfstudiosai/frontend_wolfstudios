@@ -1,8 +1,5 @@
 'use client';
 
-import * as React from 'react';
-import RouterLink from 'next/link';
-import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -13,14 +10,18 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
+import RouterLink from 'next/link';
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
 
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
+import { PageContainer } from '@/components/container/PageContainer';
 import { FilterButton } from '@/components/core/filter-button';
 import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopover';
 import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
 import { DataTable } from '@/components/data-table/data-table';
 import PageLoader from '@/components/PageLoader/PageLoader';
+import { dayjs } from '@/lib/dayjs';
+import { paths } from '@/paths';
 
 import { getUsers } from './_lib/actions';
 
@@ -125,14 +126,7 @@ export default function Page() {
   ];
 
   return (
-    <Box
-      sx={{
-        maxWidth: 'var(--Content-maxWidth)',
-        m: 'var(--Content-margin)',
-        p: 'var(--Content-padding)',
-        width: 'var(--Content-width)',
-      }}
-    >
+    <PageContainer>
       <Stack spacing={4}>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} sx={{ alignItems: 'flex-start' }}>
           <Box sx={{ flex: '1 1 auto' }}>
@@ -197,6 +191,6 @@ export default function Page() {
           </Card>
         </PageLoader>
       </Stack>
-    </Box>
+    </PageContainer>
   );
 }

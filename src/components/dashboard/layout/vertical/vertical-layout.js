@@ -47,7 +47,7 @@ export function VerticalLayout({ children }) {
               '--Content-margin': '0 auto',
               '--Content-maxWidth': 'var(--maxWidth-xl)',
               '--Content-paddingX': '24px',
-              '--Content-paddingY': { xs: '24px', lg: '64px' },
+              '--Content-paddingY': { xs: '24px', lg: '24px' },
               '--Content-padding': 'var(--Content-paddingY) var(--Content-paddingX)',
               '--Content-width': '100%',
               display: 'flex',
