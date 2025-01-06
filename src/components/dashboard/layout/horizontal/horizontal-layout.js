@@ -9,6 +9,7 @@ import { useSettings } from '@/hooks/use-settings';
 import { layoutConfig } from '../config';
 import { MainNav } from './main-nav';
 import { config } from '@/config';
+import { dashboardItems } from '@/router';
 
 export function HorizontalLayout({ children }) {
   const { settings } = useSettings();
@@ -27,7 +28,7 @@ export function HorizontalLayout({ children }) {
           minHeight: '100%',
         }}
       >
-        <MainNav color={settings.navColor} items={config.menuItems} />
+        <MainNav color={settings.navColor} items={dashboardItems} />
         <Box
           component="main"
           sx={{

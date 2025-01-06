@@ -1,15 +1,16 @@
 'use client';
 
 import * as React from 'react';
+import { dashboardItems } from '@/router';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
 
+import { config } from '@/config';
 import { useSettings } from '@/hooks/use-settings';
 
 import { layoutConfig } from '../config';
 import { MainNav } from './main-nav';
 import { SideNav } from './side-nav';
-import { config } from '@/config';
 
 export function VerticalLayout({ children }) {
   const { settings } = useSettings();
@@ -37,9 +38,9 @@ export function VerticalLayout({ children }) {
           minHeight: '100%',
         }}
       >
-        <SideNav color={settings.navColor} items={config.menuItems} />
+        <SideNav color={settings.navColor} items={dashboardItems} />
         <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: 'var(--SideNav-width)' } }}>
-          <MainNav items={config.menuItems} />
+          <MainNav items={dashboardItems} />
           <Box
             component="main"
             sx={{

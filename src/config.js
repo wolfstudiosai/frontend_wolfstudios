@@ -28,6 +28,7 @@ export const config = {
       title: 'Admin',
       items: [
         { key: 'usrs', title: 'Users', href: paths.dashboard.users, icon: 'users' },
+        { key: 'campaigns', title: 'Campaigns', href: paths.dashboard.users, icon: 'users' },
 
         { key: 'partners_by_campaign', title: 'Partners by campaign', href: paths.dashboard.partners_by_campaign, icon: 'users' },
 
