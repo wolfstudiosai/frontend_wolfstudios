@@ -15,7 +15,7 @@ import { paths } from '@/paths';
 import { SplitLayout } from '@/components/auth/split-layout';
 import { DynamicLogo } from '@/components/core/logo';
 
-export const metadata = { title: `Sign in | Samples | Auth | ${config.site.name}` };
+export const metadata = { title: `Sign in | Samples | ${config.site.name}` };
 
 export default function Page() {
   return (
