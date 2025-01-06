@@ -26,19 +26,53 @@ export const CampaignDetailsSidebar = ({ description, details, author, campaign_
                 <TypographyWithBg title="Compensation" value={details.compensation} />
                 <TypographyWithBg title="Deliverables" value={details.deliverables} />
             </Box>
-            <Divider sx={{ my: 2 }} />
+
             <Typography
                 variant="subtitle2"
                 color="text.secondary"
                 gutterBottom
+                sx={{ mt: 3, mb: 1 }}
+            >
+                SHARE
+            </Typography>
+
+            <Grid container spacing={2}>
+                <Grid item size={{ xs: 12, md: 4 }}>
+                    <IconButton
+                        sx={{ bgcolor: 'var(--mui-palette-background-level2)', width: '100%', borderRadius: '4px' }}
+                    >
+                        <Iconify icon="tabler:message" width={28} height={28} />
+                    </IconButton>
+                </Grid>
+                <Grid item size={{ xs: 12, md: 4 }}>
+                    <IconButton
+                        sx={{ bgcolor: 'var(--mui-palette-background-level2)', width: '100%', borderRadius: '4px' }}
+                    >
+                        <Iconify icon="material-symbols:share" width={28} height={28} />
+                    </IconButton>
+                </Grid>
+                <Grid item size={{ xs: 12, md: 4 }}>
+                    <IconButton
+                        sx={{ bgcolor: 'var(--mui-palette-background-level2)', width: '100%', borderRadius: '4px' }}
+                    >
+                        <Iconify icon="ic:baseline-facebook" width={28} height={28} />
+                    </IconButton>
+                </Grid>
+            </Grid>
+            <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                gutterBottom
+                sx={{ mt: 3, mb: 1 }}
             >
                 AUTHOR
             </Typography>
-            <Box display="flex" alignItems="center" mt={1}>
+            <Box display="flex" alignItems="center" sx={{ bgcolor: 'var(--mui-palette-background-level2)', p: 1.5, borderRadius: '4px' }}>
                 <Avatar
+                variant="square"
                     src={author.profile_image}
                     alt={author.name}
-                    sx={{ width: 56, height: 56, mr: 2 }}
+                    sx={{ width: 56, height: 56, mr: 2, borderRadius: '4px' }}
                 />
                 <Box>
                     <Typography
@@ -53,38 +87,6 @@ export const CampaignDetailsSidebar = ({ description, details, author, campaign_
                     </Typography>
                 </Box>
             </Box>
-            <Divider sx={{ my: 2 }} />
-            <Typography
-                variant="subtitle2"
-                color="text.secondary"
-                gutterBottom
-            >
-                SHARE
-            </Typography>
-
-            <Grid container spacing={2}>
-                <Grid item size={{ xs: 12, md: 4 }}>
-                    <IconButton
-                        sx={{ bgcolor: 'var(--mui-palette-background-level2)', width: '100%' }}
-                    >
-                        <Iconify icon="tabler:message" width={28} height={28} />
-                    </IconButton>
-                </Grid>
-                <Grid item size={{ xs: 12, md: 4 }}>
-                    <IconButton
-                        sx={{ bgcolor: 'var(--mui-palette-background-level2)', width: '100%' }}
-                    >
-                        <Iconify icon="material-symbols:share" width={28} height={28} />
-                    </IconButton>
-                </Grid>
-                <Grid item size={{ xs: 12, md: 4 }}>
-                    <IconButton
-                        sx={{ bgcolor: 'var(--mui-palette-background-level2)', width: '100%' }}
-                    >
-                        <Iconify icon="ic:baseline-facebook" width={28} height={28} />
-                    </IconButton>
-                </Grid>
-            </Grid>
         </Paper>
     )
 };
@@ -97,8 +99,8 @@ const TypographyWithBg = ({ title, value }) => {
             spacing={2}
             justifyContent={"space-between"}
             sx={{
-                bgcolor: 'var(--mui-palette-background-level1)',
-                borderRadius: 1,
+                bgcolor: 'var(--mui-palette-background-level2)',
+                borderRadius: '4px',
                 px: 2,
                 py: 1,
                 mt: 1
