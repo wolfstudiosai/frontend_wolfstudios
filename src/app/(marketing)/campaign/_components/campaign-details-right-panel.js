@@ -1,4 +1,4 @@
-import { Box, Button, Card, Paper, Typography } from "@mui/material";
+import { Avatar, AvatarGroup, Box, Button, Card, Paper, Stack, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 
 const imgUrl = "https://fastly.picsum.photos/id/534/500/300.jpg?hmac=7_nLmR2xnpUlZjy_xfL0rGWO2wDs2eIhXGjBXtpKt18"
@@ -25,20 +25,35 @@ export const CampaignDetailsRightPanel = ({ article, images, videos, social_shar
                         }}>
                             {article.title}
                         </Typography>
+                        <Stack direction='row' gap={2} alignItems='center' sx={{mt: 3, mb: 5}}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                sx={{ borderRadius: 2, px: 6, fontWeight: 'medium', color: 'white' }}
+                            >
+                                {article.button_text}
+                            </Button>
+                            <AvatarGroup max={4} sx={{
+                                '& .MuiAvatar-root': {
+                                    width: 30, // Set the size for all avatars
+                                    height: 30,
+                                    fontSize: '1rem', // Adjust the font size for the surplus avatar
+                                },
+                            }}>
+                                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+                                <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
+                                <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
+                                <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
+                            </AvatarGroup>
+                        </Stack>
                         <Typography
                             variant="body1"
                             color="text.secondary"
                         >
                             {article.content}
                         </Typography>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="small"
-                            sx={{ mt: 2, borderRadius: 2, px: 2, fontWeight: 300 }}
-                        >
-                            {article.button_text}
-                        </Button>
                     </Box>
                 </Grid>
             </Grid>
@@ -79,7 +94,7 @@ export const CampaignDetailsRightPanel = ({ article, images, videos, social_shar
                             <Box
                                 component="iframe"
                                 src={video.url}
-                                sx={{ height: 200, width: '100%', objectFit: 'cover', border: 0, borderRadius: "5px 5px 0 0" }}
+                                sx={{ height: 200, width: '100%', objectFit: 'cover', border: 0, borderRadius: "8px 8px 0 0" }}
                             />
                             <Box p={2}>
                                 <Typography

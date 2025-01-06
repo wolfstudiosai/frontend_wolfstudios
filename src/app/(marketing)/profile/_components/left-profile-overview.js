@@ -5,8 +5,8 @@ import { Iconify } from '@/components/iconify/iconify';
 
 export const LeftProfileOverview = () => {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, p: { xs: 3, md: 2 } }}>
-      <Box component={'img'} src="/assets/avatar-1.png" />
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: { xs: 3, md: 2 } }}>
+      <Box component={'img'} src="/assets/avatar-1.png" sx={{ borderRadius: 0.5, width: "100%" }} />
       <Typography sx={{ fontSize: '2.5rem', fontWeight: 300 }}>Sofia Rivers</Typography>
       <SocialIcons
         iconsArr={[
@@ -16,9 +16,9 @@ export const LeftProfileOverview = () => {
         ]}
       />
       <Stack direction="row" spacing={1}>
-        <Chip color="success" label="Approved" variant="soft" size="small" />
-        <Chip color="success" label="Approved" variant="soft" size="small" />
-        <Chip color="success" label="Approved" variant="soft" size="small" />
+        <Chip color="primary" label="Approved" variant="soft" size="small" />
+        <Chip color="primary" label="Approved" variant="soft" size="small" />
+        <Chip color="primary" label="Approved" variant="soft" size="small" />
       </Stack>
 
       <ImageTextIconButton
@@ -29,7 +29,6 @@ export const LeftProfileOverview = () => {
           { id: 4, img: '/assets/avatar-4.png', title: 'Sofia Rivers' },
         ]}
       />
-
       <BasicPlanCard />
     </Box>
   );
@@ -47,10 +46,10 @@ const SocialIcons = ({ iconsArr }) => {
             height={32}
             style={{
               cursor: 'pointer',
-              color: '#f6f6f6',
-              background: 'rgba(51, 51, 51, 0.7)',
+              color: 'var(--mui-palette-text-secondary)',
+              backgroundColor: 'var(--mui-palette-background-level2)',
               borderRadius: '50%',
-              padding: '4px',
+              padding: 4,
             }}
           />
         );
@@ -61,7 +60,7 @@ const SocialIcons = ({ iconsArr }) => {
 
 const ImageTextIconButton = ({ dataArr }) => {
   return (
-    <Stack direction="column" spacing={2} sx={{ width: '100%' }}>
+    <Stack direction="column" spacing={1} sx={{ width: '100%' }}>
       {dataArr.map((item) => {
         return (
           <Stack
@@ -69,7 +68,7 @@ const ImageTextIconButton = ({ dataArr }) => {
             direction="row"
             justifyContent={'space-between'}
             spacing={1}
-            sx={{ backgroundColor: 'rgba(51, 51, 51, 0.7)', borderRadius: 0.5, p: 1 }}
+            sx={{ bgcolor: 'var(--mui-palette-background-level2)', borderRadius: 0.5, p: 1 }}
           >
             <Box
               component={'img'}
@@ -83,8 +82,7 @@ const ImageTextIconButton = ({ dataArr }) => {
               height={32}
               style={{
                 cursor: 'pointer',
-                color: '#f6f6f6',
-                background: 'rgba(51, 51, 51, 0.7)',
+                color: 'var(--mui-palette-text-secondary)',
                 borderRadius: '50%',
                 padding: '4px',
               }}
@@ -102,15 +100,15 @@ export const BasicPlanCard = () => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        gap: 2,
+        // alignItems: 'center',
+        gap: 1,
         p: { xs: 3, md: 2 },
-        background: 'rgba(51, 51, 51, 0.7)',
+        bgcolor: 'var(--mui-palette-background-level2)',
         width: '100%',
         borderRadius: 0.5,
       }}
     >
-      <Typography sx={{ fontSize: '2.5rem', fontWeight: 300 }}>Basic Plan</Typography>
+      <Typography sx={{ fontSize: pxToRem(28), fontWeight: 300 }}>Basic Plan</Typography>
       <Stack direction="row" spacing={1} sx={{ justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
         <Typography sx={{ fontSize: '1.8rem', fontWeight: 500 }}>$ 9.99/mo</Typography>
         <Button variant="outlined">Get Started</Button>
