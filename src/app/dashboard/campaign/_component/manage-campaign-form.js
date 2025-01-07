@@ -6,6 +6,7 @@ import {
   Button,
   CircularProgress,
   FormControl,
+  FormLabel,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -22,6 +23,7 @@ import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe
 import { QuillEditor } from '@/components/quill-editor/quill-editor';
 
 import { defaultCampaign } from '../_lib/campaign.types';
+import { ContentGuideline } from './content-guideline';
 
 export const ManageCampaignForm = ({ data }) => {
   const isUpdated = data?.id ? true : false;
@@ -144,7 +146,7 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-        
+
           <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField name="content_HQ" label="Content HQ" value={values.content_HQ} onChange={handleChange} />
@@ -246,9 +248,21 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
+          <Grid size={{ md: 6, xs: 12 }}>
+            <FormControl fullWidth error={Boolean(errors.first_name)}>
+              File Upload
+            </FormControl>
+          </Grid>
+          <Grid size={{ md: 6, xs: 12 }}>
+            <FormLabel>Social Platforms</FormLabel>
+            <ContentGuideline
+              data={values.social_platforms}
+              onChange={(value) => setFieldValue('social_platforms', value)}
+            />
+          </Grid>
           <Grid size={12}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
-            <InputLabel>content guidelines</InputLabel>
+              <InputLabel>content guidelines</InputLabel>
               <QuillEditor
                 value={values.content_guidelines}
                 onChange={(html) => setFieldValue('content_guidelines', html)}
