@@ -248,18 +248,7 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 6, xs: 12 }}>
-            <FormControl fullWidth error={Boolean(errors.first_name)}>
-              File Upload
-            </FormControl>
-          </Grid>
-          <Grid size={{ md: 6, xs: 12 }}>
-            <FormLabel>Social Platforms</FormLabel>
-            <ContentGuideline
-              data={values.social_platforms}
-              onChange={(value) => setFieldValue('social_platforms', value)}
-            />
-          </Grid>
+          
           <Grid size={12}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <InputLabel>content guidelines</InputLabel>
@@ -281,7 +270,18 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-
+          <Grid size={{ md: 6, xs: 12 }}>
+            <FormControl fullWidth error={Boolean(errors.first_name)}>
+              File Upload
+            </FormControl>
+          </Grid>
+          <Grid size={{ md: 6, xs: 12 }}>
+            
+            <ContentGuideline
+              data={values.social_platforms}
+              onChange={(value) => setFieldValue('social_platforms', value)}
+            />
+          </Grid>
           <Grid item size={12}>
             <Button
               variant="contained"

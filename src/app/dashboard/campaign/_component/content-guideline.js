@@ -1,19 +1,19 @@
-import { Box, Button, ButtonGroup, Stack } from '@mui/material';
+import { Box, Button, ButtonGroup, FormLabel, Stack } from '@mui/material';
 
 import { CustomSelect } from '@/components/formFields/custom-select';
 import { CustomTextField } from '@/components/formFields/custom-textfield';
 import { Iconify } from '@/components/iconify/iconify';
 
 export const ContentGuideline = ({ data, onChange }) => {
-  const handleAdd = (index) => {
+  const handleAdd = () => {
     const newData = [...data];
-    newData.splice(index + 1, 0, { platform: '', url: '' });
+    newData.splice(data.length + 1, 0, { platform: '', url: '' });
     onChange(newData);
   };
 
-  const handleDelete = (index) => {
+  const handleDelete = () => {
     const newData = [...data];
-    newData.splice(index, 1);
+    newData.splice(data.length - 1, 1);
     onChange(newData);
   };
 
@@ -24,8 +24,25 @@ export const ContentGuideline = ({ data, onChange }) => {
   };
   return (
     <Box>
+      <Stack direction={'row'} justifyContent={'space-between'}>
+        <FormLabel>Social Platforms</FormLabel>
+        <ButtonGroup variant="outlined" aria-label="content guildeline buttons" size="small" sx={{ mb: 0.5 }}>
+          <Button variant="text" color="primary" title="Add platform" onClick={handleAdd}>
+            <Iconify icon="line-md:plus" width={24} height={24} />
+          </Button>
+          <Button
+            variant="text"
+            color="error"
+            title="Delete platform"
+            onClick={handleDelete}
+            disabled={data.length <= 1}
+          >
+            <Iconify icon="line-md:minus" width={24} height={24} />
+          </Button>
+        </ButtonGroup>
+      </Stack>
       {data.map((item, index) => (
-        <Stack key={index} direction={'row'} spacing={2} alignItems={'end'}>
+        <Stack key={index} direction={'row'} spacing={1} alignItems={'end'}>
           <CustomSelect
             value={item.platform}
             onChange={(value) => handleChange(index, 'platform', value)}
@@ -36,14 +53,6 @@ export const ContentGuideline = ({ data, onChange }) => {
             ]}
           />
           <CustomTextField name="url" value={data.url} onChange={(value) => handleChange(index, 'url', value)} />
-          <ButtonGroup variant="outlined" aria-label="content guildeline buttons" size="small" sx={{ mb: 0.5 }}>
-            <Button variant="outlined" color="primary" title="Add platform" onClick={() => handleAdd(index)}>
-              <Iconify icon="line-md:plus" width={24} height={24} />
-            </Button>
-            <Button variant="outlined" color="error" title="Delete platform" onClick={() => handleDelete(index)}>
-              <Iconify icon="line-md:minus" width={24} height={24} />
-            </Button>
-          </ButtonGroup>
         </Stack>
       ))}
     </Box>

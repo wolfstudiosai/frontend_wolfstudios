@@ -1,6 +1,6 @@
 export const defaultCampaign = {
   name: '',
-  thumbnail: '',
+  thumbnail: '', // TODO: Add a thumbnail upload component
   stakeholder: '',
   status: 'PENDING',
   start_date: '',
@@ -18,5 +18,5 @@ export const defaultCampaign = {
   content_engagement: 0,
   product_expense: 0,
   partner_expense: 0,
-  social_platforms: [{ platform: '', url: '' }], //todo
+  social_platforms: [{ platform: '', url: '' }], 
 };
