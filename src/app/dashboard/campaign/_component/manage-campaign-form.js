@@ -19,6 +19,7 @@ import { useFormik } from 'formik';
 
 import { Iconify } from '@/components/iconify/iconify';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
+import { QuillEditor } from '@/components/quill-editor/quill-editor';
 
 import { defaultCampaign } from '../_lib/campaign.types';
 
@@ -54,7 +55,7 @@ export const ManageCampaignForm = ({ data }) => {
         setLoading(false);
       },
     });
-console.log(mediaPreview, "media previque")
+  console.log(mediaPreview, 'media previque');
   return (
     <Box>
       <form onSubmit={handleSubmit}>
@@ -144,26 +145,7 @@ console.log(mediaPreview, "media previque")
               />
             </FormControl>
           </Grid>
-          <Grid size={{ md: 3, xs: 12 }}>
-            <FormControl fullWidth error={Boolean(errors.first_name)}>
-              <TextField
-                name="content_guidelines"
-                label="Content Guidelines"
-                value={values.content_guidelines}
-                onChange={handleChange}
-              />
-            </FormControl>
-          </Grid>
-          <Grid size={{ md: 3, xs: 12 }}>
-            <FormControl fullWidth error={Boolean(errors.first_name)}>
-              <TextField
-                name="content_guidelines"
-                label="Content Guidelines"
-                value={values.content_guidelines}
-                onChange={handleChange}
-              />
-            </FormControl>
-          </Grid>
+        
           <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField name="content_HQ" label="Content HQ" value={values.content_HQ} onChange={handleChange} />
@@ -262,6 +244,14 @@ console.log(mediaPreview, "media previque")
                 label="Partner Expense"
                 value={values.partner_expense}
                 onChange={handleChange}
+              />
+            </FormControl>
+          </Grid>
+          <Grid size={12}>
+            <FormControl fullWidth error={Boolean(errors.first_name)}>
+              <QuillEditor
+                value={values.content_guidelines}
+                onChange={(html) => setFieldValue('content_guidelines', html)}
               />
             </FormControl>
           </Grid>
