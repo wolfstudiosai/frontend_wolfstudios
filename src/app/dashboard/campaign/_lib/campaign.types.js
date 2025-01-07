@@ -1,7 +1,7 @@
 export const defaultCampaign = {
   name: '',
   thumbnail: '',
-  stackholder: '',
+  stakeholder: '',
   status: 'PENDING',
   start_date: '',
   end_date: '',

@@ -55,7 +55,6 @@ export const ManageCampaignForm = ({ data }) => {
         setLoading(false);
       },
     });
-  console.log(mediaPreview, 'media previque');
   return (
     <Box>
       <form onSubmit={handleSubmit}>
@@ -68,9 +67,9 @@ export const ManageCampaignForm = ({ data }) => {
           <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
-                name="stackholder"
-                label="Campaign stackholder"
-                value={values.stackholder}
+                name="stakeholder"
+                label="Campaign stakeholder"
+                value={values.stakeholder}
                 onChange={handleChange}
               />
             </FormControl>
@@ -82,7 +81,7 @@ export const ManageCampaignForm = ({ data }) => {
             </FormControl>
           </Grid>
           <Grid size={{ md: 3, xs: 12 }}>
-            <FormControl fullWidth error={Boolean(errors.from_date)}>
+            <FormControl fullWidth error={Boolean(errors.start_date)}>
               <DatePicker
                 format="DD-MM-YYYY"
                 label="From Date"
@@ -249,6 +248,7 @@ export const ManageCampaignForm = ({ data }) => {
           </Grid>
           <Grid size={12}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
+            <InputLabel>content guidelines</InputLabel>
               <QuillEditor
                 value={values.content_guidelines}
                 onChange={(html) => setFieldValue('content_guidelines', html)}
