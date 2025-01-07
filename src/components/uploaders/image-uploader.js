@@ -1,13 +1,12 @@
 'use client';
 
-import React from 'react';
 import { Close, Visibility } from '@mui/icons-material';
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
-import { CloudUploadIcon } from 'lucide-react';
+import React from 'react';
 
 import { Iconify } from '../iconify/iconify';
 
-export const ImageUploader = () => {
+export const ImageUploader = ({ value, onFileSelect, onDelete, disabled = false }) => {
   const [selectedFile, setSelectedFile] = React.useState(null);
 
   const handleFileChange = (event) => {

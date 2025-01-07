@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import {
   Box,
   Button,
@@ -17,11 +16,12 @@ import TextField from '@mui/material/TextField';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { useFormik } from 'formik';
+import React from 'react';
 
 import { Iconify } from '@/components/iconify/iconify';
-import { ImageUploader } from '@/components/image-uploader/image-uploader';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
 import { QuillEditor } from '@/components/quill-editor/quill-editor';
+import { ImageUploader } from '@/components/uploaders/image-uploader';
 
 import { defaultCampaign } from '../_lib/campaign.types';
 import { ContentGuideline } from './content-guideline';
@@ -273,7 +273,7 @@ export const ManageCampaignForm = ({ data }) => {
           </Grid>
           <Grid size={{ md: 6, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
-              <FormLabel sx={{mb: 2.8}}>Thumbnail</FormLabel>
+              <FormLabel sx={{ mb: 2.8 }}>Thumbnail</FormLabel>
               <ImageUploader />
             </FormControl>
           </Grid>
