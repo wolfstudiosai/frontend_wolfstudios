@@ -1,7 +1,7 @@
 export const defaultCampaign = {
   name: '',
-  thumbnail: '', // TODO: Add a thumbnail upload component
-  stakeholder: '',
+  thumbnail: '', 
+  stackholder: '',
   status: 'PENDING',
   start_date: '',
   end_date: '',

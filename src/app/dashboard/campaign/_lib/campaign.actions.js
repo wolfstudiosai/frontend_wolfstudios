@@ -16,18 +16,25 @@ export const getUsers = async (queryParams) => {
 
 export const createCampaignAsync = async (file, data) => {
   try {
-    let path = '';
+    let thumbnailPath = '';
     if (file) {
-      path = await uploadFileAsync(file);
+      const uploadResponse = await uploadFileAsync(file);
+      console.log(uploadResponse, 'Upload response');
+      thumbnailPath = uploadResponse[0].path;
+      console.log(thumbnailPath, 'Uploaded file path');
     }
+    console.log('Calling /campaign/add-campaign with data:', { ...data, thumbnail: thumbnailPath });
+    const campaignResponse = await api.post(`/campaign/add-campaign`, {
+      ...data,
+      thumbnail: thumbnailPath,
+    });
 
-    let res = await api.post(`/campaign/add-campaign`, { ...data, thumbnail: path });
-    if (!res.data.success) return;
-    toast.success(res.data.message);
-    return { success: true, data: res.data.data };
+    toast.success(campaignResponse.data.message);
+    return { success: true, data: campaignResponse.data.data };
   } catch (error) {
-    toast.error(error.message);
-    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+    const errorMessage = error.response?.data?.message || error.message || 'An unknown error occurred';
+    toast.error(errorMessage);
+    return { success: false, error: errorMessage };
   }
 };
 

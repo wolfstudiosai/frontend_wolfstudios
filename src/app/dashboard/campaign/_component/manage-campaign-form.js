@@ -1,22 +1,16 @@
 'use client';
 
-import {
-  Box,
-  Button,
-  CircularProgress,
-  FormControl,
-  FormLabel,
-  InputAdornment,
-  InputLabel
-} from '@mui/material';
+import React from 'react';
+import { formConstants } from '@/app/constants/form-constants';
+import { Box, Button, CircularProgress, FormControl, FormLabel, InputAdornment, InputLabel } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useFormik } from 'formik';
-import React from 'react';
 
 import { TextEditor } from '@/components/core/text-editor/text-editor';
 import { CustomDatePicker } from '@/components/formFields/custom-date-picker';
 import { CustomSelect } from '@/components/formFields/custom-select';
 import { CustomTextField } from '@/components/formFields/custom-textfield';
+import { ErrorMessage } from '@/components/formFields/error-message';
 import { Iconify } from '@/components/iconify/iconify';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
@@ -38,7 +32,9 @@ export const ManageCampaignForm = ({ data }) => {
       initialValues: defaultCampaign,
       validate: (values) => {
         const errors = {};
-
+        if (!values.name) {
+          errors.name = formConstants.required;
+        }
         return errors;
       },
       onSubmit: async (values) => {
@@ -59,20 +55,24 @@ export const ManageCampaignForm = ({ data }) => {
       },
     });
 
-  console.log(values, 'values.....');
-
   return (
     <Box>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid size={{ md: 3, xs: 12 }}>
-            <CustomTextField name="name" label="Campaign Name" value={values.name} onChange={handleChange} />
+            <CustomTextField
+              name="name"
+              label="Campaign Name"
+              value={values.name}
+              onChange={handleChange}
+            />
+            <ErrorMessage error={errors.name} />
           </Grid>
           <Grid size={{ md: 3, xs: 12 }}>
             <CustomTextField
-              name="stakeholder"
+              name="stackholder"
               label="Campaign stakeholder"
-              value={values.stakeholder}
+              value={values.stackholder}
               onChange={handleChange}
             />
           </Grid>
