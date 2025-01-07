@@ -1,5 +1,6 @@
 import { getSearchQuery } from '@/helper/common';
 import { api, publicApi } from '@/utils/api';
+import { uploadFileAsync } from '@/utils/upload-file';
 import { toast } from 'sonner';
 
 export const getUsers = async (queryParams) => {
@@ -13,15 +14,14 @@ export const getUsers = async (queryParams) => {
   }
 };
 
-export const createCampaignAsync = async (file, data, isPublicRegistration = false) => {
+export const createCampaignAsync = async (file, data) => {
   try {
-    const { confirm_password, status, ...rest } = data;
-    let res = '';
-    if (isPublicRegistration) {
-      res = await publicApi.post(`/auth/create-user`, rest);
-    } else {
-      res = await api.post(`/auth/create-user`, rest);
+    let path = '';
+    if (file) {
+      path = await uploadFileAsync(file);
     }
+
+    let res = await api.post(`/campaign/add-campaign`, { ...data, thumbnail: path });
     if (!res.data.success) return;
     toast.success(res.data.message);
     return { success: true, data: res.data.data };

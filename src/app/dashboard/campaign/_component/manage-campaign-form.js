@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import {
   Box,
   Button,
@@ -8,23 +7,21 @@ import {
   FormControl,
   FormLabel,
   InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
+  InputLabel
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import TextField from '@mui/material/TextField';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs from 'dayjs';
 import { useFormik } from 'formik';
+import React from 'react';
 
 import { TextEditor } from '@/components/core/text-editor/text-editor';
+import { CustomDatePicker } from '@/components/formFields/custom-date-picker';
 import { CustomSelect } from '@/components/formFields/custom-select';
 import { CustomTextField } from '@/components/formFields/custom-textfield';
 import { Iconify } from '@/components/iconify/iconify';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
 
+import { createCampaignAsync } from '../_lib/campaign.actions';
 import { defaultCampaign } from '../_lib/campaign.types';
 import { ContentGuideline } from './content-guideline';
 
@@ -54,7 +51,7 @@ export const ManageCampaignForm = ({ data }) => {
               status: values.status,
               contact_number: values.contact_number,
             })
-          : await createUser(values);
+          : await createCampaignAsync(file, values);
         if (res.success) {
           onConfirm();
         }
@@ -84,32 +81,25 @@ export const ManageCampaignForm = ({ data }) => {
             <CustomTextField name="goal" label="Goal" value={values.goal} onChange={handleChange} />
           </Grid>
           <Grid size={{ md: 3, xs: 12 }}>
-            <FormControl fullWidth error={Boolean(errors.start_date)}>
-              <DatePicker
-                format="DD-MM-YYYY"
-                label="From Date"
-                onChange={() => {
-                  // noop
-                }}
-                value={dayjs(values.start_date)}
-              />
-            </FormControl>
+            <CustomDatePicker
+              label={'Start Date'}
+              error={errors.start_date}
+              value={values.start_date}
+              onChange={(vlaue) => setFieldValue('start_date', vlaue)}
+            />
           </Grid>
           <Grid size={{ md: 3, xs: 12 }}>
-            <FormControl fullWidth error={Boolean(errors.end_date)}>
-              <DatePicker
-                format="DD-MM-YYYY"
-                label="End Date"
-                onChange={() => {
-                  // noop
-                }}
-                value={dayjs(values.end_date)}
-              />
-            </FormControl>
+            <CustomDatePicker
+              label={'End Date'}
+              error={errors.end_date}
+              value={values.end_date}
+              onChange={(vlaue) => setFieldValue('end_date', vlaue)}
+            />
           </Grid>
           <Grid size={{ md: 3, xs: 12 }}>
             <CustomTextField
               name="partner_compensation"
+              type="number"
               label="Partner Compensation"
               value={values.partner_compensation}
               onChange={handleChange}
@@ -229,7 +219,7 @@ export const ManageCampaignForm = ({ data }) => {
 
           <Grid size={12}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
-              <InputLabel>Content Guidelines</InputLabel>
+              <InputLabel sx={{ mb: 0.8 }}>Content Guidelines</InputLabel>
               <TextEditor
                 placeholder={'Write something'}
                 content={values.content_guidelines}
@@ -240,7 +230,7 @@ export const ManageCampaignForm = ({ data }) => {
           <Grid size={12}>
             <CustomTextField
               name="description"
-              label="Partner Expense"
+              label="Description"
               value={values.description}
               multiline
               rows={4}
