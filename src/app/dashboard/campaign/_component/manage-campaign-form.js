@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 import { useFormik } from 'formik';
 
 import { Iconify } from '@/components/iconify/iconify';
+import { ImageUploader } from '@/components/image-uploader/image-uploader';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
 import { QuillEditor } from '@/components/quill-editor/quill-editor';
 
@@ -248,7 +249,7 @@ export const ManageCampaignForm = ({ data }) => {
               />
             </FormControl>
           </Grid>
-          
+
           <Grid size={12}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
               <InputLabel>content guidelines</InputLabel>
@@ -272,11 +273,11 @@ export const ManageCampaignForm = ({ data }) => {
           </Grid>
           <Grid size={{ md: 6, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
-              File Upload
+              <FormLabel sx={{mb: 2.8}}>Thumbnail</FormLabel>
+              <ImageUploader />
             </FormControl>
           </Grid>
           <Grid size={{ md: 6, xs: 12 }}>
-            
             <ContentGuideline
               data={values.social_platforms}
               onChange={(value) => setFieldValue('social_platforms', value)}

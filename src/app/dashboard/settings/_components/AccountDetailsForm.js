@@ -16,13 +16,13 @@ import * as React from 'react';
 import { useFormik } from 'formik';
 
 import { defaultProfile } from '@/app/dashboard/settings/_lib/types';
+import ProfileUploader from '@/components/dashboard/uploaders/ImageUploader';
 import PageLoader from '@/components/PageLoader/PageLoader';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { IconButton, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import * as Yup from 'yup';
 import { getProfileData, updateProfileData } from '../_lib/actions';
-import ImageUploader from '@/components/dashboard/uploaders/ImageUploader';
 
 
 
@@ -106,7 +106,7 @@ export function AccountDetailsForm() {
           <CardContent>
             <Stack spacing={3}>
               <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-                <ImageUploader
+                <ProfileUploader
                   disabled={!isEditing}
                   value={values.profile_pic}
                   onFileSelect={(file) => setFieldValue('profile_pic', file)}
