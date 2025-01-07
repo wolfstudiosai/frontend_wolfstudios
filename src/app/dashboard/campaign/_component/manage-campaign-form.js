@@ -1,18 +1,34 @@
 'use client';
 
 import React from 'react';
-import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+} from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { useFormik } from 'formik';
 
-import { defaultCampaign } from '../_lib/types';
+import { Iconify } from '@/components/iconify/iconify';
+import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
+
+import { defaultCampaign } from '../_lib/campaign.types';
 
 export const ManageCampaignForm = ({ data }) => {
-  const [loading, setLoading] = React.useState(false);
   const isUpdated = data?.id ? true : false;
+
+  // *********************States*********************************
+  const [loading, setLoading] = React.useState(false);
+  const [mediaPreview, setMediaPreview] = React.useState(null);
+
   const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
     useFormik({
       initialValues: defaultCampaign,
@@ -38,6 +54,7 @@ export const ManageCampaignForm = ({ data }) => {
         setLoading(false);
       },
     });
+console.log(mediaPreview, "media previque")
   return (
     <Box>
       <form onSubmit={handleSubmit}>
@@ -149,11 +166,29 @@ export const ManageCampaignForm = ({ data }) => {
           </Grid>
           <Grid size={{ md: 3, xs: 12 }}>
             <FormControl fullWidth error={Boolean(errors.first_name)}>
+              <TextField name="content_HQ" label="Content HQ" value={values.content_HQ} onChange={handleChange} />
+            </FormControl>
+          </Grid>
+          <Grid size={{ md: 3, xs: 12 }}>
+            <FormControl fullWidth error={Boolean(errors.first_name)}>
               <TextField
                 name="image_inspiration"
-                label="Content HQ"
+                label="Image Inspiration"
                 value={values.image_inspiration}
                 onChange={handleChange}
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end" title="Preview Image">
+                        <Iconify
+                          style={{ cursor: 'pointer' }}
+                          icon="lucide:view"
+                          onClick={() => setMediaPreview(values.image_inspiration)}
+                        />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
               />
             </FormControl>
           </Grid>
@@ -164,16 +199,19 @@ export const ManageCampaignForm = ({ data }) => {
                 label="Video Inspiration"
                 value={values.video_inspiration}
                 onChange={handleChange}
-              />
-            </FormControl>
-          </Grid>
-          <Grid size={{ md: 3, xs: 12 }}>
-            <FormControl fullWidth error={Boolean(errors.first_name)}>
-              <TextField
-                name="video_inspiration"
-                label="Video Inspiration"
-                value={values.video_inspiration}
-                onChange={handleChange}
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end" title="Preview Video">
+                        <Iconify
+                          style={{ cursor: 'pointer' }}
+                          icon="lucide:view"
+                          onClick={() => setMediaPreview(values.video_inspiration)}
+                        />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
               />
             </FormControl>
           </Grid>
@@ -251,6 +289,8 @@ export const ManageCampaignForm = ({ data }) => {
           </Grid>
         </Grid>
       </form>
+
+      {mediaPreview && <MediaIframeDialog open={true} data={mediaPreview} onClose={() => setMediaPreview(null)} />}
     </Box>
   );
 };

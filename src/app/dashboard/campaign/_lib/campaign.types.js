@@ -2,9 +2,9 @@ export const defaultCampaign = {
   name: '',
   thumbnail: '',
   stackholder: '',
-  status: 'PENDING', 
-  start_date: '', 
-  end_date: '', 
+  status: 'PENDING',
+  start_date: '',
+  end_date: '',
   description: '',
   goal: '',
   partner_compensation: 0,
@@ -18,4 +18,5 @@ export const defaultCampaign = {
   content_engagement: 0,
   product_expense: 0,
   partner_expense: 0,
+  social_platforms: [],
 };
