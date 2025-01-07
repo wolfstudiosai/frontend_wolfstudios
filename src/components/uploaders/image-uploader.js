@@ -1,30 +1,48 @@
 'use client';
 
+import React from 'react';
 import { Close, Visibility } from '@mui/icons-material';
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
-import React from 'react';
 
 import { Iconify } from '../iconify/iconify';
 
 export const ImageUploader = ({ value, onFileSelect, onDelete, disabled = false }) => {
-  const [selectedFile, setSelectedFile] = React.useState(null);
+  const [previewUrl, setPreviewUrl] = React.useState(null);
+  const [fileInfo, setSelectedFileInfo] = React.useState({ name: '', size: 0 });
 
-  const handleFileChange = (event) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setSelectedFile(event.target.files[0]);
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setPreviewUrl(imageUrl);
+      setSelectedFileInfo({ name: file.name, size: file.size });
+      onFileSelect(file);
     }
   };
 
   const handleRemoveFile = () => {
-    setSelectedFile(null);
+    setSelectedFileInfo({ name: '', size: 0 });
+    setPreviewUrl(null);
+    onDelete?.();
   };
 
   const handlePreviewFile = () => {
-    if (selectedFile) {
-      const fileUrl = URL.createObjectURL(selectedFile);
-      window.open(fileUrl, '_blank');
+    if (previewUrl) {
+      // const fileUrl = URL.createObjectURL(previewUrl);
+      window.open(previewUrl, '_blank');
     }
   };
+
+  React.useEffect(() => {
+    if (!previewUrl) {
+      if (typeof value === 'string') {
+        setPreviewUrl(value);
+      } else if (value instanceof File) {
+        const imageUrl = URL.createObjectURL(value);
+        setPreviewUrl(imageUrl);
+      }
+    }
+  }, [value]);
   return (
     <Box
       sx={{
@@ -35,14 +53,15 @@ export const ImageUploader = ({ value, onFileSelect, onDelete, disabled = false 
         borderRadius: 1,
         width: '100%',
         position: 'relative',
-        py: .3,
-        px: 2
+        py: 0.3,
+        px: 2,
       }}
     >
-      {!selectedFile ? (
+      {!previewUrl ? (
         <Button
           component="label"
           variant="text"
+          disabled={disabled}
           sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -58,7 +77,7 @@ export const ImageUploader = ({ value, onFileSelect, onDelete, disabled = false 
             <Iconify icon="akar-icons:cloud-upload" width={24} height={24} />
             <Typography>Upload Image</Typography>
           </Stack>
-          <input type="file" accept="image/*" onChange={handleFileChange} hidden />
+          <input type="file" accept="image/*" onChange={handleImageChange} hidden />
         </Button>
       ) : (
         <Box
@@ -70,15 +89,17 @@ export const ImageUploader = ({ value, onFileSelect, onDelete, disabled = false 
           }}
         >
           <Typography sx={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {selectedFile.name}
+            {fileInfo.name}
           </Typography>
           <Box sx={{ display: 'flex', gap: 1 }}>
             <IconButton onClick={handlePreviewFile} size="small" color="primary">
               <Visibility />
             </IconButton>
-            <IconButton onClick={handleRemoveFile} size="small" color="error">
-              <Close />
-            </IconButton>
+            {onDelete && (
+              <IconButton onClick={handleRemoveFile} size="small" color="error">
+                <Close />
+              </IconButton>
+            )}
           </Box>
         </Box>
       )}

@@ -52,7 +52,7 @@ export const ContentGuideline = ({ data, onChange }) => {
               { value: 'TWITTER', label: 'Twitter' },
             ]}
           />
-          <CustomTextField name="url" value={data.url} onChange={(value) => handleChange(index, 'url', value)} />
+          <CustomTextField name="url" value={data.url} onChange={(e) => handleChange(index, 'url', e.target.value)} />
         </Stack>
       ))}
     </Box>

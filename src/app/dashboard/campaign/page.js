@@ -23,7 +23,7 @@ import PageLoader from '@/components/PageLoader/PageLoader';
 import { dayjs } from '@/lib/dayjs';
 import { paths } from '@/paths';
 
-import { getUsers } from './_lib/actions';
+import { getUsers } from './_lib/campaign.actions';
 
 export default function Page() {
   const router = useRouter();
