@@ -59,9 +59,11 @@ export default function Page() {
     }
   }
 
-  const handleDelete = (id) => {
-    deleteCampaignAsync([id]);
-    // fetchList();
+  const handleDelete = async (id) => {
+    const response = await deleteCampaignAsync([id]);
+    if (response.success) {
+      fetchList();
+    }
   };
 
   React.useEffect(() => {
@@ -72,7 +74,7 @@ export default function Page() {
     {
       formatter: (row) => (
         <Stack direction="row">
-          <IconButton size='small' title="Edit" onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
+          <IconButton size="small" title="Edit" onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
             <PencilSimpleIcon />
           </IconButton>
           <DeleteConfirmationPopover

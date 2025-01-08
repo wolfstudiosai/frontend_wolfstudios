@@ -60,9 +60,10 @@ export const updateUCampaignAsync = async (data) => {
 };
 
 export const deleteCampaignAsync = async (ids) => {
-  console.log(ids, 'ids.......');
   try {
-    const res = await api.delete(`/campaign/delete`, { ids: ids });
+    const res = await api.delete(`/campaign/delete`, {
+      data: { ids: ids },
+    });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {

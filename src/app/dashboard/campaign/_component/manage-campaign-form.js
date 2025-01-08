@@ -43,9 +43,7 @@ export const ManageCampaignForm = ({ slug }) => {
       },
       onSubmit: async (values) => {
         setLoading(true);
-        const res = isUpdated
-          ? await updateUCampaignAsync(values)
-          : await createCampaignAsync(file, values);
+        const res = isUpdated ? await updateUCampaignAsync(values) : await createCampaignAsync(file, values);
         if (res.success) {
           router.push(paths.dashboard.campaign);
         }
@@ -83,9 +81,9 @@ export const ManageCampaignForm = ({ slug }) => {
           </Grid>
           <Grid size={{ md: 3, xs: 12 }}>
             <CustomTextField
-              name="stackholder"
-              label="Campaign stakeholder"
-              value={values.stackholder}
+              name="stakeholder"
+              label="Campaign Stakeholder"
+              value={values.stakeholder}
               onChange={handleChange}
             />
           </Grid>
