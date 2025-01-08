@@ -23,7 +23,7 @@ import { defaultCampaign } from '../_lib/campaign.types';
 import { ContentGuideline } from './content-guideline';
 
 export const ManageCampaignForm = ({ slug }) => {
-  const isUpdated = slug ? true : false;
+  const isUpdate = slug ? true : false;
 
   // *********************States*********************************
   const [loading, setLoading] = React.useState(false);
@@ -43,7 +43,7 @@ export const ManageCampaignForm = ({ slug }) => {
       },
       onSubmit: async (values) => {
         setLoading(true);
-        const res = isUpdated ? await updateUCampaignAsync(file, values) : await createCampaignAsync(file, values);
+        const res = isUpdate ? await updateUCampaignAsync(file, values) : await createCampaignAsync(file, values);
         if (res.success) {
           router.push(paths.dashboard.campaign);
         }
@@ -66,7 +66,7 @@ export const ManageCampaignForm = ({ slug }) => {
   };
 
   React.useEffect(() => {
-    if (isUpdated) {
+    if (isUpdate) {
       getSingleData();
     }
   }, []);
@@ -266,11 +266,11 @@ export const ManageCampaignForm = ({ slug }) => {
           </Grid>
           <Grid item size={12}>
             <Button
-              variant="contained"
+              variant="contained" 
               type={loading ? 'button' : 'submit'}
               startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
             >
-              Create
+              Save
             </Button>
           </Grid>
         </Grid>

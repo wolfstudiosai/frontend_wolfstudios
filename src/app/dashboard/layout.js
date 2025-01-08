@@ -1,12 +1,7 @@
-"use client"
+'use client';
 
-import { DynamicLayout } from '@/components/dashboard/layout/dynamic-layout';
+import { VerticalLayout } from '@/components/dashboard/layout/vertical/vertical-layout';
 
 export default function Layout({ children }) {
-
-  return (
-    // <AuthGuard>
-    <DynamicLayout>{children}</DynamicLayout>
-    // </AuthGuard> 
-  );
+  return <VerticalLayout>{children}</VerticalLayout>;
 }

@@ -12,11 +12,11 @@ import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/Car
 
 import { paths } from '@/paths';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
-import { Logo } from '@/components/core/logo';
+import { Iconify } from '@/components/iconify/iconify';
 
 import { icons } from '../nav-icons';
-import { WorkspacesSwitch } from '../workspaces-switch';
 import { navColorStyles } from './styles';
+import { DynamicLogo, Logo } from '@/components/core/logo';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
@@ -51,7 +51,7 @@ export function SideNav({ color = 'evident', items = [] }) {
       <Stack spacing={2} sx={{ p: 2 }}>
         <div>
           <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
-            <Logo color={logoColor} height={32} width={122} />
+            <DynamicLogo color={logoColor} height={32} width={122} />
           </Box>
         </div>
         {/* <WorkspacesSwitch /> */}
@@ -136,7 +136,6 @@ function NavItem({
 }) {
   const [open, setOpen] = React.useState(forceOpen);
   const active = isNavItemActive({ disabled, external, href, matcher, pathname });
-  const Icon = icon ? icons[icon] : null;
   const ExpandIcon = open ? CaretDownIcon : CaretRightIcon;
   const isBranch = children && !href;
   const showChildren = Boolean(children && open);
@@ -207,18 +206,23 @@ function NavItem({
         tabIndex={0}
       >
         <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flex: '0 0 auto' }}>
-          {Icon ? (
-            <Icon
-              fill={active ? 'var(--NavItem-icon-active-color)' : 'var(--NavItem-icon-color)'}
-              fontSize="var(--icon-fontSize-md)"
-              weight={forceOpen || active ? 'fill' : undefined}
+          {icon ? (
+            <Iconify
+              icon={icon}
+              color={active ? 'var(--NavItem-hover-color)' : 'var(--NavItem-icon-color)'}
+              sx={{ fontSize: 'var(--icon-fontSize-sm)' }}
             />
           ) : null}
         </Box>
         <Box sx={{ flex: '1 1 auto' }}>
           <Typography
             component="span"
-            sx={{ color: 'inherit', fontSize: '0.875rem', fontWeight: 500, lineHeight: '28px' }}
+            sx={{
+              color: 'inherit',
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              lineHeight: '28px',
+            }}
           >
             {title}
           </Typography>
