@@ -65,7 +65,7 @@ export const EditableDataTable = ({
         cellModesModel={cellModesModel}
         onCellModesModelChange={handleCellModesModelChange}
         onCellClick={handleCellClick}
-        pageSize={pageSize}
+        // pageSize={pageSize}
         loading={loading}
         pageSizeOptions={pageSizeOptions}
         sx={{
@@ -74,8 +74,8 @@ export const EditableDataTable = ({
           },
         }}
         disableColumnSorting
-        pagination
         onPaginationModelChange={onPageChange}
+        paginationMode="server"
       />
       {!rows?.length && !loading && (
         <Box sx={{ p: 3 }}>
