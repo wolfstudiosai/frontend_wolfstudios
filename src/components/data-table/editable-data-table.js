@@ -69,6 +69,7 @@ export const EditableDataTable = ({
           },
         }}
         disableColumnSorting
+        pagination
       />
       {!rows?.length && !loading && (
         <Box sx={{ p: 3 }}>

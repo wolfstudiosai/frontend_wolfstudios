@@ -17,8 +17,8 @@ export const paths = {
     // admin
     users: '/dashboard/users',
     campaign: '/dashboard/campaign',
-    createCampaign: '/dashboard/campaign/create',
-    updateCampaign: (id) => `/dashboard/campaign/${id}/edit`,
+    create_campaign: '/dashboard/campaign/create',
+    edit_campaign: (id) => `/dashboard/campaign/${id}`,
 
     // can be removed later on
     settings: {

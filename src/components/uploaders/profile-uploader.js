@@ -4,7 +4,7 @@ import { Camera as CameraIcon } from '@phosphor-icons/react';
 import Image from 'next/image';
 import React from 'react';
 
-export default function ImageUploader({ value, onFileSelect, onDelete, disabled = false }) {
+export default function ProfileUploader({ value, onFileSelect, onDelete, disabled = false }) {
     const [previewUrl, setPreviewUrl] = React.useState('');
 
     const handleImageChange = (event) => {

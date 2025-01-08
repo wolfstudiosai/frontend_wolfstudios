@@ -112,7 +112,7 @@ const columns = [
 export default function Page() {
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 200 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
 
@@ -126,6 +126,7 @@ export default function Page() {
       if (response.success) {
         setRecords(response.data);
         setTotalRecords(response.totalRecords);
+        setPagination((pre) => ({ ...pre, limit: response.totalRecords }));
       }
     } catch (error) {
       console.log(error);
@@ -165,7 +166,7 @@ export default function Page() {
 
   React.useEffect(() => {
     fetchList();
-  }, [pagination]);
+  }, []);
 
   return (
     <PageContainer>

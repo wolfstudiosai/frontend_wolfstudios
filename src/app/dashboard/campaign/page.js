@@ -1,5 +1,13 @@
 'use client';
 
+import path from 'path';
+
+import * as React from 'react';
+import RouterLink from 'next/link';
+import { useRouter } from 'next/navigation';
+import { dateFormatter } from '@/utils/date-formatter';
+import { Delete } from '@mui/icons-material';
+import { ButtonGroup } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -10,20 +18,18 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
-import RouterLink from 'next/link';
-import { useRouter } from 'next/navigation';
-import * as React from 'react';
 
+import { paths } from '@/paths';
+import { dayjs } from '@/lib/dayjs';
 import { PageContainer } from '@/components/container/PageContainer';
 import { FilterButton } from '@/components/core/filter-button';
 import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopover';
 import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
 import { DataTable } from '@/components/data-table/data-table';
+import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
 import PageLoader from '@/components/PageLoader/PageLoader';
-import { dayjs } from '@/lib/dayjs';
-import { paths } from '@/paths';
 
-import { getUsers } from './_lib/actions';
+import { deleteCampaignAsync, getCampaignListAsync } from './_lib/campaign.actions';
 
 export default function Page() {
   const router = useRouter();
@@ -37,7 +43,7 @@ export default function Page() {
   async function fetchList() {
     try {
       setLoading(true);
-      const response = await getUsers({
+      const response = await getCampaignListAsync({
         page: pagination.pageNo,
         rowsPerPage: pagination.limit,
         status: status,
@@ -53,10 +59,11 @@ export default function Page() {
     }
   }
 
-  const handleConfirm = () => {
-    setOpenModal(false);
-    // fetchUsersData();
-    fetchList();
+  const handleDelete = async (id) => {
+    const response = await deleteCampaignAsync([id]);
+    if (response.success) {
+      fetchList();
+    }
   };
 
   React.useEffect(() => {
@@ -66,9 +73,15 @@ export default function Page() {
   const columns = [
     {
       formatter: (row) => (
-        <IconButton onClick={() => handleOpenModal(row)}>
-          <PencilSimpleIcon />
-        </IconButton>
+        <Stack direction="row">
+          <IconButton size="small" title="Edit" onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
+            <PencilSimpleIcon />
+          </IconButton>
+          <DeleteConfirmationPopover
+            onDelete={() => handleDelete(row.id)}
+            title={`Want to delete the campaign "${row.name}"?`}
+          />
+        </Stack>
       ),
       name: 'Actions',
       // hideName: true,
@@ -77,39 +90,46 @@ export default function Page() {
     {
       formatter: (row) => (
         <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-          <div>
-            <Link
-              color="inherit"
-              component={RouterLink}
-              href={paths.dashboard.customers.details('1')}
-              sx={{ whiteSpace: 'nowrap' }}
-              variant="subtitle2"
-            >
-              {row.first_name} {row.last_name}
-            </Link>
-            <Typography color="text.secondary" variant="body2">
-              {row.email}
-            </Typography>
-          </div>
+          <Link
+            color="inherit"
+            component={RouterLink}
+            href={paths.dashboard.customers.details('1')}
+            sx={{ whiteSpace: 'nowrap' }}
+            variant="subtitle2"
+          >
+            {row.name}
+          </Link>
         </Stack>
       ),
       name: 'Name',
     },
     {
-      formatter: (row) => (
-        <Typography color="text.secondary" variant="body2">
-          {row.contact_number}
-        </Typography>
-      ),
-      name: 'Phone',
+      formatter(row) {
+        return dateFormatter(row.start_date);
+      },
+      name: 'Start Date',
+    },
+    {
+      formatter(row) {
+        return dateFormatter(row.end_date);
+      },
+      name: 'End Date',
     },
     {
       formatter: (row) => (
         <Typography color="text.secondary" variant="body2">
-          {row.role}
+          {row.partner_expense}
         </Typography>
       ),
-      name: 'Role',
+      name: 'Partner Expense',
+    },
+    {
+      formatter: (row) => (
+        <Typography color="text.secondary" variant="body2">
+          {row.partner_expense}
+        </Typography>
+      ),
+      name: 'Partner Expense',
     },
     {
       formatter(row) {
@@ -136,7 +156,7 @@ export default function Page() {
             <Button
               startIcon={<PlusIcon />}
               variant="contained"
-              onClick={() => router.push(paths.dashboard.createCampaign)}
+              onClick={() => router.push(paths.dashboard.create_campaign)}
             >
               Add
             </Button>
@@ -166,7 +186,17 @@ export default function Page() {
                         onFilterDelete={() => {
                           handlePhoneChange();
                         }}
-                        popover={<StatusFilterPopover />}
+                        popover={
+                          <StatusFilterPopover
+                            options={[
+                              { value: '', label: 'All' },
+                              { value: 'PENDING', label: 'Pending' },
+                              { value: 'APPROVED', label: 'Approved' },
+                              { value: 'REJECTED', label: 'Rejected' },
+                              { value: 'COMPLETED', label: 'Completed' },
+                            ]}
+                          />
+                        }
                         value={status}
                       />
                       <RefreshPlugin onClick={fetchList} />
@@ -182,7 +212,7 @@ export default function Page() {
                 {!users?.length ? (
                   <Box sx={{ p: 3 }}>
                     <Typography color="text.secondary" sx={{ textAlign: 'center' }} variant="body2">
-                      No customers found
+                      No data found
                     </Typography>
                   </Box>
                 ) : null}

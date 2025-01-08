@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid2';
 
 import Link from 'next/link';
 
-export const CampaignView = () => {
+export const CampaignView = ({data}) => {
     const CampaignData = [
         {
             title: 'Mary Ann',
@@ -120,7 +120,7 @@ export const CampaignView = () => {
     return (
         <Box sx={{ py: 4 }}>
             <Grid container spacing={2}>
-                {CampaignData.map((item, index) => (
+                {data.map((item, index) => (
                     <Grid item size={{ xs: 12, md: 3 }} key={index}>
                         <SingleCard data={item} />
                     </Grid>
@@ -136,7 +136,7 @@ const SingleCard = ({ data }) => {
             <Paper elevation={1} variant="outlined">
                 <Box
                     component="img"
-                    src={data.image}
+                    src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${data.thumbnail}`}
                     sx={{ height: 200, width: '100%', objectFit: 'cover', border: 0, borderRadius: '5px 5px 0 0' }}
                 />
                 <Box p={2}>
