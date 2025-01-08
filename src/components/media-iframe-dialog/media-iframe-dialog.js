@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Image from 'next/image';
 import { Dialog } from '../dialog/Dialog';
 
@@ -28,7 +29,7 @@ export const MediaIframeDialog = ({ open, data, onClose, onComplete }) => {
             allowFullScreen
           />
         ) : (
-          <Image src={data} alt="Image Preview" style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'contain' }} />
+          <img src={data} alt="Image Preview" style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'contain' }} />
         )
       ) : (
         <p>No media to display.</p>
