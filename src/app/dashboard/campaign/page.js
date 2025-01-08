@@ -26,9 +26,10 @@ import { FilterButton } from '@/components/core/filter-button';
 import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopover';
 import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
 import { DataTable } from '@/components/data-table/data-table';
+import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
 import PageLoader from '@/components/PageLoader/PageLoader';
 
-import { getCampaignListAsync } from './_lib/campaign.actions';
+import { deleteCampaignAsync, getCampaignListAsync } from './_lib/campaign.actions';
 
 export default function Page() {
   const router = useRouter();
@@ -58,10 +59,9 @@ export default function Page() {
     }
   }
 
-  const handleConfirm = () => {
-    setOpenModal(false);
-    // fetchUsersData();
-    fetchList();
+  const handleDelete = (id) => {
+    deleteCampaignAsync([id]);
+    // fetchList();
   };
 
   React.useEffect(() => {
@@ -71,14 +71,15 @@ export default function Page() {
   const columns = [
     {
       formatter: (row) => (
-        <ButtonGroup size="small" variant="outlined">
-          <IconButton title="Edit" onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
+        <Stack direction="row">
+          <IconButton size='small' title="Edit" onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
             <PencilSimpleIcon />
           </IconButton>
-          <IconButton title="Delete" color="error" onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
-            <Delete />
-          </IconButton>
-        </ButtonGroup>
+          <DeleteConfirmationPopover
+            onDelete={() => handleDelete(row.id)}
+            title={`Want to delete the campaign "${row.name}"?`}
+          />
+        </Stack>
       ),
       name: 'Actions',
       // hideName: true,
