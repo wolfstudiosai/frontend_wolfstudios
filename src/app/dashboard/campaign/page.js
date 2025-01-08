@@ -212,7 +212,7 @@ export default function Page() {
                 {!users?.length ? (
                   <Box sx={{ p: 3 }}>
                     <Typography color="text.secondary" sx={{ textAlign: 'center' }} variant="body2">
-                      No customers found
+                      No data found
                     </Typography>
                   </Box>
                 ) : null}

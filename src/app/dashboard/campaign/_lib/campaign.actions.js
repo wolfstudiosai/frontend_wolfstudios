@@ -47,10 +47,15 @@ export const createCampaignAsync = async (file, data) => {
   }
 };
 
-export const updateUCampaignAsync = async (data) => {
+export const updateUCampaignAsync = async (file, data) => {
   try {
     const { id, slug, user_id, created_at, updated_at, ...rest } = data;
-    const res = await api.patch(`/campaign/update/${id}`, rest);
+    let thumbnailPath = '';
+    if (file) {
+      const uploadResponse = await uploadFileAsync(file);
+      thumbnailPath = uploadResponse[0].path;
+    }
+    const res = await api.patch(`/campaign/update/${id}`, { ...rest, thumbnail: thumbnailPath });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {

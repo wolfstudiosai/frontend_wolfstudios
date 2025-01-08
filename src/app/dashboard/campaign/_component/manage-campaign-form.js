@@ -43,7 +43,7 @@ export const ManageCampaignForm = ({ slug }) => {
       },
       onSubmit: async (values) => {
         setLoading(true);
-        const res = isUpdated ? await updateUCampaignAsync(values) : await createCampaignAsync(file, values);
+        const res = isUpdated ? await updateUCampaignAsync(file, values) : await createCampaignAsync(file, values);
         if (res.success) {
           router.push(paths.dashboard.campaign);
         }
