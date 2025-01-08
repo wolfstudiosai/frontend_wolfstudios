@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Dialog } from '../dialog/Dialog';
 
 export const MediaIframeDialog = ({ open, data, onClose, onComplete }) => {
@@ -27,7 +28,7 @@ export const MediaIframeDialog = ({ open, data, onClose, onComplete }) => {
             allowFullScreen
           />
         ) : (
-          <img src={data} alt="Image Preview" style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'contain' }} />
+          <Image src={data} alt="Image Preview" style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'contain' }} />
         )
       ) : (
         <p>No media to display.</p>
