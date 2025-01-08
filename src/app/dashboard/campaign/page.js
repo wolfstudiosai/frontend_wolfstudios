@@ -1,13 +1,9 @@
 'use client';
 
-import path from 'path';
-
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { dateFormatter } from '@/utils/date-formatter';
-import { Delete } from '@mui/icons-material';
-import { ButtonGroup } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -35,7 +31,6 @@ export default function Page() {
   const router = useRouter();
   const [users, setUsers] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [openModal, setOpenModal] = React.useState(false);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -93,7 +88,7 @@ export default function Page() {
           <Link
             color="inherit"
             component={RouterLink}
-            href={paths.dashboard.customers.details('1')}
+            href={paths.dashboard.edit_campaign(row.slug)}
             sx={{ whiteSpace: 'nowrap' }}
             variant="subtitle2"
           >

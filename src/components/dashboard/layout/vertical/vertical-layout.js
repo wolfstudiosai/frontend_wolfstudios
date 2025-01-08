@@ -4,15 +4,12 @@ import * as React from 'react';
 import { dashboardItems } from '@/router';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-import { config } from '@/config';
 import { useSettings } from '@/hooks/use-settings';
+import { LocalizationProvider } from '@/components/core/localization-provider';
 
-import { layoutConfig } from '../config';
 import { MainNav } from './main-nav';
 import { SideNav } from './side-nav';
-import { LocalizationProvider } from '@/components/core/localization-provider';
 
 export function VerticalLayout({ children }) {
   const { settings } = useSettings();

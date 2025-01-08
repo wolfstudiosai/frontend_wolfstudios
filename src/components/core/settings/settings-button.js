@@ -52,7 +52,7 @@ export function SettingsButton() {
             setOpenDrawer(true);
           }}
           sx={{
-            animation: 'spin 4s linear infinite',
+            animation: 'spin 34s linear infinite',
             background: 'var(--mui-palette-neutral-900)',
             border: 'none',
             borderRadius: '50%',
@@ -64,9 +64,9 @@ export function SettingsButton() {
             m: 4,
             p: '10px',
             position: 'fixed',
-            right: 0,
+            left: 0,
             width: '40px',
-            zIndex: 'var(--mui-zIndex-speedDial)',
+            zIndex: 1500,
             '&:hover': { bgcolor: 'var(--mui-palette-neutral-700)' },
             '@keyframes spin': { '0%': { rotate: '0' }, '100%': { rotate: '360deg' } },
           }}
