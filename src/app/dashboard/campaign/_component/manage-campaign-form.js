@@ -18,7 +18,7 @@ import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe
 import PageLoader from '@/components/PageLoader/PageLoader';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
 
-import { createCampaignAsync, getCampaignAsync } from '../_lib/campaign.actions';
+import { createCampaignAsync, getCampaignAsync, updateUCampaignAsync } from '../_lib/campaign.actions';
 import { defaultCampaign } from '../_lib/campaign.types';
 import { ContentGuideline } from './content-guideline';
 
@@ -44,13 +44,7 @@ export const ManageCampaignForm = ({ slug }) => {
       onSubmit: async (values) => {
         setLoading(true);
         const res = isUpdated
-          ? await updateUserData({
-              id: data.id,
-              role: values.role,
-              is_deleted: false,
-              status: values.status,
-              contact_number: values.contact_number,
-            })
+          ? await updateUCampaignAsync(values)
           : await createCampaignAsync(file, values);
         if (res.success) {
           router.push(paths.dashboard.campaign);

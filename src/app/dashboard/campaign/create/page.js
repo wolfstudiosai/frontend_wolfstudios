@@ -9,7 +9,7 @@ export const metadata = { title: `Create Record | ${config.site.name}` };
 export default function Page() {
   return (
     <PageContainer>
-      <CardTitle title="Add new campaign" />
+      <CardTitle title="Add campaign" />
       <ManageCampaignForm />
     </PageContainer>
   );

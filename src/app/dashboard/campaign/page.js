@@ -1,9 +1,13 @@
 'use client';
 
+import path from 'path';
+
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { dateFormatter } from '@/utils/date-formatter';
+import { Delete } from '@mui/icons-material';
+import { ButtonGroup } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -25,7 +29,6 @@ import { DataTable } from '@/components/data-table/data-table';
 import PageLoader from '@/components/PageLoader/PageLoader';
 
 import { getCampaignListAsync } from './_lib/campaign.actions';
-import path from 'path';
 
 export default function Page() {
   const router = useRouter();
@@ -68,9 +71,14 @@ export default function Page() {
   const columns = [
     {
       formatter: (row) => (
-        <IconButton onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
-          <PencilSimpleIcon />
-        </IconButton>
+        <ButtonGroup size="small" variant="outlined">
+          <IconButton title="Edit" onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
+            <PencilSimpleIcon />
+          </IconButton>
+          <IconButton title="Delete" color="error" onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
+            <Delete />
+          </IconButton>
+        </ButtonGroup>
       ),
       name: 'Actions',
       // hideName: true,
@@ -175,7 +183,17 @@ export default function Page() {
                         onFilterDelete={() => {
                           handlePhoneChange();
                         }}
-                        popover={<StatusFilterPopover />}
+                        popover={
+                          <StatusFilterPopover
+                            options={[
+                              { value: '', label: 'All' },
+                              { value: 'PENDING', label: 'Pending' },
+                              { value: 'APPROVED', label: 'Approved' },
+                              { value: 'REJECTED', label: 'Rejected' },
+                              { value: 'COMPLETED', label: 'Completed' },
+                            ]}
+                          />
+                        }
                         value={status}
                       />
                       <RefreshPlugin onClick={fetchList} />

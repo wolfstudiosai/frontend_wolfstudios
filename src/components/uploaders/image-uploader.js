@@ -1,14 +1,13 @@
 'use client';
 
 import React from 'react';
+import { getFilenameFromUrl } from '@/utils/get-filename-from-url';
 import { Close, Visibility } from '@mui/icons-material';
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
 
 import { Iconify } from '../iconify/iconify';
-import { getFilenameFromUrl } from '@/utils/get-filename-from-url';
 
 export const ImageUploader = ({ value, onFileSelect, onDelete, disabled = false }) => {
-  console.log(value, 'image value.....');
   const [previewUrl, setPreviewUrl] = React.useState(null);
   const [fileInfo, setSelectedFileInfo] = React.useState({ name: '', size: 0 });
 
@@ -37,7 +36,7 @@ export const ImageUploader = ({ value, onFileSelect, onDelete, disabled = false 
 
   React.useEffect(() => {
     if (!previewUrl) {
-      if (typeof value === 'string') {
+      if (typeof value === 'string' && value) {
         const fileName = getFilenameFromUrl(value);
         setSelectedFileInfo({ name: fileName, size: 0 });
         setPreviewUrl(`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${value}`);

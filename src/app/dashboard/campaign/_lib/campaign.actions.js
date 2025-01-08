@@ -26,7 +26,7 @@ export const getCampaignAsync = async (slug) => {
 
 export const createCampaignAsync = async (file, data) => {
   try {
-    const { slug, ...rest } = data
+    const { slug, ...rest } = data;
     let thumbnailPath = '';
     if (file) {
       const uploadResponse = await uploadFileAsync(file);
@@ -46,15 +46,10 @@ export const createCampaignAsync = async (file, data) => {
   }
 };
 
-export const updateUserData = async (data) => {
+export const updateUCampaignAsync = async (data) => {
   try {
-    const payload = {
-      role: data.role,
-      is_deleted: data.is_deleted,
-      status: data.status,
-      contact_number: data.contact_number,
-    };
-    const res = await api.patch(`/user/update-user/${data.id}`, payload);
+    const { id, slug, user_id, created_at, updated_at, ...rest } = data;
+    const res = await api.patch(`/campaign/update/${id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
