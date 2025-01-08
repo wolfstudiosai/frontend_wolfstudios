@@ -1,5 +1,6 @@
 export const defaultCampaign = {
   name: '',
+  slug: '',
   thumbnail: '', 
   stackholder: '',
   status: 'PENDING',

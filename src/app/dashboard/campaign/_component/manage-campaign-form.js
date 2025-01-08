@@ -1,11 +1,13 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { formConstants } from '@/app/constants/form-constants';
 import { Box, Button, CircularProgress, FormControl, FormLabel, InputAdornment, InputLabel } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useFormik } from 'formik';
 
+import { paths } from '@/paths';
 import { TextEditor } from '@/components/core/text-editor/text-editor';
 import { CustomDatePicker } from '@/components/formFields/custom-date-picker';
 import { CustomSelect } from '@/components/formFields/custom-select';
@@ -13,19 +15,21 @@ import { CustomTextField } from '@/components/formFields/custom-textfield';
 import { ErrorMessage } from '@/components/formFields/error-message';
 import { Iconify } from '@/components/iconify/iconify';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
+import PageLoader from '@/components/PageLoader/PageLoader';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
 
-import { createCampaignAsync } from '../_lib/campaign.actions';
+import { createCampaignAsync, getCampaignAsync } from '../_lib/campaign.actions';
 import { defaultCampaign } from '../_lib/campaign.types';
 import { ContentGuideline } from './content-guideline';
 
-export const ManageCampaignForm = ({ data }) => {
-  const isUpdated = data?.id ? true : false;
+export const ManageCampaignForm = ({ slug }) => {
+  const isUpdated = slug ? true : false;
 
   // *********************States*********************************
   const [loading, setLoading] = React.useState(false);
   const [mediaPreview, setMediaPreview] = React.useState(null);
   const [file, setFile] = React.useState(null);
+  const router = useRouter();
 
   const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
     useFormik({
@@ -49,23 +53,38 @@ export const ManageCampaignForm = ({ data }) => {
             })
           : await createCampaignAsync(file, values);
         if (res.success) {
-          onConfirm();
+          router.push(paths.dashboard.campaign);
         }
         setLoading(false);
       },
     });
 
+  const getSingleData = async () => {
+    setLoading(true);
+    try {
+      const response = await getCampaignAsync(slug);
+
+      setValues(response.data);
+    } catch (error) {
+      console.error('Error fetching profile data:', error);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    if (isUpdated) {
+      getSingleData();
+    }
+  }, []);
+
   return (
-    <Box>
+    <PageLoader loading={loading} error={null}>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid size={{ md: 3, xs: 12 }}>
-            <CustomTextField
-              name="name"
-              label="Campaign Name"
-              value={values.name}
-              onChange={handleChange}
-            />
+            <CustomTextField name="name" label="Campaign Name" value={values.name} onChange={handleChange} />
             <ErrorMessage error={errors.name} />
           </Grid>
           <Grid size={{ md: 3, xs: 12 }}>
@@ -201,8 +220,8 @@ export const ManageCampaignForm = ({ data }) => {
               name="status"
               options={[
                 { value: 'PENDING', label: 'Pending' },
-                { value: 'DECLINED', label: 'Declined' },
-                { value: 'ACTIVE', label: 'Active' },
+                { value: 'APPROVED', label: 'Approved' },
+                { value: 'REJECTED', label: 'Rejected' },
                 { value: 'COMPLETED', label: 'Completed' },
               ]}
             />
@@ -266,6 +285,6 @@ export const ManageCampaignForm = ({ data }) => {
       </form>
 
       {mediaPreview && <MediaIframeDialog open={true} data={mediaPreview} onClose={() => setMediaPreview(null)} />}
-    </Box>
+    </PageLoader>
   );
 };
