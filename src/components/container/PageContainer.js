@@ -5,7 +5,7 @@ export const PageContainer = ({ children }) => {
         <Box
             sx={{
                 maxWidth: 'var(--Content-maxWidth)',
-                m: 'var(--Content-margin)',
+                m: 'var(--Content-margin)',  
                 p: 'var(--Content-padding)',
                 width: 'var(--Content-width)',
             }}
