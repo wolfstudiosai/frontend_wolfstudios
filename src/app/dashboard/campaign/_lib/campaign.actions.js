@@ -27,7 +27,7 @@ export const getCampaignAsync = async (slug) => {
 
 export const createCampaignAsync = async (file, data) => {
   try {
-    const { slug, ...rest } = data;
+    const { slug, created_by, ...rest } = data;
     let thumbnailPath = '';
     if (file) {
       const uploadResponse = await uploadFileAsync(file);
@@ -49,7 +49,7 @@ export const createCampaignAsync = async (file, data) => {
 
 export const updateUCampaignAsync = async (file, data) => {
   try {
-    const { id, slug, user_id, created_at, updated_at, ...rest } = data;
+    const { id, slug, user_id, created_by, created_at, updated_at, ...rest } = data;
     let thumbnailPath = '';
     if (file) {
       const uploadResponse = await uploadFileAsync(file);

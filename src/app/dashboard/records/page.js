@@ -124,9 +124,9 @@ export default function Page() {
         rowsPerPage: pagination.limit,
       });
       if (response.success) {
+        console.log(response, 'response');
         setRecords(response.data);
         setTotalRecords(response.totalRecords);
-        setPagination((pre) => ({ ...pre, limit: response.totalRecords }));
       }
     } catch (error) {
       console.log(error);
@@ -134,6 +134,12 @@ export default function Page() {
       setLoading(false);
     }
   }
+
+  const handlePaginationModelChange = (newPaginationModel) => {
+    // {page: 1, pageSize: 50}
+    const { page, pageSize } = newPaginationModel;
+    setPagination({ pageNo: page + 1, limit: pageSize });
+  };
 
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
@@ -166,7 +172,7 @@ export default function Page() {
 
   React.useEffect(() => {
     fetchList();
-  }, []);
+  }, [pagination]);
 
   return (
     <PageContainer>
@@ -204,7 +210,9 @@ export default function Page() {
               onProcessRowUpdateError={handleProcessRowUpdateError}
               loading={loading}
               noDataMessage="No records found"
-              pageSize={pagination.limit}
+              rowCount={totalRecords}
+              pageSizeOptions={[10, 25, 50, 100]}
+              onPageChange={handlePaginationModelChange}
             />
           </Box>
           {!records?.length ? (
