@@ -16,6 +16,7 @@ export const paths = {
 
     // admin
     users: '/dashboard/users',
+    portfolios: '/dashboard/portfolios',
 
     // can be removed later on
     settings: {
