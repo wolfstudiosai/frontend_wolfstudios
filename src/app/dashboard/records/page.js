@@ -177,7 +177,6 @@ export default function Page() {
     selectedRows.forEach((row) => {
       idsToDelete.push(row.id);
     });
-    console.log(idsToDelete, 'idsToDelete');
     const response = await deleteRecordAsync(idsToDelete);
     if (response.success) {
       fetchList();

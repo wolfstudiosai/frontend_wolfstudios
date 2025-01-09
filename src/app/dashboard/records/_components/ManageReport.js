@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { createRecordAsync, getRecord} from "../_lib/records.actions";
 import { defaultRecord } from "../_lib/records.types";
-import { updateUserData } from "../../users/_lib/actions";
+import { updateUserData } from "../../users/_lib/user.actions";
 
 export const ManageReport = ({ id }) => {
     const isUpdated = Boolean(id);

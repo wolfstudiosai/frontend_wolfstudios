@@ -1,7 +1,7 @@
 'use client';
 
-import { createUser } from '@/app/dashboard/users/_lib/actions';
-import { defaultUser } from '@/app/dashboard/users/_lib/types';
+import { createUser } from '@/app/dashboard/users/_lib/user.actions';
+import { defaultUser } from '@/app/dashboard/users/_lib/user.types';
 import { CustomPasswordInput } from '@/components/formFields/CustomPasswordInput';
 import { paths } from '@/paths';
 import { CircularProgress } from '@mui/material';
