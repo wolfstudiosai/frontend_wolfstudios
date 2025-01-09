@@ -16,6 +16,8 @@ export const EditableDataTable = ({
   rowCount,
   pageSizeOptions,
   onPageChange,
+  checkboxSelection = false, 
+  onRowSelectionModelChange
 }) => {
   const [cellModesModel, setCellModesModel] = React.useState({});
 
@@ -76,6 +78,8 @@ export const EditableDataTable = ({
         disableColumnSorting
         onPaginationModelChange={onPageChange}
         paginationMode="server"
+        checkboxSelection={checkboxSelection} // it will enable checkbox selection
+        onRowSelectionModelChange={onRowSelectionModelChange} //it will return all selected rows
       />
       {!rows?.length && !loading && (
         <Box sx={{ p: 3 }}>

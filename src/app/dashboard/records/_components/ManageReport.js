@@ -6,8 +6,8 @@ import Grid from "@mui/material/Grid2";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { createRecordAsync, getRecord} from "../_lib/actions";
-import { defaultRecord } from "../_lib/types";
+import { createRecordAsync, getRecord} from "../_lib/records.actions";
+import { defaultRecord } from "../_lib/records.types";
 import { updateUserData } from "../../users/_lib/actions";
 
 export const ManageReport = ({ id }) => {

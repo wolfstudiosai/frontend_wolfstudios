@@ -2,7 +2,7 @@ import React from 'react';
 import { Delete } from '@mui/icons-material';
 import { Box, Button, IconButton, Popover, Typography } from '@mui/material';
 
-export const DeleteConfirmationPopover = ({ onDelete, title }) => {
+export const DeleteConfirmationPopover = ({ onDelete, title, disabled = false }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleOpen = (event) => {
@@ -20,7 +20,7 @@ export const DeleteConfirmationPopover = ({ onDelete, title }) => {
 
   return (
     <>
-      <IconButton size="small" color="error" onClick={handleOpen} title="Delete">
+      <IconButton size="small" color="error" onClick={handleOpen} title="Delete" disabled={disabled}>
         <Delete />
       </IconButton>
       <Popover
