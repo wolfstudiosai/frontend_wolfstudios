@@ -26,6 +26,7 @@ import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmati
 import PageLoader from '@/components/PageLoader/PageLoader';
 
 import { deleteCampaignAsync, getCampaignListAsync } from './_lib/campaign.actions';
+import { validateYupSchema } from 'formik';
 
 export default function Page() {
   const router = useRouter();
@@ -53,9 +54,12 @@ export default function Page() {
       setLoading(false);
     }
   }
-
-  const handleDelete = async (id) => {
-    const response = await deleteCampaignAsync([id]);
+  const handleDelete = async () => {
+    const idsToDelete = [];
+    selectedRows.forEach((row) => {
+      idsToDelete.push(row.id);
+    });
+    const response = await deleteCampaignAsync(idsToDelete);
     if (response.success) {
       fetchList();
     }
@@ -68,15 +72,9 @@ export default function Page() {
   const columns = [
     {
       formatter: (row) => (
-        <Stack direction="row">
-          <IconButton size="small" title="Edit" onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
-            <PencilSimpleIcon />
-          </IconButton>
-          <DeleteConfirmationPopover
-            onDelete={() => handleDelete(row.id)}
-            title={`Want to delete the campaign "${row.name}"?`}
-          />
-        </Stack>
+        <IconButton size="small" title="Edit" onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
+          <PencilSimpleIcon />
+        </IconButton>
       ),
       name: 'Actions',
       // hideName: true,
@@ -197,7 +195,15 @@ export default function Page() {
                       <RefreshPlugin onClick={fetchList} />
                     </>
                   }
-                  rightItems={<></>}
+                  rightItems={
+                    <>
+                      <DeleteConfirmationPopover
+                        disabled={selectedRows.length === 0}
+                        onDelete={handleDelete}
+                        title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
+                      />
+                    </>
+                  }
                   onRowsPerPageChange={(pageNumber, rowsPerPage) =>
                     setPagination({ pageNo: pageNumber, limit: rowsPerPage })
                   }

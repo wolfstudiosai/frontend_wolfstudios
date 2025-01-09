@@ -141,7 +141,7 @@ const SingleCard = ({ data }) => {
                 />
                 <Box p={2}>
                     <Typography color="text.secondary" sx={{ fontWeight: 600 }}>
-                        {data.title}
+                        {data.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                         {textShortner(data.description, 80)}

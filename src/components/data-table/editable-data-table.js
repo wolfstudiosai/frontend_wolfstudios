@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { DataGrid, GridCellModes } from '@mui/x-data-grid';
+import { DataGrid, GridCellModes, GridToolbar } from '@mui/x-data-grid';
 
 export const EditableDataTable = ({
   columns,
@@ -16,6 +16,8 @@ export const EditableDataTable = ({
   rowCount,
   pageSizeOptions,
   onPageChange,
+  checkboxSelection = false,
+  onRowSelectionModelChange,
 }) => {
   const [cellModesModel, setCellModesModel] = React.useState({});
 
@@ -76,6 +78,9 @@ export const EditableDataTable = ({
         disableColumnSorting
         onPaginationModelChange={onPageChange}
         paginationMode="server"
+        checkboxSelection={checkboxSelection} // it will enable checkbox selection
+        onRowSelectionModelChange={onRowSelectionModelChange} //it will return all selected rows
+        slots={{ toolbar: GridToolbar }} // filtering csv download, hide cols, etc
       />
       {!rows?.length && !loading && (
         <Box sx={{ p: 3 }}>
