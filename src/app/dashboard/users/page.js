@@ -67,7 +67,7 @@ export default function Page({ searchParams }) {
     fetchList();
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     const idsToDelete = [];
     selectedRows.forEach((row) => {
       idsToDelete.push(row.id);
