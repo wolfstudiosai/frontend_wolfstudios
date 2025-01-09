@@ -11,14 +11,13 @@ import moment from 'moment';
 import { CardTitle } from '@/components/cardTitle/CardTitle';
 import { PageContainer } from '@/components/container/PageContainer';
 import { FilterButton } from '@/components/core/filter-button';
-import { HideColumsPopover } from '@/components/core/filters/HideColumsPopover';
 import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '@/components/data-table/editable-data-table';
 import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
-import PageLoader from '@/components/PageLoader/PageLoader';
 
 import { createRecordAsync, deleteRecordAsync, getRecordList, updateRecordAsync } from './_lib/records.actions';
 import { defaultRecord } from './_lib/records.types';
+import { HideColumsPopover } from '@/components/core/filters/HideColumsPopover';
 
 // table columns
 const columns = [
@@ -212,7 +211,7 @@ export default function Page() {
       <Card>
         <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
           <Box>
-            <FilterButton
+            {/* <FilterButton
               label="Columns"
               onFilterApply={(value) => {
                 setFilteredValue(value);
@@ -222,7 +221,7 @@ export default function Page() {
               }}
               popover={<HideColumsPopover />}
               value={columns}
-            />
+            /> */}
             <RefreshPlugin onClick={fetchList} />
           </Box>
           <DeleteConfirmationPopover
