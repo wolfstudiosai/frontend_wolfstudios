@@ -87,7 +87,6 @@ function TooltipContent({ active, payload }) {
 }
 
 const renderCustomBarLabel = ({ payload, x, y, width, height, value }) => {
-  console.log(payload, 'payload');
   return (
     <text
       x={x + width / 2}

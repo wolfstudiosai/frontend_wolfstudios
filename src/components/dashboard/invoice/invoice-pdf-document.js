@@ -51,7 +51,7 @@ export function InvoicePDFDocument(_) {
             <Text style={[styles.textXl, styles.fontSemibold]}>Invoice</Text>
           </View>
           <View>
-            <Image source="/assets/logo-emblem--dark.png" style={styles.brand} />
+            <Image alt="Emblem" source="/assets/logo-emblem--dark.png" style={styles.brand} />
           </View>
         </View>
         <View style={styles.refs}>

@@ -13,6 +13,9 @@ export const EditableDataTable = ({
   loading = false,
   noDataMessage = 'No records found',
   pageSize = 10,
+  rowCount,
+  pageSizeOptions,
+  onPageChange,
 }) => {
   const [cellModesModel, setCellModesModel] = React.useState({});
 
@@ -55,20 +58,24 @@ export const EditableDataTable = ({
     <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
       <DataGrid
         rows={rows}
+        rowCount={rowCount}
         columns={columns}
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={onProcessRowUpdateError}
         cellModesModel={cellModesModel}
         onCellModesModelChange={handleCellModesModelChange}
         onCellClick={handleCellClick}
-        pageSize={pageSize}
+        // pageSize={pageSize}
         loading={loading}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           '& .MuiDataGrid-cell': {
             border: (theme) => `1px solid ${theme.palette.divider}`,
           },
         }}
         disableColumnSorting
+        onPaginationModelChange={onPageChange}
+        paginationMode="server"
       />
       {!rows?.length && !loading && (
         <Box sx={{ p: 3 }}>

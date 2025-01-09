@@ -112,7 +112,7 @@ const columns = [
 export default function Page() {
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 200 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
 
@@ -133,6 +133,11 @@ export default function Page() {
       setLoading(false);
     }
   }
+
+  const handlePaginationModelChange = (newPaginationModel) => {
+    const { page, pageSize } = newPaginationModel;
+    setPagination({ pageNo: page + 1, limit: pageSize });
+  };
 
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
@@ -179,42 +184,44 @@ export default function Page() {
           </>
         }
       />
-      <PageLoader loading={loading} error={null}>
-        <Card>
-          <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
-            <FilterButton
-              label="Columns"
-              onFilterApply={(value) => {
-                setFilteredValue(value);
-              }}
-              onFilterDelete={() => {
-                // handlePhoneChange();
-              }}
-              popover={<HideColumsPopover />}
-              value={columns}
-            />
-          </Box>
+      {/* <PageLoader loading={loading} error={null}> */}
+      <Card>
+        <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
+          <FilterButton
+            label="Columns"
+            onFilterApply={(value) => {
+              setFilteredValue(value);
+            }}
+            onFilterDelete={() => {
+              // handlePhoneChange();
+            }}
+            popover={<HideColumsPopover />}
+            value={columns}
+          />
+        </Box>
 
-          <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
-            <EditableDataTable
-              columns={visibleColumns}
-              rows={records}
-              processRowUpdate={processRowUpdate}
-              onProcessRowUpdateError={handleProcessRowUpdateError}
-              loading={loading}
-              noDataMessage="No records found"
-              pageSize={pagination.limit}
-            />
+        <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
+          <EditableDataTable
+            columns={columns}
+            rows={records}
+            processRowUpdate={processRowUpdate}
+            onProcessRowUpdateError={handleProcessRowUpdateError}
+            loading={loading}
+            noDataMessage="No records found"
+            rowCount={totalRecords}
+            pageSizeOptions={[10, 25, 50, 100]}
+            onPageChange={handlePaginationModelChange}
+          />
+        </Box>
+        {!records?.length ? (
+          <Box sx={{ p: 3 }}>
+            <Typography color="text.secondary" sx={{ textAlign: 'center' }} variant="body2">
+              No records found
+            </Typography>
           </Box>
-          {!records?.length ? (
-            <Box sx={{ p: 3 }}>
-              <Typography color="text.secondary" sx={{ textAlign: 'center' }} variant="body2">
-                No records found
-              </Typography>
-            </Box>
-          ) : null}
-        </Card>
-      </PageLoader>
+        ) : null}
+      </Card>
+      {/* </PageLoader> */}
     </PageContainer>
   );
 }
