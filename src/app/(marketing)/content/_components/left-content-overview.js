@@ -104,15 +104,84 @@ const TypographyWithBg = ({ title, value }) => {
 const Tags = ({ data }) => {
   return (
     <Box mt={3}>
-      <Typography variant="h6" color="text.primary" gutterBottom>
+      <Typography
+        variant="h6"
+        color="text.primary"
+        gutterBottom
+        sx={{ fontSize: '35px', fontWeight: '400', fontFamily: 'Vidaloka' }}
+      >
         Recent Used Tags
       </Typography>
+      <Grid
+        container
+        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}
+      >
+        <Grid item xs={12} sm={6}>
+          <Button
+            variant="outlined"
+            sx={{
+              borderRadius: '25px',
+              backgroundColor: 'transparent',
+              color: '#585858',
+              border: 'solid 1px #585858',
+              width: '100%',
+              paddingX: '50px',
+              '&:hover': {
+                backgroundColor: '#D8D8D8',
+                border: 'solid 1px #D8D8D8',
+                color: 'white',
+              },
+            }}
+          >
+            Work from Home
+          </Button>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Button
+            variant="outlined"
+            sx={{
+              borderRadius: '25px',
+              backgroundColor: '#D8D8D8',
+              color: 'black',
+              border: 'solid 1px #D8D8D8',
+              width: '100%',
+              paddingX: '50px',
+              flex: 'end',
+              '&:hover': {
+                backgroundColor: 'transparent',
+                border: 'solid 1px #D8D8D8',
+                color: 'black',
+              },
+            }}
+          >
+            Outdoor
+          </Button>
+        </Grid>
+      </Grid>
       <Grid container direction="column" spacing={2}>
         {data.map((tag, index) => (
           <Grid item xs={12} key={index}>
             <TagCard tag={tag} />
           </Grid>
         ))}
+        <Grid>
+          <Button
+            variant="outlined"
+            sx={{
+              borderRadius: '25px',
+              backgroundColor: 'transparent',
+              color: '#585858',
+              border: 'solid 1px #585858',
+              '&:hover': {
+                backgroundColor: '#D8D8D8',
+                border: 'solid 1px #D8D8D8',
+                color: 'white',
+              },
+            }}
+          >
+            See More
+          </Button>
+        </Grid>
       </Grid>
     </Box>
   );
@@ -136,13 +205,17 @@ const TagCard = ({ tag }) => {
         sx={{ width: 80, height: 80, borderRadius: '8px', mr: 2 }}
       />
       <CardContent sx={{ flex: 1, p: 0 }}>
-        <Typography variant="subtitle1" color="text.primary">
+        <Typography
+          variant="subtitle1"
+          color="text.primary"
+          sx={{ fontFamily: 'Montserrat', fontSize: '20px', textTransform: 'uppercase' }}
+        >
           TAG: {tag.tag}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.primary" sx={{ fontSize: '14px' }}>
           Profile: {tag.profile}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.primary">
           Product: {tag.product}
         </Typography>
       </CardContent>

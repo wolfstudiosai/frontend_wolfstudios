@@ -18,7 +18,7 @@ export default function Page() {
     },
     author: {
       name: 'Combina Key',
-      title: 'Director of Partnerships',
+      title: 'Founder of The Wolves LA, Director of Partnerships and Productions.',
       profile_image: 'path/to/author-image.jpg',
     },
     tags: [
