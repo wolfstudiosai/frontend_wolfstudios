@@ -24,6 +24,11 @@ export const navData = [
     href: paths.public.profile,
   },
   {
+    key: 'content',
+    title: 'Content',
+    href: paths.public.content,
+  },
+  {
     key: 'login',
     title: 'Login',
     href: paths.auth.default.signIn,
