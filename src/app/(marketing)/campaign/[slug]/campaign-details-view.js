@@ -22,7 +22,7 @@ export const CampaignDetailsView = ({ data }) => {
               compensation: data.partner_compensation,
               deliverables: data.partner_deliverables,
             }}
-            author={data.user_id}
+            author={data.created_by}
             campaign_title={data.name}
           />
         </Grid>
@@ -30,8 +30,8 @@ export const CampaignDetailsView = ({ data }) => {
         {/* Right Content */}
         <Grid item size={{ xs: 12, md: 8 }}>
           <CampaignDetailsRightPanel
-          thumbnail={data.thumbnail}
-          title={data.name}
+            thumbnail={data.thumbnail}
+            title={data.name}
             article={{
               title: 'Why the Hook Matters More Than Ever',
               content:
