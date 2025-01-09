@@ -1,7 +1,7 @@
 
 import Cookies from 'js-cookie';
 
-export const setTokenInCookies = (access_token: string) => {
+export const setTokenInCookies = (access_token) => {
   Cookies?.set("token", access_token)
 };
 
@@ -14,7 +14,7 @@ export const removeTokenFromCookies = () => {
 };
 
 
-export const getAuthTokenFromLocalStore = (): string | null => {
+export const getAuthTokenFromLocalStore = () => {
   const auth = localStorage.getItem("auth");
   if (auth) {
     return JSON.parse(auth).token;

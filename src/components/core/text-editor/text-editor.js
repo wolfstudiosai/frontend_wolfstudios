@@ -21,22 +21,22 @@ import { TextEditorToolbar } from './text-editor-toolbar';
  * />
  * ```
  */
-export function TextEditor({
-  content,
-  editable = true,
-  hideToolbar,
-  onUpdate = () => {
-    // noop
-  },
-  placeholder,
-}) {
+export function TextEditor({ content, editable = true, hideToolbar, onUpdate, placeholder }) {
   const extensions = [
     StarterKit,
     Placeholder.configure({ emptyEditorClass: 'is-editor-empty', placeholder }),
     Link.configure({ openOnClick: false, autolink: true }),
   ];
 
-  const editor = useEditor({ extensions, content, editable, onUpdate });
+  const editor = useEditor({
+    extensions,
+    content,
+    editable,
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML();
+      onUpdate(html);
+    },
+  });
 
   return (
     <Box

@@ -1,6 +1,7 @@
 import { Iconify } from "@/components/iconify/iconify";
 import { Avatar, Box, Divider, IconButton, Paper, Stack, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
+import dayjs from "dayjs";
 
 export const CampaignDetailsSidebar = ({ description, details, author, campaign_title }) => {
     return (
@@ -22,7 +23,7 @@ export const CampaignDetailsSidebar = ({ description, details, author, campaign_
                 {description}
             </Typography>
             <Box mt={3}>
-                <TypographyWithBg title="Date" value={details.date} />
+                <TypographyWithBg title="Date" value={dayjs(details.date).format('YYYY-MM-DD')} />
                 <TypographyWithBg title="Compensation" value={details.compensation} />
                 <TypographyWithBg title="Deliverables" value={details.deliverables} />
             </Box>

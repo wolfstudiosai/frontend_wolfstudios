@@ -6,13 +6,11 @@ import { ManageCampaignForm } from '../_component/manage-campaign-form';
 
 export const metadata = { title: `Create Record | ${config.site.name}` };
 
-export default function Page({ params }) {
-  const { id } = params;
-
+export default function Page({ params: { slug } }) {
   return (
     <PageContainer>
       <CardTitle title="Edit campaign" />
-      <ManageCampaignForm />
+      <ManageCampaignForm slug={slug} />
     </PageContainer>
   );
 }

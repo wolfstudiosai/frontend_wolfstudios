@@ -35,30 +35,36 @@ export const dashboardItems = [
     key: 'general',
     title: 'General',
     items: [
-      { key: 'overview', title: 'Overview', href: paths.dashboard.overview, icon: 'house' },
-      { key: 'analytics', title: 'Analytics', href: paths.dashboard.analytics, icon: 'chart-pie' },
-      { key: 'records', title: 'Records', href: paths.dashboard.records, icon: 'address-book' },
+      {
+        key: 'overview',
+        title: 'Overview',
+        href: paths.dashboard.overview,
+        icon: 'material-symbols-light:overview-outline-rounded',
+      },
+      { key: 'analytics', title: 'Analytics', href: paths.dashboard.analytics, icon: 'hugeicons:analysis-text-link' },
+      { key: 'records', title: 'Records', href: paths.dashboard.records, icon: 'pepicons-pencil:file' },
     ],
   },
   {
     key: 'admin',
     title: 'Admin',
     items: [
-      { key: 'usrs', title: 'Users', href: paths.dashboard.users, icon: 'users' },
-      { key: 'Campaign', title: 'Campaign', href: paths.dashboard.campaign, icon: 'users' },
+      { key: 'usrs', title: 'Users', href: paths.dashboard.users, icon: 'solar:user-linear' },
+      { key: 'Campaign', title: 'Campaign', href: paths.dashboard.campaign, icon: 'material-symbols-light:ads-click' },
+      { key: 'Portfolio', title: 'Portfolio', href: paths.dashboard.portfolios, icon: 'material-symbols-light:ads-click' },
 
       {
         key: 'partners_by_campaign',
         title: 'Partners by campaign',
         href: paths.dashboard.partners_by_campaign,
-        icon: 'users',
+        icon: 'ph:handshake-light',
       },
 
       {
         key: 'needs_offer_approval',
         title: 'Needs offer/ approval',
         href: paths.dashboard.needs_offer_approval,
-        icon: 'users',
+        icon: 'material-symbols-light:order-approve-outline-rounded',
       },
     ],
   },

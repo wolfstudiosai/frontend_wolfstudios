@@ -123,10 +123,17 @@ export const PortfolioView = () => {
   return (
     <Box sx={{ py: 4 }}>
       <PortfolioSlider />
-      <Typography variant='portfolioTitle'
-        gutterBottom
+      <Typography gutterBottom
+        sx={{
+          fontWeight: 300,
+          fontSize: {
+            xs: '1.4rem',
+            md: '2rem',
+          },
+          lineHeight: 1,
+        }}
       >
-        PORTFOLIOS
+        Portfolios
       </Typography>
       <PortfolioFilter />
       <Grid container spacing={2}>
@@ -143,20 +150,20 @@ export const PortfolioView = () => {
 const PortfolioCard = ({ portfolio }) => {
   return (
     <Box>
-      <Paper elevation={3} sx={{ backgroundColor: '#ebebeb',boxShadow:'none' }}>
+      <Paper elevation={1} variant="outlined">
         <Box
           component="img"
           src={portfolio.image}
-          sx={{ height: 200, width: '100%', objectFit: 'cover', border: 0, borderRadius: '20px',boxShadow: '0 2px 5px #0003' }}
+          sx={{ height: 200, width: '100%', objectFit: 'cover', border: 0, borderRadius: '5px 5px 0 0' }}
         />
-        <Box py={2}>
-          <Typography variant='portfolioCardTitle' sx={{ display: 'block', width: '100%' }}>
+        <Box p={2}>
+          <Typography color="text.secondary" sx={{ fontWeight: 600 }}>
             {portfolio.title}
           </Typography>
-          <Typography variant="portfolioCardSubTitle" color="text.secondary" sx={{ display: 'block', width: '100%' }}>
+          <Typography variant="body2" color="text.secondary">
             {textShortner(portfolio.description, 80)}
           </Typography>
-          <Typography variant="portfolioCardSubTitle" color="text.secondary" sx={{ display: 'block', width: '100%' }}>
+          <Typography variant="body2" color="text.secondary" fontWeight={600}>
             Model: {portfolio.model || '-'}
           </Typography>
           <Link
