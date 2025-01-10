@@ -16,26 +16,26 @@ import { FilterButton } from '@/components/core/filter-button';
 import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopover';
 import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
 import { DataTable } from '@/components/data-table/data-table';
+import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
 import PageLoader from '@/components/PageLoader/PageLoader';
 
-import { getPortfolios } from '../_lib/action';
+import { deletePortfolio, getPortfolios } from '../_lib/portfolio.action';
 
 export default function Portfolios() {
   const [portfolios, setPortfolios] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
   const [totalPortfolios, setTotalPortfolios] = React.useState(0);
-  const [status, setStatus] = React.useState('');
+  const [status, setStatus] = React.useState('PENDING');
 
   const fetchList = async () => {
     try {
       setLoading(true);
-      // const response = await getPortfolios({
-      //   page: pagination.pageNo,
-      //   rowsPerPage: pagination.limit,
-      //   status: status
-      // });
-      const response = getPortfolios();
+      const response = await getPortfolios({
+        page: pagination.pageNo,
+        limit: pagination.limit,
+        status: status,
+      });
       if (response.success) {
         setLoading(false);
         setPortfolios(response.data);
@@ -47,6 +47,12 @@ export default function Portfolios() {
       setLoading(false);
     }
   };
+  const handleDelete = async (id) => {
+    const response = await deletePortfolio(id);
+    if (response.success) {
+      fetchList();
+    }
+  };
 
   React.useEffect(() => {
     fetchList();
@@ -55,11 +61,17 @@ export default function Portfolios() {
   const columns = [
     {
       formatter: (row) => (
-        <Link href={`/dashboard/portfolios/add-portfolio?id=${row.id}`}>
-          <IconButton>
-            <PencilSimpleIcon />
-          </IconButton>
-        </Link>
+        <Stack direction="row">
+          <Link href={`/dashboard/portfolios/add-portfolio?id=${row.id}`}>
+            <IconButton size="small" title="Edit">
+              <PencilSimpleIcon />
+            </IconButton>
+          </Link>
+          <DeleteConfirmationPopover
+            onDelete={() => handleDelete(row.id)}
+            title={`Want to delete the Portfolio "${row.name}"?`}
+          />
+        </Stack>
       ),
       name: 'Actions', // Custom column for actions
     },

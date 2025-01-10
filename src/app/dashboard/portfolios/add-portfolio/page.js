@@ -24,7 +24,7 @@ import { toast } from 'sonner';
 import * as Yup from 'yup';
 
 import { EPortfolioType } from '../_enums/enum';
-import { createPortfolio, getPortfolioById, updatePortfolio } from '../_lib/action';
+import { createPortfolio, getPortfolioById, updatePortfolio } from '../_lib/portfolio.action';
 
 const getValidationSchema = (isUpdated) => {
   return Yup.object().shape({
@@ -40,7 +40,7 @@ const getValidationSchema = (isUpdated) => {
     creation_10_images_services_provide: Yup.string().notRequired(),
     brand: Yup.string().notRequired(),
     deliverables: Yup.string().notRequired(),
-    status: Yup.mixed().oneOf(['ACTIVE', 'BLOCKED']).notRequired(),
+    status: Yup.mixed().oneOf(['PENDING', 'APPROVED', 'REJECTED', 'COMPLETED']).notRequired(),
   });
 };
 
@@ -61,7 +61,7 @@ const Page = ({ data }) => {
     try {
       const response = await getPortfolioById(selectedId);
       if (response.success) {
-        const portfolio = response.data[0];
+        const portfolio = response.data;
         setValues(portfolio);
       }
     } catch (error) {}
@@ -70,7 +70,7 @@ const Page = ({ data }) => {
   const { values, errors, isValid, handleChange, handleSubmit, setFieldValue, setValues } = useFormik({
     initialValues: data || {
       name: '',
-      type: EPortfolioType.Vlogs, // Default portfolio type
+      type: EPortfolioType.Vlogs,
       model: '',
       days_location: '',
       sessions: '',
@@ -81,14 +81,13 @@ const Page = ({ data }) => {
       creation_10_images_services_provide: '',
       brand: '',
       deliverables: '',
-      status: 'ACTIVE',
+      status: 'PENDING',
     },
     validationSchema: getValidationSchema(isUpdated),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       setLoading(true);
       try {
-        const res = isUpdated ? updatePortfolio({ id: selectedId, ...values }) : createPortfolio(values);
-
+        const res = isUpdated ? await updatePortfolio({ id: selectedId, ...values }) : await createPortfolio(values);
         if (res.success) {
           setLoading(false);
           router.push('/dashboard/portfolios');
@@ -254,8 +253,10 @@ const Page = ({ data }) => {
                           value={values.status}
                           onChange={(e) => setFieldValue('status', e.target.value)}
                         >
-                          <MenuItem value="ACTIVE">Active</MenuItem>
-                          <MenuItem value="BLOCKED">Blocked</MenuItem>
+                          <MenuItem value="PENDING">Pending</MenuItem>
+                          <MenuItem value="APPROVED">Approved</MenuItem>
+                          <MenuItem value="COMPLETED">Completed</MenuItem>
+                          <MenuItem value="REJECTED">Rejected</MenuItem>
                         </Select>
                       </FormControl>
                     </Grid>

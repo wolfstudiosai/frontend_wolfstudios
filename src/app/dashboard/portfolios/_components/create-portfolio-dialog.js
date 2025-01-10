@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid2';
 import { useFormik } from "formik";
 import React from "react";
 import * as Yup from 'yup';
-import { createPortfolio, updatePortfolio } from "../_lib/action";
+import { createPortfolio, updatePortfolio } from "../_lib/portfolio.action";
 import { EPortfolioType } from "../_enums/enum";
 
 const getValidationSchema = (isUpdated) => {
@@ -21,7 +21,7 @@ const getValidationSchema = (isUpdated) => {
       creation_10_images_services_provide: Yup.string().notRequired(),
       brand: Yup.string().notRequired(),
       deliverables: Yup.string().notRequired(),
-      status: Yup.mixed().oneOf(['ACTIVE', 'BLOCKED']).notRequired(),
+      status: Yup.mixed().oneOf(['PENDING', 'APPROVED','COMPLETED','REJECTED']).notRequired(),
     });
   };
 
@@ -41,7 +41,7 @@ export const CreatePortfolioDialog = (props) => {
       } = useFormik({
         initialValues: data || {
           name: '',
-          type: EPortfolioType.Vlogs,  // Default portfolio type
+          type: EPortfolioType.Vlogs,
           model: '',
           days_location: '',
           sessions: '',
@@ -52,7 +52,7 @@ export const CreatePortfolioDialog = (props) => {
           creation_10_images_services_provide: '',
           brand: '',
           deliverables: '',
-          status: 'ACTIVE',
+          status: 'PENDING',
         },
         validationSchema: getValidationSchema(isUpdated),
         onSubmit: async (values) => {
@@ -190,8 +190,10 @@ export const CreatePortfolioDialog = (props) => {
                       value={values.status}
                       onChange={(e) => setFieldValue("status", e.target.value)}
                     >
-                      <MenuItem value="ACTIVE">Active</MenuItem>
-                      <MenuItem value="BLOCKED">Blocked</MenuItem>
+                      <MenuItem value="PENDING">Pending</MenuItem>
+                      <MenuItem value="APPROVED">Approved</MenuItem>
+                      <MenuItem value="COMPLETED">Completed</MenuItem>
+                      <MenuItem value="REJECTED">Rejected</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>

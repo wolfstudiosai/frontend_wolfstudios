@@ -1,6 +1,6 @@
 export const defaultPortfolio = {
   name: '',
-  type: 'Vlogs',
+  type: 'VLOGS',
   model: '',
   days_location: '',
   sessions: '',
@@ -11,5 +11,5 @@ export const defaultPortfolio = {
   creation_10_images_services_provide: '',
   brand: '',
   deliverables: '',
-  status: 'ACTIVE',
+  status: 'PENDING',
 };
