@@ -1,5 +1,8 @@
 'use client';
 
+import * as React from 'react';
+import RouterLink from 'next/link';
+import { usePathname } from 'next/navigation';
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
@@ -17,20 +20,18 @@ import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/Car
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 import { Users as UsersIcon } from '@phosphor-icons/react/dist/ssr/Users';
-import RouterLink from 'next/link';
-import { usePathname } from 'next/navigation';
-import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { paths } from '@/paths';
+import { isNavItemActive } from '@/lib/is-nav-item-active';
+import { useDialog } from '@/hooks/use-dialog';
+import { usePopover } from '@/hooks/use-popover';
+import useAuth from '@/hooks/useAuth';
 import { Dropdown } from '@/components/core/dropdown/dropdown';
 import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
 import { DropdownTrigger } from '@/components/core/dropdown/dropdown-trigger';
 import { Logo } from '@/components/core/logo';
 import { SearchDialog } from '@/components/dashboard/layout/search-dialog';
-import { useDialog } from '@/hooks/use-dialog';
-import { usePopover } from '@/hooks/use-popover';
-import { isNavItemActive } from '@/lib/is-nav-item-active';
-import { paths } from '@/paths';
 
 import { ContactsPopover } from '../contacts-popover';
 import { languageFlags, LanguagePopover } from '../language-popover';
@@ -40,7 +41,6 @@ import { NotificationsPopover } from '../notifications-popover';
 import { UserPopover } from '../user-popover/user-popover';
 import { WorkspacesSwitch } from '../workspaces-switch';
 import { navColorStyles } from './styles';
-import useAuth from '@/hooks/useAuth';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
@@ -212,7 +212,6 @@ function LanguageSwitch() {
   );
 }
 
-
 function UserButton() {
   const popover = usePopover();
   const { userInfo } = useAuth();
@@ -240,7 +239,7 @@ function UserButton() {
           }}
           variant="dot"
         >
-          <Avatar src={userInfo.profile_pic} />
+          <Avatar src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${userInfo.profile_pic}`} />
         </Badge>
       </Box>
       <UserPopover anchorEl={popover.anchorRef.current} onClose={popover.handleClose} open={popover.open} />
@@ -293,15 +292,15 @@ function NavItem({ disabled, external, items, href, icon, label, matcher, pathna
         {...(isBranch
           ? { role: 'button' }
           : {
-            ...(href
-              ? {
-                component: external ? 'a' : RouterLink,
-                href,
-                target: external ? '_blank' : undefined,
-                rel: external ? 'noreferrer' : undefined,
-              }
-              : { role: 'button' }),
-          })}
+              ...(href
+                ? {
+                    component: external ? 'a' : RouterLink,
+                    href,
+                    target: external ? '_blank' : undefined,
+                    rel: external ? 'noreferrer' : undefined,
+                  }
+                : { role: 'button' }),
+            })}
         sx={{
           alignItems: 'center',
           borderRadius: 1,
@@ -401,15 +400,15 @@ function DropdownItem({ disabled, external, items, href, matcher, pathname, titl
         {...(isBranch
           ? { role: 'button' }
           : {
-            ...(href
-              ? {
-                component: external ? 'a' : RouterLink,
-                href,
-                target: external ? '_blank' : undefined,
-                rel: external ? 'noreferrer' : undefined,
-              }
-              : { role: 'button' }),
-          })}
+              ...(href
+                ? {
+                    component: external ? 'a' : RouterLink,
+                    href,
+                    target: external ? '_blank' : undefined,
+                    rel: external ? 'noreferrer' : undefined,
+                  }
+                : { role: 'button' }),
+            })}
         sx={{
           alignItems: 'center',
           borderRadius: 1,

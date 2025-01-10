@@ -266,7 +266,7 @@ export const ManageCampaignForm = ({ slug }) => {
           </Grid>
           <Grid item size={12}>
             <Button
-              variant="contained" 
+              variant="contained"
               type={loading ? 'button' : 'submit'}
               startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
             >

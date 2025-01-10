@@ -1,31 +1,30 @@
-"use client"
+'use client';
+
+import * as React from 'react';
+import RouterLink from 'next/link';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import RouterLink from 'next/link';
-
-import Typography from '@mui/material/Typography';
-import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
-import * as React from 'react';
-
-import PageLoader from '@/components/PageLoader/PageLoader';
+import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
+import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { DataTable } from '@/components/data-table/data-table';
+import { paths } from '@/paths';
+import { dayjs } from '@/lib/dayjs';
 import { FilterButton } from '@/components/core/filter-button';
 import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopover';
 import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
-import { dayjs } from '@/lib/dayjs';
-import { paths } from '@/paths';
-import Chip from '@mui/material/Chip';
-import Link from '@mui/material/Link';
-import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
-import { getUsers } from './_lib/actions';
-import { defaultUser } from './_lib/types';
+import { DataTable } from '@/components/data-table/data-table';
+import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
+import PageLoader from '@/components/PageLoader/PageLoader';
+
+import { deleteUserAsync, getUsers } from './_lib/user.actions';
+import { defaultUser } from './_lib/user.types';
 import { ManageUserDialog } from './manage-user-dialog';
-
-
 
 export default function Page({ searchParams }) {
   const { email, phone, sortDir } = searchParams;
@@ -36,50 +35,61 @@ export default function Page({ searchParams }) {
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
-  const [status, setStatus] = React.useState("");
+  console.log(selectedRows, 'selectedRows.....');
+  const [status, setStatus] = React.useState('');
   async function fetchList() {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await getUsers({
         page: pagination.pageNo,
         rowsPerPage: pagination.limit,
-        status: status
+        status: status,
       });
       if (response.success) {
         setUsers(response.data);
-        setTotalRecords(response.totalRecords)
+        setTotalRecords(response.totalRecords);
       }
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
-
 
   const handleOpenModal = (data) => {
     setOpenModal(true);
     setModalData(data);
-  }
-
+  };
 
   const handleConfirm = () => {
     setOpenModal(false);
     // fetchUsersData();
     fetchList();
-  }
+  };
 
+  const handleDelete = async () => {
+    const idsToDelete = [];
+    selectedRows.forEach((row) => {
+      idsToDelete.push(row.id);
+    });
+    const response = await deleteUserAsync(idsToDelete);
+    if (response.success) {
+      fetchList();
+    }
+  };
 
   React.useEffect(() => {
     fetchList();
-  }, [pagination, status])
+  }, [pagination, status]);
 
   const columns = [
     {
       formatter: (row) => (
-        <IconButton onClick={() => handleOpenModal(row)}>
-          <PencilSimpleIcon />
-        </IconButton>
+        <Stack direction="row">
+          <IconButton onClick={() => handleOpenModal(row)}>
+            <PencilSimpleIcon />
+          </IconButton>
+        </Stack>
       ),
       name: 'Actions',
       // hideName: true,
@@ -130,16 +140,13 @@ export default function Page({ searchParams }) {
     },
     {
       formatter: (row) => {
-        return <Chip label={row.status} size="small" variant="outlined" />
+        return <Chip label={row.status} size="small" variant="outlined" />;
       },
       name: 'Status',
     },
-
   ];
 
-
   return (
-
     <Box
       sx={{
         maxWidth: 'var(--Content-maxWidth)',
@@ -159,10 +166,7 @@ export default function Page({ searchParams }) {
             </Button>
           </Box>
         </Stack>
-        <PageLoader
-          loading={loading}
-          error={null}
-        >
+        <PageLoader loading={loading} error={null}>
           <Card>
             <Box sx={{ overflowX: 'auto' }}>
               <React.Fragment>
@@ -175,26 +179,35 @@ export default function Page({ searchParams }) {
                   rows={users}
                   uniqueRowId="id"
                   selectionMode="multiple"
-
-                  leftItems={<>
-                    <FilterButton
-                      displayValue={status}
-                      label="Status"
-                      onFilterApply={(value) => {
-                        setStatus(value)
-                      }}
-                      onFilterDelete={() => {
-                        handlePhoneChange();
-                      }}
-                      popover={<StatusFilterPopover />}
-                      value={status}
-                    />
-                    <RefreshPlugin onClick={fetchList} />
-                  </>}
-
-                  rightItems={<></>}
-
-                  onRowsPerPageChange={(pageNumber, rowsPerPage) => setPagination({ pageNo: pageNumber, limit: rowsPerPage })}
+                  leftItems={
+                    <>
+                      <FilterButton
+                        displayValue={status}
+                        label="Status"
+                        onFilterApply={(value) => {
+                          setStatus(value);
+                        }}
+                        onFilterDelete={() => {
+                          handlePhoneChange();
+                        }}
+                        popover={<StatusFilterPopover />}
+                        value={status}
+                      />
+                      <RefreshPlugin onClick={fetchList} />
+                    </>
+                  }
+                  rightItems={
+                    <>
+                      <DeleteConfirmationPopover
+                        disabled={selectedRows.length === 0}
+                        onDelete={handleDelete}
+                        title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
+                      />
+                    </>
+                  }
+                  onRowsPerPageChange={(pageNumber, rowsPerPage) =>
+                    setPagination({ pageNo: pageNumber, limit: rowsPerPage })
+                  }
                   onPageChange={(newPageNumber) => setPagination({ ...pagination, pageNo: newPageNumber })}
                   onSelection={(selectedRows) => setSelectedRows?.(selectedRows)}
                 />
@@ -210,17 +223,14 @@ export default function Page({ searchParams }) {
           </Card>
         </PageLoader>
       </Stack>
-      {
-        openModal && (
-          <ManageUserDialog
-            open={openModal}
-            onClose={() => setOpenModal(false)}
-            onConfirm={handleConfirm}
-            data={modalData}
-          />
-        )
-      }
+      {openModal && (
+        <ManageUserDialog
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          onConfirm={handleConfirm}
+          data={modalData}
+        />
+      )}
     </Box>
-
   );
 }

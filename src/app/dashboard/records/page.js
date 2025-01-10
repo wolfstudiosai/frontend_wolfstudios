@@ -11,12 +11,13 @@ import moment from 'moment';
 import { CardTitle } from '@/components/cardTitle/CardTitle';
 import { PageContainer } from '@/components/container/PageContainer';
 import { FilterButton } from '@/components/core/filter-button';
-import { HideColumsPopover } from '@/components/core/filters/HideColumsPopover';
+import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '@/components/data-table/editable-data-table';
-import PageLoader from '@/components/PageLoader/PageLoader';
+import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
 
-import { createRecordAsync, getRecordList, updateRecordAsync } from './_lib/actions';
-import { defaultRecord } from './_lib/types';
+import { createRecordAsync, deleteRecordAsync, getRecordList, updateRecordAsync } from './_lib/records.actions';
+import { defaultRecord } from './_lib/records.types';
+import { HideColumsPopover } from '@/components/core/filters/HideColumsPopover';
 
 // table columns
 const columns = [
@@ -115,6 +116,7 @@ export default function Page() {
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 200 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
+  const [selectedRows, setSelectedRows] = React.useState([]);
 
   async function fetchList() {
     try {
@@ -134,6 +136,8 @@ export default function Page() {
     }
   }
 
+  // ******************************data grid handler starts*********************
+
   const handlePaginationModelChange = (newPaginationModel) => {
     const { page, pageSize } = newPaginationModel;
     setPagination({ pageNo: page + 1, limit: pageSize });
@@ -151,14 +155,32 @@ export default function Page() {
     return newRow;
   }, []);
 
+  const handleRowSelection = (newRowSelectionModel) => {
+    const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
+    setSelectedRows(selectedData);
+  };
+
   const handleProcessRowUpdateError = React.useCallback((error) => {
     console.log({ children: error.message, severity: 'error' });
   }, []);
+
+  // ******************************data grid handler ends*********************
 
   const visibleColumns = columns.filter((col) => filteredValue.includes(col.field));
 
   const handleAddNewItem = () => {
     setRecords([defaultRecord, ...records]);
+  };
+
+  const handleDelete = async () => {
+    const idsToDelete = [];
+    selectedRows.forEach((row) => {
+      idsToDelete.push(row.id);
+    });
+    const response = await deleteRecordAsync(idsToDelete);
+    if (response.success) {
+      fetchList();
+    }
   };
 
   React.useEffect(() => {
@@ -187,22 +209,30 @@ export default function Page() {
       {/* <PageLoader loading={loading} error={null}> */}
       <Card>
         <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
-          <FilterButton
-            label="Columns"
-            onFilterApply={(value) => {
-              setFilteredValue(value);
-            }}
-            onFilterDelete={() => {
-              // handlePhoneChange();
-            }}
-            popover={<HideColumsPopover />}
-            value={columns}
+          <Box>
+            {/* <FilterButton
+              label="Columns"
+              onFilterApply={(value) => {
+                setFilteredValue(value);
+              }}
+              onFilterDelete={() => {
+                // handlePhoneChange();
+              }}
+              popover={<HideColumsPopover />}
+              value={columns}
+            /> */}
+            <RefreshPlugin onClick={fetchList} />
+          </Box>
+          <DeleteConfirmationPopover
+            disabled={selectedRows.length === 0}
+            onDelete={handleDelete}
+            title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
           />
         </Box>
 
         <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
           <EditableDataTable
-            columns={columns}
+            columns={visibleColumns}
             rows={records}
             processRowUpdate={processRowUpdate}
             onProcessRowUpdateError={handleProcessRowUpdateError}
@@ -211,6 +241,8 @@ export default function Page() {
             rowCount={totalRecords}
             pageSizeOptions={[10, 25, 50, 100]}
             onPageChange={handlePaginationModelChange}
+            checkboxSelection={true}
+            onRowSelectionModelChange={handleRowSelection}
           />
         </Box>
         {!records?.length ? (
