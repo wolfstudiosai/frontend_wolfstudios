@@ -9,11 +9,8 @@ import { paths } from '@/paths';
 
 import { removeTokenFromCookies, setTokenInCookies } from '/src/utils/axios-api.helpers';
 
-// import { removeTokenFromCookies, setTokenInCookies } from 'utils/axios-api.helpers';
-
 export const INITIAL_AUTH_STATE = {
   token: '',
-  is_token_valid: false,
   name: '',
   email: '',
   contact_number: '',
@@ -48,8 +45,7 @@ export const AuthProvider = (props) => {
     const auth = localStorage.getItem('auth');
     if (auth) {
       const data = JSON.parse(auth);
-      const isTokenValid = isValidToken(data.token);
-      setUserInfo({ ...data, is_token_valid: isTokenValid });
+      setUserInfo(data);
       //   api.defaults.headers.common['auth-Token'] = `${data.token}`;
     }
     setLoading(false);
@@ -66,7 +62,6 @@ export const AuthProvider = (props) => {
 
       const userData = {
         token: token,
-        is_token_valid: true,
         name: res.data.data.name,
         email: res.data.data.email,
         contact_number: res.data.data.contact_number,
@@ -98,7 +93,7 @@ export const AuthProvider = (props) => {
       value={{
         loading,
         userInfo,
-        isLogin: userInfo.is_token_valid,
+        isLogin: isValidToken(userInfo.token),
         login: handleLogin,
         logout: handleLogout,
       }}

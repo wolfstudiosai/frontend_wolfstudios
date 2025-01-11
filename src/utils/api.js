@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import { isValidToken } from '@/contexts/auth/AuthContext';
-import { paths } from '@/paths';
 
 import { clearUserSessionFromLocalStore, getTokenFromCookies } from './axios-api.helpers';
 
