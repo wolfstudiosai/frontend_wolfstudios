@@ -17,7 +17,7 @@ import { CaretLeft as CaretLeftIcon } from '@phosphor-icons/react/dist/ssr/Caret
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 
 import { paths } from '/src/paths';
-import { useDialog } from '/src/rc/rc/hooks/use-dialog';
+import { useDialog } from '/src/hooks/use-dialog';
 
 import { CalendarContext } from './calendar-context';
 import { EventContent } from './event-content';
