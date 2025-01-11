@@ -4,15 +4,17 @@ import React from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Box } from '@mui/material';
 
-import { paths } from '/src/paths';
+import { isValidToken } from '@/contexts/auth/AuthContext';
+
 import useAuth from '/src/hooks/useAuth';
+import { paths } from '/src/paths';
 import { dashboardItems } from '/src/router';
 
 export function AuthGuard({ children }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { isLogin, loading, userInfo } = useAuth();
+  const { isLogin, loading, userInfo, logout } = useAuth();
   const [isChecking, setIsChecking] = React.useState(true);
   const createQueryString = React.useCallback(
     (key, value) => {
@@ -25,6 +27,11 @@ export function AuthGuard({ children }) {
 
   const checkPermissions = async () => {
     if (loading) {
+      return;
+    }
+    //if the token is not valid call logout
+    if (!isValidToken(userInfo?.token)) {
+      logout();
       return;
     }
     // redirect to login if the user is not logged in
