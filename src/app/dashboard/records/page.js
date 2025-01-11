@@ -237,7 +237,6 @@ export default function Page() {
             processRowUpdate={processRowUpdate}
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}
-            noDataMessage="No records found"
             rowCount={totalRecords}
             pageSizeOptions={[10, 25, 50, 100]}
             onPageChange={handlePaginationModelChange}
@@ -245,13 +244,7 @@ export default function Page() {
             onRowSelectionModelChange={handleRowSelection}
           />
         </Box>
-        {!records?.length ? (
-          <Box sx={{ p: 3 }}>
-            <Typography color="text.secondary" sx={{ textAlign: 'center' }} variant="body2">
-              No records found
-            </Typography>
-          </Box>
-        ) : null}
+        
       </Card>
       {/* </PageLoader> */}
     </PageContainer>

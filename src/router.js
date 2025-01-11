@@ -54,19 +54,19 @@ export const dashboardItems = [
         icon: 'hugeicons:analysis-text-link',
         allowedRoles: ['admin', 'user'],
       },
-      {
-        key: 'records',
-        title: 'Records',
-        href: paths.dashboard.records,
-        icon: 'pepicons-pencil:file',
-        allowedRoles: ['admin', 'user'],
-      },
     ],
   },
   {
     key: 'admin',
     title: 'Admin',
     items: [
+      {
+        key: 'records',
+        title: 'Records',
+        href: paths.dashboard.records,
+        icon: 'pepicons-pencil:file',
+        allowedRoles: ['admin'],
+      },
       {
         key: 'usrs',
         title: 'Users',
