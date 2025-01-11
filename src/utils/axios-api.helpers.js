@@ -1,8 +1,8 @@
-
+import { paths } from '@/paths';
 import Cookies from 'js-cookie';
 
 export const setTokenInCookies = (access_token) => {
-  Cookies?.set("token", access_token)
+  Cookies?.set('token', access_token);
 };
 
 export const getTokenFromCookies = () => {
@@ -10,26 +10,23 @@ export const getTokenFromCookies = () => {
 };
 
 export const removeTokenFromCookies = () => {
-  Cookies?.remove("token");
+  Cookies?.remove('token');
 };
 
-
 export const getAuthTokenFromLocalStore = () => {
-  const auth = localStorage.getItem("auth");
+  const auth = localStorage.getItem('auth');
   if (auth) {
     return JSON.parse(auth).token;
   }
   return null;
 };
 
-
 export const clearUserSessionFromLocalStore = () => {
-  removeTokenFromCookies()
-  // Perform any necessary cleanup tasks, e.g., clearing local storage
+  // Cleaning the local storage
+  removeTokenFromCookies();
   localStorage.clear();
+  
   // Redirect to the login page or perform any other required action
-  // window.alert(
-  //   "Attention: Your session has expired. Please log in again to continue accessing the system. Thank you!",
-  // );
-  // window.location.href = "/login"; // Replace with your desired logout destination
+  window.alert('Attention: Your session has expired. Please log in again to continue. Thank you!');
+  window.location.href = paths.auth.default.sign_in;
 };
