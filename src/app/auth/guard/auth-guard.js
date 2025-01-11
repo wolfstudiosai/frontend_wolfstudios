@@ -2,19 +2,19 @@
 
 import React from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { dashboardItems } from '@/router';
 import { Box } from '@mui/material';
 
 import { paths } from '@/paths';
 import useAuth from '@/hooks/useAuth';
+import { dashboardItems } from '@/router';
 
 export function AuthGuard({ children }) {
   const router = useRouter();
   const pathname = usePathname();
-  console.log(pathname, 'pathname');
   const searchParams = useSearchParams();
   const { isLogin, loading, userInfo } = useAuth();
   const [isChecking, setIsChecking] = React.useState(true);
+  console.log(isLogin, 'isLogin');
 
   const createQueryString = React.useCallback(
     (key, value) => {
@@ -63,12 +63,8 @@ export function AuthGuard({ children }) {
 }
 
 const isUserAuthorizedToAccessThisRoute = (role, pathname) => {
-  console.log(role, 'role');
-  console.log(pathname, 'pathname');
   return dashboardItems.some((section) => {
-    console.log(section, 'section...');
     return section.items.some((item) => {
-      console.log(item, 'item');
       if (item.href === pathname) {
         return item.allowedRoles.includes(role.toLowerCase());
       }
