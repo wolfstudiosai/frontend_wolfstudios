@@ -1,11 +1,10 @@
 'use client';
 
-import React from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Box } from '@mui/material';
+import React from 'react';
 
-import { isValidToken } from '@/contexts/auth/AuthContext';
 import { SplashScreen } from '@/components/splash-screen/splash-screen';
+import { isValidToken } from '@/contexts/auth/AuthContext';
 
 import useAuth from '/src/hooks/useAuth';
 import { paths } from '/src/paths';
@@ -16,6 +15,7 @@ export function AuthGuard({ children }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { isLogin, loading, userInfo, logout } = useAuth();
+  const role = userInfo?.role.toLowerCase();
   const [isChecking, setIsChecking] = React.useState(true);
   const createQueryString = React.useCallback(
     (key, value) => {
@@ -43,7 +43,7 @@ export function AuthGuard({ children }) {
       return;
     }
     // redirect to not-authorized if the user is logged in but not authorized
-    if (userInfo?.role && !isUserAuthorizedToAccessThisRoute(userInfo.role, pathname)) {
+    if (role && !isUserAuthorizedToAccessThisRoute(role, pathname)) {
       const href = paths.auth.default.not_authorized;
       router.replace(href);
       return;
@@ -67,8 +67,15 @@ export function AuthGuard({ children }) {
 const isUserAuthorizedToAccessThisRoute = (role, pathname) => {
   return dashboardItems.some((section) => {
     return section.items.some((item) => {
-      if (item.href === pathname || pathname.startsWith(item.href)) {
-        return item.allowedRoles.includes(role.toLowerCase());
+      //Handle static route match
+      if (item.href === pathname) {
+        return item.allowedRoles.includes(role);
+      }
+
+      //Handle dynamic route match (create/edit)
+      const baseHref = pathname.split('/').slice(0, 3).join('/');
+      if (item.href.startsWith(baseHref)) {
+        return item.allowedRoles.includes(role);
       }
       return false;
     });
