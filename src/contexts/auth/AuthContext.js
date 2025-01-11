@@ -2,14 +2,12 @@
 
 import React, { createContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { api, server_base_api } from '@/utils/api';
 import { jwtDecode } from 'jwt-decode';
 
-import { getProfileData } from '/src/app/dashboard/settings/_lib/actions';
-import { paths } from '/src/paths';
-import { api, server_base_api } from '/src/utils/api';
-import { removeTokenFromCookies, setTokenInCookies } from '/src/utils/axios-api.helpers';
+import { paths } from '@/paths';
 
-// import { removeTokenFromCookies, setTokenInCookies } from 'utils/axios-api.helpers';
+import { removeTokenFromCookies, setTokenInCookies } from '/src/utils/axios-api.helpers';
 
 export const INITIAL_AUTH_STATE = {
   token: '',
@@ -42,25 +40,6 @@ export const AuthProvider = (props) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  async function fetchProfileData() {
-    try {
-      const response = await getProfileData();
-      if (response.success) {
-        setUserInfo({
-          name: response.data.first_name + ' ' + response.data.last_name,
-          email: response.data.email,
-          contact_number: response.data.contact_number,
-          profile_pic: response.data.profile_pic,
-          role: response.data.role,
-        });
-      } else {
-        setUserInfo(INITIAL_AUTH_STATE);
-      }
-    } catch (error) {
-      return null;
-    }
-  }
-
   React.useEffect(() => {
     setLoading(true);
     const auth = localStorage.getItem('auth');
@@ -80,8 +59,6 @@ export const AuthProvider = (props) => {
         password: password,
       });
       const token = res.data.data.token;
-      const decodedToken = jwtDecode(res.data.data.token);
-      const expirationTime = decodedToken.exp * 1000;
 
       const userData = {
         token: token,
@@ -96,9 +73,6 @@ export const AuthProvider = (props) => {
       setTokenInCookies(userData.token);
       setUserInfo(userData);
 
-      // if (userData.role === "ADMIN") {
-      //     router.push("/dashboard");
-      // }
       setLoading(false);
       router.push(paths.dashboard.overview);
     } catch (error) {
@@ -111,7 +85,7 @@ export const AuthProvider = (props) => {
     setUserInfo(INITIAL_AUTH_STATE);
     delete api.defaults.headers.common['Authorization'];
     removeTokenFromCookies();
-    router.push('/auth/sign-in');
+    router.push(paths.auth.default.sign_in);
   };
 
   return (
@@ -119,7 +93,7 @@ export const AuthProvider = (props) => {
       value={{
         loading,
         userInfo,
-        isLogin: !!userInfo.token,
+        isLogin: isValidToken(userInfo.token),
         login: handleLogin,
         logout: handleLogout,
       }}
