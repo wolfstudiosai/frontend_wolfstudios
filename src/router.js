@@ -79,7 +79,7 @@ export const dashboardItems = [
         title: 'Campaign',
         href: paths.dashboard.campaign,
         icon: 'material-symbols-light:ads-click',
-        allowedRoles: ['admin'],
+        allowedRoles: ['admin'], //todo: add user role
       },
 
       {
