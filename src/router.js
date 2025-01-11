@@ -54,6 +54,14 @@ export const dashboardItems = [
         icon: 'hugeicons:analysis-text-link',
         allowedRoles: ['admin', 'user'],
       },
+      {
+        key: 'Campaign',
+        title: 'Campaign',
+        href: paths.dashboard.campaign,
+        icon: 'material-symbols-light:ads-click',
+        allowedRoles: ['admin', 'user'],
+      },
+
     ],
   },
   {
@@ -74,14 +82,6 @@ export const dashboardItems = [
         icon: 'solar:user-linear',
         allowedRoles: ['admin'],
       },
-      {
-        key: 'Campaign',
-        title: 'Campaign',
-        href: paths.dashboard.campaign,
-        icon: 'material-symbols-light:ads-click',
-        allowedRoles: ['admin'], //todo: add user role
-      },
-
       {
         key: 'partners_by_campaign',
         title: 'Partners by campaign',
