@@ -2,12 +2,12 @@
 
 import React, { createContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getProfileData } from '/src/app/dashboard/settings/_lib/actions';
-import { api, server_base_api } from '/src/utils/api';
-import { removeTokenFromCookies, setTokenInCookies } from '/src/utils/axios-api.helpers';
 import { jwtDecode } from 'jwt-decode';
 
+import { getProfileData } from '/src/app/dashboard/settings/_lib/actions';
 import { paths } from '/src/paths';
+import { api, server_base_api } from '/src/utils/api';
+import { removeTokenFromCookies, setTokenInCookies } from '/src/utils/axios-api.helpers';
 
 // import { removeTokenFromCookies, setTokenInCookies } from 'utils/axios-api.helpers';
 
@@ -117,6 +117,7 @@ export const AuthProvider = (props) => {
   return (
     <AuthContext.Provider
       value={{
+        loading,
         userInfo,
         isLogin: !!userInfo.token,
         login: handleLogin,

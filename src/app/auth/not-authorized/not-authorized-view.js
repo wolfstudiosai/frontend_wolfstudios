@@ -2,7 +2,7 @@
 
 import { Button, Container, Typography } from '@mui/material';
 import { default as Link, default as RouterLink } from 'next/link';
-import useAuth from 'src/hooks/useAuth';
+import useAuth from '/src/hooks/useAuth';
 
 import { Iconify } from '/src/components/iconify/iconify';
 import { paths } from '/src/paths';
