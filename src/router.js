@@ -31,7 +31,7 @@ export const navData = [
   {
     key: 'login',
     title: 'Login',
-    href: paths.auth.default.signIn,
+    href: paths.auth.default.sign_in,
   },
 ];
 

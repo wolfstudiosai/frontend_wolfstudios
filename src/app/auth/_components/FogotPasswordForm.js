@@ -56,7 +56,7 @@ export function ForgotPasswordForm() {
         if (step === 1) {
           setStep(2);
         } else {
-          router.push(paths.auth.default.signIn);
+          router.push(paths.auth.default.sign_in);
         }
       } else {
         console.error('Submission failed:', res?.error || 'Unknown error');

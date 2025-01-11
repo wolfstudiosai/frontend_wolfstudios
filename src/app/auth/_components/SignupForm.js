@@ -56,7 +56,7 @@ export function SignupForm() {
       })
 
       if (res.success) {
-        router.push(paths.auth.default.signIn)
+        router.push(paths.auth.default.sign_in)
       }
       setLoading(false)
     }
@@ -68,7 +68,7 @@ export function SignupForm() {
         <Typography variant="h5">Sign up</Typography>
         <Typography color="text.secondary" variant="body2">
           Already have an account?{' '}
-          <Link component={RouterLink} href={paths.auth.default.signIn} variant="subtitle2">
+          <Link component={RouterLink} href={paths.auth.default.sign_in} variant="subtitle2">
             Sign in
           </Link>
         </Typography>

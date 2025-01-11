@@ -71,7 +71,7 @@ export function LoginForm() {
         <Typography variant="h5">Sign in</Typography>
         <Typography color="text.secondary" variant="body2">
           Don&apos;t have an account?{' '}
-          <Link component={RouterLink} href={paths.auth.default.signUp} variant="subtitle2">
+          <Link component={RouterLink} href={paths.auth.default.sign_up} variant="subtitle2">
             Sign up
           </Link>
         </Typography>
