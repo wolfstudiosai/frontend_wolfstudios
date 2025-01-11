@@ -13,10 +13,10 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/ArrowLeft';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
-import { CenteredLayout } from '@/components/auth/centered-layout';
-import { DynamicLogo } from '@/components/core/logo';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
+import { CenteredLayout } from '/src/components/auth/centered-layout';
+import { DynamicLogo } from '/src/components/core/logo';
 
 export const metadata = { title: `Sign in | Samples | Auth | ${config.site.name}` };
 

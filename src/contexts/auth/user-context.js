@@ -1,5 +1,5 @@
-import { config } from '@/config';
-import { AuthStrategy } from '@/lib/auth/strategy';
+import { config } from '/src/config';
+import { AuthStrategy } from '/src/lib/auth/strategy';
 
 import { UserContext as Auth0UserContext, UserProvider as Auth0UserProvider } from './auth0/user-context';
 import { UserContext as CognitoUserContext, UserProvider as CognitoUserProvider } from './cognito/user-context';

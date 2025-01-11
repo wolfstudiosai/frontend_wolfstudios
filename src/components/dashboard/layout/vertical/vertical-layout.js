@@ -5,8 +5,8 @@ import { dashboardItems } from '@/router';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
 
-import { useSettings } from '@/hooks/use-settings';
-import { LocalizationProvider } from '@/components/core/localization-provider';
+import { useSettings } from '/src/hooks/use-settings';
+import { LocalizationProvider } from '/src/components/core/localization-provider';
 
 import { MainNav } from './main-nav';
 import { SideNav } from './side-nav';

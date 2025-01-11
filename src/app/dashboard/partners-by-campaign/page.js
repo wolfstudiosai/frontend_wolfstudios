@@ -1,5 +1,5 @@
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import ManagePartnerByCampaign from './_components/manage-parners-by-campaign';
 
 export const metadata = { title: `Dashboard | Needs Offer/ Approval | ${config.site.name}` };

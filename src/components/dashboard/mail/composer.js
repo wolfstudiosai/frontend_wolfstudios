@@ -16,7 +16,7 @@ import { Image as ImageIcon } from '@phosphor-icons/react/dist/ssr/Image';
 import { Paperclip as PaperclipIcon } from '@phosphor-icons/react/dist/ssr/Paperclip';
 import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
-import { TextEditor } from '@/components/core/text-editor/text-editor';
+import { TextEditor } from '/src/components/core/text-editor/text-editor';
 
 export function Composer({ onClose, open }) {
   const [isMaximized, setIsMaximized] = React.useState(false);

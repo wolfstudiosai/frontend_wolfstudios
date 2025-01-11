@@ -9,10 +9,10 @@ import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import { Receipt as ReceiptIcon } from '@phosphor-icons/react/dist/ssr/Receipt';
 
-import { dayjs } from '@/lib/dayjs';
-import { Option } from '@/components/core/option';
-import { PropertyItem } from '@/components/core/property-item';
-import { PropertyList } from '@/components/core/property-list';
+import { dayjs } from '/src/lib/dayjs';
+import { Option } from '/src/components/core/option';
+import { PropertyItem } from '/src/components/core/property-item';
+import { PropertyList } from '/src/components/core/property-list';
 
 export function DetailList3() {
   return (

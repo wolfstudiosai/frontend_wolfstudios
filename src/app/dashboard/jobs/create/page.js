@@ -3,8 +3,8 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { config } from '@/config';
-import { JobCreateForm } from '@/components/dashboard/jobs/job-create-form';
+import { config } from '/src/config';
+import { JobCreateForm } from '/src/components/dashboard/jobs/job-create-form';
 
 export const metadata = { title: `Create | Jobs | Dashboard | ${config.site.name}` };
 

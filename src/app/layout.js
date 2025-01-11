@@ -1,20 +1,20 @@
 import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
 
-import '@/styles/global.css';
+import '/src/styles/global.css';
 
-import { Analytics } from '@/components/core/analytics';
-import { I18nProvider } from '@/components/core/i18n-provider';
-import { LocalizationProvider } from '@/components/core/localization-provider';
-import { SettingsButton } from '@/components/core/settings/settings-button';
-import { ThemeProvider } from '@/components/core/theme-provider/theme-provider';
-import { Toaster } from '@/components/core/toaster';
-import { config } from '@/config';
-import { UserProvider } from '@/contexts/auth/user-context';
-import { SettingsProvider } from '@/contexts/settings';
-import { applyDefaultSettings } from '@/lib/settings/apply-default-settings';
-import { getSettings as getPersistedSettings } from '@/lib/settings/get-settings';
-import { AuthProvider } from '@/contexts/auth/AuthContext';
-import { Progressbar } from '@/components/utils/Progressbar';
+import { Analytics } from '/src/components/core/analytics';
+import { I18nProvider } from '/src/components/core/i18n-provider';
+import { LocalizationProvider } from '/src/components/core/localization-provider';
+import { SettingsButton } from '/src/components/core/settings/settings-button';
+import { ThemeProvider } from '/src/components/core/theme-provider/theme-provider';
+import { Toaster } from '/src/components/core/toaster';
+import { config } from '/src/config';
+import { UserProvider } from '/src/contexts/auth/user-context';
+import { SettingsProvider } from '/src/contexts/settings';
+import { applyDefaultSettings } from '/src/lib/settings/apply-default-settings';
+import { getSettings as getPersistedSettings } from '/src/lib/settings/get-settings';
+import { AuthProvider } from '/src/contexts/auth/AuthContext';
+import { Progressbar } from '/src/components/utils/Progressbar';
 
 export const metadata = { title: config.site.name };
 

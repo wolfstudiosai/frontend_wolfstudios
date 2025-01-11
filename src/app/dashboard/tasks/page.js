@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { config } from '@/config';
-import { dayjs } from '@/lib/dayjs';
-import { TasksProvider } from '@/components/dashboard/tasks/tasks-context';
-import { TasksView } from '@/components/dashboard/tasks/tasks-view';
+import { config } from '/src/config';
+import { dayjs } from '/src/lib/dayjs';
+import { TasksProvider } from '/src/components/dashboard/tasks/tasks-context';
+import { TasksView } from '/src/components/dashboard/tasks/tasks-view';
 
 export const metadata = { title: `Tasks | Dashboard | ${config.site.name}` };
 

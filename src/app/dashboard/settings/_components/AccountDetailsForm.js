@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { defaultProfile } from '@/app/dashboard/settings/_lib/types';
+import { defaultProfile } from '/src/app/dashboard/settings/_lib/types';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { IconButton, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -19,8 +19,8 @@ import { User as UserIcon } from '@phosphor-icons/react/dist/ssr/User';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import PageLoader from '@/components/PageLoader/PageLoader';
-import ProfileUploader from '@/components/uploaders/profile-uploader';
+import PageLoader from '/src/components/PageLoader/PageLoader';
+import ProfileUploader from '/src/components/uploaders/profile-uploader';
 
 import { getProfileData, updateProfileData } from '../_lib/actions';
 

@@ -2,10 +2,10 @@ import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { config } from '@/config';
-import { dayjs } from '@/lib/dayjs';
-import { Invoices } from '@/components/dashboard/settings/invoices';
-import { Plans } from '@/components/dashboard/settings/plans';
+import { config } from '/src/config';
+import { dayjs } from '/src/lib/dayjs';
+import { Invoices } from '/src/components/dashboard/settings/invoices';
+import { Plans } from '/src/components/dashboard/settings/plans';
 
 export const metadata = { title: `Billing | Settings | Dashboard | ${config.site.name}` };
 

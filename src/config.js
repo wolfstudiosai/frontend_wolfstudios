@@ -1,6 +1,6 @@
-import { AuthStrategy } from '@/lib/auth/strategy';
-import { getSiteURL } from '@/lib/get-site-url';
-import { LogLevel } from '@/lib/logger';
+import { AuthStrategy } from '/src/lib/auth/strategy';
+import { getSiteURL } from '/src/lib/get-site-url';
+import { LogLevel } from '/src/lib/logger';
 import { paths } from './paths';
 
 export const config = {

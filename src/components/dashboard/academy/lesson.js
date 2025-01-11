@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Markdown from 'react-markdown';
 
-import { CodeHighlighter } from '@/components/core/code-highlighter';
+import { CodeHighlighter } from '/src/components/core/code-highlighter';
 
 const components = { code: CodeHighlighter };
 

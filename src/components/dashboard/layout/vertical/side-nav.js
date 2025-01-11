@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -10,13 +12,13 @@ import { ArrowSquareOut as ArrowSquareOutIcon } from '@phosphor-icons/react/dist
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 
-import { paths } from '@/paths';
-import { isNavItemActive } from '@/lib/is-nav-item-active';
-import { Iconify } from '@/components/iconify/iconify';
+import useAuth from '@/hooks/useAuth';
 
-import { icons } from '../nav-icons';
 import { navColorStyles } from './styles';
-import { DynamicLogo, Logo } from '@/components/core/logo';
+import { DynamicLogo } from '/src/components/core/logo';
+import { Iconify } from '/src/components/iconify/iconify';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
+import { paths } from '/src/paths';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
@@ -25,6 +27,7 @@ const logoColors = {
 
 export function SideNav({ color = 'evident', items = [] }) {
   const pathname = usePathname();
+  const { userInfo } = useAuth();
 
   const { colorScheme = 'light' } = useColorScheme();
 
@@ -66,14 +69,24 @@ export function SideNav({ color = 'evident', items = [] }) {
           '&::-webkit-scrollbar': { display: 'none' },
         }}
       >
-        {renderNavGroups({ items, pathname })}
+        {renderNavGroups({ items, pathname, userInfo })}
       </Box>
     </Box>
   );
 }
 
-function renderNavGroups({ items, pathname }) {
-  const children = items.reduce((acc, curr) => {
+function renderNavGroups({ items, pathname, userInfo }) {
+  const role = userInfo.role.toLowerCase();
+  const filteredGroups = items
+    .map((section) => {
+      // Filter items within each section based on the user's role
+      const validItems = section.items.filter((item) => !item.allowedRoles || item.allowedRoles.includes(role));
+
+      // Return a new section object with only valid items
+      return validItems.length > 0 ? { ...section, items: validItems } : null;
+    })
+    .filter(Boolean);
+  const children = filteredGroups.reduce((acc, curr) => {
     acc.push(
       <Stack component="li" key={curr.key} spacing={1.5}>
         {curr.title ? (

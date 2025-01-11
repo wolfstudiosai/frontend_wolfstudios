@@ -14,9 +14,9 @@ import { PlugsConnected as PlugsConnectedIcon } from '@phosphor-icons/react/dist
 import { UserCircle as UserCircleIcon } from '@phosphor-icons/react/dist/ssr/UserCircle';
 import { UsersThree as UsersThreeIcon } from '@phosphor-icons/react/dist/ssr/UsersThree';
 
-import { paths } from '@/paths';
-import { isNavItemActive } from '@/lib/is-nav-item-active';
-import useAuth from '@/hooks/useAuth';
+import { paths } from '/src/paths';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
+import useAuth from '/src/hooks/useAuth';
 
 // NOTE: First level elements are groups.
 

@@ -1,9 +1,9 @@
 'use client';
 
-import { createUser } from '@/app/dashboard/users/_lib/user.actions';
-import { defaultUser } from '@/app/dashboard/users/_lib/user.types';
-import { CustomPasswordInput } from '@/components/formFields/CustomPasswordInput';
-import { paths } from '@/paths';
+import { createUser } from '/src/app/dashboard/users/_lib/user.actions';
+import { defaultUser } from '/src/app/dashboard/users/_lib/user.types';
+import { CustomPasswordInput } from '/src/components/formFields/CustomPasswordInput';
+import { paths } from '/src/paths';
 import { CircularProgress } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -56,7 +56,7 @@ export function SignupForm() {
       })
 
       if (res.success) {
-        router.push(paths.auth.default.signIn)
+        router.push(paths.auth.default.sign_in)
       }
       setLoading(false)
     }
@@ -68,7 +68,7 @@ export function SignupForm() {
         <Typography variant="h5">Sign up</Typography>
         <Typography color="text.secondary" variant="body2">
           Already have an account?{' '}
-          <Link component={RouterLink} href={paths.auth.default.signIn} variant="subtitle2">
+          <Link component={RouterLink} href={paths.auth.default.sign_in} variant="subtitle2">
             Sign in
           </Link>
         </Typography>

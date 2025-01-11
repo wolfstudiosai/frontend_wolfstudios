@@ -12,8 +12,8 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { FileDropzone } from '@/components/core/file-dropzone';
-import { TextEditor } from '@/components/core/text-editor/text-editor';
+import { FileDropzone } from '/src/components/core/file-dropzone';
+import { TextEditor } from '/src/components/core/text-editor/text-editor';
 
 export function PostForm() {
   const [cover, setCover] = React.useState('/assets/image-abstract-1.png');

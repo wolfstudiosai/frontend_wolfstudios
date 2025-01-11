@@ -13,15 +13,15 @@ import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import { Users as UsersIcon } from '@phosphor-icons/react/dist/ssr/Users';
 import { Warning as WarningIcon } from '@phosphor-icons/react/dist/ssr/Warning';
 
-import { config } from '@/config';
-import { dayjs } from '@/lib/dayjs';
-import { AppChat } from '@/components/dashboard/overview/app-chat';
-import { AppLimits } from '@/components/dashboard/overview/app-limits';
-import { AppUsage } from '@/components/dashboard/overview/app-usage';
-import { Events } from '@/components/dashboard/overview/events';
-import { HelperWidget } from '@/components/dashboard/overview/helper-widget';
-import { Subscriptions } from '@/components/dashboard/overview/subscriptions';
-import { Summary } from '@/components/dashboard/overview/summary';
+import { config } from '/src/config';
+import { dayjs } from '/src/lib/dayjs';
+import { AppChat } from '/src/components/dashboard/overview/app-chat';
+import { AppLimits } from '/src/components/dashboard/overview/app-limits';
+import { AppUsage } from '/src/components/dashboard/overview/app-usage';
+import { Events } from '/src/components/dashboard/overview/events';
+import { HelperWidget } from '/src/components/dashboard/overview/helper-widget';
+import { Subscriptions } from '/src/components/dashboard/overview/subscriptions';
+import { Summary } from '/src/components/dashboard/overview/summary';
 
 export const metadata = { title: `Overview | Dashboard | ${config.site.name}` };
 

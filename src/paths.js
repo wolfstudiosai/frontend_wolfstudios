@@ -101,8 +101,9 @@ export const paths = {
   // will be removed
   auth: {
     default: {
-      signIn: '/auth/sign-in',
-      signUp: '/auth/sign-up',
+      sign_in: '/auth/sign-in',
+      sign_up: '/auth/sign-up',
+      not_authorized: '/auth/not-authorized',
       resetPassword: '/auth/reset-password',
       forgotPassword: '/auth/forgot-password',
     },

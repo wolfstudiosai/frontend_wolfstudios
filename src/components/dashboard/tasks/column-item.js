@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsThree';
 
-import { usePopover } from '@/hooks/use-popover';
+import { usePopover } from '/src/hooks/use-popover';
 
 import { ColumnDroppable } from './column-droppable';
 

@@ -29,13 +29,13 @@ import { Trash as TrashIcon } from '@phosphor-icons/react/dist/ssr/Trash';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { paths } from '@/paths';
-import { logger } from '@/lib/default-logger';
-import { DataTable } from '@/components/data-table/data-table';
-import { FileDropzone } from '@/components/core/file-dropzone';
-import { Option } from '@/components/core/option';
-import { TextEditor } from '@/components/core/text-editor/text-editor';
-import { toast } from '@/components/core/toaster';
+import { paths } from '/src/paths';
+import { logger } from '/src/lib/default-logger';
+import { DataTable } from '/src/components/data-table/data-table';
+import { FileDropzone } from '/src/components/core/file-dropzone';
+import { Option } from '/src/components/core/option';
+import { TextEditor } from '/src/components/core/text-editor/text-editor';
+import { toast } from '/src/components/core/toaster';
 
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {

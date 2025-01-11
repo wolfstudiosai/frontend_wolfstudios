@@ -8,13 +8,13 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
-import { ProductModal } from '@/components/dashboard/product/product-modal';
-import { ProductsFilters } from '@/components/dashboard/product/products-filters';
-import { ProductsPagination } from '@/components/dashboard/product/products-pagination';
-import { ProductsTable } from '@/components/dashboard/product/products-table';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
+import { ProductModal } from '/src/components/dashboard/product/product-modal';
+import { ProductsFilters } from '/src/components/dashboard/product/products-filters';
+import { ProductsPagination } from '/src/components/dashboard/product/products-pagination';
+import { ProductsTable } from '/src/components/dashboard/product/products-table';
 
 export const metadata = { title: `List | Products | Dashboard | ${config.site.name}` };
 

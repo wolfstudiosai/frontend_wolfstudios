@@ -8,16 +8,16 @@ import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import moment from 'moment';
 
-import { CardTitle } from '@/components/cardTitle/CardTitle';
-import { PageContainer } from '@/components/container/PageContainer';
-import { FilterButton } from '@/components/core/filter-button';
-import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
-import { EditableDataTable } from '@/components/data-table/editable-data-table';
-import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
+import { CardTitle } from '/src/components/cardTitle/CardTitle';
+import { PageContainer } from '/src/components/container/PageContainer';
+import { FilterButton } from '/src/components/core/filter-button';
+import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
+import { EditableDataTable } from '/src/components/data-table/editable-data-table';
+import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
 
 import { createRecordAsync, deleteRecordAsync, getRecordList, updateRecordAsync } from './_lib/records.actions';
 import { defaultRecord } from './_lib/records.types';
-import { HideColumsPopover } from '@/components/core/filters/HideColumsPopover';
+import { HideColumsPopover } from '/src/components/core/filters/HideColumsPopover';
 
 // table columns
 const columns = [
@@ -237,7 +237,6 @@ export default function Page() {
             processRowUpdate={processRowUpdate}
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}
-            noDataMessage="No records found"
             rowCount={totalRecords}
             pageSizeOptions={[10, 25, 50, 100]}
             onPageChange={handlePaginationModelChange}
@@ -245,13 +244,7 @@ export default function Page() {
             onRowSelectionModelChange={handleRowSelection}
           />
         </Box>
-        {!records?.length ? (
-          <Box sx={{ p: 3 }}>
-            <Typography color="text.secondary" sx={{ textAlign: 'center' }} variant="body2">
-              No records found
-            </Typography>
-          </Box>
-        ) : null}
+        
       </Card>
       {/* </PageLoader> */}
     </PageContainer>

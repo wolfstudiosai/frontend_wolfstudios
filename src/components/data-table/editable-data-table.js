@@ -1,9 +1,8 @@
 'use client';
 
-import * as React from 'react';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { DataGrid, GridCellModes, GridToolbar } from '@mui/x-data-grid';
+import * as React from 'react';
 
 export const EditableDataTable = ({
   columns,
@@ -11,7 +10,6 @@ export const EditableDataTable = ({
   processRowUpdate,
   onProcessRowUpdateError,
   loading = false,
-  noDataMessage = 'No records found',
   pageSize = 10,
   rowCount,
   pageSizeOptions,
@@ -82,13 +80,6 @@ export const EditableDataTable = ({
         onRowSelectionModelChange={onRowSelectionModelChange} //it will return all selected rows
         slots={{ toolbar: GridToolbar }} // filtering csv download, hide cols, etc
       />
-      {!rows?.length && !loading && (
-        <Box sx={{ p: 3 }}>
-          <Typography color="text.secondary" sx={{ textAlign: 'center' }} variant="body2">
-            {noDataMessage}
-          </Typography>
-        </Box>
-      )}
     </Box>
   );
 };

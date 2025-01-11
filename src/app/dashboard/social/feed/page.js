@@ -3,10 +3,10 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { config } from '@/config';
-import { dayjs } from '@/lib/dayjs';
-import { PostAdd } from '@/components/dashboard/social/post-add';
-import { PostCard } from '@/components/dashboard/social/post-card';
+import { config } from '/src/config';
+import { dayjs } from '/src/lib/dayjs';
+import { PostAdd } from '/src/components/dashboard/social/post-add';
+import { PostCard } from '/src/components/dashboard/social/post-card';
 
 export const metadata = { title: `Feed | Social | Dashboard | ${config.site.name}` };
 

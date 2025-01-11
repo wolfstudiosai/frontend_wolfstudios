@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { resetPassword } from 'aws-amplify/auth';
 
-import { toast } from '@/components/core/toaster';
+import { toast } from '/src/components/core/toaster';
 
 export function ResetPasswordButton({ children, email }) {
   const [isPending, setIsPending] = React.useState(false);

@@ -11,10 +11,10 @@ import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/Arrow
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import { Lock as LockIcon } from '@phosphor-icons/react/dist/ssr/Lock';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
-import { CheckoutForm } from '@/components/marketing/checkout/checkout-form';
-import { OrderSummary } from '@/components/marketing/checkout/order-summary';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
+import { CheckoutForm } from '/src/components/marketing/checkout/checkout-form';
+import { OrderSummary } from '/src/components/marketing/checkout/order-summary';
 
 export const metadata = { title: `Checkout | ${config.site.name}` };
 

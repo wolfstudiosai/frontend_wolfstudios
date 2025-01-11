@@ -1,6 +1,6 @@
 import { Container } from '@mui/material';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 
 import { ProfileView } from './profile-view';
 

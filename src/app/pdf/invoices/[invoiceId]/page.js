@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 
-import { PDFViewer } from '@/components/core/pdf-viewer';
-import { InvoicePDFDocument } from '@/components/dashboard/invoice/invoice-pdf-document';
+import { PDFViewer } from '/src/components/core/pdf-viewer';
+import { InvoicePDFDocument } from '/src/components/dashboard/invoice/invoice-pdf-document';
 
 export default function Page() {
   return (

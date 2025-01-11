@@ -4,7 +4,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import { UploadSimple as UploadSimpleIcon } from '@phosphor-icons/react/dist/ssr/UploadSimple';
 
-import { useDialog } from '@/hooks/use-dialog';
+import { useDialog } from '/src/hooks/use-dialog';
 
 import { Uploader } from './uploader';
 

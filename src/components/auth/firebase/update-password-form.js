@@ -17,10 +17,10 @@ import { confirmPasswordReset } from 'firebase/auth';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { paths } from '@/paths';
-import { getFirebaseAuth } from '@/lib/auth/firebase/client';
-import { DynamicLogo } from '@/components/core/logo';
-import { toast } from '@/components/core/toaster';
+import { paths } from '/src/paths';
+import { getFirebaseAuth } from '/src/lib/auth/firebase/client';
+import { DynamicLogo } from '/src/components/core/logo';
+import { toast } from '/src/components/core/toaster';
 
 const schema = zod
   .object({

@@ -9,8 +9,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
-import { dayjs } from '@/lib/dayjs';
-import { Presence } from '@/components/core/presence';
+import { dayjs } from '/src/lib/dayjs';
+import { Presence } from '/src/components/core/presence';
 
 const contacts = [
   {

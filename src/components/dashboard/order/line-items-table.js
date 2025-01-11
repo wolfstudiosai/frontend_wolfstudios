@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 
-import { DataTable } from '@/components/data-table/data-table';
+import { DataTable } from '/src/components/data-table/data-table';
 
 const columns = [
   {

@@ -12,9 +12,9 @@ import Stack from '@mui/material/Stack';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 
-import { paths } from '@/paths';
-import { FilterButton, FilterPopover, useFilterContext } from '@/components/core/filter-button';
-import { Option } from '@/components/core/option';
+import { paths } from '/src/paths';
+import { FilterButton, FilterPopover, useFilterContext } from '/src/components/core/filter-button';
+import { Option } from '/src/components/core/option';
 
 // The tabs should be generated using API data.
 const tabs = [

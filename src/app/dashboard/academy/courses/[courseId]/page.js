@@ -6,10 +6,10 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/ArrowLeft';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
-import { ChapterView } from '@/components/dashboard/academy/chapter-view';
-import { CourseSummary } from '@/components/dashboard/academy/course-summary';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
+import { ChapterView } from '/src/components/dashboard/academy/chapter-view';
+import { CourseSummary } from '/src/components/dashboard/academy/course-summary';
 
 export const metadata = { title: `Course | Academy | ${config.site.name}` };
 

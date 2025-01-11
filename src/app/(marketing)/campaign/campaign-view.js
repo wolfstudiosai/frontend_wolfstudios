@@ -1,4 +1,4 @@
-import { textShortner } from '@/utils/utils';
+import { textShortner } from '/src/utils/utils';
 import { Box, Paper, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 

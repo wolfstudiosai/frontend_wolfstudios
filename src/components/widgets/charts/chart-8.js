@@ -15,8 +15,8 @@ import Typography from '@mui/material/Typography';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-import { dayjs } from '@/lib/dayjs';
-import { NoSsr } from '@/components/core/no-ssr';
+import { dayjs } from '/src/lib/dayjs';
+import { NoSsr } from '/src/components/core/no-ssr';
 
 const pages = [
   { path: '/projects', views: 24 },

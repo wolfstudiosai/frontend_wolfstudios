@@ -1,4 +1,4 @@
-import { auth0 } from '@/lib/auth/auth0/server';
+import { auth0 } from '/src/lib/auth/auth0/server';
 
 export const dynamic = 'force-dynamic';
 

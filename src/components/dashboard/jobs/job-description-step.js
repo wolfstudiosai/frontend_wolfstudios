@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/ArrowLeft';
 
-import { TextEditor } from '@/components/core/text-editor/text-editor';
+import { TextEditor } from '/src/components/core/text-editor/text-editor';
 
 export function JobDescriptionStep({ onBack, onNext }) {
   const [content, setContent] = React.useState('');

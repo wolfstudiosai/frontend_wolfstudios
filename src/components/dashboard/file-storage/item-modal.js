@@ -21,8 +21,8 @@ import { Star as StarIcon } from '@phosphor-icons/react/dist/ssr/Star';
 import { Trash as TrashIcon } from '@phosphor-icons/react/dist/ssr/Trash';
 import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
-import { dayjs } from '@/lib/dayjs';
-import { usePopover } from '@/hooks/use-popover';
+import { dayjs } from '/src/lib/dayjs';
+import { usePopover } from '/src/hooks/use-popover';
 
 import { ItemIcon } from './item-icon';
 

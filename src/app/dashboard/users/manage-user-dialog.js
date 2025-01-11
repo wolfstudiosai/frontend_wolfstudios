@@ -1,5 +1,5 @@
-import { Dialog } from "@/components/dialog/Dialog";
-import { CustomPasswordInput } from "@/components/formFields/CustomPasswordInput";
+import { Dialog } from "/src/components/dialog/Dialog";
+import { CustomPasswordInput } from "/src/components/formFields/CustomPasswordInput";
 import { Button, CircularProgress, FormControl, FormHelperText, InputLabel, MenuItem, OutlinedInput, Select, Stack } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { useFormik } from "formik";

@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 
-import { logger } from '@/lib/default-logger';
+import { logger } from '/src/lib/default-logger';
 
 /**
  * Retrieve the settings from client's cookies.

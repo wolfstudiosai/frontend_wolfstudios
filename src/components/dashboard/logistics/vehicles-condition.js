@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { Wrench as WrenchIcon } from '@phosphor-icons/react/dist/ssr/Wrench';
 import { Cell, Pie, PieChart } from 'recharts';
 
-import { NoSsr } from '@/components/core/no-ssr';
+import { NoSsr } from '/src/components/core/no-ssr';
 
 export function VehiclesCondition({ bad, excellent, good }) {
   const total = excellent + good + bad;

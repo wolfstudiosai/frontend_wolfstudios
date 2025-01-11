@@ -1,17 +1,17 @@
 import * as React from 'react';
 
-import { config } from '@/config';
-import { Layout } from '@/components/widgets/layout';
-import { Table1 } from '@/components/widgets/tables/table-1';
-import { Table2 } from '@/components/widgets/tables/table-2';
-import { Table3 } from '@/components/widgets/tables/table-3';
-import { Table4 } from '@/components/widgets/tables/table-4';
-import { Table5 } from '@/components/widgets/tables/table-5';
-import { Table6 } from '@/components/widgets/tables/table-6';
-import { Table7 } from '@/components/widgets/tables/table-7';
-import { Table8 } from '@/components/widgets/tables/table-8';
-import { Table9 } from '@/components/widgets/tables/table-9';
-import { Table10 } from '@/components/widgets/tables/table-10';
+import { config } from '/src/config';
+import { Layout } from '/src/components/widgets/layout';
+import { Table1 } from '/src/components/widgets/tables/table-1';
+import { Table2 } from '/src/components/widgets/tables/table-2';
+import { Table3 } from '/src/components/widgets/tables/table-3';
+import { Table4 } from '/src/components/widgets/tables/table-4';
+import { Table5 } from '/src/components/widgets/tables/table-5';
+import { Table6 } from '/src/components/widgets/tables/table-6';
+import { Table7 } from '/src/components/widgets/tables/table-7';
+import { Table8 } from '/src/components/widgets/tables/table-8';
+import { Table9 } from '/src/components/widgets/tables/table-9';
+import { Table10 } from '/src/components/widgets/tables/table-10';
 
 export const metadata = { title: `Tables | Components | ${config.site.name}` };
 

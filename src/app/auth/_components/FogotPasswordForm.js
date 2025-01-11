@@ -11,9 +11,9 @@ import Typography from '@mui/material/Typography';
 import RouterLink from 'next/link';
 import * as React from 'react';
 
-import { DynamicLogo } from '@/components/core/logo';
-import { CustomPasswordInput } from '@/components/formFields/CustomPasswordInput';
-import { paths } from '@/paths';
+import { DynamicLogo } from '/src/components/core/logo';
+import { CustomPasswordInput } from '/src/components/formFields/CustomPasswordInput';
+import { paths } from '/src/paths';
 import { CircularProgress } from '@mui/material';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
@@ -56,7 +56,7 @@ export function ForgotPasswordForm() {
         if (step === 1) {
           setStep(2);
         } else {
-          router.push(paths.auth.default.signIn);
+          router.push(paths.auth.default.sign_in);
         }
       } else {
         console.error('Submission failed:', res?.error || 'Unknown error');

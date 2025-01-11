@@ -20,10 +20,10 @@ import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { paths } from '@/paths';
-import { getFirebaseAuth } from '@/lib/auth/firebase/client';
-import { DynamicLogo } from '@/components/core/logo';
-import { toast } from '@/components/core/toaster';
+import { paths } from '/src/paths';
+import { getFirebaseAuth } from '/src/lib/auth/firebase/client';
+import { DynamicLogo } from '/src/components/core/logo';
+import { toast } from '/src/components/core/toaster';
 
 const oAuthProviders = [{ id: 'google', name: 'Google', logo: '/assets/logo-google.svg' }];
 

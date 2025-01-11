@@ -2,7 +2,7 @@ import * as React from 'react';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 
 export function StrategyGuard({ children, expected }) {
   if (config.auth.strategy !== expected) {

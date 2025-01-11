@@ -13,9 +13,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { EnvelopeSimple as EnvelopeSimpleIcon } from '@phosphor-icons/react/dist/ssr/EnvelopeSimple';
 
-import { dayjs } from '@/lib/dayjs';
-import { DataTable } from '@/components/data-table/data-table';
-import { Option } from '@/components/core/option';
+import { dayjs } from '/src/lib/dayjs';
+import { DataTable } from '/src/components/data-table/data-table';
+import { Option } from '/src/components/core/option';
 
 const columns = [
   {

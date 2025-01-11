@@ -8,7 +8,7 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 
-import { ConnectionCard } from '@/components/dashboard/social/connection-card';
+import { ConnectionCard } from '/src/components/dashboard/social/connection-card';
 
 const connections = [
   {

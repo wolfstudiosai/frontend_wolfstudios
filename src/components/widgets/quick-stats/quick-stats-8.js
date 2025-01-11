@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import { ArrowCounterClockwise as ArrowCounterClockwiseIcon } from '@phosphor-icons/react/dist/ssr/ArrowCounterClockwise';
 import { Line, LineChart, XAxis, YAxis } from 'recharts';
 
-import { NoSsr } from '@/components/core/no-ssr';
+import { NoSsr } from '/src/components/core/no-ssr';
 
 const data = [
   { name: 'Mon', value: 14 },

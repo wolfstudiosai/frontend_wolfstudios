@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
-import { useMediaQuery } from '@/hooks/use-media-query';
+import { useMediaQuery } from '/src/hooks/use-media-query';
 
 import { FleetVehicles } from './fleet-vehicles';
 

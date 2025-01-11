@@ -13,9 +13,9 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 
-import { paths } from '@/paths';
-import { FilterButton, FilterPopover, useFilterContext } from '@/components/core/filter-button';
-import { Option } from '@/components/core/option';
+import { paths } from '/src/paths';
+import { FilterButton, FilterPopover, useFilterContext } from '/src/components/core/filter-button';
+import { Option } from '/src/components/core/option';
 
 import { useOrdersSelection } from './orders-selection-context';
 

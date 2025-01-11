@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { AuthStrategy } from '@/lib/auth/strategy';
-import { StrategyGuard } from '@/components/auth/strategy-guard';
+import { AuthStrategy } from '/src/lib/auth/strategy';
+import { StrategyGuard } from '/src/components/auth/strategy-guard';
 
 export default function Layout({ children }) {
   return <StrategyGuard expected={AuthStrategy.COGNITO}>{children}</StrategyGuard>;
