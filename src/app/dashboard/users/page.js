@@ -35,7 +35,6 @@ export default function Page({ searchParams }) {
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
-  console.log(selectedRows, 'selectedRows.....');
   const [status, setStatus] = React.useState('');
   async function fetchList() {
     try {

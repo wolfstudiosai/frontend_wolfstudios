@@ -45,23 +45,49 @@ export const dashboardItems = [
         title: 'Overview',
         href: paths.dashboard.overview,
         icon: 'material-symbols-light:overview-outline-rounded',
+        allowedRoles: ['admin', 'user'],
       },
-      { key: 'analytics', title: 'Analytics', href: paths.dashboard.analytics, icon: 'hugeicons:analysis-text-link' },
-      { key: 'records', title: 'Records', href: paths.dashboard.records, icon: 'pepicons-pencil:file' },
+      {
+        key: 'analytics',
+        title: 'Analytics',
+        href: paths.dashboard.analytics,
+        icon: 'hugeicons:analysis-text-link',
+        allowedRoles: ['admin', 'user'],
+      },
+      {
+        key: 'records',
+        title: 'Records',
+        href: paths.dashboard.records,
+        icon: 'pepicons-pencil:file',
+        allowedRoles: ['admin', 'user'],
+      },
     ],
   },
   {
     key: 'admin',
     title: 'Admin',
     items: [
-      { key: 'usrs', title: 'Users', href: paths.dashboard.users, icon: 'solar:user-linear' },
-      { key: 'Campaign', title: 'Campaign', href: paths.dashboard.campaign, icon: 'material-symbols-light:ads-click' },
+      {
+        key: 'usrs',
+        title: 'Users',
+        href: paths.dashboard.users,
+        icon: 'solar:user-linear',
+        allowedRoles: ['admin'],
+      },
+      {
+        key: 'Campaign',
+        title: 'Campaign',
+        href: paths.dashboard.campaign,
+        icon: 'material-symbols-light:ads-click',
+        allowedRoles: ['admin'],
+      },
 
       {
         key: 'partners_by_campaign',
         title: 'Partners by campaign',
         href: paths.dashboard.partners_by_campaign,
         icon: 'ph:handshake-light',
+        allowedRoles: ['admin'],
       },
 
       {
@@ -69,6 +95,7 @@ export const dashboardItems = [
         title: 'Needs offer/ approval',
         href: paths.dashboard.needs_offer_approval,
         icon: 'material-symbols-light:order-approve-outline-rounded',
+        allowedRoles: ['admin'],
       },
     ],
   },

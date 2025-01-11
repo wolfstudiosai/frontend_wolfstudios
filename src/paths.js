@@ -103,6 +103,7 @@ export const paths = {
     default: {
       sign_in: '/auth/sign-in',
       sign_up: '/auth/sign-up',
+      not_authorized: '/auth/not-authorized',
       resetPassword: '/auth/reset-password',
       forgotPassword: '/auth/forgot-password',
     },
