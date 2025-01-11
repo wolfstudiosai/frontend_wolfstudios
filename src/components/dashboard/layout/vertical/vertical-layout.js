@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { dashboardItems } from '/src/router';
+import { dashboardItems } from '@/router';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
 
