@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Box } from '@mui/material';
 
 import { isValidToken } from '@/contexts/auth/AuthContext';
+import { SplashScreen } from '@/components/splash-screen/splash-screen';
 
 import useAuth from '/src/hooks/useAuth';
 import { paths } from '/src/paths';
@@ -57,7 +58,7 @@ export function AuthGuard({ children }) {
   }, [isLogin, loading, pathname]);
 
   if (isChecking) {
-    return <Box>Checking authentication and authorization...</Box>;
+    return <SplashScreen />;
   }
 
   return <>{children}</>;
