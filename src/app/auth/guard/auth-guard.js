@@ -67,7 +67,7 @@ export function AuthGuard({ children }) {
 const isUserAuthorizedToAccessThisRoute = (role, pathname) => {
   return dashboardItems.some((section) => {
     return section.items.some((item) => {
-      if (item.href === pathname) {
+      if (item.href === pathname || pathname.startsWith(item.href)) {
         return item.allowedRoles.includes(role.toLowerCase());
       }
       return false;
