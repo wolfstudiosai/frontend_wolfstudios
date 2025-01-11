@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 
-import { authClient } from '@/lib/auth/custom/client';
-import { logger } from '@/lib/default-logger';
+import { authClient } from '/src/lib/auth/custom/client';
+import { logger } from '/src/lib/default-logger';
 
 export const UserContext = React.createContext(undefined);
 

@@ -7,7 +7,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
 import { Rows as RowsIcon } from '@phosphor-icons/react/dist/ssr/Rows';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 export function ViewModeButton({ view }) {
   const router = useRouter();

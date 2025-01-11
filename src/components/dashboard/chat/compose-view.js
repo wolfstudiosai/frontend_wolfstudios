@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 
-import { paths } from '@/paths';
+import { paths } from '/src/rc/rc/rc/rc/rc/paths';
 
 import { ChatContext } from './chat-context';
 import { GroupRecipients } from './group-recipients';

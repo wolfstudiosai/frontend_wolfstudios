@@ -4,11 +4,11 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import Alert from '@mui/material/Alert';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
-import { AuthStrategy } from '@/lib/auth/strategy';
-import { logger } from '@/lib/default-logger';
-import { useUser } from '@/hooks/use-user';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
+import { AuthStrategy } from '/src/lib/auth/strategy';
+import { logger } from '/src/lib/default-logger';
+import { useUser } from '/src/hooks/use-user';
 
 export function AuthGuard({ children }) {
   const router = useRouter();

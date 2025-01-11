@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 import { Stack as StackIcon } from '@phosphor-icons/react/dist/ssr/Stack';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 export function Features() {
   return (

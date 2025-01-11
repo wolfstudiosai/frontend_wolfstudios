@@ -1,6 +1,6 @@
-import { getSearchQuery } from '@/helper/common';
-import { api, publicApi } from '@/utils/api';
-import { uploadFileAsync } from '@/utils/upload-file';
+import { getSearchQuery } from '/src/helper/common';
+import { api, publicApi } from '/src/utils/api';
+import { uploadFileAsync } from '/src/utils/upload-file';
 import { ConsoleLogger } from 'aws-amplify/utils';
 import { toast } from 'sonner';
 

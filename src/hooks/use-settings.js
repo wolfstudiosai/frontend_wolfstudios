@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { SettingsContext } from '@/contexts/settings';
+import { SettingsContext } from '/src/contexts/settings';
 
 export function useSettings() {
   const context = React.useContext(SettingsContext);

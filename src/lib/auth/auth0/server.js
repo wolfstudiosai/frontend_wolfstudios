@@ -1,6 +1,6 @@
 import { initAuth0 } from '@auth0/nextjs-auth0';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 
 // Read the notes from https://auth0.github.io/nextjs-auth0/types/config.ConfigParameters.html
 

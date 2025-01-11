@@ -4,9 +4,9 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import Alert from '@mui/material/Alert';
 
-import { paths } from '@/paths';
-import { logger } from '@/lib/default-logger';
-import { useUser } from '@/hooks/use-user';
+import { paths } from '/src/paths';
+import { logger } from '/src/lib/default-logger';
+import { useUser } from '/src/hooks/use-user';
 
 export function GuestGuard({ children }) {
   const router = useRouter();

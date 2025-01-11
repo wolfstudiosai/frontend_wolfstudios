@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import { Heart as HeartIcon } from '@phosphor-icons/react/dist/ssr/Heart';
 import { Users as UsersIcon } from '@phosphor-icons/react/dist/ssr/Users';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 
 const projects = [
   {

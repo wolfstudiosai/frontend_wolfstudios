@@ -13,9 +13,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
-import { Option } from '@/components/core/option';
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
+import { Option } from '/src/components/core/option';
 
 const schema = zod
   .object({

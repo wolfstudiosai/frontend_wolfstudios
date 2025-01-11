@@ -3,8 +3,8 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 
-import { logger } from '@/lib/default-logger';
-import { createClient as createSupabaseClient } from '@/lib/supabase/client';
+import { logger } from '/src/lib/default-logger';
+import { createClient as createSupabaseClient } from '/src/lib/supabase/client';
 
 export const UserContext = React.createContext(undefined);
 

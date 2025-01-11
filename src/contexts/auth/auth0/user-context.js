@@ -3,7 +3,7 @@
 import { UserProvider as Auth0UserProvider, useUser } from '@auth0/nextjs-auth0/client';
 import * as React from 'react';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 export const UserContext = React.createContext(undefined);
 

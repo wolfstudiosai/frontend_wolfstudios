@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 
-import { config } from '@/config';
-import { dayjs } from '@/lib/dayjs';
-import { CalendarProvider } from '@/components/dashboard/calendar/calendar-context';
-import { CalendarView } from '@/components/dashboard/calendar/calendar-view';
+import { config } from '/src/config';
+import { dayjs } from '/src/lib/dayjs';
+import { CalendarProvider } from '/src/components/dashboard/calendar/calendar-context';
+import { CalendarView } from '/src/components/dashboard/calendar/calendar-view';
 
 export const metadata = { title: `Calendar | Dashboard | ${config.site.name}` };
 

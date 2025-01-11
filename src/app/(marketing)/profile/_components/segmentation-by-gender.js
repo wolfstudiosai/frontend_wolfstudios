@@ -1,8 +1,8 @@
 import React from 'react';
-import { pxToRem } from '@/utils/utils';
+import { pxToRem } from '/src/utils/utils';
 import { Box, Stack, Typography } from '@mui/material';
 
-import { Iconify } from '@/components/iconify/iconify';
+import { Iconify } from '/src/components/iconify/iconify';
 
 export const SegmentationByGender = () => {
   return (

@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { Bell as BellIcon } from '@phosphor-icons/react/dist/ssr/Bell';
 import { RadialBar, RadialBarChart } from 'recharts';
 
-import { NoSsr } from '@/components/core/no-ssr';
+import { NoSsr } from '/src/components/core/no-ssr';
 
 export function VehiclesOverview({ data }) {
   const chartSize = 260;

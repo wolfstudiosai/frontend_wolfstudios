@@ -3,8 +3,8 @@
 import * as React from 'react';
 import Link from '@mui/material/Link';
 
-import { dayjs } from '@/lib/dayjs';
-import { DataTable } from '@/components/data-table/data-table';
+import { dayjs } from '/src/lib/dayjs';
+import { DataTable } from '/src/components/data-table/data-table';
 
 const columns = [
   { field: 'id', name: 'ID', width: '200px' },

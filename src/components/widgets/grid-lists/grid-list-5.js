@@ -14,7 +14,7 @@ import { Clock as ClockIcon } from '@phosphor-icons/react/dist/ssr/Clock';
 import { Heart as HeartIcon } from '@phosphor-icons/react/dist/ssr/Heart';
 import { ShareNetwork as ShareNetworkIcon } from '@phosphor-icons/react/dist/ssr/ShareNetwork';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 
 const posts = [
   {

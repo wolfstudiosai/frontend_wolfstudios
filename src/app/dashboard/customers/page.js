@@ -7,12 +7,12 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { config } from '@/config';
-import { dayjs } from '@/lib/dayjs';
-import { CustomersFilters } from '@/components/dashboard/customer/customers-filters';
-import { CustomersPagination } from '@/components/dashboard/customer/customers-pagination';
-import { CustomersSelectionProvider } from '@/components/dashboard/customer/customers-selection-context';
-import { CustomersTable } from '@/components/dashboard/customer/customers-table';
+import { config } from '/src/config';
+import { dayjs } from '/src/lib/dayjs';
+import { CustomersFilters } from '/src/components/dashboard/customer/customers-filters';
+import { CustomersPagination } from '/src/components/dashboard/customer/customers-pagination';
+import { CustomersSelectionProvider } from '/src/components/dashboard/customer/customers-selection-context';
+import { CustomersTable } from '/src/components/dashboard/customer/customers-table';
 
 export const metadata = { title: `List | Customers | Dashboard | ${config.site.name}` };
 

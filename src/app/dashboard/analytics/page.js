@@ -1,6 +1,6 @@
 
-import { PageContainer } from '@/components/container/PageContainer';
-import { config } from '@/config';
+import { PageContainer } from '/src/components/container/PageContainer';
+import { config } from '/src/config';
 import { ContentPerformance } from './_components/content-performance';
 import { Facilities } from './_components/facilities';
 import { PartnerMatrix } from './_components/partner-matrix';

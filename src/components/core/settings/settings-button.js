@@ -7,8 +7,8 @@ import { useColorScheme } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import { GearSix as GearSixIcon } from '@phosphor-icons/react/dist/ssr/GearSix';
 
-import { setSettings as setPersistedSettings } from '@/lib/settings/set-settings';
-import { useSettings } from '@/hooks/use-settings';
+import { setSettings as setPersistedSettings } from '/src/lib/settings/set-settings';
+import { useSettings } from '/src/hooks/use-settings';
 
 import { SettingsDrawer } from './settings-drawer';
 

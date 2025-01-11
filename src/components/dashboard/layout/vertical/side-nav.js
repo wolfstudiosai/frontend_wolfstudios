@@ -10,13 +10,13 @@ import { ArrowSquareOut as ArrowSquareOutIcon } from '@phosphor-icons/react/dist
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 
-import { paths } from '@/paths';
-import { isNavItemActive } from '@/lib/is-nav-item-active';
-import { Iconify } from '@/components/iconify/iconify';
+import { paths } from '/src/paths';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
+import { Iconify } from '/src/components/iconify/iconify';
 
 import { icons } from '../nav-icons';
 import { navColorStyles } from './styles';
-import { DynamicLogo, Logo } from '@/components/core/logo';
+import { DynamicLogo, Logo } from '/src/components/core/logo';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },

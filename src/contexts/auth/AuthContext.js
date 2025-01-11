@@ -2,12 +2,12 @@
 
 import React, { createContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getProfileData } from '@/app/dashboard/settings/_lib/actions';
-import { api, server_base_api } from '@/utils/api';
-import { removeTokenFromCookies, setTokenInCookies } from '@/utils/axios-api.helpers';
+import { getProfileData } from '/src/app/dashboard/settings/_lib/actions';
+import { api, server_base_api } from '/src/utils/api';
+import { removeTokenFromCookies, setTokenInCookies } from '/src/utils/axios-api.helpers';
 import { jwtDecode } from 'jwt-decode';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 // import { removeTokenFromCookies, setTokenInCookies } from 'utils/axios-api.helpers';
 

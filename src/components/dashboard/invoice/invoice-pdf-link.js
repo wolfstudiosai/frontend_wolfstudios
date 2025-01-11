@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 
-import { InvoicePDFDocument } from '@/components/dashboard/invoice/invoice-pdf-document';
+import { InvoicePDFDocument } from '/src/components/dashboard/invoice/invoice-pdf-document';
 
 export function InvoicePDFLink({ children }) {
   return (

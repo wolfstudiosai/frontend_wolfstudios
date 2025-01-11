@@ -1,6 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 
 export function createClient(cookieStore) {
   return createServerClient(config.supabase.url, config.supabase.anonKey, {

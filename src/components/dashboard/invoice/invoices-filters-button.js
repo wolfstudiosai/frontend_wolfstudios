@@ -4,7 +4,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import { Funnel as FunnelIcon } from '@phosphor-icons/react/dist/ssr/Funnel';
 
-import { useMediaQuery } from '@/hooks/use-media-query';
+import { useMediaQuery } from '/src/hooks/use-media-query';
 
 import { InvoicesFiltersModal } from './invoices-filters-modal';
 

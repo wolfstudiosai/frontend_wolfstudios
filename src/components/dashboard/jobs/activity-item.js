@@ -8,7 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 
 export function ActivityItem({ event, connector }) {
   return (

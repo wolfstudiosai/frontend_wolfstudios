@@ -6,12 +6,12 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
-import { GuestGuard } from '@/components/auth/guest-guard';
-import { SplitLayout } from '@/components/auth/split-layout';
-import { ResetPasswordButton } from '@/components/auth/supabase/reset-password-button';
-import { DynamicLogo } from '@/components/core/logo';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
+import { GuestGuard } from '/src/components/auth/guest-guard';
+import { SplitLayout } from '/src/components/auth/split-layout';
+import { ResetPasswordButton } from '/src/components/auth/supabase/reset-password-button';
+import { DynamicLogo } from '/src/components/core/logo';
 
 export const metadata = { title: `Recovery link sent | Supabase | Auth | ${config.site.name}` };
 

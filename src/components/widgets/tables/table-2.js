@@ -14,8 +14,8 @@ import Typography from '@mui/material/Typography';
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsThree';
 
-import { dayjs } from '@/lib/dayjs';
-import { DataTable } from '@/components/data-table/data-table';
+import { dayjs } from '/src/lib/dayjs';
+import { DataTable } from '/src/components/data-table/data-table';
 
 const projects = [
   {

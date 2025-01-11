@@ -1,5 +1,5 @@
-import { logger } from '@/lib/default-logger';
-import { createClient } from '@/lib/supabase/middleware';
+import { logger } from '/src/lib/default-logger';
+import { createClient } from '/src/lib/supabase/middleware';
 
 export async function supabaseMiddleware(req) {
   const { supabaseClient, res } = createClient(req);

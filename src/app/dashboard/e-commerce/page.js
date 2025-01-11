@@ -6,12 +6,12 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { config } from '@/config';
-import { Conversions } from '@/components/dashboard/e-commerce/conversions';
-import { CostBreakdown } from '@/components/dashboard/e-commerce/cost-breakdown';
-import { SalesByCountry } from '@/components/dashboard/e-commerce/sales-by-country';
-import { Stats } from '@/components/dashboard/e-commerce/stats';
-import { TopProducts } from '@/components/dashboard/e-commerce/top-products';
+import { config } from '/src/config';
+import { Conversions } from '/src/components/dashboard/e-commerce/conversions';
+import { CostBreakdown } from '/src/components/dashboard/e-commerce/cost-breakdown';
+import { SalesByCountry } from '/src/components/dashboard/e-commerce/sales-by-country';
+import { Stats } from '/src/components/dashboard/e-commerce/stats';
+import { TopProducts } from '/src/components/dashboard/e-commerce/top-products';
 
 export const metadata = { title: `E-commerce | Dashboard | ${config.site.name}` };
 

@@ -13,14 +13,14 @@ import Typography from '@mui/material/Typography';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
-import { FilterButton } from '@/components/core/filter-button';
-import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopover';
-import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
-import { DataTable } from '@/components/data-table/data-table';
-import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
-import PageLoader from '@/components/PageLoader/PageLoader';
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
+import { FilterButton } from '/src/components/core/filter-button';
+import { StatusFilterPopover } from '/src/components/core/filters/StatusFilterPopover';
+import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
+import { DataTable } from '/src/components/data-table/data-table';
+import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
+import PageLoader from '/src/components/PageLoader/PageLoader';
 
 import { deleteUserAsync, getUsers } from './_lib/user.actions';
 import { defaultUser } from './_lib/user.types';

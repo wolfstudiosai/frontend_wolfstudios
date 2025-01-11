@@ -11,8 +11,8 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
-import { FileDropzone } from '@/components/core/file-dropzone';
-import { FileIcon } from '@/components/core/file-icon';
+import { FileDropzone } from '/src/components/core/file-dropzone';
+import { FileIcon } from '/src/components/core/file-icon';
 
 function bytesToSize(bytes, decimals = 2) {
   if (bytes === 0) {

@@ -13,8 +13,8 @@ import Typography from '@mui/material/Typography';
 import { CreditCard as CreditCardIcon } from '@phosphor-icons/react/dist/ssr/CreditCard';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 
-import { PropertyItem } from '@/components/core/property-item';
-import { PropertyList } from '@/components/core/property-list';
+import { PropertyItem } from '/src/components/core/property-item';
+import { PropertyList } from '/src/components/core/property-list';
 
 import { PlanCard } from './plan-card';
 

@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 
 export const metadata = { title: `Blank | Dashboard | ${config.site.name}` };
 

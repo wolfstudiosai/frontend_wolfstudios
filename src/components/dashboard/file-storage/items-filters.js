@@ -13,8 +13,8 @@ import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/di
 import { Rows as RowsIcon } from '@phosphor-icons/react/dist/ssr/Rows';
 import { SquaresFour as SquaresFourIcon } from '@phosphor-icons/react/dist/ssr/SquaresFour';
 
-import { paths } from '@/paths';
-import { Option } from '@/components/core/option';
+import { paths } from '/src/paths';
+import { Option } from '/src/components/core/option';
 
 export function ItemsFilters({ filters = {}, sortDir = 'desc', view = 'grid' }) {
   const router = useRouter();

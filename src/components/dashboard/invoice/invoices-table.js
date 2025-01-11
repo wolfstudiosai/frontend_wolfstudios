@@ -14,9 +14,9 @@ import { CheckCircle as CheckCircleIcon } from '@phosphor-icons/react/dist/ssr/C
 import { Clock as ClockIcon } from '@phosphor-icons/react/dist/ssr/Clock';
 import { XCircle as XCircleIcon } from '@phosphor-icons/react/dist/ssr/XCircle';
 
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
-import { DataTable } from '@/components/data-table/data-table';
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
+import { DataTable } from '/src/components/data-table/data-table';
 
 function groupRows(invoices) {
   return invoices.reduce(

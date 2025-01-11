@@ -4,9 +4,9 @@ import React from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Box } from '@mui/material';
 
-import { paths } from '@/paths';
-import useAuth from '@/hooks/useAuth';
-import { dashboardItems } from '@/router';
+import { paths } from '/src/paths';
+import useAuth from '/src/hooks/useAuth';
+import { dashboardItems } from '/src/router';
 
 export function AuthGuard({ children }) {
   const router = useRouter();

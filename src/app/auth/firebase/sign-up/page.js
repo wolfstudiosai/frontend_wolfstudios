@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { config } from '@/config';
-import { SignUpForm } from '@/components/auth/firebase/sign-up-form';
-import { GuestGuard } from '@/components/auth/guest-guard';
-import { SplitLayout } from '@/components/auth/split-layout';
+import { config } from '/src/config';
+import { SignUpForm } from '/src/components/auth/firebase/sign-up-form';
+import { GuestGuard } from '/src/components/auth/guest-guard';
+import { SplitLayout } from '/src/components/auth/split-layout';
 
 export const metadata = { title: `Sign up | Firebase | Auth | ${config.site.name}` };
 

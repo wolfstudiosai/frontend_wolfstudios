@@ -1,6 +1,6 @@
 // ./src/app/(home)/properties/page.tsx
 
-import { config } from '@/config';
+import { config } from '/src/config';
 
 import { NotAuthorizedView } from './not-authorized-view';
 

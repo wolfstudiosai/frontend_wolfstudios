@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-import { config as appConfig } from '@/config';
-import { AuthStrategy } from '@/lib/auth/strategy';
-import { supabaseMiddleware } from '@/lib/auth/supabase/middleware';
+import { config as appConfig } from '/src/config';
+import { AuthStrategy } from '/src/lib/auth/strategy';
+import { supabaseMiddleware } from '/src/lib/auth/supabase/middleware';
 
 export async function middleware(req) {
 

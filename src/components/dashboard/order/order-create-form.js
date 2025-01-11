@@ -27,12 +27,12 @@ import { PlusCircle as PlusCircleIcon } from '@phosphor-icons/react/dist/ssr/Plu
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
-import { logger } from '@/lib/default-logger';
-import { DataTable } from '@/components/data-table/data-table';
-import { Option } from '@/components/core/option';
-import { toast } from '@/components/core/toaster';
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
+import { logger } from '/src/lib/default-logger';
+import { DataTable } from '/src/components/data-table/data-table';
+import { Option } from '/src/components/core/option';
+import { toast } from '/src/components/core/toaster';
 
 function calculateSubtotal(lineItems) {
   const subtotal = lineItems.reduce((acc, lineItem) => acc + lineItem.quantity * lineItem.unitPrice, 0);

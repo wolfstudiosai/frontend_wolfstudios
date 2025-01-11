@@ -20,7 +20,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { logger } from '@/lib/default-logger';
+import { logger } from '/src/lib/default-logger';
 
 import { ColumnItem } from './column-item';
 import { ColumnList } from './column-list';

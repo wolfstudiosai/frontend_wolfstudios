@@ -16,9 +16,9 @@ import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsT
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 
-import { paths } from '@/paths';
-import { useMediaQuery } from '@/hooks/use-media-query';
-import { useSelection } from '@/hooks/use-selection';
+import { paths } from '/src/paths';
+import { useMediaQuery } from '/src/hooks/use-media-query';
+import { useSelection } from '/src/hooks/use-selection';
 
 import { MailContext } from './mail-context';
 import { ThreadItem } from './thread-item';

@@ -6,14 +6,14 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { config } from '@/config';
-import { DeviatedVehicles } from '@/components/dashboard/logistics/deviated-vehicles';
-import { LateVehicles } from '@/components/dashboard/logistics/late-vehicles';
-import { OnRouteVehicles } from '@/components/dashboard/logistics/on-route-vehicles';
-import { VehiclesCondition } from '@/components/dashboard/logistics/vehicles-condition';
-import { VehiclesOverview } from '@/components/dashboard/logistics/vehicles-overview';
-import { VehiclesTable } from '@/components/dashboard/logistics/vehicles-table';
-import { VehiclesWithErrors } from '@/components/dashboard/logistics/vehicles-with-errors';
+import { config } from '/src/config';
+import { DeviatedVehicles } from '/src/components/dashboard/logistics/deviated-vehicles';
+import { LateVehicles } from '/src/components/dashboard/logistics/late-vehicles';
+import { OnRouteVehicles } from '/src/components/dashboard/logistics/on-route-vehicles';
+import { VehiclesCondition } from '/src/components/dashboard/logistics/vehicles-condition';
+import { VehiclesOverview } from '/src/components/dashboard/logistics/vehicles-overview';
+import { VehiclesTable } from '/src/components/dashboard/logistics/vehicles-table';
+import { VehiclesWithErrors } from '/src/components/dashboard/logistics/vehicles-with-errors';
 
 export const metadata = { title: `Metrics | Logistics | Dashboard | ${config.site.name}` };
 

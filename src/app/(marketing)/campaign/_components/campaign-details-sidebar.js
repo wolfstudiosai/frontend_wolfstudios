@@ -2,7 +2,7 @@ import { Avatar, Box, Divider, IconButton, Paper, Stack, Typography } from '@mui
 import Grid from '@mui/material/Grid2';
 import dayjs from 'dayjs';
 
-import { Iconify } from '@/components/iconify/iconify';
+import { Iconify } from '/src/components/iconify/iconify';
 
 export const CampaignDetailsSidebar = ({ description, details, author, campaign_title }) => {
   return (

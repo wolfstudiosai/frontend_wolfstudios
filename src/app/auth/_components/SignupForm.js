@@ -1,9 +1,9 @@
 'use client';
 
-import { createUser } from '@/app/dashboard/users/_lib/user.actions';
-import { defaultUser } from '@/app/dashboard/users/_lib/user.types';
-import { CustomPasswordInput } from '@/components/formFields/CustomPasswordInput';
-import { paths } from '@/paths';
+import { createUser } from '/src/app/dashboard/users/_lib/user.actions';
+import { defaultUser } from '/src/app/dashboard/users/_lib/user.types';
+import { CustomPasswordInput } from '/src/components/formFields/CustomPasswordInput';
+import { paths } from '/src/paths';
 import { CircularProgress } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';

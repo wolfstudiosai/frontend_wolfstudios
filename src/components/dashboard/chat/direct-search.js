@@ -14,7 +14,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 
-import { Tip } from '@/components/core/tip';
+import { Tip } from '/src/components/core/tip';
 
 export const DirectSearch = React.forwardRef(function ChatSidebarSearch(
   {

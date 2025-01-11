@@ -1,5 +1,5 @@
-import { config } from '@/config';
-import { auth0 } from '@/lib/auth/auth0/server';
+import { config } from '/src/config';
+import { auth0 } from '/src/lib/auth/auth0/server';
 
 export const dynamic = 'force-dynamic';
 

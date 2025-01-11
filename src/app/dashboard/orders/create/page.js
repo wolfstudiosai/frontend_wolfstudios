@@ -6,9 +6,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/ArrowLeft';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
-import { OrderCreateForm } from '@/components/dashboard/order/order-create-form';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
+import { OrderCreateForm } from '/src/components/dashboard/order/order-create-form';
 
 export const metadata = { title: `Create | Orders | Dashboard | ${config.site.name}` };
 

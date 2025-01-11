@@ -15,7 +15,7 @@ import { ChartPie as ChartPieIcon } from '@phosphor-icons/react/dist/ssr/ChartPi
 import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsThree';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-import { NoSsr } from '@/components/core/no-ssr';
+import { NoSsr } from '/src/components/core/no-ssr';
 import Grid from '@mui/material/Grid2';
 
 

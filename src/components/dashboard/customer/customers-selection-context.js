@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { useSelection } from '@/hooks/use-selection';
+import { useSelection } from '/src/hooks/use-selection';
 
 function noop() {
   return undefined;

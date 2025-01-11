@@ -7,9 +7,9 @@ import InputLabel from '@mui/material/InputLabel';
 import Stack from '@mui/material/Stack';
 
 
-import { ReadonlyStatus, ReadonlyStatusChip } from '@/components/formFields/readonly-status';
-import { WrapedText } from '@/components/formFields/wraped-text';
-import PageLoader from '@/components/PageLoader/PageLoader';
+import { ReadonlyStatus, ReadonlyStatusChip } from '/src/components/formFields/readonly-status';
+import { WrapedText } from '/src/components/formFields/wraped-text';
+import PageLoader from '/src/components/PageLoader/PageLoader';
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import Image from 'next/image';

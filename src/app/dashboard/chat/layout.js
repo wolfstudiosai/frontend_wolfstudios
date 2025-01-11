@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { dayjs } from '@/lib/dayjs';
-import { ChatProvider } from '@/components/dashboard/chat/chat-context';
-import { ChatView } from '@/components/dashboard/chat/chat-view';
+import { dayjs } from '/src/lib/dayjs';
+import { ChatProvider } from '/src/components/dashboard/chat/chat-context';
+import { ChatView } from '/src/components/dashboard/chat/chat-view';
 
 const contacts = [
   {

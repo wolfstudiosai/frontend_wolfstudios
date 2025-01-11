@@ -14,7 +14,7 @@ import { BookmarkSimple as BookmarkSimpleIcon } from '@phosphor-icons/react/dist
 import { Paperclip as PaperclipIcon } from '@phosphor-icons/react/dist/ssr/Paperclip';
 import { Star as StarIcon } from '@phosphor-icons/react/dist/ssr/Star';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 
 export function ThreadItem({ thread, onDeselect, onSelect, selected, href }) {
   const hasAnyAttachments = (thread.attachments ?? []).length > 0;

@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsThree';
 
-import { DataTable } from '@/components/data-table/data-table';
+import { DataTable } from '/src/components/data-table/data-table';
 
 const columns = [
   {

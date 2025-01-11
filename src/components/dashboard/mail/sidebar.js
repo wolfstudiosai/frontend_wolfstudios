@@ -13,8 +13,8 @@ import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
-import { paths } from '@/paths';
-import { useMediaQuery } from '@/hooks/use-media-query';
+import { paths } from '/src/paths';
+import { useMediaQuery } from '/src/hooks/use-media-query';
 
 import { LabelItem } from './label-item';
 

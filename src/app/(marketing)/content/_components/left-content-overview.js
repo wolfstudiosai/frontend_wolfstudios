@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, Card, CardContent, CardMedia, IconButton, Paper, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
-import { Iconify } from '@/components/iconify/iconify';
+import { Iconify } from '/src/components/iconify/iconify';
 
 export const LeftContentOverview = ({ description, details, author, campaign_title, tags }) => {
   return (

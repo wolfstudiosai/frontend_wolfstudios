@@ -16,8 +16,8 @@ import Stack from '@mui/material/Stack';
 import { CaretLeft as CaretLeftIcon } from '@phosphor-icons/react/dist/ssr/CaretLeft';
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 
-import { paths } from '@/paths';
-import { useDialog } from '@/hooks/use-dialog';
+import { paths } from '/src/paths';
+import { useDialog } from '/src/rc/rc/hooks/use-dialog';
 
 import { CalendarContext } from './calendar-context';
 import { EventContent } from './event-content';
