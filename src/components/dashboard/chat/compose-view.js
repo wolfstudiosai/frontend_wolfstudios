@@ -50,7 +50,7 @@ export function ComposeView() {
 
       createMessage({ threadId, type, content });
 
-      router.push(paths.dashboard.chat.thread('group', threadId));
+      router.push(paths.dashboard.chat_thread('group', threadId));
     },
     [router, createThread, createMessage, recipients]
   );

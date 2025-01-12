@@ -11,8 +11,8 @@ import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
-import { paths } from '/src/paths';
-import { useMediaQuery } from '/src/hooks/use-media-query';
+import { paths } from '@/paths';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 import { DirectSearch } from './direct-search';
 import { ThreadItem } from './thread-item';
@@ -145,7 +145,7 @@ function SidebarContent({
         </Typography>
         <Button
           component={RouterLink}
-          href={paths.dashboard.chat.compose}
+          href={paths.dashboard.chat_compose}
           onClick={() => {
             if (closeOnGroupClick) {
               onClose?.();

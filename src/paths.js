@@ -38,6 +38,8 @@ export const paths = {
     },
     calendar: '/dashboard/calendar',
     chat: '/dashboard/chat',
+    chat_compose: '/dashboard/chat/compose',
+    chat_thread: (type, id) => `/dashboard/chat/thread/${type}/${id}`,
     crypto: '/dashboard/crypto',
     customers: {
       list: '/dashboard/customers',
