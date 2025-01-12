@@ -1,4 +1,7 @@
+'use client';
+
 import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 import Button from '@mui/material/Button';
@@ -17,9 +20,11 @@ import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/Arr
 import { ChatCircleText as ChatCircleTextIcon } from '@phosphor-icons/react/dist/ssr/ChatCircleText';
 import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsThree';
 
+import { paths } from '@/paths';
 import { dayjs } from '/src/lib/dayjs';
 
 export function AppChat({ messages }) {
+  const router = useRouter();
   return (
     <Card>
       <CardHeader
@@ -84,7 +89,12 @@ export function AppChat({ messages }) {
       </List>
       <Divider />
       <CardActions>
-        <Button color="secondary" endIcon={<ArrowRightIcon />} size="small">
+        <Button
+          color="secondary"
+          endIcon={<ArrowRightIcon />}
+          size="small"
+          onClick={() => router.push(paths.dashboard.chat)}
+        >
           Go to chat
         </Button>
       </CardActions>

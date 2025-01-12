@@ -1,14 +1,13 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
-
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { SplashScreen } from '@/components/splash-screen/splash-screen';
-import { isValidToken } from '@/contexts/auth/AuthContext';
+import { additionalRoutes, dashboardItems } from '@/router';
 
-import useAuth from '/src/hooks/useAuth';
-import { paths } from '/src/paths';
-import { dashboardItems } from '/src/router';
+import { paths } from '@/paths';
+import { isValidToken } from '@/contexts/auth/AuthContext';
+import useAuth from '@/hooks/useAuth';
 
 export function AuthGuard({ children }) {
   const router = useRouter();
@@ -65,19 +64,39 @@ export function AuthGuard({ children }) {
 }
 
 const isUserAuthorizedToAccessThisRoute = (role, pathname) => {
-  return dashboardItems.some((section) => {
+  // Check the dashboardItems collection
+  const isAuthorizedInDashboardItems = dashboardItems.some((section) => {
     return section.items.some((item) => {
-      //Handle static route match
+      // Handle static route match
       if (item.href === pathname) {
         return item.allowedRoles.includes(role);
       }
 
-      //Handle dynamic route match (create/edit)
+      // Handle dynamic route match (create/edit)
       const baseHref = pathname.split('/').slice(0, 3).join('/');
       if (item.href.startsWith(baseHref)) {
         return item.allowedRoles.includes(role);
       }
+
       return false;
     });
   });
+
+  // Check the additionalRoutes collection
+  const isAuthorizedInAdditionalRoutes = additionalRoutes.some((route) => {
+    // Handle static route match
+    if (route.href === pathname) {
+      return route.allowedRoles.includes(role);
+    }
+
+    // Handle dynamic route match (create/edit)
+    const baseHref = pathname.split('/').slice(0, 3).join('/');
+    if (route.href.startsWith(baseHref)) {
+      return route.allowedRoles.includes(role);
+    }
+
+    return false;
+  });
+
+  return isAuthorizedInDashboardItems || isAuthorizedInAdditionalRoutes;
 };

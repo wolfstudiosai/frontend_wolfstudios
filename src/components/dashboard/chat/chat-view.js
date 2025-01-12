@@ -6,8 +6,8 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
 
-import { paths } from '/src/paths';
-import { useMediaQuery } from '/src/hooks/use-media-query';
+import { paths } from '@/paths';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 import { ChatContext } from './chat-context';
 import { Sidebar } from './sidebar';
@@ -38,14 +38,14 @@ export function ChatView({ children }) {
     (contactId) => {
       const threadId = createThread({ type: 'direct', recipientId: contactId });
 
-      router.push(paths.dashboard.chat.thread('direct', threadId));
+      router.push(paths.dashboard.chat_thread('direct', threadId));
     },
     [router, createThread]
   );
 
   const handleThreadSelect = React.useCallback(
     (threadType, threadId) => {
-      router.push(paths.dashboard.chat.thread(threadType, threadId));
+      router.push(paths.dashboard.chat_thread(threadType, threadId));
     },
     [router]
   );
