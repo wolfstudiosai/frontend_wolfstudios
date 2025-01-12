@@ -37,11 +37,7 @@ export const paths = {
       create: '/dashboard/blog/create',
     },
     calendar: '/dashboard/calendar',
-    chat: {
-      base: '/dashboard/chat',
-      compose: '/dashboard/chat/compose',
-      thread: (threadType, threadId) => `/dashboard/chat/${threadType}/${threadId}`,
-    },
+    chat: '/dashboard/chat',
     crypto: '/dashboard/crypto',
     customers: {
       list: '/dashboard/customers',
@@ -105,7 +101,6 @@ export const paths = {
     blog: '/blog',
   },
 
-  // will be removed
   auth: {
     default: {
       sign_in: '/auth/sign-in',
@@ -114,6 +109,7 @@ export const paths = {
       resetPassword: '/auth/reset-password',
       forgotPassword: '/auth/forgot-password',
     },
+    // will be removed
     auth0: {
       callback: '/auth/auth0/callback',
       signIn: '/auth/auth0/sign-in',

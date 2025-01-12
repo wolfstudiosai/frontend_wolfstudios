@@ -1,7 +1,6 @@
 import { paths } from './paths';
 
-// ----------------------------------------------------------------------
-
+// public routes
 export const navData = [
   {
     key: 'public-navitems',
@@ -68,6 +67,7 @@ export const navData = [
   },
 ];
 
+// dashboard routes
 export const dashboardItems = [
   {
     key: 'general',
@@ -130,5 +130,13 @@ export const dashboardItems = [
         allowedRoles: ['admin'],
       },
     ],
+  },
+];
+
+// add all the dashboard routes that not in the dashboardItems
+export const additionalRoutes = [
+  {
+    href: paths.dashboard.chat,
+    allowedRoles: ['admin', 'user'],
   },
 ];
