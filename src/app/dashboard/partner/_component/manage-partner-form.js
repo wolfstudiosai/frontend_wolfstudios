@@ -22,7 +22,7 @@ import { createCampaignAsync, getCampaignAsync, updateUCampaignAsync } from '../
 import { defaultCampaign } from '../_lib/campaign.types';
 import { ContentGuideline } from './content-guideline';
 
-export const ManageCampaignForm = ({ slug }) => {
+export const ManagePartnerForm = ({ slug }) => {
   const isUpdate = slug ? true : false;
 
   // *********************States*********************************

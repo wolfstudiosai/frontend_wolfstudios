@@ -9,8 +9,9 @@ import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopov
 import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
 import { DataTable } from '@/components/data-table/data-table';
 import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
-import { Iconify } from '@/components/iconify/iconify';
 import PageLoader from '@/components/PageLoader/PageLoader';
+import { dayjs } from '@/lib/dayjs';
+import { dateFormatter } from '@/utils/date-formatter';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -22,11 +23,9 @@ import Typography from '@mui/material/Typography';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { dayjs } from '/src/lib/dayjs';
+import { paths } from '@/paths';
 
 import { deleteCampaignAsync, getCampaignListAsync } from './_lib/campaign.actions';
-import { paths } from '/src/paths';
-import { dateFormatter } from '/src/utils/date-formatter';
 
 export default function Page() {
   const router = useRouter();
@@ -35,7 +34,6 @@ export default function Page() {
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
-  const [isFeatured, setIsFeatured] = React.useState(false);
   const [status, setStatus] = React.useState('');
   async function fetchList() {
     try {
@@ -74,15 +72,8 @@ export default function Page() {
     {
       formatter: (row) => (
         <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-          <IconButton size="small" title="Edit" onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
+          <IconButton size="small" title="Edit" onClick={() => router.push(paths.dashboard.edit_partner(row.slug))}>
             <PencilSimpleIcon />
-          </IconButton>
-          <IconButton size="small" title="Edit" onClick={() => setIsFeatured(!isFeatured)}>
-            <Iconify
-              icon={isFeatured ? 'material-symbols:star-rounded' : 'material-symbols:star-outline-rounded'}
-              height={20}
-              width={20}
-            />
           </IconButton>
         </Stack>
       ),
@@ -96,7 +87,7 @@ export default function Page() {
           <Link
             color="inherit"
             component={RouterLink}
-            href={paths.dashboard.edit_campaign(row.slug)}
+            href={paths.dashboard.edit_partner(row.slug)}
             sx={{ whiteSpace: 'nowrap' }}
             variant="subtitle2"
           >
@@ -153,13 +144,13 @@ export default function Page() {
       <Stack spacing={4}>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} sx={{ alignItems: 'flex-start' }}>
           <Box sx={{ flex: '1 1 auto' }}>
-            <Typography variant="h4">Campaigns</Typography>
+            <Typography variant="h4">Partner HQ</Typography>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               startIcon={<PlusIcon />}
               variant="contained"
-              onClick={() => router.push(paths.dashboard.create_campaign)}
+              onClick={() => router.push(paths.dashboard.create_partner)}
             >
               Add
             </Button>

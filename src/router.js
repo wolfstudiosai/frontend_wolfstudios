@@ -109,9 +109,9 @@ export const dashboardItems = [
       },
       {
         key: 'partner',
-        title: 'Partner',
-        href: paths.dashboard.records,
-        icon: 'pepicons-pencil:file',
+        title: 'Partner HQ',
+        href: paths.dashboard.partner,
+        icon: 'lsicon:user-crowd-outline',
         allowedRoles: ['admin'],
       },
       {

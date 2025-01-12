@@ -21,7 +21,6 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
-import { validateYupSchema } from 'formik';
 
 import { dayjs } from '/src/lib/dayjs';
 
@@ -78,7 +77,7 @@ export default function Page() {
           <IconButton size="small" title="Edit" onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
             <PencilSimpleIcon />
           </IconButton>
-          <IconButton size="small" title="Edit" onClick={() => setIsFeatured(!isFeatured)}>
+          <IconButton size="small" title="Feature Item" onClick={() => setIsFeatured(!isFeatured)}>
             <Iconify
               icon={isFeatured ? 'material-symbols:star-rounded' : 'material-symbols:star-outline-rounded'}
               height={20}

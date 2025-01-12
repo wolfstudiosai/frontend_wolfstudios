@@ -14,6 +14,8 @@ export const paths = {
     // admin
     records: '/dashboard/records',
     partner: '/dashboard/partner',
+    create_partner: '/dashboard/partner/create',
+    edit_partner: (id) => `/dashboard/partner/${id}`,
     partners_by_campaign: '/dashboard/partners-by-campaign',
     needs_offer_approval: '/dashboard/needs-offer-approval',
     users: '/dashboard/users',
