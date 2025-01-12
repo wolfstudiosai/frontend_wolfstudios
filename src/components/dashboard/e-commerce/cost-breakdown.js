@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { Wallet as WalletIcon } from '@phosphor-icons/react/dist/ssr/Wallet';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 
-import { NoSsr } from '/src/components/core/no-ssr';
+import { NoSsr } from '@/components/core/no-ssr';
 
 export function CostBreakdown({ data }) {
   const chartSize = 200;

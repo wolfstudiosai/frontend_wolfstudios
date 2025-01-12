@@ -9,8 +9,8 @@ import Typography from '@mui/material/Typography';
 import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/ArrowLeft';
 
 import { paths } from '/src/paths';
-import { BreadcrumbsSeparator } from '/src/components/core/breadcrumbs-separator';
-import { Previewer } from '/src/components/widgets/previewer';
+import { BreadcrumbsSeparator } from '@/components/core/breadcrumbs-separator';
+import { Previewer } from '@/components/widgets/previewer';
 
 export function Layout({ breadcrumbs, components, title }) {
   return (

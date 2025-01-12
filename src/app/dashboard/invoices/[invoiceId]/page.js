@@ -13,9 +13,9 @@ import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/Arrow
 import { config } from '/src/config';
 import { paths } from '/src/paths';
 import { dayjs } from '/src/lib/dayjs';
-import { DynamicLogo } from '/src/components/core/logo';
-import { InvoicePDFLink } from '/src/components/dashboard/invoice/invoice-pdf-link';
-import { LineItemsTable } from '/src/components/dashboard/invoice/line-items-table';
+import { DynamicLogo } from '@/components/core/logo';
+import { InvoicePDFLink } from '@/components/dashboard/invoice/invoice-pdf-link';
+import { LineItemsTable } from '@/components/dashboard/invoice/line-items-table';
 
 export const metadata = { title: `Details | Invoices | Dashboard | ${config.site.name}` };
 

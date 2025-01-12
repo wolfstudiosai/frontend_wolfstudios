@@ -2,7 +2,7 @@ import React from 'react';
 import { pxToRem } from '/src/utils/utils';
 import { Box, Stack, Typography } from '@mui/material';
 
-import { Iconify } from '/src/components/iconify/iconify';
+import { Iconify } from '@/components/iconify/iconify';
 
 export const SegmentationByGender = () => {
   return (

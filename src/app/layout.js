@@ -2,19 +2,19 @@ import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
 
 import '/src/styles/global.css';
 
-import { Analytics } from '/src/components/core/analytics';
-import { I18nProvider } from '/src/components/core/i18n-provider';
-import { LocalizationProvider } from '/src/components/core/localization-provider';
-import { SettingsButton } from '/src/components/core/settings/settings-button';
-import { ThemeProvider } from '/src/components/core/theme-provider/theme-provider';
-import { Toaster } from '/src/components/core/toaster';
+import { Analytics } from '@/components/core/analytics';
+import { I18nProvider } from '@/components/core/i18n-provider';
+import { LocalizationProvider } from '@/components/core/localization-provider';
+import { SettingsButton } from '@/components/core/settings/settings-button';
+import { ThemeProvider } from '@/components/core/theme-provider/theme-provider';
+import { Toaster } from '@/components/core/toaster';
 import { config } from '/src/config';
 import { UserProvider } from '/src/contexts/auth/user-context';
 import { SettingsProvider } from '/src/contexts/settings';
 import { applyDefaultSettings } from '/src/lib/settings/apply-default-settings';
 import { getSettings as getPersistedSettings } from '/src/lib/settings/get-settings';
 import { AuthProvider } from '/src/contexts/auth/AuthContext';
-import { Progressbar } from '/src/components/utils/Progressbar';
+import { Progressbar } from '@/components/utils/Progressbar';
 
 export const metadata = { title: config.site.name };
 

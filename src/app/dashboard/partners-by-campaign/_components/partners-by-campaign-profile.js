@@ -1,8 +1,8 @@
 'use client';
 
-import { MultiReadonlyStatusChip, ReadonlyStatusChip } from '/src/components/formFields/readonly-status';
-import { WrapedText } from '/src/components/formFields/wraped-text';
-import PageLoader from '/src/components/PageLoader/PageLoader';
+import { MultiReadonlyStatusChip, ReadonlyStatusChip } from '@/components/formFields/readonly-status';
+import { WrapedText } from '@/components/formFields/wraped-text';
+import PageLoader from '@/components/PageLoader/PageLoader';
 import { Typography } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';

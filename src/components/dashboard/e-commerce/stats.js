@@ -16,7 +16,7 @@ import { Receipt as ReceiptIcon } from '@phosphor-icons/react/dist/ssr/Receipt';
 import { ReceiptX as ReceiptXIcon } from '@phosphor-icons/react/dist/ssr/ReceiptX';
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-import { NoSsr } from '/src/components/core/no-ssr';
+import { NoSsr } from '@/components/core/no-ssr';
 
 const lines = [
   { name: 'New customers', dataKey: 'v1', color: 'var(--mui-palette-primary-main)' },

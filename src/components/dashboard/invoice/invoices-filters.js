@@ -15,7 +15,7 @@ import { z as zod } from 'zod';
 
 import { paths } from '/src/paths';
 import { dayjs } from '/src/lib/dayjs';
-import { Option } from '/src/components/core/option';
+import { Option } from '@/components/core/option';
 
 const schema = zod
   .object({

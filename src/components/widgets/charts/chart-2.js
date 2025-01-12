@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsThree';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-import { NoSsr } from '/src/components/core/no-ssr';
+import { NoSsr } from '@/components/core/no-ssr';
 
 const data = [
   { name: 'Jan', value: 10 },

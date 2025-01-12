@@ -4,8 +4,8 @@ import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 
-import { CustomBarGraph } from '/src/components/bar-chart/custom-bar-graph';
-import { CustomPieGraph } from '/src/components/bar-chart/custom-pie-graph';
+import { CustomBarGraph } from '@/components/bar-chart/custom-bar-graph';
+import { CustomPieGraph } from '@/components/bar-chart/custom-pie-graph';
 import { colorPalette } from '../../../dashboard/analytics/page';
 
 export function DemographicOverview() {

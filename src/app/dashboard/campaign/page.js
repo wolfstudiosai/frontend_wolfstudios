@@ -17,13 +17,13 @@ import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
 import { paths } from '/src/paths';
 import { dayjs } from '/src/lib/dayjs';
-import { PageContainer } from '/src/components/container/PageContainer';
-import { FilterButton } from '/src/components/core/filter-button';
-import { StatusFilterPopover } from '/src/components/core/filters/StatusFilterPopover';
-import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
-import { DataTable } from '/src/components/data-table/data-table';
-import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
-import PageLoader from '/src/components/PageLoader/PageLoader';
+import { PageContainer } from '@/components/container/PageContainer';
+import { FilterButton } from '@/components/core/filter-button';
+import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopover';
+import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
+import { DataTable } from '@/components/data-table/data-table';
+import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
+import PageLoader from '@/components/PageLoader/PageLoader';
 
 import { deleteCampaignAsync, getCampaignListAsync } from './_lib/campaign.actions';
 import { validateYupSchema } from 'formik';

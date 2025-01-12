@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import { Cell, Pie, PieChart } from 'recharts';
 
-import { NoSsr } from '/src/components/core/no-ssr';
+import { NoSsr } from '@/components/core/no-ssr';
 
 export function QuickStats6() {
   return (

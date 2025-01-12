@@ -16,7 +16,7 @@ import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/Arr
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { dayjs } from '/src/lib/dayjs';
-import { NoSsr } from '/src/components/core/no-ssr';
+import { NoSsr } from '@/components/core/no-ssr';
 
 const pages = [
   { path: '/projects', views: 24 },

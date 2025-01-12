@@ -22,8 +22,8 @@ import { z as zod } from 'zod';
 
 import { paths } from '/src/paths';
 import { createClient as createSupabaseClient } from '/src/lib/supabase/client';
-import { DynamicLogo } from '/src/components/core/logo';
-import { toast } from '/src/components/core/toaster';
+import { DynamicLogo } from '@/components/core/logo';
+import { toast } from '@/components/core/toaster';
 
 const oAuthProviders = [
   { id: 'google', name: 'Google', logo: '/assets/logo-google.svg' },

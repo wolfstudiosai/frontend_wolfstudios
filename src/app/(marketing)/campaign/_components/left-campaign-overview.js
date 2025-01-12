@@ -1,9 +1,8 @@
-import { Avatar, Box, Button, Card, CardContent, CardMedia, IconButton, Paper, Stack, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import { pxToRem, textShortner } from '@/utils/utils';
+import { Box, Card, CardContent, Paper, Typography } from '@mui/material';
+import dayjs from 'dayjs';
 
-import { Iconify } from '/src/components/iconify/iconify';
-
-export const LeftCampaignOverview = () => {
+export const LeftCampaignOverview = ({ data }) => {
   return (
     <Paper elevation={3} sx={{ p: 2 }}>
       <Typography
@@ -12,207 +11,68 @@ export const LeftCampaignOverview = () => {
           fontWeight: 300,
           fontSize: {
             xs: '1.5rem',
-            md: '3.2rem',
+            md: '2.4rem',
           },
           lineHeight: 1,
         }}
       >
-        {'Campaign Title'}
+        Featured Campaign
       </Typography>
-      <Typography variant="body1" color="text.secondary">
-        {'Description'}
-      </Typography>
-      <Box mt={3}>
-        <TypographyWithBg title="Date" value={'2023-01-01'} />
-        <TypographyWithBg title="Category" value={'Category'} />
-        <TypographyWithBg title="Reading Time" value={'5 min read'} />
-      </Box>
-
-      <Typography variant="subtitle2" color="text.secondary" gutterBottom sx={{ mt: 3, mb: 1 }}>
-        SHARE
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+        {'Here are the top picks of this week, curated to inform and inspire you.'}
       </Typography>
 
-      <Grid container spacing={2}>
-        <Grid item size={{ xs: 12, md: 4 }}>
-          <IconButton sx={{ bgcolor: 'var(--mui-palette-background-level2)', width: '100%', borderRadius: '4px' }}>
-            <Iconify icon="tabler:message" width={28} height={28} />
-          </IconButton>
-        </Grid>
-        <Grid item size={{ xs: 12, md: 4 }}>
-          <IconButton sx={{ bgcolor: 'var(--mui-palette-background-level2)', width: '100%', borderRadius: '4px' }}>
-            <Iconify icon="material-symbols:share" width={28} height={28} />
-          </IconButton>
-        </Grid>
-        <Grid item size={{ xs: 12, md: 4 }}>
-          <IconButton sx={{ bgcolor: 'var(--mui-palette-background-level2)', width: '100%', borderRadius: '4px' }}>
-            <Iconify icon="ic:baseline-facebook" width={28} height={28} />
-          </IconButton>
-        </Grid>
-      </Grid>
-      <Typography variant="subtitle2" color="text.secondary" gutterBottom sx={{ mt: 3, mb: 1 }}>
-        AUTHOR
-      </Typography>
-      <Box
-        display="flex"
-        alignItems="center"
-        sx={{ bgcolor: 'var(--mui-palette-background-level2)', p: 1.5, borderRadius: '4px' }}
-      >
-        <Avatar
-          variant="square"
-          src={''}
-          alt={'alt-image'}
-          sx={{ width: 56, height: 56, mr: 2, borderRadius: '4px' }}
-        />
-        <Box>
-          <Typography variant="subtitle2" color="text.primaryX">
-            {'Author Name'}
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            {'Author Bio'}
-          </Typography>
-        </Box>
-      </Box>
+      {data.map((item) => (
+        <FeaturedCampaignCard key={item.id} data={item} />
+      ))}
     </Paper>
   );
 };
 
-const TypographyWithBg = ({ title, value }) => {
-  return (
-    <Stack
-      direction="row"
-      spacing={2}
-      justifyContent={'space-between'}
-      sx={{
-        bgcolor: 'var(--mui-palette-background-level2)',
-        borderRadius: '4px',
-        px: 2,
-        py: 1,
-        mt: 1,
-      }}
-    >
-      <Typography variant="subtitle2" color="text.secondary">
-        {title}
-      </Typography>
-      <Typography variant="subtitle2" color="text.secondary">
-        {value}
-      </Typography>
-    </Stack>
-  );
-};
-
-const Tags = ({ data }) => {
-  return (
-    <Box mt={3}>
-      <Typography
-        variant="h6"
-        color="text.primary"
-        gutterBottom
-        sx={{ fontSize: '35px', fontWeight: '400', fontFamily: 'Vidaloka' }}
-      >
-        Recent Used Tags
-      </Typography>
-      <Grid
-        container
-        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}
-      >
-        <Grid item xs={12} sm={6}>
-          <Button
-            variant="outlined"
-            sx={{
-              borderRadius: '25px',
-              backgroundColor: 'transparent',
-              color: '#585858',
-              border: 'solid 1px #585858',
-              width: '100%',
-              paddingX: '50px',
-              '&:hover': {
-                backgroundColor: '#D8D8D8',
-                border: 'solid 1px #D8D8D8',
-                color: 'white',
-              },
-            }}
-          >
-            Work from Home
-          </Button>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Button
-            variant="outlined"
-            sx={{
-              borderRadius: '25px',
-              backgroundColor: '#D8D8D8',
-              color: 'black',
-              border: 'solid 1px #D8D8D8',
-              width: '100%',
-              paddingX: '50px',
-              flex: 'end',
-              '&:hover': {
-                backgroundColor: 'transparent',
-                border: 'solid 1px #D8D8D8',
-                color: 'black',
-              },
-            }}
-          >
-            Outdoor
-          </Button>
-        </Grid>
-      </Grid>
-      <Grid container direction="column" spacing={2}>
-        <Grid>
-          <Button
-            variant="outlined"
-            sx={{
-              borderRadius: '25px',
-              backgroundColor: 'transparent',
-              color: '#585858',
-              border: 'solid 1px #585858',
-              '&:hover': {
-                backgroundColor: '#D8D8D8',
-                border: 'solid 1px #D8D8D8',
-                color: 'white',
-              },
-            }}
-          >
-            See More
-          </Button>
-        </Grid>
-      </Grid>
-    </Box>
-  );
-};
-
-const TagCard = ({ tag }) => {
+const FeaturedCampaignCard = ({ data }) => {
   return (
     <Card
       sx={{
         display: 'flex',
         alignItems: 'center',
-        p: 1,
+        p: 2,
         borderRadius: '8px',
         boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+        mb: 2,
       }}
     >
-      <CardMedia
-        component="img"
-        image={tag.image}
-        alt={tag.title}
-        sx={{ width: 80, height: 80, borderRadius: '8px', mr: 2 }}
-      />
-      <CardContent sx={{ flex: 1, p: 0 }}>
-        <Typography
-          variant="subtitle1"
-          color="text.primary"
-          sx={{ fontFamily: 'Montserrat', fontSize: '20px', textTransform: 'uppercase' }}
-        >
-          TAG: {tag.tag}
+      {/* Left: Campaign Image */}
+      <Box
+        sx={{
+          width: '30%',
+          height: '100%',
+          minWidth: 120,
+          maxWidth: 200,
+          mr: 2,
+        }}
+      >
+        <Box
+          component="img"
+          src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${data.thumbnail}`}
+          sx={{ height: pxToRem(100), width: '100%', objectFit: 'cover', border: 0, borderRadius: '5px' }}
+        />
+      </Box>
+
+      {/* Right: Campaign Details */}
+      <Box>
+        <Typography color="text.secondary" sx={{ fontWeight: 600 }}>
+          {data.name}
         </Typography>
-        <Typography variant="body2" color="text.primary" sx={{ fontSize: '14px' }}>
-          Profile: {tag.profile}
+        <Typography variant="body2" color="text.secondary">
+          {textShortner(data.description || '--', 80)}
         </Typography>
-        <Typography variant="body2" color="text.primary">
-          Product: {tag.product}
+        <Typography variant="body2" color="text.secondary">
+          Start Date: {dayjs(data.start_date).format('MMM D YYYY')}
         </Typography>
-      </CardContent>
+        <Typography variant="body2" color="text.secondary">
+          End Date: {dayjs(data.end_date).format('MMM D YYYY')}
+        </Typography>
+      </Box>
     </Card>
   );
 };

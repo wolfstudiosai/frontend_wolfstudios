@@ -1,7 +1,7 @@
-import { ArrayOfStringCommaView } from "/src/components/formFields/arrayof-string-comma-view";
-import { ImageViewerWithDialog } from "/src/components/formFields/image-viewer-with-modal";
-import { SimpleCard } from "/src/components/formFields/simple-card";
-import { RightPanel } from "/src/components/rightPanel/right-panel";
+import { ArrayOfStringCommaView } from "@/components/formFields/arrayof-string-comma-view";
+import { ImageViewerWithDialog } from "@/components/formFields/image-viewer-with-modal";
+import { SimpleCard } from "@/components/formFields/simple-card";
+import { RightPanel } from "@/components/rightPanel/right-panel";
 import { Button, InputLabel, Stack, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 

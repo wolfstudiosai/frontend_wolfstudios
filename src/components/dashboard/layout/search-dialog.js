@@ -15,7 +15,7 @@ import Typography from '@mui/material/Typography';
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
-import { Tip } from '/src/components/core/tip';
+import { Tip } from '@/components/core/tip';
 
 function wait(time) {
   return new Promise((res) => {

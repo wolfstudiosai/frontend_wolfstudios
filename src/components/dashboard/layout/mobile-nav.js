@@ -14,7 +14,7 @@ import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/Car
 
 import { paths } from '/src/paths';
 import { isNavItemActive } from '/src/lib/is-nav-item-active';
-import { Logo } from '/src/components/core/logo';
+import { Logo } from '@/components/core/logo';
 
 import { icons } from './nav-icons';
 import { WorkspacesSwitch } from './workspaces-switch';

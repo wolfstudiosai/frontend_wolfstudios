@@ -18,7 +18,7 @@ import { z as zod } from 'zod';
 
 import { paths } from '/src/paths';
 import { createClient as createSupabaseClient } from '/src/lib/supabase/client';
-import { DynamicLogo } from '/src/components/core/logo';
+import { DynamicLogo } from '@/components/core/logo';
 
 const schema = zod.object({ email: zod.string().min(1, { message: 'Email is required' }).email() });
 

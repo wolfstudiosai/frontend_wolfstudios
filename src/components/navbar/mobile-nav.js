@@ -15,7 +15,7 @@ import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
 import { paths } from '/src/paths';
 import { isNavItemActive } from '/src/lib/is-nav-item-active';
-import { DynamicLogo, Logo } from '/src/components/core/logo';
+import { DynamicLogo, Logo } from '@/components/core/logo';
 import { navData } from '/src/router';
 import { NavSearch } from './nav-search';
 

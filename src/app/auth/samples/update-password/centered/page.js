@@ -14,8 +14,8 @@ import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/Arrow
 
 import { config } from '/src/config';
 import { paths } from '/src/paths';
-import { CenteredLayout } from '/src/components/auth/centered-layout';
-import { DynamicLogo } from '/src/components/core/logo';
+import { CenteredLayout } from '@/components/auth/centered-layout';
+import { DynamicLogo } from '@/components/core/logo';
 
 export const metadata = { title: `Update password | Samples | Auth | ${config.site.name}` };
 

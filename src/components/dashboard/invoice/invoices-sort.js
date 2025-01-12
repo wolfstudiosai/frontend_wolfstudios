@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Select from '@mui/material/Select';
 
 import { paths } from '/src/paths';
-import { Option } from '/src/components/core/option';
+import { Option } from '@/components/core/option';
 
 export function InvoicesSort({ filters = {}, sortDir = 'desc', view }) {
   const router = useRouter();

@@ -15,7 +15,7 @@ import { Devices as DevicesIcon } from '@phosphor-icons/react/dist/ssr/Devices';
 import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsThree';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 
-import { NoSsr } from '/src/components/core/no-ssr';
+import { NoSsr } from '@/components/core/no-ssr';
 
 export function FacilitiesGraph({ data }) {
   const chartSize = 340;

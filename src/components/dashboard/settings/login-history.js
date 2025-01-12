@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import { Timer as TimerIcon } from '@phosphor-icons/react/dist/ssr/Timer';
 
 import { dayjs } from '/src/lib/dayjs';
-import { DataTable } from '/src/components/data-table/data-table';
+import { DataTable } from '@/components/data-table/data-table';
 
 const columns = [
   {

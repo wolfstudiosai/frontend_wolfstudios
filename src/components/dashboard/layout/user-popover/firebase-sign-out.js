@@ -6,7 +6,7 @@ import { signOut } from 'firebase/auth';
 
 import { getFirebaseAuth } from '/src/lib/auth/firebase/client';
 import { logger } from '/src/lib/default-logger';
-import { toast } from '/src/components/core/toaster';
+import { toast } from '@/components/core/toaster';
 
 export function FirebaseSignOut() {
   const [firebaseAuth] = React.useState(getFirebaseAuth());

@@ -13,7 +13,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 
-import { NoSsr } from '/src/components/core/no-ssr';
+import { NoSsr } from '@/components/core/no-ssr';
 
 const data = [
   { name: 'Strategy', value: 14859, color: 'var(--mui-palette-primary-main)' },

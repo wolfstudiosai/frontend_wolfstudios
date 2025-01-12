@@ -12,7 +12,7 @@ import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsT
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 
 import { dayjs } from '/src/lib/dayjs';
-import { DataTable } from '/src/components/data-table/data-table';
+import { DataTable } from '@/components/data-table/data-table';
 
 const orders = [
   {

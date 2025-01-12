@@ -1,5 +1,5 @@
-import { CardTitle } from '/src/components/cardTitle/CardTitle';
-import { PageContainer } from '/src/components/container/PageContainer';
+import { CardTitle } from '@/components/cardTitle/CardTitle';
+import { PageContainer } from '@/components/container/PageContainer';
 import { config } from '/src/config';
 import { ManageCampaignForm } from '../_component/manage-campaign-form';
 

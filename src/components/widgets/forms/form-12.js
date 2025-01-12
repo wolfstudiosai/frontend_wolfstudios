@@ -7,7 +7,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 
-import { Option } from '/src/components/core/option';
+import { Option } from '@/components/core/option';
 
 export function Form12() {
   return (

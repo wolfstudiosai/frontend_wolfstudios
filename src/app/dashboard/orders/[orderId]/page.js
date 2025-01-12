@@ -23,10 +23,10 @@ import { Timer as TimerIcon } from '@phosphor-icons/react/dist/ssr/Timer';
 import { config } from '/src/config';
 import { paths } from '/src/paths';
 import { dayjs } from '/src/lib/dayjs';
-import { PropertyItem } from '/src/components/core/property-item';
-import { PropertyList } from '/src/components/core/property-list';
-import { EventsTimeline } from '/src/components/dashboard/order/events-timeline';
-import { LineItemsTable } from '/src/components/dashboard/order/line-items-table';
+import { PropertyItem } from '@/components/core/property-item';
+import { PropertyList } from '@/components/core/property-list';
+import { EventsTimeline } from '@/components/dashboard/order/events-timeline';
+import { LineItemsTable } from '@/components/dashboard/order/line-items-table';
 
 export const metadata = { title: `Details | Orders | Dashboard | ${config.site.name}` };
 

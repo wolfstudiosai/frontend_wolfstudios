@@ -123,7 +123,7 @@ export const CampaignView = ({ data }) => {
       <Grid container spacing={4}>
         <Grid item size={{ xs: 12, md: 4 }}>
           <Card>
-            <LeftCampaignOverview />
+            <LeftCampaignOverview data={data}/>
           </Card>
         </Grid>
         <Grid item size={{ xs: 12, md: 8 }}>

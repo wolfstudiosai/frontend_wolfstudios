@@ -1,8 +1,8 @@
 
-import { GuestGuard } from '/src/components/auth/guest-guard';
+import { GuestGuard } from '@/components/auth/guest-guard';
 import { config } from '/src/config';
 import { LoginForm } from '../_components/LoginForm';
-import { SplitLayout } from '/src/components/auth/split-layout';
+import { SplitLayout } from '@/components/auth/split-layout';
 
 export const metadata = { title: `Sign in | ${config.site.name}` };
 

@@ -12,7 +12,7 @@ import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/Arr
 import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsThree';
 import { Image as ImageIcon } from '@phosphor-icons/react/dist/ssr/Image';
 
-import { DataTable } from '/src/components/data-table/data-table';
+import { DataTable } from '@/components/data-table/data-table';
 
 const products = [
   {

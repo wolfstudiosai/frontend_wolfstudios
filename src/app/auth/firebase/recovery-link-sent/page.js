@@ -8,10 +8,10 @@ import Typography from '@mui/material/Typography';
 
 import { config } from '/src/config';
 import { paths } from '/src/paths';
-import { ResetPasswordButton } from '/src/components/auth/firebase/reset-password-button';
-import { GuestGuard } from '/src/components/auth/guest-guard';
-import { SplitLayout } from '/src/components/auth/split-layout';
-import { DynamicLogo } from '/src/components/core/logo';
+import { ResetPasswordButton } from '@/components/auth/firebase/reset-password-button';
+import { GuestGuard } from '@/components/auth/guest-guard';
+import { SplitLayout } from '@/components/auth/split-layout';
+import { DynamicLogo } from '@/components/core/logo';
 
 export const metadata = { title: `Recovery link sent | Firebase | Auth | ${config.site.name}` };
 

@@ -22,7 +22,7 @@ import { z as zod } from 'zod';
 
 import { dayjs } from '/src/lib/dayjs';
 import { logger } from '/src/lib/default-logger';
-import { toast } from '/src/components/core/toaster';
+import { toast } from '@/components/core/toaster';
 
 const schema = zod
   .object({

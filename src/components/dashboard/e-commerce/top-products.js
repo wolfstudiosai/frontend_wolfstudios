@@ -12,7 +12,7 @@ import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/Arr
 import { BagSimple as BagSimpleIcon } from '@phosphor-icons/react/dist/ssr/BagSimple';
 import { Image as ImageIcon } from '@phosphor-icons/react/dist/ssr/Image';
 
-import { DataTable } from '/src/components/data-table/data-table';
+import { DataTable } from '@/components/data-table/data-table';
 
 const columns = [
   {

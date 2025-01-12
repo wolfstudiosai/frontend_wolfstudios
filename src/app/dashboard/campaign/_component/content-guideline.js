@@ -1,8 +1,8 @@
 import { Box, Button, ButtonGroup, FormLabel, Stack } from '@mui/material';
 
-import { CustomSelect } from '/src/components/formFields/custom-select';
-import { CustomTextField } from '/src/components/formFields/custom-textfield';
-import { Iconify } from '/src/components/iconify/iconify';
+import { CustomSelect } from '@/components/formFields/custom-select';
+import { CustomTextField } from '@/components/formFields/custom-textfield';
+import { Iconify } from '@/components/iconify/iconify';
 
 export const ContentGuideline = ({ data, onChange }) => {
   const handleAdd = () => {

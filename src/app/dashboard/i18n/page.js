@@ -4,8 +4,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { config } from '/src/config';
-import { ContentClient } from '/src/components/dashboard/i18n/content-client';
-import { ContentServer } from '/src/components/dashboard/i18n/content-server';
+import { ContentClient } from '@/components/dashboard/i18n/content-client';
+import { ContentServer } from '@/components/dashboard/i18n/content-server';
 
 export const metadata = { title: `i18n | Dashboard | ${config.site.name}` };
 

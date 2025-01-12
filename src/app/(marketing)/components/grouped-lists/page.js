@@ -1,18 +1,18 @@
 import * as React from 'react';
 
 import { config } from '/src/config';
-import { GroupedList1 } from '/src/components/widgets/grouped-lists/grouped-list-1';
-import { GroupedList2 } from '/src/components/widgets/grouped-lists/grouped-list-2';
-import { GroupedList3 } from '/src/components/widgets/grouped-lists/grouped-list-3';
-import { GroupedList4 } from '/src/components/widgets/grouped-lists/grouped-list-4';
-import { GroupedList5 } from '/src/components/widgets/grouped-lists/grouped-list-5';
-import { GroupedList6 } from '/src/components/widgets/grouped-lists/grouped-list-6';
-import { GroupedList7 } from '/src/components/widgets/grouped-lists/grouped-list-7';
-import { GroupedList8 } from '/src/components/widgets/grouped-lists/grouped-list-8';
-import { GroupedList9 } from '/src/components/widgets/grouped-lists/grouped-list-9';
-import { GroupedList10 } from '/src/components/widgets/grouped-lists/grouped-list-10';
-import { GroupedList11 } from '/src/components/widgets/grouped-lists/grouped-list-11';
-import { Layout } from '/src/components/widgets/layout';
+import { GroupedList1 } from '@/components/widgets/grouped-lists/grouped-list-1';
+import { GroupedList2 } from '@/components/widgets/grouped-lists/grouped-list-2';
+import { GroupedList3 } from '@/components/widgets/grouped-lists/grouped-list-3';
+import { GroupedList4 } from '@/components/widgets/grouped-lists/grouped-list-4';
+import { GroupedList5 } from '@/components/widgets/grouped-lists/grouped-list-5';
+import { GroupedList6 } from '@/components/widgets/grouped-lists/grouped-list-6';
+import { GroupedList7 } from '@/components/widgets/grouped-lists/grouped-list-7';
+import { GroupedList8 } from '@/components/widgets/grouped-lists/grouped-list-8';
+import { GroupedList9 } from '@/components/widgets/grouped-lists/grouped-list-9';
+import { GroupedList10 } from '@/components/widgets/grouped-lists/grouped-list-10';
+import { GroupedList11 } from '@/components/widgets/grouped-lists/grouped-list-11';
+import { Layout } from '@/components/widgets/layout';
 
 export const metadata = { title: `Grouped lists | Components | ${config.site.name}` };
 

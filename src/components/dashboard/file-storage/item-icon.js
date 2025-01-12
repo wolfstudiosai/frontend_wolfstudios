@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 
-import { FileIcon } from '/src/components/core/file-icon';
+import { FileIcon } from '@/components/core/file-icon';
 
 export function ItemIcon({ type, extension }) {
   return type === 'folder' ? <FolderIcon /> : <FileIcon extension={extension} />;

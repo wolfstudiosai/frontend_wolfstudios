@@ -12,7 +12,7 @@ import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { Option } from '/src/components/core/option';
+import { Option } from '@/components/core/option';
 
 const lineItems = [
   {

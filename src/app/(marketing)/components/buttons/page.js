@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import { config } from '/src/config';
-import { Buttons1 } from '/src/components/widgets/buttons/buttons-1';
-import { Buttons2 } from '/src/components/widgets/buttons/buttons-2';
-import { Buttons3 } from '/src/components/widgets/buttons/buttons-3';
-import { Buttons4 } from '/src/components/widgets/buttons/buttons-4';
-import { Layout } from '/src/components/widgets/layout';
+import { Buttons1 } from '@/components/widgets/buttons/buttons-1';
+import { Buttons2 } from '@/components/widgets/buttons/buttons-2';
+import { Buttons3 } from '@/components/widgets/buttons/buttons-3';
+import { Buttons4 } from '@/components/widgets/buttons/buttons-4';
+import { Layout } from '@/components/widgets/layout';
 
 export const metadata = { title: `Buttons | Components | ${config.site.name}` };
 

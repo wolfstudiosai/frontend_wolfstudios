@@ -1,4 +1,4 @@
-import { CustomLinkViewer } from "/src/components/formFields/CustomLinkViewer";
+import { CustomLinkViewer } from "@/components/formFields/CustomLinkViewer";
 import { InputLabel, Paper, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 

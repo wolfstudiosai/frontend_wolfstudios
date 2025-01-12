@@ -9,7 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { Info as InfoIcon } from '@phosphor-icons/react/dist/ssr/Info';
 
-import { DataTable } from '/src/components/data-table/data-table';
+import { DataTable } from '@/components/data-table/data-table';
 
 const entries = [
   { url: '/', visitors: 95847, uniqueVisits: 8584, bounceRate: 16 },

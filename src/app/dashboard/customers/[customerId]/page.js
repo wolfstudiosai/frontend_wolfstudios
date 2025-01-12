@@ -27,11 +27,11 @@ import { User as UserIcon } from '@phosphor-icons/react/dist/ssr/User';
 import { config } from '/src/config';
 import { paths } from '/src/paths';
 import { dayjs } from '/src/lib/dayjs';
-import { PropertyItem } from '/src/components/core/property-item';
-import { PropertyList } from '/src/components/core/property-list';
-import { Notifications } from '/src/components/dashboard/customer/notifications';
-import { Payments } from '/src/components/dashboard/customer/payments';
-import { ShippingAddress } from '/src/components/dashboard/customer/shipping-address';
+import { PropertyItem } from '@/components/core/property-item';
+import { PropertyList } from '@/components/core/property-list';
+import { Notifications } from '@/components/dashboard/customer/notifications';
+import { Payments } from '@/components/dashboard/customer/payments';
+import { ShippingAddress } from '@/components/dashboard/customer/shipping-address';
 
 export const metadata = { title: `Details | Customers | Dashboard | ${config.site.name}` };
 

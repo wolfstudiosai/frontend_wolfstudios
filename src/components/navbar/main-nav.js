@@ -11,10 +11,10 @@ import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
 
-import { Dropdown } from '/src/components/core/dropdown/dropdown';
-import { DropdownPopover } from '/src/components/core/dropdown/dropdown-popover';
-import { DropdownTrigger } from '/src/components/core/dropdown/dropdown-trigger';
-import { Logo } from '/src/components/core/logo';
+import { Dropdown } from '@/components/core/dropdown/dropdown';
+import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
+import { DropdownTrigger } from '@/components/core/dropdown/dropdown-trigger';
+import { Logo } from '@/components/core/logo';
 import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import { paths } from '/src/paths';
 

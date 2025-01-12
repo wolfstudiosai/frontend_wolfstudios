@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
-import { Iconify } from '/src/components/iconify/iconify';
+import { Iconify } from '@/components/iconify/iconify';
 
 export const ConversionRate = () => {
   const rows = [
