@@ -23,7 +23,7 @@ export const paths = {
     // chat
     chat: '/dashboard/chat',
     chat_compose: '/dashboard/chat/compose',
-    chat_thread: (type, id) => `/dashboard/chat/thread/${type}/${id}`,
+    chat_thread: (type, id) => `/dashboard/chat/${type}/${id}`,
 
     // settings
     profile: '/dashboard/settings/account',
@@ -45,7 +45,7 @@ export const paths = {
       create: '/dashboard/blog/create',
     },
     calendar: '/dashboard/calendar',
-
+    
     crypto: '/dashboard/crypto',
     customers: {
       list: '/dashboard/customers',
