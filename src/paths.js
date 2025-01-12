@@ -6,19 +6,26 @@ export const paths = {
 
   dashboard: {
     overview: '/dashboard',
+    analytics: '/dashboard/analytics',
+    campaign: '/dashboard/campaign',
+    create_campaign: '/dashboard/campaign/create',
+    edit_campaign: (id) => `/dashboard/campaign/${id}`,
+
+    // admin
     records: '/dashboard/records',
-    needs_offer_approval: '/dashboard/needs-offer-approval',
+    partner: '/dashboard/partner',
     partners_by_campaign: '/dashboard/partners-by-campaign',
+    needs_offer_approval: '/dashboard/needs-offer-approval',
+    users: '/dashboard/users',
+
+    // chat
+    chat: '/dashboard/chat',
+    chat_compose: '/dashboard/chat/compose',
+    chat_thread: (type, id) => `/dashboard/chat/thread/${type}/${id}`,
 
     // settings
     profile: '/dashboard/settings/account',
     security: '/dashboard/settings/security',
-
-    // admin
-    users: '/dashboard/users',
-    campaign: '/dashboard/campaign',
-    create_campaign: '/dashboard/campaign/create',
-    edit_campaign: (id) => `/dashboard/campaign/${id}`,
 
     // can be removed later on
     settings: {
@@ -29,7 +36,6 @@ export const paths = {
       team: '/dashboard/settings/team',
     },
     academy: { browse: '/dashboard/academy', details: (courseId) => `/dashboard/academy/courses/${courseId}` },
-    analytics: '/dashboard/analytics',
     blank: '/dashboard/blank',
     blog: {
       list: '/dashboard/blog',
@@ -38,10 +44,6 @@ export const paths = {
     },
     calendar: '/dashboard/calendar',
 
-    chat: '/dashboard/chat',
-    chat_compose: '/dashboard/chat/compose',
-    chat_thread: (type, id) => `/dashboard/chat/thread/${type}/${id}`,
-    
     crypto: '/dashboard/crypto',
     customers: {
       list: '/dashboard/customers',
