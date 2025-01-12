@@ -1,3 +1,5 @@
+import RouterLink from 'next/link';
+import { Iconify } from '@/components/iconify/iconify';
 import { pxToRem, textShortner } from '@/utils/utils';
 import { Box, Card, CardContent, Paper, Typography } from '@mui/material';
 import dayjs from 'dayjs';
@@ -32,6 +34,8 @@ export const LeftCampaignOverview = ({ data }) => {
 const FeaturedCampaignCard = ({ data }) => {
   return (
     <Card
+      component={RouterLink}
+      href={`campaign/${data.slug}`}
       sx={{
         display: 'flex',
         alignItems: 'center',
@@ -39,6 +43,11 @@ const FeaturedCampaignCard = ({ data }) => {
         borderRadius: '8px',
         boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
         mb: 2,
+        textDecoration: 'none',
+        color: 'inherit',
+        '&:hover': {
+          boxShadow: '0 6px 12px rgba(0, 0, 0, 0.09)',
+        },
       }}
     >
       {/* Left: Campaign Image */}
@@ -66,12 +75,19 @@ const FeaturedCampaignCard = ({ data }) => {
         <Typography variant="body2" color="text.secondary">
           {textShortner(data.description || '--', 80)}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Start Date: {dayjs(data.start_date).format('MMM D YYYY')}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          End Date: {dayjs(data.end_date).format('MMM D YYYY')}
-        </Typography>
+
+        <Box display="flex" alignItems="center" sx={{ mt: 1 }}>
+          <Iconify icon="material-symbols:calendar-month" width={14} height={14} sx={{ mr: 1 }} />
+          <Typography variant="body2" color="text.secondary">
+            Start Date: {dayjs(data.start_date).format('MMM D, YYYY')}
+          </Typography>
+        </Box>
+        <Box display="flex" alignItems="center">
+          <Iconify icon="material-symbols:calendar-month" width={14} height={14} sx={{ mr: 1 }} />
+          <Typography variant="body2" color="text.secondary">
+            End Date: {dayjs(data.end_date).format('MMM D, YYYY')}
+          </Typography>
+        </Box>
       </Box>
     </Card>
   );
