@@ -92,10 +92,14 @@ export const paths = {
   },
 
   public: {
+    // HQs
     portfolio: '/portfolio',
     campaign: '/campaign',
     profile: '/profile',
     content: '/content',
+    partner: '/partner',
+
+    // knowledge base
     about: '/about',
     contact: '/contact',
     blog: '/blog',

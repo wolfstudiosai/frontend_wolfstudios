@@ -4,7 +4,7 @@ import { paths } from './paths';
 
 export const navData = [
   {
-    key: 'group-0',
+    key: 'public-navitems',
     items: [
       { key: 'home', title: 'Home', href: paths.home },
       {
@@ -30,6 +30,11 @@ export const navData = [
             key: 'content',
             title: 'Content',
             href: paths.public.content,
+          },
+          {
+            key: 'partner',
+            title: 'Partner',
+            href: paths.public.partner,
           },
         ],
       },
