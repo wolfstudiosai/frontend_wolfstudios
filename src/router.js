@@ -108,10 +108,10 @@ export const dashboardItems = [
         allowedRoles: ['admin'],
       },
       {
-        key: 'usrs',
-        title: 'Users',
-        href: paths.dashboard.users,
-        icon: 'solar:user-linear',
+        key: 'partner',
+        title: 'Partner HQ',
+        href: paths.dashboard.partner,
+        icon: 'lsicon:user-crowd-outline',
         allowedRoles: ['admin'],
       },
       {
@@ -127,6 +127,13 @@ export const dashboardItems = [
         title: 'Needs offer/ approval',
         href: paths.dashboard.needs_offer_approval,
         icon: 'material-symbols-light:order-approve-outline-rounded',
+        allowedRoles: ['admin'],
+      },
+      {
+        key: 'usrs',
+        title: 'Users',
+        href: paths.dashboard.users,
+        icon: 'solar:user-linear',
         allowedRoles: ['admin'],
       },
     ],
