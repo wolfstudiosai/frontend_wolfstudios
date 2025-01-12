@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, FormControl, MenuItem, Select } from '@mui/material';
 
-import { CustomSelect } from '/src/components/formFields/custom-select';
+import { CustomSelect } from '@/components/formFields/custom-select';
 
 import { FilterPopover, useFilterContext } from '../filter-button';
 

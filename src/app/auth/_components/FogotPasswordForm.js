@@ -11,8 +11,8 @@ import Typography from '@mui/material/Typography';
 import RouterLink from 'next/link';
 import * as React from 'react';
 
-import { DynamicLogo } from '/src/components/core/logo';
-import { CustomPasswordInput } from '/src/components/formFields/CustomPasswordInput';
+import { DynamicLogo } from '@/components/core/logo';
+import { CustomPasswordInput } from '@/components/formFields/CustomPasswordInput';
 import { paths } from '/src/paths';
 import { CircularProgress } from '@mui/material';
 import { useFormik } from 'formik';

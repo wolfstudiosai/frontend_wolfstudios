@@ -4,9 +4,9 @@ import Typography from '@mui/material/Typography';
 
 import { config } from '/src/config';
 import { dayjs } from '/src/lib/dayjs';
-import { LoginHistory } from '/src/components/dashboard/settings/login-history';
-import { MultiFactor } from '/src/components/dashboard/settings/multi-factor';
-import { PasswordForm } from '/src/components/dashboard/settings/password-form';
+import { LoginHistory } from '@/components/dashboard/settings/login-history';
+import { MultiFactor } from '@/components/dashboard/settings/multi-factor';
+import { PasswordForm } from '@/components/dashboard/settings/password-form';
 import { ResetPasswordForm } from '../_components/ResetPasswordForm';
 
 export const metadata = { title: `Security | Settings | Dashboard | ${config.site.name}` };

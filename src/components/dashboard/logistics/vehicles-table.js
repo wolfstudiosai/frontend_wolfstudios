@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import { Path as PathIcon } from '@phosphor-icons/react/dist/ssr/Path';
 import { Truck as TruckIcon } from '@phosphor-icons/react/dist/ssr/Truck';
 
-import { DataTable } from '/src/components/data-table/data-table';
+import { DataTable } from '@/components/data-table/data-table';
 
 const columns = [
   {

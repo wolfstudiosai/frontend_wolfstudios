@@ -1,5 +1,5 @@
 
-import { Iconify } from '/src/components/iconify/iconify';
+import { Iconify } from '@/components/iconify/iconify';
 import { alpha, InputBase, styled } from '@mui/material';
 export const NavSearch = ({ isMobile = false}) => {
     return (

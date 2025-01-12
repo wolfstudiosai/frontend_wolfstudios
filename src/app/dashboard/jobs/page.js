@@ -12,8 +12,8 @@ import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/Car
 import { config } from '/src/config';
 import { paths } from '/src/paths';
 import { dayjs } from '/src/lib/dayjs';
-import { CompanyCard } from '/src/components/dashboard/jobs/company-card';
-import { JobsFilters } from '/src/components/dashboard/jobs/jobs-filters';
+import { CompanyCard } from '@/components/dashboard/jobs/company-card';
+import { JobsFilters } from '@/components/dashboard/jobs/jobs-filters';
 
 export const metadata = { title: `Browse | Jobs | Dashboard | ${config.site.name}` };
 

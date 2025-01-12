@@ -13,7 +13,7 @@ import { DiamondsFour as DiamondsFourIcon } from '@phosphor-icons/react/dist/ssr
 import { Palette as PaletteIcon } from '@phosphor-icons/react/dist/ssr/Palette';
 import { Timer as TimerIcon } from '@phosphor-icons/react/dist/ssr/Timer';
 
-import { NoSsr } from '/src/components/core/no-ssr';
+import { NoSsr } from '@/components/core/no-ssr';
 
 export function Productivity() {
   const { colorScheme } = useColorScheme();

@@ -1,6 +1,6 @@
 "use client";
-import CustomAccordion from "/src/components/core/accordion/CustomAccordion";
-import PageLoader from "/src/components/PageLoader/PageLoader";
+import CustomAccordion from "@/components/core/accordion/CustomAccordion";
+import PageLoader from "@/components/PageLoader/PageLoader";
 import { Button, CircularProgress, FormControl, InputLabel, MenuItem, OutlinedInput, Select, Stack } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { useFormik } from "formik";

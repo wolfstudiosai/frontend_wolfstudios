@@ -7,10 +7,10 @@ import Typography from '@mui/material/Typography';
 
 import { config } from '/src/config';
 import { paths } from '/src/paths';
-import { GuestGuard } from '/src/components/auth/guest-guard';
-import { SplitLayout } from '/src/components/auth/split-layout';
-import { SignUpResendButton } from '/src/components/auth/supabase/sign-up-resend-button';
-import { DynamicLogo } from '/src/components/core/logo';
+import { GuestGuard } from '@/components/auth/guest-guard';
+import { SplitLayout } from '@/components/auth/split-layout';
+import { SignUpResendButton } from '@/components/auth/supabase/sign-up-resend-button';
+import { DynamicLogo } from '@/components/core/logo';
 
 export const metadata = { title: `Sign up confirm | Supabase | Auth | ${config.site.name}` };
 

@@ -8,12 +8,12 @@ import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
 import { config } from '/src/config';
 import { dayjs } from '/src/lib/dayjs';
-import { AccountUpgrade } from '/src/components/dashboard/crypto/account-upgrade';
-import { CreditCard } from '/src/components/dashboard/crypto/credit-card';
-import { CurrencyConverter } from '/src/components/dashboard/crypto/currency-converter';
-import { CurrentBalance } from '/src/components/dashboard/crypto/current-balance';
-import { DigitalWallet } from '/src/components/dashboard/crypto/digital-wallet';
-import { Transactions } from '/src/components/dashboard/crypto/transactions';
+import { AccountUpgrade } from '@/components/dashboard/crypto/account-upgrade';
+import { CreditCard } from '@/components/dashboard/crypto/credit-card';
+import { CurrencyConverter } from '@/components/dashboard/crypto/currency-converter';
+import { CurrentBalance } from '@/components/dashboard/crypto/current-balance';
+import { DigitalWallet } from '@/components/dashboard/crypto/digital-wallet';
+import { Transactions } from '@/components/dashboard/crypto/transactions';
 
 export const metadata = { title: `Crypto | Dashboard | ${config.site.name}` };
 

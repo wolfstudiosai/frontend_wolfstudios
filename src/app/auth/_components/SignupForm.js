@@ -2,7 +2,7 @@
 
 import { createUser } from '/src/app/dashboard/users/_lib/user.actions';
 import { defaultUser } from '/src/app/dashboard/users/_lib/user.types';
-import { CustomPasswordInput } from '/src/components/formFields/CustomPasswordInput';
+import { CustomPasswordInput } from '@/components/formFields/CustomPasswordInput';
 import { paths } from '/src/paths';
 import { CircularProgress } from '@mui/material';
 import Alert from '@mui/material/Alert';

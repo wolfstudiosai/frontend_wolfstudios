@@ -6,7 +6,7 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 
-import { TextEditor } from '/src/components/core/text-editor/text-editor';
+import { TextEditor } from '@/components/core/text-editor/text-editor';
 
 export function Form10() {
   return (

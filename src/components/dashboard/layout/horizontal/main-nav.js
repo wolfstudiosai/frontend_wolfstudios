@@ -27,11 +27,11 @@ import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import { useDialog } from '/src/hooks/use-dialog';
 import { usePopover } from '/src/hooks/use-popover';
 import useAuth from '/src/hooks/useAuth';
-import { Dropdown } from '/src/components/core/dropdown/dropdown';
-import { DropdownPopover } from '/src/components/core/dropdown/dropdown-popover';
-import { DropdownTrigger } from '/src/components/core/dropdown/dropdown-trigger';
-import { Logo } from '/src/components/core/logo';
-import { SearchDialog } from '/src/components/dashboard/layout/search-dialog';
+import { Dropdown } from '@/components/core/dropdown/dropdown';
+import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
+import { DropdownTrigger } from '@/components/core/dropdown/dropdown-trigger';
+import { Logo } from '@/components/core/logo';
+import { SearchDialog } from '@/components/dashboard/layout/search-dialog';
 
 import { ContactsPopover } from '../contacts-popover';
 import { languageFlags, LanguagePopover } from '../language-popover';

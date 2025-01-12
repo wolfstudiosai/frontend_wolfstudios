@@ -11,7 +11,7 @@ import { Link as LinkIcon } from '@phosphor-icons/react/dist/ssr/Link';
 
 import { config } from '/src/config';
 import { paths } from '/src/paths';
-import { Thumbnail } from '/src/components/widgets/thumbnail';
+import { Thumbnail } from '@/components/widgets/thumbnail';
 
 export const metadata = { title: `Components | ${config.site.name}` };
 

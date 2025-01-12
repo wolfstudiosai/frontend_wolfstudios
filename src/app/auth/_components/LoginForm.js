@@ -1,8 +1,8 @@
 'use client';
 
-import { ErrorText } from '/src/components/core/error-text';
-import { DynamicLogo } from '/src/components/core/logo';
-import { CustomPasswordInput } from '/src/components/formFields/CustomPasswordInput';
+import { ErrorText } from '@/components/core/error-text';
+import { DynamicLogo } from '@/components/core/logo';
+import { CustomPasswordInput } from '@/components/formFields/CustomPasswordInput';
 import useAuth from '/src/hooks/useAuth';
 import { paths } from '/src/paths';
 import VisibilityIcon from '@mui/icons-material/Visibility';

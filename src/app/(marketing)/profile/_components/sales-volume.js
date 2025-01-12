@@ -1,4 +1,4 @@
-import { CustomLineChart } from '/src/components/bar-chart/custom-line-chart';
+import { CustomLineChart } from '@/components/bar-chart/custom-line-chart';
 
 export function SalesVolume() {
   const data = [

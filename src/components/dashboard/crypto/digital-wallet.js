@@ -11,7 +11,7 @@ import { TrendDown as TrendDownIcon } from '@phosphor-icons/react/dist/ssr/Trend
 import { TrendUp as TrendUpIcon } from '@phosphor-icons/react/dist/ssr/TrendUp';
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
-import { NoSsr } from '/src/components/core/no-ssr';
+import { NoSsr } from '@/components/core/no-ssr';
 
 const currencyIcons = {
   BTC: '/assets/logo-btc.svg',

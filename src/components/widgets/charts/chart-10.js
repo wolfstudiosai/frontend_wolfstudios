@@ -18,7 +18,7 @@ import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/Arr
 import { Info as InfoIcon } from '@phosphor-icons/react/dist/ssr/Info';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 
-import { NoSsr } from '/src/components/core/no-ssr';
+import { NoSsr } from '@/components/core/no-ssr';
 
 const data = [
   { name: 'Linkedin', value: 15, color: 'var(--mui-palette-primary-main)' },

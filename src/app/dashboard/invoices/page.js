@@ -7,13 +7,13 @@ import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
 import { config } from '/src/config';
 import { dayjs } from '/src/lib/dayjs';
-import { InvoicesFiltersCard } from '/src/components/dashboard/invoice//invoices-filters-card';
-import { InvoicesPagination } from '/src/components/dashboard/invoice//invoices-pagination';
-import { InvoicesStats } from '/src/components/dashboard/invoice//invoices-stats';
-import { InvoicesTable } from '/src/components/dashboard/invoice//invoices-table';
-import { ViewModeButton } from '/src/components/dashboard/invoice//view-mode-button';
-import { InvoicesFiltersButton } from '/src/components/dashboard/invoice/invoices-filters-button';
-import { InvoicesSort } from '/src/components/dashboard/invoice/invoices-sort';
+import { InvoicesFiltersCard } from '@/components/dashboard/invoice//invoices-filters-card';
+import { InvoicesPagination } from '@/components/dashboard/invoice//invoices-pagination';
+import { InvoicesStats } from '@/components/dashboard/invoice//invoices-stats';
+import { InvoicesTable } from '@/components/dashboard/invoice//invoices-table';
+import { ViewModeButton } from '@/components/dashboard/invoice//view-mode-button';
+import { InvoicesFiltersButton } from '@/components/dashboard/invoice/invoices-filters-button';
+import { InvoicesSort } from '@/components/dashboard/invoice/invoices-sort';
 
 export const metadata = { title: `List | Invoices | Dashboard | ${config.site.name}` };
 

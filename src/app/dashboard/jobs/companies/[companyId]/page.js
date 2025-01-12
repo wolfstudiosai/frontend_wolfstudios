@@ -12,9 +12,9 @@ import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/Arr
 
 import { paths } from '/src/paths';
 import { dayjs } from '/src/lib/dayjs';
-import { Description } from '/src/components/dashboard/jobs/description';
-import { JobsCard } from '/src/components/dashboard/jobs/jobs-card';
-import { MemberCard } from '/src/components/dashboard/jobs/member-card';
+import { Description } from '@/components/dashboard/jobs/description';
+import { JobsCard } from '@/components/dashboard/jobs/jobs-card';
+import { MemberCard } from '@/components/dashboard/jobs/member-card';
 
 const description = `## Stripe is a technology company that builds economic infrastructure for the internet. 
 

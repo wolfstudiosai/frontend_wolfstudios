@@ -15,8 +15,8 @@ import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/Car
 import useAuth from '@/hooks/useAuth';
 
 import { navColorStyles } from './styles';
-import { DynamicLogo } from '/src/components/core/logo';
-import { Iconify } from '/src/components/iconify/iconify';
+import { DynamicLogo } from '@/components/core/logo';
+import { Iconify } from '@/components/iconify/iconify';
 import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import { paths } from '/src/paths';
 

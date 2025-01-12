@@ -1,5 +1,5 @@
 
-import { PageContainer } from '/src/components/container/PageContainer';
+import { PageContainer } from '@/components/container/PageContainer';
 import { config } from '/src/config';
 import { ContentPerformance } from './_components/content-performance';
 import { Facilities } from './_components/facilities';

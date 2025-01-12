@@ -10,7 +10,7 @@ import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr
 import RouterLink from 'next/link';
 import * as React from 'react';
 
-import { DataTable } from '/src/components/data-table/data-table';
+import { DataTable } from '@/components/data-table/data-table';
 import { dayjs } from '/src/lib/dayjs';
 import { paths } from '/src/paths';
 

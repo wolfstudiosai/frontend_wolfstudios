@@ -28,8 +28,8 @@ import { z as zod } from 'zod';
 import { paths } from '/src/paths';
 import { dayjs } from '/src/lib/dayjs';
 import { logger } from '/src/lib/default-logger';
-import { Option } from '/src/components/core/option';
-import { toast } from '/src/components/core/toaster';
+import { Option } from '@/components/core/option';
+import { toast } from '@/components/core/toaster';
 
 function calculateSubtotal(lineItems) {
   const subtotal = lineItems.reduce((acc, lineItem) => acc + lineItem.quantity * lineItem.unitPrice, 0);

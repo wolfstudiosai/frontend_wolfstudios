@@ -10,8 +10,8 @@ import Typography from '@mui/material/Typography';
 import { Lock as LockIcon } from '@phosphor-icons/react/dist/ssr/Lock';
 import { User as UserIcon } from '@phosphor-icons/react/dist/ssr/User';
 
-import { PropertyItem } from '/src/components/core/property-item';
-import { PropertyList } from '/src/components/core/property-list';
+import { PropertyItem } from '@/components/core/property-item';
+import { PropertyList } from '@/components/core/property-list';
 
 export function DetailList2() {
   return (

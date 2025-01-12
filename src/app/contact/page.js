@@ -8,8 +8,8 @@ import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/Arrow
 
 import { config } from '/src/config';
 import { paths } from '/src/paths';
-import { ContactForm } from '/src/components/marketing/contact/contact-form';
-import { Customers } from '/src/components/marketing/contact/customers';
+import { ContactForm } from '@/components/marketing/contact/contact-form';
+import { Customers } from '@/components/marketing/contact/customers';
 
 export const metadata = { title: `Contact | ${config.site.name}` };
 

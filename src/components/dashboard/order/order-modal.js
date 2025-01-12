@@ -21,8 +21,8 @@ import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
 import { paths } from '/src/paths';
 import { dayjs } from '/src/lib/dayjs';
-import { PropertyItem } from '/src/components/core/property-item';
-import { PropertyList } from '/src/components/core/property-list';
+import { PropertyItem } from '@/components/core/property-item';
+import { PropertyList } from '@/components/core/property-list';
 
 import { LineItemsTable } from './line-items-table';
 

@@ -8,7 +8,7 @@ import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/Arrow
 
 import { config } from '/src/config';
 import { paths } from '/src/paths';
-import { ProductCreateForm } from '/src/components/dashboard/product/product-create-form';
+import { ProductCreateForm } from '@/components/dashboard/product/product-create-form';
 
 export const metadata = { title: `Create | Products | Dashboard | ${config.site.name}` };
 

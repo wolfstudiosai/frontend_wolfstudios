@@ -6,12 +6,12 @@ import Typography from '@mui/material/Typography';
 
 import { config } from '/src/config';
 import { dayjs } from '/src/lib/dayjs';
-import { ItemsFilters } from '/src/components/dashboard/file-storage/items-filters';
-import { ItemsPagination } from '/src/components/dashboard/file-storage/items-pagination';
-import { Stats } from '/src/components/dashboard/file-storage/stats';
-import { StorageProvider } from '/src/components/dashboard/file-storage/storage-context';
-import { StorageView } from '/src/components/dashboard/file-storage/storage-view';
-import { UplaodButton } from '/src/components/dashboard/file-storage/upload-button';
+import { ItemsFilters } from '@/components/dashboard/file-storage/items-filters';
+import { ItemsPagination } from '@/components/dashboard/file-storage/items-pagination';
+import { Stats } from '@/components/dashboard/file-storage/stats';
+import { StorageProvider } from '@/components/dashboard/file-storage/storage-context';
+import { StorageView } from '@/components/dashboard/file-storage/storage-view';
+import { UplaodButton } from '@/components/dashboard/file-storage/upload-button';
 
 export const metadata = { title: `File storage | Dashboard | ${config.site.name}` };
 
