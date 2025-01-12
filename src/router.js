@@ -137,6 +137,14 @@ export const dashboardItems = [
 export const additionalRoutes = [
   {
     href: paths.dashboard.chat,
-    allowedRoles: ['admin'],
+    allowedRoles: ['admin','user'],
+  },
+  {
+    href: paths.dashboard.chat_compose,
+    allowedRoles: ['admin','user'],
+  },
+  {
+    href: paths.dashboard.chat_thread,
+    allowedRoles: ['admin','user'],
   },
 ];

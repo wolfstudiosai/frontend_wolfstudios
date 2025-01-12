@@ -40,7 +40,7 @@ export const paths = {
 
     chat: '/dashboard/chat',
     chat_compose: '/dashboard/chat/compose',
-    chat_thread: (type, id) => `/dashboard/chat/thread/${type}/${id}`,
+    chat_thread: (type, id) => `/dashboard/chat/${type}/${id}`,
     
     crypto: '/dashboard/crypto',
     customers: {
