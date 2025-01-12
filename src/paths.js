@@ -96,6 +96,9 @@ export const paths = {
     campaign: '/campaign',
     profile: '/profile',
     content: '/content',
+    about: '/about',
+    contact: '/contact',
+    blog: '/blog',
   },
 
   // will be removed

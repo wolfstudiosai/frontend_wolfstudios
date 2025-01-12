@@ -4,34 +4,62 @@ import { paths } from './paths';
 
 export const navData = [
   {
-    key: 'home',
-    title: 'Home',
-    href: paths.home,
-  },
-  {
-    key: 'portfolio',
-    title: 'Portfolio',
-    href: paths.public.portfolio,
-  },
-  {
-    key: 'campaign',
-    title: 'Campaign',
-    href: paths.public.campaign,
-  },
-  {
-    key: 'profile',
-    title: 'Profile',
-    href: paths.public.profile,
-  },
-  {
-    key: 'content',
-    title: 'Content',
-    href: paths.public.content,
-  },
-  {
-    key: 'login',
-    title: 'Login',
-    href: paths.auth.default.sign_in,
+    key: 'group-0',
+    items: [
+      { key: 'home', title: 'Home', href: paths.home },
+      {
+        key: 'HQs',
+        title: 'HQs',
+        items: [
+          {
+            key: 'portfolio',
+            title: 'Portfolio',
+            href: paths.public.portfolio,
+          },
+          {
+            key: 'campaign',
+            title: 'Campaign',
+            href: paths.public.campaign,
+          },
+          {
+            key: 'profile',
+            title: 'Profile',
+            href: paths.public.profile,
+          },
+          {
+            key: 'content',
+            title: 'Content',
+            href: paths.public.content,
+          },
+        ],
+      },
+      {
+        key: 'knowledge',
+        title: 'Knowledge',
+        items: [
+          {
+            key: 'about',
+            title: 'About us',
+            href: paths.public.about,
+          },
+          {
+            key: 'contact',
+            title: 'Contact',
+            href: paths.public.contact,
+          },
+          {
+            key: 'blog',
+            title: 'Blog',
+            href: paths.public.blog,
+          },
+        ],
+      },
+      {
+        key: 'login',
+        title: 'Login',
+        href: paths.auth.default.sign_in,
+      },
+    ],
   },
 ];
 
@@ -61,7 +89,6 @@ export const dashboardItems = [
         icon: 'material-symbols-light:ads-click',
         allowedRoles: ['admin', 'user'],
       },
-
     ],
   },
   {
