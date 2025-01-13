@@ -11,7 +11,7 @@ import Stack from '@mui/material/Stack';
 import { useColorScheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 export function Hero() {
   const { colorScheme } = useColorScheme();

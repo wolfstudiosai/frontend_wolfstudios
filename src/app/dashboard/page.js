@@ -13,8 +13,8 @@ import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import { Users as UsersIcon } from '@phosphor-icons/react/dist/ssr/Users';
 import { Warning as WarningIcon } from '@phosphor-icons/react/dist/ssr/Warning';
 
-import { config } from '@/config';
-import { dayjs } from '@/lib/dayjs';
+import { config } from '/src/config';
+import { dayjs } from '/src/lib/dayjs';
 import { AppChat } from '@/components/dashboard/overview/app-chat';
 import { AppLimits } from '@/components/dashboard/overview/app-limits';
 import { AppUsage } from '@/components/dashboard/overview/app-usage';

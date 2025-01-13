@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 
 const user = {
   id: 'USR-000',

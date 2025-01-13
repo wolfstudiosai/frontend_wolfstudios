@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { GroupedList1 } from '@/components/widgets/grouped-lists/grouped-list-1';
 import { GroupedList2 } from '@/components/widgets/grouped-lists/grouped-list-2';
 import { GroupedList3 } from '@/components/widgets/grouped-lists/grouped-list-3';

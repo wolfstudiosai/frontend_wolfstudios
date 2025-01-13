@@ -1,4 +1,4 @@
-import { publicApi } from "@/utils/api";
+import { publicApi } from "/src/utils/api";
 import { toast } from "sonner";
 
 export const forgotPasswordAsync = async (data, step) => {

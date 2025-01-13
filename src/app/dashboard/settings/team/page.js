@@ -2,7 +2,7 @@ import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { Members } from '@/components/dashboard/settings/members';
 
 export const metadata = { title: `Team | Settings | Dashboard | ${config.site.name}` };

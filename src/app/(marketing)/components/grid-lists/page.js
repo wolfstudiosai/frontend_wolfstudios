@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { GridList1 } from '@/components/widgets/grid-lists/grid-list-1';
 import { GridList2 } from '@/components/widgets/grid-lists/grid-list-2';
 import { GridList3 } from '@/components/widgets/grid-lists/grid-list-3';

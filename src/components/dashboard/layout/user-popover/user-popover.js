@@ -13,16 +13,16 @@ import { CreditCard as CreditCardIcon } from '@phosphor-icons/react/dist/ssr/Cre
 import { LockKey as LockKeyIcon } from '@phosphor-icons/react/dist/ssr/LockKey';
 import { User as UserIcon } from '@phosphor-icons/react/dist/ssr/User';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
-import { AuthStrategy } from '@/lib/auth/strategy';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
+import { AuthStrategy } from '/src/lib/auth/strategy';
 
 import { Auth0SignOut } from './auth0-sign-out';
 import { CognitoSignOut } from './cognito-sign-out';
 import { CustomSignOut } from './custom-sign-out';
 import { FirebaseSignOut } from './firebase-sign-out';
 import { SupabaseSignOut } from './supabase-sign-out';
-import useAuth from '@/hooks/useAuth';
+import useAuth from '/src/hooks/useAuth';
 
 const user = {
   id: 'USR-000',

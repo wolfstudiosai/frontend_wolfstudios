@@ -3,12 +3,12 @@
 import * as React from 'react';
 import { Hub } from 'aws-amplify/utils';
 
-import '@/lib/auth/cognito/client';
+import '/src/lib/auth/cognito/client';
 
 import { useRouter } from 'next/navigation';
 import { getCurrentUser } from 'aws-amplify/auth';
 
-import { logger } from '@/lib/default-logger';
+import { logger } from '/src/lib/default-logger';
 
 export const UserContext = React.createContext(undefined);
 

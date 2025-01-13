@@ -10,8 +10,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
 import { Description } from '@/components/dashboard/jobs/description';
 import { JobsCard } from '@/components/dashboard/jobs/jobs-card';
 import { MemberCard } from '@/components/dashboard/jobs/member-card';

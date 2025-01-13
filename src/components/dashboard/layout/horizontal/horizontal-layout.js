@@ -4,12 +4,12 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
 
-import { useSettings } from '@/hooks/use-settings';
+import { useSettings } from '/src/hooks/use-settings';
 
 import { layoutConfig } from '../config';
 import { MainNav } from './main-nav';
-import { config } from '@/config';
-import { dashboardItems } from '@/router';
+import { config } from '/src/config';
+import { dashboardItems } from '/src/router';
 
 export function HorizontalLayout({ children }) {
   const { settings } = useSettings();

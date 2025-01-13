@@ -12,7 +12,7 @@ import Stack from '@mui/material/Stack';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 import { FilterButton, FilterPopover, useFilterContext } from '@/components/core/filter-button';
 import { Option } from '@/components/core/option';
 

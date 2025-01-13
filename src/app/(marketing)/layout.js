@@ -1,6 +1,7 @@
 import * as React from 'react';
 import GlobalStyles from '@mui/material/GlobalStyles';
 
+// import { MainNav } from '@/components/navbar/main-nav';
 import { MainNav } from '@/components/navbar/main-nav';
 import { Footer } from '@/components/navbar/footer';
 

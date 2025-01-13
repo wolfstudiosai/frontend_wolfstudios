@@ -14,9 +14,9 @@ import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/di
 import { Users as UsersIcon } from '@phosphor-icons/react/dist/ssr/Users';
 import { useTranslation } from 'react-i18next';
 
-import { useDialog } from '@/hooks/use-dialog';
-import { usePopover } from '@/hooks/use-popover';
-import useAuth from '@/hooks/useAuth';
+import { useDialog } from '/src/hooks/use-dialog';
+import { usePopover } from '/src/hooks/use-popover';
+import useAuth from '/src/hooks/useAuth';
 
 import { ContactsPopover } from '../contacts-popover';
 import { languageFlags, LanguagePopover } from '../language-popover';

@@ -5,8 +5,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { config } from '@/config';
-import { dayjs } from '@/lib/dayjs';
+import { config } from '/src/config';
+import { dayjs } from '/src/lib/dayjs';
 import { InvoicesFiltersCard } from '@/components/dashboard/invoice//invoices-filters-card';
 import { InvoicesPagination } from '@/components/dashboard/invoice//invoices-pagination';
 import { InvoicesStats } from '@/components/dashboard/invoice//invoices-stats';

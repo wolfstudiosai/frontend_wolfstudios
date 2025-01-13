@@ -2,8 +2,8 @@ import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { config } from '@/config';
-import { dayjs } from '@/lib/dayjs';
+import { config } from '/src/config';
+import { dayjs } from '/src/lib/dayjs';
 import { LoginHistory } from '@/components/dashboard/settings/login-history';
 import { MultiFactor } from '@/components/dashboard/settings/multi-factor';
 import { PasswordForm } from '@/components/dashboard/settings/password-form';

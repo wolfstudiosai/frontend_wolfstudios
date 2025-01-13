@@ -2,12 +2,12 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { formConstants } from '@/app/constants/form-constants';
+import { formConstants } from '/src/app/constants/form-constants';
 import { Box, Button, CircularProgress, FormControl, FormLabel, InputAdornment, InputLabel } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useFormik } from 'formik';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 import { TextEditor } from '@/components/core/text-editor/text-editor';
 import { CustomDatePicker } from '@/components/formFields/custom-date-picker';
 import { CustomSelect } from '@/components/formFields/custom-select';

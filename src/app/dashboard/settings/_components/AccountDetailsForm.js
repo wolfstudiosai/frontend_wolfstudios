@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { defaultProfile } from '@/app/dashboard/settings/_lib/types';
+import { defaultProfile } from '/src/app/dashboard/settings/_lib/types';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { IconButton, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';

@@ -16,7 +16,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Truck as TruckIcon } from '@phosphor-icons/react/dist/ssr/Truck';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 
 export function FleetVehicle({ onDeselect, onSelect, selected, vehicle }) {
   const handleToggle = React.useCallback(() => {

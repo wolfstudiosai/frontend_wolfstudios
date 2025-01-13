@@ -22,7 +22,7 @@ import Grid from '@mui/material/Grid2';
 import * as Yup from 'yup';
 import { getProfileData, updateProfileData } from '../../../app/dashboard/settings/_lib/actions';
 import ImageUploader from '../../uploaders/profile-uploader';
-import { defaultProfile } from '@/app/dashboard/settings/_lib/types';
+import { defaultProfile } from '/src/app/dashboard/settings/_lib/types';
 
 
 

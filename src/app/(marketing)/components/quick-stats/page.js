@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { Layout } from '@/components/widgets/layout';
 import { QuickStats1 } from '@/components/widgets/quick-stats/quick-stats-1';
 import { QuickStats2 } from '@/components/widgets/quick-stats/quick-stats-2';

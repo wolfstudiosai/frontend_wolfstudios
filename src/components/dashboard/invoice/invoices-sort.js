@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import Select from '@mui/material/Select';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 import { Option } from '@/components/core/option';
 
 export function InvoicesSort({ filters = {}, sortDir = 'desc', view }) {

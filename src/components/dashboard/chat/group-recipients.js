@@ -18,7 +18,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 
-import { logger } from '@/lib/default-logger';
+import { logger } from '/src/lib/default-logger';
 
 export function GroupRecipients({ contacts, onRecipientAdd, onRecipientRemove, recipients = [] }) {
   const searchRef = React.useRef(null);

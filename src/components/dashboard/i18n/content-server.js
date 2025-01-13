@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import { getTranslation } from '@/lib/i18n/server';
+import { getTranslation } from '/src/lib/i18n/server';
 
 export async function ContentServer() {
   const { t } = await getTranslation();

@@ -13,8 +13,8 @@ import Typography from '@mui/material/Typography';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
 import { FilterButton } from '@/components/core/filter-button';
 import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopover';
 import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
@@ -35,7 +35,6 @@ export default function Page({ searchParams }) {
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
-  console.log(selectedRows, 'selectedRows.....');
   const [status, setStatus] = React.useState('');
   async function fetchList() {
     try {

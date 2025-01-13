@@ -13,7 +13,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 import { FilterButton, FilterPopover, useFilterContext } from '@/components/core/filter-button';
 import { Option } from '@/components/core/option';
 

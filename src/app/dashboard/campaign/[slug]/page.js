@@ -1,4 +1,4 @@
-import { config } from '@/config';
+import { config } from '/src/config';
 import { CardTitle } from '@/components/cardTitle/CardTitle';
 import { PageContainer } from '@/components/container/PageContainer';
 

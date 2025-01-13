@@ -6,8 +6,8 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/ArrowLeft';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
 import { ChapterView } from '@/components/dashboard/academy/chapter-view';
 import { CourseSummary } from '@/components/dashboard/academy/course-summary';
 

@@ -3,8 +3,8 @@
 import * as React from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 
-import { getFirebaseAuth } from '@/lib/auth/firebase/client';
-import { logger } from '@/lib/default-logger';
+import { getFirebaseAuth } from '/src/lib/auth/firebase/client';
+import { logger } from '/src/lib/default-logger';
 
 export const UserContext = React.createContext(undefined);
 

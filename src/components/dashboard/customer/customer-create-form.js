@@ -26,8 +26,8 @@ import { Camera as CameraIcon } from '@phosphor-icons/react/dist/ssr/Camera';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { paths } from '@/paths';
-import { logger } from '@/lib/default-logger';
+import { paths } from '/src/paths';
+import { logger } from '/src/lib/default-logger';
 import { Option } from '@/components/core/option';
 import { toast } from '@/components/core/toaster';
 

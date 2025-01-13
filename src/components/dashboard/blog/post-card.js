@@ -9,8 +9,8 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
 
 export function PostCard({ post }) {
   return (

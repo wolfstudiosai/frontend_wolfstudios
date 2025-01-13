@@ -3,7 +3,14 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { useRouter } from 'next/navigation';
-import { dateFormatter } from '@/utils/date-formatter';
+import { PageContainer } from '@/components/container/PageContainer';
+import { FilterButton } from '@/components/core/filter-button';
+import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopover';
+import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
+import { DataTable } from '@/components/data-table/data-table';
+import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
+import { Iconify } from '@/components/iconify/iconify';
+import PageLoader from '@/components/PageLoader/PageLoader';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -15,18 +22,11 @@ import Typography from '@mui/material/Typography';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
-import { PageContainer } from '@/components/container/PageContainer';
-import { FilterButton } from '@/components/core/filter-button';
-import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopover';
-import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
-import { DataTable } from '@/components/data-table/data-table';
-import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
-import PageLoader from '@/components/PageLoader/PageLoader';
+import { dayjs } from '/src/lib/dayjs';
 
 import { deleteCampaignAsync, getCampaignListAsync } from './_lib/campaign.actions';
-import { validateYupSchema } from 'formik';
+import { paths } from '/src/paths';
+import { dateFormatter } from '/src/utils/date-formatter';
 
 export default function Page() {
   const router = useRouter();
@@ -35,6 +35,7 @@ export default function Page() {
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
+  const [isFeatured, setIsFeatured] = React.useState(false);
   const [status, setStatus] = React.useState('');
   async function fetchList() {
     try {
@@ -72,9 +73,18 @@ export default function Page() {
   const columns = [
     {
       formatter: (row) => (
-        <IconButton size="small" title="Edit" onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
-          <PencilSimpleIcon />
-        </IconButton>
+        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+          <IconButton size="small" title="Edit" onClick={() => router.push(paths.dashboard.edit_campaign(row.slug))}>
+            <PencilSimpleIcon />
+          </IconButton>
+          <IconButton size="small" title="Feature Item" onClick={() => setIsFeatured(!isFeatured)}>
+            <Iconify
+              icon={isFeatured ? 'material-symbols:star-rounded' : 'material-symbols:star-outline-rounded'}
+              height={20}
+              width={20}
+            />
+          </IconButton>
+        </Stack>
       ),
       name: 'Actions',
       // hideName: true,

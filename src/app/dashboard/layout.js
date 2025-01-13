@@ -2,6 +2,12 @@
 
 import { VerticalLayout } from '@/components/dashboard/layout/vertical/vertical-layout';
 
+import { AuthGuard } from '../auth/guard/auth-guard';
+
 export default function Layout({ children }) {
-  return <VerticalLayout>{children}</VerticalLayout>;
+  return (
+    <AuthGuard>
+      <VerticalLayout>{children}</VerticalLayout>
+    </AuthGuard>
+  );
 }

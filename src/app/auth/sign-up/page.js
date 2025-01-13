@@ -1,4 +1,4 @@
-import { config } from '@/config';
+import { config } from '/src/config';
 import { GuestGuard } from '@/components/auth/guest-guard';
 import { SplitLayout } from '@/components/auth/split-layout';
 

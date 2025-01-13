@@ -11,7 +11,7 @@ import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsT
 import { Image as ImageIcon } from '@phosphor-icons/react/dist/ssr/Image';
 import { UserPlus as UserPlusIcon } from '@phosphor-icons/react/dist/ssr/UserPlus';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { ProfileTabs } from '@/components/dashboard/social/profile-tabs';
 
 export const metadata = { title: `Profile | Social | Dashboard | ${config.site.name}` };

@@ -4,9 +4,9 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import Alert from '@mui/material/Alert';
 
-import { paths } from '@/paths';
-import { logger } from '@/lib/default-logger';
-import { createClient as createSupabaseClient } from '@/lib/supabase/client';
+import { paths } from '/src/paths';
+import { logger } from '/src/lib/default-logger';
+import { createClient as createSupabaseClient } from '/src/lib/supabase/client';
 import { toast } from '@/components/core/toaster';
 
 // NOTE: This is a `Page` and not a `GET` route because

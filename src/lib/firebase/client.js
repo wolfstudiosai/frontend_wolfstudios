@@ -2,7 +2,7 @@
 
 import { initializeApp } from 'firebase/app';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 
 // This executes on the client only, so we can cache the app instance.
 let appInstance;

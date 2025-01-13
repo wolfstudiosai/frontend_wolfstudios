@@ -12,9 +12,9 @@ import Typography from '@mui/material/Typography';
 import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/ArrowLeft';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
 import { BreadcrumbsSeparator } from '@/components/core/breadcrumbs-separator';
 import { Newsletter } from '@/components/dashboard/blog/newsletter';
 import { PostCard } from '@/components/dashboard/blog/post-card';

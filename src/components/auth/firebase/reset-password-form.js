@@ -17,8 +17,8 @@ import { sendPasswordResetEmail } from 'firebase/auth';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { paths } from '@/paths';
-import { getFirebaseAuth } from '@/lib/auth/firebase/client';
+import { paths } from '/src/paths';
+import { getFirebaseAuth } from '/src/lib/auth/firebase/client';
 import { DynamicLogo } from '@/components/core/logo';
 
 const schema = zod.object({ email: zod.string().min(1, { message: 'Email is required' }).email() });

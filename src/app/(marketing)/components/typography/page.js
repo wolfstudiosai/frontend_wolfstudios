@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { Layout } from '@/components/widgets/layout';
 import { Typography1 } from '@/components/widgets/typography/typography-1';
 

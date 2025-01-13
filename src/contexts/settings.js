@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { applyDefaultSettings } from '@/lib/settings/apply-default-settings';
+import { applyDefaultSettings } from '/src/lib/settings/apply-default-settings';
 
 export const SettingsContext = React.createContext({
   settings: applyDefaultSettings({}),

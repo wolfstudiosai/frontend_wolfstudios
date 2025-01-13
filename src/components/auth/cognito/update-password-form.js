@@ -18,7 +18,7 @@ import { confirmResetPassword } from 'aws-amplify/auth';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 import { DynamicLogo } from '@/components/core/logo';
 import { toast } from '@/components/core/toaster';
 

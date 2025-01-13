@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 function useSegment() {
   const pathname = usePathname();

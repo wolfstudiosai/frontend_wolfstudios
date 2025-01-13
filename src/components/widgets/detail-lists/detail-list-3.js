@@ -9,7 +9,7 @@ import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import { Receipt as ReceiptIcon } from '@phosphor-icons/react/dist/ssr/Receipt';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 import { Option } from '@/components/core/option';
 import { PropertyItem } from '@/components/core/property-item';
 import { PropertyList } from '@/components/core/property-list';

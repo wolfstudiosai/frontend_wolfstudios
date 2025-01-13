@@ -6,8 +6,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { config } from '@/config';
-import { dayjs } from '@/lib/dayjs';
+import { config } from '/src/config';
+import { dayjs } from '/src/lib/dayjs';
 import { AccountUpgrade } from '@/components/dashboard/crypto/account-upgrade';
 import { CreditCard } from '@/components/dashboard/crypto/credit-card';
 import { CurrencyConverter } from '@/components/dashboard/crypto/currency-converter';

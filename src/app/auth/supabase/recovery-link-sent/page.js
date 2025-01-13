@@ -6,8 +6,8 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
 import { GuestGuard } from '@/components/auth/guest-guard';
 import { SplitLayout } from '@/components/auth/split-layout';
 import { ResetPasswordButton } from '@/components/auth/supabase/reset-password-button';

@@ -1,4 +1,4 @@
-import { api } from "@/utils/api";
+import { api } from "/src/utils/api";
 import { toast } from "sonner";
 
 export const getProfileData = async () => {

@@ -1,7 +1,7 @@
-import { publicApi } from '@/utils/api';
+import { publicApi } from '/src/utils/api';
 import { Container } from '@mui/material';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 
 import { CampaignView } from './campaign-view';
 

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 
 export function createClient(req) {
   // Create an unmodified response

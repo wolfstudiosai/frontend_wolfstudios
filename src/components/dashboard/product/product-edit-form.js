@@ -29,8 +29,8 @@ import { Trash as TrashIcon } from '@phosphor-icons/react/dist/ssr/Trash';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { paths } from '@/paths';
-import { logger } from '@/lib/default-logger';
+import { paths } from '/src/paths';
+import { logger } from '/src/lib/default-logger';
 import { DataTable } from '@/components/data-table/data-table';
 import { FileDropzone } from '@/components/core/file-dropzone';
 import { Option } from '@/components/core/option';

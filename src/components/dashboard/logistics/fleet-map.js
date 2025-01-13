@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Mapbox, { Marker } from 'react-map-gl';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 
 // Map default view state
 const VIEW_STATE = {

@@ -9,9 +9,9 @@ import Typography from '@mui/material/Typography';
 import { CaretLeft as CaretLeftIcon } from '@phosphor-icons/react/dist/ssr/CaretLeft';
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
 import { CompanyCard } from '@/components/dashboard/jobs/company-card';
 import { JobsFilters } from '@/components/dashboard/jobs/jobs-filters';
 

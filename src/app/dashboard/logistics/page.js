@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { DeviatedVehicles } from '@/components/dashboard/logistics/deviated-vehicles';
 import { LateVehicles } from '@/components/dashboard/logistics/late-vehicles';
 import { OnRouteVehicles } from '@/components/dashboard/logistics/on-route-vehicles';

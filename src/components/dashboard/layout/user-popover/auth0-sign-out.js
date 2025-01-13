@@ -1,7 +1,7 @@
 import * as React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 export function Auth0SignOut() {
   return (

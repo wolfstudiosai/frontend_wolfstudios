@@ -20,8 +20,8 @@ import { EyeSlash as EyeSlashIcon } from '@phosphor-icons/react/dist/ssr/EyeSlas
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { paths } from '@/paths';
-import { createClient as createSupabaseClient } from '@/lib/supabase/client';
+import { paths } from '/src/paths';
+import { createClient as createSupabaseClient } from '/src/lib/supabase/client';
 import { DynamicLogo } from '@/components/core/logo';
 import { toast } from '@/components/core/toaster';
 

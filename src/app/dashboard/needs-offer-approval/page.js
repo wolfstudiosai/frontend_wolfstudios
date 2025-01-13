@@ -1,5 +1,5 @@
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import ManageOfferApproval from './_components/manage-offer-approval';
 
 export const metadata = { title: `Dashboard | Needs Offer/ Approval | ${config.site.name}` };

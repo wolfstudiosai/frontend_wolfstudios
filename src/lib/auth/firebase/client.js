@@ -2,7 +2,7 @@
 
 import { getAuth } from 'firebase/auth';
 
-import { getFirebaseApp } from '@/lib/firebase/client';
+import { getFirebaseApp } from '/src/lib/firebase/client';
 
 export function getFirebaseAuth() {
   return getAuth(getFirebaseApp());

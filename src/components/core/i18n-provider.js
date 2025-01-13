@@ -4,10 +4,10 @@ import * as React from 'react';
 import { use } from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
 
-import { logger } from '@/lib/default-logger';
-import { de } from '@/locales/de';
-import { en } from '@/locales/en';
-import { es } from '@/locales/es';
+import { logger } from '/src/lib/default-logger';
+import { de } from '/src/locales/de';
+import { en } from '/src/locales/en';
+import { es } from '/src/locales/es';
 
 use(initReactI18next)
   .init({

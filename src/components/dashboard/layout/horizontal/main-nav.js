@@ -22,11 +22,11 @@ import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/di
 import { Users as UsersIcon } from '@phosphor-icons/react/dist/ssr/Users';
 import { useTranslation } from 'react-i18next';
 
-import { paths } from '@/paths';
-import { isNavItemActive } from '@/lib/is-nav-item-active';
-import { useDialog } from '@/hooks/use-dialog';
-import { usePopover } from '@/hooks/use-popover';
-import useAuth from '@/hooks/useAuth';
+import { paths } from '/src/paths';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
+import { useDialog } from '/src/hooks/use-dialog';
+import { usePopover } from '/src/hooks/use-popover';
+import useAuth from '/src/hooks/useAuth';
 import { Dropdown } from '@/components/core/dropdown/dropdown';
 import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
 import { DropdownTrigger } from '@/components/core/dropdown/dropdown-trigger';

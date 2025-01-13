@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { getFilenameFromUrl } from '@/utils/get-filename-from-url';
+import { getFilenameFromUrl } from '/src/utils/get-filename-from-url';
 import { Close, Visibility } from '@mui/icons-material';
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
 

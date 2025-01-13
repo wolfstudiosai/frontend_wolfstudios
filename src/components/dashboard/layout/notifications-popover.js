@@ -16,7 +16,7 @@ import { EnvelopeSimple as EnvelopeSimpleIcon } from '@phosphor-icons/react/dist
 import { User as UserIcon } from '@phosphor-icons/react/dist/ssr/User';
 import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 
 const notifications = [
   {

@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography';
 import { MinusCircle as MinusCircleIcon } from '@phosphor-icons/react/dist/ssr/MinusCircle';
 import { PlusCircle as PlusCircleIcon } from '@phosphor-icons/react/dist/ssr/PlusCircle';
 
-import { usePopover } from '@/hooks/use-popover';
-import { pxToRem } from '@/utils/utils';
+import { usePopover } from '/src/hooks/use-popover';
+import { pxToRem } from '/src/utils/utils';
 
 function noop(..._) {
   // Do nothing
