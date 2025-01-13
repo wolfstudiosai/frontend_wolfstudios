@@ -9,24 +9,20 @@ export const paths = {
     analytics: '/dashboard/analytics',
     campaign: '/dashboard/campaign',
     create_campaign: '/dashboard/campaign/create',
-    edit_campaign: (id) => `/dashboard/campaign/${id}`,
 
     // admin
     records: '/dashboard/records',
     partner: '/dashboard/partner',
     create_partner: '/dashboard/partner/create',
-    edit_partner: (id) => `/dashboard/partner/${id}`,
-    partners_by_campaign: '/dashboard/partners-by-campaign',
-    needs_offer_approval: '/dashboard/needs-offer-approval',
     portfolios: '/dashboard/portfolios',
     create_portfolio: '/dashboard/portfolios/add-portfolio',
-    edit_portfolio: (id) => `/dashboard/portfolios/add-portfolio?id='${id}`,
+    partners_by_campaign: '/dashboard/partners-by-campaign',
+    needs_offer_approval: '/dashboard/needs-offer-approval',
     users: '/dashboard/users',
 
     // chat
     chat: '/dashboard/chat',
     chat_compose: '/dashboard/chat/compose',
-    chat_thread: (type, id) => `/dashboard/chat/${type}/${id}`,
 
     // settings
     profile: '/dashboard/settings/account',

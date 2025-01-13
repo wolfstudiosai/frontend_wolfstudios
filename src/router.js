@@ -132,7 +132,7 @@ export const dashboardItems = [
         key: 'Portfolio',
         title: 'Portfolio',
         href: paths.dashboard.portfolios,
-        icon: 'material-symbols-light:ads-click',
+        icon: 'fluent:document-copy-20-regular',
         allowedRoles: ['admin'],
       },
       {
@@ -151,13 +151,5 @@ export const additionalRoutes = [
   {
     href: paths.dashboard.chat,
     allowedRoles: ['admin', 'user'],
-  },
-  {
-    href: paths.dashboard.chat_compose,
-    allowedRoles: ['admin', 'user'],
-  },
-  {
-    href: paths.dashboard.chat_thread,
-    allowedRoles: ['admin', 'user'],
-  },
+  }
 ];

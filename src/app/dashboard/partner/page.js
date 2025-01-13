@@ -72,7 +72,7 @@ export default function Page() {
     {
       formatter: (row) => (
         <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-          <IconButton size="small" title="Edit" onClick={() => router.push(paths.dashboard.edit_partner(row.slug))}>
+          <IconButton size="small" title="Edit" onClick={() => router.push(paths.dashboard.partner + '/' + row.slug)}>
             <PencilSimpleIcon />
           </IconButton>
         </Stack>
@@ -87,7 +87,7 @@ export default function Page() {
           <Link
             color="inherit"
             component={RouterLink}
-            href={paths.dashboard.edit_partner(row.slug)}
+            href={paths.dashboard.partner + '/' + row.slug}
             sx={{ whiteSpace: 'nowrap' }}
             variant="subtitle2"
           >

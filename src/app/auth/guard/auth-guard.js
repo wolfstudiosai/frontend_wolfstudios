@@ -84,12 +84,10 @@ const isUserAuthorizedToAccessThisRoute = (role, pathname) => {
 
   // Check the additionalRoutes collection
   const isAuthorizedInAdditionalRoutes = additionalRoutes.some((route) => {
-    // Handle static route match
+    console.log(route, 'route.....');
     if (route.href === pathname) {
       return route.allowedRoles.includes(role);
     }
-
-    // Handle dynamic route match (create/edit)
     const baseHref = pathname.split('/').slice(0, 3).join('/');
     if (route.href.startsWith(baseHref)) {
       return route.allowedRoles.includes(role);
