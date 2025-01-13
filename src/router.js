@@ -121,12 +121,18 @@ export const dashboardItems = [
         icon: 'ph:handshake-light',
         allowedRoles: ['admin'],
       },
-
       {
         key: 'needs_offer_approval',
         title: 'Needs offer/ approval',
         href: paths.dashboard.needs_offer_approval,
         icon: 'material-symbols-light:order-approve-outline-rounded',
+        allowedRoles: ['admin'],
+      },
+      {
+        key: 'Portfolio',
+        title: 'Portfolio',
+        href: paths.dashboard.portfolios,
+        icon: 'fluent:document-copy-20-regular',
         allowedRoles: ['admin'],
       },
       {
@@ -144,14 +150,6 @@ export const dashboardItems = [
 export const additionalRoutes = [
   {
     href: paths.dashboard.chat,
-    allowedRoles: ['admin','user'],
-  },
-  {
-    href: paths.dashboard.chat_compose,
-    allowedRoles: ['admin','user'],
-  },
-  {
-    href: paths.dashboard.chat_thread,
-    allowedRoles: ['admin','user'],
-  },
+    allowedRoles: ['admin', 'user'],
+  }
 ];

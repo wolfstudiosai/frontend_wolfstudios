@@ -1,0 +1,15 @@
+export const defaultPortfolio = {
+  name: '',
+  type: 'VLOGS',
+  model: '',
+  days_location: '',
+  sessions: '',
+  producer: '',
+  production_studio: '',
+  location: '',
+  talent: '',
+  creation_10_images_services_provide: '',
+  brand: '',
+  deliverables: '',
+  status: 'PENDING',
+};

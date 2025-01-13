@@ -9,13 +9,13 @@ export const paths = {
     analytics: '/dashboard/analytics',
     campaign: '/dashboard/campaign',
     create_campaign: '/dashboard/campaign/create',
-    edit_campaign: (id) => `/dashboard/campaign/${id}`,
 
     // admin
     records: '/dashboard/records',
     partner: '/dashboard/partner',
     create_partner: '/dashboard/partner/create',
-    edit_partner: (id) => `/dashboard/partner/${id}`,
+    portfolios: '/dashboard/portfolios',
+    create_portfolio: '/dashboard/portfolios/add-portfolio',
     partners_by_campaign: '/dashboard/partners-by-campaign',
     needs_offer_approval: '/dashboard/needs-offer-approval',
     users: '/dashboard/users',
@@ -23,7 +23,6 @@ export const paths = {
     // chat
     chat: '/dashboard/chat',
     chat_compose: '/dashboard/chat/compose',
-    chat_thread: (type, id) => `/dashboard/chat/${type}/${id}`,
 
     // settings
     profile: '/dashboard/settings/account',
@@ -45,7 +44,7 @@ export const paths = {
       create: '/dashboard/blog/create',
     },
     calendar: '/dashboard/calendar',
-    
+
     crypto: '/dashboard/crypto',
     customers: {
       list: '/dashboard/customers',
