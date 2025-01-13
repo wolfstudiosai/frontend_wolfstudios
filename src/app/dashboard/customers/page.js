@@ -7,8 +7,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { config } from '@/config';
-import { dayjs } from '@/lib/dayjs';
+import { config } from '/src/config';
+import { dayjs } from '/src/lib/dayjs';
 import { CustomersFilters } from '@/components/dashboard/customer/customers-filters';
 import { CustomersPagination } from '@/components/dashboard/customer/customers-pagination';
 import { CustomersSelectionProvider } from '@/components/dashboard/customer/customers-selection-context';

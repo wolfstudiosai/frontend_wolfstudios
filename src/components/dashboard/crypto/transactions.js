@@ -14,7 +14,7 @@ import { ArrowsDownUp as ArrowsDownUpIcon } from '@phosphor-icons/react/dist/ssr
 import { TrendDown as TrendDownIcon } from '@phosphor-icons/react/dist/ssr/TrendDown';
 import { TrendUp as TrendUpIcon } from '@phosphor-icons/react/dist/ssr/TrendUp';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 
 export function Transactions({ transactions }) {
   return (

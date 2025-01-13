@@ -3,8 +3,8 @@
 import * as React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 
-import { logger } from '@/lib/default-logger';
-import { createClient as createSupabaseClient } from '@/lib/supabase/client';
+import { logger } from '/src/lib/default-logger';
+import { createClient as createSupabaseClient } from '/src/lib/supabase/client';
 import { toast } from '@/components/core/toaster';
 
 export function SupabaseSignOut() {

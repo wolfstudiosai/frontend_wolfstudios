@@ -10,9 +10,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/ArrowLeft';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
 import { DynamicLogo } from '@/components/core/logo';
 import { InvoicePDFLink } from '@/components/dashboard/invoice/invoice-pdf-link';
 import { LineItemsTable } from '@/components/dashboard/invoice/line-items-table';

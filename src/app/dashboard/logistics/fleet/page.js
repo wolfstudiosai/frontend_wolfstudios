@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { config } from '@/config';
-import { dayjs } from '@/lib/dayjs';
+import { config } from '/src/config';
+import { dayjs } from '/src/lib/dayjs';
 import { FleetView } from '@/components/dashboard/logistics/fleet-view';
 
 export const metadata = { title: `Fleet | Logistics | Dashboard | ${config.site.name}` };

@@ -8,7 +8,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 
-import { usePopover } from '@/hooks/use-popover';
+import { usePopover } from '/src/hooks/use-popover';
 
 const options = [
   { label: 'Create a merge commit', value: 'merge_commit' },

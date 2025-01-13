@@ -4,7 +4,7 @@ import * as React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import { signOut } from 'aws-amplify/auth';
 
-import { logger } from '@/lib/default-logger';
+import { logger } from '/src/lib/default-logger';
 import { toast } from '@/components/core/toaster';
 
 export function CognitoSignOut() {

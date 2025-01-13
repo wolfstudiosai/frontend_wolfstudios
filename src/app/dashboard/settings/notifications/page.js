@@ -2,7 +2,7 @@ import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { EmailNotifications } from '@/components/dashboard/settings/email-notifications';
 import { PhoneNotifications } from '@/components/dashboard/settings/phone-notifications';
 

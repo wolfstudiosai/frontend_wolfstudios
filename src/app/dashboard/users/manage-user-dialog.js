@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid2';
 import { useFormik } from "formik";
 import React from "react";
 import * as Yup from 'yup';
-import { createUser, updateUserData } from "./_lib/actions";
+import { createUser, updateUserData } from "./_lib/user.actions";
 
 const getValidationSchema = (isUpdated) => {
 

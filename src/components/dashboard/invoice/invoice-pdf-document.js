@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Document, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 
 const lineItems = [
   { id: 'LI-001', name: 'Pro Subscription', quantity: 1, currency: 'USD', unitAmount: 14.99, totalAmount: 14.99 },
@@ -51,7 +51,7 @@ export function InvoicePDFDocument(_) {
             <Text style={[styles.textXl, styles.fontSemibold]}>Invoice</Text>
           </View>
           <View>
-            <Image source="/assets/logo-emblem--dark.png" style={styles.brand} />
+            <Image alt="Emblem" source="/assets/logo-emblem--dark.png" style={styles.brand} />
           </View>
         </View>
         <View style={styles.refs}>

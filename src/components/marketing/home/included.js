@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Lightning as LightningIcon } from '@phosphor-icons/react/dist/ssr/Lightning';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 export function Included() {
   return (

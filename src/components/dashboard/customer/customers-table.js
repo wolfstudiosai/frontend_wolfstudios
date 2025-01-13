@@ -11,8 +11,8 @@ import RouterLink from 'next/link';
 import * as React from 'react';
 
 import { DataTable } from '@/components/data-table/data-table';
-import { dayjs } from '@/lib/dayjs';
-import { paths } from '@/paths';
+import { dayjs } from '/src/lib/dayjs';
+import { paths } from '/src/paths';
 
 import { useCustomersSelection } from './customers-selection-context';
 

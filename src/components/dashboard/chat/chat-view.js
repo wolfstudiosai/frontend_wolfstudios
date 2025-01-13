@@ -38,14 +38,16 @@ export function ChatView({ children }) {
     (contactId) => {
       const threadId = createThread({ type: 'direct', recipientId: contactId });
 
-      router.push(paths.dashboard.chat.thread('direct', threadId));
+      // router.push(paths.dashboard.chat_thread('direct', threadId));
+      router.push(paths.dashboard.chat + '/' + 'direct' + '/' + threadId);
     },
     [router, createThread]
   );
 
   const handleThreadSelect = React.useCallback(
     (threadType, threadId) => {
-      router.push(paths.dashboard.chat.thread(threadType, threadId));
+      // router.push(paths.dashboard.chat_thread(threadType, threadId));
+      router.push(paths.dashboard.chat + '/' + threadType + '/' + threadId);
     },
     [router]
   );

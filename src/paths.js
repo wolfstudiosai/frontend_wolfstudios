@@ -6,19 +6,27 @@ export const paths = {
 
   dashboard: {
     overview: '/dashboard',
+    analytics: '/dashboard/analytics',
+    campaign: '/dashboard/campaign',
+    create_campaign: '/dashboard/campaign/create',
+
+    // admin
     records: '/dashboard/records',
-    needs_offer_approval: '/dashboard/needs-offer-approval',
+    partner: '/dashboard/partner',
+    create_partner: '/dashboard/partner/create',
+    portfolios: '/dashboard/portfolios',
+    create_portfolio: '/dashboard/portfolios/add-portfolio',
     partners_by_campaign: '/dashboard/partners-by-campaign',
+    needs_offer_approval: '/dashboard/needs-offer-approval',
+    users: '/dashboard/users',
+
+    // chat
+    chat: '/dashboard/chat',
+    chat_compose: '/dashboard/chat/compose',
 
     // settings
     profile: '/dashboard/settings/account',
     security: '/dashboard/settings/security',
-
-    // admin
-    users: '/dashboard/users',
-    campaign: '/dashboard/campaign',
-    createCampaign: '/dashboard/campaign/create',
-    updateCampaign: (id) => `/dashboard/campaign/${id}/edit`,
 
     // can be removed later on
     settings: {
@@ -29,7 +37,6 @@ export const paths = {
       team: '/dashboard/settings/team',
     },
     academy: { browse: '/dashboard/academy', details: (courseId) => `/dashboard/academy/courses/${courseId}` },
-    analytics: '/dashboard/analytics',
     blank: '/dashboard/blank',
     blog: {
       list: '/dashboard/blog',
@@ -37,11 +44,7 @@ export const paths = {
       create: '/dashboard/blog/create',
     },
     calendar: '/dashboard/calendar',
-    chat: {
-      base: '/dashboard/chat',
-      compose: '/dashboard/chat/compose',
-      thread: (threadType, threadId) => `/dashboard/chat/${threadType}/${threadId}`,
-    },
+
     crypto: '/dashboard/crypto',
     customers: {
       list: '/dashboard/customers',
@@ -92,20 +95,28 @@ export const paths = {
   },
 
   public: {
+    // HQs
     portfolio: '/portfolio',
     campaign: '/campaign',
     profile: '/profile',
     content: '/content',
+    partner: '/partner',
+
+    // knowledge base
+    about: '/about',
+    contact: '/contact',
+    blog: '/blog',
   },
 
-  // will be removed
   auth: {
     default: {
-      signIn: '/auth/sign-in',
-      signUp: '/auth/sign-up',
+      sign_in: '/auth/sign-in',
+      sign_up: '/auth/sign-up',
+      not_authorized: '/auth/not-authorized',
       resetPassword: '/auth/reset-password',
       forgotPassword: '/auth/forgot-password',
     },
+    // will be removed
     auth0: {
       callback: '/auth/auth0/callback',
       signIn: '/auth/auth0/sign-in',

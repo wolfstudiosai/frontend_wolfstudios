@@ -2,7 +2,7 @@
 
 import MenuItem from '@mui/material/MenuItem';
 
-import useAuth from '@/hooks/useAuth';
+import useAuth from '/src/hooks/useAuth';
 
 export function CustomSignOut({ onClose }) {
   const { logout } = useAuth()

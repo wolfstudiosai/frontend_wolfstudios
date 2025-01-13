@@ -1,4 +1,4 @@
-import { pxToRem } from '@/utils/utils';
+import { pxToRem } from '/src/utils/utils';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 
 import { Iconify } from '@/components/iconify/iconify';

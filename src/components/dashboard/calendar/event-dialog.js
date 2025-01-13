@@ -20,8 +20,8 @@ import { Trash as TrashIcon } from '@phosphor-icons/react/dist/ssr/Trash';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { dayjs } from '@/lib/dayjs';
-import { logger } from '@/lib/default-logger';
+import { dayjs } from '/src/lib/dayjs';
+import { logger } from '/src/lib/default-logger';
 import { toast } from '@/components/core/toaster';
 
 const schema = zod

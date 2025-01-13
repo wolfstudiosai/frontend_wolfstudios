@@ -2,15 +2,15 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { AuthApiError } from '@supabase/supabase-js';
 
-import { paths } from '@/paths';
-import { logger } from '@/lib/default-logger';
-import { createClient } from '@/lib/supabase/server';
+import { paths } from '/src/paths';
+import { logger } from '/src/lib/default-logger';
+import { createClient } from '/src/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
 // NOTE: If you have a proxy in front of this app
 //  the request origin might be a local address.
-//  Consider using `config.site.url` from `@/config` instead.
+//  Consider using `config.site.url` from `/src/config` instead.
 
 // NOTE: This is not a `Page` because we only redirect and it will never render React content.
 

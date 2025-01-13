@@ -43,3 +43,27 @@ export function debounceFunc(func, delay) {
         }, delay);
     };
 }
+
+export const getSearchQueryPortfolio = (queryParams) => {
+    const { searchTerm, page = 1, limit = 10, sortBy = 'created_at', sortOrder = 'desc' } = queryParams;
+  
+    const query = new URLSearchParams();
+  
+    if (searchTerm) {
+      query.append('searchTerm', searchTerm);
+    }
+    if (page) {
+      query.append('page', page);
+    }
+    if (limit) {
+      query.append('limit', limit);
+    }
+    if (sortBy) {
+      query.append('sortBy', sortBy);
+    }
+    if (sortOrder) {
+      query.append('sortOrder', sortOrder);
+    }
+    return `?${query.toString()}`;
+  };
+  

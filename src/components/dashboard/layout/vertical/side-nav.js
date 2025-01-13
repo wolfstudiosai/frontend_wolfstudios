@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -10,13 +12,13 @@ import { ArrowSquareOut as ArrowSquareOutIcon } from '@phosphor-icons/react/dist
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 
-import { paths } from '@/paths';
-import { isNavItemActive } from '@/lib/is-nav-item-active';
-import { Logo } from '@/components/core/logo';
+import useAuth from '@/hooks/useAuth';
 
-import { icons } from '../nav-icons';
-import { WorkspacesSwitch } from '../workspaces-switch';
 import { navColorStyles } from './styles';
+import { DynamicLogo } from '@/components/core/logo';
+import { Iconify } from '@/components/iconify/iconify';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
+import { paths } from '/src/paths';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
@@ -25,6 +27,7 @@ const logoColors = {
 
 export function SideNav({ color = 'evident', items = [] }) {
   const pathname = usePathname();
+  const { userInfo } = useAuth();
 
   const { colorScheme = 'light' } = useColorScheme();
 
@@ -51,7 +54,7 @@ export function SideNav({ color = 'evident', items = [] }) {
       <Stack spacing={2} sx={{ p: 2 }}>
         <div>
           <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
-            <Logo color={logoColor} height={32} width={122} />
+            <DynamicLogo color={logoColor} height={32} width={122} />
           </Box>
         </div>
         {/* <WorkspacesSwitch /> */}
@@ -66,14 +69,24 @@ export function SideNav({ color = 'evident', items = [] }) {
           '&::-webkit-scrollbar': { display: 'none' },
         }}
       >
-        {renderNavGroups({ items, pathname })}
+        {renderNavGroups({ items, pathname, userInfo })}
       </Box>
     </Box>
   );
 }
 
-function renderNavGroups({ items, pathname }) {
-  const children = items.reduce((acc, curr) => {
+function renderNavGroups({ items, pathname, userInfo }) {
+  const role = userInfo.role.toLowerCase();
+  const filteredGroups = items
+    .map((section) => {
+      // Filter items within each section based on the user's role
+      const validItems = section.items.filter((item) => !item.allowedRoles || item.allowedRoles.includes(role));
+
+      // Return a new section object with only valid items
+      return validItems.length > 0 ? { ...section, items: validItems } : null;
+    })
+    .filter(Boolean);
+  const children = filteredGroups.reduce((acc, curr) => {
     acc.push(
       <Stack component="li" key={curr.key} spacing={1.5}>
         {curr.title ? (
@@ -136,7 +149,6 @@ function NavItem({
 }) {
   const [open, setOpen] = React.useState(forceOpen);
   const active = isNavItemActive({ disabled, external, href, matcher, pathname });
-  const Icon = icon ? icons[icon] : null;
   const ExpandIcon = open ? CaretDownIcon : CaretRightIcon;
   const isBranch = children && !href;
   const showChildren = Boolean(children && open);
@@ -207,18 +219,23 @@ function NavItem({
         tabIndex={0}
       >
         <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flex: '0 0 auto' }}>
-          {Icon ? (
-            <Icon
-              fill={active ? 'var(--NavItem-icon-active-color)' : 'var(--NavItem-icon-color)'}
-              fontSize="var(--icon-fontSize-md)"
-              weight={forceOpen || active ? 'fill' : undefined}
+          {icon ? (
+            <Iconify
+              icon={icon}
+              color={active ? 'var(--NavItem-hover-color)' : 'var(--NavItem-icon-color)'}
+              sx={{ fontSize: 'var(--icon-fontSize-sm)' }}
             />
           ) : null}
         </Box>
         <Box sx={{ flex: '1 1 auto' }}>
           <Typography
             component="span"
-            sx={{ color: 'inherit', fontSize: '0.875rem', fontWeight: 500, lineHeight: '28px' }}
+            sx={{
+              color: 'inherit',
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              lineHeight: '28px',
+            }}
           >
             {title}
           </Typography>

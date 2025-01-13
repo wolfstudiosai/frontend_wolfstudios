@@ -5,8 +5,8 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
 import { GuestGuard } from '@/components/auth/guest-guard';
 import { SplitLayout } from '@/components/auth/split-layout';
 import { SignUpResendButton } from '@/components/auth/supabase/sign-up-resend-button';

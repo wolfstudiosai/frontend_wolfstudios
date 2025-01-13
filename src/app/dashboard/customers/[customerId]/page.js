@@ -24,9 +24,9 @@ import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import { ShieldWarning as ShieldWarningIcon } from '@phosphor-icons/react/dist/ssr/ShieldWarning';
 import { User as UserIcon } from '@phosphor-icons/react/dist/ssr/User';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
 import { PropertyItem } from '@/components/core/property-item';
 import { PropertyList } from '@/components/core/property-list';
 import { Notifications } from '@/components/dashboard/customer/notifications';

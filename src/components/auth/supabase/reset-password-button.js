@@ -6,8 +6,8 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { paths } from '@/paths';
-import { createClient as createSupabaseClient } from '@/lib/supabase/client';
+import { paths } from '/src/paths';
+import { createClient as createSupabaseClient } from '/src/lib/supabase/client';
 import { toast } from '@/components/core/toaster';
 
 export function ResetPasswordButton({ children, email }) {

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { useSettings } from '@/hooks/use-settings';
+import { useSettings } from '/src/hooks/use-settings';
 
 import { HorizontalLayout } from './horizontal/horizontal-layout';
 import { VerticalLayout } from './vertical/vertical-layout';

@@ -1,9 +1,8 @@
 'use client';
 
-import * as React from 'react';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { DataGrid, GridCellModes } from '@mui/x-data-grid';
+import { DataGrid, GridCellModes, GridToolbar } from '@mui/x-data-grid';
+import * as React from 'react';
 
 export const EditableDataTable = ({
   columns,
@@ -11,8 +10,12 @@ export const EditableDataTable = ({
   processRowUpdate,
   onProcessRowUpdateError,
   loading = false,
-  noDataMessage = 'No records found',
   pageSize = 10,
+  rowCount,
+  pageSizeOptions,
+  onPageChange,
+  checkboxSelection = false,
+  onRowSelectionModelChange,
 }) => {
   const [cellModesModel, setCellModesModel] = React.useState({});
 
@@ -55,28 +58,28 @@ export const EditableDataTable = ({
     <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
       <DataGrid
         rows={rows}
+        rowCount={rowCount}
         columns={columns}
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={onProcessRowUpdateError}
         cellModesModel={cellModesModel}
         onCellModesModelChange={handleCellModesModelChange}
         onCellClick={handleCellClick}
-        pageSize={pageSize}
+        // pageSize={pageSize}
         loading={loading}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           '& .MuiDataGrid-cell': {
             border: (theme) => `1px solid ${theme.palette.divider}`,
           },
         }}
         disableColumnSorting
+        onPaginationModelChange={onPageChange}
+        paginationMode="server"
+        checkboxSelection={checkboxSelection} // it will enable checkbox selection
+        onRowSelectionModelChange={onRowSelectionModelChange} //it will return all selected rows
+        slots={{ toolbar: GridToolbar }} // filtering csv download, hide cols, etc
       />
-      {!rows?.length && !loading && (
-        <Box sx={{ p: 3 }}>
-          <Typography color="text.secondary" sx={{ textAlign: 'center' }} variant="body2">
-            {noDataMessage}
-          </Typography>
-        </Box>
-      )}
     </Box>
   );
 };

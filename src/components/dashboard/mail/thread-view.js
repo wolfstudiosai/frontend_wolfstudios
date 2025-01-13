@@ -20,8 +20,8 @@ import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsT
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 import { Trash as TrashIcon } from '@phosphor-icons/react/dist/ssr/Trash';
 
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
 
 import { Attachments } from './attachments';
 import { MailContext } from './mail-context';

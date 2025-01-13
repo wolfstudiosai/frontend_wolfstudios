@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { Buttons1 } from '@/components/widgets/buttons/buttons-1';
 import { Buttons2 } from '@/components/widgets/buttons/buttons-2';
 import { Buttons3 } from '@/components/widgets/buttons/buttons-3';

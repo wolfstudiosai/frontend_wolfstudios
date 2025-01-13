@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
@@ -11,13 +12,12 @@ import { Bell as BellIcon } from '@phosphor-icons/react/dist/ssr/Bell';
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 import { Users as UsersIcon } from '@phosphor-icons/react/dist/ssr/Users';
-import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useDialog } from '@/hooks/use-dialog';
-import { usePopover } from '@/hooks/use-popover';
+import { useDialog } from '/src/hooks/use-dialog';
+import { usePopover } from '/src/hooks/use-popover';
+import useAuth from '/src/hooks/useAuth';
 
-import useAuth from '@/hooks/useAuth';
 import { ContactsPopover } from '../contacts-popover';
 import { languageFlags, LanguagePopover } from '../language-popover';
 import { MobileNav } from '../mobile-nav';
@@ -201,14 +201,10 @@ function UserButton() {
           }}
           variant="dot"
         >
-          <Avatar src={userInfo.profile_pic} />
+          <Avatar src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${userInfo.profile_pic}`} />
         </Badge>
       </Box>
-      <UserPopover
-        anchorEl={popover.anchorRef.current}
-        onClose={popover.handleClose}
-        open={popover.open}
-      />
+      <UserPopover anchorEl={popover.anchorRef.current} onClose={popover.handleClose} open={popover.open} />
     </React.Fragment>
   );
 }

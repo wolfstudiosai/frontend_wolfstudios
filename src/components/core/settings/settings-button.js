@@ -7,8 +7,8 @@ import { useColorScheme } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import { GearSix as GearSixIcon } from '@phosphor-icons/react/dist/ssr/GearSix';
 
-import { setSettings as setPersistedSettings } from '@/lib/settings/set-settings';
-import { useSettings } from '@/hooks/use-settings';
+import { setSettings as setPersistedSettings } from '/src/lib/settings/set-settings';
+import { useSettings } from '/src/hooks/use-settings';
 
 import { SettingsDrawer } from './settings-drawer';
 
@@ -52,7 +52,7 @@ export function SettingsButton() {
             setOpenDrawer(true);
           }}
           sx={{
-            animation: 'spin 4s linear infinite',
+            animation: 'spin 34s linear infinite',
             background: 'var(--mui-palette-neutral-900)',
             border: 'none',
             borderRadius: '50%',
@@ -64,9 +64,9 @@ export function SettingsButton() {
             m: 4,
             p: '10px',
             position: 'fixed',
-            right: 0,
+            left: 0,
             width: '40px',
-            zIndex: 'var(--mui-zIndex-speedDial)',
+            zIndex: 1500,
             '&:hover': { bgcolor: 'var(--mui-palette-neutral-700)' },
             '@keyframes spin': { '0%': { rotate: '0' }, '100%': { rotate: '360deg' } },
           }}

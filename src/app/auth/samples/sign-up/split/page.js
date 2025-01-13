@@ -12,8 +12,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/ArrowLeft';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
 import { SplitLayout } from '@/components/auth/split-layout';
 import { DynamicLogo } from '@/components/core/logo';
 

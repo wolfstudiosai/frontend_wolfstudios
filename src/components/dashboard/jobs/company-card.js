@@ -10,7 +10,7 @@ import { SealCheck as SealCheckIcon } from '@phosphor-icons/react/dist/ssr/SealC
 import { Star as StarIcon } from '@phosphor-icons/react/dist/ssr/Star';
 import { Users as UsersIcon } from '@phosphor-icons/react/dist/ssr/Users';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 import { JobsCard } from './jobs-card';
 

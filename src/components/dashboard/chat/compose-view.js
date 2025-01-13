@@ -5,11 +5,10 @@ import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 
-import { paths } from '@/paths';
-
 import { ChatContext } from './chat-context';
 import { GroupRecipients } from './group-recipients';
 import { MessageAdd } from './message-add';
+import { paths } from '/src/paths';
 
 function useRecipients() {
   const [recipients, setRecipients] = React.useState([]);
@@ -50,7 +49,8 @@ export function ComposeView() {
 
       createMessage({ threadId, type, content });
 
-      router.push(paths.dashboard.chat.thread('group', threadId));
+      // router.push(paths.dashboard.chat_thread('group', threadId));
+      router.push(paths.dashboard.chat + '/' + 'group' + '/' + threadId);
     },
     [router, createThread, createMessage, recipients]
   );

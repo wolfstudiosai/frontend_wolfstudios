@@ -15,7 +15,7 @@ import { EnvelopeSimple as EnvelopeSimpleIcon } from '@phosphor-icons/react/dist
 import { ShoppingCartSimple as ShoppingCartSimpleIcon } from '@phosphor-icons/react/dist/ssr/ShoppingCartSimple';
 import { Truck as TruckIcon } from '@phosphor-icons/react/dist/ssr/Truck';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 
 export function EventsTimeline({ events }) {
   return (

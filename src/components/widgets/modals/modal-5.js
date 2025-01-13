@@ -12,7 +12,7 @@ import { ChatText as ChatTextIcon } from '@phosphor-icons/react/dist/ssr/ChatTex
 import { CreditCard as CreditCardIcon } from '@phosphor-icons/react/dist/ssr/CreditCard';
 import { ShoppingCartSimple as ShoppingCartSimpleIcon } from '@phosphor-icons/react/dist/ssr/ShoppingCartSimple';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 
 const notifications = [
   {

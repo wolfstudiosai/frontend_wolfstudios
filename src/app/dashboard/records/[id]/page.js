@@ -1,6 +1,6 @@
 import { CardTitle } from "@/components/cardTitle/CardTitle";
 import { PageContainer } from "@/components/container/PageContainer";
-import { config } from "@/config";
+import { config } from "/src/config";
 import { ManageReport } from "../_components/ManageReport";
 
 export const metadata = { title: `Create Record | ${config.site.name}` };

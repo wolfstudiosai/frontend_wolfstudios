@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import { Clock as ClockIcon } from '@phosphor-icons/react/dist/ssr/Clock';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 export function CourseCard({ course }) {
   return (

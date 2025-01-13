@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { Form1 } from '@/components/widgets/forms/form-1';
 import { Form2 } from '@/components/widgets/forms/form-2';
 import { Form3 } from '@/components/widgets/forms/form-3';

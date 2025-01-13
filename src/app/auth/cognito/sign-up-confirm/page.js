@@ -2,7 +2,7 @@ import * as React from 'react';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { SignUpConfirmForm } from '@/components/auth/cognito/sign-up-confirm-form';
 import { GuestGuard } from '@/components/auth/guest-guard';
 import { SplitLayout } from '@/components/auth/split-layout';

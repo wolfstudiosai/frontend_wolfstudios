@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { DetailList1 } from '@/components/widgets/detail-lists/detail-list-1';
 import { DetailList2 } from '@/components/widgets/detail-lists/detail-list-2';
 import { DetailList3 } from '@/components/widgets/detail-lists/detail-list-3';

@@ -3,6 +3,7 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
+import { DynamicLogo, Logo } from '@/components/core/logo';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -13,14 +14,13 @@ import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/Caret
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
-import { paths } from '@/paths';
-import { isNavItemActive } from '@/lib/is-nav-item-active';
-import { DynamicLogo, Logo } from '@/components/core/logo';
-import { navData } from '@/router';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
+
 import { NavSearch } from './nav-search';
+import { paths } from '/src/paths';
+import { navData } from '@/router';
 
-// NOTE: First level elements are groups.
-
+// todo: remove navItems later
 const navItems = [
   {
     key: 'group-0',
@@ -97,7 +97,7 @@ export function MobileNav({ onClose, open = false }) {
           </IconButton>
         </Stack>
         <Box>
-          <NavSearch isMobile/>
+          <NavSearch isMobile />
         </Box>
         <Box component="nav">
           <Stack component="ul" spacing={1} sx={{ listStyle: 'none', m: 0, p: 0 }}>
@@ -170,29 +170,29 @@ function NavItem({ children, depth, disabled, external, forceOpen = false, href,
       <Box
         {...(isBranch
           ? {
-            onClick: () => {
-              setOpen(!open);
-            },
-            onKeyUp: (event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
+              onClick: () => {
                 setOpen(!open);
-              }
-            },
-            role: 'button',
-          }
+              },
+              onKeyUp: (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  setOpen(!open);
+                }
+              },
+              role: 'button',
+            }
           : {
-            ...(href
-              ? {
-                component: external ? 'a' : RouterLink,
-                href,
-                target: external ? '_blank' : undefined,
-                rel: external ? 'noreferrer' : undefined,
-                onClick: () => {
-                  onClose?.();
-                },
-              }
-              : { role: 'button' }),
-          })}
+              ...(href
+                ? {
+                    component: external ? 'a' : RouterLink,
+                    href,
+                    target: external ? '_blank' : undefined,
+                    rel: external ? 'noreferrer' : undefined,
+                    onClick: () => {
+                      onClose?.();
+                    },
+                  }
+                : { role: 'button' }),
+            })}
         sx={{
           alignItems: 'center',
           borderRadius: 1,

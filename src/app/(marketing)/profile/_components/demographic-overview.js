@@ -1,13 +1,13 @@
 'use client';
 
-import { colorPalette } from '@/app/dashboard/analytics/page';
-import { pxToRem } from '@/utils/utils';
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 
 import { CustomBarGraph } from '@/components/bar-chart/custom-bar-graph';
 import { CustomPieGraph } from '@/components/bar-chart/custom-pie-graph';
+import { pxToRem } from '@/utils/utils';
+import { colorPalette } from '@/constants/constants';
 
 export function DemographicOverview() {
   return (

@@ -10,8 +10,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsThree';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
 import { BreadcrumbsSeparator } from '@/components/core/breadcrumbs-separator';
 import { PostForm } from '@/components/dashboard/blog/post-form';
 

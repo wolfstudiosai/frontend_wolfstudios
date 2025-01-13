@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Link from '@mui/material/Link';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 import { DataTable } from '@/components/data-table/data-table';
 
 const columns = [

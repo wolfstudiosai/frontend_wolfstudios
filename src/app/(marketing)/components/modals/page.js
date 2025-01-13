@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { Layout } from '@/components/widgets/layout';
 import { Modal1 } from '@/components/widgets/modals/modal-1';
 import { Modal2 } from '@/components/widgets/modals/modal-2';

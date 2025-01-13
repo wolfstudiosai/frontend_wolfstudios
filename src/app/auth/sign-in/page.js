@@ -1,6 +1,6 @@
 
 import { GuestGuard } from '@/components/auth/guest-guard';
-import { config } from '@/config';
+import { config } from '/src/config';
 import { LoginForm } from '../_components/LoginForm';
 import { SplitLayout } from '@/components/auth/split-layout';
 

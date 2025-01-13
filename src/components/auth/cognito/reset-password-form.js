@@ -17,7 +17,7 @@ import { resetPassword } from 'aws-amplify/auth';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 import { DynamicLogo } from '@/components/core/logo';
 
 const schema = zod.object({ email: zod.string().min(1, { message: 'Email is required' }).email() });

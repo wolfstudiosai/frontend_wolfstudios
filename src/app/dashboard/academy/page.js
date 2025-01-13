@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid2';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { CourseCard } from '@/components/dashboard/academy/course-card';
 import { CoursesFilters } from '@/components/dashboard/academy/courses-filters';
 import { DailyProgress } from '@/components/dashboard/academy/daily-progress';

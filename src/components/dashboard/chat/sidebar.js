@@ -145,7 +145,7 @@ function SidebarContent({
         </Typography>
         <Button
           component={RouterLink}
-          href={paths.dashboard.chat.compose}
+          href={paths.dashboard.chat_compose}
           onClick={() => {
             if (closeOnGroupClick) {
               onClose?.();

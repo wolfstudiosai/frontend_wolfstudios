@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { sendPasswordResetEmail } from 'firebase/auth';
 
-import { getFirebaseAuth } from '@/lib/auth/firebase/client';
+import { getFirebaseAuth } from '/src/lib/auth/firebase/client';
 
 export function ResetPasswordButton({ children, email }) {
   const [firebaseAuth] = React.useState(getFirebaseAuth());

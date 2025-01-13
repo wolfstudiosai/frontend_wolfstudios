@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Divider from '@mui/material/Divider';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { Faqs } from '@/components/marketing/pricing/faqs';
 import { PlansTable } from '@/components/marketing/pricing/plans-table';
 

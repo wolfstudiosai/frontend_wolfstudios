@@ -1,10 +1,12 @@
+'use client';
+
+import Link from 'next/link';
 import { textShortner } from '@/utils/utils';
-import { Box, Button, Paper, Typography } from '@mui/material';
+import { Box, Paper, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { PortfolioFilter } from './components/portfolio-filter';
 import PortfolioSlider from './components/portfolio-slider';
-import Link from 'next/link';
 
 export const PortfolioView = () => {
   const portfolioData = [
@@ -170,7 +172,7 @@ const PortfolioCard = ({ portfolio }) => {
             href={`portfolio/${portfolio.slug}`}
             style={{
               fontSize: '0.9rem',
-              color: "var(--mui-palette-text-secondary)",
+              color: 'var(--mui-palette-text-secondary)',
             }}
           >
             View Project

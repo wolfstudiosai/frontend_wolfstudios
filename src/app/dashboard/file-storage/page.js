@@ -4,8 +4,8 @@ import Grid from '@mui/material/Grid2';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { config } from '@/config';
-import { dayjs } from '@/lib/dayjs';
+import { config } from '/src/config';
+import { dayjs } from '/src/lib/dayjs';
 import { ItemsFilters } from '@/components/dashboard/file-storage/items-filters';
 import { ItemsPagination } from '@/components/dashboard/file-storage/items-pagination';
 import { Stats } from '@/components/dashboard/file-storage/stats';

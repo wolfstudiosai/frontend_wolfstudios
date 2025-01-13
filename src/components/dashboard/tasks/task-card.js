@@ -10,7 +10,7 @@ import { Chat as ChatIcon } from '@phosphor-icons/react/dist/ssr/Chat';
 import { Link as LinkIcon } from '@phosphor-icons/react/dist/ssr/Link';
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 
 export function TaskCard({ onOpen, task }) {
   const { assignees = [], attachments = [], comments = [], description, dueDate, id, subtasks = [], title } = task;

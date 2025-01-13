@@ -1,6 +1,6 @@
 import { Box, Container } from '@mui/material';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 import { Hero } from '@/components/marketing/home/hero';
 
 import { PortfolioView } from './portfolio-view';

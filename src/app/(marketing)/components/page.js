@@ -9,8 +9,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Link as LinkIcon } from '@phosphor-icons/react/dist/ssr/Link';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
 import { Thumbnail } from '@/components/widgets/thumbnail';
 
 export const metadata = { title: `Components | ${config.site.name}` };

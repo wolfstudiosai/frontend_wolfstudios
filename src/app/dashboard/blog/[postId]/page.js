@@ -12,9 +12,9 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { config } from '@/config';
-import { paths } from '@/paths';
-import { dayjs } from '@/lib/dayjs';
+import { config } from '/src/config';
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
 import { BreadcrumbsSeparator } from '@/components/core/breadcrumbs-separator';
 import { CommentAdd } from '@/components/dashboard/blog/comment-add';
 import { CommentBox } from '@/components/dashboard/blog/comment-box';

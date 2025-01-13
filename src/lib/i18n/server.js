@@ -1,10 +1,10 @@
 import { createInstance } from 'i18next';
 
-import { applyDefaultSettings } from '@/lib/settings/apply-default-settings';
-import { getSettings as getPersistedSettings } from '@/lib/settings/get-settings';
-import { de } from '@/locales/de';
-import { en } from '@/locales/en';
-import { es } from '@/locales/es';
+import { applyDefaultSettings } from '/src/lib/settings/apply-default-settings';
+import { getSettings as getPersistedSettings } from '/src/lib/settings/get-settings';
+import { de } from '/src/locales/de';
+import { en } from '/src/locales/en';
+import { es } from '/src/locales/es';
 
 async function initI18next() {
   const settings = applyDefaultSettings(await getPersistedSettings());

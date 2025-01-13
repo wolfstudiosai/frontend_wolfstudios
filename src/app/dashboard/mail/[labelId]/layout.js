@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 import { MailProvider } from '@/components/dashboard/mail/mail-context';
 import { MailView } from '@/components/dashboard/mail/mail-view';
 

@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '/src/lib/dayjs';
 import { CompanyReviewAdd } from '@/components/dashboard/jobs/review-add';
 import { ReviewCard } from '@/components/dashboard/jobs/review-card';
 import { ReviewsSummary } from '@/components/dashboard/jobs/reviews-summary';
