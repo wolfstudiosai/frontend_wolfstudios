@@ -131,6 +131,7 @@ export const PortfolioView = () => {
           fontSize: {
             xs: '1.4rem',
             md: '2rem',
+            marginTop:'10px'
           },
           lineHeight: 1,
         }}
