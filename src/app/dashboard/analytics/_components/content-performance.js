@@ -4,7 +4,7 @@ import { TotalContributedEngagement } from "./total-contributed-engagement";
 import { IgViewsByPost } from "@/components/dashboard/analytics/ig-views-by-post";
 import { NumberOfAssestsByCampaign } from "./number-of-assests-by-campaign";
 import { PercentOfAssetsByProduct } from "./percent-of-assets-by-product";
-import { colorPalette } from "../page";
+import { colorPalette } from '@/constants/constants';
 
 export const ContentPerformance = () => {
     return (

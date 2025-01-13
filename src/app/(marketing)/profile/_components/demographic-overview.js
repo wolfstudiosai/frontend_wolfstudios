@@ -6,8 +6,8 @@ import Typography from '@mui/material/Typography';
 
 import { CustomBarGraph } from '@/components/bar-chart/custom-bar-graph';
 import { CustomPieGraph } from '@/components/bar-chart/custom-pie-graph';
-import { colorPalette } from '../../../dashboard/analytics/page';
 import { pxToRem } from '@/utils/utils';
+import { colorPalette } from '@/constants/constants';
 
 export function DemographicOverview() {
   return (

@@ -44,7 +44,7 @@ const getValidationSchema = (isUpdated) => {
   });
 };
 
-const Page = ({ data }) => {
+const Page = () => {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
   const searchParam = useSearchParams();
