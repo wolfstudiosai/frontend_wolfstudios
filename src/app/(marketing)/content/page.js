@@ -1,3 +1,4 @@
+import { ComingSoon } from '@/components/coming-soon/comming-soong';
 import { Container } from '@mui/material';
 
 import { config } from '/src/config';
@@ -76,7 +77,7 @@ export default function Page() {
 
   return (
     <Container maxWidth="xl">
-      <ContentView data={tempData} />
+      <ComingSoon pageName={'Content'} />
     </Container>
   );
 }
