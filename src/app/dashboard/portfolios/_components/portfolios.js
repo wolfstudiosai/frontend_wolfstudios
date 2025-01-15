@@ -26,7 +26,8 @@ export default function Portfolios() {
   const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
   const [totalPortfolios, setTotalPortfolios] = React.useState(0);
-  const [status, setStatus] = React.useState('PENDING');
+  const [status, setStatus] = React.useState('');
+  const [selectedRows, setSelectedRows] = React.useState([]);
 
   const fetchList = async () => {
     try {
@@ -47,11 +48,16 @@ export default function Portfolios() {
       setLoading(false);
     }
   };
-  const handleDelete = async (id) => {
-    const response = await deletePortfolio(id);
-    if (response.success) {
-      fetchList();
-    }
+
+  const handleDelete = async () => {
+    const idsToDelete = [];
+        selectedRows.forEach((row) => {
+          idsToDelete.push(row.id);
+        });
+        const response = await deletePortfolio(idsToDelete);
+        if (response.success) {
+          fetchList();
+        }
   };
 
   React.useEffect(() => {
@@ -67,10 +73,6 @@ export default function Portfolios() {
               <PencilSimpleIcon />
             </IconButton>
           </Link>
-          <DeleteConfirmationPopover
-            onDelete={() => handleDelete(row.id)}
-            title={`Want to delete the Portfolio "${row.name}"?`}
-          />
         </Stack>
       ),
       name: 'Actions', // Custom column for actions
@@ -204,24 +206,46 @@ export default function Portfolios() {
               columns={columns}
               rows={portfolios}
               uniqueRowId="id"
-              selectionMode="none"
+              selectionMode="multiple"
               leftItems={
                 <>
                   <FilterButton
                     displayValue={status}
                     label="Status"
                     onFilterApply={(value) => setStatus(value)}
-                    onFilterDelete={() => setStatus('')}
-                    popover={<StatusFilterPopover />}
+                    onFilterDelete={() => {
+                      handlePhoneChange();
+                    }}
+                    popover={
+                      <StatusFilterPopover
+                        options={[
+                          { value: '', label: 'All' },
+                          { value: 'PENDING', label: 'Pending' },
+                          { value: 'APPROVED', label: 'Approved' },
+                          { value: 'REJECTED', label: 'Rejected' },
+                          { value: 'COMPLETED', label: 'Completed' },
+                        ]}
+                      />
+                    }
                     value={status}
                   />
                   <RefreshPlugin onClick={fetchList} />
+                </>
+              }
+              rightItems={
+                <>
+                  <DeleteConfirmationPopover
+                    disabled={selectedRows.length === 0}
+                    onDelete={handleDelete}
+                    title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
+                  />
                 </>
               }
               onRowsPerPageChange={(pageNumber, rowsPerPage) =>
                 setPagination({ pageNo: pageNumber, limit: rowsPerPage })
               }
               onPageChange={(newPageNumber) => setPagination({ ...pagination, pageNo: newPageNumber })}
+              onSelection={(selectedRows) => setSelectedRows?.(selectedRows)}
             />
             {!portfolios?.length ? (
               <Box sx={{ p: 3 }}>
