@@ -136,7 +136,7 @@ export const PortfolioView = () => {
           lineHeight: 1,
         }}
       >
-        Portfolios
+        PORTFOLIOS
       </Typography>
       <PortfolioFilter />
       <Grid container spacing={2}>
@@ -153,20 +153,20 @@ export const PortfolioView = () => {
 const PortfolioCard = ({ portfolio }) => {
   return (
     <Box>
-      <Paper elevation={1} variant="outlined">
+      <Paper elevation={1} sx={{ backgroundColor: '#ebebeb', boxShadow: 'none' }}>
         <Box
           component="img"
           src={portfolio.image}
-          sx={{ height: 200, width: '100%', objectFit: 'cover', border: 0, borderRadius: '5px 5px 0 0' }}
+          sx={{ height: 200, width: '100%', objectFit: 'cover', border: 0, borderRadius: '20px', boxShadow:'0 2px 5px #0003' }}
         />
-        <Box p={2}>
-          <Typography color="text.secondary" sx={{ fontWeight: 600 }}>
+        <Box py={2}>
+          <Typography variant="cardTitle" sx={{ display: 'block', marginBottom: '8px' }}>
             {portfolio.title}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="cardSubTitle" sx={{ display: 'block', marginBottom: '8px' }}>
             {textShortner(portfolio.description, 80)}
           </Typography>
-          <Typography variant="body2" color="text.secondary" fontWeight={600}>
+          <Typography variant="cardSubTitle" sx={{ display: 'block', marginBottom: '8px' }}>
             Model: {portfolio.model || '-'}
           </Typography>
           <Link
@@ -176,7 +176,7 @@ const PortfolioCard = ({ portfolio }) => {
               color: 'var(--mui-palette-text-secondary)',
             }}
           >
-            View Project
+            View Portfolio
           </Link>
         </Box>
       </Paper>
