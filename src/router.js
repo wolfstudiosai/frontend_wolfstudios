@@ -142,6 +142,13 @@ export const dashboardItems = [
         icon: 'solar:user-linear',
         allowedRoles: ['admin'],
       },
+      {
+        key: 'chat',
+        title: 'Chat',
+        href: paths.dashboard.chat,
+        icon: 'fluent:chat-24-filled',
+        allowedRoles: ['admin',],
+      }
     ],
   },
 ];

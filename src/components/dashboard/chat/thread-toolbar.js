@@ -74,12 +74,12 @@ export function ThreadToolbar({ thread }) {
           </Box>
         </Stack>
         <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-          <IconButton>
+          {/* <IconButton>
             <PhoneIcon />
           </IconButton>
           <IconButton>
             <CameraIcon />
-          </IconButton>
+          </IconButton> */}
           <Tooltip title="More options">
             <IconButton onClick={popover.handleOpen} ref={popover.anchorRef}>
               <DotsThreeIcon weight="bold" />
