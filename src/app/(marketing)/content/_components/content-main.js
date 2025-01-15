@@ -97,12 +97,12 @@ export const ContentMain = () => {
       <Box
         component="div"
         sx={{
-          columnCount: 4,
-          columnWidth: '33%',
-          WebkitColumnCount: 4,
-          WebkitColumnWidth: '33%',
-          MozColumnCount: 4,
-          MozColumnWidth: '33%',
+          '@media screen and (min-width: 1921px) and (max-width: 2560px)': {
+            columnCount: 8,
+          },
+          '@media screen and (min-width: 1281px) and (max-width: 1920px)': {
+            columnCount: 5,
+          },
           '@media screen and (min-width: 1024px) and (max-width: 1280px)': {
             columnCount: 3,
           },
