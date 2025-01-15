@@ -1,15 +1,12 @@
-'use client';
-
 import Link from 'next/link';
 import { textShortner } from '@/utils/utils';
 import { Box, Paper, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
-import { PortfolioFilter } from './components/portfolio-filter';
-import PortfolioSlider from './components/portfolio-slider';
+import { ContentMain } from './content-main';
 
-export const PortfolioView = () => {
-  const portfolioData = [
+export const ContentList = () => {
+  const contentData = [
     {
       title: 'Mary Ann',
       slug: 'mary-ann',
@@ -17,7 +14,7 @@ export const PortfolioView = () => {
       model: 'Mary Ann',
       dp: 'Combina Key',
       projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=1', // Placeholder image
+      image: 'https://picsum.photos/300/200?random=1',
     },
     {
       title: 'Prints: Abstract',
@@ -25,7 +22,7 @@ export const PortfolioView = () => {
       description: 'On Session production for portraits, shot by Combina in November 2016.',
       dp: 'Combina Key',
       projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=2', // Placeholder image
+      image: 'https://picsum.photos/300/200?random=2',
     },
     {
       title: 'Kansha: Love Bite',
@@ -34,7 +31,7 @@ export const PortfolioView = () => {
       publication: 'Kansha',
       dp: 'Combina Key',
       projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=3', // Placeholder image
+      image: 'https://picsum.photos/300/200?random=3',
     },
     {
       title: 'Pump Magazine: Sharee',
@@ -44,7 +41,7 @@ export const PortfolioView = () => {
       publication: 'Pump Magazine',
       dp: 'Combina Key',
       projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=4', // Placeholder image
+      image: 'https://picsum.photos/300/200?random=4',
     },
     {
       title: 'Elegant Magazine: Elena',
@@ -54,7 +51,7 @@ export const PortfolioView = () => {
       publication: 'Elegant Magazine',
       dp: 'Combina Key',
       projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=5', // Placeholder image
+      image: 'https://picsum.photos/300/200?random=5',
     },
     {
       title: 'Imirage Mag',
@@ -63,7 +60,7 @@ export const PortfolioView = () => {
       publication: 'Imirage Mag',
       dp: 'Combina Key',
       projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=6', // Placeholder image
+      image: 'https://picsum.photos/300/200?random=6',
     },
     {
       title: 'Tamara Rzaeva',
@@ -72,7 +69,7 @@ export const PortfolioView = () => {
       model: 'Tamara Rzaeva',
       dp: 'Combina Key',
       projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=7', // Placeholder image
+      image: 'https://picsum.photos/300/200?random=7',
     },
     {
       title: 'Street Style: Karla Marie',
@@ -81,7 +78,7 @@ export const PortfolioView = () => {
       model: 'Karla Marie',
       dp: 'Combina Key',
       projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=8', // Placeholder image
+      image: 'https://picsum.photos/300/200?random=8',
     },
     {
       title: 'Shuba Magazine: Jyaira Moore',
@@ -90,7 +87,7 @@ export const PortfolioView = () => {
       model: 'Jyaira Moore',
       dp: 'Combina Key',
       projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=9', // Placeholder image
+      image: 'https://picsum.photos/300/200?random=9',
     },
     {
       title: 'Elena Tretyakova',
@@ -99,7 +96,7 @@ export const PortfolioView = () => {
       model: 'Elena Tretyakova',
       dp: 'Combina Key',
       projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=10', // Placeholder image
+      image: 'https://picsum.photos/300/200?random=10',
     },
     {
       title: 'Lissa DeLorenzo',
@@ -108,7 +105,7 @@ export const PortfolioView = () => {
       model: 'Lissa DeLorenzo',
       dp: 'Combina Key',
       projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=11', // Placeholder image
+      image: 'https://picsum.photos/300/200?random=11',
     },
     {
       title: 'Lydia DTLA',
@@ -117,66 +114,59 @@ export const PortfolioView = () => {
       model: 'Lydia',
       dp: 'Combina Key',
       projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=12', // Placeholder image
+      image: 'https://picsum.photos/300/200?random=12',
     },
   ];
 
   return (
-    <Box sx={{ py: 4 }}>
-      <PortfolioSlider />
-      <Typography
-        gutterBottom
-        sx={{
-          fontWeight: 300,
-          fontSize: {
-            xs: '1.4rem',
-            md: '2rem',
-            marginTop:'10px'
-          },
-          lineHeight: 1,
-        }}
-      >
-        PORTFOLIOS
-      </Typography>
-      <PortfolioFilter />
-      <Grid container spacing={2}>
-        {portfolioData.map((portfolio, index) => (
-          <Grid item size={{ xs: 12, md: 3 }} key={index}>
-            <PortfolioCard portfolio={portfolio} />
-          </Grid>
-        ))}
+    <>
+      <Box sx={{ overflowX: 'auto' }}>
+        <Grid
+          container
+          spacing={2}
+          sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', marginBottom: '15px' }}
+        >
+          {contentData.map((content, index) => (
+            <Grid item size={{ xs: 12, md: 3 }} key={index} sx={{ flex: '0 0 auto' }}>
+              <ContentCard content={content} />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+      <Grid container spacing={2} sx={{ py: 2 }}>
+        <ContentMain />
       </Grid>
-    </Box>
+    </>
   );
 };
 
-const PortfolioCard = ({ portfolio }) => {
+const ContentCard = ({ content }) => {
   return (
     <Box>
-      <Paper elevation={1} sx={{ backgroundColor: '#ebebeb', boxShadow: 'none' }}>
+      <Paper elevation={1} variant="outlined">
         <Box
           component="img"
-          src={portfolio.image}
-          sx={{ height: 200, width: '100%', objectFit: 'cover', border: 0, borderRadius: '20px', boxShadow:'0 2px 5px #0003' }}
+          src={content.image}
+          sx={{ height: 200, width: '100%', objectFit: 'cover', border: 0, borderRadius: '5px 5px 0 0' }}
         />
-        <Box py={2}>
-          <Typography variant="cardTitle" sx={{ display: 'block', marginBottom: '8px' }}>
-            {portfolio.title}
+        <Box p={2}>
+          <Typography color="text.secondary" sx={{ fontWeight: 600 }}>
+            {content.title}
           </Typography>
-          <Typography variant="cardSubTitle" sx={{ display: 'block', marginBottom: '8px' }}>
-            {textShortner(portfolio.description, 80)}
+          <Typography variant="body2" color="text.secondary">
+            {textShortner(content.description, 80)}
           </Typography>
-          <Typography variant="cardSubTitle" sx={{ display: 'block', marginBottom: '8px' }}>
-            Model: {portfolio.model || '-'}
+          <Typography variant="body2" color="text.secondary" fontWeight={600}>
+            Model: {content.model || '-'}
           </Typography>
           <Link
-            href={`portfolio/${portfolio.slug}`}
+            href={`content/${content.slug}`}
             style={{
               fontSize: '0.9rem',
               color: 'var(--mui-palette-text-secondary)',
             }}
           >
-            View Portfolio
+            View Project
           </Link>
         </Box>
       </Paper>

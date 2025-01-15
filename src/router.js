@@ -136,10 +136,39 @@ export const dashboardItems = [
         allowedRoles: ['admin'],
       },
       {
+        key: 'content',
+        title: 'Content',
+        icon: 'pepicons-pencil:file',
+        allowedRoles: ['admin'],
+        items: [
+          {
+            key: 'content',
+            title: 'Content',
+            href: paths.dashboard.content,
+            icon: 'lsicon:user-crowd-outline',
+            allowedRoles: ['admin'],
+          },
+          {
+            key: 'create_content',
+            title: 'Add Content',
+            href: paths.dashboard.create_content,
+            icon: 'fluent:document-copy-20-regular',
+            allowedRoles: ['admin'],
+          },
+        ],
+      },
+      {
         key: 'usrs',
         title: 'Users',
         href: paths.dashboard.users,
         icon: 'solar:user-linear',
+        allowedRoles: ['admin'],
+      },
+      {
+        key: 'chat',
+        title: 'Chat',
+        href: paths.dashboard.chat,
+        icon: 'fluent:chat-24-filled',
         allowedRoles: ['admin'],
       },
     ],
@@ -151,5 +180,5 @@ export const additionalRoutes = [
   {
     href: paths.dashboard.chat,
     allowedRoles: ['admin', 'user'],
-  }
+  },
 ];

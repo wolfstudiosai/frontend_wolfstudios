@@ -54,14 +54,14 @@ export const PortfolioFilter = () => {
   }, [pathname, router]);
 
   return (
-    <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1, mt: 2, mb: 6 }}>
+    <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1, mt: 2, mb: 4 }}>
       {CATEGORIES.map((item) => (
         <Button
           key={item}
           onClick={() => handleFilter(item)}
           variant={selectedCategories.includes(item) ? 'contained' : 'outlined'}
           sx={{ borderRadius: 4 }}
-          size="small"
+          size="medium"
           color="secondary"
         >
           {item}

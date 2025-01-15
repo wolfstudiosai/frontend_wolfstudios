@@ -44,7 +44,7 @@ export function MainNav() {
           padding: 0,
         }}
       >
-        <Container maxWidth="xl" sx={{ minHeight: 'var(--MainNav-height)', py: '8px', my: 2 }}>
+        <Container maxWidth="xxl" sx={{ minHeight: 'var(--MainNav-height)', py: '8px', my: 2 }}>
           <Stack
             direction="row"
             spacing={2}

@@ -28,6 +28,10 @@ export const paths = {
     profile: '/dashboard/settings/account',
     security: '/dashboard/settings/security',
 
+    // content
+    content: '/dashboard/content',
+    create_content: '/dashboard/add-content',
+
     // can be removed later on
     settings: {
       account: '/dashboard/settings/account',

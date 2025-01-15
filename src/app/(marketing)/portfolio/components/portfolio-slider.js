@@ -1,12 +1,9 @@
 'use client';
 
-import {
-  Box,
-  IconButton
-} from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
+import { Box, IconButton } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
 
 import PortfolioSliderItem from './portfolio-slider-item';
 
@@ -173,6 +170,7 @@ export default function PortfolioSlider() {
       sx={{
         position: 'relative',
         width: '100%',
+        height: '100%',
         mx: 'auto',
         overflow: 'hidden',
         mb: 6,
@@ -180,7 +178,7 @@ export default function PortfolioSlider() {
       onMouseEnter={() => setAutoSlideActive(false)}
       onMouseLeave={() => setAutoSlideActive(true)}
     >
-      <Box sx={{ position: 'relative', height: { xs: '300px', md: '400px' } }}>
+      <Box sx={{ position: 'relative', height: { xs: '100%', md: '662px' } }}>
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={currentIndex}
@@ -209,10 +207,10 @@ export default function PortfolioSlider() {
                   position: 'absolute',
                   left: 0,
                   top: 0,
-                  width: '16%',
+                  width: { xs: '0%', md: '16%' }, // Hide on small screens, 16% on larger
                   height: '100%',
-                  opacity: 0.7,
-                  display: 'flex',
+                  opacity: { xs: 0, md: 0.7 }, // Hide on small screens
+                  display: { xs: 'none', md: 'flex' }, // Hide on small screens
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderRadius: '20px',
@@ -226,9 +224,9 @@ export default function PortfolioSlider() {
                 sx={{
                   borderRadius: '20px',
                   position: 'absolute',
-                  left: '16%',
+                  left: { xs: '0%', md: '16%' }, // Full width on small screens, adjust on larger
                   top: 0,
-                  width: '68%',
+                  width: { xs: '100%', md: '68%' }, // Full width on small screens, 68% on larger
                   height: '100%',
                   px: '16px',
                   display: 'flex',
@@ -246,10 +244,10 @@ export default function PortfolioSlider() {
                   position: 'absolute',
                   right: 0,
                   top: 0,
-                  width: '16%',
+                  width: { xs: '0%', md: '16%' }, // Hide on small screens, 16% on larger
                   height: '100%',
-                  opacity: 0.7,
-                  display: 'flex',
+                  opacity: { xs: 0, md: 0.7 }, // Hide on small screens
+                  display: { xs: 'none', md: 'flex' }, // Hide on small screens
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
