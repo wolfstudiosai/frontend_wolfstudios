@@ -1,5 +1,4 @@
 import { publicApi } from '/src/utils/api';
-import { Container } from '@mui/material';
 
 import { config } from '/src/config';
 
@@ -12,8 +11,8 @@ export default async function Page() {
   const data = res.data?.data || [];
 
   return (
-    <Container maxWidth="xl">
+    <>
       <CampaignView data={data || []} />
-    </Container>
+    </>
   );
 }

@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export const Footer = () => {
     return (
-        <Container maxWidth="xl" sx={{ py: { xs: 4, md: 8 } }}>
+        <Container maxWidth="xxl" sx={{ py: { xs: 4, md: 8 } }}>
             <Grid container spacing={4} justifyContent="space-between">
                 {/* Column 1 */}
                 <Grid item

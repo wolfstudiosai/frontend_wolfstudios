@@ -1,9 +1,8 @@
 import * as React from 'react';
-import GlobalStyles from '@mui/material/GlobalStyles';
-
-// import { MainNav } from '@/components/navbar/main-nav';
-import { MainNav } from '@/components/navbar/main-nav';
 import { Footer } from '@/components/navbar/footer';
+import { MainNav } from '@/components/navbar/main-nav';
+import { Container } from '@mui/material';
+import GlobalStyles from '@mui/material/GlobalStyles';
 
 export default function Layout({ children }) {
   return (
@@ -24,7 +23,10 @@ export default function Layout({ children }) {
       />
       <div>
         <MainNav />
-        <main style={{ minHeight: "calc(100vh - 360px)" }}>{children}</main>
+        {/* <main style={{ minHeight: "calc(100vh - 360px)" }}>{children}</main> */}
+        <main style={{ minHeight: 'calc(100vh - 360px)' }}>
+          <Container maxWidth="xxl">{children}</Container>
+        </main>
         <Footer />
       </div>
     </React.Fragment>
