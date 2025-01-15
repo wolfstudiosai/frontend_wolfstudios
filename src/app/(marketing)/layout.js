@@ -24,7 +24,7 @@ export default function Layout({ children }) {
       />
       <div>
         <MainNav />
-        <main style={{ minHeight: "calc(100vh - 360px)" }}>{children}</main>
+        <main style={{ minHeight: 'calc(100vh - 360px)', backgroundColor: '#ebebeb' }}>{children}</main>
         <Footer />
       </div>
     </React.Fragment>
