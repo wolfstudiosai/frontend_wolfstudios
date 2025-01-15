@@ -41,6 +41,8 @@ export function AuthGuard({ children }) {
       router.replace(href);
       return;
     }
+
+    console.log(role, 'role.....');
     // redirect to not-authorized if the user is logged in but not authorized
     if (role && !isUserAuthorizedToAccessThisRoute(role, pathname)) {
       const href = paths.auth.default.not_authorized;
