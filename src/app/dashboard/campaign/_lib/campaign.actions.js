@@ -1,8 +1,9 @@
+import { ConsoleLogger } from 'aws-amplify/utils';
+import { toast } from 'sonner';
+
 import { getSearchQuery } from '/src/helper/common';
 import { api, publicApi } from '/src/utils/api';
 import { uploadFileAsync } from '/src/utils/upload-file';
-import { ConsoleLogger } from 'aws-amplify/utils';
-import { toast } from 'sonner';
 
 export const getCampaignListAsync = async (queryParams) => {
   try {
@@ -55,7 +56,10 @@ export const updateUCampaignAsync = async (file, data) => {
       const uploadResponse = await uploadFileAsync(file);
       thumbnailPath = uploadResponse[0].path;
     }
-    const res = await api.patch(`/campaign/update/${id}`, { ...rest, thumbnail: thumbnailPath });
+    const res = await api.patch(`/campaign/update/${id}`, {
+      ...rest,
+      thumbnail: thumbnailPath ? thumbnailPath : data.thumbnail,
+    });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
