@@ -54,7 +54,7 @@ export function SideNav({ color = 'evident', items = [] }) {
       <Stack spacing={2} sx={{ p: 2 }}>
         <div>
           <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
-            <DynamicLogo color={logoColor} height={32} width={122} />
+            <DynamicLogo color={logoColor} height={32} width={122} isDashboard ={true} />
           </Box>
         </div>
         {/* <WorkspacesSwitch /> */}
