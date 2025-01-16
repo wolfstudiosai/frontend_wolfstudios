@@ -6,10 +6,11 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
-import { CreditCard as CreditCardIcon } from '@phosphor-icons/react/dist/ssr/CreditCard';
+import { ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
 import { LockKey as LockKeyIcon } from '@phosphor-icons/react/dist/ssr/LockKey';
 import { User as UserIcon } from '@phosphor-icons/react/dist/ssr/User';
 
@@ -33,6 +34,21 @@ const user = {
 
 export function UserPopover({ anchorEl, onClose, open }) {
   const { userInfo } = useAuth();
+  const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
+
+  const onClickSwitchAccount = (event) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+
+  const onSelectAccount = () => {
+    // logic for choosing account
+    handleMenuClose();
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
+  };
+
   return (
     <Popover
       anchorEl={anchorEl}
@@ -73,7 +89,12 @@ export function UserPopover({ anchorEl, onClose, open }) {
           </ListItemIcon>
           Settings
         </MenuItem>
-
+        <MenuItem onClick={onClickSwitchAccount}>
+          <ListItemIcon>
+            <ChevronLeftIcon sx={{ ml: 'auto' }} />
+          </ListItemIcon>
+          Switch Account
+        </MenuItem>
       </List>
       <Divider />
       <Box sx={{ p: 1 }}>
@@ -83,6 +104,19 @@ export function UserPopover({ anchorEl, onClose, open }) {
         {config.auth.strategy === AuthStrategy.FIREBASE ? <FirebaseSignOut /> : null}
         {config.auth.strategy === AuthStrategy.SUPABASE ? <SupabaseSignOut /> : null}
       </Box>
+      {/* Switch Account Menu */}
+      <Menu
+        anchorEl={menuAnchorEl}
+        anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        open={Boolean(menuAnchorEl)}
+        onClose={handleMenuClose}
+      >
+        {/* here we can add our Account getting from API */}
+        <MenuItem onClick={onSelectAccount}>Account 1</MenuItem>
+        <MenuItem onClick={onSelectAccount}>Account 2</MenuItem>
+        <MenuItem onClick={onSelectAccount}>Account 3</MenuItem>
+      </Menu>
     </Popover>
   );
 }

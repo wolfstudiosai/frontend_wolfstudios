@@ -18,7 +18,7 @@ import { navColorStyles } from './styles';
 import { DynamicLogo } from '@/components/core/logo';
 import { Iconify } from '@/components/iconify/iconify';
 import { isNavItemActive } from '/src/lib/is-nav-item-active';
-import { paths } from '/src/paths';
+import { paths } from '@/paths';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
@@ -53,7 +53,7 @@ export function SideNav({ color = 'evident', items = [] }) {
     >
       <Stack spacing={2} sx={{ p: 2 }}>
         <div>
-          <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
+          <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
             <DynamicLogo color={logoColor} height={32} width={122} />
           </Box>
         </div>
