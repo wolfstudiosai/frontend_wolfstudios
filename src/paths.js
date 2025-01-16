@@ -7,13 +7,20 @@ export const paths = {
   dashboard: {
     overview: '/dashboard',
     analytics: '/dashboard/analytics',
+
+    // campaign
     campaign: '/dashboard/campaign',
     create_campaign: '/dashboard/campaign/create',
+    campaign_view: '/dashboard/campaign/public-view',
 
-    // admin
+    // records
     records: '/dashboard/records',
+
+    // partner
     partner: '/dashboard/partner',
     create_partner: '/dashboard/partner/create',
+    partner_view: '/dashboard/partner/view',
+
     portfolios: '/dashboard/portfolios',
     create_portfolio: '/dashboard/portfolios/add-portfolio',
     partners_by_campaign: '/dashboard/partners-by-campaign',

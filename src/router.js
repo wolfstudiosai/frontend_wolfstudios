@@ -41,11 +41,11 @@ export const navData = [
         key: 'workshops',
         title: 'Workshops',
       },
-      {
-        key: 'login',
-        title: 'Login',
-        href: paths.auth.default.sign_in,
-      },
+      // {
+      //   key: 'login',
+      //   title: 'Login',
+      //   href: paths.auth.default.sign_in,
+      // },
     ],
   },
 ];
@@ -71,11 +71,25 @@ export const dashboardItems = [
         allowedRoles: ['admin', 'user'],
       },
       {
-        key: 'Campaign',
+        key: 'campaign',
         title: 'Campaign',
-        href: paths.dashboard.campaign,
-        icon: 'material-symbols-light:ads-click',
-        allowedRoles: ['admin', 'user'],
+        icon: 'pepicons-pencil:file',
+        items: [
+          {
+            key: 'campaign',
+            title: 'Campaign',
+            href: paths.dashboard.campaign,
+            icon: 'material-symbols-light:ads-click',
+            allowedRoles: ['admin', 'user'],
+          },
+          {
+            key: 'campaign_view',
+            title: 'Campaign View',
+            href: paths.dashboard.campaign_view,
+            icon: 'fluent-mdl2:entry-view',
+            allowedRoles: ['admin', 'user'],
+          },
+        ],
       },
     ],
   },

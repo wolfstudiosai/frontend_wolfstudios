@@ -45,7 +45,7 @@ export function VerticalLayout({ children }) {
               component="main"
               sx={{
                 '--Content-margin': '0 auto',
-                '--Content-maxWidth': 'var(--maxWidth-xl)',
+                // '--Content-maxWidth': 'var(--maxWidth-xl)',
                 '--Content-paddingX': '24px',
                 '--Content-paddingY': { xs: '24px', lg: '24px' },
                 '--Content-padding': 'var(--Content-paddingY) var(--Content-paddingX)',

@@ -23,10 +23,11 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
+import { toast } from 'sonner';
 
 import { paths } from '@/paths';
 
-import { deleteCampaignAsync, getCampaignListAsync } from './_lib/campaign.actions';
+import { deleteCampaignAsync, getCampaignListAsync, updateUCampaignAsync } from './_lib/campaign.actions';
 
 export default function Page() {
   const router = useRouter();
@@ -66,6 +67,21 @@ export default function Page() {
     }
   };
 
+  const handleFeatureCampaign = async (row) => {
+    try {
+      setLoading(true);
+      const response = await updateUCampaignAsync(null, { ...row, featured: !row.featured });
+      console.log;
+      if (response.success) {
+        fetchList();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   React.useEffect(() => {
     fetchList();
   }, [pagination, status]);
@@ -77,9 +93,9 @@ export default function Page() {
           <IconButton size="small" title="Edit" onClick={() => router.push(paths.dashboard.campaign + '/' + row.slug)}>
             <PencilSimpleIcon />
           </IconButton>
-          <IconButton size="small" title="Feature Item" onClick={() => setIsFeatured(!isFeatured)}>
+          <IconButton size="small" title="Feature Item" onClick={() => handleFeatureCampaign(row)}>
             <Iconify
-              icon={isFeatured ? 'material-symbols:star-rounded' : 'material-symbols:star-outline-rounded'}
+              icon={row.featured ? 'material-symbols:star-rounded' : 'material-symbols:star-outline-rounded'}
               height={20}
               width={20}
             />

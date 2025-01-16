@@ -2,12 +2,6 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { formConstants } from '/src/app/constants/form-constants';
-import { Box, Button, CircularProgress, FormControl, FormLabel, InputAdornment, InputLabel } from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import { useFormik } from 'formik';
-
-import { paths } from '/src/paths';
 import { TextEditor } from '@/components/core/text-editor/text-editor';
 import { CustomDatePicker } from '@/components/formFields/custom-date-picker';
 import { CustomSelect } from '@/components/formFields/custom-select';
@@ -17,10 +11,15 @@ import { Iconify } from '@/components/iconify/iconify';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
 import PageLoader from '@/components/PageLoader/PageLoader';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
+import { Box, Button, CircularProgress, FormControl, FormLabel, InputAdornment, InputLabel } from '@mui/material';
+import Grid from '@mui/material/Grid2';
+import { useFormik } from 'formik';
 
 import { createCampaignAsync, getCampaignAsync, updateUCampaignAsync } from '../_lib/campaign.actions';
 import { defaultCampaign } from '../_lib/campaign.types';
 import { ContentGuideline } from './content-guideline';
+import { formConstants } from '/src/app/constants/form-constants';
+import { paths } from '/src/paths';
 
 export const ManageCampaignForm = ({ slug }) => {
   const isUpdate = slug ? true : false;
@@ -63,6 +62,11 @@ export const ManageCampaignForm = ({ slug }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDeleteThumbnail = () => {
+    setFieldValue('thumbnail', '');
+    setFile(null);
   };
 
   React.useEffect(() => {
@@ -254,7 +258,7 @@ export const ManageCampaignForm = ({ slug }) => {
               <ImageUploader
                 value={values.thumbnail}
                 onFileSelect={(url) => setFile(url)}
-                onDelete={() => setFile(null)}
+                onDelete={handleDeleteThumbnail}
               />
             </FormControl>
           </Grid>

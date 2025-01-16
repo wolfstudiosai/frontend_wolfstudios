@@ -62,20 +62,6 @@ export function LoginForm() {
 
   return (
     <Stack spacing={4}>
-      <div>
-        <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-block', fontSize: 0 }}>
-          <DynamicLogo colorDark="light" colorLight="dark" height={32} width={122} />
-        </Box>
-      </div>
-      <Stack spacing={1}>
-        <Typography variant="h5">Sign in</Typography>
-        <Typography color="text.secondary" variant="body2">
-          Don&apos;t have an account?{' '}
-          <Link component={RouterLink} href={paths.auth.default.sign_up} variant="subtitle2">
-            Sign up
-          </Link>
-        </Typography>
-      </Stack>
       <Stack spacing={3}>
         <Stack spacing={2}>
           {oAuthProviders.map((provider) => (
@@ -128,11 +114,7 @@ export function LoginForm() {
               </Button>
             </Stack>
           </form>
-          <div>
-            <Link component={RouterLink} href={paths.auth.default.forgotPassword} variant="subtitle2">
-              Forgot password?
-            </Link>
-          </div>
+          
         </Stack>
       </Stack>
 

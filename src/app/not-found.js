@@ -1,17 +1,29 @@
+'use client';
+
 import * as React from 'react';
-import RouterLink from 'next/link';
+import { config } from '@/config';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { config } from '@/config';
 import { paths } from '@/paths';
+import { useRouter, usePathname } from 'next/navigation';
 
 export const metadata = { title: `Not found | ${config.site.name}` };
 
 export default function NotFound() {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleGoBack = () => {
+    if (pathname && pathname.includes('dashboard')) {
+      router.push(paths.dashboard.overview);
+    } else {
+      router.push(paths.home);
+    }
+  };
   return (
     <Box
       component="main"
@@ -41,8 +53,8 @@ export default function NotFound() {
             </Typography>
           </Stack>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Button component={RouterLink} href={paths.home} variant="contained">
-              Back to home
+            <Button onClick={handleGoBack} variant="contained">
+              Go back
             </Button>
           </Box>
         </Stack>

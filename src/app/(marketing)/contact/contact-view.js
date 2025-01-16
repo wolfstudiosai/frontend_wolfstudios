@@ -1,19 +1,15 @@
-import * as React from 'react';
 import RouterLink from 'next/link';
+import { ContactForm } from '@/components/marketing/contact/contact-form';
+import { Customers } from '@/components/marketing/contact/customers';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/ArrowLeft';
 
-import { config } from '/src/config';
 import { paths } from '/src/paths';
-import { ContactForm } from '@/components/marketing/contact/contact-form';
-import { Customers } from '@/components/marketing/contact/customers';
 
-export const metadata = { title: `Contact | ${config.site.name}` };
-
-export default function Page() {
+export const ContactView = () => {
   return (
     <Box
       component="main"
@@ -72,4 +68,4 @@ export default function Page() {
       </Box>
     </Box>
   );
-}
+};
