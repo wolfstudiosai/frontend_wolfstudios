@@ -66,9 +66,30 @@ export function AuthGuard({ children }) {
 }
 
 const isUserAuthorizedToAccessThisRoute = (role, pathname) => {
-  // Check the dashboardItems collection
   const isAuthorizedInDashboardItems = dashboardItems.some((section) => {
     return section.items.some((item) => {
+      // check only those items that have allowedRoles
+      if (!item.allowedRoles) {
+        return true;
+      }
+      // check if it has nested items
+      if (item.items) {
+        return item.items.some((nestedItem) => {
+          // check only those nested items that have allowedRoles
+          if (!nestedItem.allowedRoles) {
+            return true;
+          }
+          if (nestedItem.href === pathname) {
+            return nestedItem.allowedRoles.includes(role);
+          }
+          const baseHref = pathname.split('/').slice(0, 3).join('/');
+          if (nestedItem.href.startsWith(baseHref)) {
+            return nestedItem.allowedRoles.includes(role);
+          }
+          return false;
+        });
+      }
+
       // Handle static route match
       if (item.href === pathname) {
         return item.allowedRoles.includes(role);
@@ -84,19 +105,5 @@ const isUserAuthorizedToAccessThisRoute = (role, pathname) => {
     });
   });
 
-  // Check the additionalRoutes collection
-  const isAuthorizedInAdditionalRoutes = additionalRoutes.some((route) => {
-    console.log(route, 'route.....');
-    if (route.href === pathname) {
-      return route.allowedRoles.includes(role);
-    }
-    const baseHref = pathname.split('/').slice(0, 3).join('/');
-    if (route.href.startsWith(baseHref)) {
-      return route.allowedRoles.includes(role);
-    }
-
-    return false;
-  });
-
-  return isAuthorizedInDashboardItems || isAuthorizedInAdditionalRoutes;
+  return isAuthorizedInDashboardItems;
 };
