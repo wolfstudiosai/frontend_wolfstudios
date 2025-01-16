@@ -118,16 +118,18 @@ export const CampaignView = ({ data }) => {
     },
   ];
 
+  const featuredData = data.filter((item) => item.featured === true);
+
   return (
     <Box sx={{ py: 4 }}>
       <Grid container spacing={4}>
         <Grid item size={{ xs: 12, md: 4 }}>
           <Card>
-            <LeftCampaignOverview data={data}/>
+            <LeftCampaignOverview data={featuredData} />
           </Card>
         </Grid>
         <Grid item size={{ xs: 12, md: 8 }}>
-          <RightCampaignOverview  data={data}/>
+          <RightCampaignOverview data={data} />
         </Grid>
       </Grid>
     </Box>
