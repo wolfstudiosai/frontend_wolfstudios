@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { notFound, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { SplashScreen } from '@/components/splash-screen/splash-screen';
 import { additionalRoutes, dashboardItems } from '@/router';
 
@@ -42,7 +42,6 @@ export function AuthGuard({ children }) {
       return;
     }
 
-    console.log(role, 'role.....');
     // redirect to not-authorized if the user is logged in but not authorized
     if (role && !isUserAuthorizedToAccessThisRoute(role, pathname)) {
       const href = paths.auth.default.not_authorized;
@@ -62,6 +61,7 @@ export function AuthGuard({ children }) {
     return <SplashScreen />;
   }
 
+  // notFound();
   return <>{children}</>;
 }
 
