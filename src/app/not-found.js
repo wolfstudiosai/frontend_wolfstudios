@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import RouterLink from 'next/link';
 import { config } from '@/config';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -10,15 +9,19 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { paths } from '@/paths';
+import { useRouter, usePathname } from 'next/navigation';
 
 export const metadata = { title: `Not found | ${config.site.name}` };
 
 export default function NotFound() {
+  const pathname = usePathname();
+  const router = useRouter();
+
   const handleGoBack = () => {
-    if (window.history.length > 1) {
-      window.history.back();
+    if (pathname && pathname.includes('dashboard')) {
+      router.push(paths.dashboard.overview);
     } else {
-      window.location.href = paths.home;
+      router.push(paths.home);
     }
   };
   return (
