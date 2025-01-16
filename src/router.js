@@ -58,11 +58,11 @@ export const navData = [
           },
         ],
       },
-      {
-        key: 'login',
-        title: 'Login',
-        href: paths.auth.default.sign_in,
-      },
+      // {
+      //   key: 'login',
+      //   title: 'Login',
+      //   href: paths.auth.default.sign_in,
+      // },
     ],
   },
 ];
