@@ -153,13 +153,13 @@ export const PortfolioView = () => {
 const PortfolioCard = ({ portfolio }) => {
   return (
     <Box>
-      <Paper elevation={1} sx={{ backgroundColor: '#ebebeb', boxShadow: 'none' }}>
+      <Paper elevation={1} variant="outlined">
         <Box
           component="img"
           src={portfolio.image}
-          sx={{ height: 200, width: '100%', objectFit: 'cover', border: 0, borderRadius: '20px', boxShadow:'0 2px 5px #0003' }}
+          sx={{ height: 200, width: '100%', objectFit: 'cover', borderRadius: '20px', boxShadow:'0 2px 5px #0003' }}
         />
-        <Box py={2}>
+        <Box p={2}>
           <Typography variant="cardTitle" sx={{ display: 'block', marginBottom: '8px' }}>
             {portfolio.title}
           </Typography>

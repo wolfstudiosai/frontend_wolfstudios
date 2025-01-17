@@ -60,12 +60,7 @@ export const PortfolioFilter = () => {
           key={item}
           onClick={() => handleFilter(item)}
           variant={selectedCategories.includes(item) ? 'contained' : 'outlined'}
-          sx={{ borderRadius: 4,
-            backgroundColor: selectedCategories.includes(item) ? 'primary.main' : 'white',
-           '&:hover': {
-            backgroundColor: selectedCategories.includes(item) ? 'primary.dark' : 'transparent',
-           }
-          }}
+          sx={{ borderRadius: 4}}
           size="medium"
           color="secondary"
         >

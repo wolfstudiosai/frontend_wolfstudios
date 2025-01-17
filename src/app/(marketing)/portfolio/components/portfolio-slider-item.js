@@ -11,7 +11,6 @@ const PortfolioSliderItem = ({ item, index, currentIndex }) => {
         border:'unset',
         overflow: 'hidden',
         position: 'relative',
-        backgroundColor:'unset',
       }}
     >
       <CardMedia
@@ -25,7 +24,6 @@ const PortfolioSliderItem = ({ item, index, currentIndex }) => {
       <CardContent
         sx={{
           width: '100%',
-          color: 'black',
           px: 2,
           display: currentIndex === index ? 'block' : 'none',
           border:'unset'
