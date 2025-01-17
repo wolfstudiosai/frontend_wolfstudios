@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useEffect } from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LoginForm } from '@/app/auth/_components/LoginForm';
@@ -17,18 +18,33 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
+import { MenuIcon } from 'lucide-react';
+
+
 
 import { paths } from '@/paths';
+
+
 
 import { Dialog } from '../dialog/Dialog';
 import { MobileNav } from './mobile-nav';
 import { NavSearch } from './nav-search';
-import { MenuIcon } from 'lucide-react';
+
 
 export function MainNav({toggleSideNav }) {
   const [openNav, setOpenNav] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [openLoginForm, setOpenLoginForm] = React.useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const data = localStorage.getItem('auth');
+    if (data && data.length >= 1) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
 
   return (
     <React.Fragment>
@@ -62,9 +78,11 @@ export function MainNav({toggleSideNav }) {
                 sx={{ listStyle: 'none', m: 0, p: 0 }}
                 alignItems={'center'}
               >
+                {isLoggedIn && (
                 <IconButton onClick={toggleSideNav}>
                   <MenuIcon/>
                 </IconButton>
+                )}
                 {navData.map((section, index) =>
                   section.items.map((item) => (
                     <NavItem
