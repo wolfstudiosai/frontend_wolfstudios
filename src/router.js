@@ -5,7 +5,7 @@ export const navData = [
   {
     key: 'public-navitems',
     items: [
-      { key: 'home', title: 'Home', href: paths.home },
+      // { key: 'home', title: 'Home', href: paths.home },
       {
         key: 'HQs',
         title: 'HQs',
@@ -38,25 +38,8 @@ export const navData = [
         ],
       },
       {
-        key: 'knowledge',
-        title: 'Knowledge',
-        items: [
-          {
-            key: 'about',
-            title: 'About us',
-            href: paths.public.about,
-          },
-          {
-            key: 'contact',
-            title: 'Contact',
-            href: paths.public.contact,
-          },
-          {
-            key: 'blog',
-            title: 'Blog',
-            href: paths.public.blog,
-          },
-        ],
+        key: 'workshops',
+        title: 'Workshops',
       },
       // {
       //   key: 'login',

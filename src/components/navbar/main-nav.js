@@ -88,7 +88,7 @@ export function MainNav() {
                 </Typography>
               </Stack>
             </Box>
-            <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
+            <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
               <Logo height={32} width={122} />
             </Box>
             <Box>
