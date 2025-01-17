@@ -17,7 +17,7 @@ import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 import { isNavItemActive } from '/src/lib/is-nav-item-active';
 
 import { NavSearch } from './nav-search';
-import { paths } from '/src/paths';
+import { paths } from '@/paths';
 import { navData } from '@/router';
 
 // todo: remove navItems later
@@ -89,7 +89,7 @@ export function MobileNav({ onClose, open = false }) {
     >
       <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, minHeight: 0 }}>
         <Stack direction="row" spacing={3} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-          <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
+          <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
             <Logo colorDark="light" colorLight="dark" height={32} width={122} />
           </Box>
           <IconButton onClick={onClose}>

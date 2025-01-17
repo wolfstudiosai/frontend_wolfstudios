@@ -153,6 +153,11 @@
   outline: 2px solid var(--mui-palette-primary-main);
 }
 
+/* For removing portfolio silder box-shadow */
+.MuiCard-root{
+  box-shadow: unset !important;
+ }
+
 html {
   height: 100%;
 }

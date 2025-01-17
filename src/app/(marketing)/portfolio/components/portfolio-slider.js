@@ -178,7 +178,7 @@ export default function PortfolioSlider() {
       onMouseEnter={() => setAutoSlideActive(false)}
       onMouseLeave={() => setAutoSlideActive(true)}
     >
-      <Box sx={{ position: 'relative', height: { xs: '100%', md: '662px' } }}>
+      <Box sx={{ position: 'relative', height: { xs: '400px', md: '662px' } }}>
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={currentIndex}

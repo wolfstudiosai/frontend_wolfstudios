@@ -8,9 +8,9 @@ const PortfolioSliderItem = ({ item, index, currentIndex }) => {
         width: '100%',
         height: '100%',
         borderRadius: 2,
+        border:'unset',
         overflow: 'hidden',
         position: 'relative',
-        boxShadow: 3,
       }}
     >
       <CardMedia
@@ -18,23 +18,20 @@ const PortfolioSliderItem = ({ item, index, currentIndex }) => {
         image={item.image}
         alt="Background Image"
         draggable={false}
-        sx={{ height: '100%', width: '100%', objectFit: 'cover', filter: 'brightness(100%)' }}
+        sx={{ height: '88%', width: '100%', objectFit: 'cover', filter: 'brightness(100%)', borderRadius:'24px'}}
+        
       />
       <CardContent
         sx={{
-          backgroundColor: 'rgba(0, 0, 0, 0.6)',
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
           width: '100%',
-          color: 'white',
           px: 2,
           display: currentIndex === index ? 'block' : 'none',
+          border:'unset'
         }}
       >
         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: -2.5 }}>
           <Stack direction="column" alignItems="flex-start">
-            <Typography variant="h5">{item.title}</Typography>
+            <Typography variant="cardTitle">{item.title}</Typography>
             <Box
               sx={{
                 display: 'inline-flex',
@@ -42,11 +39,11 @@ const PortfolioSliderItem = ({ item, index, currentIndex }) => {
                 gap: 1,
               }}
             >
-              <Typography variant="body2">Model: {item.model}</Typography>
+              <Typography variant="cardSubTitle">Model: {item.model}</Typography>
               <Divider orientation="vertical" variant="middle" flexItem />
-              <Typography variant="body2">Publication: {item.publication}</Typography>
+              <Typography variant="cardSubTitle">Publication: {item.publication}</Typography>
               <Divider orientation="vertical" variant="middle" flexItem />
-              <Typography variant="body2">DP: {item.dp}</Typography>
+              <Typography variant="cardSubTitle">DP: {item.dp}</Typography>
             </Box>
           </Stack>
           <Link href={`/portfolio/${item.slug}`}>
@@ -54,7 +51,7 @@ const PortfolioSliderItem = ({ item, index, currentIndex }) => {
               variant="outlined"
               size="small"
               color="secondary"
-              sx={{ zIndex: 10, cursor: 'pointer', color: 'common.white' }}
+              sx={{ zIndex: 10, cursor: 'pointer', backgroundColor:'#d3d3d3', padding:'.125rem .5rem' }}
             >
               View Portfolio
             </Button>
