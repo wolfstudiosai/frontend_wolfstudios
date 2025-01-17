@@ -5,7 +5,7 @@ export const navData = [
   {
     key: 'public-navitems',
     items: [
-      { key: 'home', title: 'Home', href: paths.home },
+      // { key: 'home', title: 'Home', href: paths.home },
       {
         key: 'HQs',
         title: 'HQs',

@@ -23,8 +23,9 @@ import { paths } from '@/paths';
 import { Dialog } from '../dialog/Dialog';
 import { MobileNav } from './mobile-nav';
 import { NavSearch } from './nav-search';
+import { MenuIcon } from 'lucide-react';
 
-export function MainNav() {
+export function MainNav({toggleSideNav }) {
   const [openNav, setOpenNav] = React.useState(false);
   const [openLoginForm, setOpenLoginForm] = React.useState(false);
   const pathname = usePathname();
@@ -61,6 +62,9 @@ export function MainNav() {
                 sx={{ listStyle: 'none', m: 0, p: 0 }}
                 alignItems={'center'}
               >
+                <IconButton onClick={toggleSideNav}>
+                  <MenuIcon/>
+                </IconButton>
                 {navData.map((section, index) =>
                   section.items.map((item) => (
                     <NavItem
