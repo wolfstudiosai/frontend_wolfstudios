@@ -169,6 +169,13 @@ export const dashboardItems = [
             icon: 'fluent:document-copy-20-regular',
             allowedRoles: ['admin'],
           },
+          {
+            key: 'content_view',
+            title: 'Content View',
+            href: paths.dashboard.content_view,
+            icon: 'fluent-mdl2:entry-view',
+            allowedRoles: ['admin'],
+          },
         ],
       },
       {

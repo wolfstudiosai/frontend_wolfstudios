@@ -37,7 +37,8 @@ export const paths = {
 
     // content
     content: '/dashboard/content',
-    create_content: '/dashboard/add-content',
+    create_content: '/dashboard/content/add-content',
+    content_view: '/dashboard/content/public-view',
 
     // can be removed later on
     settings: {
