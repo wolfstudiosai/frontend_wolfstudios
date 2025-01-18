@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { Footer } from '@/components/navbar/footer';
 import { MainNav } from '@/components/navbar/main-nav';
 import { Container } from '@mui/material';
 import GlobalStyles from '@mui/material/GlobalStyles';
+import * as React from 'react';
+import { Footer } from 'src/components/navbar/footer';
 
 export default function Layout({ children }) {
   return (

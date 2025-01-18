@@ -1,6 +1,6 @@
 
-import { config } from '/src/config';
 import { MainView } from './main-view';
+import { config } from '/src/config';
 
 export const metadata = { title: config.site.name, description: config.site.description };
 
