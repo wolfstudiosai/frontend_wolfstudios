@@ -33,16 +33,7 @@ export default function Layout({ children }) {
         {/* Toggleable SideNav */}
         {openSideNav && (
           <PublicSideNav
-            color="black"
             items={dashboardItems}
-            style={{
-              width: 'var(--SideNav-width)',
-              position: 'fixed',
-              top: '11%',
-              left: 0,
-              height: '100vh',
-              transition: 'width 0.3s ease',
-            }}
           />
         )}
         <main
