@@ -13,10 +13,20 @@ import { SideNav } from './side-nav';
 
 export function VerticalLayout({ children }) {
   const { settings } = useSettings();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedState = localStorage.getItem('sidebarState');
+      return savedState === 'true' ? true : false;
+    }
+    return true; // default state is expanded before setting to localStorage
+  });
 
   const handleSidebarToggle = () => {
-    setOpen((prev) => !prev);
+    setOpen((prev) => {
+      const newState = !prev;
+      localStorage.setItem('sidebarState', newState);
+      return newState;
+    });
   };
 
   return (
