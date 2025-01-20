@@ -3,6 +3,10 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
+import { DynamicLogo } from '@/components/core/logo';
+import { Iconify } from '@/components/iconify/iconify';
+import { Menu as MenuIcon } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -11,30 +15,25 @@ import Typography from '@mui/material/Typography';
 import { ArrowSquareOut as ArrowSquareOutIcon } from '@phosphor-icons/react/dist/ssr/ArrowSquareOut';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
-
-import useAuth from '@/hooks/useAuth';
-
-import { navColorStyles } from './styles';
-import { DynamicLogo } from '@/components/core/logo';
-import { Iconify } from '@/components/iconify/iconify';
-import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import { paths } from '@/paths';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
+import useAuth from '@/hooks/useAuth';
+import { navColorStyles } from './styles';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
   light: { blend_in: 'dark', discrete: 'dark', evident: 'light' },
 };
 
-export function SideNav({ color = 'evident', items = [] }) {
+export function SideNav({ color = 'evident', items = [], open, onToggle }) {
   const pathname = usePathname();
   const { userInfo } = useAuth();
 
   const { colorScheme = 'light' } = useColorScheme();
-
   const styles = navColorStyles[colorScheme][color];
   const logoColor = logoColors[colorScheme][color];
 
-  return (
+  return open ? (
     <Box
       sx={{
         ...styles,
@@ -47,17 +46,20 @@ export function SideNav({ color = 'evident', items = [] }) {
         left: 0,
         position: 'fixed',
         top: 0,
-        width: 'var(--SideNav-width)',
+        width: open ? 'var(--SideNav-width)' : '70px',
         zIndex: 'var(--SideNav-zIndex)',
+        transition: 'width 0.3s ease',
       }}
     >
-      <Stack spacing={2} sx={{ p: 2 }}>
-        <div>
+      <Stack direction="row" spacing={1} sx={{ p: 2, alignItems: 'center', justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'inline-flex' }}>
           <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
-            <DynamicLogo color={logoColor} height={32} width={122} isDashboard ={true} />
+            <DynamicLogo color={logoColor} height={32} width={122} isDashboard={true} />
           </Box>
-        </div>
-        {/* <WorkspacesSwitch /> */}
+          <IconButton onClick={onToggle}>
+            <MenuIcon />
+          </IconButton>
+        </Box>
       </Stack>
       <Box
         component="nav"
@@ -70,6 +72,38 @@ export function SideNav({ color = 'evident', items = [] }) {
         }}
       >
         {renderNavGroups({ items, pathname, userInfo })}
+      </Box>
+    </Box>
+  ) : (
+    <Box
+      sx={{
+        ...styles,
+        bgcolor: 'var(--SideNav-background)',
+        borderRight: 'var(--SideNav-border)',
+        color: 'var(--SideNav-color)',
+        display: { xs: 'none', lg: 'flex' },
+        flexDirection: 'column',
+        height: '100%',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        zIndex: 'var(--SideNav-zIndex)',
+        transition: 'width 0.3s ease',
+      }}
+    >
+      <Stack direction="row" sx={{ p: 2, alignItems: 'center', justifyContent: 'space-between' }}>
+        <IconButton onClick={onToggle}>
+          <MenuIcon />
+        </IconButton>
+      </Stack>
+      <Box component="nav" sx={{ flex: '1 1 auto', overflowY: 'auto', p: 2 }}>
+        {items.map((group) => (
+          <Stack component="ul" key={group.key} spacing={2} sx={{ listStyle: 'none', m: 0, p: 0 }}>
+            {group.items.map((item) => (
+              <NavItemIconOnly key={item.key} pathname={pathname} item={item} logoColor={logoColor} />
+            ))}
+          </Stack>
+        ))}
       </Box>
     </Box>
   );
@@ -257,6 +291,70 @@ function NavItem({
           <Box sx={{ borderLeft: '1px solid var(--NavItem-children-border)', pl: '12px' }}>{children}</Box>
         </Box>
       ) : null}
+    </Box>
+  );
+}
+
+function NavItemIconOnly({ pathname, item, depth = 0, disabled = false, external = false }) {
+  const { icon, href, label } = item;
+  const active = isNavItemActive({ href, pathname });
+
+  return (
+    <Box component="li" data-depth={depth} sx={{ userSelect: 'none' }}>
+      <Box
+        {...(href
+          ? {
+              component: external ? 'a' : RouterLink,
+              href,
+              target: external ? '_blank' : undefined,
+              rel: external ? 'noreferrer' : undefined,
+            }
+          : { role: 'button' })}
+        sx={{
+          alignItems: 'center',
+          borderRadius: 1,
+          color: 'var(--NavItem-color)',
+          cursor: 'pointer',
+          display: 'flex',
+          flex: '0 0 auto',
+          gap: 1,
+          p: '6px',
+          position: 'relative',
+          textDecoration: 'none',
+          whiteSpace: 'nowrap',
+          ...(disabled && {
+            bgcolor: 'var(--NavItem-disabled-background)',
+            color: 'var(--NavItem-disabled-color)',
+            cursor: 'not-allowed',
+          }),
+          ...(active && {
+            bgcolor: 'var(--NavItem-active-background)',
+            color: 'var(--NavItem-active-color)',
+          }),
+          '&:hover': {
+            ...(active
+              ? {}
+              : {
+                  bgcolor: 'var(--NavItem-hover-background)',
+                  color: 'var(--NavItem-hover-color)',
+                }),
+          },
+        }}
+        tabIndex={0}
+      >
+        <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flex: '0 0 auto' }}>
+          {/* Render icon */}
+          {icon && (
+            <Iconify
+              icon={icon}
+              color={active ? 'var(--NavItem-hover-color)' : 'var(--NavItem-icon-color)'}
+              sx={{ fontSize: '24px' }}
+            />
+          )}
+        </Box>
+        {/* Render label if needed */}
+        {label && <Chip color="primary" label={label} size="small" />}
+      </Box>
     </Box>
   );
 }
