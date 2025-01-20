@@ -13,6 +13,11 @@ import { SideNav } from './side-nav';
 
 export function VerticalLayout({ children }) {
   const { settings } = useSettings();
+  const [open, setOpen] = React.useState(true);
+
+  const handleSidebarToggle = () => {
+    setOpen((prev) => !prev);
+  };
 
   return (
     <React.Fragment>
@@ -21,7 +26,7 @@ export function VerticalLayout({ children }) {
           body: {
             '--MainNav-height': '56px',
             '--MainNav-zIndex': 1000,
-            '--SideNav-width': '280px',
+            '--SideNav-width': open ? '280px' : '70px',
             '--SideNav-zIndex': 1100,
             '--MobileNav-width': '320px',
             '--MobileNav-zIndex': 1100,
@@ -38,8 +43,13 @@ export function VerticalLayout({ children }) {
         }}
       >
         <LocalizationProvider>
-          <SideNav color={settings.navColor} items={dashboardItems} />
-          <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: 'var(--SideNav-width)' } }}>
+        <SideNav
+            color={settings.navColor}
+            items={dashboardItems}
+            open={open}
+            onToggle={handleSidebarToggle}
+          />
+          <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: open ? '280px' : '70px' } }}>
             <MainNav items={dashboardItems} />
             <Box
               component="main"
