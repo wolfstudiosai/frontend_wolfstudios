@@ -14,7 +14,7 @@ import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/Caret
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 
 export function PublicSideNav({ items }) {
-  const drawerWidth = '298px';
+  const drawerWidth = '250px';
 
   return (
     <Drawer
@@ -24,9 +24,11 @@ export function PublicSideNav({ items }) {
         '& .MuiDrawer-paper': {
           width: drawerWidth,
           boxSizing: 'border-box',
-          top: '74px',
-          height: '89vh',
-          overflowY: 'scroll',
+          top: '275px',
+          height: '100vh',
+          left:'15px',
+          borderRadius:'25px',
+          position:'absolute',
         },
       }}
       variant="persistent"

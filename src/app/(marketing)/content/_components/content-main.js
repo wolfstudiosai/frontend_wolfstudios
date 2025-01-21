@@ -12,7 +12,7 @@ export const ContentMain = () => {
       subtitle: 'Session',
       profileImage: 'https://picsum.photos/300/200?random=1',
       video:
-        'https://rr3---sn-cvh76nes.googlevideo.com/videoplayback?expire=1737043629&ei=TdqIZ_fZBY7C9fwPybCSqA8&ip=183.83.237.129&id=o-ABJ3pSST1XzAJqXnYZdPwtqALalBmfb9WtBRwvvSTfw0&itag=18&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&gcr=in&bui=AY2Et-PWDMJUOfgXv8jjfFBm7Ldg7-lVwusp4dtwX_WIEQaoXGvUZFr0ml-BWpjP8Z4ebfSZfUKbIoKO&spc=9kzgDbSG-PzyJHYrZJsUHTmKBxCwgNCrURfHm1O1xx3Nu2k6rIieBSG2ucFxZKXIig&vprv=1&svpuc=1&mime=video%2Fmp4&ns=wutWrgkrjcM8jV_l9MMtXikQ&rqh=1&gir=yes&clen=654278&ratebypass=yes&dur=8.490&lmt=1734964040655627&fexp=24350590,24350737,24350827,24350860,24350961,24350975,51326932,51331020,51335594,51353498,51371294,51384461&c=MWEB&sefc=1&txp=5530434&n=Swj_RFegVvkT-w&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cgcr%2Cbui%2Cspc%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cratebypass%2Cdur%2Clmt&sig=AJfQdSswRQIhAJHGoB7oVnPg2N7d9rRNhcAq5fsjJLfhUm_gILXPyRLuAiAXO8ud7DSl8Obt2Jm_SL24rUlc5055l6n-3UqXRJTCQA%3D%3D&title=Tower&rm=sn-5jucgv5qc5oq-itqy7e,sn-h55sz7s&rrc=79,104&req_id=b690dfedb83ba3ee&rms=nxu,au&redirect_counter=2&cms_redirect=yes&cmsv=e&ipbypass=yes&met=1737025898,&mh=Vb&mip=115.247.164.212&mm=30&mn=sn-cvh76nes&ms=nxu&mt=1737025707&mv=m&mvi=3&pl=21&lsparams=ipbypass,met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=AGluJ3MwRQIgT7XYlMKU8jtIRzTN9skC6xytmjS7qg5za4zWFKEK5NECIQD19CrYwHgnNMWDLloOiWm8rJySVkVqqzxOvqo0O92opQ%3D%3D',
+        'https://download-video-ak.vimeocdn.com/v3-1/playback/ce642710-fb3f-48ad-9be8-bf46d36fc501/4afb32f1-4557263b?__token__=st=1737458958~exp=1737473358~acl=%2Fv3-1%2Fplayback%2Fce642710-fb3f-48ad-9be8-bf46d36fc501%2F4afb32f1-4557263b%2A~hmac=5c4805a7e81b13faa940053efc96d84607bcd7a838c5d72c20d9b4a32624761a&r=dXMtZWFzdDE%3D',
     },
     {
       name: 'Prints: Abstract',
@@ -24,7 +24,7 @@ export const ContentMain = () => {
       name: 'Kansha: Love Bite',
       subtitle: 'Love Bite',
       profileImage: 'https://picsum.photos/200/200?random=3',
-      video: 'https://www.w3schools.com/html/movie.mp4',
+      video: 'https://download-video-ak.vimeocdn.com/v3-1/playback/1dfc892f-1d1f-4d4d-b8db-e0be71ea4008/249d49c9-b632bf29?__token__=st=1737459110~exp=1737473510~acl=%2Fv3-1%2Fplayback%2F1dfc892f-1d1f-4d4d-b8db-e0be71ea4008%2F249d49c9-b632bf29%2A~hmac=1b14a0f17b7d0adea9b29fa299a6ce9fa5b2a70e5c601f0778b81d7ef2001af2&r=dXMtd2VzdDE%3D',
     },
     {
       name: 'Pump Magazine: Sharee',
@@ -37,7 +37,7 @@ export const ContentMain = () => {
       subtitle: 'Elegant Magazine',
       profileImage: 'https://picsum.photos/200/200?random=5',
       video:
-        'https://rr3---sn-cvh76nes.googlevideo.com/videoplayback?expire=1737043629&ei=TdqIZ_fZBY7C9fwPybCSqA8&ip=183.83.237.129&id=o-ABJ3pSST1XzAJqXnYZdPwtqALalBmfb9WtBRwvvSTfw0&itag=18&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&gcr=in&bui=AY2Et-PWDMJUOfgXv8jjfFBm7Ldg7-lVwusp4dtwX_WIEQaoXGvUZFr0ml-BWpjP8Z4ebfSZfUKbIoKO&spc=9kzgDbSG-PzyJHYrZJsUHTmKBxCwgNCrURfHm1O1xx3Nu2k6rIieBSG2ucFxZKXIig&vprv=1&svpuc=1&mime=video%2Fmp4&ns=wutWrgkrjcM8jV_l9MMtXikQ&rqh=1&gir=yes&clen=654278&ratebypass=yes&dur=8.490&lmt=1734964040655627&fexp=24350590,24350737,24350827,24350860,24350961,24350975,51326932,51331020,51335594,51353498,51371294,51384461&c=MWEB&sefc=1&txp=5530434&n=Swj_RFegVvkT-w&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cgcr%2Cbui%2Cspc%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cratebypass%2Cdur%2Clmt&sig=AJfQdSswRQIhAJHGoB7oVnPg2N7d9rRNhcAq5fsjJLfhUm_gILXPyRLuAiAXO8ud7DSl8Obt2Jm_SL24rUlc5055l6n-3UqXRJTCQA%3D%3D&title=Tower&rm=sn-5jucgv5qc5oq-itqy7e,sn-h55sz7s&rrc=79,104&req_id=b690dfedb83ba3ee&rms=nxu,au&redirect_counter=2&cms_redirect=yes&cmsv=e&ipbypass=yes&met=1737025898,&mh=Vb&mip=115.247.164.212&mm=30&mn=sn-cvh76nes&ms=nxu&mt=1737025707&mv=m&mvi=3&pl=21&lsparams=ipbypass,met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=AGluJ3MwRQIgT7XYlMKU8jtIRzTN9skC6xytmjS7qg5za4zWFKEK5NECIQD19CrYwHgnNMWDLloOiWm8rJySVkVqqzxOvqo0O92opQ%3D%3D',
+        'https://download-video-ak.vimeocdn.com/v3-1/playback/ec554af8-860b-42d8-a461-9719ac5d99f9/28e95967-a6a23904?__token__=st=1737459684~exp=1737474084~acl=%2Fv3-1%2Fplayback%2Fec554af8-860b-42d8-a461-9719ac5d99f9%2F28e95967-a6a23904%2A~hmac=1e21a9273115ed8ea0ad258737f170cb2a96e9d7dc06ee9e94efcb6428b9dab7&r=dXMtY2VudHJhbDE%3D',
     },
     {
       name: 'Virat Kohli',
@@ -50,13 +50,13 @@ export const ContentMain = () => {
       subtitle: 'Imirage Mag',
       profileImage: 'https://picsum.photos/200/200?random=6',
       video:
-        'https://rr3---sn-cvh76nes.googlevideo.com/videoplayback?expire=1737043629&ei=TdqIZ_fZBY7C9fwPybCSqA8&ip=183.83.237.129&id=o-ABJ3pSST1XzAJqXnYZdPwtqALalBmfb9WtBRwvvSTfw0&itag=18&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&gcr=in&bui=AY2Et-PWDMJUOfgXv8jjfFBm7Ldg7-lVwusp4dtwX_WIEQaoXGvUZFr0ml-BWpjP8Z4ebfSZfUKbIoKO&spc=9kzgDbSG-PzyJHYrZJsUHTmKBxCwgNCrURfHm1O1xx3Nu2k6rIieBSG2ucFxZKXIig&vprv=1&svpuc=1&mime=video%2Fmp4&ns=wutWrgkrjcM8jV_l9MMtXikQ&rqh=1&gir=yes&clen=654278&ratebypass=yes&dur=8.490&lmt=1734964040655627&fexp=24350590,24350737,24350827,24350860,24350961,24350975,51326932,51331020,51335594,51353498,51371294,51384461&c=MWEB&sefc=1&txp=5530434&n=Swj_RFegVvkT-w&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cgcr%2Cbui%2Cspc%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cratebypass%2Cdur%2Clmt&sig=AJfQdSswRQIhAJHGoB7oVnPg2N7d9rRNhcAq5fsjJLfhUm_gILXPyRLuAiAXO8ud7DSl8Obt2Jm_SL24rUlc5055l6n-3UqXRJTCQA%3D%3D&title=Tower&rm=sn-5jucgv5qc5oq-itqy7e,sn-h55sz7s&rrc=79,104&req_id=b690dfedb83ba3ee&rms=nxu,au&redirect_counter=2&cms_redirect=yes&cmsv=e&ipbypass=yes&met=1737025898,&mh=Vb&mip=115.247.164.212&mm=30&mn=sn-cvh76nes&ms=nxu&mt=1737025707&mv=m&mvi=3&pl=21&lsparams=ipbypass,met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=AGluJ3MwRQIgT7XYlMKU8jtIRzTN9skC6xytmjS7qg5za4zWFKEK5NECIQD19CrYwHgnNMWDLloOiWm8rJySVkVqqzxOvqo0O92opQ%3D%3D',
+        'https://download-video-ak.vimeocdn.com/v3-1/playback/322eb8b7-e1c9-481d-a725-2d0060e439fa/337f14bf-00b70bac?__token__=st=1737459233~exp=1737473633~acl=%2Fv3-1%2Fplayback%2F322eb8b7-e1c9-481d-a725-2d0060e439fa%2F337f14bf-00b70bac%2A~hmac=f9f6e67e442b5454704d0210d086e80765af2e8a28ea52c963a3d2127928181c&r=dXMtZWFzdDE%3D',
     },
     {
       name: 'Tamara Rzaeva',
       subtitle: 'Tamara Rzaeva',
       profileImage: 'https://picsum.photos/200/200?random=7',
-      image: 'https://picsum.photos/300/200?random=7',
+      video: 'https://download-video-ak.vimeocdn.com/v3-1/playback/322eb8b7-e1c9-481d-a725-2d0060e439fa/337f14bf-00b70bac?__token__=st=1737459233~exp=1737473633~acl=%2Fv3-1%2Fplayback%2F322eb8b7-e1c9-481d-a725-2d0060e439fa%2F337f14bf-00b70bac%2A~hmac=f9f6e67e442b5454704d0210d086e80765af2e8a28ea52c963a3d2127928181c&r=dXMtZWFzdDE%3D',
     },
     {
       name: 'Street Style: Karla Marie',
@@ -68,7 +68,7 @@ export const ContentMain = () => {
       name: 'Shuba Magazine: Jyaira Moore',
       subtitle: 'Shuba Magazine',
       profileImage: 'https://picsum.photos/200/200?random=9',
-      image: 'https://picsum.photos/300/200?random=9',
+      video: 'https://download-video-ak.vimeocdn.com/v3-1/playback/af685398-2f59-4498-87d8-ae78e3cacbae/782103a5-27f7e319?__token__=st=1737459581~exp=1737473981~acl=%2Fv3-1%2Fplayback%2Faf685398-2f59-4498-87d8-ae78e3cacbae%2F782103a5-27f7e319%2A~hmac=273a50dc6258fe7a8f81904808bb410647e11cafccae9a62c30f5723c0873923&r=dXMtY2VudHJhbDE%3D',
     },
     {
       name: 'Elena Tretyakova',
@@ -80,7 +80,7 @@ export const ContentMain = () => {
       name: 'Lissa DeLorenzo',
       subtitle: 'Lissa DeLorenzo',
       profileImage: 'https://picsum.photos/200/200?random=11',
-      image: 'https://picsum.photos/300/200?random=11',
+      video: 'https://download-video-ak.vimeocdn.com/v3-1/playback/a0d678e8-f719-4f34-bc13-123f060601b9/936c33c4-2ff1a841?__token__=st=1737459441~exp=1737473841~acl=%2Fv3-1%2Fplayback%2Fa0d678e8-f719-4f34-bc13-123f060601b9%2F936c33c4-2ff1a841%2A~hmac=d09dfb2d4cc694394d24265c4e644efc7686655a78cc4a3aa1d74bc85a457c25&r=dXMtd2VzdDE%3D',
     },
     {
       name: 'Lydia DTLA',
@@ -88,7 +88,7 @@ export const ContentMain = () => {
       profileImage: 'https://picsum.photos/200/200?random=12',
       image: 'https://picsum.photos/300/200?random=12',
       video:
-        'https://rr3---sn-cvh76nes.googlevideo.com/videoplayback?expire=1737043629&ei=TdqIZ_fZBY7C9fwPybCSqA8&ip=183.83.237.129&id=o-ABJ3pSST1XzAJqXnYZdPwtqALalBmfb9WtBRwvvSTfw0&itag=18&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&gcr=in&bui=AY2Et-PWDMJUOfgXv8jjfFBm7Ldg7-lVwusp4dtwX_WIEQaoXGvUZFr0ml-BWpjP8Z4ebfSZfUKbIoKO&spc=9kzgDbSG-PzyJHYrZJsUHTmKBxCwgNCrURfHm1O1xx3Nu2k6rIieBSG2ucFxZKXIig&vprv=1&svpuc=1&mime=video%2Fmp4&ns=wutWrgkrjcM8jV_l9MMtXikQ&rqh=1&gir=yes&clen=654278&ratebypass=yes&dur=8.490&lmt=1734964040655627&fexp=24350590,24350737,24350827,24350860,24350961,24350975,51326932,51331020,51335594,51353498,51371294,51384461&c=MWEB&sefc=1&txp=5530434&n=Swj_RFegVvkT-w&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cgcr%2Cbui%2Cspc%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cratebypass%2Cdur%2Clmt&sig=AJfQdSswRQIhAJHGoB7oVnPg2N7d9rRNhcAq5fsjJLfhUm_gILXPyRLuAiAXO8ud7DSl8Obt2Jm_SL24rUlc5055l6n-3UqXRJTCQA%3D%3D&title=Tower&rm=sn-5jucgv5qc5oq-itqy7e,sn-h55sz7s&rrc=79,104&req_id=b690dfedb83ba3ee&rms=nxu,au&redirect_counter=2&cms_redirect=yes&cmsv=e&ipbypass=yes&met=1737025898,&mh=Vb&mip=115.247.164.212&mm=30&mn=sn-cvh76nes&ms=nxu&mt=1737025707&mv=m&mvi=3&pl=21&lsparams=ipbypass,met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=AGluJ3MwRQIgT7XYlMKU8jtIRzTN9skC6xytmjS7qg5za4zWFKEK5NECIQD19CrYwHgnNMWDLloOiWm8rJySVkVqqzxOvqo0O92opQ%3D%3D',
+        'https://download-video-ak.vimeocdn.com/v3-1/playback/322eb8b7-e1c9-481d-a725-2d0060e439fa/337f14bf-00b70bac?__token__=st=1737459233~exp=1737473633~acl=%2Fv3-1%2Fplayback%2F322eb8b7-e1c9-481d-a725-2d0060e439fa%2F337f14bf-00b70bac%2A~hmac=f9f6e67e442b5454704d0210d086e80765af2e8a28ea52c963a3d2127928181c&r=dXMtZWFzdDE%3D',
     },
   ];
 
