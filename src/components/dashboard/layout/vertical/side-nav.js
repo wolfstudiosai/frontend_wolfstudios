@@ -52,16 +52,6 @@ export function SideNav({ color = 'evident', items = [], open }) {
         borderRadius: '0 10px 10px 0',
       }}
     >
-      <Stack direction="row" spacing={1} sx={{ p: 2, alignItems: 'center', justifyContent: 'space-between' }}>
-        <Box sx={{ display: 'inline-flex' }}>
-          {/* <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
-            <DynamicLogo color={logoColor} height={32} width={122} isDashboard={true} />
-          </Box> */}
-          {/* <IconButton onClick={onToggle}>
-            <MenuIcon />
-          </IconButton> */}
-        </Box>
-      </Stack>
       <Box
         component="nav"
         sx={{
@@ -93,11 +83,7 @@ export function SideNav({ color = 'evident', items = [], open }) {
         borderRadius: '0 10px 10px 0',
       }}
     >
-      <Stack direction="row" sx={{ p: 2, alignItems: 'center', justifyContent: 'space-between' }}>
-        {/* <IconButton onClick={onToggle}>
-          <MenuIcon />
-        </IconButton> */}
-      </Stack>
+      
       <Box component="nav" sx={{ flex: '1 1 auto', overflowY: 'auto', p: 2 }}>
         {items.map((group) => (
           <Stack component="ul" key={group.key} spacing={2} sx={{ listStyle: 'none', m: 0, p: 0 }}>

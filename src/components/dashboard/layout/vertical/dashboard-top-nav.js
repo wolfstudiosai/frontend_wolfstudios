@@ -1,8 +1,5 @@
 'use client';
 
-import * as React from 'react';
-import RouterLink from 'next/link';
-import { usePathname } from 'next/navigation';
 import { ForgotPasswordForm } from '@/app/auth/_components/FogotPasswordForm';
 import { LoginForm } from '@/app/auth/_components/LoginForm';
 import { SignupForm } from '@/app/auth/_components/SignupForm';
@@ -11,7 +8,7 @@ import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
 import { DropdownTrigger } from '@/components/core/dropdown/dropdown-trigger';
 import { Logo } from '@/components/core/logo';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
-// import { navData } from '@/router';
+import { dashboardPublicNavData } from '@/router';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
@@ -20,19 +17,24 @@ import Typography from '@mui/material/Typography';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
 import { MenuIcon } from 'lucide-react';
+import RouterLink from 'next/link';
+import { usePathname } from 'next/navigation';
+import * as React from 'react';
 
 import { paths } from '@/paths';
 
-import { RightPanel } from '../rightPanel/right-panel';
-import { MobileNav } from './mobile-nav';
-import { NavSearch } from './nav-search';
-import { dashboardNavData, navData } from '@/router';
+// import { RightPanel } from '../rightPanel/right-panel';
+// import { MobileNav } from './mobile-nav';
+// import { NavSearch } from './nav-search';
+import { MobileNav } from '@/components/navbar/mobile-nav';
+import { NavSearch } from '@/components/navbar/nav-search';
+import { RightPanel } from '@/components/rightPanel/right-panel';
 
 const LOGIN = 'Login';
 const SIGNUP = 'Signup';
 const FORGOT_PASSWORD = 'Forgot password';
 
-export function MainNav({ onToggle }) {
+export const DashboardTopNav = ({ onToggle }) => {
   const [openNav, setOpenNav] = React.useState(false);
   const [openForm, setOpenForm] = React.useState(LOGIN);
   const [openRightPanel, setOpenRightPanel] = React.useState(false);
@@ -77,7 +79,7 @@ export function MainNav({ onToggle }) {
                 <IconButton onClick={onToggle}>
                   <MenuIcon />
                 </IconButton>
-                {navData.map((section, index) =>
+                {dashboardPublicNavData.map((section, index) =>
                   section.items.map((item) => (
                     <NavItem
                       key={index}
@@ -185,7 +187,7 @@ export function MainNav({ onToggle }) {
       </RightPanel>
     </React.Fragment>
   );
-}
+};
 
 export function NavItem({ item, disabled, external, href, matcher, pathname, title }) {
   const active = isNavItemActive({ disabled, external, href, matcher, pathname });

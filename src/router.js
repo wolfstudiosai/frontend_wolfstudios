@@ -50,6 +50,56 @@ export const navData = [
   },
 ];
 
+// dashboard public routes
+export const dashboardPublicNavData = [
+  {
+    key: 'public-navitems',
+    items: [
+      // { key: 'home', title: 'Home', href: paths.home },
+      {
+        key: 'HQs',
+        title: 'HQs',
+        items: [
+          {
+            key: 'portfolio',
+            title: 'Portfolio',
+            href: paths.dashboardPublic.portfolio,
+          },
+          {
+            key: 'campaign',
+            title: 'Campaign',
+            href: paths.dashboardPublic.campaign,
+          },
+          {
+            key: 'profile',
+            title: 'Profile',
+            href: paths.dashboardPublic.profile,
+          },
+          {
+            key: 'content',
+            title: 'Content',
+            href: paths.dashboardPublic.content,
+          },
+          {
+            key: 'partner',
+            title: 'Partner',
+            href: paths.dashboardPublic.partner,
+          },
+        ],
+      },
+      {
+        key: 'workshops',
+        title: 'Workshops',
+      },
+      // {
+      //   key: 'login',
+      //   title: 'Login',
+      //   href: paths.auth.default.sign_in,
+      // },
+    ],
+  },
+];
+
 // dashboard routes
 export const dashboardItems = [
   {

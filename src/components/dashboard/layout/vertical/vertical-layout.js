@@ -9,6 +9,7 @@ import { dashboardItems } from '@/router';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
 
+import { DashboardTopNav } from './dashboard-top-nav';
 // import { MainNav } from './main-nav';
 import { SideNav } from './side-nav';
 import { useSettings } from '/src/hooks/use-settings';
@@ -56,28 +57,29 @@ export function VerticalLayout({ children }) {
       >
         <LocalizationProvider>
           {/* <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: open ? '280px' : '70px' } }}> */}
-            {/* <MainNav items={dashboardItems} /> */}
+          {/* <MainNav items={dashboardItems} /> */}
 
-            <MainNav onToggle={handleSidebarToggle}/>
-            <TopBreadcrumbs />
-            <FeatureCards />
-            <SideNav color={settings.navColor} items={dashboardItems} open={open}  />
-            <Box
-              component="main"
-              sx={{
-                '--Content-margin': '0 auto',
-                // '--Content-maxWidth': 'var(--maxWidth-xl)',
-                '--Content-paddingX': '24px',
-                '--Content-paddingY': { xs: '24px', lg: '24px' },
-                '--Content-padding': 'var(--Content-paddingY) var(--Content-paddingX)',
-                '--Content-width': '100%',
-                display: 'flex',
-                flex: '1 1 auto',
-                flexDirection: 'column',
-              }}
-            >
-              {children}
-            </Box>
+          {/* <DashboardTopNav onToggle={handleSidebarToggle}/> */}
+          <MainNav onToggle={handleSidebarToggle} />
+          <TopBreadcrumbs />
+          <FeatureCards />
+          <SideNav color={settings.navColor} items={dashboardItems} open={open} />
+          <Box
+            component="main"
+            sx={{
+              '--Content-margin': '0 auto',
+              // '--Content-maxWidth': 'var(--maxWidth-xl)',
+              '--Content-paddingX': '24px',
+              '--Content-paddingY': { xs: '24px', lg: '24px' },
+              '--Content-padding': 'var(--Content-paddingY) var(--Content-paddingX)',
+              '--Content-width': '100%',
+              display: 'flex',
+              flex: '1 1 auto',
+              flexDirection: 'column',
+            }}
+          >
+            {children}
+          </Box>
           {/* </Box> */}
         </LocalizationProvider>
       </Box>

@@ -119,6 +119,19 @@ export const paths = {
     contact: '/contact',
     blog: '/blog',
   },
+  dashboardPublic: {
+    // HQs
+    portfolio: '/dashboard/portfolio',
+    campaign: '/dashboard/campaign',
+    profile: '/dashboard/profile',
+    content: '/dashboard/content',
+    partner: '/dashboard/partner',
+
+    // knowledge base
+    about: '/dashboard/about',
+    contact: '/dashboard/contact',
+    blog: '/dashboard/blog',
+  },
 
   auth: {
     default: {
