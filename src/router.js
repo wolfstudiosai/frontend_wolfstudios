@@ -57,6 +57,13 @@ export const dashboardItems = [
     title: 'General',
     items: [
       {
+        key: 'home',
+        title: 'Home',
+        href: paths.dashboard.root,
+        icon: 'system-uicons:home',
+        allowedRoles: ['admin', 'user'],
+      },
+      {
         key: 'overview',
         title: 'Overview',
         href: paths.dashboard.overview,

@@ -25,7 +25,7 @@ const logoColors = {
   light: { blend_in: 'dark', discrete: 'dark', evident: 'light' },
 };
 
-export function SideNav({ color = 'evident', items = [], open, onToggle }) {
+export function SideNav({ color = 'evident', items = [], open }) {
   const pathname = usePathname();
   const { userInfo } = useAuth();
 
@@ -45,20 +45,21 @@ export function SideNav({ color = 'evident', items = [], open, onToggle }) {
         height: '100%',
         left: 0,
         position: 'fixed',
-        top: 0,
+        top: 260,
         width: open ? 'var(--SideNav-width)' : '70px',
         zIndex: 'var(--SideNav-zIndex)',
         transition: 'width 0.3s ease',
+        borderRadius: '0 10px 10px 0',
       }}
     >
       <Stack direction="row" spacing={1} sx={{ p: 2, alignItems: 'center', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'inline-flex' }}>
-          <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
+          {/* <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
             <DynamicLogo color={logoColor} height={32} width={122} isDashboard={true} />
-          </Box>
-          <IconButton onClick={onToggle}>
+          </Box> */}
+          {/* <IconButton onClick={onToggle}>
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
         </Box>
       </Stack>
       <Box
@@ -85,16 +86,17 @@ export function SideNav({ color = 'evident', items = [], open, onToggle }) {
         flexDirection: 'column',
         height: '100%',
         position: 'fixed',
-        top: 0,
+        top: 260,
         left: 0,
         zIndex: 'var(--SideNav-zIndex)',
         transition: 'width 0.3s ease',
+        borderRadius: '0 10px 10px 0',
       }}
     >
       <Stack direction="row" sx={{ p: 2, alignItems: 'center', justifyContent: 'space-between' }}>
-        <IconButton onClick={onToggle}>
+        {/* <IconButton onClick={onToggle}>
           <MenuIcon />
-        </IconButton>
+        </IconButton> */}
       </Stack>
       <Box component="nav" sx={{ flex: '1 1 auto', overflowY: 'auto', p: 2 }}>
         {items.map((group) => (

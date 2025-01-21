@@ -1,15 +1,17 @@
 'use client';
 
 import * as React from 'react';
+import { TopBreadcrumbs } from '@/app/(marketing)/breadcrumbs';
+import { FeatureCards } from '@/app/(marketing)/top-cards';
+import { LocalizationProvider } from '@/components/core/localization-provider';
+import { MainNav } from '@/components/navbar/main-nav';
 import { dashboardItems } from '@/router';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
 
-import { useSettings } from '/src/hooks/use-settings';
-import { LocalizationProvider } from '@/components/core/localization-provider';
-
-import { MainNav } from './main-nav';
+// import { MainNav } from './main-nav';
 import { SideNav } from './side-nav';
+import { useSettings } from '/src/hooks/use-settings';
 
 export function VerticalLayout({ children }) {
   const { settings } = useSettings();
@@ -53,14 +55,13 @@ export function VerticalLayout({ children }) {
         }}
       >
         <LocalizationProvider>
-        <SideNav
-            color={settings.navColor}
-            items={dashboardItems}
-            open={open}
-            onToggle={handleSidebarToggle}
-          />
-          <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: open ? '280px' : '70px' } }}>
-            <MainNav items={dashboardItems} />
+          {/* <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: open ? '280px' : '70px' } }}> */}
+            {/* <MainNav items={dashboardItems} /> */}
+
+            <MainNav onToggle={handleSidebarToggle}/>
+            <TopBreadcrumbs />
+            <FeatureCards />
+            <SideNav color={settings.navColor} items={dashboardItems} open={open}  />
             <Box
               component="main"
               sx={{
@@ -77,7 +78,7 @@ export function VerticalLayout({ children }) {
             >
               {children}
             </Box>
-          </Box>
+          {/* </Box> */}
         </LocalizationProvider>
       </Box>
     </React.Fragment>
