@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { usePathname } from 'next/navigation';
-import { Box, Drawer, Stack, Typography, useColorScheme } from '@mui/material';
+import { Box, Chip, Drawer, Stack, Typography, useColorScheme } from '@mui/material';
 import RouterLink from 'next/link';
 import useAuth from '@/hooks/useAuth';
 
