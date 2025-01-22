@@ -41,6 +41,7 @@ export function SideNav({ color = 'evident', items = [], open }) {
         sx={{
           ...styles,
           bgcolor: 'var(--SideNav-background)',
+          // backgroundColor: 'var(--mui-palette-background-level2)',
           borderRight: 'var(--SideNav-border)',
           color: 'var(--SideNav-color)',
           display: { xs: 'none', lg: 'flex' },
@@ -48,12 +49,13 @@ export function SideNav({ color = 'evident', items = [], open }) {
           height: '100%',
           left: 10,
           position: 'fixed',
-          top: 220,
+          top: 170,
           width: open ? 'var(--SideNav-width)' : '70px',
           zIndex: 'var(--SideNav-zIndex)',
           transition: 'width 0.3s ease',
           borderRadius: '0 10px 10px 0',
-          margin: '0px 10px 10px 0px',
+          // margin: '0px 10px 10px 0px',
+          marginBottom: '10px',
         }}
       >
         <Box
@@ -71,37 +73,6 @@ export function SideNav({ color = 'evident', items = [], open }) {
       </Box>
     )
   );
-
-  // : (
-  //   <Box
-  //     sx={{
-  //       ...styles,
-  //       bgcolor: 'var(--SideNav-background)',
-  //       borderRight: 'var(--SideNav-border)',
-  //       color: 'var(--SideNav-color)',
-  //       display: { xs: 'none', lg: 'flex' },
-  //       flexDirection: 'column',
-  //       height: '100%',
-  //       position: 'fixed',
-  //       top: 260,
-  //       left: 0,
-  //       zIndex: 'var(--SideNav-zIndex)',
-  //       transition: 'width 0.3s ease',
-  //       borderRadius: '0 10px 10px 0',
-  //     }}
-  //   >
-
-  //     <Box component="nav" sx={{ flex: '1 1 auto', overflowY: 'auto', p: 2 }}>
-  //       {items.map((group) => (
-  //         <Stack component="ul" key={group.key} spacing={2} sx={{ listStyle: 'none', m: 0, p: 0 }}>
-  //           {group.items.map((item) => (
-  //             <NavItemIconOnly key={item.key} pathname={pathname} item={item} logoColor={logoColor} />
-  //           ))}
-  //         </Stack>
-  //       ))}
-  //     </Box>
-  //   </Box>
-  // );
 }
 
 function renderNavGroups({ items, pathname, userInfo }) {

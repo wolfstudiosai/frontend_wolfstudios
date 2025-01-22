@@ -60,7 +60,7 @@ export function FeatureCards() {
       description: 'Home to millions of species.',
       image: 'https://picsum.photos/300/200?random=15',
       timestamp: '1 month ago',
-    }
+    },
   ];
 
   return (
@@ -72,19 +72,21 @@ export function FeatureCards() {
         whiteSpace: 'nowrap',
         p: 2,
         position: 'sticky',
-        top: '100px',
+        top: 60,
         zIndex: 999,
         scrollBehavior: 'smooth',
         '&::-webkit-scrollbar': {
-          height: '6px',
+          height: '3px',
         },
         '&::-webkit-scrollbar-thumb': {
-          backgroundColor: '#888',
+          backgroundColor: 'var(--mui-palette-background-level2)',
           borderRadius: '4px',
         },
         '&::-webkit-scrollbar-thumb:hover': {
           backgroundColor: '#555',
         },
+        backgroundColor: "var(--mui-palette-background-default)",
+        // overflow: "hidden"
       }}
     >
       {cardsdata.map((card) => (
@@ -101,7 +103,7 @@ export function FeatureCards() {
             paddingY: 1,
             boxShadow: 3,
             borderRadius: 2,
-            border: 'solid 1px #e0e0e0',
+            border: 'solid 1px var(--mui-palette-divider)',
             backgroundColor: 'var(--mui-palette-background-paper)',
             overflow: 'hidden',
           }}

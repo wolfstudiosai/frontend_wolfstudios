@@ -55,29 +55,23 @@ export function VerticalLayout({ children }) {
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
-          minHeight: '100%',
+          // minHeight: '100%',
         }}
       >
-        <LocalizationProvider>
-          {/* <MainNav items={dashboardItems} /> */}
-
           <DashboardTopNav onToggle={handleSidebarToggle} />
-          {/* <MainNav onToggle={handleSidebarToggle} /> */}
-          <TopBreadcrumbs />
           <FeatureCards />
           <Box
             sx={{
               display: 'flex',
               flex: '1 1 auto',
               flexDirection: 'column',
-              pl: { lg: isLogin && open ? '280px' : '0px' },
-            }}
+              pl: { lg: isLogin && open ? '280px' : '0px' },            }}
           >
             {isLogin && open && <SideNav color={settings.navColor} items={dashboardItems} open={open} />}
             <Box
               component="main"
               sx={{
-                '--Content-margin': '0 auto',
+                // '--Content-margin': '1.5rem auto',
                 // '--Content-maxWidth': 'var(--maxWidth-xl)',
                 '--Content-paddingX': '24px',
                 '--Content-paddingY': { xs: '24px', lg: '24px' },
@@ -91,7 +85,6 @@ export function VerticalLayout({ children }) {
               {children}
             </Box>
           </Box>
-        </LocalizationProvider>
       </Box>
     </React.Fragment>
   );
