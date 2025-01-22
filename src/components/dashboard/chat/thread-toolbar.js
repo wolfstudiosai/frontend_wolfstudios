@@ -1,118 +1,99 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import AvatarGroup from '@mui/material/AvatarGroup';
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Stack from '@mui/material/Stack';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
-import { Archive as ArchiveIcon } from '@phosphor-icons/react/dist/ssr/Archive';
-import { Bell as BellIcon } from '@phosphor-icons/react/dist/ssr/Bell';
-import { Camera as CameraIcon } from '@phosphor-icons/react/dist/ssr/Camera';
-import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsThree';
-import { Phone as PhoneIcon } from '@phosphor-icons/react/dist/ssr/Phone';
-import { Prohibit as ProhibitIcon } from '@phosphor-icons/react/dist/ssr/Prohibit';
-import { Trash as TrashIcon } from '@phosphor-icons/react/dist/ssr/Trash';
-
-import { usePopover } from '/src/hooks/use-popover';
-
-const user = {
-  id: 'USR-000',
-  name: 'Sofia Rivers',
-  avatar: '/assets/avatar.png',
-  email: 'sofia@devias.io',
-};
-
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import AvatarGroup from "@mui/material/AvatarGroup";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import {List as ListIcon} from "@phosphor-icons/react/dist/ssr/List";
+import  Badge from "@mui/material/Badge";
+import useAuth from "@/hooks/useAuth";
 export function ThreadToolbar({ thread }) {
-  const popover = usePopover();
+  const  {userInfo}  = useAuth();
 
-  const recipients = (thread.participants ?? []).filter((participant) => participant.id !== user.id);
 
+  const recipients = (thread.participants ?? []).filter((participant) => participant.id !== userInfo?.email);
+// console.log("Thread in toolbar",thread);
   return (
-    <React.Fragment>
-      <Stack
-        direction="row"
-        spacing={2}
-        sx={{
-          alignItems: 'center',
-          borderBottom: '1px solid var(--mui-palette-divider)',
-          flex: '0 0 auto',
-          justifyContent: 'space-between',
-          minHeight: '64px',
-          px: 2,
-          py: 1,
-        }}
-      >
-        <Stack direction="row" spacing={2} sx={{ alignItems: 'center', minWidth: 0 }}>
-          <AvatarGroup
-            max={2}
-            sx={{
-              '& .MuiAvatar-root': {
-                fontSize: 'var(--fontSize-xs)',
-                ...(thread.type === 'group'
-                  ? { height: '24px', ml: '-16px', width: '24px', '&:nth-of-type(2)': { mt: '12px' } }
-                  : { height: '36px', width: '36px' }),
-              },
-            }}
-          >
-            {recipients.map((recipient) => (
-              <Avatar key={recipient.id} src={recipient.avatar} />
-            ))}
-          </AvatarGroup>
-          <Box sx={{ minWidth: 0 }}>
+    <Stack
+      direction="row"
+      spacing={2}
+      sx={{
+        alignItems: "center",
+        borderBottom: "1px solid var(--mui-palette-divider)",
+        flex: "0 0 auto",
+        justifyContent: "space-between",
+        minHeight: "64px",
+        px: 2,
+        py: 1,
+      }}
+    >
+      <Stack direction="row" spacing={2} sx={{ alignItems: "center", minWidth: 0 }}>
+        <AvatarGroup
+          max={2}
+          sx={{
+            "& .MuiAvatar-root": {
+              fontSize: "var(--fontSize-xs)",
+              height: "36px",
+              width: "36px",
+            },
+          }}
+        >
+          {/* {recipients.map((recipient) => (
+            <Avatar key={recipient.id} src={recipient.avatar} />
+          ))} */}
+          {
+            recipients.map((recipient) => (
+              <Badge
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          color="success"
+          sx={{
+            '& .MuiBadge-dot': {
+              border: '2px solid var(--MainNav-background)',
+              borderRadius: '50%',
+              bottom: '6px',
+              height: '12px',
+              right: '6px',
+              width: '12px',
+            },
+          }}
+          variant="dot"
+          key={recipient.id}
+        >
+          <Avatar src={recipient?.avatar} />
+        </Badge>
+            ))
+          }
+            
+        </AvatarGroup>
+        <Box sx={{ minWidth: 0 }}>
+          {thread.type.toLowerCase() === "group" ? (
             <Typography noWrap variant="subtitle2">
-              {recipients.map((recipient) => recipient.name).join(', ')}
+              {thread.name}
             </Typography>
-            {thread.type === 'direct' ? (
-              <Typography color="text.secondary" variant="caption">
-                Recently active
-              </Typography>
-            ) : null}
-          </Box>
-        </Stack>
-        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-          {/* <IconButton>
-            <PhoneIcon />
-          </IconButton>
-          <IconButton>
-            <CameraIcon />
-          </IconButton> */}
-          <Tooltip title="More options">
-            <IconButton onClick={popover.handleOpen} ref={popover.anchorRef}>
-              <DotsThreeIcon weight="bold" />
-            </IconButton>
-          </Tooltip>
-        </Stack>
+          ) : (
+            <Typography noWrap variant="subtitle2">
+              {recipients.map((recipient) => recipient.name).join(", ")}
+            </Typography>
+          )}
+
+          {thread.type.toLowerCase() === "direct" ? (
+            <Typography color="text.secondary" variant="caption">
+              Active now
+            </Typography>
+          ) : (
+            <Typography color="text.secondary" variant="caption">
+              {thread.member_count} members
+            </Typography>
+          )}
+        </Box>
       </Stack>
-      <Menu anchorEl={popover.anchorRef.current} onClose={popover.handleClose} open={popover.open}>
-        <MenuItem>
-          <ListItemIcon>
-            <ProhibitIcon />
-          </ListItemIcon>
-          <Typography>Block</Typography>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <TrashIcon />
-          </ListItemIcon>
-          <Typography>Delete</Typography>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <ArchiveIcon />
-          </ListItemIcon>
-          <Typography>Archive</Typography>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <BellIcon />
-          </ListItemIcon>
-          <Typography>Mute</Typography>
-        </MenuItem>
-      </Menu>
-    </React.Fragment>
+
+      <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+        <IconButton onClick={() => {}}>
+          <ListIcon />
+        </IconButton>
+      </Stack>
+    </Stack>
   );
 }

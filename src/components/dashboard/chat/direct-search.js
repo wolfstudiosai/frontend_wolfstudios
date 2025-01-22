@@ -78,7 +78,7 @@ export const DirectSearch = React.forwardRef(function ChatSidebarSearch(
                           disableTypography
                           primary={
                             <Typography noWrap variant="subtitle2">
-                              {contact.name}
+                              {contact.name} {contact.isActive && '(Online)'}
                             </Typography>
                           }
                         />

@@ -11,7 +11,7 @@ import { useMediaQuery } from '@/hooks/use-media-query';
 
 import { ChatContext } from './chat-context';
 import { Sidebar } from './sidebar';
-
+import {ChatFooter} from './footer'
 export function ChatView({ children }) {
   const {
     contacts,
@@ -34,26 +34,42 @@ export function ChatView({ children }) {
 
   const mdDown = useMediaQuery('down', 'md');
 
-  const handleContactSelect = React.useCallback(
-    (contactId) => {
-      const threadId = createThread({ type: 'direct', recipientId: contactId });
 
-      // router.push(paths.dashboard.chat_thread('direct', threadId));
-      router.push(paths.dashboard.chat + '/' + 'direct' + '/' + threadId);
+  const handleThreadSelect = React.useCallback(
+    async (threadType, threadId) => {
+      try {
+       
+        // Redirect to the selected thread
+        router.push(`${paths.dashboard.chat}/${threadType.toLowerCase()}/${threadId}`);
+      } catch (error) {
+        console.error('Failed to select thread:', error);
+      }
+    },
+    [ router]
+  );
+
+  
+  const handleContactSelect = React.useCallback(
+    async (contactId) => {
+      try {
+        const threadId = await createThread({ type: 'direct', recipientId: contactId });
+        console.log("Created thread ID:", threadId);
+
+  
+        // Redirect to the newly created thread
+        router.push(`${paths.dashboard.chat}/direct/${threadId}`);
+
+      } catch (error) {
+        console.error("Failed to create thread:", error);
+      }
     },
     [router, createThread]
   );
-
-  const handleThreadSelect = React.useCallback(
-    (threadType, threadId) => {
-      // router.push(paths.dashboard.chat_thread(threadType, threadId));
-      router.push(paths.dashboard.chat + '/' + threadType + '/' + threadId);
-    },
-    [router]
-  );
+  
 
   return (
-    <Box sx={{ display: 'flex', flex: '1 1 0', minHeight: 0 }}>
+    // <Box sx={{ height:'auto' }}>
+    <Box sx={{ display: 'flex', flex: '1 1 0', minHeight: 0, maxHeight: '90vh', overflow: 'hidden' }}>
       <Sidebar
         contacts={contacts}
         currentThreadId={currentThreadId}
@@ -83,6 +99,8 @@ export function ChatView({ children }) {
         </Box>
         {children}
       </Box>
+    {/* </Box> */}
+    {/* <ChatFooter /> */}
     </Box>
   );
 }
