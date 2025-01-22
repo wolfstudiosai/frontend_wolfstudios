@@ -1,16 +1,20 @@
+"use client";
 import Link from 'next/link';
+import { Iconify } from '@/components/iconify/iconify';
 import { textShortner } from '@/utils/utils';
 import { Box, Chip, Paper, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { Iconify } from '@/components/iconify/iconify';
 import dayjs from 'dayjs';
+
+import { paths } from '@/paths';
+import useAuth from '@/hooks/useAuth';
 
 export const RightCampaignOverview = ({ data }) => {
   return (
     <Box>
       <Grid container spacing={2}>
         {data.map((item, index) => (
-          <Grid item size={{ xs: 12, md: 4 }} key={index}>
+          <Grid item size={{ xs: 12, md: 3 }} key={index}>
             <CampaignCard data={item} />
           </Grid>
         ))}
@@ -20,6 +24,7 @@ export const RightCampaignOverview = ({ data }) => {
 };
 
 const CampaignCard = ({ data }) => {
+  const { isLogin } = useAuth();
   return (
     <Box sx={{ position: 'relative' }}>
       <Paper elevation={1} variant="outlined">
@@ -48,10 +53,7 @@ const CampaignCard = ({ data }) => {
               End Date: {dayjs(data.end_date).format('MMM D, YYYY')}
             </Typography>
           </Box>
-          <Link
-            href={`/campaign/${data.slug}`} // Relative path to the campaign
-            passHref
-          >
+          <Link href={isLogin ? `${paths.dashboardPublic.campaign}/${data.slug}` : `/campaign/${data.slug}`} passHref>
             <Typography
               variant="body2"
               sx={{

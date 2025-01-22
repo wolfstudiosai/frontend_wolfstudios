@@ -1,8 +1,11 @@
+import * as React from 'react';
 import { MainNav } from '@/components/navbar/main-nav';
 import { Container } from '@mui/material';
 import GlobalStyles from '@mui/material/GlobalStyles';
-import * as React from 'react';
 import { Footer } from 'src/components/navbar/footer';
+
+import Breadcrumbs, { TopBreadcrumbs } from './breadcrumbs.js';
+import { FeatureCards } from './top-cards.js';
 
 export default function Layout({ children }) {
   return (
@@ -23,6 +26,8 @@ export default function Layout({ children }) {
       />
       <div>
         <MainNav />
+        <TopBreadcrumbs />
+        <FeatureCards />
         {/* <main style={{ minHeight: "calc(100vh - 360px)" }}>{children}</main> */}
         <main style={{ minHeight: 'calc(100vh - 360px)' }}>
           <Container maxWidth="xxl">{children}</Container>

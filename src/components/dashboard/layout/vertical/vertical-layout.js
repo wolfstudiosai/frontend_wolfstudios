@@ -1,18 +1,22 @@
 'use client';
 
 import * as React from 'react';
-import { dashboardItems } from '@/router';
+import { FeatureCards } from '@/app/(marketing)/top-cards';
+import { Footer } from '@/components/navbar/footer';
+import { privateRoutes } from '@/router';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
 
-import { useSettings } from '/src/hooks/use-settings';
-import { LocalizationProvider } from '@/components/core/localization-provider';
+import useAuth from '@/hooks/useAuth';
 
-import { MainNav } from './main-nav';
+import { DashboardTopNav } from './dashboard-top-nav';
+// import { MainNav } from './main-nav';
 import { SideNav } from './side-nav';
+import { useSettings } from '/src/hooks/use-settings';
 
 export function VerticalLayout({ children }) {
   const { settings } = useSettings();
+  const { isLogin } = useAuth();
   const [open, setOpen] = React.useState(() => {
     if (typeof window !== 'undefined') {
       const savedState = localStorage.getItem('sidebarState');
@@ -49,36 +53,39 @@ export function VerticalLayout({ children }) {
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
-          minHeight: '100%',
+          // minHeight: '100%',
         }}
       >
-        <LocalizationProvider>
-        <SideNav
-            color={settings.navColor}
-            items={dashboardItems}
-            open={open}
-            onToggle={handleSidebarToggle}
-          />
-          <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: open ? '280px' : '70px' } }}>
-            <MainNav items={dashboardItems} />
-            <Box
-              component="main"
-              sx={{
-                '--Content-margin': '0 auto',
-                // '--Content-maxWidth': 'var(--maxWidth-xl)',
-                '--Content-paddingX': '24px',
-                '--Content-paddingY': { xs: '24px', lg: '24px' },
-                '--Content-padding': 'var(--Content-paddingY) var(--Content-paddingX)',
-                '--Content-width': '100%',
-                display: 'flex',
-                flex: '1 1 auto',
-                flexDirection: 'column',
-              }}
-            >
-              {children}
-            </Box>
+        <DashboardTopNav onToggle={handleSidebarToggle} />
+        <FeatureCards />
+        <Box
+          sx={{
+            display: 'flex',
+            flex: '1 1 auto',
+            flexDirection: 'column',
+            pl: { lg: isLogin && open ? '280px' : '0px' },
+          }}
+        >
+          {isLogin && open && <SideNav color={settings.navColor} items={privateRoutes} open={open} />}
+          <Box
+            component="main"
+            sx={{
+              // '--Content-margin': '1.5rem auto',
+              // '--Content-maxWidth': 'var(--maxWidth-xl)',
+              '--Content-paddingX': '24px',
+              '--Content-paddingY': { xs: '24px', lg: '24px' },
+              '--Content-padding': 'var(--Content-paddingY) var(--Content-paddingX)',
+              '--Content-width': '100%',
+              display: 'flex',
+              flex: '1 1 auto',
+              flexDirection: 'column',
+              minHeight: "calc(100vh - 420px)",
+            }}
+          >
+            {children}
           </Box>
-        </LocalizationProvider>
+          <Footer />
+        </Box>
       </Box>
     </React.Fragment>
   );
