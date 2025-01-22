@@ -74,7 +74,7 @@ export const AuthProvider = (props) => {
       setUserInfo(userData);
 
       setLoading(false);
-      router.push(paths.dashboard.overview);
+      router.push(paths.dashboard.root);
     } catch (error) {
       onError(error.response?.data?.message || 'An error occurred');
     }

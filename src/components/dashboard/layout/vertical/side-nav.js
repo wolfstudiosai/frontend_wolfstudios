@@ -15,9 +15,11 @@ import Typography from '@mui/material/Typography';
 import { ArrowSquareOut as ArrowSquareOutIcon } from '@phosphor-icons/react/dist/ssr/ArrowSquareOut';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
+
 import { paths } from '@/paths';
 import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import useAuth from '@/hooks/useAuth';
+
 import { navColorStyles } from './styles';
 
 const logoColors = {
@@ -33,68 +35,72 @@ export function SideNav({ color = 'evident', items = [], open }) {
   const styles = navColorStyles[colorScheme][color];
   const logoColor = logoColors[colorScheme][color];
 
-  return open ? (
-    <Box
-      sx={{
-        ...styles,
-        bgcolor: 'var(--SideNav-background)',
-        borderRight: 'var(--SideNav-border)',
-        color: 'var(--SideNav-color)',
-        display: { xs: 'none', lg: 'flex' },
-        flexDirection: 'column',
-        height: '100%',
-        left: 0,
-        position: 'fixed',
-        top: 260,
-        width: open ? 'var(--SideNav-width)' : '70px',
-        zIndex: 'var(--SideNav-zIndex)',
-        transition: 'width 0.3s ease',
-        borderRadius: '0 10px 10px 0',
-      }}
-    >
+  return (
+    open && (
       <Box
-        component="nav"
         sx={{
-          flex: '1 1 auto',
-          overflowY: 'auto',
-          p: 2,
-          scrollbarWidth: 'none',
-          '&::-webkit-scrollbar': { display: 'none' },
+          ...styles,
+          bgcolor: 'var(--SideNav-background)',
+          borderRight: 'var(--SideNav-border)',
+          color: 'var(--SideNav-color)',
+          display: { xs: 'none', lg: 'flex' },
+          flexDirection: 'column',
+          height: '100%',
+          left: 0,
+          position: 'fixed',
+          top: 240,
+          width: open ? 'var(--SideNav-width)' : '70px',
+          zIndex: 'var(--SideNav-zIndex)',
+          transition: 'width 0.3s ease',
+          borderRadius: '0 10px 10px 0',
         }}
       >
-        {renderNavGroups({ items, pathname, userInfo })}
+        <Box
+          component="nav"
+          sx={{
+            flex: '1 1 auto',
+            overflowY: 'auto',
+            p: 2,
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': { display: 'none' },
+          }}
+        >
+          {renderNavGroups({ items, pathname, userInfo })}
+        </Box>
       </Box>
-    </Box>
-  ) : (
-    <Box
-      sx={{
-        ...styles,
-        bgcolor: 'var(--SideNav-background)',
-        borderRight: 'var(--SideNav-border)',
-        color: 'var(--SideNav-color)',
-        display: { xs: 'none', lg: 'flex' },
-        flexDirection: 'column',
-        height: '100%',
-        position: 'fixed',
-        top: 260,
-        left: 0,
-        zIndex: 'var(--SideNav-zIndex)',
-        transition: 'width 0.3s ease',
-        borderRadius: '0 10px 10px 0',
-      }}
-    >
-      
-      <Box component="nav" sx={{ flex: '1 1 auto', overflowY: 'auto', p: 2 }}>
-        {items.map((group) => (
-          <Stack component="ul" key={group.key} spacing={2} sx={{ listStyle: 'none', m: 0, p: 0 }}>
-            {group.items.map((item) => (
-              <NavItemIconOnly key={item.key} pathname={pathname} item={item} logoColor={logoColor} />
-            ))}
-          </Stack>
-        ))}
-      </Box>
-    </Box>
+    )
   );
+
+  // : (
+  //   <Box
+  //     sx={{
+  //       ...styles,
+  //       bgcolor: 'var(--SideNav-background)',
+  //       borderRight: 'var(--SideNav-border)',
+  //       color: 'var(--SideNav-color)',
+  //       display: { xs: 'none', lg: 'flex' },
+  //       flexDirection: 'column',
+  //       height: '100%',
+  //       position: 'fixed',
+  //       top: 260,
+  //       left: 0,
+  //       zIndex: 'var(--SideNav-zIndex)',
+  //       transition: 'width 0.3s ease',
+  //       borderRadius: '0 10px 10px 0',
+  //     }}
+  //   >
+
+  //     <Box component="nav" sx={{ flex: '1 1 auto', overflowY: 'auto', p: 2 }}>
+  //       {items.map((group) => (
+  //         <Stack component="ul" key={group.key} spacing={2} sx={{ listStyle: 'none', m: 0, p: 0 }}>
+  //           {group.items.map((item) => (
+  //             <NavItemIconOnly key={item.key} pathname={pathname} item={item} logoColor={logoColor} />
+  //           ))}
+  //         </Stack>
+  //       ))}
+  //     </Box>
+  //   </Box>
+  // );
 }
 
 function renderNavGroups({ items, pathname, userInfo }) {

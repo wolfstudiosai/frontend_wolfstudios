@@ -7,8 +7,18 @@ import { Dropdown } from '@/components/core/dropdown/dropdown';
 import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
 import { DropdownTrigger } from '@/components/core/dropdown/dropdown-trigger';
 import { Logo } from '@/components/core/logo';
+import RouterLink from 'next/link';
+import { usePathname } from 'next/navigation';
+import * as React from 'react';
+// import { RightPanel } from '../rightPanel/right-panel';
+// import { MobileNav } from './mobile-nav';
+// import { NavSearch } from './nav-search';
+import { MobileNav } from '@/components/navbar/mobile-nav';
+import { NavSearch } from '@/components/navbar/nav-search';
+import { RightPanel } from '@/components/rightPanel/right-panel';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { dashboardPublicNavData } from '@/router';
+import { clearUserSessionFromLocalStore } from '@/utils/axios-api.helpers';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
@@ -17,18 +27,8 @@ import Typography from '@mui/material/Typography';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
 import { MenuIcon } from 'lucide-react';
-import RouterLink from 'next/link';
-import { usePathname } from 'next/navigation';
-import * as React from 'react';
 
 import { paths } from '@/paths';
-
-// import { RightPanel } from '../rightPanel/right-panel';
-// import { MobileNav } from './mobile-nav';
-// import { NavSearch } from './nav-search';
-import { MobileNav } from '@/components/navbar/mobile-nav';
-import { NavSearch } from '@/components/navbar/nav-search';
-import { RightPanel } from '@/components/rightPanel/right-panel';
 
 const LOGIN = 'Login';
 const SIGNUP = 'Signup';
@@ -62,7 +62,7 @@ export const DashboardTopNav = ({ onToggle }) => {
           padding: 0,
         }}
       >
-        <Container maxWidth="xxl" sx={{ minHeight: 'var(--MainNav-height)', py: '8px', my: 2 }}>
+        <Container maxWidth="xxl" sx={{ minHeight: 'var(--MainNav-height)', py: '8px' }}>
           <Stack
             direction="row"
             spacing={2}
@@ -94,15 +94,16 @@ export const DashboardTopNav = ({ onToggle }) => {
                 <Typography
                   component="span"
                   sx={{
-                    color: 'var( --Text-primary)',
+                    color: 'var(--mui-palette-neutral-600)',
+                    '&:hover': { color: 'var(--mui-palette-common-dark)' },
                     fontSize: '0.875rem',
                     fontWeight: 400,
                     lineHeight: '28px',
                     cursor: 'pointer',
                   }}
-                  onClick={() => setOpenRightPanel(true)}
+                  onClick={() => clearUserSessionFromLocalStore(true)}
                 >
-                  Login
+                  Logout
                 </Typography>
               </Stack>
             </Box>
@@ -216,7 +217,7 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
         sx={{
           alignItems: 'center',
           borderRadius: 1,
-          color: 'var(--mui-palette-neutral-300)',
+          color: 'var(--mui-palette-neutral-600)',
           cursor: 'pointer',
           display: 'flex',
           flex: '0 0 auto',

@@ -74,9 +74,7 @@ export function MainNav({ onToggle }) {
                 sx={{ listStyle: 'none', m: 0, p: 0 }}
                 alignItems={'center'}
               >
-                <IconButton onClick={onToggle}>
-                  <MenuIcon />
-                </IconButton>
+                
                 {navData.map((section, index) =>
                   section.items.map((item) => (
                     <NavItem
