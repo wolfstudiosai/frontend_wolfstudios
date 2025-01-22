@@ -32,7 +32,7 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required('Password is required'),
 });
 
-export function LoginForm() {
+export function LoginForm({closeDialog}) {
   const { login } = useAuth()
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);

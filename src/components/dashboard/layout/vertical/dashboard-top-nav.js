@@ -27,9 +27,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
-import { MenuIcon } from 'lucide-react';
 
 import { paths } from '@/paths';
+import useAuth from '@/hooks/useAuth';
 
 const LOGIN = 'Login';
 const SIGNUP = 'Signup';
@@ -39,6 +39,7 @@ export const DashboardTopNav = ({ onToggle }) => {
   const [openNav, setOpenNav] = React.useState(false);
   const [openForm, setOpenForm] = React.useState(LOGIN);
   const [openRightPanel, setOpenRightPanel] = React.useState(false);
+  const { isLogin } = useAuth();
   const pathname = usePathname();
 
   const handleRedirectLogin = () => {
@@ -77,9 +78,11 @@ export const DashboardTopNav = ({ onToggle }) => {
                 sx={{ listStyle: 'none', m: 0, p: 0 }}
                 alignItems={'center'}
               >
-                <IconButton onClick={onToggle} color="#333">
-                  <Iconify icon="material-symbols:menu-rounded" color="#333" />
-                </IconButton>
+                {isLogin && (
+                  <IconButton onClick={onToggle} color="#333">
+                    <Iconify icon="material-symbols:menu-rounded" color="#333" />
+                  </IconButton>
+                )}
                 {dashboardPublicNavData.map((section, index) =>
                   section.items.map((item) => (
                     <NavItem
@@ -92,20 +95,36 @@ export const DashboardTopNav = ({ onToggle }) => {
                     />
                   ))
                 )}
-                <Typography
-                  component="span"
-                  sx={{
-                    color: 'var(--mui-palette-warning-700)',
-                    '&:hover': { color: 'var(--mui-palette-common-dark)' },
-                    fontSize: '0.875rem',
-                    fontWeight: 400,
-                    lineHeight: '28px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => clearUserSessionFromLocalStore(true)}
-                >
-                  Logout
-                </Typography>
+                {isLogin ? (
+                  <Typography
+                    component="span"
+                    sx={{
+                      color: 'var(--mui-palette-warning-700)',
+                      '&:hover': { color: 'var(--mui-palette-common-dark)' },
+                      fontSize: '0.875rem',
+                      fontWeight: 400,
+                      lineHeight: '28px',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => clearUserSessionFromLocalStore(true)}
+                  >
+                    Logout
+                  </Typography>
+                ) : (
+                  <Typography
+                    component="span"
+                    sx={{
+                      color: 'var( --Text-primary)',
+                      fontSize: '0.875rem',
+                      fontWeight: 400,
+                      lineHeight: '28px',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => setOpenRightPanel(true)}
+                  >
+                    Login
+                  </Typography>
+                )}
               </Stack>
             </Box>
             <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
@@ -144,7 +163,7 @@ export const DashboardTopNav = ({ onToggle }) => {
                 Sign up
               </Typography>
             </Typography>
-            <LoginForm />
+            <LoginForm closeDialog={() => setOpenRightPanel(false)} />
             <Box sx={{ mt: 1 }}>
               <Typography
                 component="span"

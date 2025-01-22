@@ -15,6 +15,7 @@ import { applyDefaultSettings } from '/src/lib/settings/apply-default-settings';
 import { getSettings as getPersistedSettings } from '/src/lib/settings/get-settings';
 import { AuthProvider } from '/src/contexts/auth/AuthContext';
 import { Progressbar } from '@/components/utils/Progressbar';
+import { VerticalLayout } from '@/components/dashboard/layout/vertical/vertical-layout';
 
 export const metadata = { title: config.site.name };
 
@@ -40,7 +41,8 @@ export default async function Layout({ children }) {
                   <I18nProvider lng={settings.language}>
                     <ThemeProvider>
                       <Progressbar />
-                      {children}
+                      {/* {children} */}
+                      <VerticalLayout>{children}</VerticalLayout>
                       <SettingsButton />
                       <Toaster position="top-right" />
                     </ThemeProvider>

@@ -48,7 +48,7 @@ export function SideNav({ color = 'evident', items = [], open }) {
           height: '100%',
           left: 10,
           position: 'fixed',
-          top: 250,
+          top: 220,
           width: open ? 'var(--SideNav-width)' : '70px',
           zIndex: 'var(--SideNav-zIndex)',
           transition: 'width 0.3s ease',

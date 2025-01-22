@@ -9,6 +9,8 @@ import { dashboardItems } from '@/router';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
 
+import useAuth from '@/hooks/useAuth';
+
 import { DashboardTopNav } from './dashboard-top-nav';
 // import { MainNav } from './main-nav';
 import { SideNav } from './side-nav';
@@ -16,6 +18,7 @@ import { useSettings } from '/src/hooks/use-settings';
 
 export function VerticalLayout({ children }) {
   const { settings } = useSettings();
+  const { isLogin } = useAuth();
   const [open, setOpen] = React.useState(() => {
     if (typeof window !== 'undefined') {
       const savedState = localStorage.getItem('sidebarState');
@@ -58,12 +61,19 @@ export function VerticalLayout({ children }) {
         <LocalizationProvider>
           {/* <MainNav items={dashboardItems} /> */}
 
-          <DashboardTopNav onToggle={handleSidebarToggle}/>
+          <DashboardTopNav onToggle={handleSidebarToggle} />
           {/* <MainNav onToggle={handleSidebarToggle} /> */}
           <TopBreadcrumbs />
           <FeatureCards />
-          <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: open ? '280px' : '0px' } }}>
-            <SideNav color={settings.navColor} items={dashboardItems} open={open} />
+          <Box
+            sx={{
+              display: 'flex',
+              flex: '1 1 auto',
+              flexDirection: 'column',
+              pl: { lg: isLogin && open ? '280px' : '0px' },
+            }}
+          >
+            {isLogin && open && <SideNav color={settings.navColor} items={dashboardItems} open={open} />}
             <Box
               component="main"
               sx={{
