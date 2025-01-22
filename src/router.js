@@ -130,23 +130,9 @@ export const dashboardItems = [
       {
         key: 'campaign',
         title: 'Campaign',
-        icon: 'pepicons-pencil:file',
-        items: [
-          {
-            key: 'campaign',
-            title: 'Campaign',
-            href: paths.dashboard.campaign,
-            icon: 'material-symbols-light:ads-click',
-            allowedRoles: ['admin', 'user'],
-          },
-          {
-            key: 'campaign_view',
-            title: 'Campaign View',
-            href: paths.dashboard.campaign_view,
-            icon: 'fluent-mdl2:entry-view',
-            allowedRoles: ['admin', 'user'],
-          },
-        ],
+        href: paths.dashboard.campaign,
+        icon: 'material-symbols-light:ads-click',
+        allowedRoles: ['admin', 'user'],
       },
     ],
   },

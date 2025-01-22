@@ -46,13 +46,14 @@ export function SideNav({ color = 'evident', items = [], open }) {
           display: { xs: 'none', lg: 'flex' },
           flexDirection: 'column',
           height: '100%',
-          left: 0,
+          left: 10,
           position: 'fixed',
-          top: 240,
+          top: 250,
           width: open ? 'var(--SideNav-width)' : '70px',
           zIndex: 'var(--SideNav-zIndex)',
           transition: 'width 0.3s ease',
           borderRadius: '0 10px 10px 0',
+          margin: '0px 10px 10px 0px',
         }}
       >
         <Box
