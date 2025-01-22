@@ -20,6 +20,7 @@ import { RightPanel } from '@/components/rightPanel/right-panel';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { dashboardPublicNavData } from '@/router';
 import { clearUserSessionFromLocalStore } from '@/utils/axios-api.helpers';
+import { Popover } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
@@ -39,11 +40,21 @@ export const DashboardTopNav = ({ onToggle }) => {
   const [openNav, setOpenNav] = React.useState(false);
   const [openForm, setOpenForm] = React.useState(LOGIN);
   const [openRightPanel, setOpenRightPanel] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
   const { isLogin } = useAuth();
   const pathname = usePathname();
 
-  const handleRedirectLogin = () => {
-    setOpenForm(LOGIN);
+  // const handleRedirectLogin = () => {
+  //   setOpenForm(LOGIN);
+  // };
+
+  const handleOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -77,12 +88,16 @@ export const DashboardTopNav = ({ onToggle }) => {
                 spacing={1}
                 sx={{ listStyle: 'none', m: 0, p: 0 }}
                 alignItems={'center'}
+                // justifyContent={'space-between'}
               >
                 {isLogin && (
                   <IconButton onClick={onToggle} color="#333">
                     <Iconify icon="material-symbols:menu-rounded" color="#333" />
                   </IconButton>
                 )}
+                <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
+                  <Logo height={32} width={122} />
+                </Box>
                 {dashboardPublicNavData.map((section, index) =>
                   section.items.map((item) => (
                     <NavItem
@@ -114,22 +129,20 @@ export const DashboardTopNav = ({ onToggle }) => {
                   <Typography
                     component="span"
                     sx={{
-                      color: 'var( --Text-primary)',
+                      color: 'var( --Text-primahandleOpenry)',
                       fontSize: '0.875rem',
                       fontWeight: 400,
                       lineHeight: '28px',
                       cursor: 'pointer',
                     }}
-                    onClick={() => setOpenRightPanel(true)}
+                    onClick={handleOpen}
                   >
                     Login
                   </Typography>
                 )}
               </Stack>
             </Box>
-            <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
-              <Logo height={32} width={122} />
-            </Box>
+
             <Box>
               <NavSearch />
               <IconButton
@@ -150,6 +163,26 @@ export const DashboardTopNav = ({ onToggle }) => {
         }}
         open={openNav}
       />
+      <Popover
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        
+      >
+        <Box sx={{
+          p: 2,
+        }}>
+          <LoginForm closeDialog={handleClose} />
+        </Box>
+      </Popover>
       <RightPanel open={openRightPanel} onClose={() => setOpenRightPanel(false)} heading={openForm}>
         {openForm === LOGIN && (
           <>
