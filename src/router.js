@@ -184,7 +184,7 @@ export const privateRoutes = [
         title: 'Records',
         href: paths.private.records,
         icon: 'pepicons-pencil:file',
-        allowedRoles: ['admin'],
+        allowedRoles: ['user'],
       },
       {
         key: 'partner',

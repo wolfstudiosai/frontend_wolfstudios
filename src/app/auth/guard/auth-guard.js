@@ -31,7 +31,11 @@ export function AuthGuard({ children }) {
       return;
     }
 
-    
+    const isUserAllowed = isUserAuthorizedToAccessThisRoute(role, pathname);
+
+    if (!isUserAllowed) {
+      router.push(paths.auth.default.not_authorized);
+    }
 
     setIsChecking(false);
   };
@@ -50,5 +54,32 @@ export function AuthGuard({ children }) {
 }
 
 const isUserAuthorizedToAccessThisRoute = (role, pathname) => {
-  return true;
+  //check if current path is in private routes
+  const isPathInPrivateRoutes = privateRoutes.some((section) =>
+    section.items.some((item) => {
+      if (item.items) {
+        return item.items.some((subItem) => subItem.href === pathname);
+      }
+      return item.href === pathname;
+    })
+  );
+
+  if (!isPathInPrivateRoutes) {
+    return true;
+  }
+
+  // check if user has permission
+  const checkIfUserHasPermission = privateRoutes.some((section) =>
+    section.items.some((item) => {
+      if (item.items) {
+        return item.items.some(
+          (subItem) =>
+            Array.isArray(subItem.allowedRoles) && subItem.allowedRoles.includes(role) && subItem.href === pathname
+        );
+      }
+      return Array.isArray(item.allowedRoles) && item.allowedRoles.includes(role) && item.href === pathname;
+    })
+  );
+
+  return checkIfUserHasPermission;
 };
