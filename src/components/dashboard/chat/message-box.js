@@ -6,18 +6,15 @@ import CardMedia from '@mui/material/CardMedia';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-
+import useAuth from "/src/hooks/useAuth"
 import { dayjs } from '/src/lib/dayjs';
 
-const user = {
-  id: 'USR-000',
-  name: 'Sofia Rivers',
-  avatar: '/assets/avatar.png',
-  email: 'sofia@devias.io',
-};
+
 
 export function MessageBox({ message }) {
-  const position = message.author.id === user.id ? 'right' : 'left';
+  const {userInfo} = useAuth();
+
+  const position = message.author.id === userInfo.email ? 'right' : 'left';
 
   return (
     <Box sx={{ alignItems: position === 'right' ? 'flex-end' : 'flex-start', flex: '0 0 auto', display: 'flex' }}>
@@ -31,7 +28,7 @@ export function MessageBox({ message }) {
           mr: position === 'left' ? 'auto' : 0,
         }}
       >
-        <Avatar src={message.author.avatar} sx={{ '--Avatar-size': '32px' }} />
+        <Avatar src={message?.author.avatar} sx={{ '--Avatar-size': '32px' }} />
         <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
           <Card
             sx={{
@@ -46,28 +43,29 @@ export function MessageBox({ message }) {
             <Stack spacing={1}>
               <div>
                 <Link color="inherit" sx={{ cursor: 'pointer' }} variant="subtitle2">
-                  {message.author.name}
+                  {message.author.id !== userInfo.email ? message?.author.name:''}
                 </Link>
               </div>
-              {message.type === 'image' ? (
+              {message?.type.toLowerCase() === 'file'
+               ? (
                 <CardMedia
-                  image={message.content}
+                  image={message?.file_url}
                   onClick={() => {
                     // open modal
                   }}
                   sx={{ height: '200px', width: '200px' }}
                 />
               ) : null}
-              {message.type === 'text' ? (
+              {message?.type.toLowerCase() === 'text' || message?.type.toLowerCase() === 'file'  ? (
                 <Typography color="inherit" variant="body1">
-                  {message.content}
+                  {message.content ?? ''}
                 </Typography>
               ) : null}
             </Stack>
           </Card>
           <Box sx={{ display: 'flex', justifyContent: position === 'right' ? 'flex-end' : 'flex-start', px: 2 }}>
             <Typography color="text.secondary" noWrap variant="caption">
-              {dayjs(message.createdAt).fromNow()}
+              {dayjs(message?.createdAt).fromNow()}
             </Typography>
           </Box>
         </Stack>

@@ -43,6 +43,7 @@ export function GroupRecipients({ contacts, onRecipientAdd, onRecipientRemove, r
       try {
         // This is where you would make an API request for a real search. For the sake of simplicity, we are just
         // filtering the data in the client.
+
         const results = contacts.filter((contact) => {
           // Filter already picked recipients
           if (recipients.find((recipient) => recipient.id === contact.id)) {
