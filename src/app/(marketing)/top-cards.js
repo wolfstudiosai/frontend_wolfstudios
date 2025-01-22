@@ -97,7 +97,8 @@ export function FeatureCards() {
             minWidth: 350,
             width: { xs: '100%', sm: 300 },
             flex: '0 0 auto',
-            padding: 1.5,
+            paddingX: 1.5,
+            paddingY: 1,
             boxShadow: 3,
             borderRadius: 2,
             border: 'solid 1px #e0e0e0',
@@ -157,17 +158,6 @@ export function FeatureCards() {
             >
               {card.timestamp}
             </Typography>
-            {/* Image */}
-            <img
-              src={card.image}
-              alt={card.title}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: '50%',
-                objectFit: 'cover',
-              }}
-            />
           </Box>
         </Card>
       ))}

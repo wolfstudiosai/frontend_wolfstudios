@@ -51,7 +51,7 @@ export const navData = [
 ];
 
 // dashboard public routes
-export const dashboardPublicNavData = [
+export const footerNavData = [
   {
     key: 'public-navitems',
     items: [
@@ -96,6 +96,52 @@ export const dashboardPublicNavData = [
       //   title: 'Login',
       //   href: paths.auth.default.sign_in,
       // },
+    ],
+  },
+];
+
+// overview, campaign, portfolios, concepts, production, partners, spaces
+export const dashboardPublicNavData = [
+  {
+    key: 'public-navitems',
+    items: [
+      // { key: 'home', title: 'Home', href: paths.home },
+
+      {
+        key: 'overview',
+        title: 'Overview',
+        href: paths.dashboardPublic.campaign,
+      },
+      {
+        key: 'campaign',
+        title: 'Campaign',
+        href: paths.dashboardPublic.campaign,
+      },
+      {
+        key: 'portfolio',
+        title: 'Portfolio',
+        href: paths.dashboardPublic.campaign,
+      },
+      {
+        key: 'concept',
+        title: 'Content',
+        href: paths.dashboardPublic.campaign,
+      },
+      {
+        key: 'production',
+        title: 'Production',
+        href: paths.dashboardPublic.campaign,
+      },
+      {
+        key: 'partner',
+        title: 'Partner',
+        href: paths.dashboardPublic.campaign,
+      },
+      {
+        key: 'spaces',
+        title: 'Spaces',
+        href: paths.dashboardPublic.campaign,
+      },
     ],
   },
 ];

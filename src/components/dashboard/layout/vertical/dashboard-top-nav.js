@@ -1,5 +1,8 @@
 'use client';
 
+import * as React from 'react';
+import RouterLink from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ForgotPasswordForm } from '@/app/auth/_components/FogotPasswordForm';
 import { LoginForm } from '@/app/auth/_components/LoginForm';
 import { SignupForm } from '@/app/auth/_components/SignupForm';
@@ -7,9 +10,7 @@ import { Dropdown } from '@/components/core/dropdown/dropdown';
 import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
 import { DropdownTrigger } from '@/components/core/dropdown/dropdown-trigger';
 import { Logo } from '@/components/core/logo';
-import RouterLink from 'next/link';
-import { usePathname } from 'next/navigation';
-import * as React from 'react';
+import { Iconify } from '@/components/iconify/iconify';
 // import { RightPanel } from '../rightPanel/right-panel';
 // import { MobileNav } from './mobile-nav';
 // import { NavSearch } from './nav-search';
@@ -76,8 +77,8 @@ export const DashboardTopNav = ({ onToggle }) => {
                 sx={{ listStyle: 'none', m: 0, p: 0 }}
                 alignItems={'center'}
               >
-                <IconButton onClick={onToggle}>
-                  <MenuIcon />
+                <IconButton onClick={onToggle} color="#333">
+                  <Iconify icon="material-symbols:menu-rounded" color="#333" />
                 </IconButton>
                 {dashboardPublicNavData.map((section, index) =>
                   section.items.map((item) => (
@@ -94,7 +95,7 @@ export const DashboardTopNav = ({ onToggle }) => {
                 <Typography
                   component="span"
                   sx={{
-                    color: 'var(--mui-palette-neutral-600)',
+                    color: 'var(--mui-palette-warning-700)',
                     '&:hover': { color: 'var(--mui-palette-common-dark)' },
                     fontSize: '0.875rem',
                     fontWeight: 400,
