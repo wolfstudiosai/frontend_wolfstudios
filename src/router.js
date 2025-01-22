@@ -250,6 +250,13 @@ export const privateRoutes = [
         icon: 'fluent:chat-24-filled',
         allowedRoles: ['admin'],
       },
+      {
+        key: 'archive',
+        title: 'Archive',
+        href: paths.private.archive,
+        icon: 'fluent:archive-24-filled',
+        allowedRoles: ['admin'],
+      },
     ],
   },
 ];
@@ -260,4 +267,13 @@ export const additionalRoutes = [
     href: paths.dashboard.chat,
     allowedRoles: ['admin', 'user'],
   },
+];
+
+// footer routes
+export const footerRoutes = [
+  { label: 'Learn', href: '/learn' },
+  { label: 'Chat', href: '/chat' },
+  { label: 'Spectate', href: '/spectate' },
+  { label: 'Shop', href: '/shop' },
+  { label: 'Collaborate', href: '/collaborate' },
 ];

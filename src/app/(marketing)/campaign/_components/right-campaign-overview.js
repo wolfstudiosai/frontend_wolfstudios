@@ -14,7 +14,7 @@ export const RightCampaignOverview = ({ data }) => {
     <Box>
       <Grid container spacing={2}>
         {data.map((item, index) => (
-          <Grid item size={{ xs: 12, md: 4 }} key={index}>
+          <Grid item size={{ xs: 12, md: 3 }} key={index}>
             <CampaignCard data={item} />
           </Grid>
         ))}

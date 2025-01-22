@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { FeatureCards } from '@/app/(marketing)/top-cards';
+import { Footer } from '@/components/navbar/footer';
 import { privateRoutes } from '@/router';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
@@ -78,10 +79,12 @@ export function VerticalLayout({ children }) {
               display: 'flex',
               flex: '1 1 auto',
               flexDirection: 'column',
+              minHeight: "calc(100vh - 420px)",
             }}
           >
             {children}
           </Box>
+          <Footer />
         </Box>
       </Box>
     </React.Fragment>

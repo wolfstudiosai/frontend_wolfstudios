@@ -72,7 +72,7 @@ export default function Page() {
     {
       formatter: (row) => (
         <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-          <IconButton size="small" title="Edit" onClick={() => router.push(paths.dashboard.partner + '/' + row.slug)}>
+          <IconButton size="small" title="Edit" onClick={() => router.push(paths.private.partner + '/' + row.slug)}>
             <PencilSimpleIcon />
           </IconButton>
         </Stack>

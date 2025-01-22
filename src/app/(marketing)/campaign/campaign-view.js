@@ -122,8 +122,8 @@ export const CampaignView = ({ data }) => {
 
   return (
     <Box sx={{ py: 4 }}>
-      <Grid container spacing={4}>
-        <Grid item size={{ xs: 12, md: 4 }}>
+      <Grid container spacing={4} columns={10}>
+        <Grid item size={{ xs: 12, md: 2 }}>
           <Card>
             <LeftCampaignOverview data={featuredData} />
           </Card>

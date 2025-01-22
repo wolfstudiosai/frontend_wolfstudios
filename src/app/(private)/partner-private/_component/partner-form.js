@@ -1,12 +1,7 @@
 'use client';
 
-import { Button, CircularProgress, FormControl, FormLabel, InputAdornment, InputLabel } from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import { useFormik } from 'formik';
-import { useRouter } from 'next/navigation';
 import React from 'react';
-import { formConstants } from '/src/app/constants/form-constants';
-
+import { useRouter } from 'next/navigation';
 import { TextEditor } from '@/components/core/text-editor/text-editor';
 import { CustomDatePicker } from '@/components/formFields/custom-date-picker';
 import { CustomSelect } from '@/components/formFields/custom-select';
@@ -16,13 +11,15 @@ import { Iconify } from '@/components/iconify/iconify';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
 import PageLoader from '@/components/PageLoader/PageLoader';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
-import { paths } from '/src/paths';
+import { Button, CircularProgress, FormControl, FormLabel, InputAdornment, InputLabel } from '@mui/material';
+import Grid from '@mui/material/Grid2';
+import { useFormik } from 'formik';
 
-import { createCampaignAsync, getCampaignAsync, updateUCampaignAsync } from '../_lib/campaign.actions';
 import { defaultCampaign } from '../_lib/campaign.types';
+import { formConstants } from '/src/app/constants/form-constants';
 import { ContentGuideline } from './content-guideline';
 
-export const ManagePartnerForm = ({ slug }) => {
+export const PartnerForm = ({ slug }) => {
   const isUpdate = slug ? true : false;
 
   // *********************States*********************************
@@ -70,7 +67,6 @@ export const ManagePartnerForm = ({ slug }) => {
       getSingleData();
     }
   }, []);
-
   return (
     <PageLoader loading={loading} error={null}>
       <form onSubmit={handleSubmit}>
@@ -275,8 +271,6 @@ export const ManagePartnerForm = ({ slug }) => {
           </Grid>
         </Grid>
       </form>
-
-      {mediaPreview && <MediaIframeDialog open={true} data={mediaPreview} onClose={() => setMediaPreview(null)} />}
     </PageLoader>
   );
 };
