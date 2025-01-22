@@ -1,11 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { TopBreadcrumbs } from '@/app/(marketing)/breadcrumbs';
 import { FeatureCards } from '@/app/(marketing)/top-cards';
-import { LocalizationProvider } from '@/components/core/localization-provider';
-import { MainNav } from '@/components/navbar/main-nav';
-import { dashboardItems } from '@/router';
+import { privateRoutes } from '@/router';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
 
@@ -58,33 +55,34 @@ export function VerticalLayout({ children }) {
           // minHeight: '100%',
         }}
       >
-          <DashboardTopNav onToggle={handleSidebarToggle} />
-          <FeatureCards />
+        <DashboardTopNav onToggle={handleSidebarToggle} />
+        <FeatureCards />
+        <Box
+          sx={{
+            display: 'flex',
+            flex: '1 1 auto',
+            flexDirection: 'column',
+            pl: { lg: isLogin && open ? '280px' : '0px' },
+          }}
+        >
+          {isLogin && open && <SideNav color={settings.navColor} items={privateRoutes} open={open} />}
           <Box
+            component="main"
             sx={{
+              // '--Content-margin': '1.5rem auto',
+              // '--Content-maxWidth': 'var(--maxWidth-xl)',
+              '--Content-paddingX': '24px',
+              '--Content-paddingY': { xs: '24px', lg: '24px' },
+              '--Content-padding': 'var(--Content-paddingY) var(--Content-paddingX)',
+              '--Content-width': '100%',
               display: 'flex',
               flex: '1 1 auto',
               flexDirection: 'column',
-              pl: { lg: isLogin && open ? '280px' : '0px' },            }}
+            }}
           >
-            {isLogin && open && <SideNav color={settings.navColor} items={dashboardItems} open={open} />}
-            <Box
-              component="main"
-              sx={{
-                // '--Content-margin': '1.5rem auto',
-                // '--Content-maxWidth': 'var(--maxWidth-xl)',
-                '--Content-paddingX': '24px',
-                '--Content-paddingY': { xs: '24px', lg: '24px' },
-                '--Content-padding': 'var(--Content-paddingY) var(--Content-paddingX)',
-                '--Content-width': '100%',
-                display: 'flex',
-                flex: '1 1 auto',
-                flexDirection: 'column',
-              }}
-            >
-              {children}
-            </Box>
+            {children}
           </Box>
+        </Box>
       </Box>
     </React.Fragment>
   );

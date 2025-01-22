@@ -183,7 +183,7 @@ export const DashboardTopNav = ({ onToggle }) => {
           <LoginForm closeDialog={handleClose} />
         </Box>
       </Popover>
-      <RightPanel open={openRightPanel} onClose={() => setOpenRightPanel(false)} heading={openForm}>
+      {/* <RightPanel open={openRightPanel} onClose={() => setOpenRightPanel(false)} heading={openForm}>
         {openForm === LOGIN && (
           <>
             <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
@@ -238,7 +238,7 @@ export const DashboardTopNav = ({ onToggle }) => {
             <ForgotPasswordForm redirect={handleRedirectLogin} />
           </>
         )}
-      </RightPanel>
+      </RightPanel> */}
     </React.Fragment>
   );
 };

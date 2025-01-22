@@ -119,6 +119,36 @@ export const paths = {
     contact: '/contact',
     blog: '/blog',
   },
+
+  private: {
+    overview: '/overview',
+    analytics: '/analytics',
+
+    // campaign
+    campaign: '/campaign-private',
+    create_campaign: '/campaign/create',
+    campaign_view: '/campaign/public-view',
+
+    // records
+    records: '/records',
+
+    // partner
+    partner: '/partner-private',
+    create_partner: '/partner/create',
+    partner_view: '/partner/view',
+
+    portfolios: '/portfolios',
+    create_portfolio: '/portfolios/add-portfolio',
+    partners_by_campaign: '/partners-by-campaign',
+    needs_offer_approval: '/needs-offer-approval',
+    users: '/users',
+
+    chat: '/chat',
+    chat_compose: '/chat/compose',
+
+    content: '/content-private',
+    create_content: '/add-content',
+  },
   dashboardPublic: {
     // HQs
     portfolio: '/dashboard/portfolio/public-view',
