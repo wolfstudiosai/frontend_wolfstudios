@@ -18,6 +18,7 @@ export function Breadcrumbs() {
         position: 'sticky',
         top: '75px',
         zIndex: 999,
+        backgroundColor: 'var(--mui-palette-background-default)',
       }}
     >
       <Typography variant="breadcrumbs" color="text.primary">

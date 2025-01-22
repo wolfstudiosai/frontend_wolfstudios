@@ -60,7 +60,7 @@ export function FeatureCards() {
       description: 'Home to millions of species.',
       image: 'https://picsum.photos/300/200?random=15',
       timestamp: '1 month ago',
-    }
+    },
   ];
 
   return (
@@ -74,6 +74,7 @@ export function FeatureCards() {
         position: 'sticky',
         top: '100px',
         zIndex: 999,
+        backgroundColor: 'var(--mui-palette-background-default)',
         scrollBehavior: 'smooth',
         '&::-webkit-scrollbar': {
           height: '6px',
@@ -89,31 +90,40 @@ export function FeatureCards() {
     >
       {cardsdata.map((card) => (
         <Card
-          key={card.id}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            minWidth: 350,
-            width: { xs: '100%', sm: 300 },
-            flex: '0 0 auto',
-            padding: 1.5,
-            boxShadow: 3,
-            borderRadius: 2,
-            border: 'solid 1px #e0e0e0',
-            backgroundColor: 'var(--mui-palette-background-paper)',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Icon Section */}
-          <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 2 }}>
-            <Icon color="primary" sx={{ fontSize: 40 }}>
-              {card.icon}
-            </Icon>
-          </Box>
-
-          {/* Title and Description Section */}
-          <Box sx={{ flexGrow: 1 }}>
+        key={card.id}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          minWidth: 300,
+          width: { xs: '100%', sm: 250 },
+          flex: '0 0 auto',
+          padding: 1.2,
+          boxShadow: 3,
+          borderRadius: 3.8,
+          border: 'solid 1px var(--mui-palette-divider)',
+          backgroundColor: 'var(--mui-palette-background-paper)',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Image Section instead of Icon */}
+        <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 2 }}>
+          <img
+            src={card.image}
+            alt={card.title}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: '50%',
+              objectFit: 'cover',
+            }}
+          />
+        </Box>
+      
+        {/* Title and Description Section */}
+        <Box sx={{ flexGrow: 1 }}>
+          {/* Title and Timestamp in a Row */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography
               variant="h6"
               sx={{
@@ -124,52 +134,30 @@ export function FeatureCards() {
             >
               {card.title}
             </Typography>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{
-                fontSize: '14px',
-                marginTop: '4px',
-                whiteSpace: 'normal',
-              }}
-            >
-              {card.description}
-            </Typography>
-          </Box>
-
-          {/* Image Section with Timestamp */}
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative',
-            }}
-          >
             {/* Timestamp */}
             <Typography
               sx={{
                 fontSize: '12px',
                 color: 'text.secondary',
-                marginBottom: '4px',
               }}
             >
               {card.timestamp}
             </Typography>
-            {/* Image */}
-            <img
-              src={card.image}
-              alt={card.title}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: '50%',
-                objectFit: 'cover',
-              }}
-            />
           </Box>
-        </Card>
+      
+          {/* Description */}
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              fontSize: '14px',
+              whiteSpace: 'normal',
+            }}
+          >
+            {card.description}
+          </Typography>
+        </Box>
+      </Card>
       ))}
     </Box>
   );

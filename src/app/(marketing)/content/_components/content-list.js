@@ -120,7 +120,22 @@ export const ContentList = () => {
 
   return (
     <>
-      <Box sx={{ overflowX: 'auto' }}>
+      <Box
+        sx={{
+          overflowX: 'auto',
+          scrollBehavior: 'smooth',
+          '&::-webkit-scrollbar': {
+            height: '6px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#888',
+            borderRadius: '4px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: '#555',
+          },
+        }}
+      >
         <Grid
           container
           spacing={2}

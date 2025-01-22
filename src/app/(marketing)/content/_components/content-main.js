@@ -145,13 +145,13 @@ const VideoContentCard = ({ content }) => {
             component="video"
             src={content.video}
             controls
-            sx={{ width: '100%', objectFit: 'cover', border: 0, borderRadius: '20px' }}
+            sx={{ width: '100%', objectFit: 'cover', border: 0, borderRadius: '20px', boxShadow: '0px 2px 5px #0003' }}
           />
         ) : (
           <Box
             component="img"
             src={content.image}
-            sx={{ width: '100%', objectFit: 'cover', border: 0, borderRadius: '20px' }}
+            sx={{ width: '100%', objectFit: 'cover', border: 0, borderRadius: '20px', boxShadow: '0px 2px 5px #0003' }}
           />
         )}
         <Box p={1}>

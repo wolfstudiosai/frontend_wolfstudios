@@ -15,6 +15,7 @@ import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/Car
 
 export function PublicSideNav({ items }) {
   const drawerWidth = '250px';
+  const topSpace = '230px';
 
   return (
     <Drawer
@@ -24,11 +25,23 @@ export function PublicSideNav({ items }) {
         '& .MuiDrawer-paper': {
           width: drawerWidth,
           boxSizing: 'border-box',
-          top: '275px',
-          height: '100vh',
+          top: topSpace,
+          height: `calc(100vh - ${topSpace})`,
           left:'15px',
           borderRadius:'25px',
-          position:'absolute',
+          position:'fixed',
+          zIndex: 1100,
+          scrollBehavior: 'smooth',
+          '&::-webkit-scrollbar': {
+            width: '6px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#888',
+            borderRadius: '4px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: '#555',
+          },
         },
       }}
       variant="persistent"

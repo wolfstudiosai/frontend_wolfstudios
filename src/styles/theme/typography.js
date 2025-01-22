@@ -27,5 +27,5 @@ export const typography = {
   // Portfolio Typography
   cardTitle: { fontFamily: 'Montserrat, sans-serif', fontSize: '1.125rem', fontWeight: '300', lineHeight: '20px' },
   cardSubTitle: { fontFamily: 'Satoshi, sans-serif', fontSize: '.875rem', fontWeight: '300', lineHeight: '15px' },
-  breadcrumbs: { fontFamily: 'Montserrat, sans-serif', fontSize: '1.175rem', fontWeight: '400', lineHeight: '15px' },
+  breadcrumbs: { fontFamily: 'Montserrat, sans-serif', fontSize: '21px', fontWeight: '400', lineHeight: '15px' },
 };
