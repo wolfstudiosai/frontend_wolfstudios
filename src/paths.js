@@ -143,8 +143,8 @@ export const paths = {
     needs_offer_approval: '/needs-offer-approval',
     users: '/users',
 
-    chat: '/chat',
-    chat_compose: '/chat/compose',
+    chat: 'dashboard/chat',
+    chat_compose: 'dashboard/chat/compose',
 
     content: '/content-private',
     create_content: '/add-content',
