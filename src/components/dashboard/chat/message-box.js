@@ -24,14 +24,30 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
   const handleClose = () => setOpen(false);
   const handleSelect = () => setSelected(!selected);
 
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    const handleClickOutside = React.useCallback((event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setSelected(false);
+      }
+    }, []);
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [ref]);
+
+
+
   return (
     <Box
+      ref={ref}
       sx={{ alignItems: position === 'right' ? 'flex-end' : 'flex-start', flex: '0 0 auto', display: 'flex' }}
       // on right click
       onContextMenu={(e) => {
         e.preventDefault();
         handleSelect();
       }}
+
     >
       <Stack
         direction={position === 'right' ? 'row-reverse' : 'row'}
@@ -42,6 +58,7 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
           ml: position === 'right' ? 'auto' : 0,
           mr: position === 'left' ? 'auto' : 0,
           border: selected ? '1px solid blue' : 'none',
+          transition: 'border 0.2s ease',
           cursor: 'pointer',
         }}
       >
@@ -82,7 +99,7 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
                 <Typography color="text.primary" variant="caption" align="right">
                   (edited)
                 </Typography>
-                )}
+              )}
             </Stack>
           </Card>
           <Box sx={{ display: 'flex', justifyContent: position === 'right' ? 'flex-end' : 'flex-start', px: 2 }}>
@@ -92,12 +109,12 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
           </Box>
           {selected && (
             <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 2 }}>
-              <IconButton onClick={() => {}}>
+              <IconButton onClick={() => { }}>
                 <ReplyIcon />
               </IconButton>
               {message.author.id === userInfo.email && (
                 <>
-                  <IconButton onClick={() => {}}>
+                  <IconButton onClick={() => { }}>
                     <EditIcon />
                   </IconButton>
                   <IconButton onClick={() => onDelete(message)}>
