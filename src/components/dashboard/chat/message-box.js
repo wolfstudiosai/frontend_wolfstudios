@@ -25,17 +25,17 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
   const handleSelect = () => setSelected(!selected);
 
   const ref = React.useRef(null);
+  const handleClickOutside = React.useCallback((event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setSelected(false);
+    }
+  }, []);
+  
   React.useEffect(() => {
-    const handleClickOutside = React.useCallback((event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        setSelected(false);
-      }
-    }, []);
-    
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [ref]);
-
+  }, [handleClickOutside]);
+  
 
 
   return (
