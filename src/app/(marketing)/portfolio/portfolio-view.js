@@ -1,9 +1,10 @@
 'use client';
 
-import Link from 'next/link';
+import { Toolbar } from '@/components/toolbar/toolbar';
 import { textShortner } from '@/utils/utils';
 import { Box, Paper, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import Link from 'next/link';
 
 import { PortfolioFilter } from './components/portfolio-filter';
 import PortfolioSlider from './components/portfolio-slider';
@@ -123,6 +124,7 @@ export const PortfolioView = () => {
 
   return (
     <Box sx={{ py: 4 }}>
+      <Toolbar />
       <PortfolioSlider />
       <Typography
         gutterBottom
@@ -131,7 +133,7 @@ export const PortfolioView = () => {
           fontSize: {
             xs: '1.4rem',
             md: '2rem',
-            marginTop:'10px'
+            marginTop: '10px',
           },
           lineHeight: 1,
         }}
@@ -157,7 +159,7 @@ const PortfolioCard = ({ portfolio }) => {
         <Box
           component="img"
           src={portfolio.image}
-          sx={{ height: 200, width: '100%', objectFit: 'cover', borderRadius: '20px', boxShadow:'0 2px 5px #0003' }}
+          sx={{ height: 200, width: '100%', objectFit: 'cover', borderRadius: '20px', boxShadow: '0 2px 5px #0003' }}
         />
         <Box p={2}>
           <Typography variant="cardTitle" sx={{ display: 'block', marginBottom: '8px' }}>
