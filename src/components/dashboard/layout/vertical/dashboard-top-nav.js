@@ -18,7 +18,7 @@ import { MobileNav } from '@/components/navbar/mobile-nav';
 import { NavSearch } from '@/components/navbar/nav-search';
 import { RightPanel } from '@/components/rightPanel/right-panel';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
-import { dashboardPublicNavData } from '@/router';
+import { dashboardPublicNavData, publicRoutes } from '@/router';
 import { clearUserSessionFromLocalStore } from '@/utils/axios-api.helpers';
 import { Popover } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -98,7 +98,7 @@ export const DashboardTopNav = ({ onToggle }) => {
                 <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
                   <Logo height={32} width={122} />
                 </Box>
-                {dashboardPublicNavData.map((section, index) =>
+                {publicRoutes.map((section, index) =>
                   section.items.map((item) => (
                     <NavItem
                       key={index}

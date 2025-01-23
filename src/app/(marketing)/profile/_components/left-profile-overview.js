@@ -61,10 +61,10 @@ const SocialIcons = ({ iconsArr }) => {
 const ImageTextIconButton = ({ dataArr }) => {
   return (
     <Stack direction="column" spacing={1} sx={{ width: '100%' }}>
-      {dataArr.map((item) => {
+      {dataArr.map((item, index) => {
         return (
           <Stack
-            key={item.id}
+            key={index}
             direction="row"
             justifyContent={'space-between'}
             spacing={1}
