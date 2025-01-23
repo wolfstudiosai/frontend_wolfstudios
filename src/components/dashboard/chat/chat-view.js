@@ -69,7 +69,7 @@ export function ChatView({ children }) {
 
   return (
     // <Box sx={{ height:'auto' }}>
-    <Box sx={{ display: 'flex', flex: '1 1 0', minHeight: 0, maxHeight: '90vh', overflow: 'hidden' }}>
+    <Box sx={{ display: 'flex', flex: '1 1 0', minHeight: '80vh', maxHeight: '100vh', overflow: 'hidden' }}>
       <Sidebar
         contacts={contacts}
         currentThreadId={currentThreadId}
