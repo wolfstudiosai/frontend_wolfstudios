@@ -6,12 +6,6 @@ export const publicRoutes = [
     key: 'public-navitems',
     items: [
       // { key: 'home', title: 'Home', href: paths.home },
-
-      {
-        key: 'overview',
-        title: 'Overview',
-        href: paths.dashboardPublic.campaign,
-      },
       {
         key: 'campaign',
         title: 'Campaign',
