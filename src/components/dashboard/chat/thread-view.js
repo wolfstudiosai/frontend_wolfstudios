@@ -32,9 +32,9 @@ function useMessages(threadId) {
 // };
 
 export function ThreadView({ threadId }) {
-  const { createMessage, markAsRead } = React.useContext(ChatContext);
+  const { createMessage, markAsRead, editMessage, deleteMessage } = React.useContext(ChatContext);
   const [isProfileVisible, setIsProfileVisible] = React.useState(false);
-
+  const [editingMessage, setEditingMessage] = React.useState(null); // Track editing state
   const [loading, setLoading] = React.useState(true); 
   const thread = useThread(threadId);
   const messages = useMessages(threadId);
@@ -58,22 +58,52 @@ export function ThreadView({ threadId }) {
     return () => clearTimeout(timeoutId);
   }, [threadId]);
 
-  // const handleSendMessage = React.useCallback(
-  //   async (type, content) => {
-  //     createMessage({ threadId, type, content });
-  //   },
-  //   [threadId, createMessage]
-  // );
+
   const handleSendMessage = React.useCallback(
     async (type, content, file) => {
       const fileUrl = file
-        ? URL.createObjectURL(file) // Simulate file upload temporarily for preview
+        ? URL.createObjectURL(file) 
         : null;
       await createMessage({ threadId, type, content, file_url: fileUrl, file });
     },
     [threadId, createMessage]
   );
+
+  // const handleSendMessage = React.useCallback(
+  //   async (content, file, editingMessageId) => {
+  //     if (editingMessageId) {
+  //       // Editing an existing message
+  //       await editMessage(editingMessageId, content); // Call editMessage
+  //       setEditingMessage(null); // Clear editing state
+  //     } else {
+  //       // Creating a new message
+  //       const fileUrl = file ? URL.createObjectURL(file) : null;
+  //       await createMessage({ threadId, type: file ? 'FILE' : 'TEXT', content, file_url: fileUrl, file });
+  //     }
+  //   },
+  //   [threadId, createMessage, editMessage]
+  // );
   
+
+  const handleReply = (message) => {
+    // Handle reply logic
+  };
+
+  const handleDelete = async (message) => {
+    const confirmed = confirm('Are you sure you want to delete this message?');
+    if (confirmed) {
+      await deleteMessage(message.id);
+    }
+  };
+  
+
+  const handleEdit = (message) => {
+    setEditingMessage(message); // Set the message to edit
+  };
+
+  const handleCancelEdit = () => {
+    setEditingMessage(null); // Clear editing state
+  };
 
   React.useEffect(() => {
     if (messagesRef.current) {
@@ -123,10 +153,15 @@ export function ThreadView({ threadId }) {
       <ThreadToolbar thread={thread} />
       <Stack ref={messagesRef} spacing={2} sx={{ flex: '1 1 auto', overflowY: 'auto', p: 3 }}>
         {messages.map((message) => (
-          <MessageBox key={message?.id} message={message} />
+          <MessageBox key={message?.id} message={message} onDelete={
+            () => handleDelete(message)
+          } onEdit={handleEdit} onReply={() => {}
+          } />
         ))}
       </Stack>
-      <MessageAdd onSend={handleSendMessage} />
+      <MessageAdd onSend={handleSendMessage}   editingMessage={editingMessage}
+        onCancelEdit={handleCancelEdit} 
+        />
       {
         // isProfileVisible && <RightSidebar SelectedUser={user}  />
       }

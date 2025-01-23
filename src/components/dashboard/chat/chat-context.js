@@ -17,6 +17,8 @@ export const ChatContext = React.createContext({
   createThread: noop,
   markAsRead: noop,
   createMessage: noop,
+  editMessage: noop,
+  deleteMessage: noop,
   openDesktopSidebar: true,
   setOpenDesktopSidebar: noop,
   openMobileSidebar: true,
@@ -70,8 +72,8 @@ export function ChatProvider({ children
           type: params.type.toUpperCase(),
           participants: params.type === 'direct' ? [params.recipientId, userId] : params.recipientIds,
         });
-        console.log("params:",params)
-        console.log("response===",response.data.data)
+        // console.log("params:",params)
+        // console.log("response===",response.data.data)
         // Reformat the response data into the required thread format
         const newThread = {
           id: response.data.data.id,
@@ -163,7 +165,7 @@ useEffect(() => {
           content: payload.new.content,
           author: {
             id: payload.new.author_id,
-            name: payload.new.author_name || 'Unknown',
+            name: payload.new.author_name || 'new user',
             avatar: payload.new.author_avatar || '',
           },
           file_url: payload.new.file_url,
@@ -237,6 +239,57 @@ useEffect(() => {
   };
 }, [userId]);
 
+const handleEditMessage = useCallback(
+  async (messageId, threadId, authorId, newContent) => {
+    try {
+      const response = await api.put(`/threads/message/edit`, { 
+        messageId, 
+        thread_id: threadId, 
+        author_id: authorId, 
+        content: newContent 
+       });
+      setMessages((prev) => {
+        const updatedMessages = new Map(prev);
+        const threadMessages = updatedMessages.get(response.data.threadId) || [];
+        const updatedThreadMessages = threadMessages.map((msg) =>
+          msg.id === messageId ? { ...msg, content: newContent, isEdited: true } : msg
+        );
+        updatedMessages.set(response.data.threadId, updatedThreadMessages);
+        return updatedMessages;
+      });
+      console.log('Message edited:', response.data);
+    } catch (err) {
+      console.error('Error editing message:', err);
+      throw err;
+    }
+  },
+  []
+);
+
+// delete message
+const handleDeleteMessage = useCallback(
+  async (messageId) => {
+    try {
+      await api.delete(`/threads/message/delete`, { data: { messageId } });
+      setMessages((prev) => {
+        const updatedMessages = new Map(prev);
+        for (const [threadId, msgs] of updatedMessages.entries()) {
+          updatedMessages.set(
+            threadId,
+            msgs.filter((msg) => msg.id !== messageId)
+          );
+        }
+        return updatedMessages;
+      });
+      console.log('Message deleted');
+    } catch (err) {
+      console.error('Error deleting message:', err);
+      throw err;
+    }
+  },
+  []
+);
+
 
   return (
     <ChatContext.Provider
@@ -247,6 +300,8 @@ useEffect(() => {
         createThread: handleCreateThread,
         markAsRead: handleMarkAsRead,
         createMessage: handleCreateMessage,
+        editMessage: handleEditMessage,
+        deleteMessage: handleDeleteMessage,
         openDesktopSidebar,
         setOpenDesktopSidebar,
         openMobileSidebar,

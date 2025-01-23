@@ -67,6 +67,13 @@ export const privateRoutes = [
         icon: 'material-symbols-light:ads-click',
         allowedRoles: ['admin', 'user'],
       },
+      {
+        key: 'chat',
+        title: 'Chat',
+        href: paths.private.chat,
+        icon: 'fluent:chat-24-filled',
+        allowedRoles: ['admin', 'user'],
+      }
     ],
   },
   {
