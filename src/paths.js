@@ -151,16 +151,17 @@ export const paths = {
   },
   dashboardPublic: {
     // HQs
-    portfolio: '/dashboard/portfolio/public-view',
-    campaign: '/dashboard/campaign/public-view',
-    profile: '/dashboard/profile/public-view',
-    content: '/dashboard/content/public-view',
-    partner: '/dashboard/partner/public-view',
+    portfolio: '/portfolio',
+    campaign: '/campaign',
+    profile: '/profile',
+    content: '/content',
+    partner: '/partner',
+    production: '/production',
 
     // knowledge base
-    about: '/dashboard/about',
-    contact: '/dashboard/contact',
-    blog: '/dashboard/blog',
+    about: '/about',
+    contact: '/contact',
+    blog: '/blog',
   },
 
   auth: {
