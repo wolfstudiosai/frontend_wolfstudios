@@ -3,7 +3,8 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
-import { DynamicLogo, Logo } from '@/components/core/logo';
+import { Logo } from '@/components/core/logo';
+import { publicRoutes } from '@/router';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -14,11 +15,10 @@ import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/Caret
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
+import { paths } from '@/paths';
 import { isNavItemActive } from '/src/lib/is-nav-item-active';
 
 import { NavSearch } from './nav-search';
-import { paths } from '@/paths';
-import { navData } from '@/router';
 
 // todo: remove navItems later
 const navItems = [
@@ -101,7 +101,7 @@ export function MobileNav({ onClose, open = false }) {
         </Box>
         <Box component="nav">
           <Stack component="ul" spacing={1} sx={{ listStyle: 'none', m: 0, p: 0 }}>
-            {renderNavGroups({ items: navData, onClose, pathname })}
+            {renderNavGroups({ items: publicRoutes, onClose, pathname })}
           </Stack>
         </Box>
       </DialogContent>

@@ -76,7 +76,7 @@ export const Footer = () => {
               </Typography>
               <Box sx={{ marginTop: '10px' }}>
                 {footerRoutes.map((route) => (
-                  <FooterMenuItem key={route.id} title={route.label} link={route.href} />
+                  <FooterMenuItem key={route.label} title={route.label} link={route.href} />
                 ))}
               </Box>
             </Grid>

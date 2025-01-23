@@ -1,107 +1,7 @@
 import { paths } from './paths';
 
-// public routes
-export const navData = [
-  {
-    key: 'public-navitems',
-    items: [
-      // { key: 'home', title: 'Home', href: paths.home },
-      {
-        key: 'HQs',
-        title: 'HQs',
-        items: [
-          {
-            key: 'portfolio',
-            title: 'Portfolio',
-            href: paths.public.portfolio,
-          },
-          {
-            key: 'campaign',
-            title: 'Campaign',
-            href: paths.public.campaign,
-          },
-          {
-            key: 'profile',
-            title: 'Profile',
-            href: paths.public.profile,
-          },
-          {
-            key: 'content',
-            title: 'Content',
-            href: paths.public.content,
-          },
-          {
-            key: 'partner',
-            title: 'Partner',
-            href: paths.public.partner,
-          },
-        ],
-      },
-      {
-        key: 'workshops',
-        title: 'Workshops',
-      },
-      // {
-      //   key: 'login',
-      //   title: 'Login',
-      //   href: paths.auth.default.sign_in,
-      // },
-    ],
-  },
-];
-
-// dashboard public routes
-export const footerNavData = [
-  {
-    key: 'public-navitems',
-    items: [
-      // { key: 'home', title: 'Home', href: paths.home },
-      {
-        key: 'HQs',
-        title: 'HQs',
-        items: [
-          {
-            key: 'portfolio',
-            title: 'Portfolio',
-            href: paths.dashboardPublic.portfolio,
-          },
-          {
-            key: 'campaign',
-            title: 'Campaign',
-            href: paths.dashboardPublic.campaign,
-          },
-          {
-            key: 'profile',
-            title: 'Profile',
-            href: paths.dashboardPublic.profile,
-          },
-          {
-            key: 'content',
-            title: 'Content',
-            href: paths.dashboardPublic.content,
-          },
-          {
-            key: 'partner',
-            title: 'Partner',
-            href: paths.dashboardPublic.partner,
-          },
-        ],
-      },
-      {
-        key: 'workshops',
-        title: 'Workshops',
-      },
-      // {
-      //   key: 'login',
-      //   title: 'Login',
-      //   href: paths.auth.default.sign_in,
-      // },
-    ],
-  },
-];
-
-// overview, campaign, portfolios, concepts, production, partners, spaces
-export const dashboardPublicNavData = [
+// public header routes
+export const publicRoutes = [
   {
     key: 'public-navitems',
     items: [
@@ -258,14 +158,6 @@ export const privateRoutes = [
         allowedRoles: ['admin'],
       },
     ],
-  },
-];
-
-// add all the dashboard routes that not in the dashboardItems
-export const additionalRoutes = [
-  {
-    href: paths.dashboard.chat,
-    allowedRoles: ['admin', 'user'],
   },
 ];
 
