@@ -53,7 +53,7 @@ export function SideNav({ color = 'evident', items = [], open }) {
           width: open ? 'var(--SideNav-width)' : '70px',
           zIndex: 'var(--SideNav-zIndex)',
           transition: 'width 0.3s ease',
-          borderRadius: '0 10px 10px 0',
+          borderRadius: '30px',
           // margin: '0px 10px 10px 0px',
           marginBottom: '10px',
         }}

@@ -122,7 +122,7 @@ export const PortfolioView = () => {
   ];
 
   return (
-    <Box sx={{ py: 4 }}>
+    <Box sx={{ py: 4, px: 3 }}>
       <PortfolioSlider />
       <Typography
         gutterBottom

@@ -44,7 +44,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
-    borderRadius: theme.shape.borderRadius,
+    // borderRadius: theme.shape.borderRadius,
+    borderRadius: 'calc(4* var(--mui-shape-borderRadius))',
     backgroundColor: alpha(theme.palette.common.black, 0.05),
     transition: 'background-color 0.5s ease',
     '&:hover': {

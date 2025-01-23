@@ -143,7 +143,7 @@ export const DashboardTopNav = ({ onToggle }) => {
               </Stack>
             </Box>
 
-            <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <NavSearch />
               <IconButton
                 onClick={() => {
@@ -153,6 +153,9 @@ export const DashboardTopNav = ({ onToggle }) => {
               >
                 <ListIcon />
               </IconButton>
+              <Box  sx={{display: { xs: 'flex', md: 'none' } }}>
+                <Logo colorDark="light" colorLight="dark" height={32} width={122} />
+              </Box>
             </Box>
           </Stack>
         </Container>

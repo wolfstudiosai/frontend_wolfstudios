@@ -1,9 +1,10 @@
 'use client';
 
 import * as React from 'react';
-import { Box, Card, Icon, Typography } from '@mui/material';
+import { Box, Card, Typography } from '@mui/material';
 
 export function FeatureCards() {
+  const [isLoogedIn, setisLoogedIn] = React.useState(false);
   const cardsdata = [
     {
       id: 1,
@@ -63,6 +64,20 @@ export function FeatureCards() {
     },
   ];
 
+  React.useEffect(() => {
+    const data = localStorage.getItem('auth');    
+    if (data) {
+      const user = JSON.parse(data);
+      if (user?.role === 'ADMIN') {
+        setisLoogedIn(true);
+      }
+    }
+  }, []);
+
+  if (!isLoogedIn) {
+    return null;
+  }
+
   return (
     <Box
       sx={{
@@ -71,6 +86,7 @@ export function FeatureCards() {
         overflowX: 'auto',
         whiteSpace: 'nowrap',
         p: 2,
+        mx: 2,
         position: 'sticky',
         top: 60,
         zIndex: 999,
@@ -85,8 +101,7 @@ export function FeatureCards() {
         '&::-webkit-scrollbar-thumb:hover': {
           backgroundColor: '#555',
         },
-        backgroundColor: "var(--mui-palette-background-default)",
-        // overflow: "hidden"
+        backgroundColor: 'var(--mui-palette-background-default)',
       }}
     >
       {cardsdata.map((card) => (
@@ -96,7 +111,7 @@ export function FeatureCards() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            minWidth: 350,
+            minWidth: 300,
             width: { xs: '100%', sm: 300 },
             flex: '0 0 auto',
             paddingX: 1.5,
@@ -110,29 +125,49 @@ export function FeatureCards() {
         >
           {/* Icon Section */}
           <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 2 }}>
-            <Icon color="primary" sx={{ fontSize: 40 }}>
-              {card.icon}
-            </Icon>
+            <img
+              src={card.image}
+              alt={card.title}
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: '50%',
+                objectFit: 'cover',
+              }}
+            />
           </Box>
 
           {/* Title and Description Section */}
           <Box sx={{ flexGrow: 1 }}>
-            <Typography
-              variant="h6"
-              sx={{
-                fontSize: '16px',
-                fontWeight: 'bold',
-                whiteSpace: 'normal',
-              }}
-            >
-              {card.title}
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              {/* Title */}
+              <Typography
+                variant="h6"
+                sx={{
+                  fontSize: '16px',
+                  whiteSpace: 'normal',
+                }}
+              >
+                {card.title}
+              </Typography>
+
+              {/* Timestamp */}
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  color: 'text.secondary',
+                }}
+              >
+                {card.timestamp}
+              </Typography>
+            </Box>
+
+            {/* Description Section */}
             <Typography
               variant="body2"
               color="text.secondary"
               sx={{
                 fontSize: '14px',
-                marginTop: '4px',
                 whiteSpace: 'normal',
               }}
             >
@@ -150,16 +185,7 @@ export function FeatureCards() {
               position: 'relative',
             }}
           >
-            {/* Timestamp */}
-            <Typography
-              sx={{
-                fontSize: '12px',
-                color: 'text.secondary',
-                marginBottom: '4px',
-              }}
-            >
-              {card.timestamp}
-            </Typography>
+            {/* Timestamp (if needed here again) */}
           </Box>
         </Card>
       ))}
