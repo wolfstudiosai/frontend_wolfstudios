@@ -12,18 +12,23 @@ import { Paperclip as PaperclipIcon } from '@phosphor-icons/react/dist/ssr/Paper
 import { PaperPlaneTilt as PaperPlaneTiltIcon } from '@phosphor-icons/react/dist/ssr/PaperPlaneTilt';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import dynamic from 'next/dynamic';
-
+import{Cancel as CancelIcon} from '@mui/icons-material/Cancel';
+// import 
 const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 
-export function MessageAdd({ disabled = false, onSend }) {
-  const [content, setContent] = React.useState('');
+export function MessageAdd({ disabled = false, onSend, editingMessage = null, onCancelEdit   }) {
+  const [content, setContent] = React.useState( editingMessage ? editingMessage.content : '');
   const [showEmojiPicker, setShowEmojiPicker] = React.useState(false);
   const pickerRef = React.useRef(null);
   const inputRef = React.useRef(null);
+  
 
   const fileInputRef = React.useRef(null);
   const [file, setFile] = React.useState(null);
 
+  React.useEffect(() => {
+    setContent(editingMessage?.content || ''); // Update content when editingMessage changes
+  }, [editingMessage]);
   const handleAttach = React.useCallback(() => {
     fileInputRef.current?.click();
   }, []);
@@ -107,11 +112,18 @@ export function MessageAdd({ disabled = false, onSend }) {
         disabled={disabled}
         onChange={handleChange}
         onKeyUp={handleKeyUp}
-        placeholder="Type a message..."
+        placeholder={editingMessage ? 'Edit your message...' : 'Type a message...'}
         sx={{ flex: '1 1 auto', borderRadius: 4 }}
         value={content}
         endAdornment={
           <InputAdornment position="end">
+            {editingMessage && (
+              <Tooltip title="Cancel Edit">
+                <IconButton onClick={onCancelEdit}>
+                  <CancelIcon />
+                </IconButton>
+              </Tooltip>
+            )}
             <Tooltip title="Add emoji">
               <span>
                 <IconButton disabled={disabled} onClick={toggleEmojiPicker}>
