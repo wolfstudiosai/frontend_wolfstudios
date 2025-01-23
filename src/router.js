@@ -14,22 +14,22 @@ export const publicRoutes = [
       {
         key: 'portfolio',
         title: 'Portfolio',
-        href: paths.dashboardPublic.campaign,
+        href: paths.dashboardPublic.portfolio,
       },
       {
         key: 'concept',
         title: 'Content',
-        href: paths.dashboardPublic.campaign,
+        href: paths.dashboardPublic.content,
       },
       {
         key: 'production',
         title: 'Production',
-        href: paths.dashboardPublic.campaign,
+        href: paths.dashboardPublic.production,
       },
       {
         key: 'partner',
         title: 'Partner',
-        href: paths.dashboardPublic.campaign,
+        href: paths.dashboardPublic.partner,
       },
       {
         key: 'spaces',
@@ -78,7 +78,7 @@ export const privateRoutes = [
         title: 'Records',
         href: paths.private.records,
         icon: 'pepicons-pencil:file',
-        allowedRoles: ['user'],
+        allowedRoles: ['admin'],
       },
       {
         key: 'partner',
