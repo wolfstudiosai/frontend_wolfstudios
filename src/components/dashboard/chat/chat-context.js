@@ -218,10 +218,11 @@ useEffect(() => {
           participants: participants.map((participant) => ({
             id: participant.user_id,
             name: `${participant.user.first_name} ${participant.user.last_name}` || 'Unknown',
-            avatar: participant.user.profile_pic || '/assets/avatar.png',
+            avatar: participant.user.profile_pic || '',
           })),
           name: payload.new.name,
           unreadCount: 0,
+          member_count: participants.length,
         };
   
         setThreads((prev) => {
