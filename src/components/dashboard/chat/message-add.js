@@ -17,7 +17,7 @@ import{Cancel as CancelIcon} from '@mui/icons-material/Cancel';
 const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 
 export function MessageAdd({ disabled = false, onSend }) {
-  const [content, setContent] = React.useState(  '');
+  const [content, setContent] = React.useState('');
   const [showEmojiPicker, setShowEmojiPicker] = React.useState(false);
   const pickerRef = React.useRef(null);
   const inputRef = React.useRef(null);

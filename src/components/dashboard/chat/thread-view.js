@@ -24,21 +24,14 @@ function useMessages(threadId) {
   return messages.get(threadId) ?? [];
 }
 
-// const user = {
-//   id: 'USR-000',
-//   name: 'Sofia Rivers',
-//   avatar: '/assets/avatar.png',
-//   email: 'sofia@devias.io',
-// };
-
 export function ThreadView({ threadId }) {
-  const { createMessage, markAsRead, editMessage, deleteMessage } = React.useContext(ChatContext);
+  const { createMessage, markAsRead, editMessage, deleteMessage, replyMessage } = React.useContext(ChatContext);
   const [isProfileVisible, setIsProfileVisible] = React.useState(false);
   const [loading, setLoading] = React.useState(true); 
   const [showScrollButton, setShowScrollButton] = React.useState(false);
   const thread = useThread(threadId);
   const messages = useMessages(threadId);
-  console.log("messages in thread view", messages);
+  // console.log("messages in thread view", messages);
 
   const messagesRef = React.useRef(null);
   
@@ -71,9 +64,9 @@ export function ThreadView({ threadId }) {
   };
   
  
-  const togleProfile = React.useCallback(() => {
-    setIsProfileVisible((prev) => !prev);
-  }, []);
+  // const togleProfile = React.useCallback(() => {
+  //   setIsProfileVisible((prev) => !prev);
+  // }, []);
   const handleThreadChange = React.useCallback(() => {
     markAsRead(threadId);
   }, [threadId, markAsRead]);
@@ -99,8 +92,8 @@ export function ThreadView({ threadId }) {
   );
 
 
-  const handleReply = (message) => {
-    // Handle reply logic
+  const handleReply = async (message) => {
+    await replyMessage(message);
   };
 
   const handleDelete = async (message) => {
@@ -155,7 +148,6 @@ export function ThreadView({ threadId }) {
       </Box>
     );
   }
-
   return (
     <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', minHeight: 0, ...(isProfileVisible ? { marginRight: '240px' } : {}),
   }}>
@@ -184,18 +176,18 @@ export function ThreadView({ threadId }) {
     right: 50,
     width: 48,
     height: 48,
-    backgroundColor: 'white', // White background
-    color: 'black', // Black arrow color
-    borderRadius: '50%', // Circular shape
+    backgroundColor: 'white', 
+    color: 'black', 
+    borderRadius: '50%', 
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Subtle shadow
-    border: '1px solid #ccc', // Light border for visibility
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', 
+    border: '1px solid #ccc', 
     cursor: 'pointer',
-    zIndex: 1000, // Ensure it stays on top
+    zIndex: 1000, 
     '&:hover': {
-      backgroundColor: '#f5f5f5', // Light hover effect
+      backgroundColor: '#f5f5f5',
     },
   }}
 >
