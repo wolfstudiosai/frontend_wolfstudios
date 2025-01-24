@@ -13,7 +13,7 @@ export function ThreadToolbar({ thread }) {
 
 
   const recipients = (thread.participants ?? []).filter((participant) => participant.id !== userInfo?.email);
-// console.log("Thread in toolbar",thread);
+console.log("Thread in toolbar",thread);
   return (
     <Stack
       direction="row"
