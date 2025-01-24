@@ -34,9 +34,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         [theme.breakpoints.up('sm')]: {
-            width: '12ch',
+            width: '55ch',
             '&:focus': {
-                width: '20ch',
+                width: '60ch',
             },
         },
     },
@@ -44,7 +44,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: 'calc(4* var(--mui-shape-borderRadius))',
     backgroundColor: alpha(theme.palette.common.black, 0.05),
     transition: 'background-color 0.5s ease',
     '&:hover': {

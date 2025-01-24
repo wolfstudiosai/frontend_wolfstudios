@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { FeatureCards } from '@/app/(marketing)/top-cards';
 import { Footer } from '@/components/navbar/footer';
+import { NewFooter } from '@/components/navbar/new-footer';
 import { privateRoutes } from '@/router';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
@@ -10,6 +11,7 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import useAuth from '@/hooks/useAuth';
 
 import { DashboardTopNav } from './dashboard-top-nav';
+import { NewMainNav } from './new-main-nav';
 // import { MainNav } from './main-nav';
 import { SideNav } from './side-nav';
 import { useSettings } from '/src/hooks/use-settings';
@@ -56,7 +58,8 @@ export function VerticalLayout({ children }) {
           // minHeight: '100%',
         }}
       >
-        <DashboardTopNav onToggle={handleSidebarToggle} />
+        {/* <DashboardTopNav onToggle={handleSidebarToggle} /> */}
+        <NewMainNav onToggle={handleSidebarToggle} />
         <FeatureCards />
         <Box
           sx={{
@@ -84,7 +87,8 @@ export function VerticalLayout({ children }) {
           >
             {children}
           </Box>
-          <Footer />
+          {/* <Footer /> */}
+          <NewFooter />
         </Box>
       </Box>
     </React.Fragment>

@@ -122,7 +122,7 @@ export const PortfolioView = () => {
   ];
 
   return (
-    <Box sx={{ py: 4 }}>
+    <Box sx={{ py: 4, px: 3 }}>
       <PortfolioSlider />
       <Typography
         gutterBottom
@@ -131,7 +131,7 @@ export const PortfolioView = () => {
           fontSize: {
             xs: '1.4rem',
             md: '2rem',
-            marginTop:'10px'
+            marginTop: '10px',
           },
           lineHeight: 1,
         }}
@@ -157,7 +157,7 @@ const PortfolioCard = ({ portfolio }) => {
         <Box
           component="img"
           src={portfolio.image}
-          sx={{ height: 200, width: '100%', objectFit: 'cover', borderRadius: '20px', boxShadow:'0 2px 5px #0003' }}
+          sx={{ height: 200, width: '100%', objectFit: 'cover', borderRadius: '20px', boxShadow: '0 2px 5px #0003' }}
         />
         <Box p={2}>
           <Typography variant="cardTitle" sx={{ display: 'block', marginBottom: '8px' }}>
