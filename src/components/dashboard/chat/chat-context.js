@@ -250,25 +250,45 @@ useEffect(() => {
   };
 }, [userId]);
 
+// const handleEditMessage = async (updatedMessage) => {
+//   try {
+//     const response = await api.put(`/threads/message/${updatedMessage.id}`, updatedMessage);
+//     setMessages((prev) => {
+//       const updatedMessages = new Map(prev);
+//       const threadMessages = updatedMessages.get(updatedMessage.threadId) || [];
+//       updatedMessages.set(
+//         updatedMessage.threadId,
+//         threadMessages.map((msg) => (msg.id === updatedMessage.id ? updatedMessage : msg))
+//       );
+//       return updatedMessages;
+//     });
+//   } catch (err) {
+//     console.error('Error editing message:', err);
+//   }
+// };
+
+
 const handleEditMessage = useCallback(
-  async (messageId, threadId, authorId, newContent) => {
+  async (params) => {
+    // console.log("Edit message params:", params);
     try {
       const response = await api.put(`/threads/message/edit`, { 
-        messageId, 
-        thread_id: threadId, 
-        author_id: authorId, 
-        content: newContent 
+        messageId : params.id, 
+        thread_id: params.threadId, 
+        author_id: params.author.id, 
+        newContent: params.content 
        });
+      //  console.log("response data::",response.data)
       setMessages((prev) => {
         const updatedMessages = new Map(prev);
-        const threadMessages = updatedMessages.get(response.data.threadId) || [];
+        const threadMessages = updatedMessages.get(response.data.data.thread_id) || [];
         const updatedThreadMessages = threadMessages.map((msg) =>
-          msg.id === messageId ? { ...msg, content: newContent, isEdited: true } : msg
+          msg.id === params.id ? { ...msg, content: params.content, isEdited: true } : msg
         );
         updatedMessages.set(response.data.threadId, updatedThreadMessages);
         return updatedMessages;
       });
-      console.log('Message edited:', response.data);
+      console.log('Message edited:');
     } catch (err) {
       console.error('Error editing message:', err);
       throw err;

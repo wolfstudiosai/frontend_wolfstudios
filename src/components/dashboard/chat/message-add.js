@@ -16,8 +16,8 @@ import{Cancel as CancelIcon} from '@mui/icons-material/Cancel';
 // import 
 const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 
-export function MessageAdd({ disabled = false, onSend, editingMessage = null, onCancelEdit   }) {
-  const [content, setContent] = React.useState( editingMessage ? editingMessage.content : '');
+export function MessageAdd({ disabled = false, onSend }) {
+  const [content, setContent] = React.useState(  '');
   const [showEmojiPicker, setShowEmojiPicker] = React.useState(false);
   const pickerRef = React.useRef(null);
   const inputRef = React.useRef(null);
@@ -26,9 +26,10 @@ export function MessageAdd({ disabled = false, onSend, editingMessage = null, on
   const fileInputRef = React.useRef(null);
   const [file, setFile] = React.useState(null);
 
-  React.useEffect(() => {
-    setContent(editingMessage?.content || ''); // Update content when editingMessage changes
-  }, [editingMessage]);
+  // React.useEffect(() => {
+  //   setContent(editingMessage?.content || '');
+  // }, [editingMessage]);
+
   const handleAttach = React.useCallback(() => {
     fileInputRef.current?.click();
   }, []);
@@ -112,18 +113,12 @@ export function MessageAdd({ disabled = false, onSend, editingMessage = null, on
         disabled={disabled}
         onChange={handleChange}
         onKeyUp={handleKeyUp}
-        placeholder={editingMessage ? 'Edit your message...' : 'Type a message...'}
+        placeholder= 'Type a message...'
         sx={{ flex: '1 1 auto', borderRadius: 4 }}
         value={content}
         endAdornment={
           <InputAdornment position="end">
-            {editingMessage && (
-              <Tooltip title="Cancel Edit">
-                <IconButton onClick={onCancelEdit}>
-                  <CancelIcon />
-                </IconButton>
-              </Tooltip>
-            )}
+            
             <Tooltip title="Add emoji">
               <span>
                 <IconButton disabled={disabled} onClick={toggleEmojiPicker}>

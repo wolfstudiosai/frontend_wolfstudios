@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton'; 
-
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { ChatContext } from './chat-context';
 import { MessageAdd } from './message-add';
 import { MessageBox } from './message-box';
@@ -34,14 +34,43 @@ function useMessages(threadId) {
 export function ThreadView({ threadId }) {
   const { createMessage, markAsRead, editMessage, deleteMessage } = React.useContext(ChatContext);
   const [isProfileVisible, setIsProfileVisible] = React.useState(false);
-  const [editingMessage, setEditingMessage] = React.useState(null); // Track editing state
   const [loading, setLoading] = React.useState(true); 
+  const [showScrollButton, setShowScrollButton] = React.useState(false);
   const thread = useThread(threadId);
   const messages = useMessages(threadId);
   console.log("messages in thread view", messages);
 
   const messagesRef = React.useRef(null);
   
+   // Track scroll position and show/hide scroll-to-bottom button
+   React.useEffect(() => {
+    const handleScroll = () => {
+      if (messagesRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = messagesRef.current;
+        setShowScrollButton(scrollTop + clientHeight < scrollHeight - 10);
+      }
+    };
+
+    const container = messagesRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
+  // Scroll to the bottom when the button is clicked
+  const scrollToBottom = () => {
+    if (messagesRef.current) {
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+    }
+  };
+  
+ 
   const togleProfile = React.useCallback(() => {
     setIsProfileVisible((prev) => !prev);
   }, []);
@@ -69,21 +98,6 @@ export function ThreadView({ threadId }) {
     [threadId, createMessage]
   );
 
-  // const handleSendMessage = React.useCallback(
-  //   async (content, file, editingMessageId) => {
-  //     if (editingMessageId) {
-  //       // Editing an existing message
-  //       await editMessage(editingMessageId, content); // Call editMessage
-  //       setEditingMessage(null); // Clear editing state
-  //     } else {
-  //       // Creating a new message
-  //       const fileUrl = file ? URL.createObjectURL(file) : null;
-  //       await createMessage({ threadId, type: file ? 'FILE' : 'TEXT', content, file_url: fileUrl, file });
-  //     }
-  //   },
-  //   [threadId, createMessage, editMessage]
-  // );
-  
 
   const handleReply = (message) => {
     // Handle reply logic
@@ -96,13 +110,8 @@ export function ThreadView({ threadId }) {
     }
   };
   
-
-  const handleEdit = (message) => {
-    setEditingMessage(message); // Set the message to edit
-  };
-
-  const handleCancelEdit = () => {
-    setEditingMessage(null); // Clear editing state
+  const handleEdit = async (updatedMessage) => {
+    await editMessage(updatedMessage);
   };
 
   React.useEffect(() => {
@@ -153,15 +162,46 @@ export function ThreadView({ threadId }) {
       <ThreadToolbar thread={thread} />
       <Stack ref={messagesRef} spacing={2} sx={{ flex: '1 1 auto', overflowY: 'auto', p: 3 }}>
         {messages.map((message) => (
-          <MessageBox key={message?.id} message={message} onDelete={
+          <MessageBox key={message?.id} message={message} 
+          onDelete={
             () => handleDelete(message)
-          } onEdit={handleEdit} onReply={() => {}
-          } />
+          } 
+
+          onEdit={handleEdit}
+          ref = {messagesRef}
+       />
         ))}
+        
       </Stack>
-      <MessageAdd onSend={handleSendMessage}   editingMessage={editingMessage}
-        onCancelEdit={handleCancelEdit} 
+      <MessageAdd onSend={handleSendMessage} 
+        
         />
+      <Box
+  onClick={scrollToBottom}
+  sx={{
+    position: 'fixed',
+    bottom: 24,
+    right: 50,
+    width: 48,
+    height: 48,
+    backgroundColor: 'white', // White background
+    color: 'black', // Black arrow color
+    borderRadius: '50%', // Circular shape
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Subtle shadow
+    border: '1px solid #ccc', // Light border for visibility
+    cursor: 'pointer',
+    zIndex: 1000, // Ensure it stays on top
+    '&:hover': {
+      backgroundColor: '#f5f5f5', // Light hover effect
+    },
+  }}
+>
+  <ArrowDownwardIcon />
+</Box>
+
       {
         // isProfileVisible && <RightSidebar SelectedUser={user}  />
       }
