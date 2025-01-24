@@ -57,7 +57,6 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
           maxWidth: '500px',
           ml: position === 'right' ? 'auto' : 0,
           mr: position === 'left' ? 'auto' : 0,
-          border: selected ? '1px solid blue' : 'none',
           transition: 'border 0.2s ease',
           cursor: 'pointer',
         }}
@@ -81,11 +80,28 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
                 </Link>
               </div>
               {message?.type.toLowerCase() === 'file' ? (
-                <CardMedia
-                  image={message?.file_url}
-                  onClick={handleOpen}
-                  sx={{ height: '200px', width: '200px' }}
-                />
+                <>
+                  <CardMedia
+                    image={message?.file_url}
+                    onClick={handleOpen}
+                    sx={{ height: '200px', width: '200px', cursor: 'pointer' }}
+                  />
+                  <Modal open={open} onClose={handleClose}>
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 4,
+                      }}
+                    >
+                      <img src={message?.file_url} alt="file" style={{ width: '100%', height: 'auto' }} />
+                    </Box>
+                  </Modal>
+                </>
               ) : null}
               {message?.type.toLowerCase() === 'text' || message?.type.toLowerCase() === 'file' ? (
                 <Typography color="inherit" variant="body1">
@@ -101,14 +117,8 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
                 </Typography>
               )}
             </Stack>
-          </Card>
-          <Box sx={{ display: 'flex', justifyContent: position === 'right' ? 'flex-end' : 'flex-start', px: 2 }}>
-            <Typography color="text.secondary" noWrap variant="caption">
-              {dayjs(message?.createdAt).fromNow()}
-            </Typography>
-          </Box>
-          {selected && (
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 2 }}>
+            {selected && (
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 2, background : 'var(--mui-palette-primary-main)' }}>
               <IconButton onClick={() => { }}>
                 <ReplyIcon />
               </IconButton>
@@ -124,13 +134,16 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
               )}
             </Box>
           )}
+          </Card>
+          <Box sx={{ display: 'flex', justifyContent: position === 'right' ? 'flex-end' : 'flex-start', px: 2 }}>
+            <Typography color="text.secondary" noWrap variant="caption">
+              {dayjs(message?.createdAt).fromNow()}
+            </Typography>
+          </Box>
+          
         </Stack>
       </Stack>
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-          <img src={message?.file_url} alt="file" style={{ maxHeight: '90%', maxWidth: '90%' }} />
-        </Box>
-      </Modal>
+      
     </Box>
   );
 }

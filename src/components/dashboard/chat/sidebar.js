@@ -141,15 +141,15 @@ function SidebarContent({
     [onSelectThread, onClose, closeOnThreadSelect]
   );
 
-  // const sortedThreads = threads.slice().sort((a, b) => {
-  //   const lastMessageA = messages?.get(a.id)?.at(-1);
-  //   const lastMessageB = messages?.get(b.id)?.at(-1);
+  const sortedThreads = threads.slice().sort((a, b) => {
+    const lastMessageA = messages?.get(a.id)?.at(-1);
+    const lastMessageB = messages?.get(b.id)?.at(-1);
   
-  //   const dateA = lastMessageA ? new Date(lastMessageA.createdAt) : new Date(a.createdAt);
-  //   const dateB = lastMessageB ? new Date(lastMessageB.createdAt) : new Date(b.createdAt);
+    const dateA = lastMessageA ? new Date(lastMessageA.createdAt) : new Date(a.createdAt);
+    const dateB = lastMessageB ? new Date(lastMessageB.createdAt) : new Date(b.createdAt);
   
-  //   return dateB - dateA; 
-  // });
+    return dateB - dateA; 
+  });
   
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -168,7 +168,7 @@ function SidebarContent({
           startIcon={<PlusIcon />}
           variant="contained"
         >
-          New Group
+           Room
         </Button>
         <IconButton onClick={onClose} sx={{ display: { md: 'none' } }}>
           <XIcon />
