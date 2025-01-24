@@ -82,11 +82,12 @@ export function ComposeView() {
        <OutlinedInput
           placeholder="Enter group name"
           onChange={(e) => setGroupName(e.target.value)}
-          sx={{ minWidth: '300px' }}
+          sx={{ minWidth: '100px', maxWidth: '300px',mt:2 ,ml:2}}
           value={groupName}
+
         />
-         <Typography variant="body2" color="text.secondary">
-          Recipients:
+         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 , p:2}}>
+          Add members to the group
         </Typography>
       <GroupRecipients
         contacts={contacts}
