@@ -71,17 +71,15 @@ export function ChatProvider({ children
         const response = await api.post('/threads/create', {
           type: params.type.toUpperCase(),
           participants: params.type === 'direct' ? [params.recipientId, userId] : params.recipientIds,
+          name: params.name,
         });
-        // console.log("params:",params)
-        // console.log("response===",response.data.data)
-        // Reformat the response data into the required thread format
         const newThread = {
           id: response.data.data.id,
           type: params.type.toLowerCase(), 
           participants: response.data.data.participants.map((participant) => ({
             id: participant.user_id,
             name: participant.name || 'Unknown',
-            avatar: participant.avatar || '/assets/avatar.png', // Use participant's avatar or fallback
+            avatar: participant.avatar || '', 
           })),
           unreadCount: 0,
           name: response.data.data.name,
@@ -131,12 +129,24 @@ export function ChatProvider({ children
   
 
   const handleMarkAsRead = useCallback((threadId) => {
+    // setThreads((prev) =>
+    //   prev.map((thread) =>
+    //     thread.id === threadId ? { ...thread, unreadCount: 0 } : thread
+    //   )
+    // );
+    
+    // Optionally call an API to mark as read on the server side
+    const response = api.post(`/threads/thread/mark-as-read`, {
+      threadId,
+      userId,
+    });
+
     setThreads((prev) =>
       prev.map((thread) =>
         thread.id === threadId ? { ...thread, unreadCount: 0 } : thread
       )
     );
-    // Optionally call an API to mark as read on the server side
+    console.log('Marked as read:', response.data);
   }, []);
 
 // Real time updates
