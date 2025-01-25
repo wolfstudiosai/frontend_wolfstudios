@@ -3,7 +3,7 @@
 import React from 'react';
 import { Iconify } from '@/components/iconify/iconify';
 import { QuickToolbar } from '@/components/toolbar/quick-toolbar';
-import { Box, IconButton, Stack } from '@mui/material';
+import { Box, IconButton, Pagination, Stack } from '@mui/material';
 
 import { ManagePortfolioRightPanel } from './_components/manage-portfolio-right-panel';
 import { PortfolioGridView } from './_components/portfolio-gridview';
@@ -45,10 +45,13 @@ export const PortfolioView = () => {
       setLoading(false);
     }
   }
+  const handlePagination = (event, value) => {
+    setPagination({ ...pagination, pageNo: value });
+  };
 
   React.useEffect(() => {
     fetchList();
-  }, []);
+  }, [pagination]);
 
   return (
     <Box sx={{ py: 4 }}>
@@ -88,7 +91,23 @@ export const PortfolioView = () => {
       {viewMode === 'list' ? (
         <PortfolioListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />
       ) : (
-        <PortfolioGridView data={data || [defaultPortfolio]} fetchList={fetchList} loading={loading} />
+        <Box>
+          <PortfolioGridView
+            data={data || [defaultPortfolio]}
+            fetchList={fetchList}
+            loading={loading}
+            handlePagination={handlePagination}
+          />
+          <Stack mt={2} justifyContent="center" alignItems="center">
+            <Pagination
+              count={Math.ceil(totalRecords / pagination.limit)}
+              page={pagination.pageNo}
+              variant="outlined"
+              shape="rounded"
+              onChange={handlePagination}
+            />
+          </Stack>
+        </Box>
       )}
 
       <ManagePortfolioRightPanel

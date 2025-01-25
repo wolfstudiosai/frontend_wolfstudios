@@ -6,16 +6,14 @@ import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmati
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { pxToRem, textShortner } from '@/utils/utils';
-import { Box, IconButton, Paper, Stack, Typography } from '@mui/material';
+import { Box, IconButton, Pagination, Paper, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { deletePortfolioAsync } from '../_lib/portfolio.actions';
-import { defaultPortfolio } from '../_lib/portfolio.types';
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 import { PortfolioFilter } from './portfolio-filter';
-import PortfolioSlider from './portfolio-slider';
 
-export const PortfolioGridView = ({ data, fetchList, loading }) => {
+export const PortfolioGridView = ({ data, fetchList, loading, handlePagination }) => {
   return (
     <Box sx={{ p: 2 }}>
       {/* <PortfolioSlider data={data || [defaultPortfolio]} /> */}
@@ -28,6 +26,7 @@ export const PortfolioGridView = ({ data, fetchList, loading }) => {
             </Grid>
           ))}
         </Grid>
+      
       </PageLoader>
     </Box>
   );
