@@ -12,7 +12,7 @@ import { getPortfolioListAsync } from './_lib/portfolio.actions';
 import { defaultPortfolio } from './_lib/portfolio.types';
 
 export const PortfolioView = () => {
-  const [viewMode, setViewMode] = React.useState('grid');
+  const [viewMode, setViewMode] = React.useState('list');
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(false);
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(true);

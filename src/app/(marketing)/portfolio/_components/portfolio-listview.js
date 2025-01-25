@@ -12,10 +12,17 @@ import Card from '@mui/material/Card';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import moment from 'moment';
 
+import {
+  createPortfolioAsync,
+  deletePortfolioAsync,
+  getPortfolioListAsync,
+  updatePortfolioAsync,
+} from '../_lib/portfolio.actions';
+import { defaultPortfolio } from '../_lib/portfolio.types';
+
 // table columns
 const columns = [
   { field: 'project_title', headerName: 'Project Title', width: 280, editable: true },
-  { field: 'slug', headerName: 'Slug', width: 150, editable: true },
   { field: 'category', headerName: 'Category', width: 150, editable: true },
   { field: 'video_url', headerName: 'Video URL', width: 200, editable: true },
   { field: 'hero_image', headerName: 'Hero Image', width: 150, editable: true },
@@ -51,11 +58,31 @@ const columns = [
   },
 ];
 
-export const PortfolioListView = ({ data, totalRecords, fetchList, loading }) => {
+export const PortfolioListView = () => {
   const [records, setRecords] = React.useState([]);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 50 });
+  const [loading, setLoading] = React.useState(true);
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 200 });
+  const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
+
+  async function fetchList() {
+    try {
+      setLoading(true);
+      const response = await getPortfolioListAsync({
+        page: pagination.pageNo,
+        rowsPerPage: pagination.limit,
+      });
+      if (response.success) {
+        setRecords(response.data);
+        setTotalRecords(response.totalRecords);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   // ******************************data grid handler starts*********************
 
@@ -67,10 +94,10 @@ export const PortfolioListView = ({ data, totalRecords, fetchList, loading }) =>
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
     if (newRow.id) {
-      await updateRecordAsync(newRow);
+      await updatePortfolioAsync(null, newRow);
     } else {
       const { id, ...rest } = newRow;
-      await createRecordAsync(rest);
+      await createPortfolioAsync(null, rest);
       fetchList();
     }
     return newRow;
@@ -90,7 +117,7 @@ export const PortfolioListView = ({ data, totalRecords, fetchList, loading }) =>
   const visibleColumns = columns.filter((col) => filteredValue.includes(col.field));
 
   const handleAddNewItem = () => {
-    setRecords([defaultRecord, ...records]);
+    setRecords([defaultPortfolio, ...records]);
   };
 
   const handleDelete = async () => {
@@ -98,7 +125,7 @@ export const PortfolioListView = ({ data, totalRecords, fetchList, loading }) =>
     selectedRows.forEach((row) => {
       idsToDelete.push(row.id);
     });
-    const response = await deleteRecordAsync(idsToDelete);
+    const response = await deletePortfolioAsync(idsToDelete);
     if (response.success) {
       fetchList();
     }
@@ -154,7 +181,7 @@ export const PortfolioListView = ({ data, totalRecords, fetchList, loading }) =>
         <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
           <EditableDataTable
             columns={visibleColumns}
-            rows={data}
+            rows={records}
             processRowUpdate={processRowUpdate}
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}
