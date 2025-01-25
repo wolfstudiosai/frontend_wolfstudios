@@ -4,7 +4,7 @@ export function pxToRem(value) {
 
 
 export const textShortner = (text, length) => {
-    if (text.length > length) {
+    if ( text && text.length > length) {
         return text.slice(0, length) + "...";
     }
     return text;
