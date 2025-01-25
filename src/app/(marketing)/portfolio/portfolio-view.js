@@ -121,6 +121,8 @@ export const PortfolioView = () => {
     },
   ];
 
+  
+
   const [viewMode, setViewMode] = React.useState('grid');
 
   const handleToggleViewMode = (mode) => {
