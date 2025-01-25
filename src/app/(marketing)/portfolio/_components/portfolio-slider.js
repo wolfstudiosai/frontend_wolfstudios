@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, IconButton } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -100,12 +100,12 @@ const slider_data = [
   },
 ];
 
-export default function PortfolioSlider() {
+export default function PortfolioSlider({ data }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [autoSlideActive, setAutoSlideActive] = useState(true);
 
-  const slides = slider_data.map((item, index) => ({
+  const slides = data.map((item, index) => ({
     id: item.id,
     content: <PortfolioSliderItem key={item.id} item={item} index={index} currentIndex={currentIndex} />,
   }));
@@ -155,7 +155,7 @@ export default function PortfolioSlider() {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + slides.length) % slides.length);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (autoSlideActive) {
       const interval = setInterval(() => {
         handleNext();

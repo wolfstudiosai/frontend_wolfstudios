@@ -15,7 +15,7 @@ const PortfolioSliderItem = ({ item, index, currentIndex }) => {
     >
       <CardMedia
         component="img"
-        image={item.image}
+        image={item.thumbnail}
         alt="Background Image"
         draggable={false}
         sx={{ height: '88%', width: '100%', objectFit: 'cover', filter: 'brightness(100%)', borderRadius:'24px'}}
@@ -31,7 +31,7 @@ const PortfolioSliderItem = ({ item, index, currentIndex }) => {
       >
         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: -2.5 }}>
           <Stack direction="column" alignItems="flex-start">
-            <Typography variant="cardTitle">{item.title}</Typography>
+            <Typography variant="cardTitle">{item.project_title}</Typography>
             <Box
               sx={{
                 display: 'inline-flex',

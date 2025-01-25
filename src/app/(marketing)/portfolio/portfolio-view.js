@@ -19,8 +19,6 @@ export const PortfolioView = () => {
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
 
-  console.log('data', data);
-
   const handleToggleViewMode = (mode) => {
     setViewMode(mode);
   };
@@ -37,7 +35,6 @@ export const PortfolioView = () => {
         rowsPerPage: pagination.limit,
       });
 
-      console.log('response', response);
       if (response.success) {
         setData(response.data);
         setTotalRecords(response.totalRecords);
@@ -91,7 +88,7 @@ export const PortfolioView = () => {
       {viewMode === 'list' ? (
         <PortfolioListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />
       ) : (
-        <PortfolioGridView data={data} />
+        <PortfolioGridView data={data || [defaultPortfolio]} fetchList={fetchList} loading={loading} />
       )}
 
       <ManagePortfolioRightPanel

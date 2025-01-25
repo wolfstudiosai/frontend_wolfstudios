@@ -1,8 +1,7 @@
-import { toast } from 'sonner';
-
 import { getSearchQuery } from '@/helper/common';
 import { api } from '@/utils/api';
 import { uploadFileAsync } from '@/utils/upload-file';
+import { toast } from 'sonner';
 
 export const getPortfolioListAsync = async (queryParams) => {
   try {
@@ -27,15 +26,15 @@ export const getPortfolioAsync = async (slug) => {
 
 export const createPortfolioAsync = async (file, data) => {
   try {
-    const { slug, created_by, ...rest } = data;
-    let thumbnailPath = '';
+    const { slug, id, created_by, user_id, updated_at, ...rest } = data;
+    let thumbnail = '';
     if (file) {
       const uploadResponse = await uploadFileAsync(file);
-      thumbnailPath = uploadResponse[0].path;
+      thumbnail = uploadResponse[0].path;
     }
     const campaignResponse = await api.post(`/portfolio/add-portfolio`, {
       ...rest,
-      thumbnail: thumbnailPath,
+      thumbnail: thumbnail,
     });
 
     toast.success(campaignResponse.data.message);
