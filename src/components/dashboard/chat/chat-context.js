@@ -173,7 +173,7 @@ useEffect(() => {
           avatar: payload.new.author_avatar || '',
         },
         file_url: payload.new.file_url,
-        createdAt: new Date(payload.new.created_at),
+        createdAt: new Date(),
       };
 
       setMessages((prev) => {
@@ -241,7 +241,7 @@ useEffect(() => {
           })),
           name: payload.new.name,
           unreadCount: 0,
-          member_count: participants.length,
+          member_count: payload.new.member_count,
         };
   
         setThreads((prev) => {
