@@ -1,5 +1,5 @@
 
-export const defaultCampaign = {
+export const defaultPortfolio = {
   id: '',
   project_title: '',
   slug: '',

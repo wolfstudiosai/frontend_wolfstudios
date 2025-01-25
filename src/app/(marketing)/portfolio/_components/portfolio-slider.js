@@ -113,7 +113,7 @@ export default function PortfolioSlider() {
   const slideVariants = {
     hidden: (_direction) => ({
       x: _direction > 0 ? '100%' : '-100%',
-      opacity: 0,
+      // opacity: 0,
       transition: {
         duration: 0.6,
         ease: [0.42, 0, 0.58, 1],
@@ -121,7 +121,7 @@ export default function PortfolioSlider() {
     }),
     visible: {
       x: 0,
-      opacity: 1,
+      // opacity: 1,
       transition: {
         duration: 0.6,
         ease: [0.42, 0, 0.58, 1],
@@ -129,7 +129,7 @@ export default function PortfolioSlider() {
     },
     exit: (_direction) => ({
       x: _direction > 0 ? '-100%' : '100%',
-      opacity: 0,
+      // opacity: 0,
       transition: {
         duration: 0.6,
         ease: [0.42, 0, 0.58, 1],

@@ -36,7 +36,7 @@ export const QuickToolbar = ({ children }) => {
             position: 'fixed',
             right: 0,
             width: '40px',
-            zIndex: 1500,
+            zIndex: 1200,
             '&:hover': { bgcolor: 'var(--mui-palette-neutral-700)' },
             '@keyframes spin': { '0%': { rotate: '0' }, '100%': { rotate: '360deg' } },
           }}

@@ -1,130 +1,21 @@
 'use client';
 
-import { textShortner } from '@/utils/utils';
-import { Box, Paper, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import React from 'react';
 import Link from 'next/link';
+import { Iconify } from '@/components/iconify/iconify';
+import { pxToRem, textShortner } from '@/utils/utils';
+import { Box, IconButton, Paper, Stack, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 
+import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 import { PortfolioFilter } from './portfolio-filter';
 import PortfolioSlider from './portfolio-slider';
 
-export const PortfolioGridView = () => {
-  const portfolioData = [
-    {
-      title: 'Mary Ann',
-      slug: 'mary-ann',
-      description: 'Session with Mary Ann, shot by Combina in February 2018',
-      model: 'Mary Ann',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=1', // Placeholder image
-    },
-    {
-      title: 'Prints: Abstract',
-      slug: 'prints-abstract',
-      description: 'On Session production for portraits, shot by Combina in November 2016.',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=2', // Placeholder image
-    },
-    {
-      title: 'Kansha: Love Bite',
-      slug: 'kansha-love-bite',
-      description: 'In Studio Production for Kansha Magazine, shot by Combina Key in August 2018.',
-      publication: 'Kansha',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=3', // Placeholder image
-    },
-    {
-      title: 'Pump Magazine: Sharee',
-      slug: 'pump-magazine-sharee',
-      description: 'In Studio Production with Sharee Michelle for Pump Magazine, shot by Combina Key in November 2018.',
-      model: 'Sharee Michelle',
-      publication: 'Pump Magazine',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=4', // Placeholder image
-    },
-    {
-      title: 'Elegant Magazine: Elena',
-      slug: 'elegant-magazine-elena',
-      description: 'In Studio Production with Elena for Elegant Magazine, shot by Combina Key in May 2019.',
-      model: 'Elena',
-      publication: 'Elegant Magazine',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=5', // Placeholder image
-    },
-    {
-      title: 'Imirage Mag',
-      slug: 'imirage-mag',
-      description: 'In Studio Production for Imirage Magazine, shot by Combina Key in February 2019.',
-      publication: 'Imirage Mag',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=6', // Placeholder image
-    },
-    {
-      title: 'Tamara Rzaeva',
-      slug: 'tamara-rzaeva',
-      description: 'Session with Tamara Rzaeva, shot by Combina Key on April 2018.',
-      model: 'Tamara Rzaeva',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=7', // Placeholder image
-    },
-    {
-      title: 'Street Style: Karla Marie',
-      slug: 'street-style-karla-marie',
-      description: 'Street Style Session with Karla Marie, shot by Combina Key in December 2018.',
-      model: 'Karla Marie',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=8', // Placeholder image
-    },
-    {
-      title: 'Shuba Magazine: Jyaira Moore',
-      slug: 'shuba-magazine-jyaira-moore',
-      description: 'A session with Jyaira Moore, shot by Combina in July 2018.',
-      model: 'Jyaira Moore',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=9', // Placeholder image
-    },
-    {
-      title: 'Elena Tretyakova',
-      slug: 'elena-tretyakova',
-      description: 'Session with Elena Tretyakova, shot by Combina Key in March 2018.',
-      model: 'Elena Tretyakova',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=10', // Placeholder image
-    },
-    {
-      title: 'Lissa DeLorenzo',
-      slug: 'lissa-delorenzo',
-      description: 'Session with Lissa DeLorenzo, shot by Combina Key in July 2018.',
-      model: 'Lissa DeLorenzo',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=11', // Placeholder image
-    },
-    {
-      title: 'Lydia DTLA',
-      slug: 'lydia-dtl',
-      description: 'Session with Lydia, shot by Combina in DTLA in June 2024.',
-      model: 'Lydia',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=12', // Placeholder image
-    },
-  ];
-
+export const PortfolioGridView = ({ data }) => {
   return (
-    <Box sx={{ py: 4 }}>
+    <Box sx={{ p: 2 }}>
       <PortfolioSlider />
-      <Typography
+      {/* <Typography
         gutterBottom
         sx={{
           fontWeight: 300,
@@ -137,10 +28,10 @@ export const PortfolioGridView = () => {
         }}
       >
         PORTFOLIOS
-      </Typography>
+      </Typography> */}
       <PortfolioFilter />
       <Grid container spacing={2}>
-        {portfolioData.map((portfolio, index) => (
+        {data.map((portfolio, index) => (
           <Grid item size={{ xs: 12, md: 3 }} key={index}>
             <PortfolioCard portfolio={portfolio} />
           </Grid>
@@ -151,35 +42,46 @@ export const PortfolioGridView = () => {
 };
 
 const PortfolioCard = ({ portfolio }) => {
+  const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
+
   return (
     <Box>
       <Paper elevation={1} variant="outlined">
-        <Box
-          component="img"
-          src={portfolio.image}
-          sx={{ height: 200, width: '100%', objectFit: 'cover', borderRadius: '20px', boxShadow: '0 2px 5px #0003' }}
-        />
+        <Box component="img" src={portfolio.thumbnail} sx={{ height: 200, width: '100%', objectFit: 'cover' }} />
         <Box p={2}>
           <Typography variant="cardTitle" sx={{ display: 'block', marginBottom: '8px' }}>
-            {portfolio.title}
+            {portfolio.project_title}
           </Typography>
           <Typography variant="cardSubTitle" sx={{ display: 'block', marginBottom: '8px' }}>
-            {textShortner(portfolio.description, 80)}
+            {textShortner(portfolio.short_description, 80)}
           </Typography>
-          <Typography variant="cardSubTitle" sx={{ display: 'block', marginBottom: '8px' }}>
-            Model: {portfolio.model || '-'}
-          </Typography>
-          <Link
-            href={`portfolio/${portfolio.slug}`}
-            style={{
-              fontSize: '0.9rem',
-              color: 'var(--mui-palette-text-secondary)',
-            }}
-          >
-            View Portfolio
-          </Link>
+          <Stack direction="row" alignItems="center">
+            <Link
+              href={`portfolio/${portfolio.slug}`}
+              style={{
+                fontSize: '0.9rem',
+                color: 'var(--mui-palette-text-secondary)',
+                marginRight: pxToRem(5),
+              }}
+            >
+              View Portfolio
+            </Link>
+            <IconButton size="small" title="Edit" onClick={() => setOpenPortfolioRightPanel(portfolio)}>
+              <Iconify icon="mynaui:edit-one" />
+            </IconButton>
+            <IconButton color="error" size="small" title="Delete" onClick={() => setOpenPortfolioRightPanel(portfolio)}>
+              <Iconify icon="ic:baseline-delete" />
+            </IconButton>
+          </Stack>
         </Box>
       </Paper>
+
+      <ManagePortfolioRightPanel
+        id={''}
+        open={openPortfolioRightPanel ? true : false}
+        data={openPortfolioRightPanel}
+        onClose={() => setOpenPortfolioRightPanel(false)}
+      />
     </Box>
   );
 };
