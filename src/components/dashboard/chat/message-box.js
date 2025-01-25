@@ -208,9 +208,9 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
 
             {selected && (
               <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 2, background: 'var(--mui-palette-primary-main)' }}>
-                <IconButton onClick={() => { }}>
+                {/* <IconButton onClick={() => { }}>
                   <ReplyIcon />
-                </IconButton>
+                </IconButton> */}
                 {message.author.id === userInfo.email && (
                   <>
                     <IconButton onClick={handleEditToggle}>
