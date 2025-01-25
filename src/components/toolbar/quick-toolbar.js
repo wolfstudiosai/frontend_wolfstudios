@@ -1,12 +1,11 @@
 'use client';
 
-import React from 'react';
-import { pxToRem } from '@/utils/utils';
 import { Box, Popover, Tooltip } from '@mui/material';
+import React from 'react';
 
 import { Iconify } from '../iconify/iconify';
 
-export const Toolbar = ({ children }) => {
+export const QuickToolbar = ({ children }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleToggle = (event) => {

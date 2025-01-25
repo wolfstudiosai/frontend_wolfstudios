@@ -1,14 +1,14 @@
 'use client';
 
-import React from 'react';
-import { Iconify } from '@/components/iconify/iconify';
-import { QuickToolbar } from '@/components/toolbar/quick-toolbar';
-import { Box, IconButton, Stack } from '@mui/material';
+import { textShortner } from '@/utils/utils';
+import { Box, Paper, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
+import Link from 'next/link';
 
-import { PortfolioGridView } from './_components/portfolio-gridview';
-import { PortfolioListView } from './_components/portfolio-listview';
+import { PortfolioFilter } from './portfolio-filter';
+import PortfolioSlider from './portfolio-slider';
 
-export const PortfolioView = () => {
+export const PortfolioGridView = () => {
   const portfolioData = [
     {
       title: 'Mary Ann',
@@ -121,48 +121,65 @@ export const PortfolioView = () => {
     },
   ];
 
-  const [viewMode, setViewMode] = React.useState('grid');
-
-  const handleToggleViewMode = (mode) => {
-    setViewMode(mode);
-  };
-
   return (
     <Box sx={{ py: 4 }}>
-      <QuickToolbar>
-        <Stack direction="column" spacing={3} justifyContent={'center'} alignItems={'center'} p={1}>
-          <IconButton variant="text" size="small" title="Add ">
-            <Iconify icon="iconoir:plus" title="Add Portfolio" />
-          </IconButton>
-          <IconButton
-            variant="text"
-            size="small"
-            title="Card View"
-            onClick={() => handleToggleViewMode('grid')}
-            sx={{
-              backgroundColor: viewMode === 'grid' ? 'action.selected' : 'transparent',
-              '&:hover': {
-                backgroundColor: viewMode === 'grid' ? 'action.selected' : 'action.hover',
-              },
+      <PortfolioSlider />
+      <Typography
+        gutterBottom
+        sx={{
+          fontWeight: 300,
+          fontSize: {
+            xs: '1.4rem',
+            md: '2rem',
+            marginTop: '10px',
+          },
+          lineHeight: 1,
+        }}
+      >
+        PORTFOLIOS
+      </Typography>
+      <PortfolioFilter />
+      <Grid container spacing={2}>
+        {portfolioData.map((portfolio, index) => (
+          <Grid item size={{ xs: 12, md: 3 }} key={index}>
+            <PortfolioCard portfolio={portfolio} />
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  );
+};
+
+const PortfolioCard = ({ portfolio }) => {
+  return (
+    <Box>
+      <Paper elevation={1} variant="outlined">
+        <Box
+          component="img"
+          src={portfolio.image}
+          sx={{ height: 200, width: '100%', objectFit: 'cover', borderRadius: '20px', boxShadow: '0 2px 5px #0003' }}
+        />
+        <Box p={2}>
+          <Typography variant="cardTitle" sx={{ display: 'block', marginBottom: '8px' }}>
+            {portfolio.title}
+          </Typography>
+          <Typography variant="cardSubTitle" sx={{ display: 'block', marginBottom: '8px' }}>
+            {textShortner(portfolio.description, 80)}
+          </Typography>
+          <Typography variant="cardSubTitle" sx={{ display: 'block', marginBottom: '8px' }}>
+            Model: {portfolio.model || '-'}
+          </Typography>
+          <Link
+            href={`portfolio/${portfolio.slug}`}
+            style={{
+              fontSize: '0.9rem',
+              color: 'var(--mui-palette-text-secondary)',
             }}
           >
-            <Iconify icon="fluent:grid-16-filled" />
-          </IconButton>
-          <IconButton
-            variant="text"
-            size="small"
-            title="List View"
-            onClick={() => handleToggleViewMode('list')}
-            sx={{
-              backgroundColor: viewMode === 'list' ? 'action.selected' : 'transparent',
-              ':hover': { backgroundColor: viewMode === 'list' ? 'action.selected' : 'action.hover' },
-            }}
-          >
-            <Iconify icon="fluent:list-16-regular" />
-          </IconButton>
-        </Stack>
-      </QuickToolbar>
-      {viewMode === 'list' ? <PortfolioListView /> : <PortfolioGridView />}
+            View Portfolio
+          </Link>
+        </Box>
+      </Paper>
     </Box>
   );
 };
