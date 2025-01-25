@@ -55,7 +55,7 @@ export const PortfolioView = () => {
 
   return (
     <Box sx={{ py: 4 }}>
-      <QuickToolbar>
+      <QuickToolbar closePopover={openPortfolioRightPanel}>
         <Stack direction="column" spacing={3} justifyContent={'center'} alignItems={'center'} p={1}>
           <IconButton variant="text" size="small" title="Add " onClick={handleOpenPortfolioRightPanel}>
             <Iconify icon="iconoir:plus" title="Add Portfolio" />

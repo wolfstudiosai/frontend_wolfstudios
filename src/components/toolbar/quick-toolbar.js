@@ -5,7 +5,7 @@ import React from 'react';
 
 import { Iconify } from '../iconify/iconify';
 
-export const QuickToolbar = ({ children }) => {
+export const QuickToolbar = ({ children, closePopover }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleToggle = (event) => {
@@ -15,6 +15,13 @@ export const QuickToolbar = ({ children }) => {
       setAnchorEl(event.currentTarget);
     }
   };
+
+  React.useEffect(() => {
+    if(closePopover) {
+      setAnchorEl(null);
+    }
+    
+  }, [closePopover]);
 
   return (
     <React.Fragment>
