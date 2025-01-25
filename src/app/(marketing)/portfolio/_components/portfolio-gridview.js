@@ -9,6 +9,8 @@ import { pxToRem, textShortner } from '@/utils/utils';
 import { Box, IconButton, Pagination, Paper, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
+import useAuth from '@/hooks/useAuth';
+
 import { deletePortfolioAsync } from '../_lib/portfolio.actions';
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 import { PortfolioFilter } from './portfolio-filter';
@@ -26,13 +28,13 @@ export const PortfolioGridView = ({ data, fetchList, loading, handlePagination }
             </Grid>
           ))}
         </Grid>
-      
       </PageLoader>
     </Box>
   );
 };
 
 const PortfolioCard = ({ portfolio, fetchList }) => {
+  const { isLogin } = useAuth();
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
   const handleDelete = async () => {
     const response = await deletePortfolioAsync([portfolio.id]);
@@ -67,10 +69,14 @@ const PortfolioCard = ({ portfolio, fetchList }) => {
             >
               View Portfolio
             </Link>
-            <IconButton size="small" title="Edit" onClick={() => setOpenPortfolioRightPanel(portfolio)}>
-              <Iconify icon="mynaui:edit-one" />
-            </IconButton>
-            <DeleteConfirmationPopover title="Delete" onDelete={handleDelete} />
+            {isLogin && (
+              <>
+                <IconButton size="small" title="Edit" onClick={() => setOpenPortfolioRightPanel(portfolio)}>
+                  <Iconify icon="mynaui:edit-one" />
+                </IconButton>
+                <DeleteConfirmationPopover title="Delete" onDelete={handleDelete} />
+              </>
+            )}
           </Stack>
         </Box>
       </Paper>
