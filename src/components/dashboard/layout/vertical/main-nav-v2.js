@@ -26,10 +26,10 @@ import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/Caret
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
 
 import { paths } from '@/paths';
+import { usePopover } from '@/hooks/use-popover';
 import useAuth from '@/hooks/useAuth';
 
 import { UserPopover } from '../user-popover/user-popover';
-import { usePopover } from '/src/hooks/use-popover';
 
 export const MainNavV2 = ({ onToggle }) => {
   const [openNav, setOpenNav] = React.useState(false);
@@ -309,7 +309,7 @@ export function UserButton() {
     <React.Fragment>
       <Box
         component="button"
-        onClick={popover.handleOpen}
+        onMouseEnter={popover.handleOpen}
         ref={popover.anchorRef}
         sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
       >
