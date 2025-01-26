@@ -7,56 +7,30 @@ export const publicRoutes = [
     items: [
       // { key: 'home', title: 'Home', href: paths.home },
       {
-        key: 'hq',
-        title: 'HQ',
-        items: [
-          {
-            key: 'campaign',
-            title: 'Campaign',
-            href: paths.dashboardPublic.campaign,
-          },
-          {
-            key: 'portfolio',
-            title: 'Portfolio',
-            href: paths.dashboardPublic.portfolio,
-          },
-          {
-            key: 'content',
-            title: 'Content',
-            href: paths.dashboardPublic.content,
-          },
-          {
-            key: 'partner',
-            title: 'Partner',
-            href: paths.dashboardPublic.partner,
-          },
-        ],
+        key: 'campaign',
+        title: 'Campaign',
+        href: paths.dashboardPublic.campaign,
       },
-      // {
-      //   key: 'campaign',
-      //   title: 'Campaign',
-      //   href: paths.dashboardPublic.campaign,
-      // },
-      // {
-      //   key: 'portfolio',
-      //   title: 'Portfolio',
-      //   href: paths.dashboardPublic.portfolio,
-      // },
-      // {
-      //   key: 'concept',
-      //   title: 'Content',
-      //   href: paths.dashboardPublic.content,
-      // },
+      {
+        key: 'portfolio',
+        title: 'Portfolio',
+        href: paths.dashboardPublic.portfolio,
+      },
+      {
+        key: 'concept',
+        title: 'Content',
+        href: paths.dashboardPublic.content,
+      },
       {
         key: 'production',
         title: 'Production',
         href: paths.dashboardPublic.production,
       },
-      // {
-      //   key: 'partner',
-      //   title: 'Partner',
-      //   href: paths.dashboardPublic.partner,
-      // },
+      {
+        key: 'partner',
+        title: 'Partner',
+        href: paths.dashboardPublic.partner,
+      },
       {
         key: 'spaces',
         title: 'Spaces',
@@ -195,18 +169,4 @@ export const footerRoutes = [
   { label: 'Spectate', href: '/spectate' },
   { label: 'Shop', href: '/shop' },
   { label: 'Collaborate', href: '/collaborate' },
-];
-
-// footer New routes
-export const NewfooterRoutes = [
-  { label: 'Blog', href: '/blog' },
-  { label: 'Learn', href: '/learn' },
-  { label: 'About', href: '/about' },
-  { label: 'Services', href: '/services' },
-  { label: 'Help Docs', href: '/help' },
-  { label: 'Privacy Policy', href: '/privacy' },
-  { label: 'Cookie Policy', href: '/cookies' },
-  { label: 'Contact Us', href: '/contact' },
-  { label: 'Join', href: '/join' },
-
 ];

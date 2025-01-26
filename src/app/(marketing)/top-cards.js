@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { Box, Card, Icon, Typography } from '@mui/material';
+import { pxToRem, textShortner } from '@/utils/utils';
 
 export function FeatureCards() {
   const [isLoogedIn, setisLoogedIn] = React.useState(false);
@@ -88,7 +89,7 @@ export function FeatureCards() {
         p: 2,
         mx: 2,
         position: 'sticky',
-        top: 60,
+        top: 50,
         zIndex: 999,
         backgroundColor: 'var(--mui-palette-background-default)',
         scrollBehavior: 'smooth',
@@ -113,11 +114,11 @@ export function FeatureCards() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            minWidth: 300,
-            width: { xs: '100%', sm: 300 },
+            minWidth: pxToRem(100),
+            width: { xs: '100%', sm: pxToRem(200) },
             flex: '0 0 auto',
-            paddingX: 1.5,
-            paddingY: 1,
+            paddingX: 1,
+            paddingY: .5,
             boxShadow: 3,
             borderRadius: 2,
             border: 'solid 1px var(--mui-palette-divider)',
@@ -131,8 +132,8 @@ export function FeatureCards() {
               src={card.image}
               alt={card.title}
               style={{
-                width: 40,
-                height: 40,
+                width: 30,
+                height: 30,
                 borderRadius: '50%',
                 objectFit: 'cover',
               }}
@@ -146,7 +147,7 @@ export function FeatureCards() {
               <Typography
                 variant="h6"
                 sx={{
-                  fontSize: '16px',
+                  fontSize: pxToRem(12),
                   whiteSpace: 'normal',
                 }}
               >
@@ -156,7 +157,7 @@ export function FeatureCards() {
               {/* Timestamp */}
               <Typography
                 sx={{
-                  fontSize: '12px',
+                  fontSize: pxToRem(10),
                   color: 'text.secondary',
                 }}
               >
@@ -169,11 +170,11 @@ export function FeatureCards() {
               variant="body2"
               color="text.secondary"
               sx={{
-                fontSize: '14px',
+                fontSize: pxToRem(10),
                 whiteSpace: 'normal',
               }}
             >
-              {card.description}
+              {textShortner(card.description, 20)}
             </Typography>
           </Box>
 

@@ -1,9 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
-import { Box, Container, Typography, Stack } from '@mui/material';
-import { NewfooterRoutes } from '@/router';
+import { footerRoutes, NewfooterRoutes } from '@/router';
+import { pxToRem } from '@/utils/utils';
+import { Box, Container, Stack, Typography } from '@mui/material';
 
-export const NewFooter = () => {
+export const ThinerFooter = () => {
   const links = [
     { href: '/blog', label: 'Blog' },
     { href: '/learn', label: 'Learn' },
@@ -32,23 +33,23 @@ export const NewFooter = () => {
           borderRadius: 0,
           backdropFilter: 'blur(10px)',
           padding: 0,
-          mt: 4,
+          // mt: 4,
         }}
       >
-        <Container maxWidth="xxl" sx={{ py: '16px' }}>
+        <Container maxWidth="xxl" sx={{ py: pxToRem(8) }}>
           <Stack
             direction="row"
-            spacing={2} 
+            spacing={2}
             sx={{
               justifyContent: 'start',
               alignItems: 'center',
               flexWrap: 'wrap',
             }}
           >
-            {NewfooterRoutes.map((link, index) => (
+            {footerRoutes.map((link, index) => (
               <React.Fragment key={index}>
                 <Link href={link.href} passHref style={{ textDecoration: 'none' }}>
-                  <Typography
+                  {/* <Typography
                     sx={{
                       color: 'var(--mui-palette-neutral-950)',
                       fontSize: '0.875rem',
@@ -57,15 +58,27 @@ export const NewFooter = () => {
                         color: 'var(--mui-palette-common-dark)',
                       },
                     }}
+                  ></Typography> */}
+                  <Typography
+                    component="span"
+                    sx={{
+                      color: 'var(--mui-palette-neutral-700)',
+                      '&:hover': {
+                        color: 'var(--mui-palette-secondary-main)',
+                      },
+                      fontSize: '0.875rem',
+                      fontWeight: 400,
+                      lineHeight: '28px',
+                    }}
                   >
                     {link.label}
                   </Typography>
                 </Link>
-                {index !== NewfooterRoutes.length - 1 && (
+                {index !== footerRoutes.length - 1 && (
                   <Box
                     sx={{
-                      height: '24px',
-                      borderLeft: '1px solid var(--mui-palette-neutral-950)',
+                      height: pxToRem(12),
+                      borderLeft: '1px solid var(--mui-palette-neutral-300)',
                       mx: 1,
                     }}
                   />

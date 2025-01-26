@@ -28,8 +28,9 @@ import useAuth from '@/hooks/useAuth';
 
 import { UserPopover } from '../user-popover/user-popover';
 import { usePopover } from '/src/hooks/use-popover';
+import { pxToRem } from '@/utils/utils';
 
-export const NewMainNav = ({ onToggle }) => {
+export const MainNavV2 = ({ onToggle }) => {
   const [openNav, setOpenNav] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -49,7 +50,7 @@ export const NewMainNav = ({ onToggle }) => {
       <Box
         component="header"
         sx={{
-          bgcolor: 'rgba(240, 240, 240, 0.8)',
+          bgcolor: 'var(--mui-palette-background-default)',
           color: 'var( --mui-palette-neutral-950)',
           left: 0,
           position: 'sticky',
@@ -62,7 +63,7 @@ export const NewMainNav = ({ onToggle }) => {
           padding: 0,
         }}
       >
-        <Container maxWidth="xxl" sx={{ minHeight: 'var(--MainNav-height)', py: '8px' }}>
+        <Container maxWidth="xxl" sx={{ minHeight: 'var(--MainNav-height)', py: pxToRem(8) }}>
           <Stack
             direction="row"
             spacing={2}
@@ -78,7 +79,7 @@ export const NewMainNav = ({ onToggle }) => {
               >
                 {isLogin && (
                   <IconButton onClick={onToggle} color="#333">
-                    <Iconify icon="material-symbols:menu-rounded" color="#333" />
+                    <Iconify icon="material-symbols:menu-rounded" color={"var(--mui-palette-neutral-950)"} />
                   </IconButton>
                 )}
                 <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
