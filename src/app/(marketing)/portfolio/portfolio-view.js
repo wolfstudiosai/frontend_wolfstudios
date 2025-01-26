@@ -20,6 +20,7 @@ export const PortfolioView = () => {
   const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
+  const [closeQuickToolbar, setCloseQuickToolbar] = React.useState(false);
   const { isLogin } = useAuth();
 
   const handleToggleViewMode = (mode) => {
@@ -56,10 +57,14 @@ export const PortfolioView = () => {
     fetchList();
   }, [pagination]);
 
+  React.useEffect(() => {
+    setCloseQuickToolbar((prev) => !prev);
+  }, [openPortfolioRightPanel, viewMode]);
+
   return (
     <Box sx={{ py: 4 }}>
       {isLogin && (
-        <QuickToolbar closePopover={openPortfolioRightPanel}>
+        <QuickToolbar closePopover={closeQuickToolbar}>
           <Stack direction="column" spacing={3} justifyContent={'center'} alignItems={'center'} p={1}>
             <IconButton variant="text" size="small" title="Add " onClick={handleOpenPortfolioRightPanel}>
               <Iconify icon="iconoir:plus" title="Add Portfolio" />
@@ -116,7 +121,6 @@ export const PortfolioView = () => {
       )}
 
       <ManagePortfolioRightPanel
-        id={''}
         data={null}
         open={openPortfolioRightPanel}
         onClose={() => setOpenPortfolioRightPanel(false)}

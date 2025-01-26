@@ -27,6 +27,11 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data }) =>
   const [file, setFile] = React.useState(null);
   const router = useRouter();
 
+  const onSucess = () => {
+    fetchList();
+    onClose?.();
+  };
+
   const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
     useFormik({
       initialValues: defaultPortfolio,
@@ -44,13 +49,13 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data }) =>
           const res = isUpdate ? await updatePortfolioAsync(file, values) : await createPortfolioAsync(file, values);
           if (res.success) {
             onClose?.();
-            fetchList(); 
           } else {
             console.error('Operation failed:', res.message);
           }
         } catch (error) {
           console.error('Error:', error);
         } finally {
+          fetchList?.();
           setLoading(false);
         }
       },
