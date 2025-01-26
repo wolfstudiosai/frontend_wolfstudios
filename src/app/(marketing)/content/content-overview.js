@@ -6,7 +6,7 @@ import { ContentList } from './_components/content-list';
 
 export const ContentOverView = () => {
   return (
-    <Box sx={{ py: 4 }}>
+    <Box sx={{ py: 4, px: 3 }}>
       <Grid container>
         <ContentFilter />
         <ContentList />

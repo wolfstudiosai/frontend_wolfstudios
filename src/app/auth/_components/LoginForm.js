@@ -1,12 +1,7 @@
 'use client';
 
-import * as React from 'react';
-import RouterLink from 'next/link';
 import { ErrorText } from '@/components/core/error-text';
-import { DynamicLogo } from '@/components/core/logo';
 import { CustomPasswordInput } from '@/components/formFields/CustomPasswordInput';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { CircularProgress } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -15,15 +10,13 @@ import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import InputLabel from '@mui/material/InputLabel';
-import Link from '@mui/material/Link';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import { useFormik } from 'formik';
+import * as React from 'react';
 import * as Yup from 'yup';
 
 import useAuth from '/src/hooks/useAuth';
-import { paths } from '/src/paths';
 
 const oAuthProviders = [{ id: 'google', name: 'Google', logo: '/assets/logo-google.svg' }];
 const defaultValues = { email: '', password: '' };
@@ -52,8 +45,8 @@ export function LoginForm({ closeDialog }) {
     });
 
   return (
-    <Stack spacing={3} sx={{ minWidth: 380 }}>
-      <Stack spacing={2}>
+    <Stack spacing={3} sx={{ minWidth: 300 }}>
+      {/* <Stack spacing={2}>
         {oAuthProviders.map((provider) => (
           <Button
             color="secondary"
@@ -69,19 +62,19 @@ export function LoginForm({ closeDialog }) {
           </Button>
         ))}
       </Stack>
-      <Divider>or</Divider>
+      <Divider>or</Divider> */}
       <Stack spacing={2}>
         <form onSubmit={handleSubmit}>
           <Stack spacing={2}>
             <ErrorText error={error} />
             <FormControl error={Boolean(errors.email)}>
               <InputLabel>Email address</InputLabel>
-              <OutlinedInput type="email" name="email" value={values.email} onChange={handleChange} />
+              <OutlinedInput size='small' type="email" name="email" value={values.email} onChange={handleChange} />
               {errors.email ? <FormHelperText>{errors.email.message}</FormHelperText> : null}
             </FormControl>
             <FormControl error={Boolean(errors.password)}>
               <InputLabel>Password</InputLabel>
-              <CustomPasswordInput name="password" value={values.password} onChange={handleChange} />
+              <CustomPasswordInput size='small' name="password" value={values.password} onChange={handleChange} />
               {errors.password ? <FormHelperText>{errors.password.message}</FormHelperText> : null}
             </FormControl>
             {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}

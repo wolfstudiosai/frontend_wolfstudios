@@ -2,25 +2,21 @@
 
 import * as React from 'react';
 import RouterLink from 'next/link';
-import { usePathname } from 'next/navigation';
-import { ForgotPasswordForm } from '@/app/auth/_components/FogotPasswordForm';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { LoginForm } from '@/app/auth/_components/LoginForm';
-import { SignupForm } from '@/app/auth/_components/SignupForm';
 import { Dropdown } from '@/components/core/dropdown/dropdown';
 import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
 import { DropdownTrigger } from '@/components/core/dropdown/dropdown-trigger';
 import { Logo } from '@/components/core/logo';
 import { Iconify } from '@/components/iconify/iconify';
-// import { RightPanel } from '../rightPanel/right-panel';
-// import { MobileNav } from './mobile-nav';
-// import { NavSearch } from './nav-search';
 import { MobileNav } from '@/components/navbar/mobile-nav';
 import { NavSearch } from '@/components/navbar/nav-search';
-import { RightPanel } from '@/components/rightPanel/right-panel';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
-import { dashboardPublicNavData, publicRoutes } from '@/router';
+import { publicRoutes } from '@/router';
 import { clearUserSessionFromLocalStore } from '@/utils/axios-api.helpers';
-import { Popover } from '@mui/material';
+import { pxToRem } from '@/utils/utils';
+import { Avatar, Badge, Button, Popover, Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
@@ -30,24 +26,18 @@ import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/Caret
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
 
 import { paths } from '@/paths';
+import { usePopover } from '@/hooks/use-popover';
 import useAuth from '@/hooks/useAuth';
 
-const LOGIN = 'Login';
-const SIGNUP = 'Signup';
-const FORGOT_PASSWORD = 'Forgot password';
+import { UserPopover } from '../user-popover/user-popover';
 
-export const DashboardTopNav = ({ onToggle }) => {
+export const MainNavV2 = ({ onToggle }) => {
   const [openNav, setOpenNav] = React.useState(false);
-  const [openForm, setOpenForm] = React.useState(LOGIN);
-  const [openRightPanel, setOpenRightPanel] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const router = useRouter();
 
   const { isLogin } = useAuth();
   const pathname = usePathname();
-
-  // const handleRedirectLogin = () => {
-  //   setOpenForm(LOGIN);
-  // };
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -57,29 +47,38 @@ export const DashboardTopNav = ({ onToggle }) => {
     setAnchorEl(null);
   };
 
+  const handleRedirect = (path) => {
+    router.push(paths.auth.default.sign_in);
+    handleClose();
+  };
   return (
     <React.Fragment>
       <Box
         component="header"
         sx={{
-          bgcolor: 'rgba(240, 240, 240, 0.8)',
+          bgcolor: 'var(--mui-palette-background-default)',
           color: 'var( --mui-palette-neutral-950)',
-          left: 0,
           position: 'sticky',
           right: 0,
-          top: 10,
+          top: 0,
           zIndex: 'var(--MainNav-zIndex)',
-          mx: 2,
-          borderRadius: 4,
+          mx: 0,
+          borderRadius: 0,
           backdropFilter: 'blur(10px)',
           padding: 0,
+          borderBottom: '1px solid var(--mui-palette-divider)',
         }}
       >
-        <Container maxWidth="xxl" sx={{ minHeight: 'var(--MainNav-height)', py: '8px' }}>
+        <Container maxWidth="xxl" sx={{ minHeight: 'var(--MainNav-height)', py: pxToRem(8) }}>
           <Stack
             direction="row"
             spacing={2}
-            sx={{ display: 'flex', flex: '1 1 auto', justifyContent: 'space-between', alignItems: 'center' }}
+            sx={{
+              display: 'flex',
+              flex: '1 1 auto',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
           >
             <Box component="nav" sx={{ display: { xs: 'none', md: 'block' } }}>
               <Stack
@@ -88,15 +87,14 @@ export const DashboardTopNav = ({ onToggle }) => {
                 spacing={1}
                 sx={{ listStyle: 'none', m: 0, p: 0 }}
                 alignItems={'center'}
-                // justifyContent={'space-between'}
               >
                 {isLogin && (
-                  <IconButton onClick={onToggle} color="#333">
-                    <Iconify icon="material-symbols:menu-rounded" color="#333" />
+                  <IconButton onClick={onToggle}>
+                    <Iconify icon="material-symbols:menu-rounded" color={'var(--mui-palette-neutral-400)'} />
                   </IconButton>
                 )}
-                <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
-                  <Logo height={32} width={122} />
+                <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
+                  <Logo height={40} width={120} />
                 </Box>
                 {publicRoutes.map((section, index) =>
                   section.items.map((item) => (
@@ -110,41 +108,27 @@ export const DashboardTopNav = ({ onToggle }) => {
                     />
                   ))
                 )}
-                {isLogin ? (
-                  <Typography
-                    component="span"
-                    sx={{
-                      color: 'var(--mui-palette-warning-700)',
-                      '&:hover': { color: 'var(--mui-palette-common-dark)' },
-                      fontSize: '0.875rem',
-                      fontWeight: 400,
-                      lineHeight: '28px',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => clearUserSessionFromLocalStore(true)}
-                  >
-                    Logout
-                  </Typography>
-                ) : (
-                  <Typography
-                    component="span"
-                    sx={{
-                      color: 'var( --Text-primahandleOpenry)',
-                      fontSize: '0.875rem',
-                      fontWeight: 400,
-                      lineHeight: '28px',
-                      cursor: 'pointer',
-                    }}
-                    onClick={handleOpen}
-                  >
-                    Login
-                  </Typography>
-                )}
+                <NavSearch />
               </Stack>
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <NavSearch />
+            <Box sx={{ display: 'flex', alignItems: 'center', ml: 'auto' }}>
+              {isLogin ? (
+                <UserButton />
+              ) : (
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{ backgroundColor: 'var(--mui-palette-warning-700)' }}
+                  onClick={handleOpen}
+                >
+                  Sign in
+                </Button>
+              )}
+            </Box>
+
+            <Box>
+              {/* <NavSearch /> */}
               <IconButton
                 onClick={() => {
                   setOpenNav(true);
@@ -153,10 +137,6 @@ export const DashboardTopNav = ({ onToggle }) => {
               >
                 <ListIcon />
               </IconButton>
-              {/* logo for small view */}
-              <Box  sx={{display: { xs: 'flex', md: 'none' } }}>
-                <Logo colorDark="light" colorLight="dark" height={32} width={122} />
-              </Box>
             </Box>
           </Stack>
         </Container>
@@ -179,70 +159,26 @@ export const DashboardTopNav = ({ onToggle }) => {
           vertical: 'top',
           horizontal: 'center',
         }}
-        
       >
-        <Box sx={{
-          p: 2,
-        }}>
+        <Box
+          sx={{
+            p: 2,
+          }}
+        >
           <LoginForm closeDialog={handleClose} />
+          <Typography color="text.secondary" variant="body2" sx={{ my: 1 }}>
+            Don&#39;t have an account?{' '}
+            <Typography
+              component={'span'}
+              variant="body2"
+              onClick={handleRedirect}
+              sx={{ cursor: 'pointer', color: 'var(--mui-palette-primary-main)' }}
+            >
+              Sign up
+            </Typography>
+          </Typography>
         </Box>
-      </Popover>
-      {/* <RightPanel open={openRightPanel} onClose={() => setOpenRightPanel(false)} heading={openForm}>
-        {openForm === LOGIN && (
-          <>
-            <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
-              Don&apos;t have an account?{' '}
-              <Typography
-                component="span"
-                onClick={() => setOpenForm(SIGNUP)}
-                sx={{ cursor: 'pointer', color: 'var(--mui-palette-primary-main)' }}
-              >
-                Sign up
-              </Typography>
-            </Typography>
-            <LoginForm closeDialog={() => setOpenRightPanel(false)} />
-            <Box sx={{ mt: 1 }}>
-              <Typography
-                component="span"
-                onClick={() => setOpenForm(FORGOT_PASSWORD)}
-                sx={{ cursor: 'pointer', color: 'var(--mui-palette-primary-main)' }}
-              >
-                Forgot password?
-              </Typography>
-            </Box>
-          </>
-        )}
-        {openForm === SIGNUP && (
-          <>
-            <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
-              Already have an account?{' '}
-              <Typography
-                component="span"
-                onClick={() => setOpenForm(LOGIN)}
-                sx={{ cursor: 'pointer', color: 'var(--mui-palette-primary-main)' }}
-              >
-                Sign in
-              </Typography>
-            </Typography>
-            <SignupForm redirect={handleRedirectLogin} />
-          </>
-        )}
-        {openForm === FORGOT_PASSWORD && (
-          <>
-            <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
-              Remember the passoword?{' '}
-              <Typography
-                component="span"
-                onClick={() => setOpenForm(LOGIN)}
-                sx={{ cursor: 'pointer', color: 'var(--mui-palette-primary-main)' }}
-              >
-                Sign in
-              </Typography>
-            </Typography>
-            <ForgotPasswordForm redirect={handleRedirectLogin} />
-          </>
-        )}
-      </RightPanel> */}
+      </Popover>{' '}
     </React.Fragment>
   );
 };
@@ -274,12 +210,12 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
         sx={{
           alignItems: 'center',
           borderRadius: 1,
-          color: 'var(--mui-palette-neutral-600)',
+          color: 'var(--mui-palette-neutral-400)',
           cursor: 'pointer',
           display: 'flex',
           flex: '0 0 auto',
           gap: 1,
-          p: '6px 16px',
+          p: pxToRem(8),
           textAlign: 'left',
           textDecoration: 'none',
           whiteSpace: 'nowrap',
@@ -288,10 +224,9 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
             color: 'var(--mui-action-disabled)',
             cursor: 'not-allowed',
           }),
-          ...(active && { color: 'var(--mui-palette-common-dark)' }),
+          ...(active && { color: 'text.primary' }),
           '&:hover': {
-            ...(!disabled &&
-              !active && { bgcolor: 'rgba(255, 255, 255, 0.04)', color: 'var(--mui-palette-common-dark)' }),
+            ...(!disabled && !active && { bgcolor: 'none', color: 'text.primary' }),
           },
         }}
         tabIndex={0}
@@ -300,7 +235,6 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
           component="span"
           sx={{ flex: '1 1 auto', display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}
         >
-          {/* <Iconify width={14} icon={icon} /> */}
           <Typography
             component="span"
             sx={{ color: 'var( --Text-primary)', fontSize: '0.875rem', fontWeight: 400, lineHeight: '28px' }}
@@ -365,4 +299,39 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
   }
 
   return element;
+}
+
+export function UserButton() {
+  const popover = usePopover();
+  const { userInfo } = useAuth();
+
+  return (
+    <React.Fragment>
+      <Box
+        component="button"
+        onMouseEnter={popover.handleOpen}
+        ref={popover.anchorRef}
+        sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
+      >
+        <Badge
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          color="success"
+          sx={{
+            '& .MuiBadge-dot': {
+              border: '2px solid var(--MainNav-background)',
+              borderRadius: '50%',
+              bottom: '6px',
+              height: '12px',
+              right: '6px',
+              width: '12px',
+            },
+          }}
+          variant="dot"
+        >
+          <Avatar src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${userInfo.profile_pic}`} />
+        </Badge>
+      </Box>
+      <UserPopover anchorEl={popover.anchorRef.current} onClose={popover.handleClose} open={popover.open} />
+    </React.Fragment>
+  );
 }

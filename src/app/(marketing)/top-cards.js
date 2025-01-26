@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { Box, Card, Icon, Typography } from '@mui/material';
+import { pxToRem, textShortner } from '@/utils/utils';
 
 export function FeatureCards() {
   const cardsdata = [
@@ -63,6 +64,7 @@ export function FeatureCards() {
     },
   ];
 
+
   return (
     <Box
       sx={{
@@ -71,9 +73,11 @@ export function FeatureCards() {
         overflowX: 'auto',
         whiteSpace: 'nowrap',
         p: 2,
+        mx: 2,
         position: 'sticky',
-        top: 60,
+        top: 50,
         zIndex: 999,
+        backgroundColor: 'var(--mui-palette-background-default)',
         scrollBehavior: 'smooth',
         '&::-webkit-scrollbar': {
           height: '3px',
@@ -85,7 +89,7 @@ export function FeatureCards() {
         '&::-webkit-scrollbar-thumb:hover': {
           backgroundColor: '#555',
         },
-        backgroundColor: "var(--mui-palette-background-default)",
+        backgroundColor: 'var(--mui-palette-background-default)',
         // overflow: "hidden"
       }}
     >
@@ -96,47 +100,67 @@ export function FeatureCards() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            minWidth: 350,
-            width: { xs: '100%', sm: 300 },
+            minWidth: pxToRem(100),
+            width: { xs: '100%', sm: pxToRem(200) },
             flex: '0 0 auto',
-            paddingX: 1.5,
-            paddingY: 1,
+            paddingX: 1,
+            paddingY: .5,
             boxShadow: 3,
-            borderRadius: 2,
-            border: 'solid 1px var(--mui-palette-divider)',
+            borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+            border: 'solid .1px var(--mui-palette-divider)',
             backgroundColor: 'var(--mui-palette-background-paper)',
             overflow: 'hidden',
           }}
         >
-          {/* Icon Section */}
+          {/* Image Section */}
           <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 2 }}>
-            <Icon color="primary" sx={{ fontSize: 40 }}>
-              {card.icon}
-            </Icon>
+            <img
+              src={card.image}
+              alt={card.title}
+              style={{
+                width: 30,
+                height: 30,
+                borderRadius: '50%',
+                objectFit: 'cover',
+              }}
+            />
           </Box>
 
           {/* Title and Description Section */}
           <Box sx={{ flexGrow: 1 }}>
-            <Typography
-              variant="h6"
-              sx={{
-                fontSize: '16px',
-                fontWeight: 'bold',
-                whiteSpace: 'normal',
-              }}
-            >
-              {card.title}
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              {/* Title */}
+              <Typography
+                variant="h6"
+                sx={{
+                  fontSize: pxToRem(12),
+                  whiteSpace: 'normal',
+                }}
+              >
+                {card.title}
+              </Typography>
+
+              {/* Timestamp */}
+              <Typography
+                sx={{
+                  fontSize: pxToRem(10),
+                  color: 'text.secondary',
+                }}
+              >
+                {card.timestamp}
+              </Typography>
+            </Box>
+
+            {/* Description Section */}
             <Typography
               variant="body2"
               color="text.secondary"
               sx={{
-                fontSize: '14px',
-                marginTop: '4px',
+                fontSize: pxToRem(10),
                 whiteSpace: 'normal',
               }}
             >
-              {card.description}
+              {textShortner(card.description, 20)}
             </Typography>
           </Box>
 
@@ -150,16 +174,6 @@ export function FeatureCards() {
               position: 'relative',
             }}
           >
-            {/* Timestamp */}
-            <Typography
-              sx={{
-                fontSize: '12px',
-                color: 'text.secondary',
-                marginBottom: '4px',
-              }}
-            >
-              {card.timestamp}
-            </Typography>
           </Box>
         </Card>
       ))}

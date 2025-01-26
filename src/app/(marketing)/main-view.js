@@ -1,13 +1,8 @@
+'use client';
 
-"use client"
-
-import { Box } from "@mui/material"
-import React from "react";
+import React from 'react';
+import { Box } from '@mui/material';
 
 export const MainView = () => {
-    return (
-        <Box>
-            Homepage content will be here very soon.
-        </Box>
-    )
-}
+  return <Box>Homepage content will be here soon.</Box>;
+};
