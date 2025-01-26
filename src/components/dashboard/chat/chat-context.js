@@ -19,6 +19,7 @@ export const ChatContext = React.createContext({
   createMessage: noop,
   editMessage: noop,
   deleteMessage: noop,
+  replyMessage: noop,
   openDesktopSidebar: true,
   setOpenDesktopSidebar: noop,
   openMobileSidebar: true,
@@ -156,45 +157,53 @@ useEffect(() => {
 
   // Subscribe to new messages
   const messageSubscription = supabase
-    .channel('messages')
-    .on(
-      
-      'postgres_changes',
-      { event: 'INSERT', schema: 'public', table: 'messages' },
-      (payload) => {
-        console.log("Raw payload:", payload); 
-        if (!payload.new) {
-          console.error("Payload is missing the `new` field");
-          return;
-        }
+  .channel('messages')
+  .on(
+    'postgres_changes',
+    { event: 'INSERT', schema: 'public', table: 'messages' },
+    (payload) => {
+      const newMessage = {
+        id: payload.new.id,
+        threadId: payload.new.thread_id,
+        type: payload.new.type,
+        content: payload.new.content,
+        author: {
+          id: payload.new.author_id,
+          name: payload.new.author_name || 'new user',
+          avatar: payload.new.author_avatar || '',
+        },
+        file_url: payload.new.file_url,
+        createdAt: new Date(),
+      };
 
-        const newMessage = {
-          id: payload.new.id,
-          threadId: payload.new.thread_id,
-          type: payload.new.type,
-          content: payload.new.content,
-          author: {
-            id: payload.new.author_id,
-            name: payload.new.author_name || 'new user',
-            avatar: payload.new.author_avatar || '',
-          },
-          file_url: payload.new.file_url,
-          createdAt: new Date(),
-        };
+      setMessages((prev) => {
+        const updatedMessages = new Map(prev);
+        const threadMessages = updatedMessages.get(payload.new.thread_id) || [];
+        updatedMessages.set(payload.new.thread_id, [...threadMessages, newMessage]);
+        return updatedMessages;
+      });
+    }
+  )
+  .on(
+    'postgres_changes',
+    { event: 'UPDATE', schema: 'public', table: 'messages' },
+    (payload) => {
+      setMessages((prev) => {
+        const updatedMessages = new Map(prev);
+        const threadMessages = updatedMessages.get(payload.new.thread_id) || [];
+        const updatedThreadMessages = threadMessages.map((msg) =>
+          msg.id === payload.new.id
+            ? { ...msg, content: payload.new.content, isEdited: true }
+            : msg
+        );
+        updatedMessages.set(payload.new.thread_id, updatedThreadMessages);
+        return updatedMessages;
+      });
 
-        
-        // Update messages state
-        setMessages((prev) => {
-          const updatedMessages = new Map(prev);
-          const threadMessages = updatedMessages.get(payload.new.thread_id) || [];
-          updatedMessages.set(payload.new.thread_id, [...threadMessages, newMessage]);
-          return updatedMessages;
-        });
-        console.log("Real-time message added:", newMessage);
-
-      }
-    )
-    .subscribe();
+      console.log('Message updated:', payload.new);
+    }
+  )
+  .subscribe();
 
     const threadSubscription = supabase
     .channel('threads')
@@ -232,7 +241,7 @@ useEffect(() => {
           })),
           name: payload.new.name,
           unreadCount: 0,
-          member_count: participants.length,
+          member_count: payload.new.member_count,
         };
   
         setThreads((prev) => {
@@ -250,27 +259,55 @@ useEffect(() => {
   };
 }, [userId]);
 
+
+
 const handleEditMessage = useCallback(
-  async (messageId, threadId, authorId, newContent) => {
+  async (params) => {
     try {
       const response = await api.put(`/threads/message/edit`, { 
-        messageId, 
-        thread_id: threadId, 
-        author_id: authorId, 
-        content: newContent 
+        messageId : params.id, 
+        thread_id: params.threadId, 
+        author_id: params.author.id, 
+        newContent: params.content 
        });
       setMessages((prev) => {
         const updatedMessages = new Map(prev);
-        const threadMessages = updatedMessages.get(response.data.threadId) || [];
+        const threadMessages = updatedMessages.get(response.data.data.thread_id) || [];
         const updatedThreadMessages = threadMessages.map((msg) =>
-          msg.id === messageId ? { ...msg, content: newContent, isEdited: true } : msg
+          msg.id === params.id ? { ...msg, content: params.content, isEdited: true } : msg
         );
-        updatedMessages.set(response.data.threadId, updatedThreadMessages);
+        updatedMessages.set(response.data.data.thread_id, updatedThreadMessages);
         return updatedMessages;
       });
-      console.log('Message edited:', response.data);
+      console.log('Message edited:');
     } catch (err) {
       console.error('Error editing message:', err);
+      throw err;
+    }
+  },
+  []
+);
+
+
+// reply to message
+const handleReplyMessage = useCallback(
+  async (params) => {
+    try {
+      const response = await api.post(`/threads/message/reply`, {
+        threadId: params.threadId,
+        authorId: params.author.id,
+        content: params.content,
+        parentMessageId: params.parentMessageId,
+      });
+      setMessages((prev) => {
+        const updatedMessages = new Map(prev);
+        const threadMessages = updatedMessages.get(response.data.data.thread_id) || [];
+        updatedMessages.set(response.data.data.thread_id, [...threadMessages, response.data.data]);
+        return updatedMessages;
+      });
+      console.log('Message replied:', response.data);
+    } catch (err) {
+      console.error('Error replying to message:', err);
       throw err;
     }
   },
@@ -313,6 +350,7 @@ const handleDeleteMessage = useCallback(
         createMessage: handleCreateMessage,
         editMessage: handleEditMessage,
         deleteMessage: handleDeleteMessage,
+        replyMessage: handleReplyMessage,
         openDesktopSidebar,
         setOpenDesktopSidebar,
         openMobileSidebar,
