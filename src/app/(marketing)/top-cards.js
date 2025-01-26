@@ -5,7 +5,6 @@ import { Box, Card, Icon, Typography } from '@mui/material';
 import { pxToRem, textShortner } from '@/utils/utils';
 
 export function FeatureCards() {
-  const [isLoogedIn, setisLoogedIn] = React.useState(false);
   const cardsdata = [
     {
       id: 1,
@@ -65,19 +64,6 @@ export function FeatureCards() {
     },
   ];
 
-  React.useEffect(() => {
-    const data = localStorage.getItem('auth');
-    if (data) {
-      const user = JSON.parse(data);
-      if (user?.role === 'ADMIN') {
-        setisLoogedIn(true);
-      }
-    }
-  }, []);
-
-  if (!isLoogedIn) {
-    return null;
-  }
 
   return (
     <Box
@@ -121,7 +107,7 @@ export function FeatureCards() {
             paddingY: .5,
             boxShadow: 3,
             borderRadius: 2,
-            border: 'solid 1px var(--mui-palette-divider)',
+            border: 'solid .1px var(--mui-palette-divider)',
             backgroundColor: 'var(--mui-palette-background-paper)',
             overflow: 'hidden',
           }}

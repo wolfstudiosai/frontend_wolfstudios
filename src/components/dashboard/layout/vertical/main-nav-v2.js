@@ -2,7 +2,8 @@
 
 import * as React from 'react';
 import RouterLink from 'next/link';
-import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { LoginForm } from '@/app/auth/_components/LoginForm';
 import { Dropdown } from '@/components/core/dropdown/dropdown';
 import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
@@ -14,6 +15,7 @@ import { NavSearch } from '@/components/navbar/nav-search';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { publicRoutes } from '@/router';
 import { clearUserSessionFromLocalStore } from '@/utils/axios-api.helpers';
+import { pxToRem } from '@/utils/utils';
 import { Avatar, Badge, Button, Popover, Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -28,11 +30,11 @@ import useAuth from '@/hooks/useAuth';
 
 import { UserPopover } from '../user-popover/user-popover';
 import { usePopover } from '/src/hooks/use-popover';
-import { pxToRem } from '@/utils/utils';
 
 export const MainNavV2 = ({ onToggle }) => {
   const [openNav, setOpenNav] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const router = useRouter();
 
   const { isLogin } = useAuth();
   const pathname = usePathname();
@@ -45,6 +47,10 @@ export const MainNavV2 = ({ onToggle }) => {
     setAnchorEl(null);
   };
 
+  const handleRedirect = (path) => {
+    router.push(paths.auth.default.sign_in);
+    handleClose();
+  };
   return (
     <React.Fragment>
       <Box
@@ -52,7 +58,6 @@ export const MainNavV2 = ({ onToggle }) => {
         sx={{
           bgcolor: 'var(--mui-palette-background-default)',
           color: 'var( --mui-palette-neutral-950)',
-          left: 0,
           position: 'sticky',
           right: 0,
           top: 0,
@@ -61,13 +66,19 @@ export const MainNavV2 = ({ onToggle }) => {
           borderRadius: 0,
           backdropFilter: 'blur(10px)',
           padding: 0,
+          borderBottom: '1px solid var(--mui-palette-divider)',
         }}
       >
         <Container maxWidth="xxl" sx={{ minHeight: 'var(--MainNav-height)', py: pxToRem(8) }}>
           <Stack
             direction="row"
             spacing={2}
-            sx={{ display: 'flex', flex: '1 1 auto', justifyContent: 'space-between', alignItems: 'center' }}
+            sx={{
+              display: 'flex',
+              flex: '1 1 auto',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
           >
             <Box component="nav" sx={{ display: { xs: 'none', md: 'block' } }}>
               <Stack
@@ -78,12 +89,12 @@ export const MainNavV2 = ({ onToggle }) => {
                 alignItems={'center'}
               >
                 {isLogin && (
-                  <IconButton onClick={onToggle} color="#333">
-                    <Iconify icon="material-symbols:menu-rounded" color={"var(--mui-palette-neutral-950)"} />
+                  <IconButton onClick={onToggle}>
+                    <Iconify icon="material-symbols:menu-rounded" color={'var(--mui-palette-neutral-400)'} />
                   </IconButton>
                 )}
-                <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
-                  <Logo height={32} width={122} />
+                <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
+                  <Logo height={40} width={120} />
                 </Box>
                 {publicRoutes.map((section, index) =>
                   section.items.map((item) => (
@@ -100,44 +111,18 @@ export const MainNavV2 = ({ onToggle }) => {
                 <NavSearch />
               </Stack>
             </Box>
-            
+
             <Box sx={{ display: 'flex', alignItems: 'center', ml: 'auto' }}>
               {isLogin ? (
-                <Typography
-                  component="span"
-                  sx={{
-                    color: 'var(--mui-palette-warning-700)',
-                    '&:hover': { color: 'var(--mui-palette-common-dark)' },
-                    fontSize: '0.875rem',
-                    fontWeight: 400,
-                    lineHeight: '28px',
-                    cursor: 'pointer',
-                    mr: 3,
-                  }}
-                  onClick={() => clearUserSessionFromLocalStore(true)}
-                >
-                  Logout
-                </Typography>
+                <UserButton />
               ) : (
-                <Typography
-                  component="span"
-                  sx={{
-                    color: 'var( --Text-primahandleOpenry)',
-                    fontSize: '0.875rem',
-                    fontWeight: 400,
-                    lineHeight: '28px',
-                    cursor: 'pointer',
-                    mr: 3,
-                  }}
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{ backgroundColor: 'var(--mui-palette-warning-700)' }}
                   onClick={handleOpen}
                 >
-                  Login
-                </Typography>
-              )}
-              {isLogin && <UserButton />}
-              {!isLogin && (
-                <Button variant="contained" size="small">
-                  Sign Up
+                  Sign in
                 </Button>
               )}
             </Box>
@@ -181,6 +166,17 @@ export const MainNavV2 = ({ onToggle }) => {
           }}
         >
           <LoginForm closeDialog={handleClose} />
+          <Typography color="text.secondary" variant="body2" sx={{ my: 1 }}>
+            Don&#39;t have an account?{' '}
+            <Typography
+              component={'span'}
+              variant="body2"
+              onClick={handleRedirect}
+              sx={{ cursor: 'pointer', color: 'var(--mui-palette-primary-main)' }}
+            >
+              Sign up
+            </Typography>
+          </Typography>
         </Box>
       </Popover>{' '}
     </React.Fragment>
@@ -214,12 +210,12 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
         sx={{
           alignItems: 'center',
           borderRadius: 1,
-          color: 'var(--mui-palette-neutral-600)',
+          color: 'var(--mui-palette-neutral-400)',
           cursor: 'pointer',
           display: 'flex',
           flex: '0 0 auto',
           gap: 1,
-          p: '6px 16px',
+          p: pxToRem(8),
           textAlign: 'left',
           textDecoration: 'none',
           whiteSpace: 'nowrap',
@@ -228,10 +224,9 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
             color: 'var(--mui-action-disabled)',
             cursor: 'not-allowed',
           }),
-          ...(active && { color: 'var(--mui-palette-common-dark)' }),
+          ...(active && { color: 'text.primary' }),
           '&:hover': {
-            ...(!disabled &&
-              !active && { bgcolor: 'rgba(255, 255, 255, 0.04)', color: 'var(--mui-palette-common-dark)' }),
+            ...(!disabled && !active && { bgcolor: 'none', color: 'text.primary' }),
           },
         }}
         tabIndex={0}
@@ -340,4 +335,3 @@ export function UserButton() {
     </React.Fragment>
   );
 }
-

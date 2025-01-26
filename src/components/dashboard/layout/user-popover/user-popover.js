@@ -36,10 +36,6 @@ export function UserPopover({ anchorEl, onClose, open }) {
   const { userInfo } = useAuth();
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
 
-  const onClickSwitchAccount = (event) => {
-    setMenuAnchorEl(event.currentTarget);
-  };
-
   const onSelectAccount = () => {
     // logic for choosing account
     handleMenuClose();
@@ -88,12 +84,6 @@ export function UserPopover({ anchorEl, onClose, open }) {
             <LockKeyIcon />
           </ListItemIcon>
           Settings
-        </MenuItem>
-        <MenuItem onClick={onClickSwitchAccount}>
-          <ListItemIcon>
-            <ChevronLeftIcon sx={{ ml: 'auto' }} />
-          </ListItemIcon>
-          Switch Account
         </MenuItem>
       </List>
       <Divider />

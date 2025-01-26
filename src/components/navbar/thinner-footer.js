@@ -22,8 +22,8 @@ export const ThinerFooter = () => {
       <Box
         component="footer"
         sx={{
-          bgcolor: 'var(--mui-palette-background-level2)',
-          color: 'var(--mui-palette-neutral-950)',
+          bgcolor: 'var(--mui-palette-background-level1)',
+          borderTop: '1px solid var(--mui-palette-divider)',
           left: 0,
           position: 'sticky',
           right: 0,
@@ -49,22 +49,12 @@ export const ThinerFooter = () => {
             {footerRoutes.map((link, index) => (
               <React.Fragment key={index}>
                 <Link href={link.href} passHref style={{ textDecoration: 'none' }}>
-                  {/* <Typography
-                    sx={{
-                      color: 'var(--mui-palette-neutral-950)',
-                      fontSize: '0.875rem',
-                      fontWeight: 'normal',
-                      '&:hover': {
-                        color: 'var(--mui-palette-common-dark)',
-                      },
-                    }}
-                  ></Typography> */}
                   <Typography
                     component="span"
                     sx={{
-                      color: 'var(--mui-palette-neutral-700)',
+                      color: 'text.secondary',
                       '&:hover': {
-                        color: 'var(--mui-palette-secondary-main)',
+                        color: 'text.primary',
                       },
                       fontSize: '0.875rem',
                       fontWeight: 400,
