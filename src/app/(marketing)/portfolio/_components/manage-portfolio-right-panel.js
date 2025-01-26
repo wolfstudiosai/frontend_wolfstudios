@@ -11,6 +11,7 @@ import { Iconify } from '@/components/iconify/iconify';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
 import { RightPanel } from '@/components/rightPanel/right-panel';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
+import { ImageUploaderV2 } from '@/components/uploaders/image-uploader-v2';
 import { Box, Button, FormControl, FormLabel, InputAdornment } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useFormik } from 'formik';
@@ -25,6 +26,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data }) =>
   const [loading, setLoading] = React.useState(false);
   const [mediaPreview, setMediaPreview] = React.useState(null);
   const [file, setFile] = React.useState(null);
+  const [openUploadDialog, setOpenUploadDialog] = React.useState(false);
   const router = useRouter();
 
   const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
@@ -44,7 +46,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data }) =>
           const res = isUpdate ? await updatePortfolioAsync(file, values) : await createPortfolioAsync(file, values);
           if (res.success) {
             onClose?.();
-            fetchList(); 
+            fetchList();
           } else {
             console.error('Operation failed:', res.message);
           }
@@ -73,6 +75,10 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data }) =>
     setFieldValue('thumbnail', '');
     setFile(null);
   };
+
+  const handleSave = (url) => {};
+
+  // *****************Use Effects*******************************
 
   React.useEffect(() => {
     return () => {
@@ -111,6 +117,15 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data }) =>
       {/* <PageLoader loading={loading} error={null}> */}
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
+          <Grid size={{ xs: 12 }}>
+            <Button
+              endIcon={<Iconify icon="lucide:upload" />}
+              variant="contained"
+              onClick={() => setOpenUploadDialog(true)}
+            >
+              Upload
+            </Button>
+          </Grid>
           <Grid size={{ xs: 12 }}>
             <CustomTextField
               name="project_title"
@@ -237,6 +252,13 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data }) =>
       </form>
 
       {mediaPreview && <MediaIframeDialog open={true} data={mediaPreview} onClose={() => setMediaPreview(null)} />}
+      <ImageUploaderV2
+        open={openUploadDialog}
+        onClose={() => setOpenUploadDialog(false)}
+        onSave={(files) => handleSave(files)}
+        multiple
+      />
+
       {/* </PageLoader> */}
     </RightPanel>
   );
