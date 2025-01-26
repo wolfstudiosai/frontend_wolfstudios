@@ -106,7 +106,7 @@ export function FeatureCards() {
             paddingX: 1,
             paddingY: .5,
             boxShadow: 3,
-            borderRadius: 2,
+            borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
             border: 'solid .1px var(--mui-palette-divider)',
             backgroundColor: 'var(--mui-palette-background-paper)',
             overflow: 'hidden',

@@ -157,6 +157,7 @@ export const paths = {
     content: '/content',
     partner: '/partner',
     production: '/production',
+    spaces: '/spaces',
 
     // knowledge base
     about: '/about',

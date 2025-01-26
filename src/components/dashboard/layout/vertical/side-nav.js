@@ -21,6 +21,7 @@ import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import useAuth from '@/hooks/useAuth';
 
 import { navColorStyles } from './styles';
+import { pxToRem } from '@/utils/utils';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
@@ -40,8 +41,8 @@ export function SideNav({ color = 'evident', items = [], open }) {
       <Box
         sx={{
           ...styles,
-          bgcolor: 'var(--SideNav-background)',
-          // backgroundColor: 'var(--mui-palette-background-level2)',
+          bgcolor: 'text-primary',
+          backgroundColor: 'var(--mui-palette-background-level2)',
           borderRight: 'var(--SideNav-border)',
           color: 'var(--SideNav-color)',
           display: { xs: 'none', lg: 'flex' },
@@ -49,13 +50,14 @@ export function SideNav({ color = 'evident', items = [], open }) {
           height: '100%',
           left: 10,
           position: 'fixed',
-          top: 170,
+          top: 140,
           width: open ? 'var(--SideNav-width)' : '70px',
           zIndex: 'var(--SideNav-zIndex)',
           transition: 'width 0.3s ease',
-          borderRadius: '30px',
-          // margin: '0px 10px 10px 0px',
+          borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
           marginBottom: '10px',
+          border: '1px solid var(--mui-palette-background-level2)',
+          height: 'calc(100vh - 210px)',
         }}
       >
         <Box
@@ -79,10 +81,7 @@ function renderNavGroups({ items, pathname, userInfo }) {
   const role = userInfo.role.toLowerCase();
   const filteredGroups = items
     .map((section) => {
-      // Filter items within each section based on the user's role
       const validItems = section.items.filter((item) => !item.allowedRoles || item.allowedRoles.includes(role));
-
-      // Return a new section object with only valid items
       return validItems.length > 0 ? { ...section, items: validItems } : null;
     })
     .filter(Boolean);
@@ -222,7 +221,7 @@ function NavItem({
           {icon ? (
             <Iconify
               icon={icon}
-              color={active ? 'var(--NavItem-hover-color)' : 'var(--NavItem-icon-color)'}
+              color={active ? 'var(--NavItem-hover-color)' : 'text.primary'}
               sx={{ fontSize: 'var(--icon-fontSize-sm)' }}
             />
           ) : null}
@@ -231,7 +230,7 @@ function NavItem({
           <Typography
             component="span"
             sx={{
-              color: 'inherit',
+              color: 'text.primary',
               fontSize: '0.875rem',
               fontWeight: 500,
               lineHeight: '28px',

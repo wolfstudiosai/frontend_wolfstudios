@@ -22,7 +22,7 @@ export function VerticalLayout({ children }) {
       const savedState = localStorage.getItem('sidebarState');
       return savedState === 'true' ? true : false;
     }
-    return true; // default state is expanded before setting to localStorage
+    return true;
   });
 
   const handleSidebarToggle = () => {
@@ -86,8 +86,8 @@ export function VerticalLayout({ children }) {
             {children}
           </Box>
           {/* <Footer /> */}
-          <ThinerFooter />
         </Box>
+        <ThinerFooter />
       </Box>
     </React.Fragment>
   );

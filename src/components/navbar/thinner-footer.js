@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { footerRoutes, NewfooterRoutes } from '@/router';
+import { footerRoutes } from '@/router';
 import { pxToRem } from '@/utils/utils';
 import { Box, Container, Stack, Typography } from '@mui/material';
 
@@ -22,8 +22,8 @@ export const ThinerFooter = () => {
       <Box
         component="footer"
         sx={{
-          bgcolor: 'var(--mui-palette-background-level1)',
-          borderTop: '1px solid var(--mui-palette-divider)',
+          bgcolor: 'var(--mui-palette-background-default)',
+          borderTop: '1px solid var(--mui-palette-background-level2)',
           left: 0,
           position: 'sticky',
           right: 0,
@@ -36,45 +36,63 @@ export const ThinerFooter = () => {
           // mt: 4,
         }}
       >
-        <Container maxWidth="xxl" sx={{ py: pxToRem(8) }}>
+        <Container maxWidth="xxl" sx={{ py: pxToRem(2) }}>
           <Stack
             direction="row"
             spacing={2}
             sx={{
-              justifyContent: 'start',
+              justifyContent: 'space-between',
               alignItems: 'center',
               flexWrap: 'wrap',
+              gap: 2,
             }}
           >
-            {footerRoutes.map((link, index) => (
-              <React.Fragment key={index}>
-                <Link href={link.href} passHref style={{ textDecoration: 'none' }}>
-                  <Typography
-                    component="span"
-                    sx={{
-                      color: 'text.secondary',
-                      '&:hover': {
-                        color: 'text.primary',
-                      },
-                      fontSize: '0.875rem',
-                      fontWeight: 400,
-                      lineHeight: '28px',
-                    }}
-                  >
-                    {link.label}
-                  </Typography>
-                </Link>
-                {index !== footerRoutes.length - 1 && (
-                  <Box
-                    sx={{
-                      height: pxToRem(12),
-                      borderLeft: '1px solid var(--mui-palette-neutral-300)',
-                      mx: 1,
-                    }}
-                  />
-                )}
-              </React.Fragment>
-            ))}
+            {/* Links Section */}
+            <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
+              {footerRoutes.map((link, index) => (
+                <React.Fragment key={index}>
+                  <Link href={link.href} passHref style={{ textDecoration: 'none' }}>
+                    <Typography
+                      component="span"
+                      sx={{
+                        color: 'text.secondary',
+                        '&:hover': {
+                          color: 'text.primary',
+                        },
+                        fontSize: '0.875rem',
+                        fontWeight: 400,
+                        lineHeight: '28px',
+                      }}
+                    >
+                      {link.label}
+                    </Typography>
+                  </Link>
+                  {/* Divider */}
+                  {index !== footerRoutes.length - 1 && (
+                    <Box
+                      sx={{
+                        height: pxToRem(12),
+                        borderLeft: '1px solid',
+                        borderColor: 'neutral.300',
+                        mx: 1,
+                      }}
+                    />
+                  )}
+                </React.Fragment>
+              ))}
+            </Stack>
+
+            {/* Copyright Section */}
+            <Typography
+              sx={{
+                fontSize: '0.875rem',
+                color: 'text.secondary',
+                textAlign: { xs: 'center', sm: 'left' },
+                width: { xs: '100%', sm: 'auto' },
+              }}
+            >
+              ©{new Date().getFullYear()} Wolf Studios Ai. All rights reserved.
+            </Typography>
           </Stack>
         </Container>
       </Box>
