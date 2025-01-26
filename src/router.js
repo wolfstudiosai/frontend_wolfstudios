@@ -1,74 +1,47 @@
 import { paths } from './paths';
 
-// public routes
-export const navData = [
+// public header routes
+export const publicRoutes = [
   {
     key: 'public-navitems',
     items: [
-      { key: 'home', title: 'Home', href: paths.home },
+      // { key: 'home', title: 'Home', href: paths.home },
       {
-        key: 'HQs',
-        title: 'HQs',
-        items: [
-          {
-            key: 'portfolio',
-            title: 'Portfolio',
-            href: paths.public.portfolio,
-          },
-          {
-            key: 'campaign',
-            title: 'Campaign',
-            href: paths.public.campaign,
-          },
-          {
-            key: 'profile',
-            title: 'Profile',
-            href: paths.public.profile,
-          },
-          {
-            key: 'content',
-            title: 'Content',
-            href: paths.public.content,
-          },
-          {
-            key: 'partner',
-            title: 'Partner',
-            href: paths.public.partner,
-          },
-        ],
+        key: 'campaign',
+        title: 'Campaign',
+        href: paths.dashboardPublic.campaign,
       },
       {
-        key: 'knowledge',
-        title: 'Knowledge',
-        items: [
-          {
-            key: 'about',
-            title: 'About us',
-            href: paths.public.about,
-          },
-          {
-            key: 'contact',
-            title: 'Contact',
-            href: paths.public.contact,
-          },
-          {
-            key: 'blog',
-            title: 'Blog',
-            href: paths.public.blog,
-          },
-        ],
+        key: 'portfolio',
+        title: 'Portfolio',
+        href: paths.dashboardPublic.portfolio,
       },
-      // {
-      //   key: 'login',
-      //   title: 'Login',
-      //   href: paths.auth.default.sign_in,
-      // },
+      {
+        key: 'concept',
+        title: 'Content',
+        href: paths.dashboardPublic.content,
+      },
+      {
+        key: 'production',
+        title: 'Production',
+        href: paths.dashboardPublic.production,
+      },
+      {
+        key: 'partner',
+        title: 'Partner',
+        href: paths.dashboardPublic.partner,
+      },
+      {
+        key: 'spaces',
+        title: 'Spaces',
+        href: paths.dashboardPublic.spaces,
+      },
     ],
   },
 ];
 
 // dashboard routes
-export const dashboardItems = [
+export const privateRoutes = [
   {
     key: 'general',
     title: 'General',
@@ -76,38 +49,31 @@ export const dashboardItems = [
       {
         key: 'overview',
         title: 'Overview',
-        href: paths.dashboard.overview,
+        href: paths.private.overview,
         icon: 'material-symbols-light:overview-outline-rounded',
         allowedRoles: ['admin', 'user'],
       },
       {
         key: 'analytics',
         title: 'Analytics',
-        href: paths.dashboard.analytics,
+        href: paths.private.analytics,
         icon: 'hugeicons:analysis-text-link',
         allowedRoles: ['admin', 'user'],
       },
       {
         key: 'campaign',
         title: 'Campaign',
-        icon: 'pepicons-pencil:file',
-        items: [
-          {
-            key: 'campaign',
-            title: 'Campaign',
-            href: paths.dashboard.campaign,
-            icon: 'material-symbols-light:ads-click',
-            allowedRoles: ['admin', 'user'],
-          },
-          {
-            key: 'campaign_view',
-            title: 'Campaign View',
-            href: paths.dashboard.campaign_view,
-            icon: 'fluent-mdl2:entry-view',
-            allowedRoles: ['admin', 'user'],
-          },
-        ],
+        href: paths.private.campaign,
+        icon: 'material-symbols-light:ads-click',
+        allowedRoles: ['admin', 'user'],
       },
+      {
+        key: 'chat',
+        title: 'Chat',
+        href: paths.private.chat,
+        icon: 'quill:chat',
+        allowedRoles: ['admin', 'user'],
+      }
     ],
   },
   {
@@ -117,35 +83,35 @@ export const dashboardItems = [
       {
         key: 'records',
         title: 'Records',
-        href: paths.dashboard.records,
+        href: paths.private.records,
         icon: 'pepicons-pencil:file',
         allowedRoles: ['admin'],
       },
       {
         key: 'partner',
         title: 'Partner HQ',
-        href: paths.dashboard.partner,
+        href: paths.private.partner,
         icon: 'lsicon:user-crowd-outline',
         allowedRoles: ['admin'],
       },
       {
         key: 'partners_by_campaign',
         title: 'Partners by campaign',
-        href: paths.dashboard.partners_by_campaign,
+        href: paths.private.partners_by_campaign,
         icon: 'ph:handshake-light',
         allowedRoles: ['admin'],
       },
       {
         key: 'needs_offer_approval',
         title: 'Needs offer/ approval',
-        href: paths.dashboard.needs_offer_approval,
+        href: paths.private.needs_offer_approval,
         icon: 'material-symbols-light:order-approve-outline-rounded',
         allowedRoles: ['admin'],
       },
       {
         key: 'Portfolio',
         title: 'Portfolio',
-        href: paths.dashboard.portfolios,
+        href: paths.private.portfolios,
         icon: 'fluent:document-copy-20-regular',
         allowedRoles: ['admin'],
       },
@@ -158,14 +124,14 @@ export const dashboardItems = [
           {
             key: 'content',
             title: 'Content',
-            href: paths.dashboard.content,
+            href: paths.private.content,
             icon: 'lsicon:user-crowd-outline',
             allowedRoles: ['admin'],
           },
           {
             key: 'create_content',
             title: 'Add Content',
-            href: paths.dashboard.create_content,
+            href: paths.private.create_content,
             icon: 'fluent:document-copy-20-regular',
             allowedRoles: ['admin'],
           },
@@ -174,25 +140,33 @@ export const dashboardItems = [
       {
         key: 'usrs',
         title: 'Users',
-        href: paths.dashboard.users,
+        href: paths.private.users,
         icon: 'solar:user-linear',
         allowedRoles: ['admin'],
       },
       {
         key: 'chat',
         title: 'Chat',
-        href: paths.dashboard.chat,
-        icon: 'fluent:chat-24-filled',
+        href: paths.private.chat,
+        icon: 'quill:chat',
+        allowedRoles: ['admin'],
+      },
+      {
+        key: 'archive',
+        title: 'Archive',
+        href: paths.private.archive,
+        icon: 'material-symbols-light:archive-outline-rounded',
         allowedRoles: ['admin'],
       },
     ],
   },
 ];
 
-// add all the dashboard routes that not in the dashboardItems
-export const additionalRoutes = [
-  {
-    href: paths.dashboard.chat,
-    allowedRoles: ['admin', 'user'],
-  },
+// footer routes
+export const footerRoutes = [
+  { label: 'Learn', href: '/learn' },
+  { label: 'Chat', href: '/chat' },
+  { label: 'Spectate', href: '/spectate' },
+  { label: 'Shop', href: '/shop' },
+  { label: 'Collaborate', href: '/collaborate' },
 ];

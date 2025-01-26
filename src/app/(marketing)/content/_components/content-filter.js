@@ -148,7 +148,7 @@ export const ContentFilter = () => {
               key={item}
               onClick={() => handleFilter(item)}
               variant={selectedCategories.includes(item) ? 'contained' : 'outlined'}
-              sx={{ borderRadius: 4 }}
+              sx={{ borderRadius: 4}}
               size="medium"
               color="secondary"
             >
@@ -162,7 +162,7 @@ export const ContentFilter = () => {
               key={item}
               onClick={() => handleFilter(item)}
               variant={selectedFilters.includes(item) ? 'contained' : 'outlined'}
-              sx={{ borderRadius: 4 }}
+              sx={{ borderRadius: 4}}
               size="medium"
               color="secondary"
             >
@@ -176,7 +176,7 @@ export const ContentFilter = () => {
               key={item}
               onClick={() => handleFilter(item)}
               variant={selectedSort === item ? 'contained' : 'outlined'}
-              sx={{ borderRadius: 4 }}
+              sx={{ borderRadius: 4}}
               size="medium"
               color="secondary"
             >

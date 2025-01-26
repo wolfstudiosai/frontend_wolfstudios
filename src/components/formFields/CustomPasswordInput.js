@@ -16,6 +16,7 @@ export function CustomPasswordInput({ value, onChange, error, onBlur, ...props }
             onChange={onChange}
             onBlur={onBlur}
             error={error}
+            fullWidth   
             endAdornment={
                 <InputAdornment position="end">
                     <IconButton

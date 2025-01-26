@@ -22,7 +22,7 @@ import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/di
 import { Users as UsersIcon } from '@phosphor-icons/react/dist/ssr/Users';
 import { useTranslation } from 'react-i18next';
 
-import { paths } from '/src/paths';
+import { paths } from '@/paths';
 import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import { useDialog } from '/src/hooks/use-dialog';
 import { usePopover } from '/src/hooks/use-popover';
@@ -90,7 +90,7 @@ export function MainNav({ color = 'evident', items = [] }) {
             >
               <ListIcon color="var(--NavItem-icon-color)" />
             </IconButton>
-            <Box component={RouterLink} href={paths.home} sx={{ display: { xs: 'none', md: 'inline-block' } }}>
+            <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: { xs: 'none', md: 'inline-block' } }}>
               <Logo color={logoColor} height={32} width={122} />
             </Box>
             <Box sx={{ display: { xs: 'none', md: 'block' } }}>

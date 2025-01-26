@@ -1,13 +1,18 @@
+"use client";
 import * as React from 'react';
 
 import { dayjs } from '/src/lib/dayjs';
 import { ChatProvider } from '@/components/dashboard/chat/chat-context';
 import { ChatView } from '@/components/dashboard/chat/chat-view';
+import {api, server_base_api} from "src/utils/api"
+import useAuth from '@/hooks/useAuth';
+import { getUsers } from '../users/_lib/user.actions';
 
-const contacts = [
+
+const contcts = [
   {
     id: 'USR-010',
-    name: 'Alcides Antonio',
+    name: 'Alcides Esmizo',
     avatar: '/assets/avatar-10.png',
     isActive: false,
     lastActivity: dayjs().subtract(1, 'hour').toDate(),
@@ -66,7 +71,7 @@ const contacts = [
   },
 ];
 
-const threads = [
+const thrds = [
   {
     id: 'TRD-004',
     type: 'direct',
@@ -106,7 +111,7 @@ const threads = [
   },
 ];
 
-const messages = [
+const messags = [
   {
     id: 'MSG-011',
     threadId: 'TRD-004',
@@ -197,10 +202,78 @@ const messages = [
   },
 ];
 
+
 export default function Layout({ children }) {
+  const [messages, setMessages] = React.useState([])
+  const [threads, setThreads] = React.useState([]);
+  const [contacts, setContacts] = React.useState([]);
+  const {userInfo} = useAuth();
+  const userId = userInfo?.email;
+
+  React.useEffect(() => {
+    async function fetchData() {
+      try {
+        const contactsRes = await getUsers(
+          {page:1,rowsPerPage:100}
+
+        );
+        // console.log('Contacts data:', contactsRes);
+        const transformedContacts = (contactsRes.data || []).map((user) => ({
+          id: user.email,
+          name: `${user.first_name} ${user.last_name}`,
+          avatar: user.profile_pic || '',
+          isActive: user.status === 'ACTIVE',
+          lastActivity: dayjs().toDate(),
+        }));
+        setContacts(transformedContacts);
+  
+        // Fetch threads
+        const threadsRes = await api.get('/threads',{
+          params: { userId: userId },
+          
+        });
+
+        setThreads(threadsRes.data.data);
+  
+        // Fetch messages for each thread
+        const fetchMessagesForThread = async (threadId) => {
+          if (!threadId) return;
+  
+          try {
+            const messagesRes = await server_base_api.get(`/threads/${threadId}/messages`);
+            if (!messagesRes.data.success) {
+              console.error('Failed to fetch messages:', messagesRes.data.message);
+              return;
+            }
+            setMessages((prevMessages) => {
+              const newMessageIds = new Set(prevMessages.map((msg) => msg.id));
+              const uniqueMessages = messagesRes.data.data.filter((msg) => !newMessageIds.has(msg.id));
+              return [...prevMessages, ...uniqueMessages];
+            });
+            
+
+          } catch (error) {
+            console.error('Error fetching messages:', error);
+          }
+        };
+
+        // console.log("threadsRes data:",threadsRes.data.data)
+        for (const thread of threadsRes.data.data || []) {
+          await fetchMessagesForThread(thread?.id);
+        }
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
+    }
+  
+    fetchData();
+  }, []);
+
   return (
+
     <ChatProvider contacts={contacts} messages={messages} threads={threads}>
       <ChatView>{children}</ChatView>
     </ChatProvider>
   );
 }
+

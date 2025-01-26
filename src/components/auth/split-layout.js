@@ -19,6 +19,7 @@ export function SplitLayout({ children }) {
           flexDirection: 'column',
           p: 3,
           gap: 3,
+          minHeight: "calc(100vh - 120px)",
         }}
       >
         <div>

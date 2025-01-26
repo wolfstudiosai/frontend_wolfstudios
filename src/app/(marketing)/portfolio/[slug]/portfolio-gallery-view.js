@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { IMAGES_MANIFEST } from 'next/dist/shared/lib/constants';
 import Image from 'next/image';
-import { Box, Button, Grid, Paper } from '@mui/material';
+import { Box, Button, Paper } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { useTheme } from '@mui/material/styles';
 
 const portfolioItems = [

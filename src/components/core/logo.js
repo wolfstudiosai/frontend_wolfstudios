@@ -3,6 +3,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { NoSsr } from '@/components/core/no-ssr';
+import { pxToRem } from '@/utils/utils';
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { useColorScheme } from '@mui/material/styles';
@@ -13,15 +14,29 @@ const HEIGHT = 25;
 const WIDTH = '100%';
 
 export function Logo({ color = 'dark', emblem, height = HEIGHT, width = WIDTH }) {
+  const { mode } = useColorScheme();
+
   let url;
 
   if (emblem) {
     url = color === 'light' ? '/assets/logo-emblem.svg' : '/assets/logo-emblem--dark.svg';
   } else {
-    url = color === 'light' ? '/assets/logo.svg' : '/assets/wolf_studio_logo_dark.png';
+    url = mode === 'light' ? '/assets/wolf_studio_logo_dark.png' : '/assets/wolf_studios_white.png';
   }
 
-  return <Box alt="logo" component="img" src={url} height={HEIGHT} />;
+  return (
+    <Box
+      alt="logo"
+      component="img"
+      src={url}
+      sx={{
+        height: pxToRem(height),
+        width: pxToRem(width),
+        objectFit: 'contain',
+        display: 'block',
+      }}
+    />
+  );
 }
 
 export function DynamicLogo({

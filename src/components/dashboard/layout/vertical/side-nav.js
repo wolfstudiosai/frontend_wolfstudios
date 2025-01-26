@@ -3,6 +3,10 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
+import { DynamicLogo } from '@/components/core/logo';
+import { Iconify } from '@/components/iconify/iconify';
+import { Menu as MenuIcon } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -12,66 +16,64 @@ import { ArrowSquareOut as ArrowSquareOutIcon } from '@phosphor-icons/react/dist
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 
+import { paths } from '@/paths';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import useAuth from '@/hooks/useAuth';
 
 import { navColorStyles } from './styles';
-import { DynamicLogo } from '@/components/core/logo';
-import { Iconify } from '@/components/iconify/iconify';
-import { isNavItemActive } from '/src/lib/is-nav-item-active';
-import { paths } from '/src/paths';
+import { pxToRem } from '@/utils/utils';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
   light: { blend_in: 'dark', discrete: 'dark', evident: 'light' },
 };
 
-export function SideNav({ color = 'evident', items = [] }) {
+export function SideNav({ color = 'evident', items = [], open }) {
   const pathname = usePathname();
   const { userInfo } = useAuth();
 
   const { colorScheme = 'light' } = useColorScheme();
-
   const styles = navColorStyles[colorScheme][color];
   const logoColor = logoColors[colorScheme][color];
 
   return (
-    <Box
-      sx={{
-        ...styles,
-        bgcolor: 'var(--SideNav-background)',
-        borderRight: 'var(--SideNav-border)',
-        color: 'var(--SideNav-color)',
-        display: { xs: 'none', lg: 'flex' },
-        flexDirection: 'column',
-        height: '100%',
-        left: 0,
-        position: 'fixed',
-        top: 0,
-        width: 'var(--SideNav-width)',
-        zIndex: 'var(--SideNav-zIndex)',
-      }}
-    >
-      <Stack spacing={2} sx={{ p: 2 }}>
-        <div>
-          <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
-            <DynamicLogo color={logoColor} height={32} width={122} isDashboard ={true} />
-          </Box>
-        </div>
-        {/* <WorkspacesSwitch /> */}
-      </Stack>
+    open && (
       <Box
-        component="nav"
         sx={{
-          flex: '1 1 auto',
-          overflowY: 'auto',
-          p: 2,
-          scrollbarWidth: 'none',
-          '&::-webkit-scrollbar': { display: 'none' },
+          ...styles,
+          bgcolor: 'text-primary',
+          backgroundColor: 'var(--mui-palette-background-level2)',
+          borderRight: 'var(--SideNav-border)',
+          color: 'var(--SideNav-color)',
+          display: { xs: 'none', lg: 'flex' },
+          flexDirection: 'column',
+          height: '100%',
+          left: 10,
+          position: 'fixed',
+          top: 140,
+          width: open ? 'var(--SideNav-width)' : '70px',
+          zIndex: 'var(--SideNav-zIndex)',
+          transition: 'width 0.3s ease',
+          borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+          marginBottom: '10px',
+          border: '1px solid var(--mui-palette-background-level2)',
+          height: 'calc(100vh - 210px)',
         }}
       >
-        {renderNavGroups({ items, pathname, userInfo })}
+        <Box
+          component="nav"
+          sx={{
+            flex: '1 1 auto',
+            overflowY: 'auto',
+            p: 2,
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': { display: 'none' },
+          }}
+        >
+          {renderNavGroups({ items, pathname, userInfo })}
+        </Box>
       </Box>
-    </Box>
+    )
   );
 }
 
@@ -79,10 +81,7 @@ function renderNavGroups({ items, pathname, userInfo }) {
   const role = userInfo.role.toLowerCase();
   const filteredGroups = items
     .map((section) => {
-      // Filter items within each section based on the user's role
       const validItems = section.items.filter((item) => !item.allowedRoles || item.allowedRoles.includes(role));
-
-      // Return a new section object with only valid items
       return validItems.length > 0 ? { ...section, items: validItems } : null;
     })
     .filter(Boolean);
@@ -222,7 +221,7 @@ function NavItem({
           {icon ? (
             <Iconify
               icon={icon}
-              color={active ? 'var(--NavItem-hover-color)' : 'var(--NavItem-icon-color)'}
+              color={active ? 'var(--NavItem-hover-color)' : 'text.primary'}
               sx={{ fontSize: 'var(--icon-fontSize-sm)' }}
             />
           ) : null}
@@ -231,7 +230,7 @@ function NavItem({
           <Typography
             component="span"
             sx={{
-              color: 'inherit',
+              color: 'text.primary',
               fontSize: '0.875rem',
               fontWeight: 500,
               lineHeight: '28px',
@@ -257,6 +256,70 @@ function NavItem({
           <Box sx={{ borderLeft: '1px solid var(--NavItem-children-border)', pl: '12px' }}>{children}</Box>
         </Box>
       ) : null}
+    </Box>
+  );
+}
+
+function NavItemIconOnly({ pathname, item, depth = 0, disabled = false, external = false }) {
+  const { icon, href, label } = item;
+  const active = isNavItemActive({ href, pathname });
+
+  return (
+    <Box component="li" data-depth={depth} sx={{ userSelect: 'none' }}>
+      <Box
+        {...(href
+          ? {
+              component: external ? 'a' : RouterLink,
+              href,
+              target: external ? '_blank' : undefined,
+              rel: external ? 'noreferrer' : undefined,
+            }
+          : { role: 'button' })}
+        sx={{
+          alignItems: 'center',
+          borderRadius: 1,
+          color: 'var(--NavItem-color)',
+          cursor: 'pointer',
+          display: 'flex',
+          flex: '0 0 auto',
+          gap: 1,
+          p: '6px',
+          position: 'relative',
+          textDecoration: 'none',
+          whiteSpace: 'nowrap',
+          ...(disabled && {
+            bgcolor: 'var(--NavItem-disabled-background)',
+            color: 'var(--NavItem-disabled-color)',
+            cursor: 'not-allowed',
+          }),
+          ...(active && {
+            bgcolor: 'var(--NavItem-active-background)',
+            color: 'var(--NavItem-active-color)',
+          }),
+          '&:hover': {
+            ...(active
+              ? {}
+              : {
+                  bgcolor: 'var(--NavItem-hover-background)',
+                  color: 'var(--NavItem-hover-color)',
+                }),
+          },
+        }}
+        tabIndex={0}
+      >
+        <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flex: '0 0 auto' }}>
+          {/* Render icon */}
+          {icon && (
+            <Iconify
+              icon={icon}
+              color={active ? 'var(--NavItem-hover-color)' : 'var(--NavItem-icon-color)'}
+              sx={{ fontSize: '24px' }}
+            />
+          )}
+        </Box>
+        {/* Render label if needed */}
+        {label && <Chip color="primary" label={label} size="small" />}
+      </Box>
     </Box>
   );
 }

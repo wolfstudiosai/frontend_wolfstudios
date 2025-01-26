@@ -3,13 +3,15 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
+import { ForgotPasswordForm } from '@/app/auth/_components/FogotPasswordForm';
 import { LoginForm } from '@/app/auth/_components/LoginForm';
+import { SignupForm } from '@/app/auth/_components/SignupForm';
 import { Dropdown } from '@/components/core/dropdown/dropdown';
 import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
 import { DropdownTrigger } from '@/components/core/dropdown/dropdown-trigger';
 import { Logo } from '@/components/core/logo';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
-import { navData } from '@/router';
+// import { navData } from '@/router';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
@@ -17,17 +19,28 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
+import { MenuIcon } from 'lucide-react';
 
 import { paths } from '@/paths';
 
-import { Dialog } from '../dialog/Dialog';
+import { RightPanel } from '../rightPanel/right-panel';
 import { MobileNav } from './mobile-nav';
 import { NavSearch } from './nav-search';
+import { dashboardNavData, navData } from '@/router';
 
-export function MainNav() {
+const LOGIN = 'Login';
+const SIGNUP = 'Signup';
+const FORGOT_PASSWORD = 'Forgot password';
+
+export function MainNav({ onToggle }) {
   const [openNav, setOpenNav] = React.useState(false);
-  const [openLoginForm, setOpenLoginForm] = React.useState(false);
+  const [openForm, setOpenForm] = React.useState(LOGIN);
+  const [openRightPanel, setOpenRightPanel] = React.useState(false);
   const pathname = usePathname();
+
+  const handleRedirectLogin = () => {
+    setOpenForm(LOGIN);
+  };
 
   return (
     <React.Fragment>
@@ -61,6 +74,7 @@ export function MainNav() {
                 sx={{ listStyle: 'none', m: 0, p: 0 }}
                 alignItems={'center'}
               >
+                
                 {navData.map((section, index) =>
                   section.items.map((item) => (
                     <NavItem
@@ -82,13 +96,13 @@ export function MainNav() {
                     lineHeight: '28px',
                     cursor: 'pointer',
                   }}
-                  onClick={() => setOpenLoginForm(true)}
+                  onClick={() => setOpenRightPanel(true)}
                 >
                   Login
                 </Typography>
               </Stack>
             </Box>
-            <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
+            <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
               <Logo height={32} width={122} />
             </Box>
             <Box>
@@ -111,11 +125,62 @@ export function MainNav() {
         }}
         open={openNav}
       />
-      {openLoginForm && (
-        <Dialog title="Login" open={openLoginForm} onClose={() => setOpenLoginForm(false)}>
-          <LoginForm />
-        </Dialog>
-      )}
+      <RightPanel open={openRightPanel} onClose={() => setOpenRightPanel(false)} heading={openForm}>
+        {openForm === LOGIN && (
+          <>
+            <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
+              Don&apos;t have an account?{' '}
+              <Typography
+                component="span"
+                onClick={() => setOpenForm(SIGNUP)}
+                sx={{ cursor: 'pointer', color: 'var(--mui-palette-primary-main)' }}
+              >
+                Sign up
+              </Typography>
+            </Typography>
+            <LoginForm />
+            <Box sx={{ mt: 1 }}>
+              <Typography
+                component="span"
+                onClick={() => setOpenForm(FORGOT_PASSWORD)}
+                sx={{ cursor: 'pointer', color: 'var(--mui-palette-primary-main)' }}
+              >
+                Forgot password?
+              </Typography>
+            </Box>
+          </>
+        )}
+        {openForm === SIGNUP && (
+          <>
+            <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
+              Already have an account?{' '}
+              <Typography
+                component="span"
+                onClick={() => setOpenForm(LOGIN)}
+                sx={{ cursor: 'pointer', color: 'var(--mui-palette-primary-main)' }}
+              >
+                Sign in
+              </Typography>
+            </Typography>
+            <SignupForm redirect={handleRedirectLogin} />
+          </>
+        )}
+        {openForm === FORGOT_PASSWORD && (
+          <>
+            <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
+              Remember the passoword?{' '}
+              <Typography
+                component="span"
+                onClick={() => setOpenForm(LOGIN)}
+                sx={{ cursor: 'pointer', color: 'var(--mui-palette-primary-main)' }}
+              >
+                Sign in
+              </Typography>
+            </Typography>
+            <ForgotPasswordForm redirect={handleRedirectLogin} />
+          </>
+        )}
+      </RightPanel>
     </React.Fragment>
   );
 }

@@ -28,6 +28,8 @@ export function Sidebar({
   openMobile,
   threads,
 }) {
+  console.log("contacts in sidebar",contacts);
+
   const mdUp = useMediaQuery('up', 'md');
 
   const content = (
@@ -84,7 +86,8 @@ function SidebarContent({
   const [searchFocused, setSearchFocused] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState([]);
-
+  
+  
   const handleSearchChange = React.useCallback(
     async (event) => {
       const { value } = event.target;
@@ -118,6 +121,7 @@ function SidebarContent({
 
   const handleSearchSelect = React.useCallback(
     (contact) => {
+      console.log("selected",contact)
       onSelectContact?.(contact.id);
 
       setSearchFocused(false);
@@ -137,11 +141,21 @@ function SidebarContent({
     [onSelectThread, onClose, closeOnThreadSelect]
   );
 
+  const sortedThreads = threads.slice().sort((a, b) => {
+    const lastMessageA = messages?.get(a.id)?.at(-1);
+    const lastMessageB = messages?.get(b.id)?.at(-1);
+  
+    const dateA = lastMessageA ? new Date(lastMessageA.createdAt) : new Date(a.createdAt);
+    const dateB = lastMessageB ? new Date(lastMessageB.createdAt) : new Date(b.createdAt);
+  
+    return dateB - dateA; 
+  });
+  
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <Stack direction="row" spacing={2} sx={{ alignItems: 'center', flex: '0 0 auto', p: 2 }}>
         <Typography sx={{ flex: '1 1 auto' }} variant="h5">
-          Chats
+          Messages
         </Typography>
         <Button
           component={RouterLink}
@@ -177,9 +191,10 @@ function SidebarContent({
         >
           {threads.map((thread) => (
             <ThreadItem
+            loading={false}
               active={currentThreadId === thread.id}
               key={thread.id}
-              messages={messages.get(thread.id) ?? []}
+              messages={messages ?? []}
               onSelect={() => {
                 handleThreadSelect(thread.type, thread.id);
               }}

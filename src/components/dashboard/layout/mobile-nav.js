@@ -12,7 +12,7 @@ import { ArrowSquareOut as ArrowSquareOutIcon } from '@phosphor-icons/react/dist
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 
-import { paths } from '/src/paths';
+import { paths } from '@/paths';
 import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import { Logo } from '@/components/core/logo';
 
@@ -61,7 +61,7 @@ export function MobileNav({ items = [], open, onClose }) {
     >
       <Stack spacing={2} sx={{ p: 2 }}>
         <div>
-          <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
+          <Box component={RouterLink} href={paths.public.portfolio} sx={{ display: 'inline-flex' }}>
             <Logo color="light" height={32} width={122} />
           </Box>
         </div>
