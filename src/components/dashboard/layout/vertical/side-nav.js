@@ -5,6 +5,7 @@ import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import { DynamicLogo } from '@/components/core/logo';
 import { Iconify } from '@/components/iconify/iconify';
+import { pxToRem } from '@/utils/utils';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -21,7 +22,6 @@ import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import useAuth from '@/hooks/useAuth';
 
 import { navColorStyles } from './styles';
-import { pxToRem } from '@/utils/utils';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
@@ -57,7 +57,7 @@ export function SideNav({ color = 'evident', items = [], open }) {
           borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
           marginBottom: '10px',
           border: '1px solid var(--mui-palette-background-level2)',
-          height: 'calc(100vh - 210px)',
+          height: 'calc(100vh - 200px)',
         }}
       >
         <Box
@@ -230,7 +230,7 @@ function NavItem({
           <Typography
             component="span"
             sx={{
-              color: 'text.primary',
+              color: active ? 'var(--NavItem-hover-color)' : 'text.primary',
               fontSize: '0.875rem',
               fontWeight: 500,
               lineHeight: '28px',
@@ -256,70 +256,6 @@ function NavItem({
           <Box sx={{ borderLeft: '1px solid var(--NavItem-children-border)', pl: '12px' }}>{children}</Box>
         </Box>
       ) : null}
-    </Box>
-  );
-}
-
-function NavItemIconOnly({ pathname, item, depth = 0, disabled = false, external = false }) {
-  const { icon, href, label } = item;
-  const active = isNavItemActive({ href, pathname });
-
-  return (
-    <Box component="li" data-depth={depth} sx={{ userSelect: 'none' }}>
-      <Box
-        {...(href
-          ? {
-              component: external ? 'a' : RouterLink,
-              href,
-              target: external ? '_blank' : undefined,
-              rel: external ? 'noreferrer' : undefined,
-            }
-          : { role: 'button' })}
-        sx={{
-          alignItems: 'center',
-          borderRadius: 1,
-          color: 'var(--NavItem-color)',
-          cursor: 'pointer',
-          display: 'flex',
-          flex: '0 0 auto',
-          gap: 1,
-          p: '6px',
-          position: 'relative',
-          textDecoration: 'none',
-          whiteSpace: 'nowrap',
-          ...(disabled && {
-            bgcolor: 'var(--NavItem-disabled-background)',
-            color: 'var(--NavItem-disabled-color)',
-            cursor: 'not-allowed',
-          }),
-          ...(active && {
-            bgcolor: 'var(--NavItem-active-background)',
-            color: 'var(--NavItem-active-color)',
-          }),
-          '&:hover': {
-            ...(active
-              ? {}
-              : {
-                  bgcolor: 'var(--NavItem-hover-background)',
-                  color: 'var(--NavItem-hover-color)',
-                }),
-          },
-        }}
-        tabIndex={0}
-      >
-        <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flex: '0 0 auto' }}>
-          {/* Render icon */}
-          {icon && (
-            <Iconify
-              icon={icon}
-              color={active ? 'var(--NavItem-hover-color)' : 'var(--NavItem-icon-color)'}
-              sx={{ fontSize: '24px' }}
-            />
-          )}
-        </Box>
-        {/* Render label if needed */}
-        {label && <Chip color="primary" label={label} size="small" />}
-      </Box>
     </Box>
   );
 }
