@@ -6,10 +6,11 @@ import { ThinerFooter } from '@/components/navbar/thinner-footer';
 import { privateRoutes } from '@/router';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
+import { m } from 'framer-motion';
 
 import useAuth from '@/hooks/useAuth';
 
-import { MainNavV2, NewMainNav } from './main-nav-v2';
+import { MainNavV2 } from './main-nav-v2';
 // import { MainNav } from './main-nav';
 import { SideNav } from './side-nav';
 import { useSettings } from '/src/hooks/use-settings';
@@ -24,6 +25,8 @@ export function VerticalLayout({ children }) {
     }
     return true;
   });
+  const [isFeaturedCardVisible, setIsFeaturedCardVisible] = React.useState(false);
+  console.log(isFeaturedCardVisible, 'isFeaturedCardVisible....');
 
   const handleSidebarToggle = () => {
     setOpen((prev) => {
@@ -57,8 +60,20 @@ export function VerticalLayout({ children }) {
         }}
       >
         {/* <DashboardTopNav onToggle={handleSidebarToggle} /> */}
-        <MainNavV2 onToggle={handleSidebarToggle} />
-        <FeatureCards />
+        <MainNavV2 onToggle={handleSidebarToggle} onFeatureCardVisible={setIsFeaturedCardVisible} />
+        {/* {isLogin && isFeaturedCardVisible && <FeatureCards />} */}
+        {isLogin && (
+          <Box
+            sx={{
+              transform: isFeaturedCardVisible ? 'translateY(100)' : 'translateY(-100%)', // Slide in/out
+              opacity: isFeaturedCardVisible ? 1 : 0, 
+              transition: 'transform 0.5s ease, opacity 0.5s ease', 
+              width: '100%', 
+            }}
+          >
+            <FeatureCards />
+          </Box>
+        )}
         <Box
           sx={{
             display: 'flex',

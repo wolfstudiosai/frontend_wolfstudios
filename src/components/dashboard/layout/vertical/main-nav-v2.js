@@ -29,7 +29,7 @@ import { NotificationPopover } from '../_components/notificaiton-popover';
 import { SettingsGear } from '../_components/settings-gear';
 import { UserInfoPopover } from '../_components/user-info-popover';
 
-export const MainNavV2 = ({ onToggle }) => {
+export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const [openNav, setOpenNav] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const router = useRouter();
@@ -88,11 +88,17 @@ export const MainNavV2 = ({ onToggle }) => {
                     <Iconify icon="material-symbols:menu-rounded" color={'var(--mui-palette-neutral-400)'} />
                   </IconButton>
 
-                  <Iconify
-                    icon="icon-park-outline:down"
-                    width={15}
-                    style={{ color: 'var(--mui-palette-neutral-400)', cursor: 'pointer' }}
-                  />
+                  <Box
+                    component="button"
+                    onClick={() => onFeatureCardVisible((prev) => !prev)}
+                    sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
+                  >
+                    <Iconify
+                      icon="icon-park-outline:down"
+                      width={15}
+                      style={{ color: 'var(--mui-palette-neutral-400)' }}
+                    />
+                  </Box>
                 </Stack>
               )}
               <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
