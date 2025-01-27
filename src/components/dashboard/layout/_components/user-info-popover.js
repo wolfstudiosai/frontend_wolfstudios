@@ -10,16 +10,12 @@ export const UserPopoverV2 = () => {
   const { userInfo } = useAuth();
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
   const { logout } = useAuth();
-  const handleMenuClose = () => {
-    setMenuAnchorEl(null);
-  };
 
   return (
     <>
       <Box
         component="button"
-        onMouseEnter={(e) => setMenuAnchorEl(e.currentTarget)}
-        onMouseLeave={() => setMenuAnchorEl(null)}
+        onClick={(e) => setMenuAnchorEl(e.currentTarget)}
         ref={menuAnchorEl}
         sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
       >

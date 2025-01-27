@@ -1,98 +1,75 @@
-import React from 'react';
-import RouterLink from 'next/link';
 import { Iconify } from '@/components/iconify/iconify';
-import { Avatar, Badge, Box, Divider, List, ListItemIcon, Menu, MenuItem, Popover, Typography } from '@mui/material';
-
-import { paths } from '@/paths';
-import { usePopover } from '@/hooks/use-popover';
-import useAuth from '@/hooks/useAuth';
+import { Badge, Box, Divider, List, ListItem, ListItemText, MenuItem, Popover, Typography } from '@mui/material';
+import React from 'react';
 
 export const NotificationPopover = () => {
-  const popover = usePopover();
-  const { userInfo } = useAuth();
-  return (
-    <React.Fragment>
-      <Box
-        component="button"
-        onMouseEnter={popover.handleOpen}
-        ref={popover.anchorRef}
-        sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
-      >
-        <Badge color="primary" variant="dot">
-          <Iconify icon="clarity:notification-line" width={20} style={{ color: 'var(--mui-palette-neutral-400)' }} />
-        </Badge>
-      </Box>
-      <UserPopover anchorEl={popover.anchorRef.current} onClose={popover.handleClose} open={popover.open} />
-    </React.Fragment>
-  );
-};
-
-const UserPopover = ({ anchorEl, onClose, open }) => {
-  const { userInfo } = useAuth();
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
-  const { logout } = useAuth();
 
-  const onSelectAccount = () => {
-    // logic for choosing account
-    handleMenuClose();
-  };
+  const notifications = [
+    { id: 1, message: 'You have a new message from John Doe', timestamp: '5 mins ago' },
+    { id: 2, message: 'Your profile was viewed 10 times today', timestamp: '1 hour ago' },
+    { id: 3, message: 'System update scheduled for 3:00 PM', timestamp: 'Yesterday' },
+  ];
 
   const handleMenuClose = () => {
     setMenuAnchorEl(null);
   };
 
   return (
-    <Popover
-      anchorEl={anchorEl}
-      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      onClose={onClose}
-      open={Boolean(open)}
-      slotProps={{ paper: { sx: { width: '280px' } } }}
-      transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-    >
-      <Box sx={{ p: 2 }}>
-        <Typography>{userInfo.name}</Typography>
-        <Typography color="text.secondary" variant="body2">
-          {userInfo.email}
-        </Typography>
-        <Typography color="text.secondary" variant="body2">
-          {userInfo.role}
-        </Typography>
-      </Box>
-      <Divider />
-      <List sx={{ p: 1 }}>
-        <MenuItem component={RouterLink} href={paths.dashboard.profile} onClick={onClose}>
-          <ListItemIcon>
-            <Iconify icon="solar:user-linear" />
-          </ListItemIcon>
-          Profile
-        </MenuItem>
-        <MenuItem component={RouterLink} href={paths.dashboard.security} onClick={onClose}>
-          <ListItemIcon>
-            <Iconify icon="ph:gear-light" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
-      </List>
-      <Divider />
-      <Box sx={{ p: 1 }}>
-        <MenuItem component="div" onClick={logout} sx={{ justifyContent: 'center' }}>
-          Sign out
-        </MenuItem>
-      </Box>
-      {/* Switch Account Menu */}
-      <Menu
-        anchorEl={menuAnchorEl}
-        anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        open={Boolean(menuAnchorEl)}
-        onClose={handleMenuClose}
+    <>
+      <Box
+        component="button"
+        onClick={(e) => setMenuAnchorEl(e.currentTarget)}
+        sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
       >
-        {/* here we can add our Account getting from API */}
-        <MenuItem onClick={onSelectAccount}>Account 1</MenuItem>
-        <MenuItem onClick={onSelectAccount}>Account 2</MenuItem>
-        <MenuItem onClick={onSelectAccount}>Account 3</MenuItem>
-      </Menu>
-    </Popover>
+        <Badge color="primary" variant="dot">
+          <Iconify icon="clarity:notification-line" width={20} style={{ color: 'var(--mui-palette-neutral-400)' }} />
+        </Badge>
+      </Box>
+      <Popover
+        anchorEl={menuAnchorEl}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        onClose={handleMenuClose}
+        open={Boolean(menuAnchorEl)}
+        slotProps={{ paper: { sx: { width: '280px' } } }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+      >
+        <Box sx={{ p: 2 }}>
+          <Typography variant="h6" sx={{ mb: 1 }}>
+            Notifications
+          </Typography>
+          {notifications.length === 0 ? (
+            <Typography color="text.secondary" variant="body2">
+              No new notifications
+            </Typography>
+          ) : (
+            <List sx={{ p: 0 }}>
+              {notifications.map((notification) => (
+                <ListItem
+                  key={notification.id}
+                  sx={{ alignItems: 'flex-start', cursor: 'pointer', '&:hover': { backgroundColor: 'action.hover' } }}
+                  onClick={handleMenuClose}
+                >
+                  <ListItemText
+                    primary={notification.message}
+                    secondary={
+                      <Typography component="span" color="text.secondary" variant="caption">
+                        {notification.timestamp}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </Box>
+        <Divider />
+        <Box sx={{ p: 1 }}>
+          <MenuItem component="div" onClick={handleMenuClose} sx={{ justifyContent: 'center' }}>
+            All notifications
+          </MenuItem>
+        </Box>
+      </Popover>
+    </>
   );
 };
