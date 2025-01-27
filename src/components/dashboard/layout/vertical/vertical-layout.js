@@ -4,6 +4,7 @@ import * as React from 'react';
 import { FeatureCards } from '@/app/(marketing)/top-cards';
 import { ThinerFooter } from '@/components/navbar/thinner-footer';
 import { privateRoutes } from '@/router';
+import { pxToRem } from '@/utils/utils';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { m } from 'framer-motion';
@@ -18,18 +19,17 @@ import { useSettings } from '/src/hooks/use-settings';
 export function VerticalLayout({ children }) {
   const { settings } = useSettings();
   const { isLogin } = useAuth();
-  const [open, setOpen] = React.useState(() => {
+  const [openSidebar, setOpenSidebar] = React.useState(() => {
     if (typeof window !== 'undefined') {
       const savedState = localStorage.getItem('sidebarState');
       return savedState === 'true' ? true : false;
     }
     return true;
   });
-  const [isFeaturedCardVisible, setIsFeaturedCardVisible] = React.useState(false);
-  console.log(isFeaturedCardVisible, 'isFeaturedCardVisible....');
+  const [isFeaturedCardVisible, setIsFeaturedCardVisible] = React.useState(true);
 
   const handleSidebarToggle = () => {
-    setOpen((prev) => {
+    setOpenSidebar((prev) => {
       const newState = !prev;
       localStorage.setItem('sidebarState', newState);
       return newState;
@@ -43,7 +43,7 @@ export function VerticalLayout({ children }) {
           body: {
             '--MainNav-height': '56px',
             '--MainNav-zIndex': 1000,
-            '--SideNav-width': open ? '280px' : '70px',
+            '--SideNav-width': open ? pxToRem(250) : '70px',
             '--SideNav-zIndex': 1100,
             '--MobileNav-width': '320px',
             '--MobileNav-zIndex': 1100,
@@ -59,16 +59,14 @@ export function VerticalLayout({ children }) {
           // minHeight: '100%',
         }}
       >
-        {/* <DashboardTopNav onToggle={handleSidebarToggle} /> */}
         <MainNavV2 onToggle={handleSidebarToggle} onFeatureCardVisible={setIsFeaturedCardVisible} />
-        {/* {isLogin && isFeaturedCardVisible && <FeatureCards />} */}
         {isLogin && (
           <Box
             sx={{
-              transform: isFeaturedCardVisible ? 'translateY(100)' : 'translateY(-100%)', // Slide in/out
-              opacity: isFeaturedCardVisible ? 1 : 0, 
-              transition: 'transform 0.5s ease, opacity 0.5s ease', 
-              width: '100%', 
+              transform: isFeaturedCardVisible ? 'translateY(100)' : 'translateY(-100%)',
+              opacity: isFeaturedCardVisible ? 1 : 0,
+              transition: 'transform 0.5s ease, opacity 0.5s ease',
+              width: '100%',
             }}
           >
             <FeatureCards />
@@ -79,10 +77,17 @@ export function VerticalLayout({ children }) {
             display: 'flex',
             flex: '1 1 auto',
             flexDirection: 'column',
-            pl: { lg: isLogin && open ? '280px' : '0px' },
+            pl: { lg: isLogin && openSidebar ? '280px' : '0px' },
           }}
         >
-          {isLogin && open && <SideNav color={settings.navColor} items={privateRoutes} open={open} />}
+          {isLogin && openSidebar && (
+            <SideNav
+              color={settings.navColor}
+              items={privateRoutes}
+              open={openSidebar}
+              isFeaturedCardVisible={isFeaturedCardVisible}
+            />
+          )}
           <Box
             component="main"
             sx={{

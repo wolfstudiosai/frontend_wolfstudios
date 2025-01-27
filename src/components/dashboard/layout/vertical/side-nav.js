@@ -5,6 +5,7 @@ import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import { DynamicLogo } from '@/components/core/logo';
 import { Iconify } from '@/components/iconify/iconify';
+import { pxToRem } from '@/utils/utils';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -21,14 +22,13 @@ import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import useAuth from '@/hooks/useAuth';
 
 import { navColorStyles } from './styles';
-import { pxToRem } from '@/utils/utils';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
   light: { blend_in: 'dark', discrete: 'dark', evident: 'light' },
 };
 
-export function SideNav({ color = 'evident', items = [], open }) {
+export function SideNav({ color = 'evident', items = [], open, isFeaturedCardVisible }) {
   const pathname = usePathname();
   const { userInfo } = useAuth();
 
@@ -50,14 +50,14 @@ export function SideNav({ color = 'evident', items = [], open }) {
           height: '100%',
           left: 10,
           position: 'fixed',
-          top: 140,
+          top: isFeaturedCardVisible ? 95 : 50,
           width: open ? 'var(--SideNav-width)' : '70px',
           zIndex: 'var(--SideNav-zIndex)',
           transition: 'width 0.3s ease',
           borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
           marginBottom: '10px',
           border: '1px solid var(--mui-palette-background-level2)',
-          height: 'calc(100vh - 210px)',
+          height: 'calc(100vh - 135px)',
         }}
       >
         <Box

@@ -62,18 +62,42 @@ export function FeatureCards() {
       image: 'https://picsum.photos/300/200?random=15',
       timestamp: '1 month ago',
     },
+    {
+      id: 8,
+      icon: 'pets',
+      title: 'Animals',
+      description: 'A part of nature.',
+      image: 'https://picsum.photos/300/200?random=7',
+      timestamp: '4 days ago',
+    },
+    {
+      id: 9,
+      icon: 'person',
+      title: 'Humans',
+      description: 'Depend on plants for survival.',
+      image: 'https://picsum.photos/300/200?random=3',
+      timestamp: '52 min ago',
+    },
+    {
+      id: 10,
+      icon: 'person',
+      title: 'Humans',
+      description: 'Depend on plants for survival.',
+      image: 'https://picsum.photos/300/200?random=3',
+      timestamp: '52 min ago',
+    },
   ];
 
   return (
     <Box
       sx={{
         display: 'flex',
-        gap: 2,
+        gap: 1,
         overflowX: 'auto',
         whiteSpace: 'nowrap',
         // p: 2,
         py: pxToRem(5),
-        mx: 2,
+        mx: 1.5,
         position: 'sticky',
         top: 45,
         zIndex: 999,
