@@ -60,7 +60,6 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
         alignItems: position === 'right' ? 'flex-end' : 'flex-start', flex: '0 0 auto', display: 'flex',
         p: 2,
       }}
-      onClick={handleEvent}
       onKeyUp={(event) => {
         if (event.key === 'Enter') {
           handleSelect();
@@ -84,6 +83,10 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
         {/* <Avatar src={message?.author.avatar} sx={{ '--Avatar-size': '32px' }} /> */}
         <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
           <Card
+          onClick={(e) => {
+            e.stopPropagation(); 
+            handleSelect();
+          }}
             sx={{
               px: 2,
               py: 2,
