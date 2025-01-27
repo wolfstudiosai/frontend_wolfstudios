@@ -48,17 +48,25 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [handleClickOutside]);
 
-
+  const handleEvent = (e) => {
+    e.preventDefault();
+    handleSelect();
+  }
 
   return (
     <Box
       ref={ref}
-      sx={{ alignItems: position === 'right' ? 'flex-end' : 'flex-start', flex: '0 0 auto', display: 'flex' }}
-      // on right click
-      onContextMenu={(e) => {
-        e.preventDefault();
-        handleSelect();
+      sx={{
+        alignItems: position === 'right' ? 'flex-end' : 'flex-start', flex: '0 0 auto', display: 'flex',
+        p: 2,
       }}
+      onClick={handleEvent}
+      onKeyUp={(event) => {
+        if (event.key === 'Enter') {
+          handleSelect();
+        }
+      }}
+      onContextMenu={handleEvent}
 
     >
       <Stack
@@ -73,12 +81,12 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
           cursor: 'pointer',
         }}
       >
-        <Avatar src={message?.author.avatar} sx={{ '--Avatar-size': '32px' }} />
+        {/* <Avatar src={message?.author.avatar} sx={{ '--Avatar-size': '32px' }} /> */}
         <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
           <Card
             sx={{
               px: 2,
-              py: 1,
+              py: 2,
               ...(position === 'right' && {
                 bgcolor: 'var(--mui-palette-primary-main)',
                 color: 'var(--mui-palette-primary-contrastText)',
@@ -88,54 +96,46 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
             <Stack spacing={1}>
               <div>
                 <Link color="inherit" sx={{ cursor: 'pointer' }} variant="subtitle2">
-                  {message.author.id !== userInfo.email ? message?.author.name : ''}
+                  {message.author.id !== userInfo.email ? message?.author.name : 'You'}
                 </Link>
               </div>
-              {/* {message?.type.toLowerCase() === 'file' ? (
-                <>
-                
-                  <CardMedia
-                    image={message?.file_url}
-                    onClick={handleOpen}
-                    sx={{ height: '200px', width: '200px', cursor: 'pointer' }}
-                  />
-                  <Modal open={open} onClose={handleClose}>
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        bgcolor: 'background.paper',
-                        boxShadow: 24,
-                        p: 4,
-                      }}
-                    >
-                      <img src={message?.file_url} alt="file" style={{ width: '100%', height: 'auto' }} />
-                    </Box>
-                  </Modal>
-                </>
-              ) : null} */}
-              {/* File Preview */}
               {message?.type.toLowerCase() === 'file' && (
                 <>
                   {/* Check if the file is an image */}
                   {/\.(jpg|jpeg|png|gif)$/i.test(message?.file_url) ? (
-                    <CardMedia
-                      image={message?.file_url}
-                      onClick={handleOpen}
-                      sx={{
-                        height: '200px',
-                        width: '200px',
-                        borderRadius: 2,
-                        cursor: 'pointer',
-                        boxShadow: 2,
-                        transition: 'transform 0.2s',
-                        '&:hover': {
-                          transform: 'scale(1.05)',
-                        },
-                      }}
-                    />
+                    <Box>
+                      <CardMedia
+                        image={message?.file_url}
+                        onClick={handleOpen}
+                        sx={{
+                          height: '200px',
+                          width: '200px',
+                          borderRadius: 2,
+                          cursor: 'pointer',
+                          boxShadow: 2,
+                          transition: 'transform 0.2s',
+                          '&:hover': {
+                            transform: 'scale(1.05)',
+                          },
+                        }}
+                      />
+                      <Modal open={open} onClose={handleClose}>
+                        <Box
+                          sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            bgcolor: 'background.paper',
+                            boxShadow: 24,
+                            p: 4,
+                          }}
+                        >
+                          <img src={message?.file_url} alt="file" style={{ width: '100%', height: 'auto' }} />
+                        </Box>
+                      </Modal>
+                    </Box>
+
                   ) : (
                     // PDF Preview
                     /\.(pdf)$/i.test(message?.file_url) && (
@@ -152,7 +152,7 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
                         }}
                       >
                         <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                          PDF Preview
+
                         </Typography>
                         <iframe
                           src={message?.file_url}
@@ -162,7 +162,7 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
                             border: 'none',
                             borderRadius: '4px',
                           }}
-                          title="PDF Preview"
+                          title={message?.file_url}
                         ></iframe>
                       </Box>
                     )
@@ -171,15 +171,17 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
                   {/* Download Button */}
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
                     <Button
-                      color="primary"
+                      color="text.secondary"
                       endIcon={<Download />}
                       size="small"
                       variant="outlined"
+
                       onClick={() => {
                         const link = document.createElement('a');
                         link.href = message?.file_url;
                         link.download = message?.file_url.split('/').pop();
                         link.click();
+                        target = "_blank"
                       }}
                     >
                       Download
@@ -188,20 +190,25 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
 
                 </>
               )}
-
               {message?.type.toLowerCase() === 'text' || message?.type.toLowerCase() === 'file' ? (
-                <Typography color="inherit" variant="body1">
+                <Typography color="inherit" variant="body1"
+                  sx={{
+                    lineHeight: 1.6,
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
+                    padding: '8px',
+                  }}
+                >
                   {message.content ?? ''}
                 </Typography>
               ) : null}
               {editing && (
-
                 <EditMessage editing={editing} setEditing={setEditing} editContent={editContent} setEditContent={setEditContent} handleEditSubmit={handleEditSubmit} handleEditToggle={handleEditToggle} />
               )}
 
-              {message.isEdited && (
+              {message.is_edited && (
                 <Typography color="text.primary" variant="caption" align="right">
-                  (edited)
+                  ( edited )
                 </Typography>
               )}
             </Stack>
@@ -224,10 +231,6 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
               </Box>
             )}
           </Card>
-
-
-
-
           <Box sx={{ display: 'flex', justifyContent: position === 'right' ? 'flex-end' : 'flex-start', px: 2 }}>
             <Typography color="text.secondary" noWrap variant="caption">
               {dayjs(message?.createdAt).fromNow()}
