@@ -74,7 +74,7 @@ const PortfolioCard = ({ portfolio, fetchList }) => {
                 <IconButton size="small" title="Edit" onClick={() => setOpenPortfolioRightPanel(portfolio)}>
                   <Iconify icon="mynaui:edit-one" />
                 </IconButton>
-                <DeleteConfirmationPopover title="Delete" onDelete={handleDelete} />
+                <DeleteConfirmationPopover title={`Want to delete ${portfolio.project_title}?`} onDelete={handleDelete} />
               </>
             )}
           </Stack>

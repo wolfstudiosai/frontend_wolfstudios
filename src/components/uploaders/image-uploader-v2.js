@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Add, Delete } from '@mui/icons-material';
+import React from 'react';
+import { Add } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -8,11 +8,14 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  Stack,
   Tab,
   Tabs,
   TextField,
   Typography,
 } from '@mui/material';
+
+import { Iconify } from '../iconify/iconify';
 
 // interface ImageUploadDialogProps {
 //   open: boolean;
@@ -22,10 +25,10 @@ import {
 // }
 
 export const ImageUploaderV2 = ({ open, onClose, onSave, multiple = false }) => {
-  const [tab, setTab] = useState(0); // 0: Device, 1: URL
-  const [urls, setUrls] = useState([]);
-  const [files, setFiles] = useState([]);
-  const [uploading, setUploading] = useState(false);
+  const [tab, setTab] = React.useState(0); // 0: Device, 1: URL
+  const [urls, setUrls] = React.useState(['']);
+  const [files, setFiles] = React.useState([]);
+  const [uploading, setUploading] = React.useState(false);
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
@@ -57,7 +60,6 @@ export const ImageUploaderV2 = ({ open, onClose, onSave, multiple = false }) => 
   const handleSave = async () => {
     if (tab === 0 && files.length > 0) {
       setUploading(true);
-      // Simulate API upload logic
       const uploadedPaths = await Promise.all(files.map((file) => uploadFileToServer(file)));
       setUploading(false);
       onSave(multiple ? uploadedPaths : uploadedPaths[0]);
@@ -84,22 +86,40 @@ export const ImageUploaderV2 = ({ open, onClose, onSave, multiple = false }) => 
       <DialogTitle>Upload Image</DialogTitle>
       <DialogContent>
         <Tabs value={tab} onChange={handleTabChange} centered>
-          <Tab label="Select from Device" />
+          <Tab label="Select from device" />
           <Tab label="Paste URL" />
         </Tabs>
         <Box mt={2}>
           {tab === 0 && (
             <Box>
-              <Button variant="outlined" component="label">
-                Select Files
+              <Button
+                component="label"
+                variant="outlined"
+                // disabled={disabled}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '100%',
+                  width: '100%',
+                  color: '#888',
+                  px: 2,
+                  border: '1px solid var(--mui-palette-divider)',
+                }}
+              >
+                <Stack direction="row" gap={1}>
+                  <Iconify icon="akar-icons:cloud-upload" width={24} height={24} />
+                  <Typography>Upload Image</Typography>
+                </Stack>
                 <input type="file" hidden multiple={multiple} onChange={handleFileChange} />
               </Button>
               <Box mt={2}>
                 {files.map((file, index) => (
                   <Box key={index} display="flex" alignItems="center" mt={1}>
                     <Typography>{file.name}</Typography>
-                    <IconButton onClick={() => handleRemoveFile(index)}>
-                      <Delete />
+                    <IconButton onClick={() => handleRemoveFile(index)} color="error">
+                      <Iconify icon="ic:outline-delete" width={18} height={18} />
                     </IconButton>
                   </Box>
                 ))}
@@ -116,8 +136,8 @@ export const ImageUploaderV2 = ({ open, onClose, onSave, multiple = false }) => 
                     fullWidth
                     size="small"
                   />
-                  <IconButton onClick={() => handleRemoveUrl(index)}>
-                    <Delete />
+                  <IconButton onClick={() => handleRemoveUrl(index)} color="error" disabled={urls.length === 1}>
+                    <Iconify icon="ic:outline-delete" width={18} height={18} />
                   </IconButton>
                 </Box>
               ))}
@@ -134,7 +154,7 @@ export const ImageUploaderV2 = ({ open, onClose, onSave, multiple = false }) => 
         <Button onClick={handleClose} color="secondary">
           Cancel
         </Button>
-        <Button onClick={handleSave} color="primary" disabled={uploading}>
+        <Button variant="outlined" size="small" onClick={handleSave} color="primary" disabled={uploading}>
           {uploading ? 'Uploading...' : 'Save'}
         </Button>
       </DialogActions>
