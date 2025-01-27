@@ -1,5 +1,6 @@
 import React from 'react';
 import { Iconify } from '@/components/iconify/iconify';
+import { pxToRem } from '@/utils/utils';
 import {
   Badge,
   Box,
@@ -65,6 +66,9 @@ export const NotificationPopover = () => {
                   onClick={handleMenuClose}
                 >
                   <ListItemText
+                    primaryTypographyProps={{
+                      style: { fontSize: pxToRem(14), whiteSpace: 'normal', fontWeight: 500 },
+                    }}
                     primary={notification.message}
                     secondary={
                       <Typography component="span" color="text.secondary" variant="caption">
