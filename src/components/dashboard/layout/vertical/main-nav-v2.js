@@ -12,6 +12,7 @@ import { Logo } from '@/components/core/logo';
 import { Iconify } from '@/components/iconify/iconify';
 import { MobileNav } from '@/components/navbar/mobile-nav';
 import { NavSearch } from '@/components/navbar/nav-search';
+import { NavSearchV2 } from '@/components/navbar/nav-search-v2';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { publicRoutes } from '@/router';
 import { clearUserSessionFromLocalStore } from '@/utils/axios-api.helpers';
@@ -69,7 +70,8 @@ export const MainNavV2 = ({ onToggle }) => {
           borderBottom: '1px solid var(--mui-palette-divider)',
         }}
       >
-        <Container maxWidth="xxl" sx={{ minHeight: 'var(--MainNav-height)', py: pxToRem(8) }}>
+        {/* sx={{ minHeight: 'var(--MainNav-height)', py: pxToRem(8) }} */}
+        <Container maxWidth="xxl">
           <Stack
             direction="row"
             spacing={2}
@@ -108,13 +110,19 @@ export const MainNavV2 = ({ onToggle }) => {
                     />
                   ))
                 )}
-                <NavSearch />
+                {/* <NavSearch /> */}
               </Stack>
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', ml: 'auto' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', ml: 'auto', gap: 1 }}>
+              <NavSearchV2 />
               {isLogin ? (
-                <UserButton />
+                <React.Component>
+                  <Badge color="primary" variant="dot">
+                    <Iconify icon="clarity:notification-line" width={20} />
+                  </Badge>
+                  <UserButton />
+                </React.Component>
               ) : (
                 <Button
                   variant="contained"
