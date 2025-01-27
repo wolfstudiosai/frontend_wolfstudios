@@ -1,5 +1,8 @@
 'use client';
 
+import * as React from 'react';
+import RouterLink from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { LoginForm } from '@/app/auth/_components/LoginForm';
 import { Dropdown } from '@/components/core/dropdown/dropdown';
 import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
@@ -18,14 +21,12 @@ import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
-import RouterLink from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import * as React from 'react';
 
-import useAuth from '@/hooks/useAuth';
 import { paths } from '@/paths';
+import useAuth from '@/hooks/useAuth';
 
 import { NotificationPopover } from '../_components/notificaiton-popover';
+import { SettingsGear } from '../_components/settings-gear';
 import { UserInfoPopover } from '../_components/user-info-popover';
 
 export const MainNavV2 = ({ onToggle }) => {
@@ -120,7 +121,7 @@ export const MainNavV2 = ({ onToggle }) => {
               sx={{
                 flex: 1,
                 justifyContent: 'flex-end',
-                gap: 1,
+                gap: 2,
               }}
             >
               <Box
@@ -134,7 +135,8 @@ export const MainNavV2 = ({ onToggle }) => {
                 <NavSearchV2 />
               </Box>
 
-              <Iconify icon="ph:gear-light" width={20} style={{ color: 'var(--mui-palette-neutral-400)' }} />
+              {/* <Iconify icon="ph:gear-light" width={20} style={{ color: 'var(--mui-palette-neutral-400)' }} /> */}
+              <SettingsGear />
 
               {/* Notifications and User Actions */}
               {isLogin ? (

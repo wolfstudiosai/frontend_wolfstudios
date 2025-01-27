@@ -1,6 +1,18 @@
-import { Iconify } from '@/components/iconify/iconify';
-import { Badge, Box, Divider, List, ListItem, ListItemText, MenuItem, Popover, Typography } from '@mui/material';
 import React from 'react';
+import { Iconify } from '@/components/iconify/iconify';
+import {
+  Badge,
+  Box,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  MenuItem,
+  Popover,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 
 export const NotificationPopover = () => {
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
@@ -22,9 +34,11 @@ export const NotificationPopover = () => {
         onClick={(e) => setMenuAnchorEl(e.currentTarget)}
         sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
       >
-        <Badge color="primary" variant="dot">
-          <Iconify icon="clarity:notification-line" width={20} style={{ color: 'var(--mui-palette-neutral-400)' }} />
-        </Badge>
+        <Tooltip title="Notifications">
+          <Badge color="primary" variant="dot">
+            <Iconify icon="clarity:notification-line" width={20} style={{ color: 'var(--mui-palette-neutral-400)' }} />
+          </Badge>
+        </Tooltip>
       </Box>
       <Popover
         anchorEl={menuAnchorEl}
