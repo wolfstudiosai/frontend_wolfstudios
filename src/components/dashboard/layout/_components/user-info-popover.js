@@ -6,7 +6,7 @@ import { Avatar, Badge, Box, Divider, List, ListItemIcon, MenuItem, Popover, Typ
 import { paths } from '@/paths';
 import useAuth from '@/hooks/useAuth';
 
-export const UserPopoverV2 = () => {
+export const UserInfoPopover = () => {
   const { userInfo } = useAuth();
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
   const { logout } = useAuth();
@@ -19,7 +19,7 @@ export const UserPopoverV2 = () => {
         ref={menuAnchorEl}
         sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
       >
-        <Badge
+        {/* <Badge
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           color="success"
           sx={{
@@ -33,12 +33,12 @@ export const UserPopoverV2 = () => {
             },
           }}
           variant="dot"
-        >
+        > */}
           <Avatar
             sx={{ width: 34, height: 34 }}
             src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${userInfo.profile_pic}`}
           />
-        </Badge>
+        {/* </Badge> */}
       </Box>
       <Popover
         anchorEl={menuAnchorEl}

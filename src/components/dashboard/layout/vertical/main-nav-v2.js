@@ -1,8 +1,5 @@
 'use client';
 
-import * as React from 'react';
-import RouterLink from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
 import { LoginForm } from '@/app/auth/_components/LoginForm';
 import { Dropdown } from '@/components/core/dropdown/dropdown';
 import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
@@ -14,19 +11,22 @@ import { NavSearchV2 } from '@/components/navbar/nav-search-v2';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { publicRoutes } from '@/router';
 import { pxToRem } from '@/utils/utils';
-import { Badge, Button, Popover } from '@mui/material';
+import { Button, Popover } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
+import RouterLink from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import * as React from 'react';
 
-import { paths } from '@/paths';
 import useAuth from '@/hooks/useAuth';
+import { paths } from '@/paths';
 
-import { UserPopoverV2 } from '../_components/user-info-popover';
 import { NotificationPopover } from '../_components/notificaiton-popover';
+import { UserInfoPopover } from '../_components/user-info-popover';
 
 export const MainNavV2 = ({ onToggle }) => {
   const [openNav, setOpenNav] = React.useState(false);
@@ -140,7 +140,7 @@ export const MainNavV2 = ({ onToggle }) => {
               {isLogin ? (
                 <React.Fragment>
                   <NotificationPopover />
-                  <UserPopoverV2 />
+                  <UserInfoPopover />
                 </React.Fragment>
               ) : (
                 <Button
