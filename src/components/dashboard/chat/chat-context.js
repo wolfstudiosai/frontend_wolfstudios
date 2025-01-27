@@ -111,8 +111,6 @@ export function ChatProvider({ children
         if (params.file) {
           formData.append('file', params.file);
         }
-        
-  
         const response = await api.post('/threads/message', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
@@ -161,7 +159,21 @@ useEffect(() => {
   .on(
     'postgres_changes',
     { event: 'INSERT', schema: 'public', table: 'messages' },
-    (payload) => {
+    async (payload) => {
+      console.log('Message Payload received:', payload.new);
+
+      // Fetch user data
+      const { data: user, error } = await supabase
+        .from('users')
+        .select('first_name, last_name, profile_pic')
+        .eq('email', payload.new.author_id)
+        .single();
+
+      if (error) {
+        console.error('Failed to fetch author data:', error);
+        return;
+      }
+
       const newMessage = {
         id: payload.new.id,
         threadId: payload.new.thread_id,
@@ -169,8 +181,8 @@ useEffect(() => {
         content: payload.new.content,
         author: {
           id: payload.new.author_id,
-          name: payload.new.author_name || 'new user',
-          avatar: payload.new.author_avatar || '',
+          name:  user?.first_name + ' ' + user?.last_name || '',
+          avatar: user.profile_pic || '',
         },
         file_url: payload.new.file_url,
         createdAt: new Date(),
@@ -193,7 +205,7 @@ useEffect(() => {
         const threadMessages = updatedMessages.get(payload.new.thread_id) || [];
         const updatedThreadMessages = threadMessages.map((msg) =>
           msg.id === payload.new.id
-            ? { ...msg, content: payload.new.content, isEdited: true }
+            ? { ...msg, content: payload.new.content, is_edited: true }
             : msg
         );
         updatedMessages.set(payload.new.thread_id, updatedThreadMessages);
@@ -274,7 +286,7 @@ const handleEditMessage = useCallback(
         const updatedMessages = new Map(prev);
         const threadMessages = updatedMessages.get(response.data.data.thread_id) || [];
         const updatedThreadMessages = threadMessages.map((msg) =>
-          msg.id === params.id ? { ...msg, content: params.content, isEdited: true } : msg
+          msg.id === params.id ? { ...msg, content: params.content, is_edited: true } : msg
         );
         updatedMessages.set(response.data.data.thread_id, updatedThreadMessages);
         return updatedMessages;

@@ -28,7 +28,7 @@ export function Sidebar({
   openMobile,
   threads,
 }) {
-  console.log("contacts in sidebar",contacts);
+  console.log("contacts in sidebar", contacts);
 
   const mdUp = useMediaQuery('up', 'md');
 
@@ -86,8 +86,8 @@ function SidebarContent({
   const [searchFocused, setSearchFocused] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState([]);
-  
-  
+
+
   const handleSearchChange = React.useCallback(
     async (event) => {
       const { value } = event.target;
@@ -121,7 +121,7 @@ function SidebarContent({
 
   const handleSearchSelect = React.useCallback(
     (contact) => {
-      console.log("selected",contact)
+      console.log("selected", contact)
       onSelectContact?.(contact.id);
 
       setSearchFocused(false);
@@ -144,13 +144,13 @@ function SidebarContent({
   const sortedThreads = threads.slice().sort((a, b) => {
     const lastMessageA = messages?.get(a.id)?.at(-1);
     const lastMessageB = messages?.get(b.id)?.at(-1);
-  
+
     const dateA = lastMessageA ? new Date(lastMessageA.createdAt) : new Date(a.createdAt);
     const dateB = lastMessageB ? new Date(lastMessageB.createdAt) : new Date(b.createdAt);
-  
-    return dateB - dateA; 
+
+    return dateA - dateB;
   });
-  
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <Stack direction="row" spacing={2} sx={{ alignItems: 'center', flex: '0 0 auto', p: 2 }}>
@@ -189,9 +189,9 @@ function SidebarContent({
           spacing={1}
           sx={{ display: searchFocused ? 'none' : 'flex', listStyle: 'none', m: 0, p: 0 }}
         >
-          {threads.map((thread) => (
+          {sortedThreads.map((thread) => (
             <ThreadItem
-            loading={false}
+              loading={false}
               active={currentThreadId === thread.id}
               key={thread.id}
               messages={messages ?? []}
