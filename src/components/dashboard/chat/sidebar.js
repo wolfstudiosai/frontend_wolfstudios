@@ -148,7 +148,7 @@ function SidebarContent({
     const dateA = lastMessageA ? new Date(lastMessageA.createdAt) : new Date(a.createdAt);
     const dateB = lastMessageB ? new Date(lastMessageB.createdAt) : new Date(b.createdAt);
 
-    return dateA - dateB;
+    return dateB - dateA ;
   });
 
   return (
