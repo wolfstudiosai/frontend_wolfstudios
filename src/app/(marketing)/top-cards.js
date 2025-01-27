@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Box, Card, Icon, Typography } from '@mui/material';
 import { pxToRem, textShortner } from '@/utils/utils';
+import { Box, Card, Icon, Typography } from '@mui/material';
 
 export function FeatureCards() {
   const cardsdata = [
@@ -64,7 +64,6 @@ export function FeatureCards() {
     },
   ];
 
-
   return (
     <Box
       sx={{
@@ -72,15 +71,16 @@ export function FeatureCards() {
         gap: 2,
         overflowX: 'auto',
         whiteSpace: 'nowrap',
-        p: 2,
+        // p: 2,
+        py: pxToRem(5),
         mx: 2,
         position: 'sticky',
-        top: 50,
+        top: 45,
         zIndex: 999,
         backgroundColor: 'var(--mui-palette-background-default)',
         scrollBehavior: 'smooth',
         '&::-webkit-scrollbar': {
-          height: '3px',
+          height: '0px', //i remove the scrollbar. if you want to use the scrollbar, increase height
         },
         '&::-webkit-scrollbar-thumb': {
           backgroundColor: 'var(--mui-palette-background-level2)',
@@ -100,11 +100,11 @@ export function FeatureCards() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            minWidth: pxToRem(100),
+            minWidth: pxToRem(250),
             width: { xs: '100%', sm: pxToRem(200) },
             flex: '0 0 auto',
             paddingX: 1,
-            paddingY: .5,
+            paddingY: 0.5,
             boxShadow: 3,
             borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
             border: 'solid .1px var(--mui-palette-divider)',
@@ -160,7 +160,7 @@ export function FeatureCards() {
                 whiteSpace: 'normal',
               }}
             >
-              {textShortner(card.description, 20)}
+              {textShortner(card.description, 35)}
             </Typography>
           </Box>
 
@@ -173,8 +173,7 @@ export function FeatureCards() {
               justifyContent: 'center',
               position: 'relative',
             }}
-          >
-          </Box>
+          ></Box>
         </Card>
       ))}
     </Box>
