@@ -73,7 +73,12 @@ export const PortfolioSliderItem = ({ item, index }) => {
             variant="outlined"
             size="small"
             color="secondary"
-            sx={{ zIndex: 10, cursor: 'pointer', backgroundColor: '#d3d3d3', padding: '.125rem .5rem' }}
+            sx={{
+              zIndex: 10,
+              cursor: 'pointer',
+              backgroundColor: 'var(--mui-palette-background-level2)',
+              // padding: por125rem .5rem',
+            }}
           >
             View Portfolio
           </Button>
@@ -82,4 +87,3 @@ export const PortfolioSliderItem = ({ item, index }) => {
     </Card>
   );
 };
-
