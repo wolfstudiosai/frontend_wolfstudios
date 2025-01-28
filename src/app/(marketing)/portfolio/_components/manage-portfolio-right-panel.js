@@ -18,7 +18,7 @@ import { useFormik } from 'formik';
 import { createPortfolioAsync, getPortfolioAsync, updatePortfolioAsync } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
 
-export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data }) => {
+export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, width }) => {
   const isUpdate = data ? true : false;
 
   // *********************States*********************************
@@ -97,6 +97,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data }) =>
       heading="Add Portfolio"
       open={open}
       onClose={onClose}
+      width = {width}
       actionButtons={() => (
         <Box display="flex" gap={2}>
           <Button variant="outlined" color="primary" onClick={onClose}>

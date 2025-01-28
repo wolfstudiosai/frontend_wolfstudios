@@ -5,18 +5,6 @@ import { pxToRem } from '@/utils/utils';
 import { Box, Container, Stack, Typography } from '@mui/material';
 
 export const ThinerFooter = () => {
-  const links = [
-    { href: '/blog', label: 'Blog' },
-    { href: '/learn', label: 'Learn' },
-    { href: '/about', label: 'About' },
-    { href: '/services', label: 'Services' },
-    { href: '/help', label: 'Help Docs' },
-    { href: '/privacy', label: 'Privacy Policy' },
-    { href: '/cookies', label: 'Cookie Policy' },
-    { href: '/contact', label: 'Contact Us' },
-    { href: '/join', label: 'Join' },
-  ];
-
   return (
     <React.Fragment>
       <Box

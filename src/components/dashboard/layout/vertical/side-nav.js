@@ -1,13 +1,6 @@
 'use client';
 
-import * as React from 'react';
-import RouterLink from 'next/link';
-import { usePathname } from 'next/navigation';
-import { DynamicLogo } from '@/components/core/logo';
 import { Iconify } from '@/components/iconify/iconify';
-import { pxToRem } from '@/utils/utils';
-import { Menu as MenuIcon } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -16,10 +9,12 @@ import Typography from '@mui/material/Typography';
 import { ArrowSquareOut as ArrowSquareOutIcon } from '@phosphor-icons/react/dist/ssr/ArrowSquareOut';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
+import RouterLink from 'next/link';
+import { usePathname } from 'next/navigation';
+import * as React from 'react';
 
-import { paths } from '@/paths';
-import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import useAuth from '@/hooks/useAuth';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
 
 import { navColorStyles } from './styles';
 

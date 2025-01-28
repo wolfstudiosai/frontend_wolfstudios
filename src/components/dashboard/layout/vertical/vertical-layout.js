@@ -101,13 +101,13 @@ export function VerticalLayout({ children }) {
               display: 'flex',
               flex: '1 1 auto',
               flexDirection: 'column',
-              minHeight: 'calc(100vh - 120px)',
+              minHeight: isFeaturedCardVisible ? 'calc(100vh - 78px)' : 'calc(100vh - 122px)',
             }}
           >
             {children}
           </Box>
         </Box>
-        <ThinerFooter />
+        <ThinerFooter  isFeaturedCardVisible={isFeaturedCardVisible}/>
       </Box>
     </React.Fragment>
   );

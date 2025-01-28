@@ -57,7 +57,7 @@ export const PortfolioView = () => {
   }, [pagination]);
 
   return (
-    <Box sx={{ py: 4 }}>
+    <Box >
       {isLogin && (
         <QuickToolbar closePopover={openPortfolioRightPanel}>
           <Stack direction="column" spacing={3} justifyContent={'center'} alignItems={'center'} p={1}>
@@ -117,6 +117,7 @@ export const PortfolioView = () => {
 
       <ManagePortfolioRightPanel
         id={''}
+        width="50%"
         data={null}
         open={openPortfolioRightPanel}
         onClose={() => setOpenPortfolioRightPanel(false)}

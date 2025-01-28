@@ -83,6 +83,7 @@ const PortfolioCard = ({ portfolio, fetchList }) => {
 
       <ManagePortfolioRightPanel
         fetchList={fetchList}
+        width="50%"
         open={openPortfolioRightPanel ? true : false}
         data={openPortfolioRightPanel}
         onClose={() => setOpenPortfolioRightPanel(false)}
