@@ -185,7 +185,7 @@ function NavItem({
           display: 'flex',
           flex: '0 0 auto',
           gap: 1,
-          p: '6px 16px',
+          p: '6px 6px',
           position: 'relative',
           textDecoration: 'none',
           whiteSpace: 'nowrap',
@@ -221,7 +221,7 @@ function NavItem({
           {icon ? (
             <Iconify
               icon={icon}
-              color={active ? 'var(--NavItem-hover-color)' : 'text.primary'}
+              color={ 'text.primary'}
               sx={{ fontSize: 'var(--icon-fontSize-sm)' }}
             />
           ) : null}

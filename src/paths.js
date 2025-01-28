@@ -130,7 +130,7 @@ export const paths = {
     expense: '/expense',
     contract: '/contract',
     calender: '/calender',
-    user_management: '/user-management',
+    user: '/user',
 
     // partner HQ
     partner_needs_approval: '/partner-needs-approval',
@@ -143,16 +143,18 @@ export const paths = {
     onsite_location: '/onsite-location',
     venue: '/venue',
 
-
     // content HQ
-    content_needs_approval: "/content-needs-approval",
-    by_platform: "/by-platform",
-    content_analytics: "/content-analytics",
+    content_needs_approval: '/content-needs-approval',
+    by_platform: '/by-platform',
+    content_analytics: '/content-analytics',
 
     // campaign HQ
     revo: '/revo',
     campaign_add_new: '/campaign-add-new',
 
+    //archive
+    partners_by_campaign: '/partners-by-campaign',
+    needs_offer_approval: '/needs-offer-approval',
   },
   dashboardPublic: {
     // HQs
