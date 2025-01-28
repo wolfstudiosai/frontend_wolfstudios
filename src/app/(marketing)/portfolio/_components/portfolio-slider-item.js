@@ -24,7 +24,7 @@ export const PortfolioSliderItem = ({ item, index }) => {
         <Box
           component="video"
           src={item.url}
-          controls
+          // controls
           muted
           autoPlay
           loop
