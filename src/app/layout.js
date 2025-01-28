@@ -47,7 +47,7 @@ export default async function Layout({ children }) {
                       <AuthGuard>
                         <VerticalLayout>{children}</VerticalLayout>
                       </AuthGuard>
-                      <SettingsButton />
+                      {/* <SettingsButton /> */}
                       <Toaster position="top-right" />
                     </ThemeProvider>
                   </I18nProvider>

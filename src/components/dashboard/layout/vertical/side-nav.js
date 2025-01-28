@@ -1,12 +1,6 @@
 'use client';
 
-import * as React from 'react';
-import RouterLink from 'next/link';
-import { usePathname } from 'next/navigation';
-import { DynamicLogo } from '@/components/core/logo';
 import { Iconify } from '@/components/iconify/iconify';
-import { Menu as MenuIcon } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -15,20 +9,21 @@ import Typography from '@mui/material/Typography';
 import { ArrowSquareOut as ArrowSquareOutIcon } from '@phosphor-icons/react/dist/ssr/ArrowSquareOut';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
+import RouterLink from 'next/link';
+import { usePathname } from 'next/navigation';
+import * as React from 'react';
 
-import { paths } from '@/paths';
-import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import useAuth from '@/hooks/useAuth';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
 
 import { navColorStyles } from './styles';
-import { pxToRem } from '@/utils/utils';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
   light: { blend_in: 'dark', discrete: 'dark', evident: 'light' },
 };
 
-export function SideNav({ color = 'evident', items = [], open }) {
+export function SideNav({ color = 'evident', items = [], open, isFeaturedCardVisible }) {
   const pathname = usePathname();
   const { userInfo } = useAuth();
 
@@ -50,14 +45,14 @@ export function SideNav({ color = 'evident', items = [], open }) {
           height: '100%',
           left: 10,
           position: 'fixed',
-          top: 140,
+          top: isFeaturedCardVisible ? 95 : 50,
           width: open ? 'var(--SideNav-width)' : '70px',
           zIndex: 'var(--SideNav-zIndex)',
           transition: 'width 0.3s ease',
           borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
           marginBottom: '10px',
           border: '1px solid var(--mui-palette-background-level2)',
-          height: 'calc(100vh - 210px)',
+          height: isFeaturedCardVisible ? 'calc(100vh - 135px)' : 'calc(100vh - 90px)',
         }}
       >
         <Box
@@ -185,7 +180,7 @@ function NavItem({
           display: 'flex',
           flex: '0 0 auto',
           gap: 1,
-          p: '6px 16px',
+          p: '6px 6px',
           position: 'relative',
           textDecoration: 'none',
           whiteSpace: 'nowrap',
@@ -221,7 +216,7 @@ function NavItem({
           {icon ? (
             <Iconify
               icon={icon}
-              color={active ? 'var(--NavItem-hover-color)' : 'text.primary'}
+              color={ 'text.primary'}
               sx={{ fontSize: 'var(--icon-fontSize-sm)' }}
             />
           ) : null}
