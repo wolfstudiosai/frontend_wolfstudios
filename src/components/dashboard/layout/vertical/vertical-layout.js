@@ -7,12 +7,10 @@ import { privateRoutes } from '@/router';
 import { pxToRem } from '@/utils/utils';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
-import { m } from 'framer-motion';
 
 import useAuth from '@/hooks/useAuth';
 
 import { MainNavV2 } from './main-nav-v2';
-// import { MainNav } from './main-nav';
 import { SideNav } from './side-nav';
 import { useSettings } from '/src/hooks/use-settings';
 
@@ -67,6 +65,9 @@ export function VerticalLayout({ children }) {
               opacity: isFeaturedCardVisible ? 1 : 0,
               transition: 'transform 0.5s ease, opacity 0.5s ease',
               width: '100%',
+              position: 'sticky',
+              top: 45,
+              zIndex: 100,
             }}
           >
             <FeatureCards />
@@ -77,7 +78,7 @@ export function VerticalLayout({ children }) {
             display: 'flex',
             flex: '1 1 auto',
             flexDirection: 'column',
-            pl: { lg: isLogin && openSidebar ? '280px' : '0px' },
+            pl: { lg: isLogin && openSidebar ? pxToRem(260) : '0px' },
           }}
         >
           {isLogin && openSidebar && (
@@ -93,7 +94,7 @@ export function VerticalLayout({ children }) {
             sx={{
               // '--Content-margin': '1.5rem auto',
               // '--Content-maxWidth': 'var(--maxWidth-xl)',
-              '--Content-paddingX': '24px',
+              // '--Content-paddingX': '24px',
               '--Content-paddingY': { xs: '24px', lg: '24px' },
               '--Content-padding': 'var(--Content-paddingY) var(--Content-paddingX)',
               '--Content-width': '100%',
@@ -105,7 +106,6 @@ export function VerticalLayout({ children }) {
           >
             {children}
           </Box>
-          {/* <Footer /> */}
         </Box>
         <ThinerFooter />
       </Box>

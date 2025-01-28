@@ -57,7 +57,7 @@ export function SideNav({ color = 'evident', items = [], open, isFeaturedCardVis
           borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
           marginBottom: '10px',
           border: '1px solid var(--mui-palette-background-level2)',
-          height: 'calc(100vh - 135px)',
+          height: isFeaturedCardVisible ? 'calc(100vh - 135px)' : 'calc(100vh - 90px)',
         }}
       >
         <Box
