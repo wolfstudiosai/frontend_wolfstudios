@@ -187,8 +187,8 @@ export function ThreadView({ threadId }) {
     sx={{
       display: 'flex', flex: '1 1 auto', flexDirection: 'column', minHeight: 0, ...(isProfileVisible ? { marginRight: '240px' } : {}),
       maxHeight: {
-        xs: 'calc(100vh - 47vh)', 
-        md: 'calc(100vh - 36vh)',
+        xs: 'calc(100vh - 44vh)', 
+        md: 'calc(100vh - 32vh)',
       },
       overflowY: 'auto', 
       scrollbarWidth: 'none', 
