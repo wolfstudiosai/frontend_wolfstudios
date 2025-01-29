@@ -16,6 +16,92 @@ import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/di
 
 import { Tip } from '@/components/core/tip';
 
+// export const DirectSearch = React.forwardRef(function ChatSidebarSearch(
+//   {
+//     isFocused,
+//     onChange,
+//     onClickAway = () => {
+//       // noop
+//     },
+//     onFocus,
+//     onSelect,
+//     query = '',
+//     results = [],
+//   },
+//   ref
+// ) {
+//   const handleSelect = React.useCallback(
+//     (result) => {
+//       onSelect?.(result);
+//     },
+//     [onSelect]
+//   );
+
+//   const showTip = isFocused && !query;
+//   const showResults = isFocused && query;
+//   const hasResults = results.length > 0;
+
+//   return (
+//     <ClickAwayListener onClickAway={onClickAway}>
+//       <Stack ref={ref} spacing={2} tabIndex={-1}>
+//         <OutlinedInput
+//           onChange={onChange}
+//           onFocus={onFocus}
+//           placeholder="Search contacts"
+//           startAdornment={
+//             <InputAdornment position="start">
+//               <MagnifyingGlassIcon fontSize="var(--icon-fontSize-md)" />
+//             </InputAdornment>
+//           }
+//           value={query}
+//         />
+//         {showTip ? <Tip message="Enter a contact name" /> : null}
+//         {showResults ? (
+//           <React.Fragment>
+//             {hasResults ? (
+//               <Stack spacing={1}>
+//                 <Typography color="text.secondary" variant="subtitle2">
+//                   Contacts
+//                 </Typography>
+//                 <List disablePadding sx={{ '& .MuiListItemButton-root': { borderRadius: 1 } }}>
+//                   {results.map((contact) => (
+//                     <ListItem disablePadding key={contact.id}>
+//                       <ListItemButton
+//                         onClick={() => {
+//                           handleSelect(contact);
+//                         }}
+//                       >
+//                         <ListItemAvatar>
+//                           <Avatar src={contact.avatar} sx={{ '--Avatar-size': '32px' }} />
+//                         </ListItemAvatar>
+//                         <ListItemText
+//                           disableTypography
+//                           primary={
+//                             <Typography noWrap variant="subtitle2">
+//                               {contact.name} {contact.isActive && '(Online)'}
+//                             </Typography>
+//                           }
+//                         />
+//                       </ListItemButton>
+//                     </ListItem>
+//                   ))}
+//                 </List>
+//               </Stack>
+//             ) : (
+//               <div>
+//                 <Typography color="text.secondary" variant="body2">
+//                   We couldn&apos;t find any matches for &quot;{query}&quot;. Try checking for typos or using complete
+//                   words.
+//                 </Typography>
+//               </div>
+//             )}
+//           </React.Fragment>
+//         ) : null}
+//       </Stack>
+//     </ClickAwayListener>
+//   );
+// });
+
 export const DirectSearch = React.forwardRef(function ChatSidebarSearch(
   {
     isFocused,
@@ -27,6 +113,7 @@ export const DirectSearch = React.forwardRef(function ChatSidebarSearch(
     onSelect,
     query = '',
     results = [],
+    loading = false, // New prop
   },
   ref
 ) {
@@ -58,7 +145,11 @@ export const DirectSearch = React.forwardRef(function ChatSidebarSearch(
         {showTip ? <Tip message="Enter a contact name" /> : null}
         {showResults ? (
           <React.Fragment>
-            {hasResults ? (
+            {loading ? (
+              <Typography color="text.secondary" variant="body2">
+                Searching...
+              </Typography>
+            ) : hasResults ? (
               <Stack spacing={1}>
                 <Typography color="text.secondary" variant="subtitle2">
                   Contacts

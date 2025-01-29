@@ -182,15 +182,23 @@ export function ThreadView({ threadId }) {
     );
   }
   return (
-    <Box sx={{
+    <Box 
+    
+    sx={{
       display: 'flex', flex: '1 1 auto', flexDirection: 'column', minHeight: 0, ...(isProfileVisible ? { marginRight: '240px' } : {}),
-      height: 'calc(100vh - 30vh)',
-      position: 'relative',
-      overflow: 'hidden',
-      '&:hover': {
-        overflow: 'auto',
-      }
-    }}>
+      maxHeight: {
+        xs: 'calc(100vh - 47vh)', 
+        md: 'calc(100vh - 36vh)',
+      },
+      overflowY: 'auto', 
+      scrollbarWidth: 'none', 
+      '&::-webkit-scrollbar': {
+        display: 'none',
+      },
+  
+    }}
+  
+    >
       <ThreadToolbar thread={thread} />
       <Stack ref={messagesRef} spacing={2} sx={{ flex: '1 1 auto', overflowY: 'auto', p: 3, maxWidth: '100%' }}>
         {messages.map((message) => (
