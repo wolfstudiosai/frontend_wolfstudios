@@ -16,9 +16,9 @@ import { useMediaQuery } from '@/hooks/use-media-query';
 
 import { DirectSearch } from './direct-search';
 import { ThreadItem } from './thread-item';
+import { api } from '@/utils/api';
 
 export function Sidebar({
-  contacts,
   currentThreadId,
   messages,
   onCloseMobile,
@@ -28,15 +28,33 @@ export function Sidebar({
   openMobile,
   threads,
 }) {
-  console.log("contacts in sidebar", contacts);
-
   const mdUp = useMediaQuery('up', 'md');
+
+  // React.useEffect(() => {
+  //   async function fetchContacts() {
+  //     try {
+  //       const contactsRes = await getUsers({ page: 1, rowsPerPage: 100 });
+  //       const transformedContacts = (contactsRes.data || []).map((user) => ({
+  //         id: user.email,
+  //         name: `${user.first_name} ${user.last_name}`,
+  //         avatar: user.profile_pic || '',
+  //         isActive: user.status === 'ACTIVE',
+  //         lastActivity: dayjs().toDate(),
+  //       }));
+  //       setContacts(transformedContacts);
+  //     } catch (error) {
+  //       console.error('Failed to fetch contacts:', error);
+  //     }
+  //   }
+  //   fetchContacts();
+  // }, []);
+  // console.log("contactssssss",contacts)
+
 
   const content = (
     <SidebarContent
       closeOnGroupClick={!mdUp}
       closeOnThreadSelect={!mdUp}
-      contacts={contacts}
       currentThreadId={currentThreadId}
       messages={messages}
       onClose={onCloseMobile}
@@ -73,7 +91,6 @@ export function Sidebar({
 function SidebarContent({
   closeOnGroupClick,
   closeOnThreadSelect,
-  contacts,
   currentThreadId,
   messages,
   onClose,
@@ -86,27 +103,41 @@ function SidebarContent({
   const [searchFocused, setSearchFocused] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
 
+  
 
-  const handleSearchChange = React.useCallback(
-    async (event) => {
-      const { value } = event.target;
+const handleSearchChange = React.useCallback(
+  async (event) => {
+    const { value } = event.target;
+    setSearchQuery(value);
 
-      setSearchQuery(value);
+    if (!value) {
+      setSearchResults([]);
+      return;
+    }
 
-      if (!value) {
+    setLoading(true);
+
+    try {
+      const response = await api.get(`threads/contacts?query=${encodeURIComponent(value)}`);
+      const result = response.data;
+
+      if (result.success) {
+        setSearchResults(result.data);
+      } else {
         setSearchResults([]);
-        return;
       }
+    } catch (error) {
+      console.error("Error searching users:", error);
+      setSearchResults([]);
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  },
+  []
+);
 
-      const results = contacts.filter((contact) => {
-        return contact.name.toLowerCase().includes(value.toLowerCase());
-      });
-
-      setSearchResults(results);
-    },
-    [contacts]
-  );
 
   const handleSearchClickAway = React.useCallback(() => {
     if (searchFocused) {
@@ -183,6 +214,7 @@ function SidebarContent({
           onSelect={handleSearchSelect}
           query={searchQuery}
           results={searchResults}
+          loading={loading}
         />
         <Stack
           component="ul"

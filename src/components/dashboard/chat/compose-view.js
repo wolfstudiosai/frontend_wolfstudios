@@ -30,7 +30,7 @@ function useRecipients() {
   const handleRecipientRemove = React.useCallback((recipientId) => {
     setRecipients((prevState) => {
       return prevState.filter((recipient) => recipient.id !== recipientId);
-    });i
+    });
   }, []);
 
   return { handleRecipientAdd, handleRecipientRemove, recipients };

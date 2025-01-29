@@ -59,6 +59,11 @@ export function MessageBox({ message, onReply, onEdit, onDelete }) {
       sx={{
         alignItems: position === 'right' ? 'flex-end' : 'flex-start', flex: '0 0 auto', display: 'flex',
         p: 2,
+        overflowY: 'auto', 
+        scrollbarWidth: 'none', 
+        '&::-webkit-scrollbar': {
+          display: 'none',
+        },
       }}
       onKeyUp={(event) => {
         if (event.key === 'Enter') {

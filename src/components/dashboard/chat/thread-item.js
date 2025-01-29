@@ -19,7 +19,7 @@ export function ThreadItem({ active = false, thread, messages, onSelect, loading
   const { userInfo } = useAuth();
   const recipients = (thread?.participants ?? []).filter((participant) => participant.id !== userInfo.email);
   const lastMessage = messages?.get(thread?.id)?.at(-1);
-  console.log("messages in sidebar", messages);
+  // console.log("messages in sidebar", messages);
 
   if (loading) {
     return (
