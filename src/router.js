@@ -16,11 +16,11 @@ export const publicRoutes = [
         title: 'Portfolio',
         href: paths.dashboardPublic.portfolio,
       },
-      {
-        key: 'concept',
-        title: 'Content',
-        href: paths.dashboardPublic.content,
-      },
+      // {
+      //   key: 'concept',
+      //   title: 'Content',
+      //   href: paths.dashboardPublic.content,
+      // },
       {
         key: 'production',
         title: 'Production',
@@ -29,7 +29,7 @@ export const publicRoutes = [
       {
         key: 'partner',
         title: 'Partner',
-        href: paths.dashboardPublic.partner,
+        href: paths.private.partner_private,
       },
       {
         key: 'spaces',
@@ -207,6 +207,13 @@ export const privateRoutes = [
         title: 'Content HQ',
         icon: 'fluent:content-view-20-regular',
         items: [
+          {
+            key: 'content_discovery',
+            title: 'Discovery',
+            href: paths.dashboardPublic.partner,
+            icon: 'fluent:approvals-app-20-regular',
+            allowedRoles: ['admin', 'user'],
+          },
           {
             key: 'needs_approval',
             title: 'Needs Approval',
