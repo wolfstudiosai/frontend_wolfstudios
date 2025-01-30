@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { FeatureCards } from '@/app/(marketing)/top-cards';
+import { FeatureCards } from '@/app/(public)/top-cards';
 import { ThinerFooter } from '@/components/navbar/thinner-footer';
 import { privateRoutes } from '@/router';
 import { pxToRem } from '@/utils/utils';

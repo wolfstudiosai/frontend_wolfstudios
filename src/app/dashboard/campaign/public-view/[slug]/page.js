@@ -1,4 +1,4 @@
-import { CampaignDetailsView } from '@/app/(marketing)/campaign/[slug]/campaign-details-view';
+import { CampaignDetailsView } from '@/app/(public)/campaign/[slug]/campaign-details-view';
 import { config } from '@/config';
 import { publicApi } from '@/utils/api';
 import { Container } from '@mui/material';

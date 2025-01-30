@@ -1,4 +1,4 @@
-import { ProfileView } from '@/app/(marketing)/profile/profile-view';
+import { ProfileView } from '@/app/(public)/profile/profile-view';
 import { config } from '@/config';
 
 
