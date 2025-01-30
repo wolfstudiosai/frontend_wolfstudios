@@ -12,16 +12,16 @@ import { Paperclip as PaperclipIcon } from '@phosphor-icons/react/dist/ssr/Paper
 import { PaperPlaneTilt as PaperPlaneTiltIcon } from '@phosphor-icons/react/dist/ssr/PaperPlaneTilt';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import dynamic from 'next/dynamic';
-import{Cancel as CancelIcon} from '@mui/icons-material/Cancel';
+import { Cancel as CancelIcon } from '@mui/icons-material/Cancel';
 // import 
 const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 
-export function MessageAdd({ disabled = false, onSend }) {
+export function MessageAdd({ disabled = false, onSend, onFileChange }) {
   const [content, setContent] = React.useState('');
   const [showEmojiPicker, setShowEmojiPicker] = React.useState(false);
   const pickerRef = React.useRef(null);
   const inputRef = React.useRef(null);
-  
+
 
   const fileInputRef = React.useRef(null);
   const [file, setFile] = React.useState(null);
@@ -37,12 +37,21 @@ export function MessageAdd({ disabled = false, onSend }) {
   const handleFileChange = React.useCallback((event) => {
     if (event.target.files && event.target.files.length > 0) {
       setFile(event.target.files[0]);
+      onFileChange(event.target.files[0]);
     }
   }, []);
 
   const handleChange = React.useCallback((event) => {
     setContent(event.target.value);
   }, []);
+
+  // const handleFileSelect = (event) => {
+  //   const selectedFile = event.target.files[0];
+  //   if (selectedFile) {
+  //     setFile(selectedFile); // Keep local file state for reset
+  //     onFileChange(selectedFile); // Notify parent component
+  //   }
+  // }
 
   const handleSend = React.useCallback(() => {
     if (!content && !fileInputRef.current?.files[0]) {
@@ -89,7 +98,7 @@ export function MessageAdd({ disabled = false, onSend }) {
   const getEmojiPickerPosition = () => {
     if (inputRef.current) {
       const rect = inputRef.current.getBoundingClientRect();
-      const bottomOffset = window.innerHeight - rect.bottom + 10; 
+      const bottomOffset = window.innerHeight - rect.bottom + 10;
       const leftOffset = rect.left;
 
       return {
@@ -113,12 +122,12 @@ export function MessageAdd({ disabled = false, onSend }) {
         disabled={disabled}
         onChange={handleChange}
         onKeyUp={handleKeyUp}
-        placeholder= 'Type a message...'
+        placeholder='Type a message...'
         sx={{ flex: '1 1 auto', borderRadius: 4 }}
         value={content}
         endAdornment={
           <InputAdornment position="end">
-            
+
             <Tooltip title="Add emoji">
               <span>
                 <IconButton disabled={disabled} onClick={toggleEmojiPicker}>

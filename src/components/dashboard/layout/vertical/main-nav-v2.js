@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import RouterLink from 'next/link';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { LoginForm } from '@/app/auth/_components/LoginForm';
 import { Dropdown } from '@/components/core/dropdown/dropdown';
@@ -11,27 +10,26 @@ import { DropdownTrigger } from '@/components/core/dropdown/dropdown-trigger';
 import { Logo } from '@/components/core/logo';
 import { Iconify } from '@/components/iconify/iconify';
 import { MobileNav } from '@/components/navbar/mobile-nav';
-import { NavSearch } from '@/components/navbar/nav-search';
+import { NavSearchV2 } from '@/components/navbar/nav-search-v2';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { publicRoutes } from '@/router';
-import { clearUserSessionFromLocalStore } from '@/utils/axios-api.helpers';
 import { pxToRem } from '@/utils/utils';
-import { Avatar, Badge, Button, Popover, Tooltip } from '@mui/material';
+import { Button, Popover } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
-import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
 
 import { paths } from '@/paths';
-import { usePopover } from '@/hooks/use-popover';
 import useAuth from '@/hooks/useAuth';
 
-import { UserPopover } from '../user-popover/user-popover';
+import { NotificationPopover } from '../_components/notificaiton-popover';
+import { SettingsGear } from '../_components/settings-gear';
+import { UserInfoPopover } from '../_components/user-info-popover';
 
-export const MainNavV2 = ({ onToggle }) => {
+export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const [openNav, setOpenNav] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const router = useRouter();
@@ -57,45 +55,56 @@ export const MainNavV2 = ({ onToggle }) => {
         component="header"
         sx={{
           bgcolor: 'var(--mui-palette-background-default)',
-          color: 'var( --mui-palette-neutral-950)',
+          color: 'var(--mui-palette-neutral-950)',
           position: 'sticky',
-          right: 0,
           top: 0,
           zIndex: 'var(--MainNav-zIndex)',
-          mx: 0,
-          borderRadius: 0,
-          backdropFilter: 'blur(10px)',
-          padding: 0,
           borderBottom: '1px solid var(--mui-palette-divider)',
+          backdropFilter: 'blur(10px)',
         }}
       >
-        <Container maxWidth="xxl" sx={{ minHeight: 'var(--MainNav-height)', py: pxToRem(8) }}>
+        <Container maxWidth="xxl">
           <Stack
             direction="row"
             spacing={2}
             sx={{
               display: 'flex',
-              flex: '1 1 auto',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}
           >
-            <Box component="nav" sx={{ display: { xs: 'none', md: 'block' } }}>
-              <Stack
-                component="ul"
-                direction="row"
-                spacing={1}
-                sx={{ listStyle: 'none', m: 0, p: 0 }}
-                alignItems={'center'}
-              >
-                {isLogin && (
+            {/* Left Section: Logo and Menu */}
+            <Box
+              component="nav"
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
+              }}
+            >
+              {isLogin && (
+                <Stack direction="row" sx={{ alignItems: 'center' }}>
                   <IconButton onClick={onToggle}>
                     <Iconify icon="material-symbols:menu-rounded" color={'var(--mui-palette-neutral-400)'} />
                   </IconButton>
-                )}
-                <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
-                  <Logo height={40} width={120} />
-                </Box>
+
+                  <Box
+                    component="button"
+                    onClick={() => onFeatureCardVisible((prev) => !prev)}
+                    sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
+                  >
+                    <Iconify
+                      icon="icon-park-outline:down"
+                      width={15}
+                      style={{ color: 'var(--mui-palette-neutral-400)' }}
+                    />
+                  </Box>
+                </Stack>
+              )}
+              <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
+                <Logo height={40} width={120} />
+              </Box>
+              <Stack component="ul" direction="row" spacing={1} sx={{ listStyle: 'none', m: 0, p: 0 }}>
                 {publicRoutes.map((section, index) =>
                   section.items.map((item) => (
                     <NavItem
@@ -108,36 +117,50 @@ export const MainNavV2 = ({ onToggle }) => {
                     />
                   ))
                 )}
-                <NavSearch />
               </Stack>
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', ml: 'auto' }}>
+            {/* Right Section: Search, Notifications, Sign In/UserButton, setting gear */}
+            <Stack
+              direction="row"
+              alignItems="center"
+              sx={{
+                flex: 1,
+                justifyContent: 'flex-end',
+                gap: 2,
+              }}
+            >
+              <Box
+                sx={{
+                  flex: 1,
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  minWidth: pxToRem(150),
+                }}
+              >
+                <NavSearchV2 />
+              </Box>
+
+              {/* <Iconify icon="ph:gear-light" width={20} style={{ color: 'var(--mui-palette-neutral-400)' }} /> */}
+              <SettingsGear />
+
+              {/* Notifications and User Actions */}
               {isLogin ? (
-                <UserButton />
+                <React.Fragment>
+                  <NotificationPopover />
+                  <UserInfoPopover />
+                </React.Fragment>
               ) : (
                 <Button
                   variant="contained"
                   size="small"
-                  sx={{ backgroundColor: 'var(--mui-palette-warning-700)' }}
+                  sx={{ backgroundColor: 'var(--mui-palette-warning-700)', flexShrink: 0 }}
                   onClick={handleOpen}
                 >
                   Sign in
                 </Button>
               )}
-            </Box>
-
-            <Box>
-              {/* <NavSearch /> */}
-              <IconButton
-                onClick={() => {
-                  setOpenNav(true);
-                }}
-                sx={{ color: 'var(--mui-palette-common-dark)', display: { xs: 'flex', md: 'none' } }}
-              >
-                <ListIcon />
-              </IconButton>
-            </Box>
+            </Stack>
           </Stack>
         </Container>
       </Box>
@@ -299,39 +322,4 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
   }
 
   return element;
-}
-
-export function UserButton() {
-  const popover = usePopover();
-  const { userInfo } = useAuth();
-
-  return (
-    <React.Fragment>
-      <Box
-        component="button"
-        onMouseEnter={popover.handleOpen}
-        ref={popover.anchorRef}
-        sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
-      >
-        <Badge
-          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          color="success"
-          sx={{
-            '& .MuiBadge-dot': {
-              border: '2px solid var(--MainNav-background)',
-              borderRadius: '50%',
-              bottom: '6px',
-              height: '12px',
-              right: '6px',
-              width: '12px',
-            },
-          }}
-          variant="dot"
-        >
-          <Avatar src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${userInfo.profile_pic}`} />
-        </Badge>
-      </Box>
-      <UserPopover anchorEl={popover.anchorRef.current} onClose={popover.handleClose} open={popover.open} />
-    </React.Fragment>
-  );
 }

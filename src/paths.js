@@ -121,33 +121,40 @@ export const paths = {
   },
 
   private: {
+    // admin
     overview: '/overview',
+    performance: '/performance',
     analytics: '/analytics',
+    notification: '/notification',
+    record: '/record',
+    expense: '/expense',
+    contract: '/contract',
+    calender: '/calender',
+    user: '/user',
 
-    // campaign
-    campaign: '/campaign-private',
-    create_campaign: '/campaign/create',
-    campaign_view: '/campaign/public-view',
+    // partner HQ
+    partner_needs_approval: '/partner-needs-approval',
+    waiting_area: '/waiting-area',
+    talent: '/talent',
 
-    // records
-    records: '/records',
+    // production hq
+    studio: '/studio',
+    crew: '/crew',
+    onsite_location: '/onsite-location',
+    venue: '/venue',
 
-    // partner
-    partner: '/partner-private',
-    create_partner: '/partner/create',
-    partner_view: '/partner/view',
+    // content HQ
+    content_needs_approval: '/content-needs-approval',
+    by_platform: '/by-platform',
+    content_analytics: '/content-analytics',
 
-    portfolios: '/portfolios',
-    create_portfolio: '/portfolios/add-portfolio',
+    // campaign HQ
+    revo: '/revo',
+    campaign_add_new: '/campaign-add-new',
+
+    //archive
     partners_by_campaign: '/partners-by-campaign',
     needs_offer_approval: '/needs-offer-approval',
-    users: '/users',
-
-    chat: 'dashboard/chat',
-    chat_compose: 'dashboard/chat/compose',
-
-    content: '/content-private',
-    create_content: '/add-content',
   },
   dashboardPublic: {
     // HQs

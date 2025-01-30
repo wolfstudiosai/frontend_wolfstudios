@@ -16,9 +16,9 @@ import { useMediaQuery } from '@/hooks/use-media-query';
 
 import { DirectSearch } from './direct-search';
 import { ThreadItem } from './thread-item';
+import { api } from '@/utils/api';
 
 export function Sidebar({
-  contacts,
   currentThreadId,
   messages,
   onCloseMobile,
@@ -28,15 +28,33 @@ export function Sidebar({
   openMobile,
   threads,
 }) {
-  console.log("contacts in sidebar",contacts);
-
   const mdUp = useMediaQuery('up', 'md');
+
+  // React.useEffect(() => {
+  //   async function fetchContacts() {
+  //     try {
+  //       const contactsRes = await getUsers({ page: 1, rowsPerPage: 100 });
+  //       const transformedContacts = (contactsRes.data || []).map((user) => ({
+  //         id: user.email,
+  //         name: `${user.first_name} ${user.last_name}`,
+  //         avatar: user.profile_pic || '',
+  //         isActive: user.status === 'ACTIVE',
+  //         lastActivity: dayjs().toDate(),
+  //       }));
+  //       setContacts(transformedContacts);
+  //     } catch (error) {
+  //       console.error('Failed to fetch contacts:', error);
+  //     }
+  //   }
+  //   fetchContacts();
+  // }, []);
+  // console.log("contactssssss",contacts)
+
 
   const content = (
     <SidebarContent
       closeOnGroupClick={!mdUp}
       closeOnThreadSelect={!mdUp}
-      contacts={contacts}
       currentThreadId={currentThreadId}
       messages={messages}
       onClose={onCloseMobile}
@@ -73,7 +91,6 @@ export function Sidebar({
 function SidebarContent({
   closeOnGroupClick,
   closeOnThreadSelect,
-  contacts,
   currentThreadId,
   messages,
   onClose,
@@ -86,27 +103,41 @@ function SidebarContent({
   const [searchFocused, setSearchFocused] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState([]);
-  
-  
-  const handleSearchChange = React.useCallback(
-    async (event) => {
-      const { value } = event.target;
+  const [loading, setLoading] = React.useState(false);
 
-      setSearchQuery(value);
+  
 
-      if (!value) {
+const handleSearchChange = React.useCallback(
+  async (event) => {
+    const { value } = event.target;
+    setSearchQuery(value);
+
+    if (!value) {
+      setSearchResults([]);
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await api.get(`threads/contacts?query=${encodeURIComponent(value)}`);
+      const result = response.data;
+
+      if (result.success) {
+        setSearchResults(result.data);
+      } else {
         setSearchResults([]);
-        return;
       }
+    } catch (error) {
+      console.error("Error searching users:", error);
+      setSearchResults([]);
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  },
+  []
+);
 
-      const results = contacts.filter((contact) => {
-        return contact.name.toLowerCase().includes(value.toLowerCase());
-      });
-
-      setSearchResults(results);
-    },
-    [contacts]
-  );
 
   const handleSearchClickAway = React.useCallback(() => {
     if (searchFocused) {
@@ -121,7 +152,7 @@ function SidebarContent({
 
   const handleSearchSelect = React.useCallback(
     (contact) => {
-      console.log("selected",contact)
+      console.log("selected", contact)
       onSelectContact?.(contact.id);
 
       setSearchFocused(false);
@@ -144,13 +175,13 @@ function SidebarContent({
   const sortedThreads = threads.slice().sort((a, b) => {
     const lastMessageA = messages?.get(a.id)?.at(-1);
     const lastMessageB = messages?.get(b.id)?.at(-1);
-  
+
     const dateA = lastMessageA ? new Date(lastMessageA.createdAt) : new Date(a.createdAt);
     const dateB = lastMessageB ? new Date(lastMessageB.createdAt) : new Date(b.createdAt);
-  
-    return dateB - dateA; 
+
+    return dateB - dateA ;
   });
-  
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <Stack direction="row" spacing={2} sx={{ alignItems: 'center', flex: '0 0 auto', p: 2 }}>
@@ -183,15 +214,16 @@ function SidebarContent({
           onSelect={handleSearchSelect}
           query={searchQuery}
           results={searchResults}
+          loading={loading}
         />
         <Stack
           component="ul"
           spacing={1}
           sx={{ display: searchFocused ? 'none' : 'flex', listStyle: 'none', m: 0, p: 0 }}
         >
-          {threads.map((thread) => (
+          {sortedThreads.map((thread) => (
             <ThreadItem
-            loading={false}
+              loading={false}
               active={currentThreadId === thread.id}
               key={thread.id}
               messages={messages ?? []}
