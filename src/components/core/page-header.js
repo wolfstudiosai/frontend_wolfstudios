@@ -14,7 +14,7 @@ export const PageHeader = ({ title, tags = [], filters = [], sorting = [], onFil
   };
 
   return (
-    <Box mb={3}>
+    <Stack direction={'column'} spacing={2} mb={3}>
       <Stack direction={'row'} alignItems={'center'}>
         <Typography variant="h5" fontWeight={600} gutterBottom>
           {title}
@@ -37,6 +37,7 @@ export const PageHeader = ({ title, tags = [], filters = [], sorting = [], onFil
           <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
           <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
         </AvatarGroup>
+        <Iconify icon="ri:more-line" width={20} height={20} sx={{ ml: 1 }} />
       </Stack>
       <Box>
         <Stack direction="row" alignItems="center" sx={{ gap: 2, mb: 1 }}>
@@ -48,9 +49,9 @@ export const PageHeader = ({ title, tags = [], filters = [], sorting = [], onFil
                 fontSize: pxToRem(14),
                 fontWeight: '500',
                 cursor: 'pointer',
-                color: currentSection === section ? '#1976d2' : 'text.secondary',
+                color: currentSection === section ? 'primary.main' : 'text.secondary',
                 '&:hover': {
-                  color: currentSection === section ? '#1565c0' : '#1976d2',
+                  color: currentSection === section ? 'text.primary' : 'text.primary',
                 },
               }}
             >
@@ -76,6 +77,6 @@ export const PageHeader = ({ title, tags = [], filters = [], sorting = [], onFil
           </Stack>
         </Stack>
       </Box>
-    </Box>
+    </Stack>
   );
 };

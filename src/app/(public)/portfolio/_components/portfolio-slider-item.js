@@ -1,10 +1,8 @@
-import Link from 'next/link';
-import { pxToRem } from '@/utils/utils';
-import { Box, Button, Card, CardContent, CardMedia, Divider, Stack, Typography } from '@mui/material';
+import { getRandomColor, pxToRem } from '@/utils/utils';
+import { Avatar, AvatarGroup, Box, Card, Chip, Stack, Typography } from '@mui/material';
 
 export const PortfolioSliderItem = ({ item, index }) => {
   const isVideoContent = (url) => {
-    // Check for common video-hosting platforms or specific keywords in the URL
     const videoKeywords = ['vimeo', 'playback', 'video'];
     return videoKeywords.some((keyword) => url.includes(keyword));
   };
@@ -13,7 +11,7 @@ export const PortfolioSliderItem = ({ item, index }) => {
     <Card
       sx={{
         width: '100%',
-        height: pxToRem(700),
+        aspectRatio: '16 / 9',
         borderRadius: 2,
         border: 'unset',
         overflow: 'hidden',
@@ -29,11 +27,12 @@ export const PortfolioSliderItem = ({ item, index }) => {
           autoPlay
           loop
           draggable={false}
+          playsInline
           sx={{
-            height: '88%',
+            height: '100%',
             width: '100%',
             objectFit: 'cover',
-            borderRadius: '24px',
+            borderRadius: 1,
           }}
         />
       ) : (
@@ -42,47 +41,55 @@ export const PortfolioSliderItem = ({ item, index }) => {
           src={item.url}
           alt={item.title}
           draggable={false}
+          
           sx={{
-            height: '88%',
+            height: '100%',
             width: '100%',
             objectFit: 'cover',
+            objectPosition: "cen",
             filter: 'brightness(100%)',
-            borderRadius: '24px',
+            borderRadius: 1,
           }}
         />
       )}
-      <Stack direction="row" justifyContent="space-between" alignItems="center" px={2}>
-        <Stack direction="column" alignItems="flex-start">
-          <Typography variant="cardTitle">{item.project_title}</Typography>
-          <Box
-            sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 1,
-            }}
-          >
-            <Typography variant="cardSubTitle">Model: {item.model}</Typography>
-            <Divider orientation="vertical" variant="middle" flexItem />
-            <Typography variant="cardSubTitle">Publication: {item.publication}</Typography>
-            <Divider orientation="vertical" variant="middle" flexItem />
-            <Typography variant="cardSubTitle">DP: {item.dp}</Typography>
-          </Box>
-        </Stack>
-        <Link href={`/portfolio/${item.slug}`}>
-          <Button
-            variant="outlined"
-            size="small"
-            color="secondary"
-            sx={{
-              zIndex: 10,
-              cursor: 'pointer',
-              backgroundColor: 'var(--mui-palette-background-level2)',
-              // padding: por125rem .5rem',
-            }}
-          >
-            View Portfolio
-          </Button>
-        </Link>
+      <Stack
+        direction="column"
+        spacing={1}
+        px={2}
+        sx={{ position: 'absolute', bottom: 20, right: 0, left: 0, width: '100%' }}
+      >
+        <Typography variant="h3" fontWeight={700} color="var(--mui-palette-common-white)">
+          {item.project_title}
+        </Typography>
+        <Box
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
+          <Typography variant="body" color="var(--mui-palette-common-white)">
+            State: {item.state}
+          </Typography>
+          {item.category.split(',').map((category, index) => (
+            <Chip key={index} label={category.trim()} size="small" sx={{ backgroundColor: getRandomColor() }} />
+          ))}
+        </Box>
+      </Stack>
+      <Stack
+        direction="row"
+        justifyContent={'flex-end'}
+        sx={{ position: 'absolute', top: 20, right: 10, width: '100%' }}
+      >
+        <AvatarGroup
+          spacing={'small'}
+          total={42}
+          sx={{ '& .MuiAvatar-root': { width: 32, height: 32, fontSize: 12, mb: 0.5 } }}
+        >
+          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+          <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+          <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
+        </AvatarGroup>
       </Stack>
     </Card>
   );
