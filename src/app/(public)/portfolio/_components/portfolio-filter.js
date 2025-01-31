@@ -91,56 +91,55 @@ export const PortfolioFilter = () => {
   }, [pathname, router]);
 
   return (
-    <>
-      <Box>
-        <Stack direction="row" sx={{ gap: 2, mb: 1 }}>
-          <Typography
-            onClick={() => setCurrentSection('TAG')}
-            sx={{
-              fontSize: '16px',
-              fontWeight: '500',
-              cursor: 'pointer',
-              color: currentSection === 'TAG' ? '#1976d2' : 'text.primary', // Active color
-              borderBottom: currentSection === 'TAG' ? '2px solid #1976d2' : 'none', // Underline for active section
-              '&:hover': {
-                color: currentSection === 'TAG' ? '#1565c0' : '#1976d2', // Hover color for active section
-              },
-            }}
-          >
-            TAG
-          </Typography>
-          <Typography
-            onClick={() => setCurrentSection('FILTER')}
-            sx={{
-              fontSize: '16px',
-              fontWeight: '500',
-              cursor: 'pointer',
-              color: currentSection === 'FILTER' ? '#1976d2' : 'text.primary',
-              borderBottom: currentSection === 'FILTER' ? '2px solid #1976d2' : 'none',
-              '&:hover': {
-                color: currentSection === 'FILTER' ? '#1565c0' : '#1976d2',
-              },
-            }}
-          >
-            FILTER
-          </Typography>
-          <Typography
-            onClick={() => setCurrentSection('SORTING')}
-            sx={{
-              fontSize: '16px',
-              fontWeight: '500',
-              cursor: 'pointer',
-              color: currentSection === 'SORTING' ? '#1976d2' : 'text.primary',
-              borderBottom: currentSection === 'SORTING' ? '2px solid #1976d2' : 'none',
-              '&:hover': {
-                color: currentSection === 'SORTING' ? '#1565c0' : '#1976d2',
-              },
-            }}
-          >
-            SORTING
-          </Typography>
-        </Stack>
-      </Box>
+    <Box>
+      <Stack direction="row" sx={{ gap: 2, mb: 1 }}>
+        <Typography
+          onClick={() => setCurrentSection('TAG')}
+          sx={{
+            fontSize: '16px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            color: currentSection === 'TAG' ? '#1976d2' : 'text.primary', // Active color
+            borderBottom: currentSection === 'TAG' ? '2px solid #1976d2' : 'none', // Underline for active section
+            '&:hover': {
+              color: currentSection === 'TAG' ? '#1565c0' : '#1976d2', // Hover color for active section
+            },
+          }}
+        >
+          TAG
+        </Typography>
+        <Typography
+          onClick={() => setCurrentSection('FILTER')}
+          sx={{
+            fontSize: '16px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            color: currentSection === 'FILTER' ? '#1976d2' : 'text.primary',
+            borderBottom: currentSection === 'FILTER' ? '2px solid #1976d2' : 'none',
+            '&:hover': {
+              color: currentSection === 'FILTER' ? '#1565c0' : '#1976d2',
+            },
+          }}
+        >
+          FILTER
+        </Typography>
+        <Typography
+          onClick={() => setCurrentSection('SORTING')}
+          sx={{
+            fontSize: '16px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            color: currentSection === 'SORTING' ? '#1976d2' : 'text.primary',
+            borderBottom: currentSection === 'SORTING' ? '2px solid #1976d2' : 'none',
+            '&:hover': {
+              color: currentSection === 'SORTING' ? '#1565c0' : '#1976d2',
+            },
+          }}
+        >
+          SORTING
+        </Typography>
+      </Stack>
+
       <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1, mt: 1, mb: 2, width: '100%' }}>
         {currentSection === 'TAG' &&
           TAGS.map((item) => (
@@ -184,6 +183,6 @@ export const PortfolioFilter = () => {
             </Button>
           ))}
       </Stack>
-    </>
+    </Box>
   );
 };
