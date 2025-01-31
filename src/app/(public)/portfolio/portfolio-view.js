@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
-import { Iconify } from '@/components/iconify/iconify';
 import { PageHeader } from '@/components/core/page-header';
+import { Iconify } from '@/components/iconify/iconify';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { QuickToolbar } from '@/components/toolbar/quick-toolbar';
 import { Box, IconButton, Pagination, Stack } from '@mui/material';
@@ -18,8 +18,6 @@ import { PortfolioListView } from './_components/portfolio-listview';
 import { PortfolioSliderItem } from './_components/portfolio-slider-item';
 import { getPortfolioListAsync } from './_lib/portfolio.actions';
 import { defaultPortfolio } from './_lib/portfolio.types';
-
-
 
 export const PortfolioView = () => {
   const [viewMode, setViewMode] = React.useState('grid');
@@ -66,7 +64,6 @@ export const PortfolioView = () => {
 
   return (
     <PageContainer>
-      
       {isLogin && (
         <QuickToolbar closePopover={openPortfolioRightPanel}>
           <Stack direction="column" spacing={3} justifyContent={'center'} alignItems={'center'} p={1}>
@@ -125,7 +122,8 @@ export const PortfolioView = () => {
       )}
 
       <ManagePortfolioRightPanel
-        id={''}
+        view={'EDIT'}
+        width={'70%'}
         data={null}
         open={openPortfolioRightPanel}
         onClose={() => setOpenPortfolioRightPanel(false)}

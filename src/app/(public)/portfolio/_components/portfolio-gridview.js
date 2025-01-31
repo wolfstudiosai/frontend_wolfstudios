@@ -1,12 +1,12 @@
 'use client';
 
+import React from 'react';
 import { PageHeader } from '@/components/core/page-header';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { getRandomColor } from '@/utils/utils';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
@@ -264,6 +264,7 @@ const PortfolioCard = ({ item, fetchList }) => {
       </Stack> */}
 
       <ManagePortfolioRightPanel
+        view={'QUICK'}
         fetchList={fetchList}
         width="70%"
         open={openPortfolioRightPanel ? true : false}

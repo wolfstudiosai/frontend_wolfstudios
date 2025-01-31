@@ -13,10 +13,10 @@ import { defaultPortfolio } from '../_lib/portfolio.types';
 import { PortfolioForm } from './portfolio-form';
 import { PortfolioQuickView } from './portfolio-quickview';
 
-export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, width }) => {
+export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
   const isUpdate = data ? true : false;
   const [values, setValues] = React.useState(defaultPortfolio);
-  const [editContent, setEditContent] = React.useState(false);
+  const [sidebarView, setSidebarView] = React.useState(view); //QUICK/ EDIT
   const { isLogin } = useAuth();
 
   // *********************States*********************************
@@ -78,13 +78,13 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
           </Button>
           {isLogin && (
             <>
-              {editContent ? (
-                <IconButton onClick={() => setEditContent(false)} title="Quick View">
-                  <Iconify icon="lets-icons:view-light" />
+              {sidebarView === 'QUICK' ? (
+                <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
+                  <Iconify icon="mynaui:edit-one" />
                 </IconButton>
               ) : (
-                <IconButton onClick={() => setEditContent(true)} title="Edit">
-                  <Iconify icon="mynaui:edit-one" />
+                <IconButton onClick={() => setSidebarView('QUICK')} title="Quick View">
+                  <Iconify icon="lets-icons:view-light" />
                 </IconButton>
               )}
               <DeleteConfirmationPopover title={`Want to delete ${data?.project_title}?`} onDelete={handleDelete} />{' '}
@@ -93,7 +93,11 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
         </Stack>
       )}
     >
-      {editContent ? <PortfolioForm  data={values}/> : <PortfolioQuickView data={values} />}
+      {sidebarView === 'QUICK' ? (
+        <PortfolioQuickView data={values} />
+      ) : (
+        <PortfolioForm data={values} onClose={onClose} fetchList={fetchList} />
+      )}
     </RightPanel>
   );
 };
