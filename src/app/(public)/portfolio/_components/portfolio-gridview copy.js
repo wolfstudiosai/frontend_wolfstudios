@@ -7,8 +7,8 @@ import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmati
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { getRandomColor, pxToRem, textShortner } from '@/utils/utils';
-import { Avatar, AvatarGroup, Box, Card, Chip, IconButton, Paper, Stack, Typography } from '@mui/material';
+import { pxToRem, textShortner } from '@/utils/utils';
+import { Box, IconButton, Paper, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
@@ -129,7 +129,7 @@ export const PortfolioGridView = ({ data, fetchList, loading, handlePagination }
         sorting={portfolioSorting}
         onFilterChange={handleFilterChange}
       />
-      <Box>
+      <Box sx={{ px: 2 }}>
         <SliderWrapper
           modules={[Navigation, SwiperPagination, Scrollbar, A11y, Autoplay]}
           autoplay={{ delay: 4000, disableOnInteraction: true }}
@@ -150,10 +150,10 @@ export const PortfolioGridView = ({ data, fetchList, loading, handlePagination }
         </SliderWrapper>
       </Box>
       <PageLoader loading={loading} error={null}>
-        <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 10 }} sx={{ mt: 2 }}>
+        <Grid container spacing={2}>
           {data.map((portfolio, index) => (
-            <Grid item size={{ xs: 12, md: 2 }} key={index}>
-              <PortfolioCard item={portfolio} fetchList={fetchList} />
+            <Grid item size={{ xs: 12, md: 3 }} key={index}>
+              <PortfolioCard portfolio={portfolio} fetchList={fetchList} />
             </Grid>
           ))}
         </Grid>
@@ -162,109 +162,56 @@ export const PortfolioGridView = ({ data, fetchList, loading, handlePagination }
   );
 };
 
-const PortfolioCard = ({ item, fetchList }) => {
-  console.log(item, 'item inside PortfolioCard');
+const PortfolioCard = ({ portfolio, fetchList }) => {
   const { isLogin } = useAuth();
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
   const handleDelete = async () => {
-    const response = await deletePortfolioAsync([item.id]);
+    const response = await deletePortfolioAsync([portfolio.id]);
     if (response.success) {
       fetchList();
     }
   };
 
-  const isVideoContent = (url) => {
-    const videoKeywords = ['vimeo', 'playback', 'video'];
-    return videoKeywords.some((keyword) => url.includes(keyword));
-  };
-
   return (
-    <Card
-      sx={{
-        width: '100%',
-        aspectRatio: '9 / 12',
-        borderRadius: 2,
-        border: 'unset',
-        overflow: 'hidden',
-        position: 'relative',
-        backgroundColor: '#333',
-        border: '1px solid var(--mui-palette-divider)',
-        cursor: 'pointer',
-      }}
-      onClick={() => setOpenPortfolioRightPanel(item)}
-    >
-      {isVideoContent(item.thumbnail || '') ? (
-        <Box
-          component="video"
-          src={item.thumbnail}
-          // controls
-          muted
-          autoPlay
-          loop
-          draggable={false}
-          playsInline
-          sx={{
-            height: '100%',
-            width: '100%',
-            objectFit: 'cover',
-            borderRadius: 1,
-          }}
-        />
-      ) : (
+    <Box>
+      <Paper elevation={1} variant="outlined" sx={{ borderRadius: 1, p: 1, overflow: 'hidden' }}>
         <Box
           component="img"
-          src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
-          alt={item.title}
-          draggable={false}
-          sx={{
-            height: '100%',
-            width: '100%',
-            objectFit: 'cover',
-            objectPosition: 'cen',
-            filter: 'brightness(100%)',
-            borderRadius: 1,
-          }}
+          src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${portfolio.thumbnail}`}
+          sx={{ height: 200, width: '100%', objectFit: 'cover' }}
         />
-      )}
-      <Stack
-        direction="column"
-        spacing={1}
-        px={2}
-        sx={{ position: 'absolute', bottom: 20, right: 0, left: 0, width: '100%' }}
-      >
-        <Typography variant="h3" fontWeight={600} color="var(--mui-palette-common-white)" fontSize={{ xs: 18, md: 22 }}>
-          {item.project_title}
-        </Typography>
-        <Box
-          sx={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 1,
-          }}
-        >
-          <Typography variant="body" color="var(--mui-palette-common-white)">
-            State: {item.state}
+        <Box p={2}>
+          <Typography variant="cardTitle" sx={{ display: 'block', marginBottom: '8px' }}>
+            {portfolio.project_title}
           </Typography>
-          {item.category.split(',').map((category, index) => (
-            <Chip key={index} label={category.trim()} size="small" sx={{ backgroundColor: getRandomColor() }} />
-          ))}
+          <Typography variant="cardSubTitle" sx={{ display: 'block', marginBottom: '8px' }}>
+            {textShortner(portfolio.short_description, 80)}
+          </Typography>
+          <Stack direction="row" alignItems="center">
+            <Link
+              href={`portfolio/${portfolio.slug}`}
+              style={{
+                fontSize: '0.9rem',
+                color: 'var(--mui-palette-text-secondary)',
+                marginRight: pxToRem(5),
+              }}
+            >
+              View Portfolio
+            </Link>
+            {isLogin && (
+              <>
+                <IconButton size="small" title="Edit" onClick={() => setOpenPortfolioRightPanel(portfolio)}>
+                  <Iconify icon="mynaui:edit-one" />
+                </IconButton>
+                <DeleteConfirmationPopover
+                  title={`Want to delete ${portfolio.project_title}?`}
+                  onDelete={handleDelete}
+                />
+              </>
+            )}
+          </Stack>
         </Box>
-      </Stack>
-      {/* <Stack
-        direction="row"
-        justifyContent={'flex-end'}
-        sx={{ position: 'absolute', top: 20, right: 10, width: '100%' }}
-      >
-        <AvatarGroup
-          spacing={'small'}
-          total={42}
-          sx={{ '& .MuiAvatar-root': { width: 32, height: 32, fontSize: 12, mb: 0.5 } }}
-        >
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-          <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-          <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-        </AvatarGroup>
-      </Stack> */}
+      </Paper>
 
       <ManagePortfolioRightPanel
         fetchList={fetchList}
@@ -273,6 +220,6 @@ const PortfolioCard = ({ item, fetchList }) => {
         data={openPortfolioRightPanel}
         onClose={() => setOpenPortfolioRightPanel(false)}
       />
-    </Card>
+    </Box>
   );
 };

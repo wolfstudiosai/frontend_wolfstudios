@@ -19,7 +19,7 @@ import { useFormik } from 'formik';
 import { createPortfolioAsync, getPortfolioAsync, updatePortfolioAsync } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
 
-export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data }) => {
+export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, width }) => {
   const isUpdate = data ? true : false;
 
   // *********************States*********************************
@@ -103,6 +103,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data }) =>
       heading="Add Portfolio"
       open={open}
       onClose={onClose}
+      width={width}
       actionButtons={() => (
         <Box display="flex" gap={2}>
           <Button variant="outlined" color="primary" onClick={onClose}>
@@ -117,7 +118,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data }) =>
       {/* <PageLoader loading={loading} error={null}> */}
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
-          <Grid size={{ xs: 12 }}>
+          {/* <Grid size={{ xs: 12 }}>
             <Button
               endIcon={<Iconify icon="lucide:upload" />}
               variant="contained"
@@ -125,7 +126,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data }) =>
             >
               Upload
             </Button>
-          </Grid>
+          </Grid> */}
           <Grid size={{ xs: 12 }}>
             <CustomTextField
               name="project_title"

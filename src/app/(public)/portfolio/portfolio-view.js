@@ -26,7 +26,7 @@ export const PortfolioView = () => {
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(false);
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const { isLogin } = useAuth();
 
