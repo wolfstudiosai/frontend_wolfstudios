@@ -1,15 +1,12 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
 import { PageHeader } from '@/components/core/page-header';
-import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
-import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { getRandomColor, pxToRem, textShortner } from '@/utils/utils';
-import { Avatar, AvatarGroup, Box, Card, Chip, IconButton, Paper, Stack, Typography } from '@mui/material';
+import { getRandomColor } from '@/utils/utils';
+import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
@@ -268,7 +265,7 @@ const PortfolioCard = ({ item, fetchList }) => {
 
       <ManagePortfolioRightPanel
         fetchList={fetchList}
-        width="50%"
+        width="70%"
         open={openPortfolioRightPanel ? true : false}
         data={openPortfolioRightPanel}
         onClose={() => setOpenPortfolioRightPanel(false)}
