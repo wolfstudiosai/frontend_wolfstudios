@@ -155,6 +155,8 @@ export const paths = {
     //archive
     partners_by_campaign: '/partners-by-campaign',
     needs_offer_approval: '/needs-offer-approval',
+    partner_private: '/partner-private',
+    chat: '/chat',
   },
   dashboardPublic: {
     // HQs

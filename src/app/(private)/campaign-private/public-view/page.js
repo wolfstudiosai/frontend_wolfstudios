@@ -1,4 +1,4 @@
-import { CampaignView } from '@/app/(marketing)/campaign/campaign-view';
+import { CampaignView } from '@/app/(public)/campaign/campaign-view';
 import { publicApi } from '@/utils/api';
 
 export default async function Page() {

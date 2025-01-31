@@ -225,7 +225,7 @@ function NavItem({
           <Typography
             component="span"
             sx={{
-              color: 'text.primary',
+              color: active ? 'var(--NavItem-hover-color)' : 'text.primary',
               fontSize: '0.875rem',
               fontWeight: 500,
               lineHeight: '28px',
@@ -251,70 +251,6 @@ function NavItem({
           <Box sx={{ borderLeft: '1px solid var(--NavItem-children-border)', pl: '12px' }}>{children}</Box>
         </Box>
       ) : null}
-    </Box>
-  );
-}
-
-function NavItemIconOnly({ pathname, item, depth = 0, disabled = false, external = false }) {
-  const { icon, href, label } = item;
-  const active = isNavItemActive({ href, pathname });
-
-  return (
-    <Box component="li" data-depth={depth} sx={{ userSelect: 'none' }}>
-      <Box
-        {...(href
-          ? {
-              component: external ? 'a' : RouterLink,
-              href,
-              target: external ? '_blank' : undefined,
-              rel: external ? 'noreferrer' : undefined,
-            }
-          : { role: 'button' })}
-        sx={{
-          alignItems: 'center',
-          borderRadius: 1,
-          color: 'var(--NavItem-color)',
-          cursor: 'pointer',
-          display: 'flex',
-          flex: '0 0 auto',
-          gap: 1,
-          p: '6px',
-          position: 'relative',
-          textDecoration: 'none',
-          whiteSpace: 'nowrap',
-          ...(disabled && {
-            bgcolor: 'var(--NavItem-disabled-background)',
-            color: 'var(--NavItem-disabled-color)',
-            cursor: 'not-allowed',
-          }),
-          ...(active && {
-            bgcolor: 'var(--NavItem-active-background)',
-            color: 'var(--NavItem-active-color)',
-          }),
-          '&:hover': {
-            ...(active
-              ? {}
-              : {
-                  bgcolor: 'var(--NavItem-hover-background)',
-                  color: 'var(--NavItem-hover-color)',
-                }),
-          },
-        }}
-        tabIndex={0}
-      >
-        <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flex: '0 0 auto' }}>
-          {/* Render icon */}
-          {icon && (
-            <Iconify
-              icon={icon}
-              color={active ? 'var(--NavItem-hover-color)' : 'var(--NavItem-icon-color)'}
-              sx={{ fontSize: '24px' }}
-            />
-          )}
-        </Box>
-        {/* Render label if needed */}
-        {label && <Chip color="primary" label={label} size="small" />}
-      </Box>
     </Box>
   );
 }

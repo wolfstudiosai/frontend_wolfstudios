@@ -90,7 +90,7 @@ export const RightPanel = (props) => {
                 sx: {
                     width: {
                         xs: "100%",
-                        md: "80%",
+                        md: width || "80%",
                         lg: width || "35%",
                     },
                     padding: "40px 0px",

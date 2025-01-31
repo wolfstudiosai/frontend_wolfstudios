@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { FeatureCards } from '@/app/(marketing)/top-cards';
+import { FeatureCards } from '@/app/(public)/top-cards';
 import { ThinerFooter } from '@/components/navbar/thinner-footer';
 import { privateRoutes } from '@/router';
 import { pxToRem } from '@/utils/utils';
@@ -94,8 +94,8 @@ export function VerticalLayout({ children }) {
             sx={{
               // '--Content-margin': '1.5rem auto',
               // '--Content-maxWidth': 'var(--maxWidth-xl)',
-              // '--Content-paddingX': '24px',
-              '--Content-paddingY': { xs: '24px', lg: '24px' },
+              '--Content-paddingX': { xs: pxToRem(16), lg: pxToRem(18) },
+              '--Content-paddingY': { xs: pxToRem(16), lg: pxToRem(18) },
               '--Content-padding': 'var(--Content-paddingY) var(--Content-paddingX)',
               '--Content-width': '100%',
               display: 'flex',
@@ -107,7 +107,7 @@ export function VerticalLayout({ children }) {
             {children}
           </Box>
         </Box>
-        <ThinerFooter  isFeaturedCardVisible={isFeaturedCardVisible}/>
+        <ThinerFooter isFeaturedCardVisible={isFeaturedCardVisible} />
       </Box>
     </React.Fragment>
   );
