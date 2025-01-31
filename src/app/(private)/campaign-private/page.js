@@ -71,7 +71,6 @@ export default function Page() {
     try {
       setLoading(true);
       const response = await updateUCampaignAsync(null, { ...row, featured: !row.featured });
-      console.log;
       if (response.success) {
         fetchList();
       }

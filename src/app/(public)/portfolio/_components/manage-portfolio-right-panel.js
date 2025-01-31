@@ -5,7 +5,7 @@ import { formConstants } from '@/app/constants/form-constants';
 import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
 import { Iconify } from '@/components/iconify/iconify';
 import { RightPanel } from '@/components/rightPanel/right-panel';
-import { Button, IconButton, Stack } from '@mui/material';
+import { Button, FormControlLabel, IconButton, Stack, Switch } from '@mui/material';
 import { useFormik } from 'formik';
 
 import useAuth from '@/hooks/useAuth';
@@ -26,6 +26,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
 
   const [sidebarView, setSidebarView] = React.useState(view); //QUICK/ EDIT
   const [file, setFile] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
 
   const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
     useFormik({
@@ -57,7 +58,6 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
     });
 
   // *********************States*********************************
-  const [loading, setLoading] = React.useState(false);
 
   const getSingleData = async () => {
     setLoading(true);
@@ -82,6 +82,12 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
   const handleDeleteThumbnail = () => {
     setFieldValue('thumbnail', '');
     setFile(null);
+  };
+
+  const handleFeatured = async (featured) => {
+    setFieldValue('featured', featured);
+    await updatePortfolioAsync(file, { ...values, featured });
+    fetchList();
   };
 
   // *****************Use Effects*******************************
@@ -133,6 +139,16 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
                 title={`Want to delete ${data?.project_title}?`}
                 onDelete={() => handleDelete()}
               />{' '}
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={values?.featured}
+                    onChange={() => handleFeatured(!values?.featured)}
+                    color="primary"
+                  />
+                }
+                label="Featured"
+              />
             </>
           )}
         </Stack>

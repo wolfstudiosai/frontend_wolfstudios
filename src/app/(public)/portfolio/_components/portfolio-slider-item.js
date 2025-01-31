@@ -1,7 +1,12 @@
-import { getRandomColor, pxToRem } from '@/utils/utils';
+import React from 'react';
+import { getRandomColor } from '@/utils/utils';
 import { Avatar, AvatarGroup, Box, Card, Chip, Stack, Typography } from '@mui/material';
 
-export const PortfolioSliderItem = ({ item, index }) => {
+import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
+
+export const PortfolioSliderItem = ({ item, index, fetchList }) => {
+  const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
+
   const isVideoContent = (url) => {
     const videoKeywords = ['vimeo', 'playback', 'video'];
     return videoKeywords.some((keyword) => url.includes(keyword));
@@ -16,12 +21,14 @@ export const PortfolioSliderItem = ({ item, index }) => {
         border: 'unset',
         overflow: 'hidden',
         position: 'relative',
+        cursor: 'pointer',
       }}
+      onClick={() => setOpenPortfolioRightPanel(item)}
     >
-      {isVideoContent(item.url) ? (
+      {isVideoContent(item.thumbnail) ? (
         <Box
           component="video"
-          src={item.url}
+          src={item.thumbnail}
           // controls
           muted
           autoPlay
@@ -38,15 +45,14 @@ export const PortfolioSliderItem = ({ item, index }) => {
       ) : (
         <Box
           component="img"
-          src={item.url}
+          src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
           alt={item.title}
           draggable={false}
-          
           sx={{
             height: '100%',
             width: '100%',
             objectFit: 'cover',
-            objectPosition: "cen",
+            objectPosition: 'cen',
             filter: 'brightness(100%)',
             borderRadius: 1,
           }}
@@ -91,6 +97,14 @@ export const PortfolioSliderItem = ({ item, index }) => {
           <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
         </AvatarGroup>
       </Stack>
+      <ManagePortfolioRightPanel
+        view={'QUICK'}
+        fetchList={fetchList}
+        width="70%"
+        open={openPortfolioRightPanel ? true : false}
+        data={openPortfolioRightPanel}
+        onClose={() => setOpenPortfolioRightPanel(false)}
+      />
     </Card>
   );
 };

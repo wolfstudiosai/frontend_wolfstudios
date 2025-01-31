@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { PageHeader } from '@/components/core/page-header';
+import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { getRandomColor } from '@/utils/utils';
@@ -17,7 +18,7 @@ import { deletePortfolioAsync } from '../_lib/portfolio.actions';
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 import { PortfolioSliderItem } from './portfolio-slider-item';
 
-const slider_data = [
+const slider_data_old = [
   {
     id: 1,
     project_title: 'Elegent Magazine',
@@ -117,6 +118,8 @@ export const PortfolioGridView = ({ data, fetchList, loading, handlePagination }
   const handleFilterChange = (type, value) => {
     console.log(type, value);
   };
+
+  const slider_data = data.filter((item) => item.featured);
   return (
     <Box sx={{ p: 2 }}>
       <PageHeader
@@ -141,7 +144,7 @@ export const PortfolioGridView = ({ data, fetchList, loading, handlePagination }
         >
           {slider_data.map((item, index) => (
             <SwiperSlide key={index}>
-              <PortfolioSliderItem item={item} index={index} />
+              <PortfolioSliderItem item={item} index={index} fetchList={fetchList} />
             </SwiperSlide>
           ))}
         </SliderWrapper>
@@ -160,7 +163,6 @@ export const PortfolioGridView = ({ data, fetchList, loading, handlePagination }
 };
 
 const PortfolioCard = ({ item, fetchList }) => {
-  console.log(item, 'item inside PortfolioCard');
   const { isLogin } = useAuth();
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
   const handleDelete = async () => {
@@ -262,6 +264,16 @@ const PortfolioCard = ({ item, fetchList }) => {
           <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
         </AvatarGroup>
       </Stack> */}
+
+      {item.featured && (
+        <Stack
+          direction="row"
+          justifyContent={'flex-end'}
+          sx={{ position: 'absolute', top: 20, right: 10, width: '100%' }}
+        >
+          <Iconify icon="fluent-color:star-16" width={25} height={25} />
+        </Stack>
+      )}
 
       <ManagePortfolioRightPanel
         view={'QUICK'}
