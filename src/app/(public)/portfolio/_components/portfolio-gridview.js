@@ -6,6 +6,7 @@ import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { Box, Card, Rating, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import Image from 'next/image';
 import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
@@ -16,102 +17,6 @@ import { portfolioFilters, portfolioSorting, portfolioTags } from '../_lib/const
 import { deletePortfolioAsync } from '../_lib/portfolio.actions';
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 import { PortfolioSliderItem } from './portfolio-slider-item';
-
-const slider_data_old = [
-  {
-    id: 1,
-    project_title: 'Elegent Magazine',
-    slug: 'elegent-magazine',
-    model: 'Elina',
-    publication: 'Vogue',
-    dp: 'Combina Key',
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57db937c24dab0b8b82f_66e4700589276eed14241799_MTViYQ.jpeg',
-    state: 'californina',
-    created_at: '2025-01-24T10:45:02.335Z',
-    category: 'Lifestyle,Fashion',
-  },
-  {
-    id: 2,
-    project_title: 'Fashion Trends',
-    slug: 'fashion-trends',
-    model: 'Alexis',
-    publication: 'Elle',
-    dp: 'Style Studio',
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/672c8f645c58c34ae738d9a6_Photo%20Feb%2019%2C%202%2022%2052%20PM%20(1)-p-500.jpg',
-    state: 'californina',
-    created_at: '2025-01-24T10:45:02.335Z',
-    category: 'Lifestyle,Fashion',
-  },
-  {
-    id: 3,
-    project_title: 'Luxury Lifestyle',
-    slug: 'luxury-lifestyle',
-    model: 'Jordan',
-    publication: 'GQ',
-    dp: 'Chic Agency',
-    url: 'https://player.vimeo.com/progressive_redirect/playback/1008919226/rendition/1080p/file.mp4?loc=external&signature=bf4233dc5593395173302057f4757f83ccb3c307dd4c49f373ecf1e8f5d31ffb',
-    state: 'californina',
-    created_at: '2025-01-24T10:45:02.335Z',
-    category: 'Lifestyle,Fashion',
-  },
-  {
-    id: 4,
-    project_title: 'Street Style',
-    slug: 'street-style',
-    model: 'Samantha',
-    publication: 'Hypebae',
-    dp: 'Urban Icons',
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671b6a961ff3baf4d743d7a1_sharee3-p-500.jpg',
-    state: 'californina',
-    created_at: '2025-01-24T10:45:02.335Z',
-    category: 'Lifestyle,Fashion',
-  },
-  {
-    id: 5,
-    project_title: 'Wedding Couture',
-    slug: 'wedding-couture',
-    model: 'Olivia',
-    publication: 'Bridal Magazine',
-    dp: 'Romance Creations',
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671236ee22391f7f18795637_T641-p-500.png',
-    state: 'californina',
-    created_at: '2025-01-24T10:45:02.335Z',
-    category: 'Lifestyle,Fashion',
-  },
-  {
-    id: 6,
-    project_title: 'Travel Diaries',
-    slug: 'travel-diaries',
-    model: 'Noah',
-    publication: 'National Geographic',
-    dp: 'Adventure Lens',
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671b5ebbdc1d4ae848fa87c7_381%20(5)qwss-p-500.jpg',
-    state: 'californina',
-    created_at: '2025-01-24T10:45:02.335Z',
-    category: 'Lifestyle,Fashion',
-  },
-  {
-    id: 7,
-    project_title: 'Tech Innovations',
-    slug: 'tech-innovations',
-    model: 'Sophia',
-    publication: 'TechCrunch',
-    dp: 'InnoHub',
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/6717489818419bdb3551c791_DSC06216-p-500.jpg',
-    state: 'californina',
-    created_at: '2025-01-24T10:45:02.335Z',
-    category: 'Lifestyle,Fashion',
-  },
-  // {
-  //   id: 8,
-  //   title: 'Fitness Journey',
-  //   slug: 'fitness-journey',
-  //   model: 'Ethan',
-  //   publication: "Men's Health",
-  //   dp: 'FitLife Studio',
-  //   url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671b680b53357fcda4f00df3_0059-p-500.jpg',
-  // },
-];
 
 export const PortfolioGridView = ({ data, fetchList, loading, handlePagination }) => {
   const handleFilterChange = (type, value) => {
@@ -215,18 +120,20 @@ const PortfolioCard = ({ item, fetchList }) => {
           }}
         />
       ) : (
-        <Box
-          component="img"
+        <Image
           src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
           alt={item.title}
           draggable={false}
-          sx={{
-            height: '100%',
-            width: '100%',
+          style={{
             objectFit: 'cover',
-            objectPosition: 'cen',
-            filter: 'brightness(100%)',
-            borderRadius: 1,
+            filter: 'blur(20px)',
+            transition: 'filter 0.2s ease-out',
+          }}
+          loading="lazy"
+          sizes="100vw"
+          fill={true}
+          onLoad={(e) => {
+            e.target.style.filter = 'blur(0px)';
           }}
         />
       )}
@@ -304,8 +211,11 @@ const PortfolioCard = ({ item, fetchList }) => {
           <Typography variant="body" color="var(--mui-palette-common-white)">
             State: {item.state}
           </Typography>
-          {item.category && item.category.split(',').map((category, index) => (
-            <Chip key={index} label={category.trim()} size="small" sx={{ backgroundColor: getRandomColor() }} />
-          ))}
+          {item.category &&
+            item.category
+              .split(',')
+              .map((category, index) => (
+                <Chip key={index} label={category.trim()} size="small" sx={{ backgroundColor: getRandomColor() }} />
+              ))}
         </Box>
       </Stack> */}
