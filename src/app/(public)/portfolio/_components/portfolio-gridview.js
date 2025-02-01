@@ -4,7 +4,7 @@ import { PageHeader } from '@/components/core/page-header';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { Box, Card, Rating, Stack, Typography } from '@mui/material';
+import { Box, Button, Card, Popover, Rating, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import Image from 'next/image';
 import React from 'react';
@@ -54,7 +54,7 @@ export const PortfolioGridView = ({ data, fetchList, loading, handlePagination }
         </SliderWrapper>
       </Box>
       <PageLoader loading={loading} error={null}>
-        <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 10 }} sx={{ mt: 2 }}>
+        <Grid container spacing={2} columns={{ xs: 14 }} sx={{ mt: 2 }}>
           {data.map((portfolio, index) => (
             <Grid item size={{ xs: 12, md: 2 }} key={index}>
               <PortfolioCard item={portfolio} fetchList={fetchList} />
@@ -69,7 +69,28 @@ export const PortfolioGridView = ({ data, fetchList, loading, handlePagination }
 const PortfolioCard = ({ item, fetchList }) => {
   const { isLogin } = useAuth();
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
-  const [isShowCommentField, setIsShowCommentField] = React.useState(false);
+  const [isShowCommentField, setIsShowCommentField] = React.useState(null);
+  const [comment, setComment] = React.useState('');
+  const [editComment, setEditComment] = React.useState(false);
+  const [isShowReactPopover, setIsShowReactPopover] = React.useState(null);
+  const [emoji, setEmoji] = React.useState(null);
+
+  const handleShowCommentField = (event) => {
+    setIsShowCommentField(event.currentTarget);
+  };
+
+  const handleReactPopoverOpen = (event) => {
+    setIsShowReactPopover(event.currentTarget);
+  };
+
+  const handleReactPopoverClose = () => {
+    setIsShowReactPopover(null);
+  };
+
+  const handleCloseCommentField = () => {
+    setIsShowCommentField(null);
+  };
+
   console.log("comment field", isShowCommentField);
   const handleDelete = async () => {
     const response = await deletePortfolioAsync([item.id]);
@@ -84,81 +105,160 @@ const PortfolioCard = ({ item, fetchList }) => {
   };
 
   return (
-    <Card
-      sx={{
-        width: '100%',
-        aspectRatio: '9 / 12',
-        borderRadius: 2,
-        border: 'unset',
-        overflow: 'hidden',
-        position: 'relative',
-        backgroundColor: '#333',
-        border: '1px solid var(--mui-palette-divider)',
-        cursor: 'pointer',
-        '&:hover .portfolio-card-overlay': {
-          opacity: 1,
-        },
-        zIndex: 50
-      }}
-      onClick={() => setOpenPortfolioRightPanel(item)}
-    >
-      {isVideoContent(item.thumbnail || '') ? (
-        <Box
-          component="video"
-          src={item.thumbnail}
-          // controls
-          muted
-          autoPlay
-          loop
-          draggable={false}
-          playsInline
-          sx={{
-            height: '100%',
-            width: '100%',
-            objectFit: 'cover',
-            borderRadius: 1,
-          }}
-        />
-      ) : (
-        <Image
-          src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
-          alt={item.title}
-          draggable={false}
-          style={{
-            objectFit: 'cover',
-            filter: 'blur(20px)',
-            transition: 'filter 0.2s ease-out',
-          }}
-          loading="lazy"
-          sizes="100vw"
-          fill={true}
-          onLoad={(e) => {
-            e.target.style.filter = 'blur(0px)';
-          }}
-        />
-      )}
-      <Stack direction='column' justifyContent='space-between' className='portfolio-card-overlay' sx={{ position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, p: 1, backgroundColor: 'rgba(0, 0, 0, 0.4)', opacity: 0, transition: 'all 0.3s ease-in-out' }}>
-        <Stack direction='row' justifyContent='space-between'>
-          <Rating value={3} size='small' />
-          <Stack direction='row' alignItems='center' gap='4px' sx={{ zIndex: 100 }}>
-            <Iconify icon="ant-design:message-outlined" width={20} onClick={() => setIsShowCommentField(true)} />
-            <Iconify icon="material-symbols-light:add-reaction-outline" width={20} />
-          </Stack>
-        </Stack>
-        <Stack direction='row'>
-          <Box>
-            <Typography sx={{ fontSize: '1.1rem' }}>Image title</Typography>
-            <Stack direction='row' alignItems='center' gap='2px'>
-              <Typography sx={{ fontSize: '0.7rem' }}>PNG</Typography>
-              <Iconify icon="radix-icons:dot-filled" width={12} />
-              <Typography sx={{ fontSize: '0.7rem' }}>1100x1233</Typography>
-              <Iconify icon="radix-icons:dot-filled" width={12} />
-              <Typography sx={{ fontSize: '0.7rem' }}>2.1MB</Typography>
+    <>
+      <Card
+        sx={{
+          width: '100%',
+          aspectRatio: '9 / 12',
+          borderRadius: 2,
+          border: 'unset',
+          overflow: 'hidden',
+          position: 'relative',
+          backgroundColor: '#333',
+          border: '1px solid var(--mui-palette-divider)',
+          cursor: 'pointer',
+          '&:hover .portfolio-card-overlay': {
+            opacity: 1,
+          },
+        }}
+        onClick={() => setOpenPortfolioRightPanel(item)}
+      >
+        {isVideoContent(item.thumbnail || '') ? (
+          <Box
+            component="video"
+            src={item.thumbnail}
+            // controls
+            muted
+            autoPlay
+            loop
+            draggable={false}
+            playsInline
+            sx={{
+              height: '100%',
+              width: '100%',
+              objectFit: 'cover',
+              borderRadius: 1,
+            }}
+          />
+        ) : (
+          <Image
+            src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
+            alt={item.title}
+            draggable={false}
+            style={{
+              objectFit: 'cover',
+              filter: 'blur(20px)',
+              transition: 'filter 0.2s ease-out',
+            }}
+            loading="lazy"
+            sizes="100vw"
+            fill={true}
+            onLoad={(e) => {
+              e.target.style.filter = 'blur(0px)';
+            }}
+          />
+        )}
+        <Stack direction='column' justifyContent='space-between' className='portfolio-card-overlay' sx={{ position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, p: 1, backgroundColor: 'rgba(0, 0, 0, 0.4)', opacity: (!!isShowCommentField || !!isShowReactPopover) ? 1 : 0, transition: 'all 0.3s ease-in-out' }}>
+          <Stack direction='row' justifyContent='space-between' alignItems='center'>
+            <Rating value={3} size='small' />
+            <Stack direction='row' alignItems='center' sx={{ zIndex: 100 }}>
+              <Button variant="text" size='small' sx={{ color: '#fff' }} onClick={(e) => {
+                e.stopPropagation()
+                handleShowCommentField(e)
+              }}>
+                <Iconify icon="ant-design:message-outlined" width={20} />
+              </Button>
+              <Button variant="text" size='small' sx={{ color: '#fff' }} onClick={(e) => {
+                e.stopPropagation()
+                handleReactPopoverOpen(e)
+              }}>
+                {
+                  emoji ? (
+                    <Typography>{emoji}</Typography>
+                  ) : (
+                    <Iconify icon="material-symbols-light:add-reaction-outline" width={20} />
+                  )
+                }
+              </Button>
             </Stack>
-          </Box>
+          </Stack>
+          <Stack direction='row'>
+            <Box>
+              <Typography sx={{ fontSize: '1.1rem' }}>Image title</Typography>
+              <Stack direction='row' alignItems='center' gap='2px'>
+                <Typography sx={{ fontSize: '0.7rem' }}>PNG</Typography>
+                <Iconify icon="radix-icons:dot-filled" width={12} />
+                <Typography sx={{ fontSize: '0.7rem' }}>1100x1233</Typography>
+                <Iconify icon="radix-icons:dot-filled" width={12} />
+                <Typography sx={{ fontSize: '0.7rem' }}>2.1MB</Typography>
+              </Stack>
+            </Box>
+          </Stack>
+          <Popover
+            id={Boolean(isShowCommentField) ? 'comment-popover' : undefined}
+            open={Boolean(isShowCommentField)}
+            anchorEl={isShowCommentField}
+            onClose={handleCloseCommentField}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {
+              editComment ? (
+                <Stack direction='row' alignItems='center' gap={1} sx={{ p: 1 }}>
+                  <TextField value={comment} onChange={(e) => setComment(e.target.value)} size='small' />
+                  <Iconify
+                    onClick={() => {
+                      handleCloseCommentField();
+                      setEditComment(false)
+                    }}
+                    icon='subway:tick'
+                    sx={{ cursor: 'pointer' }}
+                  />
+                </Stack>
+              ) : (
+                <Stack direction='row' alignItems='center' gap={1} sx={{ p: 1 }}>
+                  <Typography sx={{ fontSize: '0.8rem' }}>The comment of the image</Typography>
+                  <Iconify onClick={() => setEditComment(true)} icon='material-symbols:edit-outline-rounded' sx={{ cursor: 'pointer' }} />
+                </Stack>
+              )
+            }
+
+          </Popover>
+          <Popover
+            id={Boolean(isShowReactPopover) ? 'react-popover' : undefined}
+            open={Boolean(isShowReactPopover)}
+            anchorEl={isShowReactPopover}
+            onClose={handleReactPopoverClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Stack direction='row' alignItems='center'>
+              <Button variant='text' size='small' onClick={() => {
+                setEmoji('❤️')
+                handleReactPopoverClose()
+              }}>❤️</Button>
+              <Button variant='text' size='small' onClick={() => {
+                setEmoji('👍')
+                handleReactPopoverClose()
+              }}>👍</Button>
+              <Button variant='text' size='small' onClick={() => {
+                setEmoji('👎')
+                handleReactPopoverClose()
+              }}>👎</Button>
+              <Button variant='text' size='small' onClick={() => {
+                setEmoji('✅')
+                handleReactPopoverClose()
+              }}>✅</Button>
+            </Stack>
+          </Popover>
         </Stack>
-      </Stack>
-      {/* {item.featured && (
+        {/* {item.featured && (
         <Stack
           direction="row"
           justifyContent={'flex-end'}
@@ -168,15 +268,16 @@ const PortfolioCard = ({ item, fetchList }) => {
         </Stack>
       )} */}
 
-      <ManagePortfolioRightPanel
-        view={'QUICK'}
-        fetchList={fetchList}
-        width="70%"
-        open={openPortfolioRightPanel ? true : false}
-        data={openPortfolioRightPanel}
-        onClose={() => setOpenPortfolioRightPanel(false)}
-      />
-    </Card>
+        <ManagePortfolioRightPanel
+          view={'QUICK'}
+          fetchList={fetchList}
+          width="70%"
+          open={openPortfolioRightPanel ? true : false}
+          data={openPortfolioRightPanel}
+          onClose={() => setOpenPortfolioRightPanel(false)}
+        />
+      </Card>
+    </>
   );
 };
 

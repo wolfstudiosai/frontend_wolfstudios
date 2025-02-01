@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useRef } from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { Iconify } from '@/components/iconify/iconify';
 import PageLoader from '@/components/PageLoader/PageLoader';
 import { QuickToolbar } from '@/components/toolbar/quick-toolbar';
 import { Box, CircularProgress, IconButton, Stack } from '@mui/material';
+import React, { useRef } from 'react';
 
 import useAuth from '@/hooks/useAuth';
 
