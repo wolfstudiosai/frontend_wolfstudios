@@ -126,11 +126,11 @@ export const paths = {
     performance: '/performance',
     analytics: '/analytics',
     notification: '/notification',
-    record: '/record',
+    record: '/records',
     expense: '/expense',
     contract: '/contract',
     calender: '/calender',
-    user: '/user',
+    user: '/users',
 
     // partner HQ
     partner_needs_approval: '/partner-needs-approval',

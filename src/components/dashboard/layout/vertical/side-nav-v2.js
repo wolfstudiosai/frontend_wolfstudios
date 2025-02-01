@@ -1,17 +1,20 @@
 'use client';
 
-import * as React from 'react';
-import { usePathname } from 'next/navigation';
 import { Iconify } from '@/components/iconify/iconify';
 import { privateRoutes } from '@/router';
 import { Collapse, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useColorScheme } from '@mui/material/styles';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import * as React from 'react';
 
 import useAuth from '@/hooks/useAuth';
 
 import { navColorStyles } from './styles';
+
+// import Link from 'next/link';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
@@ -26,6 +29,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
   const styles = navColorStyles[colorScheme][color];
   const logoColor = logoColors[colorScheme][color];
   const [openMenus, setOpenMenus] = React.useState({});
+  const router = useRouter();
   console.log(openMenus, '  openMenus');
 
   const toggleMenuItem = (key) => {
@@ -39,20 +43,27 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
 
       return (
         <React.Fragment key={item.key}>
-          {/* Parent Menu Item */}
           <MenuItem onClick={() => hasChildren && toggleMenuItem(item.key)}>
             <ListItemIcon>
               <Iconify icon={item.icon} width={15} height={15} color="text.primary" />
             </ListItemIcon>
-            <ListItemText primary={item.title} sx={{ color: 'text.primary' }} />
 
+            {item.href ? (
+              <Link href={item.href} passHref style={{ textDecoration: 'none' }}>
+                <ListItemText primary={item.title} sx={{ color: 'text.primary' }} />
+              </Link>
+            ) : (
+              <ListItemText primary={item.title} sx={{ color: 'text.primary' }} />
+            )}
             {hasChildren && (
-              <Iconify
-                icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
-                width={10}
-                height={10}
-                color="text.secondary"
-              />
+              <>
+                <Iconify
+                  icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
+                  width={10}
+                  height={10}
+                  color="text.secondary"
+                />
+              </>
             )}
           </MenuItem>
 
