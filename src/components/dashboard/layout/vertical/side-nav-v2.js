@@ -39,26 +39,29 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
 
       return (
         <React.Fragment key={item.key}>
+          {/* Parent Menu Item */}
           <MenuItem onClick={() => hasChildren && toggleMenuItem(item.key)}>
             <ListItemIcon>
-              <Iconify icon={'solar:hashtag-line-duotone'} width={15} height={15} color="text.primary" />
+              <Iconify icon={item.icon} width={15} height={15} color="text.primary" />
             </ListItemIcon>
             <ListItemText primary={item.title} sx={{ color: 'text.primary' }} />
-          
-          {hasChildren ? (
-            isExpanded ? (
-              <Iconify icon="icon-park-solid:up-one" width={10} height={10} color="text.primary" />
-            ) : (
-              <Iconify icon="prime:sort-down-fill" width={10} height={10} color="text.primary" />
-            )
-          ) : null}
 
+            {hasChildren && (
+              <Iconify
+                icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
+                width={10}
+                height={10}
+                color="text.secondary"
+              />
+            )}
+          </MenuItem>
+
+          {/* Collapsible Children (Placed Outside MenuItem) */}
           {hasChildren && (
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-              <MenuList sx={{ pl: level + 2 }}>{renderMenuItems(item.items, level + 2)}</MenuList>
+              <MenuList sx={{ pl: level + 1 }}>{renderMenuItems(item.items, level + 1)}</MenuList>
             </Collapse>
           )}
-          </MenuItem>
         </React.Fragment>
       );
     });

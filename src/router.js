@@ -51,6 +51,7 @@ export const privateRoutes = [
   {
     key: 'general',
     title: 'General',
+    icon: "solar:hashtag-line-duotone",
     items: [
       {
         key: 'admin',
