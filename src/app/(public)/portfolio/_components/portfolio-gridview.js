@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+import Image from 'next/image';
 import { PageHeader } from '@/components/core/page-header';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
@@ -7,8 +9,6 @@ import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { getRandomColor } from '@/utils/utils';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import Image from 'next/image';
-import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
@@ -115,17 +115,22 @@ const PortfolioCard = ({ item, fetchList }) => {
           }}
         />
       ) : (
-        <Image
-          src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
-          alt={item.title}
-          draggable={false}
-          style={{
-            objectFit: 'cover',
-          }}
-          loading="lazy"
-          sizes="100vw"
-          fill={true}
-        />
+          <Image
+            src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
+            alt={item.title}
+            draggable={false}
+            style={{
+              objectFit: 'cover',
+              filter: 'blur(20px)', 
+              transition: 'filter 0.2s ease-out',
+            }}
+            loading="lazy"
+            sizes="100vw"
+            fill={true}
+            onLoad={(e) => {
+              e.target.style.filter = 'blur(0px)'; 
+            }}
+          />
       )}
       <Stack
         direction="column"

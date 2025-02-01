@@ -50,10 +50,15 @@ export const PortfolioSliderItem = ({ item, index, fetchList }) => {
           draggable={false}
           style={{
             objectFit: 'cover',
+            filter: 'blur(20px)',
+            transition: 'filter 0.2s ease-out',
           }}
           loading="lazy"
           sizes="100vw"
           fill={true}
+          onLoad={(e) => {
+            e.target.style.filter = 'blur(0px)';
+          }}
         />
       )}
       <Stack
