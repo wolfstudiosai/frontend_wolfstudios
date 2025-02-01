@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { getRandomColor } from '@/utils/utils';
 import { Avatar, AvatarGroup, Box, Card, Chip, Stack, Typography } from '@mui/material';
 
@@ -43,19 +44,16 @@ export const PortfolioSliderItem = ({ item, index, fetchList }) => {
           }}
         />
       ) : (
-        <Box
-          component="img"
+        <Image
           src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
           alt={item.title}
           draggable={false}
-          sx={{
-            height: '100%',
-            width: '100%',
+          style={{
             objectFit: 'cover',
-            objectPosition: 'cen',
-            filter: 'brightness(100%)',
-            borderRadius: 1,
           }}
+          loading="lazy"
+          sizes="100vw"
+          fill={true}
         />
       )}
       <Stack

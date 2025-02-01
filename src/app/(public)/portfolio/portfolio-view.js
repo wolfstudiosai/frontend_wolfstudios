@@ -125,8 +125,8 @@ export const PortfolioView = () => {
         ) : (
           <Box>
             <PortfolioGridView data={data || [defaultPortfolio]} fetchList={fetchList} loading={loading} />
-            <div ref={observerRef} style={{ height: 80, marginBottom: 20, textAlign: 'center' }}>
-              {isFetching && <Iconify icon="eos-icons:three-dots-loading" size={40} height={40} color="text.primary" />}
+            <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
+              {isFetching && <CircularProgress size="30px" />}
             </div>
           </Box>
         )}
