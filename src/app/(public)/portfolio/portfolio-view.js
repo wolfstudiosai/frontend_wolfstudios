@@ -1,21 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
-import { PageHeader } from '@/components/core/page-header';
 import { Iconify } from '@/components/iconify/iconify';
-import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { QuickToolbar } from '@/components/toolbar/quick-toolbar';
-import { Box, IconButton, Pagination, Stack } from '@mui/material';
-import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
-import { SwiperSlide } from 'swiper/react';
+import { Box, CircularProgress, IconButton, Stack } from '@mui/material';
 
 import useAuth from '@/hooks/useAuth';
 
 import { ManagePortfolioRightPanel } from './_components/manage-portfolio-right-panel';
 import { PortfolioGridView } from './_components/portfolio-gridview';
 import { PortfolioListView } from './_components/portfolio-listview';
-import { PortfolioSliderItem } from './_components/portfolio-slider-item';
 import { getPortfolioListAsync } from './_lib/portfolio.actions';
 import { defaultPortfolio } from './_lib/portfolio.types';
 
@@ -24,9 +19,11 @@ export const PortfolioView = () => {
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(false);
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [isFetching, setIsFetching] = React.useState(false);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const { isLogin } = useAuth();
+  const observerRef = useRef(null);
 
   const handleToggleViewMode = (mode) => {
     setViewMode(mode);
@@ -37,36 +34,58 @@ export const PortfolioView = () => {
   };
 
   async function fetchList() {
+    if (isFetching) return;
+    setIsFetching(true);
+
     try {
-      setLoading(true);
       const response = await getPortfolioListAsync({
         page: pagination.pageNo,
         rowsPerPage: pagination.limit,
       });
 
       if (response.success) {
-        setData(response.data);
+        setData((prev) => [...prev, ...response.data]);
         setTotalRecords(response.totalRecords);
+        setPagination((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }));
       }
     } catch (error) {
       console.log(error);
     } finally {
+      setIsFetching(false);
       setLoading(false);
     }
   }
-  const handlePagination = (event, value) => {
-    setPagination({ ...pagination, pageNo: value });
-  };
 
   React.useEffect(() => {
     fetchList();
-  }, [pagination]);
+  }, []);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetching && data.length < totalRecords) {
+          fetchList();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [data, isFetching, totalRecords]);
 
   return (
     <PageContainer>
       {isLogin && (
         <QuickToolbar closePopover={openPortfolioRightPanel}>
-          <Stack direction="column" spacing={3} justifyContent={'center'} alignItems={'center'} p={1}>
+          <Stack direction="column" spacing={3} justifyContent="center" alignItems="center" p={1}>
             <IconButton variant="text" size="small" title="Add " onClick={handleOpenPortfolioRightPanel}>
               <Iconify icon="iconoir:plus" title="Add Portfolio" />
             </IconButton>
@@ -103,27 +122,16 @@ export const PortfolioView = () => {
         <PortfolioListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />
       ) : (
         <Box>
-          <PortfolioGridView
-            data={data || [defaultPortfolio]}
-            fetchList={fetchList}
-            loading={loading}
-            handlePagination={handlePagination}
-          />
-          <Stack mt={2} justifyContent="center" alignItems="center">
-            <Pagination
-              count={Math.ceil(totalRecords / pagination.limit)}
-              page={pagination.pageNo}
-              variant="outlined"
-              shape="rounded"
-              onChange={handlePagination}
-            />
-          </Stack>
+          <PortfolioGridView data={data || [defaultPortfolio]} fetchList={fetchList} loading={loading} />
+          <div ref={observerRef} style={{ height: 50, marginBottom: 20, textAlign: 'center' }}>
+            {isFetching && <CircularProgress />}
+          </div>
         </Box>
       )}
 
       <ManagePortfolioRightPanel
-        view={'EDIT'}
-        width={'70%'}
+        view="EDIT"
+        width="70%"
         data={null}
         open={openPortfolioRightPanel}
         onClose={() => setOpenPortfolioRightPanel(false)}
