@@ -1,21 +1,16 @@
 'use client';
 
-import React from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
-import { PageHeader } from '@/components/core/page-header';
 import { Iconify } from '@/components/iconify/iconify';
-import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { QuickToolbar } from '@/components/toolbar/quick-toolbar';
 import { Box, IconButton, Pagination, Stack } from '@mui/material';
-import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
-import { SwiperSlide } from 'swiper/react';
+import React from 'react';
 
 import useAuth from '@/hooks/useAuth';
 
 import { ManagePortfolioRightPanel } from './_components/manage-portfolio-right-panel';
 import { PortfolioGridView } from './_components/portfolio-gridview';
 import { PortfolioListView } from './_components/portfolio-listview';
-import { PortfolioSliderItem } from './_components/portfolio-slider-item';
 import { getPortfolioListAsync } from './_lib/portfolio.actions';
 import { defaultPortfolio } from './_lib/portfolio.types';
 
