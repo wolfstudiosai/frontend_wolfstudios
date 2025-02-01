@@ -1,3 +1,4 @@
+import { title } from 'process';
 import { paths } from './paths';
 
 // public header routes
@@ -48,8 +49,8 @@ export const publicRoutes = [
 // dashboard routes
 export const privateRoutes = [
   {
-    key: 'admin',
-    // title: 'Admin',
+    key: 'general',
+    title: 'General',
     items: [
       {
         key: 'admin',
@@ -121,10 +122,25 @@ export const privateRoutes = [
           },
         ],
       },
+      {
+        key: "user", 
+        title: 'User',
+        icon: 'hugeicons:user-multiple',
+        items: [
+          {
+            key: 'user',
+            title: 'User Management',
+            href: paths.private.user,
+            icon: 'hugeicons:user-multiple',
+            allowedRoles: ['admin', 'user'],
+          },
+        ],
+      }
     ],
   },
   {
     key: 'partner_hq',
+    title: 'Partner HQ',
     // icon: 'material-symbols-light:handshake-outline-rounded',
     items: [
       {
@@ -159,6 +175,7 @@ export const privateRoutes = [
   },
   {
     key: 'production_hq',
+    title: 'Production HQ',
     // icon: 'material-symbols-light:handshake-outline-rounded',
     items: [
       {
@@ -200,6 +217,7 @@ export const privateRoutes = [
   },
   {
     key: 'content_hq',
+    title: 'Content HQ',
     // icon: 'material-symbols-light:handshake-outline-rounded',
     items: [
       {
@@ -241,6 +259,7 @@ export const privateRoutes = [
   },
   {
     key: 'campaign_hq',
+    title: 'Campaign HQ',
     // icon: 'material-symbols-light:handshake-outline-rounded',
     items: [
       {
@@ -268,6 +287,7 @@ export const privateRoutes = [
   },
   {
     key: 'archive',
+    title: 'Archive',
     // icon: 'material-symbols-light:handshake-outline-rounded',
     items: [
       {
