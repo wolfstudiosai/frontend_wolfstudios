@@ -244,27 +244,11 @@ const PortfolioCard = ({ item, fetchList }) => {
           <Typography variant="body" color="var(--mui-palette-common-white)">
             State: {item.state}
           </Typography>
-          {item.category.split(',').map((category, index) => (
+          {item.category && item.category.split(',').map((category, index) => (
             <Chip key={index} label={category.trim()} size="small" sx={{ backgroundColor: getRandomColor() }} />
           ))}
         </Box>
       </Stack>
-      {/* <Stack
-        direction="row"
-        justifyContent={'flex-end'}
-        sx={{ position: 'absolute', top: 20, right: 10, width: '100%' }}
-      >
-        <AvatarGroup
-          spacing={'small'}
-          total={42}
-          sx={{ '& .MuiAvatar-root': { width: 32, height: 32, fontSize: 12, mb: 0.5 } }}
-        >
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-          <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-          <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-        </AvatarGroup>
-      </Stack> */}
-
       {item.featured && (
         <Stack
           direction="row"
