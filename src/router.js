@@ -1,4 +1,3 @@
-import { title } from 'process';
 import { paths } from './paths';
 
 // public header routes
@@ -51,7 +50,7 @@ export const privateRoutes = [
   {
     key: 'general',
     title: 'General',
-    icon: "solar:hashtag-line-duotone",
+    icon: 'solar:hashtag-line-duotone',
     items: [
       {
         key: 'admin',
@@ -91,6 +90,7 @@ export const privateRoutes = [
             title: 'Records',
             href: paths.private.record,
             icon: 'material-symbols-light:data-table-outline',
+            count: 5,
             allowedRoles: ['admin', 'user'],
           },
           {
@@ -105,6 +105,7 @@ export const privateRoutes = [
             title: 'Contracts',
             href: paths.private.contract,
             icon: 'material-symbols-light:contract-edit-outline-sharp',
+            count: 8,
             allowedRoles: ['admin', 'user'],
           },
           {
@@ -124,7 +125,7 @@ export const privateRoutes = [
         ],
       },
       {
-        key: "user", 
+        key: 'user',
         title: 'User',
         icon: 'hugeicons:user-multiple',
         items: [
@@ -136,160 +137,132 @@ export const privateRoutes = [
             allowedRoles: ['admin', 'user'],
           },
         ],
-      }
+      },
     ],
   },
   {
     key: 'partner_hq',
     title: 'Partner HQ',
-    // icon: 'material-symbols-light:handshake-outline-rounded',
+    icon: 'noto:fire',
     items: [
       {
-        key: 'partner_hq',
-        title: 'Partner HQ',
-        icon: 'material-symbols-light:handshake-outline-rounded',
-        items: [
-          {
-            key: 'needs_approval',
-            title: 'Needs Approval',
-            href: paths.private.partner_needs_approval,
-            icon: 'fluent:approvals-app-20-regular',
-            allowedRoles: ['admin', 'user'],
-          },
-          {
-            key: 'waiting_area',
-            title: 'Waiting Area',
-            href: paths.private.waiting_area,
-            icon: 'hugeicons:clock-04',
-            allowedRoles: ['admin', 'user'],
-          },
-          {
-            key: 'talent',
-            title: 'Talent',
-            href: paths.private.talent,
-            icon: 'solar:user-linear',
-            allowedRoles: ['admin', 'user'],
-          },
-        ],
+        key: 'needs_approval',
+        title: 'Needs Approval',
+        href: paths.private.partner_needs_approval,
+        icon: 'fluent:approvals-app-20-regular',
+        allowedRoles: ['admin', 'user'],
+      },
+      {
+        key: 'waiting_area',
+        title: 'Waiting Area',
+        href: paths.private.waiting_area,
+        icon: 'hugeicons:clock-04',
+        allowedRoles: ['admin', 'user'],
+      },
+      {
+        key: 'talent',
+        title: 'Talent',
+        href: paths.private.talent,
+        icon: 'solar:user-linear',
+        allowedRoles: ['admin', 'user'],
       },
     ],
   },
   {
     key: 'production_hq',
     title: 'Production HQ',
-    // icon: 'material-symbols-light:handshake-outline-rounded',
+    icon: 'iconoir:at-sign',
     items: [
       {
-        key: 'production_hq',
-        title: 'Production HQ',
-        icon: 'qlementine-icons:camera-16',
-        items: [
-          {
-            key: 'studios',
-            title: 'Studios',
-            href: paths.private.studio,
-            icon: 'fluent:approvals-app-20-regular',
-            allowedRoles: ['admin', 'user'],
-          },
-          {
-            key: 'crew',
-            title: 'Crew',
-            href: paths.private.crew,
-            icon: 'hugeicons:clock-04',
-            allowedRoles: ['admin', 'user'],
-          },
-          {
-            key: 'onsite_location',
-            title: 'Onsite Locatios',
-            href: paths.private.onsite_location,
-            icon: 'solar:user-linear',
-            allowedRoles: ['admin', 'user'],
-          },
-          {
-            key: 'venues',
-            title: 'Venues',
-            href: paths.private.venue,
-            icon: 'solar:user-linear',
-            allowedRoles: ['admin', 'user'],
-          },
-        ],
+        key: 'studios',
+        title: 'Studios',
+        href: paths.private.studio,
+        icon: 'fluent:approvals-app-20-regular',
+        allowedRoles: ['admin', 'user'],
+      },
+      {
+        key: 'crew',
+        title: 'Crew',
+        href: paths.private.crew,
+        icon: 'hugeicons:clock-04',
+        allowedRoles: ['admin', 'user'],
+      },
+      {
+        key: 'onsite_location',
+        title: 'Onsite Locatios',
+        href: paths.private.onsite_location,
+        icon: 'solar:user-linear',
+        allowedRoles: ['admin', 'user'],
+      },
+      {
+        key: 'venues',
+        title: 'Venues',
+        href: paths.private.venue,
+        icon: 'solar:user-linear',
+        allowedRoles: ['admin', 'user'],
       },
     ],
   },
   {
     key: 'content_hq',
     title: 'Content HQ',
-    // icon: 'material-symbols-light:handshake-outline-rounded',
+    icon: 'fa6-solid:dollar-sign',
     items: [
       {
-        key: 'content_hq',
-        title: 'Content HQ',
-        icon: 'fluent:content-view-20-regular',
-        items: [
-          {
-            key: 'content_discovery',
-            title: 'Discovery',
-            href: paths.dashboardPublic.partner,
-            icon: 'fluent:approvals-app-20-regular',
-            allowedRoles: ['admin', 'user'],
-          },
-          {
-            key: 'needs_approval',
-            title: 'Needs Approval',
-            href: paths.private.content_needs_approval,
-            icon: 'fluent:approvals-app-20-regular',
-            allowedRoles: ['admin', 'user'],
-          },
-          {
-            key: 'by_platform',
-            title: 'By Platform',
-            href: paths.private.by_platform,
-            icon: 'hugeicons:clock-04',
-            allowedRoles: ['admin', 'user'],
-          },
-          {
-            key: 'analytics',
-            title: 'Analytics',
-            href: paths.private.content_analytics,
-            icon: 'solar:user-linear',
-            allowedRoles: ['admin', 'user'],
-          },
-        ],
+        key: 'content_discovery',
+        title: 'Discovery',
+        href: paths.dashboardPublic.partner,
+        icon: 'fluent:approvals-app-20-regular',
+        allowedRoles: ['admin', 'user'],
+      },
+      {
+        key: 'needs_approval',
+        title: 'Needs Approval',
+        href: paths.private.content_needs_approval,
+        icon: 'fluent:approvals-app-20-regular',
+        allowedRoles: ['admin', 'user'],
+      },
+      {
+        key: 'by_platform',
+        title: 'By Platform',
+        href: paths.private.by_platform,
+        icon: 'hugeicons:clock-04',
+        allowedRoles: ['admin', 'user'],
+      },
+      {
+        key: 'analytics',
+        title: 'Analytics',
+        href: paths.private.content_analytics,
+        icon: 'solar:user-linear',
+        allowedRoles: ['admin', 'user'],
       },
     ],
   },
   {
     key: 'campaign_hq',
     title: 'Campaign HQ',
-    // icon: 'material-symbols-light:handshake-outline-rounded',
+    icon: 'nimbus:marketing',
     items: [
       {
-        key: 'campaign_hq',
-        title: 'Campaign HQ',
-        icon: 'nimbus:marketing',
-        items: [
-          {
-            key: 'revo',
-            title: 'Revo',
-            href: paths.private.revo,
-            icon: 'fluent:approvals-app-20-regular',
-            allowedRoles: ['admin', 'user'],
-          },
-          {
-            key: 'add_new',
-            title: 'Add New',
-            href: paths.private.campaign_add_new,
-            icon: 'hugeicons:clock-04',
-            allowedRoles: ['admin', 'user'],
-          },
-        ],
+        key: 'revo',
+        title: 'Revo',
+        href: paths.private.revo,
+        icon: 'fluent:approvals-app-20-regular',
+        allowedRoles: ['admin', 'user'],
+      },
+      {
+        key: 'add_new',
+        title: 'Add New',
+        href: paths.private.campaign_add_new,
+        icon: 'hugeicons:clock-04',
+        allowedRoles: ['admin', 'user'],
       },
     ],
   },
   {
     key: 'archive',
     title: 'Archive',
-    // icon: 'material-symbols-light:handshake-outline-rounded',
+    icon: 'fluent-emoji-flat:radioactive',
     items: [
       {
         key: 'archive',
@@ -311,6 +284,39 @@ export const privateRoutes = [
             allowedRoles: ['admin', 'user'],
           },
         ],
+      },
+    ],
+  },
+];
+
+// dashboard fav items
+export const dashboardFavItems = [
+  {
+    key: 'favorite',
+    title: 'Favorite',
+    icon: 'noto:red-heart',
+    items: [
+      {
+        key: 'records',
+        title: 'Records',
+        icon: 'material-symbols-light:data-table-outline',
+        href: paths.private.record,
+        allowedRoles: ['admin', 'user'],
+        // Optional: add a count if needed, e.g. count: 5,
+      },
+      {
+        key: 'campaign',
+        title: 'Campaign',
+        icon: 'nimbus:marketing',
+        href: paths.private.campaign_add_new, // adjust the href to your campaign route if needed
+        allowedRoles: ['admin', 'user'],
+      },
+      {
+        key: 'analytics',
+        title: 'Analytics',
+        icon: 'material-symbols-light:analytics-outline-rounded',
+        href: paths.private.analytics,
+        allowedRoles: ['admin', 'user'],
       },
     ],
   },

@@ -1,18 +1,21 @@
 'use client';
 
+import path from 'path';
+
+import * as React from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { Iconify } from '@/components/iconify/iconify';
-import { privateRoutes } from '@/router';
-import { Collapse, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
+import { dashboardFavItems, privateRoutes } from '@/router';
+import { Collapse, Divider, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useColorScheme } from '@mui/material/styles';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import * as React from 'react';
 
 import useAuth from '@/hooks/useAuth';
 
 import { navColorStyles } from './styles';
+import { pxToRem } from '@/utils/utils';
 
 // import Link from 'next/link';
 
@@ -30,6 +33,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
   const logoColor = logoColors[colorScheme][color];
   const [openMenus, setOpenMenus] = React.useState({});
   const router = useRouter();
+
   console.log(openMenus, '  openMenus');
 
   const toggleMenuItem = (key) => {
@@ -38,12 +42,13 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
 
   const renderMenuItems = (items, level = 0) => {
     return items.map((item) => {
+      const isActive = item.href && pathname === item.href;
       const hasChildren = item.items && item.items.length > 0;
       const isExpanded = openMenus[item.key] || false;
 
       return (
         <React.Fragment key={item.key}>
-          <MenuItem onClick={() => hasChildren && toggleMenuItem(item.key)}>
+          <MenuItem onClick={() => hasChildren && toggleMenuItem(item.key)} sx={{ mb: 0.3 }} selected={isActive}>
             <ListItemIcon>
               <Iconify icon={item.icon} width={15} height={15} color="text.primary" />
             </ListItemIcon>
@@ -53,7 +58,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
                 <ListItemText primary={item.title} sx={{ color: 'text.primary' }} />
               </Link>
             ) : (
-              <ListItemText primary={item.title} sx={{ color: 'text.primary' }} />
+              <ListItemText primary={item.title} sx={{ color: 'text.primary', fontWeight: 800 }}  />
             )}
             {hasChildren && (
               <>
@@ -65,12 +70,15 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
                 />
               </>
             )}
+            {!hasChildren && item.count && (
+              <Chip label={item.count} size="small" fontSize={10} color="text.primary" sx={{ borderRadius: 1 }} />
+            )}
           </MenuItem>
 
           {/* Collapsible Children (Placed Outside MenuItem) */}
           {hasChildren && (
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-              <MenuList sx={{ pl: level + 1 }}>{renderMenuItems(item.items, level + 1)}</MenuList>
+              <MenuList sx={{ pl: level + 2 }}>{renderMenuItems(item.items, level + 1)}</MenuList>
             </Collapse>
           )}
         </React.Fragment>
@@ -100,10 +108,11 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
           marginBottom: '10px',
           border: '1px solid var(--mui-palette-background-level2)',
           height: isFeaturedCardVisible ? 'calc(100vh - 135px)' : 'calc(100vh - 90px)',
+          paddingRight: pxToRem(5),
         }}
       >
         {/* static quick links */}
-        <Box>
+        <Box sx={{mb: -1.3}}>
           <MenuList>
             <MenuItem>
               <ListItemIcon>
@@ -126,6 +135,8 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
             </MenuItem>
           </MenuList>
         </Box>
+        <MenuList>{renderMenuItems(dashboardFavItems)}</MenuList>
+        <Divider />
         {/* dynamic nested menu items */}
         <MenuList>{renderMenuItems(privateRoutes)}</MenuList>
       </Box>
