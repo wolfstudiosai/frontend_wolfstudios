@@ -1,13 +1,12 @@
 'use client';
 
-import React from 'react';
 import { PageHeader } from '@/components/core/page-header';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { getRandomColor } from '@/utils/utils';
-import { Box, Card, Chip, Stack, Typography } from '@mui/material';
+import { Box, Card, Rating, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
@@ -165,6 +164,8 @@ export const PortfolioGridView = ({ data, fetchList, loading, handlePagination }
 const PortfolioCard = ({ item, fetchList }) => {
   const { isLogin } = useAuth();
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
+  const [isShowCommentField, setIsShowCommentField] = React.useState(false);
+  console.log("comment field", isShowCommentField);
   const handleDelete = async () => {
     const response = await deletePortfolioAsync([item.id]);
     if (response.success) {
@@ -189,6 +190,10 @@ const PortfolioCard = ({ item, fetchList }) => {
         backgroundColor: '#333',
         border: '1px solid var(--mui-palette-divider)',
         cursor: 'pointer',
+        '&:hover .portfolio-card-overlay': {
+          opacity: 1,
+        },
+        zIndex: 50
       }}
       onClick={() => setOpenPortfolioRightPanel(item)}
     >
@@ -225,7 +230,62 @@ const PortfolioCard = ({ item, fetchList }) => {
           }}
         />
       )}
-      <Stack
+      <Stack direction='column' justifyContent='space-between' className='portfolio-card-overlay' sx={{ position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, p: 1, backgroundColor: 'rgba(0, 0, 0, 0.4)', opacity: 0, transition: 'all 0.3s ease-in-out' }}>
+        <Stack direction='row' justifyContent='space-between'>
+          <Rating value={3} size='small' />
+          <Stack direction='row' alignItems='center' gap='4px' sx={{ zIndex: 100 }}>
+            <Iconify icon="ant-design:message-outlined" width={20} onClick={() => setIsShowCommentField(true)} />
+            <Iconify icon="material-symbols-light:add-reaction-outline" width={20} />
+          </Stack>
+        </Stack>
+        <Stack direction='row'>
+          <Box>
+            <Typography sx={{ fontSize: '1.1rem' }}>Image title</Typography>
+            <Stack direction='row' alignItems='center' gap='2px'>
+              <Typography sx={{ fontSize: '0.7rem' }}>PNG</Typography>
+              <Iconify icon="radix-icons:dot-filled" width={12} />
+              <Typography sx={{ fontSize: '0.7rem' }}>1100x1233</Typography>
+              <Iconify icon="radix-icons:dot-filled" width={12} />
+              <Typography sx={{ fontSize: '0.7rem' }}>2.1MB</Typography>
+            </Stack>
+          </Box>
+        </Stack>
+      </Stack>
+      {/* {item.featured && (
+        <Stack
+          direction="row"
+          justifyContent={'flex-end'}
+          sx={{ position: 'absolute', top: 20, right: 10, width: '100%' }}
+        >
+          <Iconify icon="fluent-color:star-16" width={25} height={25} />
+        </Stack>
+      )} */}
+
+      <ManagePortfolioRightPanel
+        view={'QUICK'}
+        fetchList={fetchList}
+        width="70%"
+        open={openPortfolioRightPanel ? true : false}
+        data={openPortfolioRightPanel}
+        onClose={() => setOpenPortfolioRightPanel(false)}
+      />
+    </Card>
+  );
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* <Stack
         direction="column"
         spacing={1}
         px={2}
@@ -248,25 +308,4 @@ const PortfolioCard = ({ item, fetchList }) => {
             <Chip key={index} label={category.trim()} size="small" sx={{ backgroundColor: getRandomColor() }} />
           ))}
         </Box>
-      </Stack>
-      {item.featured && (
-        <Stack
-          direction="row"
-          justifyContent={'flex-end'}
-          sx={{ position: 'absolute', top: 20, right: 10, width: '100%' }}
-        >
-          <Iconify icon="fluent-color:star-16" width={25} height={25} />
-        </Stack>
-      )}
-
-      <ManagePortfolioRightPanel
-        view={'QUICK'}
-        fetchList={fetchList}
-        width="70%"
-        open={openPortfolioRightPanel ? true : false}
-        data={openPortfolioRightPanel}
-        onClose={() => setOpenPortfolioRightPanel(false)}
-      />
-    </Card>
-  );
-};
+      </Stack> */}
