@@ -5,7 +5,14 @@ const config = {
     esmExternals: 'loose',
   },
   images: {
-    domains: ['res.cloudinary.com', 'gravatar.com', 'avatar.iran.liara.run', 'picsum.photos',"images.unsplash.com"]
+    domains: [
+      'res.cloudinary.com',
+      'gravatar.com',
+      'avatar.iran.liara.run',
+      'picsum.photos',
+      'images.unsplash.com',
+      'bryrhmtbdhskxqbdbryf.supabase.co',
+    ],
   },
 };
 
