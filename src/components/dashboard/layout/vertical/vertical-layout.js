@@ -11,7 +11,7 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import useAuth from '@/hooks/useAuth';
 
 import { MainNavV2 } from './main-nav-v2';
-import { SideNav } from './side-nav';
+import { SideNavV2 } from './side-nav-v2';
 import { useSettings } from '/src/hooks/use-settings';
 
 export function VerticalLayout({ children }) {
@@ -82,7 +82,7 @@ export function VerticalLayout({ children }) {
           }}
         >
           {isLogin && openSidebar && (
-            <SideNav
+            <SideNavV2
               color={settings.navColor}
               items={privateRoutes}
               open={openSidebar}
