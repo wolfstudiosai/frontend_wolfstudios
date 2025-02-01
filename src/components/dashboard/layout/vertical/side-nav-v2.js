@@ -1,12 +1,11 @@
 'use client';
 
-import path from 'path';
-
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Iconify } from '@/components/iconify/iconify';
 import { dashboardFavItems, privateRoutes } from '@/router';
+import { pxToRem } from '@/utils/utils';
 import { Collapse, Divider, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
@@ -15,7 +14,6 @@ import { useColorScheme } from '@mui/material/styles';
 import useAuth from '@/hooks/useAuth';
 
 import { navColorStyles } from './styles';
-import { pxToRem } from '@/utils/utils';
 
 // import Link from 'next/link';
 
@@ -58,7 +56,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
                 <ListItemText primary={item.title} sx={{ color: 'text.primary' }} />
               </Link>
             ) : (
-              <ListItemText primary={item.title} sx={{ color: 'text.primary', fontWeight: 800 }}  />
+              <ListItemText primary={item.title} sx={{ color: 'text.primary', fontWeight: 800 }} />
             )}
             {hasChildren && (
               <>
@@ -109,10 +107,21 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
           border: '1px solid var(--mui-palette-background-level2)',
           height: isFeaturedCardVisible ? 'calc(100vh - 135px)' : 'calc(100vh - 90px)',
           paddingRight: pxToRem(5),
+          overflowY: 'auto',
+          '&::-webkit-scrollbar': {
+            width: '0px',
+          },
+          // '&::-webkit-scrollbar-thumb': {
+          //   backgroundColor: 'transparent', // Hide the thumb
+          // },
+          // '&:hover::-webkit-scrollbar-thumb': {
+          //   backgroundColor: 'var(--mui-palette-divider)', // Show on hover
+          //   borderRadius: '10px',
+          // },
         }}
       >
         {/* static quick links */}
-        <Box sx={{mb: -1.3}}>
+        <Box sx={{ mb: -1.3 }}>
           <MenuList>
             <MenuItem>
               <ListItemIcon>
