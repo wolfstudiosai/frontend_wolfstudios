@@ -70,12 +70,12 @@ export function VerticalLayout({ children }) {
               zIndex: 100,
             }}
           >
-            <FeatureCards />
+            {isFeaturedCardVisible ? <FeatureCards /> : <Box mb={1} />}
           </Box>
         )}
         <Box
           sx={{
-            display: 'flex',
+            display: isFeaturedCardVisible ? 'flex' : 'block',
             flex: '1 1 auto',
             flexDirection: 'column',
             pl: { lg: isLogin && openSidebar ? pxToRem(260) : '0px' },
