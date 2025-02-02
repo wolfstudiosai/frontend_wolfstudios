@@ -1,21 +1,25 @@
 'use client';
 
+import React, { useRef } from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
+import { PageHeader } from '@/components/core/page-header';
 import { Iconify } from '@/components/iconify/iconify';
 import PageLoader from '@/components/PageLoader/PageLoader';
 import { QuickToolbar } from '@/components/toolbar/quick-toolbar';
 import { Box, CircularProgress, IconButton, Stack } from '@mui/material';
-import React, { useRef } from 'react';
 
 import useAuth from '@/hooks/useAuth';
 
 import { ManagePortfolioRightPanel } from './_components/manage-portfolio-right-panel';
 import { PortfolioGridView } from './_components/portfolio-gridview';
 import { PortfolioListView } from './_components/portfolio-listview';
+import { portfolioFilters, portfolioSorting, portfolioTags } from './_lib/constants';
 import { getPortfolioListAsync } from './_lib/portfolio.actions';
 import { defaultPortfolio } from './_lib/portfolio.types';
 
 export const PortfolioView = () => {
+  const { isLogin } = useAuth();
+  const observerRef = useRef(null);
   const [viewMode, setViewMode] = React.useState('grid');
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(false);
   const [data, setData] = React.useState([]);
@@ -23,8 +27,12 @@ export const PortfolioView = () => {
   const [isFetching, setIsFetching] = React.useState(false);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
   const [totalRecords, setTotalRecords] = React.useState(0);
-  const { isLogin } = useAuth();
-  const observerRef = useRef(null);
+  const [filters, setFilters] = React.useState({
+    COL: 3,
+    TAG: [],
+    FILTER: [],
+    SORTING: [],
+  });
 
   const handleToggleViewMode = (mode) => {
     setViewMode(mode);
@@ -57,6 +65,10 @@ export const PortfolioView = () => {
     }
   }
 
+  const handleFilterChange = (type, value) => {
+    setFilters((prev) => ({ ...prev, [type]: value }));
+  };
+
   React.useEffect(() => {
     fetchList();
   }, []);
@@ -85,6 +97,14 @@ export const PortfolioView = () => {
   return (
     <PageContainer>
       <PageLoader loading={loading}>
+        <PageHeader
+          title="Portfolio"
+          values={filters}
+          tags={portfolioTags}
+          filters={portfolioFilters}
+          sorting={portfolioSorting}
+          onFilterChange={handleFilterChange}
+        />
         {isLogin && (
           <QuickToolbar closePopover={openPortfolioRightPanel}>
             <Stack direction="column" spacing={3} justifyContent="center" alignItems="center" p={1}>
@@ -124,7 +144,12 @@ export const PortfolioView = () => {
           <PortfolioListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />
         ) : (
           <Box>
-            <PortfolioGridView data={data || [defaultPortfolio]} fetchList={fetchList} loading={loading} />
+            <PortfolioGridView
+              data={data || [defaultPortfolio]}
+              fetchList={fetchList}
+              loading={loading}
+              colums={filters.COL}
+            />
             <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
               {isFetching && <CircularProgress size="30px" />}
             </div>
