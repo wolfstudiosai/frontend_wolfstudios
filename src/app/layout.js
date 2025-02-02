@@ -6,7 +6,6 @@ import { AuthGuard } from '@/app/auth/guard/auth-guard';
 import { Analytics } from '@/components/core/analytics';
 import { I18nProvider } from '@/components/core/i18n-provider';
 import { LocalizationProvider } from '@/components/core/localization-provider';
-import { SettingsButton } from '@/components/core/settings/settings-button';
 import { ThemeProvider } from '@/components/core/theme-provider/theme-provider';
 import { Toaster } from '@/components/core/toaster';
 import { VerticalLayout } from '@/components/dashboard/layout/vertical/vertical-layout';

@@ -1,7 +1,7 @@
-import React from 'react';
-import Image from 'next/image';
 import { getRandomColor } from '@/utils/utils';
 import { Avatar, AvatarGroup, Box, Card, Chip, Stack, Typography } from '@mui/material';
+import Image from 'next/image';
+import React from 'react';
 
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 
@@ -18,8 +18,8 @@ export const PortfolioSliderItem = ({ item, index, fetchList }) => {
       sx={{
         width: '100%',
         aspectRatio: '16 / 9',
-        borderRadius: 2,
-        border: 'unset',
+        borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+        border: 'solid .1px var(--mui-palette-divider)',
         overflow: 'hidden',
         position: 'relative',
         cursor: 'pointer',
@@ -30,7 +30,6 @@ export const PortfolioSliderItem = ({ item, index, fetchList }) => {
         <Box
           component="video"
           src={item.thumbnail}
-          // controls
           muted
           autoPlay
           loop

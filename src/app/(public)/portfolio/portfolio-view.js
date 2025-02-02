@@ -107,8 +107,8 @@ export const PortfolioView = () => {
         />
         {isLogin && (
           <QuickToolbar closePopover={openPortfolioRightPanel}>
-            <Stack direction="column" spacing={3} justifyContent="center" alignItems="center" p={1}>
-              <IconButton variant="text" size="small" title="Add " onClick={handleOpenPortfolioRightPanel}>
+            <Stack direction="column" justifyContent="center" alignItems="center">
+              <IconButton variant="text" size="small" title="Add" onClick={handleOpenPortfolioRightPanel}>
                 <Iconify icon="iconoir:plus" title="Add Portfolio" />
               </IconButton>
               <IconButton
@@ -155,7 +155,6 @@ export const PortfolioView = () => {
             </div>
           </Box>
         )}
-
         <ManagePortfolioRightPanel
           view="EDIT"
           width="70%"

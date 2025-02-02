@@ -10,7 +10,7 @@ export const PageContainer = ({ children }) => {
                 width: 'var(--Content-width)',
             }}
         >
-            <Stack spacing={4}>
+            <Stack>
                 {children}
             </Stack>
         </Box>

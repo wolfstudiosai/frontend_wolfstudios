@@ -1,12 +1,12 @@
 'use client';
 
+import React from 'react';
+import Image from 'next/image';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { Box, Button, Card, Popover, Rating, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import Image from 'next/image';
-import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
@@ -20,7 +20,7 @@ export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagi
   const slider_data = data.filter((item) => item.featured);
   return (
     <Box>
-      <Box>
+      <Box sx={{ mt: 2 }}>
         <SliderWrapper
           modules={[Navigation, SwiperPagination, Scrollbar, A11y, Autoplay]}
           autoplay={{ delay: 4000, disableOnInteraction: true }}
@@ -41,7 +41,7 @@ export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagi
         </SliderWrapper>
       </Box>
       <PageLoader loading={loading} error={null}>
-        <Grid container spacing={2} columns={{ xs: 30 }} sx={{ mt: 2 }}>
+        <Grid container spacing={1} columns={{ xs: 30 }} sx={{ mt: 2 }}>
           {data.map((portfolio, index) => (
             <Grid item size={{ xs: 12, md: colums }} key={index}>
               <PortfolioCard item={portfolio} fetchList={fetchList} />
@@ -102,7 +102,8 @@ const PortfolioCard = ({ item, fetchList }) => {
           overflow: 'hidden',
           position: 'relative',
           backgroundColor: '#333',
-          border: '1px solid var(--mui-palette-divider)',
+          borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+          border: 'solid .1px var(--mui-palette-divider)',
           cursor: 'pointer',
           '&:hover .portfolio-card-overlay': {
             opacity: 1,
