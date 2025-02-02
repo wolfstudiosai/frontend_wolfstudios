@@ -1,12 +1,13 @@
 'use client';
 
+import React from 'react';
+import Image from 'next/image';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
+import { extractFilenameAndType } from '@/utils/utils';
 import { Box, Button, Card, Popover, Rating, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import Image from 'next/image';
-import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
@@ -51,22 +52,22 @@ export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagi
 };
 
 const PortfolioCard = ({ item, fetchList }) => {
+  const { fileName, fileType } = extractFilenameAndType(item.thumbnail);
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
   const [showPopover, setShowPopover] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const [comment, setComment] = React.useState('');
-  const [rating, setRating] = React.useState(0);
-  const [emoji, setEmoji] = React.useState('');
+  const [openCommentBox, setOpenCommentBox] = React.useState(false);
+  const [popoverValues, setPopoverValues] = React.useState({
+    comment: '',
+    rating: 0,
+    emoji: '',
+  });
 
   const handleClosePopover = () => {
     setShowPopover('');
     setAnchorEl(null);
   };
-
-  // const handleCloseCommentField = () => {
-  //   setIsShowCommentField(null);
-  // };
 
   const isVideoContent = (url) => {
     const videoKeywords = ['vimeo', 'playback', 'video'];
@@ -91,7 +92,12 @@ const PortfolioCard = ({ item, fetchList }) => {
             opacity: 1,
           },
         }}
-        onClick={() => setOpenPortfolioRightPanel(item)}
+        onClick={(e) => {
+          if (e.target.closest('.rating') || e.target.closest('.popover')) {
+            return;
+          }
+          setOpenPortfolioRightPanel(item);
+        }}
       >
         {isVideoContent(item.thumbnail || '') ? (
           <Box
@@ -145,7 +151,7 @@ const PortfolioCard = ({ item, fetchList }) => {
           }}
         >
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            {rating > 0 ? <Rating value={rating} size="small" readOnly /> : <Box></Box>}
+            {popoverValues.rating > 0 ? <Rating value={popoverValues.rating} size="small" readOnly /> : <Box></Box>}
             <Stack direction="row" alignItems="center" sx={{ zIndex: 100 }}>
               <Button
                 variant="text"
@@ -170,8 +176,8 @@ const PortfolioCard = ({ item, fetchList }) => {
                   setShowPopover('emoji');
                 }}
               >
-                {showPopover === 'emoji' ? (
-                  <Typography>{emoji}</Typography>
+                {popoverValues.emoji ? (
+                  <Typography>{popoverValues.emoji}</Typography>
                 ) : (
                   <Iconify icon="material-symbols-light:add-reaction-outline" width={20} />
                 )}
@@ -180,13 +186,15 @@ const PortfolioCard = ({ item, fetchList }) => {
           </Stack>
           <Stack direction="row">
             <Box>
-              <Typography sx={{ fontSize: '1.1rem' }}>Image title</Typography>
+              <Typography sx={{ fontSize: '1.1rem', color: 'var(--mui-palette-common-white)' }}>{fileName}</Typography>
               <Stack direction="row" alignItems="center" gap="2px">
-                <Typography sx={{ fontSize: '0.7rem' }}>PNG</Typography>
-                <Iconify icon="radix-icons:dot-filled" width={12} />
-                <Typography sx={{ fontSize: '0.7rem' }}>1100x1233</Typography>
-                <Iconify icon="radix-icons:dot-filled" width={12} />
-                <Typography sx={{ fontSize: '0.7rem' }}>2.1MB</Typography>
+                <Typography sx={{ fontSize: '0.7rem', color: 'var(--mui-palette-common-white)' }}>
+                  {fileType}
+                </Typography>
+                <Iconify icon="radix-icons:dot-filled" width={12} color="var(--mui-palette-common-white)" />
+                <Typography sx={{ fontSize: '0.7rem', color: 'var(--mui-palette-common-white)' }}>1100x1233</Typography>
+                <Iconify icon="radix-icons:dot-filled" width={12} color="var(--mui-palette-common-white)" />
+                <Typography sx={{ fontSize: '0.7rem', color: 'var(--mui-palette-common-white)' }}>2.1MB</Typography>
               </Stack>
             </Box>
           </Stack>
@@ -199,20 +207,34 @@ const PortfolioCard = ({ item, fetchList }) => {
               vertical: 'bottom',
               horizontal: 'left',
             }}
-            // onClick={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
-            {showPopover === 'comment' ? (
+            {openCommentBox ? (
               <Stack direction="row" alignItems="center" gap={1} sx={{ p: 1 }}>
-                <TextField value={comment} onChange={(e) => setComment(e.target.value)} size="small" />
-                <Iconify onClick={handleClosePopover} icon="subway:tick" sx={{ cursor: 'pointer' }} />
+                <TextField
+                  value={popoverValues.comment}
+                  onChange={(e) => setPopoverValues((prev) => ({ ...prev, comment: e.target.value }))}
+                  size="small"
+                />
+                <Iconify
+                  onClick={handleClosePopover}
+                  icon="subway:tick"
+                  sx={{ cursor: 'pointer' }}
+                  width={10}
+                  height={10}
+                />
               </Stack>
             ) : (
               <Stack direction="row" alignItems="center" gap={1} sx={{ p: 1 }}>
-                <Typography sx={{ fontSize: '0.8rem' }}>The comment of the image</Typography>
+                <Typography sx={{ fontSize: '0.8rem' }}>
+                  {popoverValues.comment ? popoverValues.comment : 'Add a comment...'}
+                </Typography>
                 <Iconify
-                  onClick={() => setAnchorEl(e.currentTarget)}
+                  onClick={() => setOpenCommentBox(true)}
                   icon="material-symbols:edit-outline-rounded"
                   sx={{ cursor: 'pointer' }}
+                  width={15}
+                  height={15}
                 />
               </Stack>
             )}
@@ -223,6 +245,7 @@ const PortfolioCard = ({ item, fetchList }) => {
             anchorEl={anchorEl}
             onClose={handleClosePopover}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+            onClick={(e) => e.stopPropagation()}
           >
             <Stack direction="row" alignItems="center">
               {['❤️', '👍', '👎', '✅'].map((emoji) => (
@@ -232,7 +255,7 @@ const PortfolioCard = ({ item, fetchList }) => {
                   size="small"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setEmoji(emoji);
+                    setPopoverValues((prev) => ({ ...prev, emoji: emoji }));
                     handleClosePopover();
                   }}
                 >
@@ -241,11 +264,11 @@ const PortfolioCard = ({ item, fetchList }) => {
               ))}
             </Stack>
             <Rating
-              value={rating}
+              value={popoverValues.rating}
               size="small"
               onChange={(e, value) => {
                 e.stopPropagation();
-                setRating(value);
+                setPopoverValues((prev) => ({ ...prev, rating: value }));
                 handleClosePopover();
               }}
             />

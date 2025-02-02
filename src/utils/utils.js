@@ -16,3 +16,11 @@ export const getRandomColor = () => {
   const color = colors[Math.floor(Math.random() * colors.length)];
   return alpha(color, 0.8);
 };
+
+export const extractFilenameAndType = (path) => {
+  if (!path) return { name: '', type: '' };
+  const parts = path.split('/');
+  const filename = parts[parts.length - 1];
+  const [name, type] = filename.split('.');
+  return { fileName: name, fileType: type };
+};
