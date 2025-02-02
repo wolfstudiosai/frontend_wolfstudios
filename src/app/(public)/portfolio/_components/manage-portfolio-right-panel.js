@@ -121,11 +121,12 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
           <Button size="small" variant="outlined" color="primary" onClick={onClose}>
             Close
           </Button>
-          <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
-            Save
-          </Button>
+
           {isLogin && (
             <>
+              <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+                Save
+              </Button>
               {sidebarView === 'QUICK' ? (
                 <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
                   <Iconify icon="mynaui:edit-one" />

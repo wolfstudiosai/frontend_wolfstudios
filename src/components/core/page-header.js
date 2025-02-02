@@ -20,6 +20,7 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
       handleFilter('VIEW', value);
     }
   };
+
   return (
     <Stack
       direction={'column'}
