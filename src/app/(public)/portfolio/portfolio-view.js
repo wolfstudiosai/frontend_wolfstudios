@@ -27,7 +27,12 @@ export const PortfolioView = () => {
   const [isFetching, setIsFetching] = React.useState(false);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
   const [totalRecords, setTotalRecords] = React.useState(0);
-  const [cols, setCols] = React.useState();
+  const [filters, setFilters] = React.useState({
+    COL: 3,
+    TAG: [],
+    FILTER: [],
+    SORTING: [],
+  });
 
   const handleToggleViewMode = (mode) => {
     setViewMode(mode);
@@ -61,10 +66,7 @@ export const PortfolioView = () => {
   }
 
   const handleFilterChange = (type, value) => {
-    console.log(type, value);
-    if (type === 'COL') {
-      setCols(value);
-    }
+    setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
   React.useEffect(() => {
@@ -97,7 +99,7 @@ export const PortfolioView = () => {
       <PageLoader loading={loading}>
         <PageHeader
           title="Portfolio"
-          colums={cols}
+          values={filters}
           tags={portfolioTags}
           filters={portfolioFilters}
           sorting={portfolioSorting}
@@ -142,7 +144,12 @@ export const PortfolioView = () => {
           <PortfolioListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />
         ) : (
           <Box>
-            <PortfolioGridView data={data || [defaultPortfolio]} fetchList={fetchList} loading={loading} colums={cols} />
+            <PortfolioGridView
+              data={data || [defaultPortfolio]}
+              fetchList={fetchList}
+              loading={loading}
+              colums={filters.COL}
+            />
             <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
               {isFetching && <CircularProgress size="30px" />}
             </div>

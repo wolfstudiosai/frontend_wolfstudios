@@ -6,7 +6,7 @@ import { Avatar, AvatarGroup, Box, Chip, IconButton, Slider, Stack, Typography }
 
 import { Iconify } from '../iconify/iconify';
 
-export const PageHeader = ({ title, colums = 4, tags = [], filters = [], sorting = [], onFilterChange }) => {
+export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [], onFilterChange }) => {
   const [currentSection, setCurrentSection] = React.useState('TAG');
   const handleFilter = (type, value) => {
     onFilterChange?.(type, value);
@@ -28,9 +28,9 @@ export const PageHeader = ({ title, colums = 4, tags = [], filters = [], sorting
         </IconButton>
         <Box sx={{ width: '100px', mx: 2 }}>
           <Slider
-          size='small'
+            size="small"
             aria-label="show-columns"
-            value={colums}
+            value={values.COL}
             onChange={(e, value) => handleFilter('COL', value)}
             color="#fff"
             min={2}
