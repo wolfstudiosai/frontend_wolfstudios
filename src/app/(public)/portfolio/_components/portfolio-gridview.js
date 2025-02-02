@@ -1,12 +1,12 @@
 'use client';
 
-import React from 'react';
-import Image from 'next/image';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { Box, Button, Card, Popover, Rating, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import Image from 'next/image';
+import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
@@ -52,20 +52,21 @@ export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagi
 
 const PortfolioCard = ({ item, fetchList }) => {
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
+  const [showPopover, setShowPopover] = React.useState('');
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
   const [comment, setComment] = React.useState('');
   const [rating, setRating] = React.useState(0);
-  const [showPopover, setShowPopover] = React.useState('');
   const [emoji, setEmoji] = React.useState('');
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClosePopover = () => {
     setShowPopover('');
     setAnchorEl(null);
   };
 
-  const handleCloseCommentField = () => {
-    setIsShowCommentField(null);
-  };
+  // const handleCloseCommentField = () => {
+  //   setIsShowCommentField(null);
+  // };
 
   const isVideoContent = (url) => {
     const videoKeywords = ['vimeo', 'playback', 'video'];
@@ -152,6 +153,7 @@ const PortfolioCard = ({ item, fetchList }) => {
                 sx={{ color: '#fff' }}
                 onClick={(e) => {
                   e.stopPropagation();
+                  setAnchorEl(e.currentTarget);
                   setShowPopover('comment');
                 }}
               >
@@ -163,6 +165,7 @@ const PortfolioCard = ({ item, fetchList }) => {
                 sx={{ color: '#fff' }}
                 onClick={(e) => {
                   e.stopPropagation();
+                  setAnchorEl(e.currentTarget);
                   // handleReactPopoverOpen(e);
                   setShowPopover('emoji');
                 }}
@@ -191,24 +194,17 @@ const PortfolioCard = ({ item, fetchList }) => {
             id={Boolean(showPopover === 'comment') ? 'comment-popover' : undefined}
             open={Boolean(showPopover === 'comment')}
             anchorEl={anchorEl}
-            onClose={handleCloseCommentField}
+            onClose={handleClosePopover}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'left',
             }}
-            onClick={(e) => e.stopPropagation()}
+            // onClick={(e) => e.stopPropagation()}
           >
             {showPopover === 'comment' ? (
               <Stack direction="row" alignItems="center" gap={1} sx={{ p: 1 }}>
                 <TextField value={comment} onChange={(e) => setComment(e.target.value)} size="small" />
-                <Iconify
-                  onClick={() => {
-                    handleCloseCommentField();
-                    // setEditComment(false);
-                  }}
-                  icon="subway:tick"
-                  sx={{ cursor: 'pointer' }}
-                />
+                <Iconify onClick={handleClosePopover} icon="subway:tick" sx={{ cursor: 'pointer' }} />
               </Stack>
             ) : (
               <Stack direction="row" alignItems="center" gap={1} sx={{ p: 1 }}>
@@ -234,7 +230,8 @@ const PortfolioCard = ({ item, fetchList }) => {
                   key={emoji}
                   variant="text"
                   size="small"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setEmoji(emoji);
                     handleClosePopover();
                   }}
@@ -243,7 +240,15 @@ const PortfolioCard = ({ item, fetchList }) => {
                 </Button>
               ))}
             </Stack>
-            <Rating value={rating} size="small" onChange={(e, value) => setRating(value)} />
+            <Rating
+              value={rating}
+              size="small"
+              onChange={(e, value) => {
+                e.stopPropagation();
+                setRating(value);
+                handleClosePopover();
+              }}
+            />
           </Popover>
         </Stack>
         <ManagePortfolioRightPanel
