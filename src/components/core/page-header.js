@@ -2,18 +2,7 @@
 
 import React from 'react';
 import { getRandomColor, pxToRem } from '@/utils/utils';
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  Chip,
-  IconButton,
-  Slider,
-  Stack,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from '@mui/material';
+import { Box, Chip, IconButton, Slider, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 
 import { Iconify } from '../iconify/iconify';
 
@@ -30,7 +19,15 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
     }
   };
   return (
-    <Stack direction={'column'} spacing={2} sx={{ backgroundColor: 'var(--mui-palette-background-level1)', p: 1 }}>
+    <Stack
+      direction={'column'}
+      sx={{
+        // backgroundColor: 'var(--mui-palette-background-level1)',
+        p: 1,
+        borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+        border: 'solid .1px var(--mui-palette-divider)',
+      }}
+    >
       <Stack direction={'row'} alignItems={'center'}>
         <Typography variant="h6" fontWeight={600} gutterBottom>
           {title}
@@ -44,7 +41,7 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
         <IconButton size="small" variant="contained" color="error">
           <Iconify icon="material-symbols-light:bookmark-outline" width={16} height={16} />
         </IconButton>
-        <Stack justifyContent={'center'} alignItems={'center'} sx={{ width: pxToRem(70) }}>
+        <Stack justifyContent={'center'} alignItems={'center'} sx={{ width: pxToRem(50) }}>
           <Slider
             size="small"
             aria-label="show-columns"
@@ -63,28 +60,28 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
           onChange={handleToggle}
           aria-label="toggle buttons"
           sx={{
-            display: 'inline-flex', 
-            border: '1px solid var(--mui-palette-divider)', 
-            boxShadow: 'none', 
-            gap: '1px', 
-            padding: '2px', 
-            marginLeft: (theme) => theme.spacing(1), 
+            display: 'inline-flex',
+            border: '1px solid var(--mui-palette-divider)',
+            boxShadow: 'none',
+            gap: '4px',
+            padding: '2px',
+            marginLeft: (theme) => theme.spacing(1),
           }}
         >
-          <ToggleButton value="grid" aria-label="grid view">
-            <Iconify icon="ep:grid" width={8} height={8} />
+          <ToggleButton value="grid" aria-label="grid view" sx={{ padding: '2px' }}>
+            <Iconify icon="ep:grid" width={10} height={10} />
           </ToggleButton>
-          <ToggleButton value="list" aria-label="list view">
-            <Iconify icon="solar:list-bold" width={8} height={8} />
+          <ToggleButton value="list" aria-label="list view" sx={{ padding: '2px' }}>
+            <Iconify icon="solar:list-bold" width={10} height={10} />
           </ToggleButton>
-          <ToggleButton value="add" aria-label="add new">
-            <Iconify icon="mynaui:plus" width={8} height={8} />
+          <ToggleButton value="add" aria-label="add new" sx={{ padding: '2px' }}>
+            <Iconify icon="mynaui:plus" width={10} height={10} />
           </ToggleButton>
         </ToggleButtonGroup>
-        <Iconify icon="ri:more-line" width={20} height={20} sx={{ ml: 1 }} />
+        <Iconify icon="ri:more-line" width={12} height={12} sx={{ ml: 1 }} />
       </Stack>
       <Box>
-        <Stack direction="row" alignItems="center" sx={{ gap: 1, mb: 1 }}>
+        <Stack direction="row" alignItems="center" sx={{ gap: 1 }}>
           {['TAG', 'FILTER', 'SORTING'].map((section) => (
             <Typography
               key={section}
@@ -111,10 +108,13 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
                 label={item.label}
                 onClick={() => handleFilter(currentSection, item.value)}
                 sx={{
-                  ml: 1,
+                  ml: 0.3,
                   borderRadius: 0.5,
                   backgroundColor: getRandomColor(),
                   color: '#fff',
+                  fontSize: '8px',
+                  height: '14px',
+                  padding: '1px',
                 }}
               />
             ))}
