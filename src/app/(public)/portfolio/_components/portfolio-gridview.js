@@ -18,21 +18,13 @@ import { deletePortfolioAsync } from '../_lib/portfolio.actions';
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 import { PortfolioSliderItem } from './portfolio-slider-item';
 
-export const PortfolioGridView = ({ data, fetchList, loading, handlePagination }) => {
-  const handleFilterChange = (type, value) => {
-    console.log(type, value);
-  };
+export const PortfolioGridView = ({ data, colums = 3, fetchList, loading, handlePagination }) => {
+ 
 
   const slider_data = data.filter((item) => item.featured);
   return (
     <Box sx={{ p: 2 }}>
-      <PageHeader
-        title="Portfolio"
-        tags={portfolioTags}
-        filters={portfolioFilters}
-        sorting={portfolioSorting}
-        onFilterChange={handleFilterChange}
-      />
+      
       <Box>
         <SliderWrapper
           modules={[Navigation, SwiperPagination, Scrollbar, A11y, Autoplay]}
@@ -54,9 +46,9 @@ export const PortfolioGridView = ({ data, fetchList, loading, handlePagination }
         </SliderWrapper>
       </Box>
       <PageLoader loading={loading} error={null}>
-        <Grid container spacing={2} columns={{ xs: 14 }} sx={{ mt: 2 }}>
+        <Grid container spacing={2} columns={{ xs: 30 }} sx={{ mt: 2 }}>
           {data.map((portfolio, index) => (
-            <Grid item size={{ xs: 12, md: 2 }} key={index}>
+            <Grid item size={{ xs: 12, md: colums }} key={index}>
               <PortfolioCard item={portfolio} fetchList={fetchList} />
             </Grid>
           ))}

@@ -1,29 +1,16 @@
 'use client';
 
+import React from 'react';
 import { getRandomColor, pxToRem } from '@/utils/utils';
 import { Avatar, AvatarGroup, Box, Chip, IconButton, Slider, Stack, Typography } from '@mui/material';
-import React, { useEffect } from 'react';
 
-import { useRouter, useSearchParams } from 'next/navigation';
 import { Iconify } from '../iconify/iconify';
 
-export const PageHeader = ({ title, tags = [], filters = [], sorting = [], onFilterChange }) => {
+export const PageHeader = ({ title, colums = 4, tags = [], filters = [], sorting = [], onFilterChange }) => {
   const [currentSection, setCurrentSection] = React.useState('TAG');
-  const [columns, setColumns] = React.useState(4);
-
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
   const handleFilter = (type, value) => {
     onFilterChange?.(type, value);
   };
-
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams);
-    params.set("columns", columns.toString());
-    router.replace(`?${params.toString()}`);
-  }, [columns, router, searchParams]);
-
   return (
     <Stack direction={'column'} spacing={2} mb={3}>
       <Stack direction={'row'} alignItems={'center'}>
@@ -40,7 +27,16 @@ export const PageHeader = ({ title, tags = [], filters = [], sorting = [], onFil
           <Iconify icon="material-symbols-light:bookmark-outline" width={16} height={16} />
         </IconButton>
         <Box sx={{ width: '100px', mx: 2 }}>
-          <Slider aria-label="show-columns" value={columns} onChange={(e, value) => setColumns(value)} color='#fff' min={2} max={20} step={2} />
+          <Slider
+          size='small'
+            aria-label="show-columns"
+            value={colums}
+            onChange={(e, value) => handleFilter('COL', value)}
+            color="#fff"
+            min={2}
+            max={30}
+            step={2}
+          />
         </Box>
         <AvatarGroup
           spacing={'small'}
