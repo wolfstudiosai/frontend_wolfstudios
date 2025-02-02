@@ -1,18 +1,16 @@
 'use client';
 
+import React from 'react';
+import Image from 'next/image';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
+import { extractFilenameAndType } from '@/utils/utils';
 import { Box, Button, Card, Popover, Rating, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import Image from 'next/image';
-import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
-import useAuth from '@/hooks/useAuth';
-
-import { deletePortfolioAsync } from '../_lib/portfolio.actions';
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 import { PortfolioSliderItem } from './portfolio-slider-item';
 
@@ -20,7 +18,7 @@ export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagi
   const slider_data = data.filter((item) => item.featured);
   return (
     <Box>
-      <Box>
+      <Box sx={{ mt: 2 }}>
         <SliderWrapper
           modules={[Navigation, SwiperPagination, Scrollbar, A11y, Autoplay]}
           autoplay={{ delay: 4000, disableOnInteraction: true }}
@@ -41,7 +39,7 @@ export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagi
         </SliderWrapper>
       </Box>
       <PageLoader loading={loading} error={null}>
-        <Grid container spacing={2} columns={{ xs: 30 }} sx={{ mt: 2 }}>
+        <Grid container spacing={1} columns={{ xs: 28 }} sx={{ mt: 2 }}>
           {data.map((portfolio, index) => (
             <Grid item size={{ xs: 12, md: colums }} key={index}>
               <PortfolioCard item={portfolio} fetchList={fetchList} />
@@ -54,36 +52,21 @@ export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagi
 };
 
 const PortfolioCard = ({ item, fetchList }) => {
-  const { isLogin } = useAuth();
+  const { fileName, fileType } = extractFilenameAndType(item.thumbnail);
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
-  const [isShowCommentField, setIsShowCommentField] = React.useState(null);
-  const [comment, setComment] = React.useState('');
-  const [editComment, setEditComment] = React.useState(false);
-  const [isShowReactPopover, setIsShowReactPopover] = React.useState(null);
-  const [emoji, setEmoji] = React.useState(null);
+  const [showPopover, setShowPopover] = React.useState('');
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleShowCommentField = (event) => {
-    setIsShowCommentField(event.currentTarget);
-  };
+  const [openCommentBox, setOpenCommentBox] = React.useState(false);
+  const [popoverValues, setPopoverValues] = React.useState({
+    comment: '',
+    rating: 0,
+    emoji: '',
+  });
 
-  const handleReactPopoverOpen = (event) => {
-    setIsShowReactPopover(event.currentTarget);
-  };
-
-  const handleReactPopoverClose = () => {
-    setIsShowReactPopover(null);
-  };
-
-  const handleCloseCommentField = () => {
-    setIsShowCommentField(null);
-  };
-
-  console.log('comment field', isShowCommentField);
-  const handleDelete = async () => {
-    const response = await deletePortfolioAsync([item.id]);
-    if (response.success) {
-      fetchList();
-    }
+  const handleClosePopover = () => {
+    setShowPopover('');
+    setAnchorEl(null);
   };
 
   const isVideoContent = (url) => {
@@ -102,13 +85,19 @@ const PortfolioCard = ({ item, fetchList }) => {
           overflow: 'hidden',
           position: 'relative',
           backgroundColor: '#333',
-          border: '1px solid var(--mui-palette-divider)',
+          borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+          border: 'solid .1px var(--mui-palette-divider)',
           cursor: 'pointer',
           '&:hover .portfolio-card-overlay': {
             opacity: 1,
           },
         }}
-        onClick={() => setOpenPortfolioRightPanel(item)}
+        onClick={(e) => {
+          if (e.target.closest('.rating') || e.target.closest('.popover')) {
+            return;
+          }
+          setOpenPortfolioRightPanel(item);
+        }}
       >
         {isVideoContent(item.thumbnail || '') ? (
           <Box
@@ -157,12 +146,12 @@ const PortfolioCard = ({ item, fetchList }) => {
             bottom: 0,
             p: 1,
             backgroundColor: 'rgba(0, 0, 0, 0.4)',
-            opacity: !!isShowCommentField || !!isShowReactPopover ? 1 : 0,
+            opacity: showPopover ? 1 : 0,
             transition: 'all 0.3s ease-in-out',
           }}
         >
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Rating value={3} size="small" />
+            {popoverValues.rating > 0 ? <Rating value={popoverValues.rating} size="small" readOnly /> : <Box></Box>}
             <Stack direction="row" alignItems="center" sx={{ zIndex: 100 }}>
               <Button
                 variant="text"
@@ -170,7 +159,8 @@ const PortfolioCard = ({ item, fetchList }) => {
                 sx={{ color: '#fff' }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleShowCommentField(e);
+                  setAnchorEl(e.currentTarget);
+                  setShowPopover('comment');
                 }}
               >
                 <Iconify icon="ant-design:message-outlined" width={20} />
@@ -181,11 +171,13 @@ const PortfolioCard = ({ item, fetchList }) => {
                 sx={{ color: '#fff' }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleReactPopoverOpen(e);
+                  setAnchorEl(e.currentTarget);
+                  // handleReactPopoverOpen(e);
+                  setShowPopover('emoji');
                 }}
               >
-                {emoji ? (
-                  <Typography>{emoji}</Typography>
+                {popoverValues.emoji ? (
+                  <Typography>{popoverValues.emoji}</Typography>
                 ) : (
                   <Iconify icon="material-symbols-light:add-reaction-outline" width={20} />
                 )}
@@ -194,115 +186,94 @@ const PortfolioCard = ({ item, fetchList }) => {
           </Stack>
           <Stack direction="row">
             <Box>
-              <Typography sx={{ fontSize: '1.1rem' }}>Image title</Typography>
+              <Typography sx={{ fontSize: '1.1rem', color: 'var(--mui-palette-common-white)' }}>{fileName}</Typography>
               <Stack direction="row" alignItems="center" gap="2px">
-                <Typography sx={{ fontSize: '0.7rem' }}>PNG</Typography>
-                <Iconify icon="radix-icons:dot-filled" width={12} />
-                <Typography sx={{ fontSize: '0.7rem' }}>1100x1233</Typography>
-                <Iconify icon="radix-icons:dot-filled" width={12} />
-                <Typography sx={{ fontSize: '0.7rem' }}>2.1MB</Typography>
+                <Typography sx={{ fontSize: '0.7rem', color: 'var(--mui-palette-common-white)' }}>
+                  {fileType}
+                </Typography>
+                <Iconify icon="radix-icons:dot-filled" width={12} color="var(--mui-palette-common-white)" />
+                <Typography sx={{ fontSize: '0.7rem', color: 'var(--mui-palette-common-white)' }}>1100x1233</Typography>
+                <Iconify icon="radix-icons:dot-filled" width={12} color="var(--mui-palette-common-white)" />
+                <Typography sx={{ fontSize: '0.7rem', color: 'var(--mui-palette-common-white)' }}>2.1MB</Typography>
               </Stack>
             </Box>
           </Stack>
           <Popover
-            id={Boolean(isShowCommentField) ? 'comment-popover' : undefined}
-            open={Boolean(isShowCommentField)}
-            anchorEl={isShowCommentField}
-            onClose={handleCloseCommentField}
+            id={Boolean(showPopover === 'comment') ? 'comment-popover' : undefined}
+            open={Boolean(showPopover === 'comment')}
+            anchorEl={anchorEl}
+            onClose={handleClosePopover}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'left',
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {editComment ? (
+            {openCommentBox ? (
               <Stack direction="row" alignItems="center" gap={1} sx={{ p: 1 }}>
-                <TextField value={comment} onChange={(e) => setComment(e.target.value)} size="small" />
+                <TextField
+                  value={popoverValues.comment}
+                  onChange={(e) => setPopoverValues((prev) => ({ ...prev, comment: e.target.value }))}
+                  size="small"
+                />
                 <Iconify
-                  onClick={() => {
-                    handleCloseCommentField();
-                    setEditComment(false);
-                  }}
+                  onClick={handleClosePopover}
                   icon="subway:tick"
                   sx={{ cursor: 'pointer' }}
+                  width={10}
+                  height={10}
                 />
               </Stack>
             ) : (
               <Stack direction="row" alignItems="center" gap={1} sx={{ p: 1 }}>
-                <Typography sx={{ fontSize: '0.8rem' }}>The comment of the image</Typography>
+                <Typography sx={{ fontSize: '0.8rem' }}>
+                  {popoverValues.comment ? popoverValues.comment : 'Add a comment...'}
+                </Typography>
                 <Iconify
-                  onClick={() => setEditComment(true)}
+                  onClick={() => setOpenCommentBox(true)}
                   icon="material-symbols:edit-outline-rounded"
                   sx={{ cursor: 'pointer' }}
+                  width={15}
+                  height={15}
                 />
               </Stack>
             )}
           </Popover>
           <Popover
-            id={Boolean(isShowReactPopover) ? 'react-popover' : undefined}
-            open={Boolean(isShowReactPopover)}
-            anchorEl={isShowReactPopover}
-            onClose={handleReactPopoverClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
+            id={showPopover === 'emoji' ? 'react-popover' : undefined}
+            open={showPopover === 'emoji'}
+            anchorEl={anchorEl}
+            onClose={handleClosePopover}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             onClick={(e) => e.stopPropagation()}
           >
             <Stack direction="row" alignItems="center">
-              <Button
-                variant="text"
-                size="small"
-                onClick={() => {
-                  setEmoji('❤️');
-                  handleReactPopoverClose();
-                }}
-              >
-                ❤️
-              </Button>
-              <Button
-                variant="text"
-                size="small"
-                onClick={() => {
-                  setEmoji('👍');
-                  handleReactPopoverClose();
-                }}
-              >
-                👍
-              </Button>
-              <Button
-                variant="text"
-                size="small"
-                onClick={() => {
-                  setEmoji('👎');
-                  handleReactPopoverClose();
-                }}
-              >
-                👎
-              </Button>
-              <Button
-                variant="text"
-                size="small"
-                onClick={() => {
-                  setEmoji('✅');
-                  handleReactPopoverClose();
-                }}
-              >
-                ✅
-              </Button>
+              {['❤️', '👍', '👎', '✅'].map((emoji) => (
+                <Button
+                  key={emoji}
+                  variant="text"
+                  size="small"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPopoverValues((prev) => ({ ...prev, emoji: emoji }));
+                    handleClosePopover();
+                  }}
+                >
+                  {emoji}
+                </Button>
+              ))}
             </Stack>
+            <Rating
+              value={popoverValues.rating}
+              size="small"
+              onChange={(e, value) => {
+                e.stopPropagation();
+                setPopoverValues((prev) => ({ ...prev, rating: value }));
+                handleClosePopover();
+              }}
+            />
           </Popover>
         </Stack>
-        {/* {item.featured && (
-        <Stack
-          direction="row"
-          justifyContent={'flex-end'}
-          sx={{ position: 'absolute', top: 20, right: 10, width: '100%' }}
-        >
-          <Iconify icon="fluent-color:star-16" width={25} height={25} />
-        </Stack>
-      )} */}
-
         <ManagePortfolioRightPanel
           view={'QUICK'}
           fetchList={fetchList}
@@ -315,33 +286,3 @@ const PortfolioCard = ({ item, fetchList }) => {
     </>
   );
 };
-
-{
-  /* <Stack
-        direction="column"
-        spacing={1}
-        px={2}
-        sx={{ position: 'absolute', bottom: 20, right: 0, left: 0, width: '100%' }}
-      >
-        <Typography variant="h3" fontWeight={600} color="var(--mui-palette-common-white)" fontSize={{ xs: 18, md: 22 }}>
-          {item.project_title}
-        </Typography>
-        <Box
-          sx={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 1,
-          }}
-        >
-          <Typography variant="body" color="var(--mui-palette-common-white)">
-            State: {item.state}
-          </Typography>
-          {item.category &&
-            item.category
-              .split(',')
-              .map((category, index) => (
-                <Chip key={index} label={category.trim()} size="small" sx={{ backgroundColor: getRandomColor() }} />
-              ))}
-        </Box>
-      </Stack> */
-}

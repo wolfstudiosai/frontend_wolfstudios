@@ -21,7 +21,7 @@ export const DeleteConfirmationPopover = ({ onDelete, title, disabled = false })
 
   return (
     <>
-      <IconButton size="small" color="error" onClick={handleOpen} title="Delete" disabled={disabled}>
+      <IconButton size="small" color="error" onClick={handleOpen} title="Delete" disabled={disabled} >
         <Iconify icon="ic:outline-delete" width={24} height={24} color="error" />
       </IconButton>
       <Popover

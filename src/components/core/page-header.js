@@ -4,20 +4,23 @@ import React from 'react';
 import { getRandomColor, pxToRem } from '@/utils/utils';
 import { Box, Chip, IconButton, Slider, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 
+import useAuth from '@/hooks/useAuth';
+
 import { Iconify } from '../iconify/iconify';
 
 export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [], onFilterChange }) => {
   const [currentSection, setCurrentSection] = React.useState('TAG');
-  const [toggleButton, setToggleButton] = React.useState('grid');
+  const { isLogin } = useAuth();
   const handleFilter = (type, value) => {
     onFilterChange?.(type, value);
   };
 
   const handleToggle = (event, value) => {
     if (value !== null) {
-      setToggleButton(value);
+      handleFilter('VIEW', value);
     }
   };
+
   return (
     <Stack
       direction={'column'}
@@ -53,31 +56,33 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
             step={2}
           />
         </Stack>
-        <ToggleButtonGroup
-          size="small"
-          value={toggleButton}
-          exclusive
-          onChange={handleToggle}
-          aria-label="toggle buttons"
-          sx={{
-            display: 'inline-flex',
-            border: '1px solid var(--mui-palette-divider)',
-            boxShadow: 'none',
-            gap: '4px',
-            padding: '2px',
-            marginLeft: (theme) => theme.spacing(1),
-          }}
-        >
-          <ToggleButton value="grid" aria-label="grid view" sx={{ padding: '2px' }}>
-            <Iconify icon="ep:grid" width={10} height={10} />
-          </ToggleButton>
-          <ToggleButton value="list" aria-label="list view" sx={{ padding: '2px' }}>
-            <Iconify icon="solar:list-bold" width={10} height={10} />
-          </ToggleButton>
-          <ToggleButton value="add" aria-label="add new" sx={{ padding: '2px' }}>
-            <Iconify icon="mynaui:plus" width={10} height={10} />
-          </ToggleButton>
-        </ToggleButtonGroup>
+        {isLogin && (
+          <ToggleButtonGroup
+            size="small"
+            value={values.VIEW}
+            exclusive
+            onChange={handleToggle}
+            aria-label="toggle buttons"
+            sx={{
+              display: 'inline-flex',
+              border: '1px solid var(--mui-palette-divider)',
+              boxShadow: 'none',
+              gap: '4px',
+              padding: '2px',
+              marginLeft: (theme) => theme.spacing(1),
+            }}
+          >
+            <ToggleButton value="grid" aria-label="grid view" sx={{ padding: '2px' }}>
+              <Iconify icon="ep:grid" width={10} height={10} />
+            </ToggleButton>
+            <ToggleButton value="list" aria-label="list view" sx={{ padding: '2px' }}>
+              <Iconify icon="solar:list-bold" width={10} height={10} />
+            </ToggleButton>
+            <ToggleButton value="add" aria-label="add new" sx={{ padding: '2px' }}>
+              <Iconify icon="mynaui:plus" width={10} height={10} />
+            </ToggleButton>
+          </ToggleButtonGroup>
+        )}
         <Iconify icon="ri:more-line" width={12} height={12} sx={{ ml: 1 }} />
       </Stack>
       <Box>
