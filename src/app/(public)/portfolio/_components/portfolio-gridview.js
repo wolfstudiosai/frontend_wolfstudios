@@ -19,7 +19,7 @@ import { PortfolioSliderItem } from './portfolio-slider-item';
 export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
   const slider_data = data.filter((item) => item.featured);
   return (
-    <Box sx={{ p: 2 }}>
+    <Box>
       <Box>
         <SliderWrapper
           modules={[Navigation, SwiperPagination, Scrollbar, A11y, Autoplay]}

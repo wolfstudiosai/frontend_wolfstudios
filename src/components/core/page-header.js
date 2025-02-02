@@ -12,7 +12,7 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
     onFilterChange?.(type, value);
   };
   return (
-    <Stack direction={'column'} spacing={2} mb={3}>
+    <Stack direction={'column'} spacing={2} >
       <Stack direction={'row'} alignItems={'center'}>
         <Typography variant="h5" fontWeight={600} gutterBottom>
           {title}
