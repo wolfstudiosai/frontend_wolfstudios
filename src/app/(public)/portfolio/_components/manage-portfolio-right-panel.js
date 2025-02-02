@@ -118,10 +118,10 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
       width={width}
       actionButtons={() => (
         <Stack direction="row" alignItems="center" gap={2}>
-          <Button variant="outlined" color="primary" onClick={onClose}>
+          <Button size="small" variant="outlined" color="primary" onClick={onClose}>
             Close
           </Button>
-          <Button variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+          <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
             Save
           </Button>
           {isLogin && (
@@ -142,6 +142,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
               <FormControlLabel
                 control={
                   <Switch
+                    size="small"
                     checked={values?.featured}
                     onChange={() => handleFeatured(!values?.featured)}
                     color="primary"

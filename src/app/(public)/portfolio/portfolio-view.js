@@ -3,10 +3,8 @@
 import React, { useRef } from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
-import { Iconify } from '@/components/iconify/iconify';
 import PageLoader from '@/components/PageLoader/PageLoader';
-import { QuickToolbar } from '@/components/toolbar/quick-toolbar';
-import { Box, CircularProgress, IconButton, Stack } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 
 import useAuth from '@/hooks/useAuth';
 
@@ -18,29 +16,19 @@ import { getPortfolioListAsync } from './_lib/portfolio.actions';
 import { defaultPortfolio } from './_lib/portfolio.types';
 
 export const PortfolioView = () => {
-  const { isLogin } = useAuth();
   const observerRef = useRef(null);
-  const [viewMode, setViewMode] = React.useState('grid');
-  const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(false);
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [isFetching, setIsFetching] = React.useState(false);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filters, setFilters] = React.useState({
-    COL: 3,
+    COL: 4,
     TAG: [],
     FILTER: [],
     SORTING: [],
+    VIEW: 'grid',
   });
-
-  const handleToggleViewMode = (mode) => {
-    setViewMode(mode);
-  };
-
-  const handleOpenPortfolioRightPanel = () => {
-    setOpenPortfolioRightPanel(true);
-  };
 
   async function fetchList() {
     if (isFetching) return;
@@ -105,42 +93,8 @@ export const PortfolioView = () => {
           sorting={portfolioSorting}
           onFilterChange={handleFilterChange}
         />
-        {isLogin && (
-          <QuickToolbar closePopover={openPortfolioRightPanel}>
-            <Stack direction="column" justifyContent="center" alignItems="center">
-              <IconButton variant="text" size="small" title="Add" onClick={handleOpenPortfolioRightPanel}>
-                <Iconify icon="iconoir:plus" title="Add Portfolio" />
-              </IconButton>
-              <IconButton
-                variant="text"
-                size="small"
-                title="Card View"
-                onClick={() => handleToggleViewMode('grid')}
-                sx={{
-                  backgroundColor: viewMode === 'grid' ? 'action.selected' : 'transparent',
-                  '&:hover': {
-                    backgroundColor: viewMode === 'grid' ? 'action.selected' : 'action.hover',
-                  },
-                }}
-              >
-                <Iconify icon="fluent:grid-16-filled" />
-              </IconButton>
-              <IconButton
-                variant="text"
-                size="small"
-                title="List View"
-                onClick={() => handleToggleViewMode('list')}
-                sx={{
-                  backgroundColor: viewMode === 'list' ? 'action.selected' : 'transparent',
-                  ':hover': { backgroundColor: viewMode === 'list' ? 'action.selected' : 'action.hover' },
-                }}
-              >
-                <Iconify icon="fluent:list-16-regular" />
-              </IconButton>
-            </Stack>
-          </QuickToolbar>
-        )}
-        {viewMode === 'list' ? (
+
+        {filters.VIEW === 'list' ? (
           <PortfolioListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />
         ) : (
           <Box>
@@ -159,8 +113,8 @@ export const PortfolioView = () => {
           view="EDIT"
           width="70%"
           data={null}
-          open={openPortfolioRightPanel}
-          onClose={() => setOpenPortfolioRightPanel(false)}
+          open={filters.VIEW === 'add'}
+          onClose={() => setFilters((prev) => ({ ...prev, VIEW: 'grid' }))}
         />
       </PageLoader>
     </PageContainer>

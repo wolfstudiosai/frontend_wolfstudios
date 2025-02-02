@@ -41,7 +41,7 @@ export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagi
         </SliderWrapper>
       </Box>
       <PageLoader loading={loading} error={null}>
-        <Grid container spacing={1} columns={{ xs: 30 }} sx={{ mt: 2 }}>
+        <Grid container spacing={1} columns={{ xs: 28 }} sx={{ mt: 2 }}>
           {data.map((portfolio, index) => (
             <Grid item size={{ xs: 12, md: colums }} key={index}>
               <PortfolioCard item={portfolio} fetchList={fetchList} />
@@ -78,7 +78,6 @@ const PortfolioCard = ({ item, fetchList }) => {
     setIsShowCommentField(null);
   };
 
-  console.log('comment field', isShowCommentField);
   const handleDelete = async () => {
     const response = await deletePortfolioAsync([item.id]);
     if (response.success) {

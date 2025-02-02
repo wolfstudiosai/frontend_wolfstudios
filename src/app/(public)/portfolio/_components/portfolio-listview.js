@@ -162,7 +162,7 @@ export const PortfolioListView = () => {
 
   return (
     <PageContainer>
-      <CardTitle
+      {/* <CardTitle
         title={'Portfolios'}
         rightItem={
           <>
@@ -171,7 +171,7 @@ export const PortfolioListView = () => {
             </Button>
           </>
         }
-      />
+      /> */}
       {/* <PageLoader loading={loading} error={null}> */}
       <Card>
         <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
