@@ -94,9 +94,9 @@ export function VerticalLayout({ children }) {
             sx={{
               // '--Content-margin': '1.5rem auto',
               // '--Content-maxWidth': 'var(--maxWidth-xl)',
-              // '--Content-paddingY': { xs: pxToRem(16), lg: pxToRem(18) },
+              '--Content-paddingY': { xs: pxToRem(2), lg: pxToRem(4) },
               '--Content-paddingX': { xs: pxToRem(4), md: pxToRem(6) },
-              '--Content-padding': '0 var(--Content-paddingX)',
+              '--Content-padding': 'var(--Content-paddingY) var(--Content-paddingX)',
               '--Content-width': '100%',
               display: 'flex',
               flex: '1 1 auto',

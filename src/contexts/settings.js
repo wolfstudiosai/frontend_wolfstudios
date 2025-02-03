@@ -10,13 +10,13 @@ export const SettingsContext = React.createContext({
     // noop
   },
   customSettings: {
-    openSubNav: true
+    openSubNav: false
   }
 });
 
 export function SettingsProvider({ children, settings: initialSettings }) {
   const [state, setState] = React.useState(initialSettings);
-  const [openSubNav, setOpenSubNav] = React.useState(true);
+  const [openSubNav, setOpenSubNav] = React.useState(false);
 
   React.useEffect(() => {
     setState(initialSettings);
