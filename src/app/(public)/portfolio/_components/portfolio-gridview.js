@@ -1,15 +1,16 @@
 'use client';
 
+import React from 'react';
+import Image from 'next/image';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
+import { getRandomColor } from '@/utils/utils';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import Image from 'next/image';
-import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
-import { getRandomColor } from '@/utils/utils';
+import { isVideoContent } from '../_lib/helper';
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 import { PortfolioSliderItem } from './portfolio-slider-item';
 
@@ -52,11 +53,6 @@ export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagi
 
 const PortfolioCard = ({ item, fetchList }) => {
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
-
-  const isVideoContent = (url) => {
-    const videoKeywords = ['vimeo', 'playback', 'video'];
-    return videoKeywords.some((keyword) => url.includes(keyword));
-  };
 
   return (
     <>
@@ -118,7 +114,15 @@ const PortfolioCard = ({ item, fetchList }) => {
         <Stack
           direction="column"
           px={2}
-          sx={{ position: 'absolute', bottom: 0, right: 0, left: 0, width: '100%', py: 1, background: "linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))", }}
+          sx={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0,
+            left: 0,
+            width: '100%',
+            py: 1,
+            background: 'linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))',
+          }}
         >
           <Typography fontWeight={600} color="var(--mui-palette-common-white)" fontSize={{ xs: 12, md: 14 }}>
             {item.project_title}
@@ -131,13 +135,20 @@ const PortfolioCard = ({ item, fetchList }) => {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '4px',
-              mt: 1
+              mt: 1,
             }}
           >
-
-            {item?.category && item?.category?.split(',').map((category, index) => (
-              <Chip key={index} label={category.trim()} size="small" sx={{ backgroundColor: getRandomColor(), fontSize: '10px', py: '2px' }} />
-            ))}
+            {item?.category &&
+              item?.category
+                ?.split(',')
+                .map((category, index) => (
+                  <Chip
+                    key={index}
+                    label={category.trim()}
+                    size="small"
+                    sx={{ backgroundColor: getRandomColor(), fontSize: '10px', py: '2px' }}
+                  />
+                ))}
           </Box>
         </Stack>
         {/* <Stack

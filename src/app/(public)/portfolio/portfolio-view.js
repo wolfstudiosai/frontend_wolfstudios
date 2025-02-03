@@ -1,13 +1,13 @@
 'use client';
 
+import React, { useRef } from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
 import PageLoader from '@/components/PageLoader/PageLoader';
 import { Box, CircularProgress } from '@mui/material';
-import React, { useRef } from 'react';
-
 
 import { SettingsContext } from '@/contexts/settings';
+
 import { ManagePortfolioRightPanel } from './_components/manage-portfolio-right-panel';
 import { PortfolioGridView } from './_components/portfolio-gridview';
 import { PortfolioListView } from './_components/portfolio-listview';
@@ -29,7 +29,7 @@ export const PortfolioView = () => {
     SORTING: [],
     VIEW: 'grid',
   });
-  const { customSettings: { openSubNav } } = React.useContext(SettingsContext);
+  
 
   async function fetchList() {
     if (isFetching) return;
@@ -86,15 +86,7 @@ export const PortfolioView = () => {
   return (
     <PageContainer>
       <PageLoader loading={loading}>
-        <Box
-          sx={{
-            width: '100%',
-            position: 'sticky',
-            top: openSubNav ? 94 : 45,
-            zIndex: 100,
-            backgroundColor: 'background.paper'
-          }}
-        >
+      
           <PageHeader
             title="Portfolio"
             values={filters}
@@ -103,7 +95,7 @@ export const PortfolioView = () => {
             sorting={portfolioSorting}
             onFilterChange={handleFilterChange}
           />
-        </Box>
+        
 
         {filters.VIEW === 'list' ? (
           <PortfolioListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />

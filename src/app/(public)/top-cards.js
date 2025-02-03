@@ -95,7 +95,7 @@ export function FeatureCards() {
         overflowX: 'auto',
         whiteSpace: 'nowrap',
         // p: 2,
-        py: pxToRem(5),
+        pt: { xs: pxToRem(2), lg: pxToRem(6) },
         mx: 1.5,
         position: 'sticky',
         top: 45,
