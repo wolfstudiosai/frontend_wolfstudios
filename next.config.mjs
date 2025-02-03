@@ -12,6 +12,7 @@ const config = {
       'picsum.photos',
       'images.unsplash.com',
       'bryrhmtbdhskxqbdbryf.supabase.co',
+      'cdn.prod.website-files.com',
     ],
   },
 };

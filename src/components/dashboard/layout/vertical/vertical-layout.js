@@ -70,7 +70,7 @@ export function VerticalLayout({ children }) {
               zIndex: 100,
             }}
           >
-            {isFeaturedCardVisible ? <FeatureCards /> : <Box mb={1} />}
+            {isFeaturedCardVisible ? <FeatureCards /> : <Box  />}
           </Box>
         )}
         <Box
