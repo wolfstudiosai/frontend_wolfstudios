@@ -29,10 +29,7 @@ export const PortfolioView = () => {
     SORTING: [],
     VIEW: 'grid',
   });
-  const {
-    customSettings: { openSubNav },
-  } = React.useContext(SettingsContext);
-  console.log(openSubNav, 'openSubNav');
+  
 
   async function fetchList() {
     if (isFetching) return;
@@ -89,15 +86,7 @@ export const PortfolioView = () => {
   return (
     <PageContainer>
       <PageLoader loading={loading}>
-        <Box
-          sx={{
-            width: '100%',
-            position: 'sticky',
-            top: openSubNav ? 94 : 44,
-            zIndex: 100,
-            backgroundColor: 'background.paper',
-          }}
-        >
+      
           <PageHeader
             title="Portfolio"
             values={filters}
@@ -106,7 +95,7 @@ export const PortfolioView = () => {
             sorting={portfolioSorting}
             onFilterChange={handleFilterChange}
           />
-        </Box>
+        
 
         {filters.VIEW === 'list' ? (
           <PortfolioListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />

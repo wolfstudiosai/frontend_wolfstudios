@@ -24,7 +24,7 @@ export function VerticalLayout({ children }) {
     }
     return true;
   });
-  const [isFeaturedCardVisible, setIsFeaturedCardVisible] = React.useState(true);
+  const [isFeaturedCardVisible, setIsFeaturedCardVisible] = React.useState(false);
 
   const handleSidebarToggle = () => {
     setOpenSidebar((prev) => {

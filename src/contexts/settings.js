@@ -3,6 +3,7 @@
 import * as React from 'react';
 
 import { applyDefaultSettings } from '/src/lib/settings/apply-default-settings';
+import useAuth from '@/hooks/useAuth';
 
 export const SettingsContext = React.createContext({
   settings: applyDefaultSettings({}),
@@ -10,13 +11,15 @@ export const SettingsContext = React.createContext({
     // noop
   },
   customSettings: {
-    openSubNav: false
-  }
+    openSubNav: false, // Set a default value here
+    setOpenSubNav: () => {}, // Provide a default noop function
+  },
 });
 
 export function SettingsProvider({ children, settings: initialSettings }) {
+  const { isLogin } = useAuth();
   const [state, setState] = React.useState(initialSettings);
-  const [openSubNav, setOpenSubNav] = React.useState(false);
+  const [openSubNav, setOpenSubNav] = React.useState(isLogin ? true : false);
 
   React.useEffect(() => {
     setState(initialSettings);
@@ -31,8 +34,8 @@ export function SettingsProvider({ children, settings: initialSettings }) {
         },
         customSettings: {
           openSubNav,
-          setOpenSubNav
-        }
+          setOpenSubNav,
+        },
       }}
     >
       {children}

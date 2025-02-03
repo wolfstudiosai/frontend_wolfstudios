@@ -77,7 +77,7 @@ export const PortfolioQuickView = ({ data }) => {
       <Box mt={3} width="100%">
         <Divider sx={{ my: 2 }} />
 
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2} mb={2}>
           <Typography variant="subtitle1" color="text.secondary">
             Category: {data.category || 'N/A'}
           </Typography>
@@ -89,8 +89,8 @@ export const PortfolioQuickView = ({ data }) => {
           </Typography>
         </Stack>
 
-        <Divider sx={{ my: 2 }} />
         <Typography variant="body1">{data.full_description || 'No description available.'}</Typography>
+        <Divider sx={{ my: 2 }} />
 
         {/* Gallery Images */}
         {data.vertical_gallery_images.length > 0 && (
