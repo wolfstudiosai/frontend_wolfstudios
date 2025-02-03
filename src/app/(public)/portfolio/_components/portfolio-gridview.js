@@ -1,16 +1,15 @@
 'use client';
 
-import React from 'react';
-import Image from 'next/image';
-import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { extractFilenameAndType } from '@/utils/utils';
-import { Box, Button, Card, Popover, Rating, Stack, TextField, Typography } from '@mui/material';
+import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import Image from 'next/image';
+import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
+import { getRandomColor } from '@/utils/utils';
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 import { PortfolioSliderItem } from './portfolio-slider-item';
 
@@ -52,22 +51,7 @@ export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagi
 };
 
 const PortfolioCard = ({ item, fetchList }) => {
-  const { fileName, fileType } = extractFilenameAndType(item.thumbnail);
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
-  const [showPopover, setShowPopover] = React.useState('');
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const [openCommentBox, setOpenCommentBox] = React.useState(false);
-  const [popoverValues, setPopoverValues] = React.useState({
-    comment: '',
-    rating: 0,
-    emoji: '',
-  });
-
-  const handleClosePopover = () => {
-    setShowPopover('');
-    setAnchorEl(null);
-  };
 
   const isVideoContent = (url) => {
     const videoKeywords = ['vimeo', 'playback', 'video'];
@@ -93,9 +77,6 @@ const PortfolioCard = ({ item, fetchList }) => {
           },
         }}
         onClick={(e) => {
-          if (e.target.closest('.rating') || e.target.closest('.popover')) {
-            return;
-          }
           setOpenPortfolioRightPanel(item);
         }}
       >
@@ -136,144 +117,44 @@ const PortfolioCard = ({ item, fetchList }) => {
         )}
         <Stack
           direction="column"
-          justifyContent="space-between"
-          className="portfolio-card-overlay"
-          sx={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            left: 0,
-            bottom: 0,
-            p: 1,
-            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-            opacity: showPopover ? 1 : 0,
-            transition: 'all 0.3s ease-in-out',
-          }}
+          px={2}
+          sx={{ position: 'absolute', bottom: 0, right: 0, left: 0, width: '100%', py: 1, background: "linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))", }}
         >
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
-            {popoverValues.rating > 0 ? <Rating value={popoverValues.rating} size="small" readOnly /> : <Box></Box>}
-            <Stack direction="row" alignItems="center" sx={{ zIndex: 100 }}>
-              <Button
-                variant="text"
-                size="small"
-                sx={{ color: '#fff' }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setAnchorEl(e.currentTarget);
-                  setShowPopover('comment');
-                }}
-              >
-                <Iconify icon="ant-design:message-outlined" width={20} />
-              </Button>
-              <Button
-                variant="text"
-                size="small"
-                sx={{ color: '#fff' }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setAnchorEl(e.currentTarget);
-                  // handleReactPopoverOpen(e);
-                  setShowPopover('emoji');
-                }}
-              >
-                {popoverValues.emoji ? (
-                  <Typography>{popoverValues.emoji}</Typography>
-                ) : (
-                  <Iconify icon="material-symbols-light:add-reaction-outline" width={20} />
-                )}
-              </Button>
-            </Stack>
-          </Stack>
-          <Stack direction="row">
-            <Box>
-              <Typography sx={{ fontSize: '1.1rem', color: 'var(--mui-palette-common-white)' }}>{fileName}</Typography>
-              <Stack direction="row" alignItems="center" gap="2px">
-                <Typography sx={{ fontSize: '0.7rem', color: 'var(--mui-palette-common-white)' }}>
-                  {fileType}
-                </Typography>
-                <Iconify icon="radix-icons:dot-filled" width={12} color="var(--mui-palette-common-white)" />
-                <Typography sx={{ fontSize: '0.7rem', color: 'var(--mui-palette-common-white)' }}>1100x1233</Typography>
-                <Iconify icon="radix-icons:dot-filled" width={12} color="var(--mui-palette-common-white)" />
-                <Typography sx={{ fontSize: '0.7rem', color: 'var(--mui-palette-common-white)' }}>2.1MB</Typography>
-              </Stack>
-            </Box>
-          </Stack>
-          <Popover
-            id={Boolean(showPopover === 'comment') ? 'comment-popover' : undefined}
-            open={Boolean(showPopover === 'comment')}
-            anchorEl={anchorEl}
-            onClose={handleClosePopover}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
+          <Typography fontWeight={600} color="var(--mui-palette-common-white)" fontSize={{ xs: 12, md: 14 }}>
+            {item.project_title}
+          </Typography>
+          <Typography variant="body" color="var(--mui-palette-common-white)" sx={{ fontSize: '12px' }}>
+            {item.state}
+          </Typography>
+          <Box
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              mt: 1
             }}
-            onClick={(e) => e.stopPropagation()}
           >
-            {openCommentBox ? (
-              <Stack direction="row" alignItems="center" gap={1} sx={{ p: 1 }}>
-                <TextField
-                  value={popoverValues.comment}
-                  onChange={(e) => setPopoverValues((prev) => ({ ...prev, comment: e.target.value }))}
-                  size="small"
-                />
-                <Iconify
-                  onClick={handleClosePopover}
-                  icon="subway:tick"
-                  sx={{ cursor: 'pointer' }}
-                  width={10}
-                  height={10}
-                />
-              </Stack>
-            ) : (
-              <Stack direction="row" alignItems="center" gap={1} sx={{ p: 1 }}>
-                <Typography sx={{ fontSize: '0.8rem' }}>
-                  {popoverValues.comment ? popoverValues.comment : 'Add a comment...'}
-                </Typography>
-                <Iconify
-                  onClick={() => setOpenCommentBox(true)}
-                  icon="material-symbols:edit-outline-rounded"
-                  sx={{ cursor: 'pointer' }}
-                  width={15}
-                  height={15}
-                />
-              </Stack>
-            )}
-          </Popover>
-          <Popover
-            id={showPopover === 'emoji' ? 'react-popover' : undefined}
-            open={showPopover === 'emoji'}
-            anchorEl={anchorEl}
-            onClose={handleClosePopover}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Stack direction="row" alignItems="center">
-              {['❤️', '👍', '👎', '✅'].map((emoji) => (
-                <Button
-                  key={emoji}
-                  variant="text"
-                  size="small"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setPopoverValues((prev) => ({ ...prev, emoji: emoji }));
-                    handleClosePopover();
-                  }}
-                >
-                  {emoji}
-                </Button>
-              ))}
-            </Stack>
-            <Rating
-              value={popoverValues.rating}
-              size="small"
-              onChange={(e, value) => {
-                e.stopPropagation();
-                setPopoverValues((prev) => ({ ...prev, rating: value }));
-                handleClosePopover();
-              }}
-            />
-          </Popover>
+
+            {item?.category && item?.category?.split(',').map((category, index) => (
+              <Chip key={index} label={category.trim()} size="small" sx={{ backgroundColor: getRandomColor(), fontSize: '10px', py: '2px' }} />
+            ))}
+          </Box>
         </Stack>
+        {/* <Stack
+          direction="row"
+          justifyContent={'flex-end'}
+          sx={{ position: 'absolute', top: 20, right: 10, width: '100%' }}
+        >
+          <AvatarGroup
+            spacing={'small'}
+            total={42}
+            sx={{ '& .MuiAvatar-root': { width: 32, height: 32, fontSize: 12, mb: 0.5 } }}
+          >
+            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+            <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+            <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
+          </AvatarGroup>
+        </Stack> */}
         <ManagePortfolioRightPanel
           view={'QUICK'}
           fetchList={fetchList}

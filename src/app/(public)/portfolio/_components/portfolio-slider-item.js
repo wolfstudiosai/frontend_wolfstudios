@@ -64,9 +64,9 @@ export const PortfolioSliderItem = ({ item, index, fetchList }) => {
         direction="column"
         spacing={1}
         px={2}
-        sx={{ position: 'absolute', bottom: 20, right: 0, left: 0, width: '100%' }}
+        sx={{ position: 'absolute', bottom: 0, right: 0, left: 0, width: '100%', pb: 2, pt: 3, background: "linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))", }}
       >
-        <Typography variant="h3" fontWeight={700} color="var(--mui-palette-common-white)">
+        <Typography variant="h5" fontWeight={700} color="var(--mui-palette-common-white)">
           {item.project_title}
         </Typography>
         <Box

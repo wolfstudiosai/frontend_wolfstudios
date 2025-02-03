@@ -1,4 +1,4 @@
-import { ComingSoon } from '@/components/coming-soon/comming-soong';
+import { ComingSoon } from '@/components/coming-soon/comming-soon-2';
 
 import { config } from '/src/config';
 

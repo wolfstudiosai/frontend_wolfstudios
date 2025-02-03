@@ -15,8 +15,8 @@ export const PortfolioQuickView = ({ data }) => {
           maxWidth: '100%',
           borderRadius: 2,
           overflow: 'hidden',
-        //   boxShadow: `0px 1px 5px ${theme.palette.grey[900]}`,
-        border: `1px solid ${theme.palette.divider}`,
+          //   boxShadow: `0px 1px 5px ${theme.palette.grey[900]}`,
+          border: `1px solid ${theme.palette.divider}`,
         }}
       >
         <Box

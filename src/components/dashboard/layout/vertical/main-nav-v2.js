@@ -1,8 +1,5 @@
 'use client';
 
-import * as React from 'react';
-import RouterLink from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
 import { LoginForm } from '@/app/auth/_components/LoginForm';
 import { Dropdown } from '@/components/core/dropdown/dropdown';
 import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
@@ -21,15 +18,20 @@ import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
+import RouterLink from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import * as React from 'react';
+import { SettingsContext } from 'src/contexts/settings';
 
-import { paths } from '@/paths';
 import useAuth from '@/hooks/useAuth';
+import { paths } from '@/paths';
 
 import { NotificationPopover } from '../_components/notificaiton-popover';
 import { SettingsGear } from '../_components/settings-gear';
 import { UserInfoPopover } from '../_components/user-info-popover';
 
 export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
+  const { customSettings: { setOpenSubNav } } = React.useContext(SettingsContext);
   const [openNav, setOpenNav] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const router = useRouter();
@@ -90,12 +92,15 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
 
                   <Box
                     component="button"
-                    onClick={() => onFeatureCardVisible((prev) => !prev)}
+                    onClick={() => onFeatureCardVisible((prev) => {
+                      setOpenSubNav(!prev)
+                      return !prev
+                    })}
                     sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
                   >
                     <Iconify
                       icon="icon-park-outline:down"
-                      width={15}
+                      width={20}
                       style={{ color: 'var(--mui-palette-neutral-400)' }}
                     />
                   </Box>
@@ -215,21 +220,21 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
       <Box
         {...(hasPopover
           ? {
-              onClick: (event) => {
-                event.preventDefault();
-              },
-              role: 'button',
-            }
+            onClick: (event) => {
+              event.preventDefault();
+            },
+            role: 'button',
+          }
           : {
-              ...(href
-                ? {
-                    component: external ? 'a' : RouterLink,
-                    href,
-                    target: external ? '_blank' : undefined,
-                    rel: external ? 'noreferrer' : undefined,
-                  }
-                : { role: 'button' }),
-            })}
+            ...(href
+              ? {
+                component: external ? 'a' : RouterLink,
+                href,
+                target: external ? '_blank' : undefined,
+                rel: external ? 'noreferrer' : undefined,
+              }
+              : { role: 'button' }),
+          })}
         sx={{
           alignItems: 'center',
           borderRadius: 1,

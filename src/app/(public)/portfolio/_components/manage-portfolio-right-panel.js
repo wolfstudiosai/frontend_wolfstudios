@@ -1,12 +1,12 @@
 'use client';
 
-import React from 'react';
 import { formConstants } from '@/app/constants/form-constants';
 import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
 import { Iconify } from '@/components/iconify/iconify';
 import { RightPanel } from '@/components/rightPanel/right-panel';
 import { Button, FormControlLabel, IconButton, Stack, Switch } from '@mui/material';
 import { useFormik } from 'formik';
+import React from 'react';
 
 import useAuth from '@/hooks/useAuth';
 
@@ -139,7 +139,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
               <DeleteConfirmationPopover
                 title={`Want to delete ${data?.project_title}?`}
                 onDelete={() => handleDelete()}
-              />{' '}
+              />
               <FormControlLabel
                 control={
                   <Switch

@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import { getRandomColor, pxToRem } from '@/utils/utils';
+import { pxToRem } from '@/utils/utils';
 import { Box, Chip, IconButton, Slider, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import React from 'react';
 
 import useAuth from '@/hooks/useAuth';
 
@@ -32,19 +32,19 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
       }}
     >
       <Stack direction={'row'} alignItems={'center'}>
-        <Typography variant="h6" fontWeight={600} gutterBottom>
+        <Typography variant="h6" fontWeight={600} gutterBottom sx={{ fontSize: pxToRem(28) }}>
           {title}
         </Typography>
         <Chip
           label={'1881'}
           color="inherit"
           size="small"
-          sx={{ ml: 1, color: 'text.secondary', fontSize: pxToRem(8), padding: 0 }}
+          sx={{ ml: 1, color: 'text.secondary', fontSize: pxToRem(12), padding: 0 }}
         />
         <IconButton size="small" variant="contained" color="error">
-          <Iconify icon="material-symbols-light:bookmark-outline" width={16} height={16} />
+          <Iconify icon="material-symbols-light:bookmark-outline" width={20} height={20} />
         </IconButton>
-        <Stack justifyContent={'center'} alignItems={'center'} sx={{ width: pxToRem(50) }}>
+        <Stack justifyContent={'center'} alignItems={'center'} sx={{ width: pxToRem(100) }}>
           <Slider
             size="small"
             aria-label="show-columns"
@@ -73,17 +73,17 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
             }}
           >
             <ToggleButton value="grid" aria-label="grid view" sx={{ padding: '2px' }}>
-              <Iconify icon="ep:grid" width={10} height={10} />
+              <Iconify icon="ep:grid" width={16} height={16} />
             </ToggleButton>
             <ToggleButton value="list" aria-label="list view" sx={{ padding: '2px' }}>
-              <Iconify icon="solar:list-bold" width={10} height={10} />
+              <Iconify icon="solar:list-bold" width={16} height={16} />
             </ToggleButton>
             <ToggleButton value="add" aria-label="add new" sx={{ padding: '2px' }}>
-              <Iconify icon="mynaui:plus" width={10} height={10} />
+              <Iconify icon="mynaui:plus" width={16} height={16} />
             </ToggleButton>
           </ToggleButtonGroup>
         )}
-        <Iconify icon="ri:more-line" width={12} height={12} sx={{ ml: 1 }} />
+        <Iconify icon="ri:more-line" width={20} height={20} sx={{ ml: 1 }} />
       </Stack>
       <Box>
         <Stack direction="row" alignItems="center" sx={{ gap: 1 }}>
@@ -92,7 +92,7 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
               key={section}
               onClick={() => setCurrentSection(section)}
               sx={{
-                fontSize: pxToRem(10),
+                fontSize: pxToRem(12),
                 fontWeight: '500',
                 cursor: 'pointer',
                 color: currentSection === section ? 'primary.main' : 'text.secondary',
@@ -109,17 +109,17 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
             {(currentSection === 'TAG' ? tags : currentSection === 'FILTER' ? filters : sorting).map((item) => (
               <Chip
                 key={item.value}
+                color='inherit'
                 size="small"
                 label={item.label}
                 onClick={() => handleFilter(currentSection, item.value)}
                 sx={{
                   ml: 0.3,
                   borderRadius: 0.5,
-                  backgroundColor: getRandomColor(),
-                  color: '#fff',
-                  fontSize: '8px',
-                  height: '14px',
-                  padding: '1px',
+                  fontSize: '12px',
+                  height: '22px',
+                  padding: '4px',
+                  cursor: 'pointer',
                 }}
               />
             ))}
