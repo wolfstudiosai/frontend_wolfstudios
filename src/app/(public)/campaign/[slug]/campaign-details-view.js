@@ -5,13 +5,14 @@ import { Iconify } from '@/components/iconify/iconify';
 
 import { CampaignDetailsRightPanel } from '../_components/campaign-details-right-panel';
 import { CampaignDetailsSidebar } from '../_components/campaign-details-sidebar';
+import { PageContainer } from '@/components/container/PageContainer';
 
 // import { CampaignDetailsRightPanel } from "../_components/campaign-details-right-panel";
 // import { CampaignDetailsSidebar } from "../_components/campaign-details-sidebar";
 
 export const CampaignDetailsView = ({ data }) => {
   return (
-    <Box sx={{ py: 4 }}>
+    <PageContainer>
       <Grid container spacing={4}>
         {/* Left Panel */}
         <Grid item size={{ xs: 12, md: 4 }}>
@@ -118,6 +119,6 @@ export const CampaignDetailsView = ({ data }) => {
           </Stack>
         </Grid>
       </Grid>
-    </Box>
+    </PageContainer>
   );
 };

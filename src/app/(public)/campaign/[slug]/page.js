@@ -1,9 +1,9 @@
-import { publicApi } from '/src/utils/api';
 import { Container } from '@mui/material';
 
 import { config } from '/src/config';
 
 import { CampaignDetailsView } from './campaign-details-view';
+import { publicApi } from '/src/utils/api';
 
 export const metadata = { title: config.site.name, description: 'Campaigns list page' };
 
@@ -66,9 +66,5 @@ export default async function Page({ params: { slug } }) {
     },
   };
 
-  return (
-    <Container maxWidth="xl">
-      <CampaignDetailsView data={data} />
-    </Container>
-  );
+  return <CampaignDetailsView data={data} />;
 }

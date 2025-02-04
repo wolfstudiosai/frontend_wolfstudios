@@ -7,7 +7,7 @@ import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { Box, CircularProgress } from '@mui/material';
 
 import { CampaignGridView } from './_components/campaign-grid-view';
-import { CampaignListView } from './_components/campaign-list-view';
+import { CampaignListView } from './_components/campaign-listview';
 import { defaultCampaignData } from './_lib/campagin.data';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
 

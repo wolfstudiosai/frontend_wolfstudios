@@ -1,17 +1,19 @@
 'use client';
 
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { formConstants } from '@/app/constants/form-constants';
 import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
 import { Iconify } from '@/components/iconify/iconify';
 import { RightPanel } from '@/components/rightPanel/right-panel';
 import { Box, Button, FormControlLabel, IconButton, Stack, Switch } from '@mui/material';
-import React from 'react';
+import { useFormik } from 'formik';
 
+import { paths } from '@/paths';
 import useAuth from '@/hooks/useAuth';
 
-import { CampaignQuickView } from './campaign-quick-view';
-import { useFormik } from 'formik';
 import { defaultCampaignData } from '../_lib/campagin.data';
-import { formConstants } from '@/app/constants/form-constants';
+import { CampaignQuickView } from './campaign-quick-view';
 
 // import {
 //   createPortfolioAsync,
@@ -24,6 +26,7 @@ import { formConstants } from '@/app/constants/form-constants';
 
 export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
   const isUpdate = data ? true : false;
+  const router = useRouter();
   const { isLogin } = useAuth();
 
   const [sidebarView, setSidebarView] = React.useState(view); //QUICK/ EDIT
@@ -129,15 +132,9 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
               <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
                 Save
               </Button>
-              {sidebarView === 'QUICK' ? (
-                <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
-                  <Iconify icon="mynaui:edit-one" />
-                </IconButton>
-              ) : (
-                <IconButton onClick={() => setSidebarView('QUICK')} title="Quick View">
-                  <Iconify icon="lets-icons:view-light" />
-                </IconButton>
-              )}
+              <IconButton onClick={() => router.push(paths.public.campaign + '/bogomore')} title="Quick View">
+                <Iconify icon="lets-icons:view-light" />
+              </IconButton>
               <DeleteConfirmationPopover
                 title={`Want to delete ${data?.project_title}?`}
                 onDelete={() => handleDelete()}

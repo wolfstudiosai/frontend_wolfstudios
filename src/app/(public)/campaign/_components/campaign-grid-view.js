@@ -102,7 +102,7 @@ const CampaignCard = ({ item, fetchList }) => {
           }}
         >
           <Typography fontWeight={600} color="var(--mui-palette-common-white)" fontSize={{ xs: 12, md: 14 }}>
-            {item.project_title}
+            {item.title}
           </Typography>
           <Typography variant="body" color="var(--mui-palette-common-white)" sx={{ fontSize: '12px' }}>
             {item.state}
