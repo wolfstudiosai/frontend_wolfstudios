@@ -1,137 +1,289 @@
-import { Box, Card } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+'use client';
 
-import { LeftCampaignOverview } from './_components/left-campaign-overview';
-import { RightCampaignOverview } from './_components/right-campaign-overview';
+import React from 'react';
+import { PageContainer } from '@/components/container/PageContainer';
+import { PageHeader } from '@/components/core/page-header';
+import { PageLoader } from '@/components/PageLoader/PageLoader';
+import { Box, CircularProgress } from '@mui/material';
 
-export const CampaignView = ({ data }) => {
-  // todo: remove this after completing data poppulation
-  const CampaignData = [
-    {
-      title: 'Mary Ann',
-      slug: 'mary-ann',
-      description: 'Session with Mary Ann, shot by Combina in February 2018',
-      model: 'Mary Ann',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=1', // Placeholder image
-    },
-    {
-      title: 'Prints: Abstract',
-      slug: 'prints-abstract',
-      description: 'On Session production for portraits, shot by Combina in November 2016.',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=2', // Placeholder image
-    },
-    {
-      title: 'Kansha: Love Bite',
-      slug: 'kansha-love-bite',
-      description: 'In Studio Production for Kansha Magazine, shot by Combina Key in August 2018.',
-      publication: 'Kansha',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=3', // Placeholder image
-    },
-    {
-      title: 'Pump Magazine: Sharee',
-      slug: 'pump-magazine-sharee',
-      description: 'In Studio Production with Sharee Michelle for Pump Magazine, shot by Combina Key in November 2018.',
-      model: 'Sharee Michelle',
-      publication: 'Pump Magazine',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=4', // Placeholder image
-    },
-    {
-      title: 'Elegant Magazine: Elena',
-      slug: 'elegant-magazine-elena',
-      description: 'In Studio Production with Elena for Elegant Magazine, shot by Combina Key in May 2019.',
-      model: 'Elena',
-      publication: 'Elegant Magazine',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=5', // Placeholder image
-    },
-    {
-      title: 'Imirage Mag',
-      slug: 'imirage-mag',
-      description: 'In Studio Production for Imirage Magazine, shot by Combina Key in February 2019.',
-      publication: 'Imirage Mag',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=6', // Placeholder image
-    },
-    {
-      title: 'Tamara Rzaeva',
-      slug: 'tamara-rzaeva',
-      description: 'Session with Tamara Rzaeva, shot by Combina Key on April 2018.',
-      model: 'Tamara Rzaeva',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=7', // Placeholder image
-    },
-    {
-      title: 'Street Style: Karla Marie',
-      slug: 'street-style-karla-marie',
-      description: 'Street Style Session with Karla Marie, shot by Combina Key in December 2018.',
-      model: 'Karla Marie',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=8', // Placeholder image
-    },
-    {
-      title: 'Shuba Magazine: Jyaira Moore',
-      slug: 'shuba-magazine-jyaira-moore',
-      description: 'A session with Jyaira Moore, shot by Combina in July 2018.',
-      model: 'Jyaira Moore',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=9', // Placeholder image
-    },
-    {
-      title: 'Elena Tretyakova',
-      slug: 'elena-tretyakova',
-      description: 'Session with Elena Tretyakova, shot by Combina Key in March 2018.',
-      model: 'Elena Tretyakova',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=10', // Placeholder image
-    },
-    {
-      title: 'Lissa DeLorenzo',
-      slug: 'lissa-delorenzo',
-      description: 'Session with Lissa DeLorenzo, shot by Combina Key in July 2018.',
-      model: 'Lissa DeLorenzo',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=11', // Placeholder image
-    },
-    {
-      title: 'Lydia DTLA',
-      slug: 'lydia-dtl',
-      description: 'Session with Lydia, shot by Combina in DTLA in June 2024.',
-      model: 'Lydia',
-      dp: 'Combina Key',
-      projectLink: 'Link to project',
-      image: 'https://picsum.photos/300/200?random=12', // Placeholder image
-    },
-  ];
+import { CampaignGridView } from './_components/campaign-grid-view';
+import { CampaignListView } from './_components/campaign-list-view';
+import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
 
-  const featuredData = data.filter((item) => item.featured === true);
+// todo: remove this after completing data poppulation
+const CampaignData = [
+  {
+    title: 'Mary Ann',
+    slug: 'mary-ann',
+    description: 'Session with Mary Ann, shot by Combina in February 2018',
+    model: 'Mary Ann',
+    dp: 'Combina Key',
+    projectLink: 'Link to project',
+    category: 'Editorial',
+    date: '2018-02-15',
+    location: 'New York, USA',
+    client: 'Vogue',
+    tags: ['fashion', 'editorial', 'portraits'],
+    videoLink: 'https://www.youtube.com/watch?v=example',
+    gallery: ['https://picsum.photos/400/300?random=1', 'https://picsum.photos/400/300?random=2'],
+    photographerBio: 'https://combina-key-portfolio.com',
+    team: {
+      stylist: 'Jane Doe',
+      makeupArtist: 'Emily Smith',
+      creativeDirector: 'John Carter',
+    },
+    engagementStats: {
+      views: 12000,
+      likes: 3400,
+      shares: 450,
+    },
+    callToAction: 'Book a similar shoot with us!',
+    testimonial: 'Loved working on this shoot! - Mary Ann',
+    image: 'https://picsum.photos/300/200?random=1',
+  },
+  {
+    title: 'Prints: Abstract',
+    slug: 'prints-abstract',
+    description: 'On Session production for portraits, shot by Combina in November 2016.',
+    dp: 'Combina Key',
+    projectLink: 'Link to project',
+    category: 'Portrait',
+    date: '2016-11-10',
+    location: 'Los Angeles, USA',
+    client: 'Elle Magazine',
+    tags: ['prints', 'abstract', 'portrait'],
+    videoLink: 'https://www.youtube.com/watch?v=example2',
+    gallery: ['https://picsum.photos/400/300?random=3', 'https://picsum.photos/400/300?random=4'],
+    photographerBio: 'https://combina-key-portfolio.com',
+    team: {
+      stylist: 'Michael Taylor',
+      makeupArtist: 'Sarah Lee',
+      creativeDirector: 'Daniel Brown',
+    },
+    engagementStats: {
+      views: 8900,
+      likes: 2500,
+      shares: 320,
+    },
+    callToAction: 'Contact us for editorial campaigns!',
+    testimonial: 'A fantastic experience! - Elle Team',
+    image: 'https://picsum.photos/300/200?random=2',
+  },
+  {
+    title: 'Kansha: Love Bite',
+    slug: 'kansha-love-bite',
+    description: 'In Studio Production for Kansha Magazine, shot by Combina Key in August 2018.',
+    publication: 'Kansha',
+    dp: 'Combina Key',
+    projectLink: 'Link to project',
+    category: 'Magazine Feature',
+    date: '2018-08-22',
+    location: 'Tokyo, Japan',
+    client: 'Kansha Magazine',
+    tags: ['studio', 'fashion', 'love'],
+    videoLink: null,
+    gallery: ['https://picsum.photos/400/300?random=5', 'https://picsum.photos/400/300?random=6'],
+    photographerBio: 'https://combina-key-portfolio.com',
+    team: {
+      stylist: 'Anna Martinez',
+      makeupArtist: 'Kevin James',
+      creativeDirector: 'Olivia Parker',
+    },
+    engagementStats: {
+      views: 15000,
+      likes: 4800,
+      shares: 570,
+    },
+    callToAction: 'Explore more Kansha exclusives!',
+    testimonial: 'This shoot was an absolute dream! - Kansha Team',
+    image: 'https://picsum.photos/300/200?random=3',
+  },
+  {
+    title: 'Pump Magazine: Sharee',
+    slug: 'pump-magazine-sharee',
+    description: 'In Studio Production with Sharee Michelle for Pump Magazine, shot by Combina Key in November 2018.',
+    model: 'Sharee Michelle',
+    publication: 'Pump Magazine',
+    dp: 'Combina Key',
+    projectLink: 'Link to project',
+    category: 'Magazine Cover',
+    date: '2018-11-05',
+    location: 'Paris, France',
+    client: 'Pump Magazine',
+    tags: ['editorial', 'beauty', 'high-fashion'],
+    videoLink: 'https://www.youtube.com/watch?v=example4',
+    gallery: ['https://picsum.photos/400/300?random=7', 'https://picsum.photos/400/300?random=8'],
+    photographerBio: 'https://combina-key-portfolio.com',
+    team: {
+      stylist: 'Sophia Green',
+      makeupArtist: 'James Carter',
+      creativeDirector: 'Emma White',
+    },
+    engagementStats: {
+      views: 21000,
+      likes: 6300,
+      shares: 890,
+    },
+    callToAction: 'Discover the latest trends in Pump Magazine!',
+    testimonial: 'Incredible team effort! - Sharee Michelle',
+    image: 'https://picsum.photos/300/200?random=4',
+  },
+  {
+    title: 'Elegant Magazine: Elena',
+    slug: 'elegant-magazine-elena',
+    description: 'In Studio Production with Elena for Elegant Magazine, shot by Combina Key in May 2019.',
+    model: 'Elena',
+    publication: 'Elegant Magazine',
+    dp: 'Combina Key',
+    projectLink: 'Link to project',
+    category: 'Fashion Editorial',
+    date: '2019-05-18',
+    location: 'Milan, Italy',
+    client: 'Elegant Magazine',
+    tags: ['elegance', 'fashion', 'studio'],
+    videoLink: 'https://www.youtube.com/watch?v=example5',
+    gallery: ['https://picsum.photos/400/300?random=9', 'https://picsum.photos/400/300?random=10'],
+    photographerBio: 'https://combina-key-portfolio.com',
+    team: {
+      stylist: 'David Brown',
+      makeupArtist: 'Sophia Turner',
+      creativeDirector: 'Lucas Adams',
+    },
+    engagementStats: {
+      views: 17500,
+      likes: 5200,
+      shares: 620,
+    },
+    callToAction: 'Explore more in Elegant Magazine!',
+    testimonial: 'One of my favorite shoots! - Elena',
+    image: 'https://picsum.photos/300/200?random=5',
+  },
+];
+
+const mockGetCampaignListAsync = async ({ page, rowsPerPage }) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const startIndex = (page - 1) * rowsPerPage;
+      const paginatedData = CampaignData.slice(startIndex, startIndex + rowsPerPage);
+
+      resolve({
+        success: true,
+        data: paginatedData,
+        totalRecords: CampaignData.length,
+      });
+    }, 1000);
+  });
+};
+export const CampaignView = () => {
+  // const featuredData = data.filter((item) => item.featured === true);
+  const observerRef = React.useRef(null);
+
+  const [loading, setLoading] = React.useState(false);
+  const [isFetching, setIsFetching] = React.useState(false);
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
+  const [totalRecords, setTotalRecords] = React.useState(0);
+  const [data, setData] = React.useState([]);
+  const [filters, setFilters] = React.useState({
+    COL: 4,
+    TAG: [],
+    FILTER: [],
+    SORTING: [],
+    VIEW: 'grid',
+  });
+
+  console.log(data, 'data....');
+  async function fetchList() {
+    if (isFetching) return;
+    setIsFetching(true);
+
+    try {
+      const response = await mockGetCampaignListAsync({
+        page: pagination.pageNo,
+        rowsPerPage: pagination.limit,
+      });
+
+      if (response.success) {
+        setData((prev) => [...prev, ...response.data]);
+        setTotalRecords(response.totalRecords);
+        setPagination((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }));
+      }
+    } catch (error) {
+      console.error('Error fetching campaigns:', error);
+    } finally {
+      setIsFetching(false);
+      setLoading(false);
+    }
+  }
+
+  const handleFilterChange = (type, value) => {
+    setFilters((prev) => ({ ...prev, [type]: value }));
+  };
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetching && data.length < totalRecords) {
+          fetchList();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [data, isFetching, totalRecords]);
+
+  React.useEffect(() => {
+    fetchList();
+  }, []);
 
   return (
-    <Box sx={{ py: 4 }}>
-      <Grid container spacing={4} columns={10}>
-        <Grid item size={{ xs: 12, md: 2 }}>
-          <Card>
-            <LeftCampaignOverview data={featuredData} />
-          </Card>
-        </Grid>
-        <Grid item size={{ xs: 12, md: 8 }}>
-          <RightCampaignOverview data={data} />
-        </Grid>
-      </Grid>
-    </Box>
+    <PageContainer>
+      <PageLoader loading={loading}>
+        <PageHeader
+          title="Campaign"
+          values={filters}
+          tags={campaignTags}
+          filters={campaignFilters}
+          sorting={campaignSorting}
+          onFilterChange={handleFilterChange}
+        />
+        {filters.VIEW === 'list' ? (
+          <CampaignListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />
+        ) : (
+          <Box>
+            <CampaignGridView
+              data={data || [defaultPortfolio]}
+              fetchList={fetchList}
+              loading={loading}
+              colums={filters.COL}
+            />
+            <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
+              {isFetching && <CircularProgress size="30px" />}
+            </div>
+          </Box>
+        )}
+
+        {/* <Box sx={{ py: 4 }}>
+          <Grid container spacing={4} columns={10}>
+            <Grid item size={{ xs: 12, md: 2 }}>
+              <Card>
+                <LeftCampaignOverview data={featuredData} />
+              </Card>
+            </Grid>
+            <Grid item size={{ xs: 12, md: 8 }}>
+              <RightCampaignOverview data={data} />
+            </Grid>
+          </Grid>
+        </Box> */}
+      </PageLoader>
+    </PageContainer>
   );
 };
