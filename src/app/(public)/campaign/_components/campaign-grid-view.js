@@ -3,55 +3,31 @@
 import React from 'react';
 import Image from 'next/image';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
-import { SliderWrapper } from '@/components/slider/slider-wrapper';
+import { isVideoContent } from '@/helper/common';
 import { getRandomColor } from '@/utils/utils';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
-import { SwiperSlide } from 'swiper/react';
 
-import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
-import { PortfolioSliderItem } from './portfolio-slider-item';
-import { isVideoContent } from '@/helper/common';
+import { singleCampaignData } from '../_lib/campagin.data';
+import { ManageCampaignRightPanel } from './manage-campaign-right-panel';
 
-export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
+export const CampaignGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
   const slider_data = data.filter((item) => item.featured);
+
   return (
-    <Box>
-      <Box sx={{ mt: 2 }}>
-        <SliderWrapper
-          modules={[Navigation, SwiperPagination, Scrollbar, A11y, Autoplay]}
-          autoplay={{ delay: 4000, disableOnInteraction: true }}
-          breakpoints={{
-            0: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-          }}
-          pauseOnHover
-          speed={2000}
-          spaceBetween={10}
-        >
-          {slider_data.map((item, index) => (
-            <SwiperSlide key={index}>
-              <PortfolioSliderItem item={item} index={index} fetchList={fetchList} />
-            </SwiperSlide>
-          ))}
-        </SliderWrapper>
-      </Box>
-      <PageLoader loading={loading} error={null}>
-        <Grid container spacing={1} columns={{ xs: 28 }} sx={{ mt: 2 }}>
-          {data.map((portfolio, index) => (
-            <Grid item size={{ xs: 12, md: colums }} key={index}>
-              <PortfolioCard item={portfolio} fetchList={fetchList} />
-            </Grid>
-          ))}
-        </Grid>
-      </PageLoader>
-    </Box>
+    <PageLoader loading={loading} error={null}>
+      <Grid container spacing={1} columns={{ xs: 28 }} sx={{ mt: 2 }}>
+        {data.map((portfolio, index) => (
+          <Grid item size={{ xs: 12, md: colums }} key={index}>
+            <CampaignCard item={portfolio} fetchList={fetchList} />
+          </Grid>
+        ))}
+      </Grid>
+    </PageLoader>
   );
 };
 
-const PortfolioCard = ({ item, fetchList }) => {
+const CampaignCard = ({ item, fetchList }) => {
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
 
   return (
@@ -95,7 +71,8 @@ const PortfolioCard = ({ item, fetchList }) => {
           />
         ) : (
           <Image
-            src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
+            // src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
+            src={item.thumbnail}
             alt={item.title}
             draggable={false}
             style={{
@@ -125,7 +102,7 @@ const PortfolioCard = ({ item, fetchList }) => {
           }}
         >
           <Typography fontWeight={600} color="var(--mui-palette-common-white)" fontSize={{ xs: 12, md: 14 }}>
-            {item.project_title}
+            {item.title}
           </Typography>
           <Typography variant="body" color="var(--mui-palette-common-white)" sx={{ fontSize: '12px' }}>
             {item.state}
@@ -166,12 +143,12 @@ const PortfolioCard = ({ item, fetchList }) => {
             <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
           </AvatarGroup>
         </Stack> */}
-        <ManagePortfolioRightPanel
+        <ManageCampaignRightPanel
           view={'QUICK'}
           fetchList={fetchList}
           width="70%"
           open={openPortfolioRightPanel ? true : false}
-          data={openPortfolioRightPanel}
+          data={singleCampaignData}
           onClose={() => setOpenPortfolioRightPanel(false)}
         />
       </Card>

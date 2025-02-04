@@ -1,7 +1,5 @@
 'use client';
 
-import * as React from 'react';
-import { CardTitle } from '@/components/cardTitle/CardTitle';
 import { PageContainer } from '@/components/container/PageContainer';
 import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '@/components/data-table/editable-data-table';
@@ -10,20 +8,19 @@ import { Iconify } from '@/components/iconify/iconify';
 import { dateFormatter } from '@/utils/date-formatter';
 import { IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
+import * as React from 'react';
 
-import {
-  createPortfolioAsync,
-  deletePortfolioAsync,
-  getPortfolioListAsync,
-  updatePortfolioAsync,
-} from '../_lib/portfolio.actions';
-import { defaultPortfolio } from '../_lib/portfolio.types';
-import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
+// import {
+//   createPortfolioAsync,
+//   deletePortfolioAsync,
+//   getPortfolioListAsync,
+//   updatePortfolioAsync,
+// } from '../_lib/portfolio.actions';
+import { defaultCampaignData, singleCampaignData } from '../_lib/campagin.data';
+import { ManageCampaignRightPanel } from './manage-campaign-right-panel';
 
-export const PortfolioListView = () => {
+export const CampaignListView = () => {
   // table columns
   const columns = [
     {
@@ -135,7 +132,7 @@ export const PortfolioListView = () => {
   const visibleColumns = columns.filter((col) => filteredValue.includes(col.field));
 
   const handleAddNewItem = () => {
-    setRecords([defaultPortfolio, ...records]);
+    setRecords([defaultCampaignData, ...records]);
   };
 
   const handleDelete = async () => {
@@ -189,10 +186,10 @@ export const PortfolioListView = () => {
           />
         </Box>
       </Card>
-      <ManagePortfolioRightPanel
+      <ManageCampaignRightPanel
         open={openDetails ? true : false}
         onClose={() => setOpenDetails(null)}
-        data={openDetails}
+        data={singleCampaignData}
         fetchList={fetchList}
       />
       {/* </PageLoader> */}

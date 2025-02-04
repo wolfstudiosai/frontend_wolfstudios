@@ -67,3 +67,8 @@ export const getSearchQueryPortfolio = (queryParams) => {
     return `?${query.toString()}`;
   };
   
+
+  export  const isVideoContent = (url) => {
+    const videoKeywords = ['vimeo', 'playback', 'video'];
+    return videoKeywords.some((keyword) => url.includes(keyword));
+  };

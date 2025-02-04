@@ -1,13 +1,12 @@
 'use client';
 
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
+import { isVideoContent } from '@/helper/common';
 import { pxToRem } from '@/utils/utils';
-import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Button, Divider, Stack, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
-
-import { isVideoContent } from '@/helper/common';
 
 const mediaArr = [
   'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670d11d77dff7fcc24e16f1c_2_DSC03975.jpeg',
@@ -34,7 +33,7 @@ const mediaArr = [
   'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670be14aa60fa816cf457054_19055002_1812151462433470_492009593312992502_o-p-500.jpeg',
 ];
 
-export const PortfolioQuickView = ({ data }) => {
+export const CampaignQuickView = ({ data }) => {
   const theme = useTheme();
 
   return (
@@ -49,7 +48,6 @@ export const PortfolioQuickView = ({ data }) => {
           1024: { slidesPerView: 3 },
         }}
         pauseOnHover
-        // speed={2000}
         spaceBetween={10}
       >
         {mediaArr.map((item, index) => (
@@ -73,74 +71,80 @@ export const PortfolioQuickView = ({ data }) => {
       </SliderWrapper>
 
       {/* Project Details */}
-
       <Box mt={3} width="100%">
+        <Typography variant="h5" fontWeight={600} gutterBottom>
+          {data.title || 'Untitled'}
+        </Typography>
+        <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+          {data.description || 'No description available.'}
+        </Typography>
         <Divider sx={{ my: 2 }} />
 
-        <Stack direction="row" spacing={2} mb={2}>
+        <Stack direction="row" spacing={2} mb={2} flexWrap="wrap">
           <Typography variant="subtitle1" color="text.secondary">
             Category: {data.category || 'N/A'}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
-            State: {data.state || 'N/A'}
+            Date: {data.date || 'N/A'}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
-            Partner HQ: {data.partner_hq || 'N/A'}
+            Location: {data.location || 'N/A'}
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary">
+            Client: {data.client || 'N/A'}
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary">
+            Photographer: {data.dp || 'N/A'}
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary">
+            Model: {data.model || 'N/A'}
           </Typography>
         </Stack>
 
-        <Typography variant="body1">{data.full_description || 'No description available.'}</Typography>
         <Divider sx={{ my: 2 }} />
+        <Typography variant="body1" color="text.secondary">{data.full_description || 'No additional details available.'}</Typography>
 
-        {/* Gallery Images */}
-        {data.vertical_gallery_images.length > 0 && (
-          <>
-            <Typography variant="subtitle1" fontWeight="bold" mt={3}>
-              Vertical Gallery
-            </Typography>
-            <Box display="flex" gap={1} overflow="auto" sx={{ mt: 1, pb: 1, whiteSpace: 'nowrap' }}>
-              {data.vertical_gallery_images.map((img, idx) => (
-                <img
-                  key={idx}
-                  src={img}
-                  alt={`Vertical ${idx}`}
-                  style={{
-                    width: '80px',
-                    height: '80px',
-                    borderRadius: '5px',
-                    boxShadow: `0px 4px 8px ${theme.palette.grey[400]}`,
-                  }}
-                />
-              ))}
-            </Box>
-          </>
-        )}
+        <Divider sx={{ my: 2 }} />
+        <Typography variant="h6" color="text.secondary">
+          Team
+        </Typography>
+        <Typography variant="subtitle2" color="text.secondary">
+          Stylist: {data.team?.stylist || 'N/A'}
+        </Typography>
+        <Typography variant="subtitle2" color="text.secondary">
+          Makeup Artist: {data.team?.makeupArtist || 'N/A'}
+        </Typography>
+        <Typography variant="subtitle2" color="text.secondary">
+          Creative Director: {data.team?.creativeDirector || 'N/A'}
+        </Typography>
 
-        {data.horizontal_gallery_images.length > 0 && (
-          <>
-            <Typography variant="subtitle1" fontWeight="bold" mt={3}>
-              Horizontal Gallery
-            </Typography>
-            <Box display="flex" gap={1} overflow="auto" sx={{ mt: 1, pb: 1, whiteSpace: 'nowrap' }}>
-              {data.horizontal_gallery_images.map((img, idx) => (
-                <img
-                  key={idx}
-                  src={img}
-                  alt={`Horizontal ${idx}`}
-                  style={{
-                    width: '100px',
-                    height: '60px',
-                    borderRadius: '5px',
-                    boxShadow: `0px 4px 8px ${theme.palette.grey[400]}`,
-                  }}
-                />
-              ))}
-            </Box>
-          </>
-        )}
+        <Divider sx={{ my: 2 }} />
+        <Typography variant="h6" color="text.secondary">
+          Social Engagement
+        </Typography>
+        <Typography variant="subtitle2" color="text.secondary">
+          Views: {data.engagementStats?.views || 0}
+        </Typography>
+        <Typography variant="subtitle2" color="text.secondary">
+          Likes: {data.engagementStats?.likes || 0}
+        </Typography>
+        <Typography variant="subtitle2" color="text.secondary">
+          Shares: {data.engagementStats?.shares || 0}
+        </Typography>
 
+        <Divider sx={{ my: 2 }} />
+        <Typography variant="h6" color="text.secondary">
+          Testimonial
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {data.testimonial || 'No testimonial available.'}
+        </Typography>
+
+        <Divider sx={{ my: 2 }} />
+        <Button variant="contained">Join</Button>
+        <Divider sx={{ my: 2 }} />
         <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>
-          {mediaArr.map((item, index) => (
+          {data?.gallery.map((item, index) => (
             <Grid item size={{ xs: 2 }} key={index}>
               {isVideoContent(item) ? (
                 <Box
