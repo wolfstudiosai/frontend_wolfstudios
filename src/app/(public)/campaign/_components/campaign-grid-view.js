@@ -71,7 +71,8 @@ const CampaignCard = ({ item, fetchList }) => {
           />
         ) : (
           <Image
-            src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
+            // src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
+            src={item.thumbnail}
             alt={item.title}
             draggable={false}
             style={{

@@ -8,6 +8,7 @@ import { Box, CircularProgress } from '@mui/material';
 
 import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignListView } from './_components/campaign-list-view';
+import { defaultCampaignData } from './_lib/campagin.data';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
 
 // todo: remove this after completing data poppulation
@@ -15,6 +16,7 @@ const CampaignData = [
   {
     title: 'Mary Ann',
     slug: 'mary-ann',
+    thumbnail: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670d11d77dff7fcc24e16f1c_2_DSC03975.jpeg',
     description: 'Session with Mary Ann, shot by Combina in February 2018',
     model: 'Mary Ann',
     dp: 'Combina Key',
@@ -44,6 +46,8 @@ const CampaignData = [
   {
     title: 'Prints: Abstract',
     slug: 'prints-abstract',
+    thumbnail:
+      'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/6712275879e29b61d2c2dc79_DSC05709%20(1).jpg',
     description: 'On Session production for portraits, shot by Combina in November 2016.',
     dp: 'Combina Key',
     projectLink: 'Link to project',
@@ -72,6 +76,8 @@ const CampaignData = [
   {
     title: 'Kansha: Love Bite',
     slug: 'kansha-love-bite',
+    thumbnail:
+      'https://player.vimeo.com/progressive_redirect/playback/1008919226/rendition/1080p/file.mp4?loc=external&signature=bf4233dc5593395173302057f4757f83ccb3c307dd4c49f373ecf1e8f5d31ffb',
     description: 'In Studio Production for Kansha Magazine, shot by Combina Key in August 2018.',
     publication: 'Kansha',
     dp: 'Combina Key',
@@ -101,6 +107,8 @@ const CampaignData = [
   {
     title: 'Pump Magazine: Sharee',
     slug: 'pump-magazine-sharee',
+    thumbnail:
+      'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/67023b95692662e57485fae7_1ACCCEF7-605C-4365-B7D4-5084FDC835C6_1_105_c.jpeg',
     description: 'In Studio Production with Sharee Michelle for Pump Magazine, shot by Combina Key in November 2018.',
     model: 'Sharee Michelle',
     publication: 'Pump Magazine',
@@ -131,6 +139,8 @@ const CampaignData = [
   {
     title: 'Elegant Magazine: Elena',
     slug: 'elegant-magazine-elena',
+    thumbnail:
+      'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/6715276ce15620dc4dd4440f_12957620_1589024814746137_4884333050968345441_o.jpg',
     description: 'In Studio Production with Elena for Elegant Magazine, shot by Combina Key in May 2019.',
     model: 'Elena',
     publication: 'Elegant Magazine',
@@ -191,7 +201,6 @@ export const CampaignView = () => {
     VIEW: 'grid',
   });
 
-  console.log(data, 'data....');
   async function fetchList() {
     if (isFetching) return;
     setIsFetching(true);
@@ -260,7 +269,7 @@ export const CampaignView = () => {
         ) : (
           <Box>
             <CampaignGridView
-              data={data || [defaultPortfolio]}
+              data={data || [defaultCampaignData]}
               fetchList={fetchList}
               loading={loading}
               colums={filters.COL}
@@ -270,19 +279,6 @@ export const CampaignView = () => {
             </div>
           </Box>
         )}
-
-        {/* <Box sx={{ py: 4 }}>
-          <Grid container spacing={4} columns={10}>
-            <Grid item size={{ xs: 12, md: 2 }}>
-              <Card>
-                <LeftCampaignOverview data={featuredData} />
-              </Card>
-            </Grid>
-            <Grid item size={{ xs: 12, md: 8 }}>
-              <RightCampaignOverview data={data} />
-            </Grid>
-          </Grid>
-        </Box> */}
       </PageLoader>
     </PageContainer>
   );

@@ -1,6 +1,7 @@
 export const singleCampaignData = {
   title: 'Mary Ann',
   slug: 'mary-ann',
+  thumbnail: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670d11d77dff7fcc24e16f1c_2_DSC03975.jpeg',
   description: 'Session with Mary Ann, shot by Combina in February 2018',
   model: 'Mary Ann',
   dp: 'Combina Key',
@@ -31,6 +32,7 @@ export const singleCampaignData = {
 export const defaultCampaignData = {
   title: '',
   slug: '',
+  thumbnail: '',
   description: '',
   model: '',
   dp: '',
