@@ -74,7 +74,18 @@ export const AuthProvider = (props) => {
       setUserInfo(userData);
 
       setLoading(false);
-      router.push(paths.home);
+
+      if (res.status === 200) {
+        return {
+          success: true,
+          data: res.data.data,
+        };
+      }
+      return {
+        success: false,
+        data: res.data.data,
+      };
+      // router.push(paths.home);
     } catch (error) {
       onError(error.response?.data?.message || 'An error occurred');
     }
@@ -85,7 +96,7 @@ export const AuthProvider = (props) => {
     setUserInfo(INITIAL_AUTH_STATE);
     delete api.defaults.headers.common['Authorization'];
     removeTokenFromCookies();
-    router.push(paths.home);
+    // router.push(paths.home);
   };
 
   return (
