@@ -61,7 +61,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
           position: 'sticky',
           top: 0,
           zIndex: 'var(--MainNav-zIndex)',
-          borderBottom: '1px solid var(--mui-palette-divider)',
+          // borderBottom: '1px solid var(--mui-palette-divider)',
           backdropFilter: 'blur(10px)',
         }}
       >

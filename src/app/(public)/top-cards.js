@@ -156,7 +156,7 @@ export function FeatureCards() {
               <Typography
                 variant="h6"
                 sx={{
-                  fontSize: pxToRem(12),
+                  fontSize: pxToRem(14),
                   whiteSpace: 'normal',
                 }}
               >
@@ -166,7 +166,7 @@ export function FeatureCards() {
               {/* Timestamp */}
               <Typography
                 sx={{
-                  fontSize: pxToRem(10),
+                  fontSize: pxToRem(12),
                   color: 'text.secondary',
                 }}
               >
@@ -179,7 +179,7 @@ export function FeatureCards() {
               variant="body2"
               color="text.secondary"
               sx={{
-                fontSize: pxToRem(10),
+                fontSize: pxToRem(12),
                 whiteSpace: 'normal',
               }}
             >
