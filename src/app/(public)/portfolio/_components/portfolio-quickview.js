@@ -63,10 +63,24 @@ export const PortfolioQuickView = ({ data }) => {
                 loop
                 muted
                 playsInline
-                sx={{ height: pxToRem(500), width: '100%', objectFit: 'cover' }}
+                sx={{
+                  height: pxToRem(500),
+                  width: '100%',
+                  objectFit: 'cover',
+                  borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                }}
               />
             ) : (
-              <Box component="img" src={item} sx={{ height: pxToRem(500), width: '100%', objectFit: 'cover' }} />
+              <Box
+                component="img"
+                src={item}
+                sx={{
+                  height: pxToRem(500),
+                  width: '100%',
+                  objectFit: 'cover',
+                  borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                }}
+              />
             )}
           </SwiperSlide>
         ))}

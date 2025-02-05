@@ -139,9 +139,6 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
       >
         {isLogin && (
           <>
-            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
-              Save
-            </Button>
             {sidebarView === 'QUICK' ? (
               <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
                 <Iconify icon="mynaui:edit-one" />
@@ -151,10 +148,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
                 <Iconify icon="lets-icons:view-light" />
               </IconButton>
             )}
-            <DeleteConfirmationPopover
-              title={`Want to delete ${data?.project_title}?`}
-              onDelete={() => handleDelete()}
-            />
+
             <FormControlLabel
               control={
                 <Switch
@@ -166,6 +160,17 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
               }
               label="Featured"
             />
+
+            <DeleteConfirmationPopover
+              title={`Want to delete ${data?.project_title}?`}
+              onDelete={() => handleDelete()}
+            />
+
+            {sidebarView === 'EDIT' && (
+              <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+                Save
+              </Button>
+            )}
           </>
         )}
       </Stack>
