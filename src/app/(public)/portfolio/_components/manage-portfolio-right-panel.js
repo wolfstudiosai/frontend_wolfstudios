@@ -97,6 +97,44 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
     setTempOpen((pre) => !pre);
   };
 
+  // *****************Action Buttons*******************************
+  const actionButtons = (
+    <>
+      {isLogin && (
+        <>
+          {sidebarView === 'QUICK' ? (
+            <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
+              <Iconify icon="mynaui:edit-one" />
+            </IconButton>
+          ) : (
+            <IconButton onClick={() => setSidebarView('QUICK')} title="Quick View">
+              <Iconify icon="lets-icons:view-light" />
+            </IconButton>
+          )}
+
+          <FormControlLabel
+            control={
+              <Switch
+                size="small"
+                checked={values?.featured}
+                onChange={() => handleFeatured(!values?.featured)}
+                color="primary"
+              />
+            }
+            label="Featured"
+          />
+
+          <DeleteConfirmationPopover title={`Want to delete ${data?.project_title}?`} onDelete={() => handleDelete()} />
+
+          {sidebarView === 'EDIT' && (
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+              Save
+            </Button>
+          )}
+        </>
+      )}
+    </>
+  );
   // *****************Use Effects*******************************
 
   React.useEffect(() => {
@@ -118,7 +156,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
   }, []);
 
   return (
-    <DrawerContainer open={open} handleDrawerClose={onClose}>
+    <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
       {sidebarView === 'QUICK' ? (
         <PortfolioQuickView data={values} />
       ) : (
@@ -131,49 +169,6 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
           onDeleteThumbnail={handleDeleteThumbnail}
         />
       )}
-      <Stack
-        direction="row"
-        alignItems="center"
-        gap={1}
-        sx={{ position: 'sticky', bottom: 0, left: 0, backgroundColor: 'var(--mui-palette-background-default)', py: 1 }}
-      >
-        {isLogin && (
-          <>
-            {sidebarView === 'QUICK' ? (
-              <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
-                <Iconify icon="mynaui:edit-one" />
-              </IconButton>
-            ) : (
-              <IconButton onClick={() => setSidebarView('QUICK')} title="Quick View">
-                <Iconify icon="lets-icons:view-light" />
-              </IconButton>
-            )}
-
-            <FormControlLabel
-              control={
-                <Switch
-                  size="small"
-                  checked={values?.featured}
-                  onChange={() => handleFeatured(!values?.featured)}
-                  color="primary"
-                />
-              }
-              label="Featured"
-            />
-
-            <DeleteConfirmationPopover
-              title={`Want to delete ${data?.project_title}?`}
-              onDelete={() => handleDelete()}
-            />
-
-            {sidebarView === 'EDIT' && (
-              <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
-                Save
-              </Button>
-            )}
-          </>
-        )}
-      </Stack>
     </DrawerContainer>
   );
 };
