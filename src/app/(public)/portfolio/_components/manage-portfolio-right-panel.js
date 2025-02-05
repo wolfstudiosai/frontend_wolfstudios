@@ -3,6 +3,7 @@
 import React from 'react';
 import { formConstants } from '@/app/constants/form-constants';
 import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
+import { DrawerContainer } from '@/components/drawer/drawer';
 import { Iconify } from '@/components/iconify/iconify';
 import { RightPanel } from '@/components/rightPanel/right-panel';
 import { Box, Button, FormControlLabel, IconButton, Stack, Switch } from '@mui/material';
@@ -21,6 +22,8 @@ import { PortfolioForm } from './portfolio-form';
 import { PortfolioQuickView } from './portfolio-quickview';
 
 export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
+  const [tempOpen, setTempOpen] = React.useState(false);
+
   const isUpdate = data ? true : false;
   const { isLogin } = useAuth();
 
@@ -90,6 +93,10 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
     fetchList();
   };
 
+  const toggleDrawer = () => {
+    setTempOpen((pre) => !pre);
+  };
+
   // *****************Use Effects*******************************
 
   React.useEffect(() => {
@@ -111,51 +118,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
   }, []);
 
   return (
-    <RightPanel
-      heading={data?.project_title}
-      open={open}
-      onClose={onClose}
-      width={width}
-      actionButtons={() => (
-        <Stack direction="row" alignItems="center" gap={2}>
-          <Button size="small" variant="outlined" color="primary" onClick={onClose}>
-            Close
-          </Button>
-
-          {isLogin && (
-            <>
-              <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
-                Save
-              </Button>
-              {sidebarView === 'QUICK' ? (
-                <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
-                  <Iconify icon="mynaui:edit-one" />
-                </IconButton>
-              ) : (
-                <IconButton onClick={() => setSidebarView('QUICK')} title="Quick View">
-                  <Iconify icon="lets-icons:view-light" />
-                </IconButton>
-              )}
-              <DeleteConfirmationPopover
-                title={`Want to delete ${data?.project_title}?`}
-                onDelete={() => handleDelete()}
-              />
-              <FormControlLabel
-                control={
-                  <Switch
-                    size="small"
-                    checked={values?.featured}
-                    onChange={() => handleFeatured(!values?.featured)}
-                    color="primary"
-                  />
-                }
-                label="Featured"
-              />
-            </>
-          )}
-        </Stack>
-      )}
-    >
+    <DrawerContainer open={open} handleDrawerClose={onClose}>
       {sidebarView === 'QUICK' ? (
         <PortfolioQuickView data={values} />
       ) : (
@@ -168,6 +131,6 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
           onDeleteThumbnail={handleDeleteThumbnail}
         />
       )}
-    </RightPanel>
+    </DrawerContainer>
   );
 };

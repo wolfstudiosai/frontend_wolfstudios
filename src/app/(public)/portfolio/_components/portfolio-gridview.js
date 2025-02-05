@@ -2,10 +2,10 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { DrawerContainer } from '@/components/drawer/drawer';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { getFancyColor, isVideoContent } from '@/utils/helper';
-import { getRandomColor } from '@/utils/helper';
+import { getFancyColor, getRandomColor, isVideoContent } from '@/utils/helper';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
@@ -72,9 +72,7 @@ const PortfolioCard = ({ item, fetchList }) => {
             opacity: 1,
           },
         }}
-        onClick={(e) => {
-          setOpenPortfolioRightPanel(item);
-        }}
+        onClick={() => setOpenPortfolioRightPanel(item)}
       >
         {isVideoContent(item.thumbnail || '') ? (
           <Box
