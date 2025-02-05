@@ -52,7 +52,7 @@ export const PageHeader = ({
           border: 'solid .1px var(--mui-palette-divider)',
         }}
       >
-        <Stack direction={'row'} alignItems={'center'}>
+        <Stack direction={'row'} alignItems={'center'} >  
           <Typography
             variant="h6"
             fontWeight={600}
@@ -67,8 +67,8 @@ export const PageHeader = ({
             size="small"
             sx={{ ml: 1, color: 'text.secondary', fontSize: pxToRem(12), padding: 0 }}
           />
-          <IconButton size="small" variant="contained" color="error">
-            <Iconify icon="material-symbols-light:bookmark-outline" width={20} height={20} />
+          <IconButton size="small" variant="contained" color="error" sx={{ mr: .5 }}>
+            <Iconify icon="material-symbols-light:bookmark-outline" width={22} height={22} />
           </IconButton>
           <Stack justifyContent={'center'} alignItems={'center'} sx={{ width: pxToRem(100) }}>
             <Slider
@@ -93,19 +93,19 @@ export const PageHeader = ({
                 display: 'inline-flex',
                 border: '1px solid var(--mui-palette-divider)',
                 boxShadow: 'none',
-                gap: '4px',
-                padding: '2px',
+                gap: '6px',
+                padding: '4px',
                 marginLeft: (theme) => theme.spacing(1),
               }}
             >
               <ToggleButton value="grid" aria-label="grid view" sx={{ padding: '2px' }}>
-                <Iconify icon="ep:grid" width={16} height={16} />
+                <Iconify icon="ep:grid" width={20} height={20} />
               </ToggleButton>
               <ToggleButton value="list" aria-label="list view" sx={{ padding: '2px' }}>
-                <Iconify icon="solar:list-bold" width={16} height={16} />
+                <Iconify icon="solar:list-bold" width={20} height={20} />
               </ToggleButton>
               <ToggleButton value="add" aria-label="add new" sx={{ padding: '2px' }}>
-                <Iconify icon="mynaui:plus" width={16} height={16} />
+                <Iconify icon="mynaui:plus" width={20} height={20} />
               </ToggleButton>
             </ToggleButtonGroup>
           )}
@@ -118,7 +118,7 @@ export const PageHeader = ({
                 key={section}
                 onClick={() => setCurrentSection(section)}
                 sx={{
-                  fontSize: pxToRem(12),
+                  fontSize: pxToRem(14),
                   fontWeight: '500',
                   cursor: 'pointer',
                   color: currentSection === section ? 'primary.main' : 'text.secondary',
@@ -131,20 +131,20 @@ export const PageHeader = ({
               </Typography>
             ))}
 
-            <Stack direction="row">
+            <Stack direction="row" spacing={.5}>
               {(currentSection === 'TAG' ? tags : currentSection === 'FILTER' ? filters : sorting).map((item) => (
                 <Chip
                   key={item.value}
-                  color="inherit"
+                  color="text.secondary"
                   size="small"
                   label={item.label}
                   onClick={() => handleFilter(currentSection, item.value)}
                   sx={{
                     ml: 0.3,
                     borderRadius: 0.5,
-                    fontSize: '12px',
+                    fontSize: pxToRem(13),
                     height: '22px',
-                    padding: '4px',
+                    padding: '6px',
                     cursor: 'pointer',
                   }}
                 />
