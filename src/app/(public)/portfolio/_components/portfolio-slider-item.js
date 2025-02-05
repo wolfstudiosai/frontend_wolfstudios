@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { getRandomColor } from '@/utils/helper';
+import { getFancyColor, getRandomColor } from '@/utils/helper';
 import { Avatar, AvatarGroup, Box, Card, Chip, Stack, Typography } from '@mui/material';
 
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
@@ -89,7 +89,7 @@ export const PortfolioSliderItem = ({ item, index, fetchList }) => {
             {item.state}
           </Typography>
           {item.category.split(',').map((category, index) => (
-            <Chip key={index} label={category.trim()} size="small" sx={{ backgroundColor: getRandomColor() }} />
+            <Chip key={index} label={category.trim()} size="small" sx={{ backgroundColor: getFancyColor(index) }} />
           ))}
         </Box>
       </Stack>
