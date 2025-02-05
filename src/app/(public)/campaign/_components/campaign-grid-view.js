@@ -3,13 +3,13 @@
 import React from 'react';
 import Image from 'next/image';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
-import { isVideoContent } from '@/helper/common';
-import { getRandomColor } from '@/utils/utils';
+import { getRandomColor } from '@/utils/helper';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { singleCampaignData } from '../_lib/campagin.data';
 import { ManageCampaignRightPanel } from './manage-campaign-right-panel';
+import { isVideoContent } from '@/utils/helper';
 
 export const CampaignGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
   const slider_data = data.filter((item) => item.featured);

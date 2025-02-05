@@ -10,7 +10,7 @@ import { MobileNav } from '@/components/navbar/mobile-nav';
 import { NavSearchV2 } from '@/components/navbar/nav-search-v2';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { publicRoutes } from '@/router';
-import { pxToRem } from '@/utils/utils';
+import { pxToRem } from '@/utils/helper';
 import { Button, Popover } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -61,7 +61,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
           position: 'sticky',
           top: 0,
           zIndex: 'var(--MainNav-zIndex)',
-          borderBottom: '1px solid var(--mui-palette-divider)',
+          // borderBottom: '1px solid var(--mui-palette-divider)',
           backdropFilter: 'blur(10px)',
         }}
       >
@@ -193,7 +193,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
             p: 2,
           }}
         >
-          <LoginForm closeDialog={handleClose} />
+          <LoginForm onLoginSuccess={handleClose} />
           <Typography color="text.secondary" variant="body2" sx={{ my: 1 }}>
             Don&#39;t have an account?{' '}
             <Typography

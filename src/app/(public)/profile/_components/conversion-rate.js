@@ -1,4 +1,4 @@
-import { pxToRem } from '/src/utils/utils';
+import { pxToRem } from '@/utils/helper';
 import {
   Box,
   Card,

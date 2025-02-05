@@ -1,5 +1,5 @@
 import React from 'react';
-import { pxToRem } from '/src/utils/utils';
+import { pxToRem } from '@/utils/helper';
 import { Box, Stack, Typography } from '@mui/material';
 
 import { Iconify } from '@/components/iconify/iconify';

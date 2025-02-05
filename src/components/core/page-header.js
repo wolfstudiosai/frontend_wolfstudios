@@ -1,15 +1,23 @@
 'use client';
 
-import { pxToRem } from '@/utils/utils';
-import { Box, Chip, IconButton, Slider, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import React from 'react';
+import { pxToRem } from '@/utils/helper';
+import { Box, Chip, IconButton, Slider, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 
 import { SettingsContext } from '@/contexts/settings';
 import useAuth from '@/hooks/useAuth';
 
 import { Iconify } from '../iconify/iconify';
 
-export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [], onFilterChange }) => {
+export const PageHeader = ({
+  title,
+  values,
+  tags = [],
+  filters = [],
+  sorting = [],
+  onFilterChange,
+  totalRecords = 0,
+}) => {
   const {
     customSettings: { openSubNav },
   } = React.useContext(SettingsContext);
@@ -44,18 +52,23 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
           border: 'solid .1px var(--mui-palette-divider)',
         }}
       >
-        <Stack direction={'row'} alignItems={'center'}>
-          <Typography variant="h6" fontWeight={600} gutterBottom sx={{ fontSize: pxToRem(28) }}>
+        <Stack direction={'row'} alignItems={'center'} >  
+          <Typography
+            variant="h6"
+            fontWeight={600}
+            gutterBottom
+            sx={{ fontSize: { xs: pxToRem(16), md: pxToRem(30) } }}
+          >
             {title}
           </Typography>
           <Chip
-            label={'1881'}
+            label={totalRecords}
             color="inherit"
             size="small"
             sx={{ ml: 1, color: 'text.secondary', fontSize: pxToRem(12), padding: 0 }}
           />
-          <IconButton size="small" variant="contained" color="error">
-            <Iconify icon="material-symbols-light:bookmark-outline" width={20} height={20} />
+          <IconButton size="small" variant="contained" color="error" sx={{ mr: .5 }}>
+            <Iconify icon="material-symbols-light:bookmark-outline" width={22} height={22} />
           </IconButton>
           <Stack justifyContent={'center'} alignItems={'center'} sx={{ width: pxToRem(100) }}>
             <Slider
@@ -64,9 +77,9 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
               value={values.COL}
               onChange={(e, value) => handleFilter('COL', value)}
               color="#fff"
-              min={2}
-              max={30}
-              step={2}
+              min={1}
+              max={7}
+              step={1}
             />
           </Stack>
           {isLogin && (
@@ -80,19 +93,19 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
                 display: 'inline-flex',
                 border: '1px solid var(--mui-palette-divider)',
                 boxShadow: 'none',
-                gap: '4px',
-                padding: '2px',
+                gap: '6px',
+                padding: '4px',
                 marginLeft: (theme) => theme.spacing(1),
               }}
             >
               <ToggleButton value="grid" aria-label="grid view" sx={{ padding: '2px' }}>
-                <Iconify icon="ep:grid" width={16} height={16} />
+                <Iconify icon="ep:grid" width={20} height={20} />
               </ToggleButton>
               <ToggleButton value="list" aria-label="list view" sx={{ padding: '2px' }}>
-                <Iconify icon="solar:list-bold" width={16} height={16} />
+                <Iconify icon="solar:list-bold" width={20} height={20} />
               </ToggleButton>
               <ToggleButton value="add" aria-label="add new" sx={{ padding: '2px' }}>
-                <Iconify icon="mynaui:plus" width={16} height={16} />
+                <Iconify icon="mynaui:plus" width={20} height={20} />
               </ToggleButton>
             </ToggleButtonGroup>
           )}
@@ -105,7 +118,7 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
                 key={section}
                 onClick={() => setCurrentSection(section)}
                 sx={{
-                  fontSize: pxToRem(12),
+                  fontSize: pxToRem(14),
                   fontWeight: '500',
                   cursor: 'pointer',
                   color: currentSection === section ? 'primary.main' : 'text.secondary',
@@ -118,20 +131,20 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
               </Typography>
             ))}
 
-            <Stack direction="row">
+            <Stack direction="row" spacing={.5}>
               {(currentSection === 'TAG' ? tags : currentSection === 'FILTER' ? filters : sorting).map((item) => (
                 <Chip
                   key={item.value}
-                  color="inherit"
+                  color="text.secondary"
                   size="small"
                   label={item.label}
                   onClick={() => handleFilter(currentSection, item.value)}
                   sx={{
                     ml: 0.3,
                     borderRadius: 0.5,
-                    fontSize: '12px',
+                    fontSize: pxToRem(13),
                     height: '22px',
-                    padding: '4px',
+                    padding: '6px',
                     cursor: 'pointer',
                   }}
                 />

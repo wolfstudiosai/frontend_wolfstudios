@@ -1,7 +1,7 @@
 "use client";
 import Link from 'next/link';
 import { Iconify } from '@/components/iconify/iconify';
-import { textShortner } from '@/utils/utils';
+import { textShortner } from '@/utils/helper';
 import { Box, Chip, Paper, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import dayjs from 'dayjs';

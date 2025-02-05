@@ -8,7 +8,7 @@ import { MinusCircle as MinusCircleIcon } from '@phosphor-icons/react/dist/ssr/M
 import { PlusCircle as PlusCircleIcon } from '@phosphor-icons/react/dist/ssr/PlusCircle';
 
 import { usePopover } from '/src/hooks/use-popover';
-import { pxToRem } from '/src/utils/utils';
+import { pxToRem } from '@/utils/helper';
 
 function noop(..._) {
   // Do nothing

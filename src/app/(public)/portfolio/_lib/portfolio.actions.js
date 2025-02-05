@@ -1,5 +1,5 @@
-import { getSearchQuery } from '@/helper/common';
 import { api } from '@/utils/api';
+import { getSearchQuery } from '@/utils/helper';
 import { uploadFileAsync } from '@/utils/upload-file';
 import { toast } from 'sonner';
 

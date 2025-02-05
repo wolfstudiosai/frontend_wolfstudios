@@ -1,7 +1,7 @@
-import { getRandomColor } from '@/utils/utils';
-import { Avatar, AvatarGroup, Box, Card, Chip, Stack, Typography } from '@mui/material';
-import Image from 'next/image';
 import React from 'react';
+import Image from 'next/image';
+import { getFancyColor, getRandomColor } from '@/utils/helper';
+import { Avatar, AvatarGroup, Box, Card, Chip, Stack, Typography } from '@mui/material';
 
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 
@@ -64,7 +64,16 @@ export const PortfolioSliderItem = ({ item, index, fetchList }) => {
         direction="column"
         spacing={1}
         px={2}
-        sx={{ position: 'absolute', bottom: 0, right: 0, left: 0, width: '100%', pb: 2, pt: 3, background: "linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))", }}
+        sx={{
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          left: 0,
+          width: '100%',
+          pb: 2,
+          pt: 3,
+          background: 'linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))',
+        }}
       >
         <Typography variant="h5" fontWeight={700} color="var(--mui-palette-common-white)">
           {item.project_title}
@@ -77,10 +86,10 @@ export const PortfolioSliderItem = ({ item, index, fetchList }) => {
           }}
         >
           <Typography variant="body" color="var(--mui-palette-common-white)">
-            State: {item.state}
+            {item.state}
           </Typography>
           {item.category.split(',').map((category, index) => (
-            <Chip key={index} label={category.trim()} size="small" sx={{ backgroundColor: getRandomColor() }} />
+            <Chip key={index} label={category.trim()} size="small" sx={{ backgroundColor: getFancyColor(index) }} />
           ))}
         </Box>
       </Stack>

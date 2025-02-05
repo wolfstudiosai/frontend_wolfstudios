@@ -1,6 +1,7 @@
-import { getSearchQuery } from '/src/helper/common';
-import { api, publicApi } from '/src/utils/api';
+import { getSearchQuery } from '@/utils/helper';
 import { toast } from 'sonner';
+
+import { api } from '/src/utils/api';
 
 export const getRecordList = async (queryParams) => {
   try {

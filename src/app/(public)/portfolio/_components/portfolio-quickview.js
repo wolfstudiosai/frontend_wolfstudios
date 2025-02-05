@@ -1,13 +1,13 @@
 'use client';
 
+import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
+import { Iconify } from '@/components/iconify/iconify';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { pxToRem } from '@/utils/utils';
-import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
+import { isVideoContent, pxToRem } from '@/utils/helper';
+import { Box, Button, Divider, FormControlLabel, IconButton, Stack, Switch, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
-
-import { isVideoContent } from '@/helper/common';
 
 const mediaArr = [
   'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670d11d77dff7fcc24e16f1c_2_DSC03975.jpeg',
@@ -63,10 +63,24 @@ export const PortfolioQuickView = ({ data }) => {
                 loop
                 muted
                 playsInline
-                sx={{ height: pxToRem(500), width: '100%', objectFit: 'cover' }}
+                sx={{
+                  height: pxToRem(500),
+                  width: '100%',
+                  objectFit: 'cover',
+                  borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                }}
               />
             ) : (
-              <Box component="img" src={item} sx={{ height: pxToRem(500), width: '100%', objectFit: 'cover' }} />
+              <Box
+                component="img"
+                src={item}
+                sx={{
+                  height: pxToRem(500),
+                  width: '100%',
+                  objectFit: 'cover',
+                  borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                }}
+              />
             )}
           </SwiperSlide>
         ))}
@@ -74,9 +88,16 @@ export const PortfolioQuickView = ({ data }) => {
 
       {/* Project Details */}
 
-      <Box mt={3} width="100%">
+      <Box
+        mt={3}
+        width="100%"
+        sx={{ position: 'sticky', top: 0, left: 0, backgroundColor: theme.palette.background.default, zIndex: 2 }}
+      >
         <Divider sx={{ my: 2 }} />
 
+        <Typography variant="subtitle1" color="text.secondary" fontWeight={'bold'}>
+          {data?.project_title}
+        </Typography>
         <Stack direction="row" spacing={2} mb={2}>
           <Typography variant="subtitle1" color="text.secondary">
             Category: {data.category || 'N/A'}
@@ -89,77 +110,78 @@ export const PortfolioQuickView = ({ data }) => {
           </Typography>
         </Stack>
 
-        <Typography variant="body1">{data.full_description || 'No description available.'}</Typography>
         <Divider sx={{ my: 2 }} />
 
-        {/* Gallery Images */}
-        {data.vertical_gallery_images.length > 0 && (
-          <>
-            <Typography variant="subtitle1" fontWeight="bold" mt={3}>
-              Vertical Gallery
-            </Typography>
-            <Box display="flex" gap={1} overflow="auto" sx={{ mt: 1, pb: 1, whiteSpace: 'nowrap' }}>
-              {data.vertical_gallery_images.map((img, idx) => (
-                <img
-                  key={idx}
-                  src={img}
-                  alt={`Vertical ${idx}`}
-                  style={{
-                    width: '80px',
-                    height: '80px',
-                    borderRadius: '5px',
-                    boxShadow: `0px 4px 8px ${theme.palette.grey[400]}`,
-                  }}
-                />
-              ))}
-            </Box>
-          </>
-        )}
-
-        {data.horizontal_gallery_images.length > 0 && (
-          <>
-            <Typography variant="subtitle1" fontWeight="bold" mt={3}>
-              Horizontal Gallery
-            </Typography>
-            <Box display="flex" gap={1} overflow="auto" sx={{ mt: 1, pb: 1, whiteSpace: 'nowrap' }}>
-              {data.horizontal_gallery_images.map((img, idx) => (
-                <img
-                  key={idx}
-                  src={img}
-                  alt={`Horizontal ${idx}`}
-                  style={{
-                    width: '100px',
-                    height: '60px',
-                    borderRadius: '5px',
-                    boxShadow: `0px 4px 8px ${theme.palette.grey[400]}`,
-                  }}
-                />
-              ))}
-            </Box>
-          </>
-        )}
-
-        <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>
-          {mediaArr.map((item, index) => (
-            <Grid item size={{ xs: 2 }} key={index}>
-              {isVideoContent(item) ? (
-                <Box
-                  component="video"
-                  src={item}
-                  controls
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  sx={{ height: pxToRem(300), width: '100%', objectFit: 'cover' }}
-                />
-              ) : (
-                <Box component="img" src={item} sx={{ height: pxToRem(300), width: '100%', objectFit: 'cover' }} />
-              )}
-            </Grid>
-          ))}
-        </Grid>
+        <Typography variant="body1">{data.full_description || 'No description available.'}</Typography>
+        <Divider sx={{ my: 2 }} />
       </Box>
+      {/* Gallery Images */}
+      {data.vertical_gallery_images.length > 0 && (
+        <>
+          <Typography variant="subtitle1" fontWeight="bold" mt={3}>
+            Vertical Gallery
+          </Typography>
+          <Box display="flex" gap={1} overflow="auto" sx={{ mt: 1, pb: 1, whiteSpace: 'nowrap' }}>
+            {data.vertical_gallery_images.map((img, idx) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`Vertical ${idx}`}
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '5px',
+                  boxShadow: `0px 4px 8px ${theme.palette.grey[400]}`,
+                }}
+              />
+            ))}
+          </Box>
+        </>
+      )}
+
+      {data.horizontal_gallery_images.length > 0 && (
+        <>
+          <Typography variant="subtitle1" fontWeight="bold" mt={3}>
+            Horizontal Gallery
+          </Typography>
+          <Box display="flex" gap={1} overflow="auto" sx={{ mt: 1, pb: 1, whiteSpace: 'nowrap' }}>
+            {data.horizontal_gallery_images.map((img, idx) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`Horizontal ${idx}`}
+                style={{
+                  width: '100px',
+                  height: '60px',
+                  borderRadius: '5px',
+                  boxShadow: `0px 4px 8px ${theme.palette.grey[400]}`,
+                }}
+              />
+            ))}
+          </Box>
+        </>
+      )}
+
+      <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>
+        {mediaArr.map((item, index) => (
+          <Grid item size={{ xs: 2 }} key={index}>
+            {isVideoContent(item) ? (
+              <Box
+                component="video"
+                src={item}
+                controls
+                autoPlay
+                loop
+                muted
+                playsInline
+                sx={{ height: pxToRem(300), width: '100%', objectFit: 'cover' }}
+              />
+            ) : (
+              <Box component="img" src={item} sx={{ height: pxToRem(300), width: '100%', objectFit: 'cover' }} />
+            )}
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 };

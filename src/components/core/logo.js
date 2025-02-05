@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { NoSsr } from '@/components/core/no-ssr';
-import { pxToRem } from '@/utils/utils';
+import { pxToRem } from '@/utils/helper';
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { useColorScheme } from '@mui/material/styles';
