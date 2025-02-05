@@ -131,6 +131,44 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
           onDeleteThumbnail={handleDeleteThumbnail}
         />
       )}
+      <Stack
+        direction="row"
+        alignItems="center"
+        gap={1}
+        sx={{ position: 'sticky', bottom: 0, left: 0, backgroundColor: 'var(--mui-palette-background-default)', py: 1 }}
+      >
+        {isLogin && (
+          <>
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+              Save
+            </Button>
+            {sidebarView === 'QUICK' ? (
+              <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
+                <Iconify icon="mynaui:edit-one" />
+              </IconButton>
+            ) : (
+              <IconButton onClick={() => setSidebarView('QUICK')} title="Quick View">
+                <Iconify icon="lets-icons:view-light" />
+              </IconButton>
+            )}
+            <DeleteConfirmationPopover
+              title={`Want to delete ${data?.project_title}?`}
+              onDelete={() => handleDelete()}
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  size="small"
+                  checked={values?.featured}
+                  onChange={() => handleFeatured(!values?.featured)}
+                  color="primary"
+                />
+              }
+              label="Featured"
+            />
+          </>
+        )}
+      </Stack>
     </DrawerContainer>
   );
 };
