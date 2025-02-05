@@ -27,7 +27,7 @@ export default function Page() {
             </Link>
           </Typography>
         </Stack>
-        <LoginForm />
+        <LoginForm onLoginSuccess={null} redirectToHome={true} />
         <Link component={RouterLink} href={paths.auth.default.forgotPassword} variant="subtitle2">
           Forgot password?
         </Link>

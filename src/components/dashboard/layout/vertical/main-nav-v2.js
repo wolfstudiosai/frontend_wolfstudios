@@ -193,7 +193,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
             p: 2,
           }}
         >
-          <LoginForm closeDialog={handleClose} />
+          <LoginForm onLoginSuccess={handleClose} />
           <Typography color="text.secondary" variant="body2" sx={{ my: 1 }}>
             Don&#39;t have an account?{' '}
             <Typography

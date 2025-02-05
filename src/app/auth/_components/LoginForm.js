@@ -1,13 +1,12 @@
 'use client';
 
 import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import { ErrorText } from '@/components/core/error-text';
 import { CustomPasswordInput } from '@/components/formFields/CustomPasswordInput';
 import { CircularProgress } from '@mui/material';
 import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import InputLabel from '@mui/material/InputLabel';
@@ -16,6 +15,7 @@ import Stack from '@mui/material/Stack';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
+import { paths } from '@/paths';
 import useAuth from '@/hooks/useAuth';
 
 const oAuthProviders = [{ id: 'google', name: 'Google', logo: '/assets/logo-google.svg' }];
@@ -25,7 +25,8 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required('Password is required'),
 });
 
-export function LoginForm({ closeDialog }) {
+export function LoginForm({ onLoginSuccess, redirectToHome = false }) {
+  const router = useRouter();
   const { login } = useAuth();
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
@@ -42,7 +43,8 @@ export function LoginForm({ closeDialog }) {
         setLoading(false);
 
         if (res.success) {
-          closeDialog?.();
+          onLoginSuccess?.();
+          redirectToHome && router.push(paths.home);
         }
       },
     });
