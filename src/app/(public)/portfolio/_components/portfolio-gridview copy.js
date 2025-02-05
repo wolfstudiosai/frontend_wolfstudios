@@ -7,7 +7,7 @@ import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmati
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { pxToRem, textShortner } from '@/utils/utils';
+import { pxToRem, textShortner } from '@/utils/helper';
 import { Box, IconButton, Paper, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';

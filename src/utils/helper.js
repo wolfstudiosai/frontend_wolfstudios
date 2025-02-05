@@ -1,3 +1,5 @@
+import { alpha } from '@mui/material';
+
 export const getSearchQuery = (queryParams) => {
   const { page, rowsPerPage, status } = queryParams; // value, columns, fromDate, toDate
   let query = '?';
@@ -89,4 +91,34 @@ export const sliderToGridColsCoverter = (sliderCols) => {
     default:
       return 4;
   }
+};
+
+export function pxToRem(value) {
+  return `${value / 16}rem`;
+}
+
+export const textShortner = (text, length) => {
+  if (text && text.length > length) {
+    return text.slice(0, length) + '...';
+  }
+  return text;
+};
+
+const colors = ['#5C7285', '#818C78', '#D2665A', '#48A6A7', '#16404D', '#809D3C', '#578E7E', '#E16A54'];
+export const getRandomColor = () => {
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  return alpha(color, 0.8);
+};
+
+export const getFancyColor = (index) => {
+  const newIndex = index > colors.length - 1 ? 0 : index;
+  return colors[newIndex];
+};
+
+export const extractFilenameAndType = (path) => {
+  if (!path) return { name: '', type: '' };
+  const parts = path.split('/');
+  const filename = parts[parts.length - 1];
+  const [name, type] = filename.split('.');
+  return { fileName: name, fileType: type };
 };

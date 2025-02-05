@@ -2,7 +2,7 @@
 
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { isVideoContent } from '@/utils/helper';
-import { pxToRem } from '@/utils/utils';
+import { pxToRem } from '@/utils/helper';
 import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';

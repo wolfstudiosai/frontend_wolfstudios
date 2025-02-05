@@ -4,7 +4,8 @@ import React from 'react';
 import Image from 'next/image';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { getRandomColor } from '@/utils/utils';
+import { getFancyColor, isVideoContent } from '@/utils/helper';
+import { getRandomColor } from '@/utils/helper';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
@@ -12,7 +13,6 @@ import { SwiperSlide } from 'swiper/react';
 
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 import { PortfolioSliderItem } from './portfolio-slider-item';
-import { isVideoContent } from '@/utils/helper';
 
 export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
   const slider_data = data.filter((item) => item.featured);
@@ -127,45 +127,32 @@ const PortfolioCard = ({ item, fetchList }) => {
           <Typography fontWeight={600} color="var(--mui-palette-common-white)" fontSize={{ xs: 12, md: 14 }}>
             {item.project_title}
           </Typography>
-          <Typography variant="body" color="var(--mui-palette-common-white)" sx={{ fontSize: '12px' }}>
-            {item.state}
-          </Typography>
-          <Box
-            sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px',
-              mt: 1,
-            }}
-          >
-            {item?.category &&
-              item?.category
-                ?.split(',')
-                .map((category, index) => (
-                  <Chip
-                    key={index}
-                    label={category.trim()}
-                    size="small"
-                    sx={{ backgroundColor: getRandomColor(), fontSize: '10px', py: '2px' }}
-                  />
-                ))}
-          </Box>
+          <Stack direction={'row'} spacing={1} justifyContent={'space-between'} alignItems={'center'} mt={1}>
+            <Typography variant="body" color="var(--mui-palette-common-white)" sx={{ fontSize: '12px' }}>
+              {item.state}
+            </Typography>
+            <Box
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                // mt: 1,
+              }}
+            >
+              {item?.category &&
+                item?.category
+                  ?.split(',')
+                  .map((category, index) => (
+                    <Chip
+                      key={index}
+                      label={category.trim()}
+                      size="small"
+                      sx={{ backgroundColor: getFancyColor(index), fontSize: '10px' }}
+                    />
+                  ))}
+            </Box>
+          </Stack>
         </Stack>
-        {/* <Stack
-          direction="row"
-          justifyContent={'flex-end'}
-          sx={{ position: 'absolute', top: 20, right: 10, width: '100%' }}
-        >
-          <AvatarGroup
-            spacing={'small'}
-            total={42}
-            sx={{ '& .MuiAvatar-root': { width: 32, height: 32, fontSize: 12, mb: 0.5 } }}
-          >
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-            <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-            <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-          </AvatarGroup>
-        </Stack> */}
         <ManagePortfolioRightPanel
           view={'QUICK'}
           fetchList={fetchList}

@@ -10,7 +10,7 @@ import { MobileNav } from '@/components/navbar/mobile-nav';
 import { NavSearchV2 } from '@/components/navbar/nav-search-v2';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { publicRoutes } from '@/router';
-import { pxToRem } from '@/utils/utils';
+import { pxToRem } from '@/utils/helper';
 import { Button, Popover } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';

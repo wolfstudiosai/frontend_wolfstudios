@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { pxToRem } from '@/utils/utils';
+import { pxToRem } from '@/utils/helper';
 import { Box, Chip, IconButton, Slider, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 
 import { SettingsContext } from '@/contexts/settings';

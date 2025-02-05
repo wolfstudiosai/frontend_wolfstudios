@@ -1,5 +1,5 @@
 import { Iconify } from '@/components/iconify/iconify';
-import { pxToRem } from '@/utils/utils';
+import { pxToRem } from '@/utils/helper';
 import { InputBase, styled } from '@mui/material';
 
 export const NavSearchV2 = ({ isMobile = false }) => {

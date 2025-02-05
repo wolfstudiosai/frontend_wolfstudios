@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
-import { getRandomColor } from '@/utils/utils';
+import { getRandomColor } from '@/utils/helper';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
