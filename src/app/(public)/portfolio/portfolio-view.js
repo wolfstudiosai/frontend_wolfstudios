@@ -4,9 +4,8 @@ import React, { useRef } from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
 import PageLoader from '@/components/PageLoader/PageLoader';
+import { sliderToGridColsCoverter } from '@/utils/helper';
 import { Box, CircularProgress } from '@mui/material';
-
-import { SettingsContext } from '@/contexts/settings';
 
 import { ManagePortfolioRightPanel } from './_components/manage-portfolio-right-panel';
 import { PortfolioGridView } from './_components/portfolio-gridview';
@@ -23,13 +22,12 @@ export const PortfolioView = () => {
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filters, setFilters] = React.useState({
-    COL: 4,
+    COL: 3,
     TAG: [],
     FILTER: [],
     SORTING: [],
     VIEW: 'grid',
   });
-  
 
   async function fetchList() {
     if (isFetching) return;
@@ -86,16 +84,15 @@ export const PortfolioView = () => {
   return (
     <PageContainer>
       <PageLoader loading={loading}>
-      
-          <PageHeader
-            title="Portfolio"
-            values={filters}
-            tags={portfolioTags}
-            filters={portfolioFilters}
-            sorting={portfolioSorting}
-            onFilterChange={handleFilterChange}
-          />
-        
+        <PageHeader
+          title="Portfolio"
+          values={filters}
+          tags={portfolioTags}
+          filters={portfolioFilters}
+          sorting={portfolioSorting}
+          totalRecords={totalRecords}
+          onFilterChange={handleFilterChange}
+        />
 
         {filters.VIEW === 'list' ? (
           <PortfolioListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />
@@ -105,7 +102,7 @@ export const PortfolioView = () => {
               data={data || [defaultPortfolio]}
               fetchList={fetchList}
               loading={loading}
-              colums={filters.COL}
+              colums={sliderToGridColsCoverter(filters.COL)}
             />
             <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
               {isFetching && <CircularProgress size="30px" />}

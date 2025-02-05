@@ -1,5 +1,5 @@
-import { getSearchQueryPortfolio } from '@/helper/common';
 import { api } from '@/utils/api';
+import { getSearchQueryPortfolio } from '@/utils/helper';
 import { toast } from 'sonner';
 
 export const getPortfolios = async (queryParams) => {
@@ -213,7 +213,6 @@ export const deletePortfolio = async (id) => {
 //     type: 'Creators',
 //   },
 // ];
-
 
 // =====================================================
 // static API

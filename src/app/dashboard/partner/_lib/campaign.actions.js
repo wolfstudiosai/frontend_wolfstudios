@@ -1,8 +1,8 @@
-import { getSearchQuery } from '/src/helper/common';
-import { api, publicApi } from '/src/utils/api';
-import { uploadFileAsync } from '/src/utils/upload-file';
-import { ConsoleLogger } from 'aws-amplify/utils';
+import { getSearchQuery } from '@/utils/helper';
 import { toast } from 'sonner';
+
+import { api } from '/src/utils/api';
+import { uploadFileAsync } from '/src/utils/upload-file';
 
 export const getCampaignListAsync = async (queryParams) => {
   try {

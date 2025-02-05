@@ -1,7 +1,7 @@
 'use client';
 
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { isVideoContent } from '@/helper/common';
+import { isVideoContent } from '@/utils/helper';
 import { pxToRem } from '@/utils/utils';
 import { Box, Button, Divider, Stack, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';

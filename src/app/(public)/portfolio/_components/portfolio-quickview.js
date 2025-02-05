@@ -1,13 +1,13 @@
 'use client';
 
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
+import { isVideoContent } from '@/utils/helper';
 import { pxToRem } from '@/utils/utils';
 import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
-import { isVideoContent } from '@/helper/common';
 
 const mediaArr = [
   'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670d11d77dff7fcc24e16f1c_2_DSC03975.jpeg',

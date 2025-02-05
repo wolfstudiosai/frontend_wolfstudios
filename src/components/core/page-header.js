@@ -1,15 +1,23 @@
 'use client';
 
+import React from 'react';
 import { pxToRem } from '@/utils/utils';
 import { Box, Chip, IconButton, Slider, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
-import React from 'react';
 
 import { SettingsContext } from '@/contexts/settings';
 import useAuth from '@/hooks/useAuth';
 
 import { Iconify } from '../iconify/iconify';
 
-export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [], onFilterChange }) => {
+export const PageHeader = ({
+  title,
+  values,
+  tags = [],
+  filters = [],
+  sorting = [],
+  onFilterChange,
+  totalRecords = 0,
+}) => {
   const {
     customSettings: { openSubNav },
   } = React.useContext(SettingsContext);
@@ -45,11 +53,16 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
         }}
       >
         <Stack direction={'row'} alignItems={'center'}>
-          <Typography variant="h6" fontWeight={600} gutterBottom sx={{ fontSize: pxToRem(28) }}>
+          <Typography
+            variant="h6"
+            fontWeight={600}
+            gutterBottom
+            sx={{ fontSize: { xs: pxToRem(16), md: pxToRem(30) } }}
+          >
             {title}
           </Typography>
           <Chip
-            label={'1881'}
+            label={totalRecords}
             color="inherit"
             size="small"
             sx={{ ml: 1, color: 'text.secondary', fontSize: pxToRem(12), padding: 0 }}
@@ -64,9 +77,9 @@ export const PageHeader = ({ title, values, tags = [], filters = [], sorting = [
               value={values.COL}
               onChange={(e, value) => handleFilter('COL', value)}
               color="#fff"
-              min={2}
-              max={30}
-              step={2}
+              min={1}
+              max={7}
+              step={1}
             />
           </Stack>
           {isLogin && (
