@@ -4,6 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { formConstants } from '@/app/constants/form-constants';
 import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
+import { DrawerContainer } from '@/components/drawer/drawer';
 import { Iconify } from '@/components/iconify/iconify';
 import { RightPanel } from '@/components/rightPanel/right-panel';
 import { Box, Button, FormControlLabel, IconButton, Stack, Switch } from '@mui/material';
@@ -14,15 +15,6 @@ import useAuth from '@/hooks/useAuth';
 
 import { defaultCampaignData } from '../_lib/campagin.data';
 import { CampaignQuickView } from './campaign-quick-view';
-
-// import {
-//   createPortfolioAsync,
-//   deletePortfolioAsync,
-//   getPortfolioAsync,
-//   updatePortfolioAsync,
-// } from '../_lib/portfolio.actions';
-// import { defaultPortfolio } from '../_lib/portfolio.types';
-// import { PortfolioQuickView } from './portfolio-quickview';
 
 export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
   const isUpdate = data ? true : false;
@@ -95,6 +87,39 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
     fetchList();
   };
 
+  // *****************Action Buttons*******************************
+  const actionButtons = (
+    <>
+      {isLogin && (
+        <>
+          <IconButton onClick={() => router.push(paths.public.campaign + '/bogomore')} title="Quick View">
+            <Iconify icon="lets-icons:view-light" />
+          </IconButton>
+
+          <FormControlLabel
+            control={
+              <Switch
+                size="small"
+                checked={values?.featured}
+                onChange={() => handleFeatured(!values?.featured)}
+                color="primary"
+              />
+            }
+            label="Featured"
+          />
+
+          <DeleteConfirmationPopover title={`Want to delete ${data?.project_title}?`} onDelete={() => handleDelete()} />
+
+          {sidebarView === 'EDIT' && (
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+              Save
+            </Button>
+          )}
+        </>
+      )}
+    </>
+  );
+
   // *****************Use Effects*******************************
 
   React.useEffect(() => {
@@ -116,46 +141,8 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
   }, []);
 
   return (
-    <RightPanel
-      heading={data?.project_title}
-      open={open}
-      onClose={onClose}
-      width={width}
-      actionButtons={() => (
-        <Stack direction="row" alignItems="center" gap={2}>
-          <Button size="small" variant="outlined" color="primary" onClick={onClose}>
-            Close
-          </Button>
-
-          {isLogin && (
-            <>
-              <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
-                Save
-              </Button>
-              <IconButton onClick={() => router.push(paths.public.campaign + '/bogomore')} title="Quick View">
-                <Iconify icon="lets-icons:view-light" />
-              </IconButton>
-              <DeleteConfirmationPopover
-                title={`Want to delete ${data?.project_title}?`}
-                onDelete={() => handleDelete()}
-              />
-              <FormControlLabel
-                control={
-                  <Switch
-                    size="small"
-                    checked={values?.featured}
-                    onChange={() => handleFeatured(!values?.featured)}
-                    color="primary"
-                  />
-                }
-                label="Featured"
-              />
-            </>
-          )}
-        </Stack>
-      )}
-    >
-      {sidebarView === 'QUICK' ? <CampaignQuickView data={data} /> : <Box>admin view</Box>}
-    </RightPanel>
+    <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
+      <CampaignQuickView data={data} />
+    </DrawerContainer>
   );
 };
