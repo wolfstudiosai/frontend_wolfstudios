@@ -264,6 +264,7 @@ export const CampaignView = () => {
           sorting={campaignSorting}
           onFilterChange={handleFilterChange}
           showFilters={false}
+          showColSlider={false}
         />
         {filters.VIEW === 'list' ? (
           <CampaignTabView />

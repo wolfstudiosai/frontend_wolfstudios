@@ -17,7 +17,8 @@ export const PageHeader = ({
   sorting = [],
   onFilterChange,
   totalRecords = 0,
-  showFilters = true
+  showFilters = true, 
+  showColSlider = true
 }) => {
   const {
     customSettings: { openSubNav },
@@ -71,7 +72,7 @@ export const PageHeader = ({
           <IconButton size="small" variant="contained" color="error" sx={{ mr: .5 }}>
             <Iconify icon="material-symbols-light:bookmark-outline" width={22} height={22} />
           </IconButton>
-          <Stack justifyContent={'center'} alignItems={'center'} sx={{ width: pxToRem(100) }}>
+          {showColSlider &&  <Stack justifyContent={'center'} alignItems={'center'} sx={{ width: pxToRem(100) }}>
             <Slider
               size="small"
               aria-label="show-columns"
@@ -82,7 +83,7 @@ export const PageHeader = ({
               max={7}
               step={1}
             />
-          </Stack>
+          </Stack>}
           {isLogin && (
             <ToggleButtonGroup
               size="small"
