@@ -101,7 +101,7 @@ export function VerticalLayout({ children }) {
               display: 'flex',
               flex: '1 1 auto',
               flexDirection: 'column',
-              minHeight: isFeaturedCardVisible ? 'calc(100vh - 78px)' : 'calc(100vh - 122px)',
+              minHeight: isFeaturedCardVisible ? 'calc(100vh - 78px)' : 'calc(100vh - 76px)',
             }}
           >
             {children}

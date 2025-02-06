@@ -17,6 +17,7 @@ export const PageHeader = ({
   sorting = [],
   onFilterChange,
   totalRecords = 0,
+  showFilters = true
 }) => {
   const {
     customSettings: { openSubNav },
@@ -49,7 +50,7 @@ export const PageHeader = ({
           // backgroundColor: 'var(--mui-palette-background-level1)',
           p: 1,
           borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-          border: 'solid .1px var(--mui-palette-divider)',
+          // border: 'solid .1px var(--mui-palette-divider)',
         }}
       >
         <Stack direction={'row'} alignItems={'center'} >  
@@ -111,7 +112,7 @@ export const PageHeader = ({
           )}
           <Iconify icon="ri:more-line" width={20} height={20} sx={{ ml: 1 }} />
         </Stack>
-        <Box>
+        {showFilters && <Box>
           <Stack direction="row" alignItems="center" sx={{ gap: 1 }}>
             {['TAG', 'FILTER', 'SORTING'].map((section) => (
               <Typography
@@ -151,7 +152,7 @@ export const PageHeader = ({
               ))}
             </Stack>
           </Stack>
-        </Box>
+        </Box>}
       </Stack>
     </Box>
   );
