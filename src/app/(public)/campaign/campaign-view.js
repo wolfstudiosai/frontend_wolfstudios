@@ -1,13 +1,13 @@
 'use client';
 
-import React from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { Box, CircularProgress } from '@mui/material';
+import React from 'react';
 
 import { CampaignGridView } from './_components/campaign-grid-view';
-import { CampaignListView } from './_components/campaign-listview';
+import { CampaignTabView } from './_components/campaign-tab-view';
 import { defaultCampaignData } from './_lib/campagin.data';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
 
@@ -263,9 +263,10 @@ export const CampaignView = () => {
           filters={campaignFilters}
           sorting={campaignSorting}
           onFilterChange={handleFilterChange}
+          showFilters={false}
         />
         {filters.VIEW === 'list' ? (
-          <CampaignListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />
+          <CampaignTabView />
         ) : (
           <Box>
             <CampaignGridView
