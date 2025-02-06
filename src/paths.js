@@ -110,6 +110,7 @@ export const paths = {
     // HQs
     portfolio: '/portfolio',
     campaign: '/campaign',
+    campaign_analytics: '/campaign-analytics',
     profile: '/profile',
     content: '/content',
     partner: '/partner',
