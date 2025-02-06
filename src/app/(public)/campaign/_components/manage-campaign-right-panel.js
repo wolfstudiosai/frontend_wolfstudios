@@ -92,7 +92,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
     <>
       {isLogin && (
         <>
-          <IconButton onClick={() => router.push(paths.public.campaign + '/bogomore')} title="Quick View">
+          <IconButton onClick={() => router.push(paths.public.campaign_analytics + '/bogomore')} title="Quick View">
             <Iconify icon="lets-icons:view-light" />
           </IconButton>
 
