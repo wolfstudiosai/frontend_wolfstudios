@@ -78,3 +78,16 @@ export const deletePortfolioAsync = async (ids) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
+
+export const deleteFileAsync = async (paths) => {
+  try {
+    const res = await api.delete(`/file/delete-files`, {
+      data: { paths },
+    });
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
