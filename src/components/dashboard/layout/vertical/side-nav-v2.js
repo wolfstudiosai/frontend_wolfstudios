@@ -46,7 +46,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
 
       return (
         <React.Fragment key={item.key}>
-          <MenuItem onClick={() => hasChildren && toggleMenuItem(item.key)} sx={{ mb: 0.3 }} selected={isActive}>
+          <MenuItem onClick={() => hasChildren && toggleMenuItem(item.key)} sx={{ mb: hasChildren && 1 }} selected={isActive}>
             <ListItemIcon>
               <Iconify icon={item.icon} width={15} height={15} color="text.primary" />
             </ListItemIcon>

@@ -4,6 +4,7 @@ import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { isVideoContent, pxToRem } from '@/utils/helper';
 import { Box, Button, Divider, Stack, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import Link from 'next/link';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
@@ -89,12 +90,17 @@ export const CampaignQuickView = ({ data }) => {
         width="100%"
         sx={{ position: 'sticky', top: 0, left: 0, backgroundColor: theme.palette.background.default, zIndex: 2 }}
       >
-        <Typography variant="h5" fontWeight={600} gutterBottom>
-          {data.title || 'Untitled'}
-        </Typography>
-        <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-          {data.description || 'No description available.'}
-        </Typography>
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Box>
+            <Typography variant="h5" fontWeight={600} gutterBottom>
+              {data.title || 'Untitled'}
+            </Typography>
+            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+              {data.description || 'No description available.'}
+            </Typography>
+          </Box>
+          <Button variant="contained">Join</Button>
+        </Stack>
         <Divider sx={{ my: 2 }} />
       </Box>
       <Stack direction="row" spacing={2} mb={2} flexWrap="wrap">
@@ -127,7 +133,7 @@ export const CampaignQuickView = ({ data }) => {
       <Typography variant="h6" color="text.secondary">
         Team
       </Typography>
-      <Typography variant="subtitle2" color="text.secondary">
+      <Typography variant="subtitle2" color="text.secondary" component={Link} href={data.team?.stylist}>
         Stylist: {data.team?.stylist || 'N/A'}
       </Typography>
       <Typography variant="subtitle2" color="text.secondary">
@@ -158,9 +164,6 @@ export const CampaignQuickView = ({ data }) => {
       <Typography variant="body2" color="text.secondary">
         {data.testimonial || 'No testimonial available.'}
       </Typography>
-
-      <Divider sx={{ my: 2 }} />
-      <Button variant="contained">Join</Button>
       <Divider sx={{ my: 2 }} />
       <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>
         {data?.gallery.map((item, index) => (

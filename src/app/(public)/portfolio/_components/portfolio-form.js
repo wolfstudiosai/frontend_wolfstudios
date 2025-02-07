@@ -9,7 +9,7 @@ import { Iconify } from '@/components/iconify/iconify';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
 import { ImageUploaderV2 } from '@/components/uploaders/image-uploader-v2';
-import { FormControl, FormLabel, InputAdornment } from '@mui/material';
+import { Button, FormControl, FormLabel, InputAdornment } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { defaultPortfolio } from '../_lib/portfolio.types';
@@ -40,7 +40,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
       {/* <PageLoader loading={loading} error={null}> */}
       <form onSubmit={onSubmit}>
         <Grid container spacing={2}>
-          {/* <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }}>
             <Button
               endIcon={<Iconify icon="lucide:upload" />}
               variant="contained"
@@ -48,7 +48,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
             >
               Upload
             </Button>
-          </Grid> */}
+          </Grid>
           <Grid size={{ xs: 12 }}>
             <CustomTextField
               name="project_title"
