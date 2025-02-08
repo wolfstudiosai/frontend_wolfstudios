@@ -1,6 +1,6 @@
 import React from 'react';
 import { deleteFileAsync } from '@/app/(public)/portfolio/_lib/portfolio.actions';
-import { isVideoContent } from '@/utils/helper';
+import { isSupabaseUrl, isVideoContent } from '@/utils/helper';
 import { Box, FormLabel, IconButton, Stack } from '@mui/material';
 
 import { Iconify } from '../iconify/iconify';
@@ -8,10 +8,10 @@ import { MediaUploader } from './media-uploader';
 
 export const MediaUploaderTrigger = ({ open, onClose, onSave, value, label, onAdd, onDelete }) => {
   const handleRemoveFile = async (item) => {
-    if (item.includes('http') || item.includes('www.')) {
+    if (isSupabaseUrl(item)) {
+      await deleteFileAsync([item]);
       onDelete(value?.filter((path) => path !== item));
     } else {
-      await deleteFileAsync([item]);
       onDelete(value?.filter((path) => path !== item));
     }
   };
@@ -33,7 +33,6 @@ export const MediaUploaderTrigger = ({ open, onClose, onSave, value, label, onAd
               height: '100px',
               borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
               border: '3px dashed var(--mui-palette-divider)',
-              borderRadius: 1,
               cursor: 'pointer',
             }}
             onClick={onAdd}
@@ -53,9 +52,10 @@ export const MediaUploaderTrigger = ({ open, onClose, onSave, value, label, onAd
                     muted
                     playsInline
                     sx={{
-                      height: '200px',
+                      height: '100px',
                       width: '100%',
-                      objectFit: 'cover',
+                      objectFit: 'contain',
+                      border: '1px solid var(--mui-palette-divider)',
                       borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
                     }}
                   />
@@ -79,7 +79,7 @@ export const MediaUploaderTrigger = ({ open, onClose, onSave, value, label, onAd
                 <>
                   <Box
                     component="img"
-                    src={path.includes('http') ? path : `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${path}`}
+                    src={isSupabaseUrl(path) ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${path}` : path}
                     sx={{
                       width: '100%',
                       height: '100px',
@@ -119,7 +119,6 @@ export const MediaUploaderTrigger = ({ open, onClose, onSave, value, label, onAd
             height: '100px',
             borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
             border: '3px dashed var(--mui-palette-divider)',
-            borderRadius: 1,
             cursor: 'pointer',
           }}
           onClick={onAdd}
