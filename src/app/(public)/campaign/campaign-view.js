@@ -1,16 +1,16 @@
 'use client';
 
-import React from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
-import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Typography } from '@mui/material';
+import { pxToRem } from '@/utils/helper';
+import { Box, Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import React from 'react';
 
-import { CampaignGridView } from './_components/campaign-grid-view';
-import { CampaignTabView } from './_components/campaign-tab-view';
-import { defaultCampaignData } from './_lib/campagin.data';
+import { SettingsContext } from '@/contexts/settings';
+
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
 
 // todo: remove this after completing data poppulation
@@ -22,7 +22,7 @@ const CampaignData = [
       title: `REVO Campaign ${i + 1}`,
       slug: `revo-campaign-${i + 1}`,
       thumbnail: `https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671541de64121943821caa00_DSC01725-p-500.jpg`,
-      description: `Description for REVO Campaign ${i + 1}`,
+      description: `It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors  ${i + 1}`,
       model: `Model ${i + 1}`,
       dp: 'Combina Key',
       projectLink: 'Link to project',
@@ -56,7 +56,7 @@ const CampaignData = [
       title: `BOGOMORE Campaign ${i + 1}`,
       slug: `bogomore-campaign-${i + 1}`,
       thumbnail: `https://cdn.prod.website-files.com/66836d311a49ad62d048361e/67174bb0d168aa30e7fca8ef_DSC01881-p-500.jpg`,
-      description: `Description for BOGOMORE Campaign ${i + 1}`,
+      description: `It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors  ${i + 1}`,
       model: `Model ${i + 11}`,
       dp: 'Combina Key',
       projectLink: 'Link to project',
@@ -85,12 +85,13 @@ const CampaignData = [
   },
 ];
 
-
 const INITIAL_VISIBLE_COUNT = 5;
 
 export const CampaignView = () => {
   const observerRef = React.useRef(null);
-
+  const {
+    customSettings: { openSubNav },
+  } = React.useContext(SettingsContext);
   const [loading, setLoading] = React.useState(false);
   const [isFetching, setIsFetching] = React.useState(false);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
@@ -183,33 +184,58 @@ export const CampaignView = () => {
             ? campaignGroup.campaigns
             : campaignGroup.campaigns.slice(0, INITIAL_VISIBLE_COUNT);
           return (
-            <Grid key={campaignGroup.name} container sx={{ border: '1px solid #333', mb: 2 }}>
+            <Grid key={campaignGroup.name} container sx={{ mb: 2, position: 'relative' }} spacing={4}>
               <Grid size={{ xs: 12, md: 4 }}>
-                <Typography variant="h4" fontWeight="bold" gutterBottom>
-                  AMPLIFY YOUR IMPACT
-                </Typography>
-                <Typography variant="body1" color="grey.400">
-                  Welcome to the space where potential meets possibility. Our agency prides itself on establishing
-                  authentic, meaningful partnerships that put our creators first.
-                </Typography>
+                <Box
+                  sx={{
+                    backgroundColor: 'text.primary',
+                    borderRadius: 1,
+                    padding: 4,
+                    position: 'sticky',
+                    top: pxToRem(openSubNav ? 152 : 106),
+                  }}
+                >
+                  <Typography variant="h4" fontWeight="bold" gutterBottom color="var(--mui-palette-common-white)">
+                    AMPLIFY YOUR IMPACT
+                  </Typography>
+                  <Typography variant="body1" color="grey.400">
+                    Welcome to the space where potential meets possibility. Our agency prides itself on establishing
+                    authentic, meaningful partnerships that put our creators first.
+                  </Typography>
+                </Box>
               </Grid>
               <Grid size={{ xs: 12, md: 8 }}>
                 {visibleCampaigns.map((item, index) => (
-                  <Grid container key={item.number} mb={4}>
-                    <Grid item size={{ xs: 2 }} position="relative">
-                      <Card>
-                        <CardMedia component="img" height="200" image={item.image} alt={item.title} />
+                  <Grid container key={item.slug} spacing={2} mb={4} alignItems="center">
+                    <Grid size={{ xs: 2 }} position="relative">
+                      <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
+                        <CardMedia
+                          component="img"
+                          height="150"
+                          image={item.image}
+                          alt={item.title}
+                          sx={{ borderRadius: 2 }}
+                        />
                       </Card>
-                      <Box position="absolute" bottom={-16} left={16}>
-                        <Typography number={item.number} />
+                      <Box
+                        position="absolute"
+                        bottom={-16}
+                        left={16}
+                        bgcolor="primary.main"
+                        color="white"
+                        px={1}
+                        py={0.5}
+                        borderRadius={1}
+                      >
+                        <Typography variant="caption">{index + 1}</Typography>
                       </Box>
                     </Grid>
-                    <Grid item size={{ xs: 10 }}>
-                      <CardContent>
+                    <Grid size={{ xs: 10 }}>
+                      <CardContent sx={{ p: 2 }}>
                         <Typography variant="h6" fontWeight="bold">
                           {item.title}
                         </Typography>
-                        <Typography variant="body2" color="textSecondary" paragraph>
+                        <Typography variant="body2" color="text.secondary" paragraph>
                           {item.description}
                         </Typography>
                         <Button variant="text" color="primary">
@@ -219,7 +245,16 @@ export const CampaignView = () => {
                     </Grid>
                   </Grid>
                 ))}
-                <Iconify icon="solar:square-arrow-down-broken" onClick={() => toggleGroupView(campaignGroup.name)} />
+                <Button
+                  variant="text"
+                  color="primary"
+                  onClick={() => toggleGroupView(campaignGroup.name)}
+                  endIcon={
+                    <Iconify icon={isExpanded ? 'solar:square-arrow-up-broken' : 'solar:square-arrow-down-broken'} />
+                  }
+                >
+                  {isExpanded ? 'Show Less' : 'Show More'}
+                </Button>
               </Grid>
             </Grid>
           );
