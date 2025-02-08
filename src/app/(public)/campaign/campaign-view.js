@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
 import { Iconify } from '@/components/iconify/iconify';
@@ -7,7 +8,6 @@ import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { pxToRem } from '@/utils/helper';
 import { Box, Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import React from 'react';
 
 import { SettingsContext } from '@/contexts/settings';
 
@@ -188,22 +188,42 @@ export const CampaignView = () => {
               <Grid size={{ xs: 12, md: 4 }}>
                 <Box
                   sx={{
-                    backgroundColor: 'text.primary',
-                    borderRadius: 1,
+                    background: 'linear-gradient(135deg, #f6d365 0%, #fda085 50%, #ff758c 100%)',
+                    borderRadius: 2,
                     padding: 4,
                     position: 'sticky',
                     top: pxToRem(openSubNav ? 152 : 106),
+                    boxShadow: 3,
+                    color: 'white',
                   }}
                 >
-                  <Typography variant="h4" fontWeight="bold" gutterBottom color="var(--mui-palette-common-white)">
-                    AMPLIFY YOUR IMPACT
+                  <Typography
+                    variant="h4"
+                    fontWeight="bold"
+                    gutterBottom
+                    sx={{
+                      fontSize: '2rem',
+                      letterSpacing: '0.5px',
+                      textTransform: 'uppercase',
+                      color: 'text.primary',
+                    }}
+                  >
+                    Amplify Your Impact
                   </Typography>
-                  <Typography variant="body1" color="grey.400">
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontSize: '1rem',
+                      color: 'text.primary',
+                      // lineHeight: 1.6,
+                    }}
+                  >
                     Welcome to the space where potential meets possibility. Our agency prides itself on establishing
                     authentic, meaningful partnerships that put our creators first.
                   </Typography>
                 </Box>
               </Grid>
+
               <Grid size={{ xs: 12, md: 8 }}>
                 {visibleCampaigns.map((item, index) => (
                   <Grid container key={item.slug} spacing={2} mb={4} alignItems="center">
