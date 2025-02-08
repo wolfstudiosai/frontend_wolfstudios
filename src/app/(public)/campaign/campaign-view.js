@@ -5,7 +5,7 @@ import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
-import { pxToRem } from '@/utils/helper';
+import { getRandomGradientColor, pxToRem } from '@/utils/helper';
 import { Box, Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
@@ -188,7 +188,7 @@ export const CampaignView = () => {
               <Grid size={{ xs: 12, md: 4 }}>
                 <Box
                   sx={{
-                    background: 'linear-gradient(135deg, #f6d365 0%, #fda085 50%, #ff758c 100%)',
+                    background: getRandomGradientColor(index),
                     borderRadius: 2,
                     padding: 4,
                     position: 'sticky',
