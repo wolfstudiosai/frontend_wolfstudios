@@ -19,7 +19,7 @@ import { api } from '@/utils/api';
 import { isVideoContent, pxToRem } from '@/utils/helper';
 import { Iconify } from '../iconify/iconify';
 
-export const ImageUploaderV2 = ({ open, onClose, onSave, multiple = true }) => {
+export const MediaUploader = ({ open, onClose, onSave, multiple = true }) => {
   const [tab, setTab] = React.useState(0);
   const [urls, setUrls] = React.useState([]);
   const [files, setFiles] = React.useState([]);
@@ -27,7 +27,6 @@ export const ImageUploaderV2 = ({ open, onClose, onSave, multiple = true }) => {
   const [url, setUrl] = React.useState('');
   const [videoUrls, setVideoUrls] = React.useState([]);
 
-  console.log("video urls check: ", videoUrls);
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
