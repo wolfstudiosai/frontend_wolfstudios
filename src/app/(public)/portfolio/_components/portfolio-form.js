@@ -2,15 +2,15 @@
 
 import React from 'react';
 import { CustomDatePicker } from '@/components/formFields/custom-date-picker';
-import { CustomSelect } from '@/components/formFields/custom-select';
 import { CustomTextField } from '@/components/formFields/custom-textfield';
 import { ErrorMessage } from '@/components/formFields/error-message';
 import { Iconify } from '@/components/iconify/iconify';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
 import { MediaUploader } from '@/components/uploaders/media-uploader';
+import { MediaUploaderTrigger } from '@/components/uploaders/media-uploader-trigger';
 import { isVideoContent } from '@/utils/helper';
-import { Box, Button, FormControl, FormLabel, IconButton, InputAdornment, Stack } from '@mui/material';
+import { Box, FormControl, FormLabel, IconButton, InputAdornment, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { deleteFileAsync } from '../_lib/portfolio.actions';
@@ -19,26 +19,9 @@ import { defaultPortfolio } from '../_lib/portfolio.types';
 export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
   const [values, setValues] = React.useState(data || defaultPortfolio);
 
-  console.log(data, 'data inside portfolio form...');
-
   // *********************States*********************************
   const [mediaPreview, setMediaPreview] = React.useState(null);
   const [openUploadDialog, setOpenUploadDialog] = React.useState(false);
-
-  const handleRemoveFile = async (item) => {
-    if (item.includes('http') || item.includes('www.')) {
-      setFieldValue(
-        'vertical_gallery_images',
-        values?.vertical_gallery_images?.filter((path) => path !== item)
-      );
-    } else {
-      setFieldValue(
-        'vertical_gallery_images',
-        values?.vertical_gallery_images?.filter((path) => path !== item)
-      );
-      await deleteFileAsync([item]);
-    }
-  };
 
   // *****************Use Effects*******************************
 
@@ -174,232 +157,30 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
-            <Box sx={{ mb: 1.8 }}>
-              <FormLabel>Vertical Gallery Images</FormLabel>
-            </Box>
-            {values?.vertical_gallery_images?.length > 0 ? (
-              <Stack direction="row" gap={1} sx={{ flexWrap: 'wrap', mt: 2 }}>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  justifyContent="center"
-                  sx={{
-                    width: '24.3%',
-                    height: '100px',
-                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-                    border: '3px dashed var(--mui-palette-divider)',
-                    borderRadius: 1,
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => setOpenUploadDialog(true)}
-                >
-                  <Iconify icon="icon-park-outline:upload-two" sx={{ width: 50, height: 50, color: 'grey.600' }} />
-                </Stack>
-                {values?.vertical_gallery_images?.map((path, index) => (
-                  <Box key={index} sx={{ width: '24.3%', position: 'relative' }}>
-                    {isVideoContent(path) ? (
-                      <>
-                        <Box
-                          component="video"
-                          src={path}
-                          controls
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                          sx={{
-                            height: '200px',
-                            width: '100%',
-                            objectFit: 'cover',
-                            borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-                          }}
-                        />
-                        <IconButton
-                          size="small"
-                          sx={{
-                            position: 'absolute',
-                            top: 5,
-                            right: 5,
-                            color: '#fff',
-                            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                            borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-                            '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.6)' },
-                          }}
-                          onClick={() => handleRemoveFile(path)}
-                        >
-                          <Iconify icon="ic:round-close" width={18} height={18} />
-                        </IconButton>
-                      </>
-                    ) : (
-                      <>
-                        <Box
-                          component="img"
-                          src={
-                            path.includes('http') ? path : `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${path}`
-                          }
-                          sx={{
-                            width: '100%',
-                            height: '100px',
-                            aspectRatio: 1,
-                            objectFit: 'contain',
-                            borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-                            border: '1px solid var(--mui-palette-divider)',
-                          }}
-                        />
-                        <IconButton
-                          size="small"
-                          sx={{
-                            position: 'absolute',
-                            top: 5,
-                            right: 5,
-                            color: '#fff',
-                            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                            borderRadius: '50%',
-                            '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.6)' },
-                          }}
-                          onClick={() => handleRemoveFile(path)}
-                        >
-                          <Iconify icon="ic:round-close" width={18} height={18} />
-                        </IconButton>
-                      </>
-                    )}
-                  </Box>
-                ))}
-              </Stack>
-            ) : (
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="center"
-                sx={{
-                  width: '24.3%',
-                  height: '200px',
-                  border: '1px dashed',
-                  borderColor: 'divider',
-                  borderRadius: 1,
-                  cursor: 'pointer',
-                }}
-                onClick={() => setOpenUploadDialog(true)}
-              >
-                <Iconify icon="lucide:upload" sx={{ width: 80, height: 80, color: 'grey.600' }} />
-              </Stack>
-            )}
+            <MediaUploaderTrigger
+              open={openUploadDialog}
+              onClose={() => setOpenUploadDialog(false)}
+              onSave={(urls) => setFieldValue('vertical_gallery_images', urls)}
+              value={values?.vertical_gallery_images}
+              label={'Vertical Gallery Images'}
+              onAdd={() => setOpenUploadDialog(true)}
+              onDelete={(filteredUrls) => setFieldValue('vertical_gallery_images', filteredUrls)}
+            />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <Box sx={{ mb: 1.8 }}>
-              <FormLabel>Horizontal Gallery Images</FormLabel>
-            </Box>
-            {values?.horizontal_gallery_images?.length > 0 ? (
-              <Stack direction="row" gap={1} sx={{ flexWrap: 'wrap', mt: 2 }}>
-                {values?.horizontal_gallery_images?.map((path, index) => (
-                  <Box key={index} sx={{ width: '24.3%', position: 'relative' }}>
-                    {isVideoContent(path) ? (
-                      <>
-                        <Box
-                          component="video"
-                          src={path}
-                          controls
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                          sx={{
-                            height: '200px',
-                            width: '100%',
-                            objectFit: 'cover',
-                            borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-                          }}
-                        />
-                        <IconButton
-                          size="small"
-                          sx={{
-                            position: 'absolute',
-                            top: 5,
-                            right: 5,
-                            color: '#fff',
-                            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                            borderRadius: '50%',
-                            '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.6)' },
-                          }}
-                          onClick={() => handleRemoveFile(path)}
-                        >
-                          <Iconify icon="ic:round-close" width={18} height={18} />
-                        </IconButton>
-                      </>
-                    ) : (
-                      <>
-                        <Box
-                          component="img"
-                          src={
-                            path.includes('http') ? path : `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${path}`
-                          }
-                          sx={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: 1 }}
-                        />
-                        <IconButton
-                          size="small"
-                          sx={{
-                            position: 'absolute',
-                            top: 5,
-                            right: 5,
-                            color: '#fff',
-                            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                            borderRadius: '50%',
-                            '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.6)' },
-                          }}
-                          onClick={() => handleRemoveFile(path)}
-                        >
-                          <Iconify icon="ic:round-close" width={18} height={18} />
-                        </IconButton>
-                      </>
-                    )}
-                  </Box>
-                ))}
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  justifyContent="center"
-                  sx={{
-                    width: '24.3%',
-                    height: '200px',
-                    border: '1px dashed',
-                    borderColor: 'divider',
-                    borderRadius: 1,
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => setOpenUploadDialog(true)}
-                >
-                  <Iconify icon="lucide:upload" sx={{ width: 80, height: 80, color: 'grey.600' }} />
-                </Stack>
-              </Stack>
-            ) : (
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="center"
-                sx={{
-                  width: '24.3%',
-                  height: '200px',
-                  border: '1px dashed',
-                  borderColor: 'divider',
-                  borderRadius: 1,
-                  cursor: 'pointer',
-                }}
-                onClick={() => setOpenUploadDialog(true)}
-              >
-                <Iconify icon="lucide:upload" sx={{ width: 80, height: 80, color: 'grey.600' }} />
-              </Stack>
-            )}
+            <MediaUploaderTrigger
+              onClose={() => setOpenUploadDialog(false)}
+              onSave={(urls) => setFieldValue('horizontal_gallery_images', urls)}
+              value={values?.horizontal_gallery_images}
+              label={'Vertical Gallery Images'}
+              onAdd={() => setOpenUploadDialog(true)}
+              onDelete={(filteredUrls) => setFieldValue('horizontal_gallery_images', filteredUrls)}
+            />
           </Grid>
         </Grid>
       </form>
 
       {mediaPreview && <MediaIframeDialog open={true} data={mediaPreview} onClose={() => setMediaPreview(null)} />}
-      <MediaUploader
-        open={openUploadDialog}
-        onClose={() => setOpenUploadDialog(false)}
-        onSave={(paths) => setFieldValue('vertical_gallery_images', [...values?.vertical_gallery_images, ...paths])}
-        multiple
-      />
     </>
   );
 };

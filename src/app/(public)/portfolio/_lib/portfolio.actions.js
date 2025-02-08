@@ -84,7 +84,7 @@ export const deleteFileAsync = async (paths) => {
     const res = await api.delete(`/file/delete-files`, {
       data: { paths },
     });
-    toast.success(res.data.message);
+    // toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
     toast.error(error.response.data.message);

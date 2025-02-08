@@ -1,10 +1,8 @@
 'use client';
 
-import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
-import { Iconify } from '@/components/iconify/iconify';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { isVideoContent, pxToRem } from '@/utils/helper';
-import { Box, Button, Divider, FormControlLabel, IconButton, Stack, Switch, Typography, useTheme } from '@mui/material';
+import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
