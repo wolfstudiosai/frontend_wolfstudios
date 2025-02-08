@@ -129,11 +129,11 @@ export const isSupabaseUrl = (url) => {
 };
 
 const gradients = [
-  'linear-gradient(135deg, #B3CFFF 0%, #9EB8FF 50%, #8AA8FF 100%)', // Rich denim flow
-  'linear-gradient(135deg, #D8E2F0 0%, #C1CEDD 50%, #B8C7DC 100%)', // Stormy slate
-  'linear-gradient(135deg, #C2E4FE 0%, #A9D4FD 50%, #90D1FC 100%)', // Deep sky progression
-  'linear-gradient(135deg, #E6CFF2 0%, #D8BCE6 50%, #D4AEE8 100%)', // Twilight lavender
-  'linear-gradient(135deg, #BBDEFB 0%, #A6D1F9 50%, #90CAF9 100%)', // Ocean depth blues
+  'linear-gradient(135deg, #B3CFFF 0%, #9EB8FF 50%, #8AA8FF 100%)', 
+  'linear-gradient(135deg, #D8E2F0 0%, #C1CEDD 50%, #B8C7DC 100%)', 
+  'linear-gradient(135deg, #C2E4FE 0%, #A9D4FD 50%, #90D1FC 100%)', 
+  'linear-gradient(135deg, #E6CFF2 0%, #D8BCE6 50%, #D4AEE8 100%)', 
+  'linear-gradient(135deg, #BBDEFB 0%, #A6D1F9 50%, #90CAF9 100%)', 
 ];
 
 export const getRandomGradientColor = (index) => {

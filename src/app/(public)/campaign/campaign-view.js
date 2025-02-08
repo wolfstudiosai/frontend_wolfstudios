@@ -184,7 +184,7 @@ export const CampaignView = () => {
             ? campaignGroup.campaigns
             : campaignGroup.campaigns.slice(0, INITIAL_VISIBLE_COUNT);
           return (
-            <Grid key={campaignGroup.name} container sx={{ mb: 2, position: 'relative' }} spacing={4}>
+            <Grid key={campaignGroup.name} container sx={{ mb: 2, position: 'relative' }} spacing={2}>
               <Grid size={{ xs: 12, md: 4 }}>
                 <Box
                   sx={{
@@ -227,7 +227,7 @@ export const CampaignView = () => {
               <Grid size={{ xs: 12, md: 8 }}>
                 {visibleCampaigns.map((item, index) => (
                   <Grid container key={item.slug} spacing={2} mb={4} alignItems="center">
-                    <Grid size={{ xs: 2 }} position="relative">
+                    <Grid size={{ xs: 2 }}>
                       <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
                         <CardMedia
                           component="img"
@@ -237,25 +237,23 @@ export const CampaignView = () => {
                           sx={{ borderRadius: 2 }}
                         />
                       </Card>
-                      <Box
-                        position="absolute"
-                        bottom={-16}
-                        left={16}
-                        bgcolor="primary.main"
-                        color="white"
-                        px={1}
-                        py={0.5}
-                        borderRadius={1}
-                      >
-                        <Typography variant="caption">{index + 1}</Typography>
-                      </Box>
                     </Grid>
-                    <Grid size={{ xs: 10 }}>
+                    <Grid size={{ xs: 8 }} position="relative">
                       <CardContent sx={{ p: 2 }}>
                         <Typography variant="h6" fontWeight="bold">
                           {item.title}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" paragraph>
+                        <Box position="absolute" top={1} left={16} color="primary.main" px={1}>
+                          <Typography
+                            sx={{
+                              fontSize: '5.75rem',
+                              opacity: 0.07,
+                            }}
+                          >
+                            {index + 1}
+                          </Typography>
+                        </Box>
+                        <Typography variant="body2" color="text.secondary">
                           {item.description}
                         </Typography>
                         <Button variant="text" color="primary">
