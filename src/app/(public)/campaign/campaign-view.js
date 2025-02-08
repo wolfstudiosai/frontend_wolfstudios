@@ -6,7 +6,7 @@ import { PageHeader } from '@/components/core/page-header';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { getRandomGradientColor, pxToRem } from '@/utils/helper';
-import { Box, Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { SettingsContext } from '@/contexts/settings';
@@ -215,7 +215,6 @@ export const CampaignView = () => {
                     sx={{
                       fontSize: '1rem',
                       color: 'text.primary',
-                      // lineHeight: 1.6,
                     }}
                   >
                     Welcome to the space where potential meets possibility. Our agency prides itself on establishing
@@ -226,40 +225,50 @@ export const CampaignView = () => {
 
               <Grid size={{ xs: 12, md: 8 }}>
                 {visibleCampaigns.map((item, index) => (
-                  <Grid container key={item.slug} spacing={2} mb={4} alignItems="center">
+                  <Grid
+                    container
+                    key={item.slug}
+                    spacing={2}
+                    mb={4}
+                    alignItems="center"
+                    sx={{
+                      border: '1px solid var(--mui-palette-divider)',
+                      boxShadow: '1px 1px 5px rgba(0, 0, 0, 0.05)',
+                      height: pxToRem(200),
+                      overflow: 'hidden',
+                    }}
+                  >
                     <Grid size={{ xs: 2 }}>
-                      <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
-                        <CardMedia
-                          component="img"
-                          height="150"
-                          image={item.image}
-                          alt={item.title}
-                          sx={{ borderRadius: 2 }}
-                        />
-                      </Card>
+                      <Box
+                        component="img"
+                        sx={{
+                          height: '100%',
+                          width: '100%',
+                        }}
+                        src={item.image}
+                        alt={item.title}
+                      />
                     </Grid>
                     <Grid size={{ xs: 8 }} position="relative">
-                      <CardContent sx={{ p: 2 }}>
-                        <Typography variant="h6" fontWeight="bold">
-                          {item.title}
+                      <Typography variant="h6" fontWeight="bold">
+                        {item.title}
+                      </Typography>
+                      <Box position="absolute" top={1} left={16} color="primary.main" px={1}>
+                        <Typography
+                          sx={{
+                            fontSize: '5.75rem',
+                            opacity: 0.07,
+                          }}
+                        >
+                          {index + 1}
                         </Typography>
-                        <Box position="absolute" top={1} left={16} color="primary.main" px={1}>
-                          <Typography
-                            sx={{
-                              fontSize: '5.75rem',
-                              opacity: 0.07,
-                            }}
-                          >
-                            {index + 1}
-                          </Typography>
-                        </Box>
-                        <Typography variant="body2" color="text.secondary">
-                          {item.description}
-                        </Typography>
-                        <Button variant="text" color="primary">
-                          View Details
-                        </Button>
-                      </CardContent>
+                      </Box>
+                      <Typography variant="body2" color="text.secondary">
+                        {item.description}
+                      </Typography>
+                      <Button variant="text" color="primary">
+                        View Details
+                      </Button>
                     </Grid>
                   </Grid>
                 ))}
