@@ -2,19 +2,21 @@
 
 import React from 'react';
 import { CustomDatePicker } from '@/components/formFields/custom-date-picker';
-import { CustomSelect } from '@/components/formFields/custom-select';
 import { CustomTextField } from '@/components/formFields/custom-textfield';
 import { ErrorMessage } from '@/components/formFields/error-message';
 import { Iconify } from '@/components/iconify/iconify';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
-import { ImageUploaderV2 } from '@/components/uploaders/image-uploader-v2';
-import { FormControl, FormLabel, InputAdornment } from '@mui/material';
+import { MediaUploader } from '@/components/uploaders/media-uploader';
+import { MediaUploaderTrigger } from '@/components/uploaders/media-uploader-trigger';
+import { isVideoContent } from '@/utils/helper';
+import { Box, FormControl, FormLabel, IconButton, InputAdornment, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
+import { deleteFileAsync } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
 
-export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail }) => {
+export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
   const [values, setValues] = React.useState(data || defaultPortfolio);
 
   // *********************States*********************************
@@ -40,16 +42,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
       {/* <PageLoader loading={loading} error={null}> */}
       <form onSubmit={onSubmit}>
         <Grid container spacing={2}>
-          {/* <Grid size={{ xs: 12 }}>
-            <Button
-              endIcon={<Iconify icon="lucide:upload" />}
-              variant="contained"
-              onClick={() => setOpenUploadDialog(true)}
-            >
-              Upload
-            </Button>
-          </Grid> */}
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
               name="project_title"
               label="Project Title"
@@ -59,7 +52,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
             <ErrorMessage error={errors.project_title} />
           </Grid>
 
-          <Grid size={{ xs: 12 }}>
+          {/* <Grid size={{ xs: 12 }}>
             <CustomSelect
               label="Category"
               name="category"
@@ -71,11 +64,11 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
                 { value: 'TWITTER', label: 'Twitter' },
               ]}
             />
-          </Grid>
-          <Grid size={{ xs: 12 }}>
+          </Grid> */}
+          <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField name="category" label="Category" value={values.category} onChange={onChange} />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
               name="video_url"
               label="Video URL"
@@ -96,7 +89,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
               }}
             />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
               name="hero_image"
               label="Hero Image"
@@ -117,7 +110,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
               }}
             />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <CustomDatePicker
               label={'Date'}
               error={errors.date}
@@ -126,13 +119,13 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
             />
           </Grid>
 
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField name="state" label="State" value={values.state} onChange={onChange} />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField name="partner_hq" label="Partner HQ" value={values.partner_hq} onChange={onChange} />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <FormControl fullWidth error={Boolean(errors.thumbnail)}>
               <FormLabel sx={{ mb: 2.8 }}>Thumbnail</FormLabel>
               <ImageUploader
@@ -162,25 +155,32 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
               rows={4}
             />
           </Grid>
-          {/* <Grid size={12}>
-              <Button
-                variant="contained"
-                type={loading ? 'button' : 'submit'}
-                startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
-              >
-                Save
-              </Button>
-            </Grid> */}
+
+          <Grid size={{ xs: 12, md: 6 }}>
+            <MediaUploaderTrigger
+              open={openUploadDialog}
+              onClose={() => setOpenUploadDialog(false)}
+              onSave={(urls) => setFieldValue('vertical_gallery_images', urls)}
+              value={values?.vertical_gallery_images}
+              label={'Vertical Gallery Images'}
+              onAdd={() => setOpenUploadDialog(true)}
+              onDelete={(filteredUrls) => setFieldValue('vertical_gallery_images', filteredUrls)}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <MediaUploaderTrigger
+              onClose={() => setOpenUploadDialog(false)}
+              onSave={(urls) => setFieldValue('horizontal_gallery_images', urls)}
+              value={values?.horizontal_gallery_images}
+              label={'Vertical Gallery Images'}
+              onAdd={() => setOpenUploadDialog(true)}
+              onDelete={(filteredUrls) => setFieldValue('horizontal_gallery_images', filteredUrls)}
+            />
+          </Grid>
         </Grid>
       </form>
 
       {mediaPreview && <MediaIframeDialog open={true} data={mediaPreview} onClose={() => setMediaPreview(null)} />}
-      <ImageUploaderV2
-        open={openUploadDialog}
-        onClose={() => setOpenUploadDialog(false)}
-        onSave={(files) => handleSave(files)}
-        multiple
-      />
     </>
   );
 };
