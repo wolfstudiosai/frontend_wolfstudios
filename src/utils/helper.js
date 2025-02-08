@@ -122,3 +122,8 @@ export const extractFilenameAndType = (path) => {
   const [name, type] = filename.split('.');
   return { fileName: name, fileType: type };
 };
+
+export const isSupabaseUrl = (url) => {
+  if (!url) return false;
+  return !url.includes('http') && !url.includes('www');
+};

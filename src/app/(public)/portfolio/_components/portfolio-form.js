@@ -19,9 +19,12 @@ import { defaultPortfolio } from '../_lib/portfolio.types';
 export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
   const [values, setValues] = React.useState(data || defaultPortfolio);
 
+  console.log(values, 'values....');
+
   // *********************States*********************************
   const [mediaPreview, setMediaPreview] = React.useState(null);
-  const [openUploadDialog, setOpenUploadDialog] = React.useState(false);
+  const [openVerticalUploadDialog, setOpenVerticalUploadDialog] = React.useState(false);
+  const [openHorizontalUploadDialog, setOpenHorizontalUploadDialog] = React.useState(false);
 
   // *****************Use Effects*******************************
 
@@ -158,22 +161,24 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
 
           <Grid size={{ xs: 12, md: 6 }}>
             <MediaUploaderTrigger
-              open={openUploadDialog}
-              onClose={() => setOpenUploadDialog(false)}
+              open={openVerticalUploadDialog}
+              onClose={() => setOpenVerticalUploadDialog(false)}
               onSave={(urls) => setFieldValue('vertical_gallery_images', urls)}
               value={values?.vertical_gallery_images}
               label={'Vertical Gallery Images'}
-              onAdd={() => setOpenUploadDialog(true)}
+              onAdd={() => setOpenVerticalUploadDialog(true)}
               onDelete={(filteredUrls) => setFieldValue('vertical_gallery_images', filteredUrls)}
             />
           </Grid>
+
           <Grid size={{ xs: 12, md: 6 }}>
             <MediaUploaderTrigger
-              onClose={() => setOpenUploadDialog(false)}
+              open={openHorizontalUploadDialog}
+              onClose={() => setOpenHorizontalUploadDialog(false)}
               onSave={(urls) => setFieldValue('horizontal_gallery_images', urls)}
               value={values?.horizontal_gallery_images}
-              label={'Vertical Gallery Images'}
-              onAdd={() => setOpenUploadDialog(true)}
+              label={'Horizontal Gallery Images'}
+              onAdd={() => setOpenHorizontalUploadDialog(true)}
               onDelete={(filteredUrls) => setFieldValue('horizontal_gallery_images', filteredUrls)}
             />
           </Grid>

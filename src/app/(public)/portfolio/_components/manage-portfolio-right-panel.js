@@ -1,12 +1,12 @@
 'use client';
 
+import React from 'react';
 import { formConstants } from '@/app/constants/form-constants';
 import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
 import { DrawerContainer } from '@/components/drawer/drawer';
 import { Iconify } from '@/components/iconify/iconify';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
-import React from 'react';
 
 import useAuth from '@/hooks/useAuth';
 
@@ -14,15 +14,13 @@ import {
   createPortfolioAsync,
   deletePortfolioAsync,
   getPortfolioAsync,
-  updatePortfolioAsync
+  updatePortfolioAsync,
 } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
 import { PortfolioForm } from './portfolio-form';
 import { PortfolioQuickView } from './portfolio-quickview';
 
 export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
-  const [tempOpen, setTempOpen] = React.useState(false);
-
   const isUpdate = data ? true : false;
   const { isLogin } = useAuth();
 
@@ -78,6 +76,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
     const response = await deletePortfolioAsync([data.id]);
     if (response.success) {
       fetchList();
+      onClose?.();
     }
   };
 
@@ -90,10 +89,6 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
     setFieldValue('featured', featured);
     await updatePortfolioAsync(file, { ...values, featured });
     fetchList();
-  };
-
-  const toggleDrawer = () => {
-    setTempOpen((pre) => !pre);
   };
 
   // *****************Action Buttons*******************************

@@ -1,3 +1,6 @@
+import React from 'react';
+import { api } from '@/utils/api';
+import { isVideoContent, pxToRem } from '@/utils/helper';
 import {
   Box,
   Button,
@@ -13,10 +16,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React from 'react';
 
-import { api } from '@/utils/api';
-import { isVideoContent, pxToRem } from '@/utils/helper';
 import { Iconify } from '../iconify/iconify';
 
 export const MediaUploader = ({ open, onClose, onSave, multiple = true }) => {
@@ -26,7 +26,6 @@ export const MediaUploader = ({ open, onClose, onSave, multiple = true }) => {
   const [uploading, setUploading] = React.useState(false);
   const [url, setUrl] = React.useState('');
   const [videoUrls, setVideoUrls] = React.useState([]);
-
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
@@ -79,7 +78,7 @@ export const MediaUploader = ({ open, onClose, onSave, multiple = true }) => {
   };
 
   const handleSave = async () => {
-    setUploading(true)
+    setUploading(true);
     try {
       const uploadedPaths = [];
       if (files.length > 0) {
@@ -95,17 +94,17 @@ export const MediaUploader = ({ open, onClose, onSave, multiple = true }) => {
         if (res?.data?.success && res?.data?.data?.length > 0) {
           res?.data?.data?.forEach((item) => {
             uploadedPaths.push(item?.path);
-          })
+          });
         }
       }
       onSave([...uploadedPaths, ...urls, ...videoUrls]);
       handleClose();
-      setUploading(false)
+      setUploading(false);
     } catch (err) {
       console.error(err);
-      setUploading(false)
+      setUploading(false);
     }
-    setUploading(false)
+    setUploading(false);
   };
 
   const handleClose = () => {
@@ -133,7 +132,7 @@ export const MediaUploader = ({ open, onClose, onSave, multiple = true }) => {
         <Box mt={2}>
           {tab === 0 && (
             <>
-              <Stack direction='row' gap={2}>
+              <Stack direction="row" gap={2}>
                 <Button
                   component="label"
                   variant="outlined"
@@ -153,7 +152,7 @@ export const MediaUploader = ({ open, onClose, onSave, multiple = true }) => {
                     <Iconify icon="akar-icons:cloud-upload" width={24} height={24} />
                     <Typography>Upload Image</Typography>
                   </Stack>
-                  <input type="file" accept='image/*' hidden multiple={multiple} onChange={handleFileChange} />
+                  <input type="file" accept="image/*" hidden multiple={multiple} onChange={handleFileChange} />
                 </Button>
                 <TextField
                   value={url || ''}
@@ -171,21 +170,37 @@ export const MediaUploader = ({ open, onClose, onSave, multiple = true }) => {
                   sx={{ width: '50%' }}
                 />
               </Stack>
-              <Stack direction='row' gap={1} sx={{ flexWrap: 'wrap', mt: 2 }}>
-                {
-                  [...files, ...urls].map((item, index) => (
-                    <Box key={index} sx={{ width: '19.2%', position: 'relative' }}>
-                      <Box component='img' src={typeof item === 'string' ? item : URL.createObjectURL(item)} sx={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: 1 }} />
-                      <IconButton
-                        size='small'
-                        sx={{ position: 'absolute', top: 5, right: 5, color: '#fff', backgroundColor: 'rgba(0, 0, 0, 0.4)', borderRadius: '50%', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.6)' } }}
-                        onClick={() => handleRemoveFile(item)}
-                      >
-                        <Iconify icon="ic:round-close" width={18} height={18} />
-                      </IconButton>
-                    </Box>
-                  ))
-                }
+              <Stack direction="row" gap={1} sx={{ flexWrap: 'wrap', mt: 2 }}>
+                {[...files, ...urls].map((item, index) => (
+                  <Box key={index} sx={{ width: '19.2%', position: 'relative' }}>
+                    <Box
+                      component="img"
+                      src={typeof item === 'string' ? item : URL.createObjectURL(item)}
+                      sx={{
+                        width: '100%',
+                        height: '200px',
+                        objectFit: 'contain',
+                        borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                        border: '1px solid var(--mui-palette-divider)',
+                      }}
+                    />
+                    <IconButton
+                      size="small"
+                      sx={{
+                        position: 'absolute',
+                        top: 5,
+                        right: 5,
+                        color: '#fff',
+                        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                        borderRadius: '50%',
+                        '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.6)' },
+                      }}
+                      onClick={() => handleRemoveFile(item)}
+                    >
+                      <Iconify icon="ic:round-close" width={18} height={18} />
+                    </IconButton>
+                  </Box>
+                ))}
               </Stack>
             </>
           )}
@@ -206,35 +221,42 @@ export const MediaUploader = ({ open, onClose, onSave, multiple = true }) => {
                 }}
                 fullWidth
               />
-              <Stack direction='row' gap={1} sx={{ flexWrap: 'wrap', mt: 2 }}>
-                {
-                  videoUrls.map((item, index) => (
-                    <Box key={index} sx={{ width: '49.5%', position: 'relative' }}>
-                      <Box
-                        component="video"
-                        src={item}
-                        controls
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        sx={{
-                          height: pxToRem(500),
-                          width: '100%',
-                          objectFit: 'cover',
-                          borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-                        }}
-                      />
-                      <IconButton
-                        size='small'
-                        sx={{ position: 'absolute', top: 5, right: 5, color: '#fff', backgroundColor: 'rgba(0, 0, 0, 0.4)', borderRadius: '50%', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.6)' } }}
-                        onClick={() => handleRemoveFile(item)}
-                      >
-                        <Iconify icon="ic:round-close" width={18} height={18} />
-                      </IconButton>
-                    </Box>
-                  ))
-                }
+              <Stack direction="row" gap={1} sx={{ flexWrap: 'wrap', mt: 2 }}>
+                {videoUrls.map((item, index) => (
+                  <Box key={index} sx={{ width: '49.5%', position: 'relative' }}>
+                    <Box
+                      component="video"
+                      src={item}
+                      controls
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      sx={{
+                        height: pxToRem(500),
+                        width: '100%',
+                        objectFit: 'contain',
+                        borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                        border: '1px solid var(--mui-palette-divider)',
+                      }}
+                    />
+                    <IconButton
+                      size="small"
+                      sx={{
+                        position: 'absolute',
+                        top: 5,
+                        right: 5,
+                        color: '#fff',
+                        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                        borderRadius: '50%',
+                        '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.6)' },
+                      }}
+                      onClick={() => handleRemoveFile(item)}
+                    >
+                      <Iconify icon="ic:round-close" width={18} height={18} />
+                    </IconButton>
+                  </Box>
+                ))}
               </Stack>
             </>
           )}

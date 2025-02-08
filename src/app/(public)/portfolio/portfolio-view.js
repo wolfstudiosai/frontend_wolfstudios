@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useRef } from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
 import PageLoader from '@/components/PageLoader/PageLoader';
 import { sliderToGridColsCoverter } from '@/utils/helper';
 import { Box, CircularProgress } from '@mui/material';
+import React, { useRef } from 'react';
 
 import { ManagePortfolioRightPanel } from './_components/manage-portfolio-right-panel';
 import { PortfolioGridView } from './_components/portfolio-gridview';
@@ -56,6 +56,18 @@ export const PortfolioView = () => {
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
+  const refreshListView = async () => {
+    const response = await getPortfolioListAsync({
+      page: 1,
+      rowsPerPage: 40,
+    });
+
+    if (response.success) {
+      setData(response.data);
+      setTotalRecords(response.totalRecords);
+    }
+  };
+
   React.useEffect(() => {
     fetchList();
   }, []);
@@ -100,7 +112,7 @@ export const PortfolioView = () => {
           <Box>
             <PortfolioGridView
               data={data || [defaultPortfolio]}
-              fetchList={fetchList}
+              fetchList={refreshListView}
               loading={loading}
               colums={sliderToGridColsCoverter(filters.COL)}
             />
@@ -113,6 +125,7 @@ export const PortfolioView = () => {
           view="EDIT"
           width="70%"
           data={null}
+          fetchList={refreshListView}
           open={filters.VIEW === 'add'}
           onClose={() => setFilters((prev) => ({ ...prev, VIEW: 'grid' }))}
         />
