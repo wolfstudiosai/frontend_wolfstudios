@@ -59,6 +59,8 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
       },
     });
 
+    console.log(values, 'values from manage');
+
   // *********************States*********************************
 
   const getSingleData = async () => {

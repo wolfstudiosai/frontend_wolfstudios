@@ -64,8 +64,9 @@ export const PortfolioQuickView = ({ data }) => {
                 sx={{
                   height: pxToRem(500),
                   width: '100%',
-                  objectFit: 'cover',
+                  objectFit: 'contain',
                   borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                  border: '1px solid var(--mui-palette-divider)',
                 }}
               />
             ) : (
@@ -130,7 +131,13 @@ export const PortfolioQuickView = ({ data }) => {
                   loop
                   muted
                   playsInline
-                  sx={{ height: pxToRem(300), width: '100%', objectFit: 'cover' }}
+                  sx={{
+                    height: pxToRem(300),
+                    width: '100%',
+                    objectFit: 'contain',
+                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                    border: '1px solid var(--mui-palette-divider)',
+                  }}
                 />
               ) : (
                 <Box
@@ -166,7 +173,13 @@ export const PortfolioQuickView = ({ data }) => {
                   loop
                   muted
                   playsInline
-                  sx={{ height: pxToRem(300), width: '100%', objectFit: 'cover' }}
+                  sx={{
+                    height: pxToRem(200),
+                    width: '100%',
+                    objectFit: 'contain',
+                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                    border: '1px solid var(--mui-palette-divider)',
+                  }}
                 />
               ) : (
                 <Box

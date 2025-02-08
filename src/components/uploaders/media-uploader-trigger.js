@@ -19,7 +19,7 @@ export const MediaUploaderTrigger = ({ open, onClose, onSave, value, label, onAd
     <React.Fragment>
       {label && (
         <Box sx={{ mb: 1.8 }}>
-          <FormLabel>Vertical Gallery Images</FormLabel>
+          <FormLabel>{label}</FormLabel>
         </Box>
       )}
       {value?.length > 0 ? (
