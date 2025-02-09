@@ -6,7 +6,7 @@ import { PageHeader } from '@/components/core/page-header';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { getRandomGradientColor, pxToRem } from '@/utils/helper';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Link, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { SettingsContext } from '@/contexts/settings';
@@ -230,11 +230,12 @@ export const CampaignView = () => {
                     key={item.slug}
                     spacing={2}
                     mb={4}
-                    alignItems="center"
+                    // alignItems="center"
                     sx={{
                       border: '1px solid var(--mui-palette-divider)',
+                      borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
                       boxShadow: '1px 1px 5px rgba(0, 0, 0, 0.05)',
-                      height: pxToRem(200),
+                      height: pxToRem(170),
                       overflow: 'hidden',
                     }}
                   >
@@ -249,11 +250,11 @@ export const CampaignView = () => {
                         alt={item.title}
                       />
                     </Grid>
-                    <Grid size={{ xs: 8 }} position="relative">
+                    <Grid size={{ xs: 8 }} position="relative" >
                       <Typography variant="h6" fontWeight="bold">
                         {item.title}
                       </Typography>
-                      <Box position="absolute" top={1} left={16} color="primary.main" px={1}>
+                      {/* <Box position="absolute" top={1} left={16} color="primary.main" px={1}>
                         <Typography
                           sx={{
                             fontSize: '5.75rem',
@@ -262,13 +263,17 @@ export const CampaignView = () => {
                         >
                           {index + 1}
                         </Typography>
-                      </Box>
+                      </Box> */}
                       <Typography variant="body2" color="text.secondary">
                         {item.description}
                       </Typography>
-                      <Button variant="text" color="primary">
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mt: 1, cursor: 'pointer', textDecoration: 'underline' }}
+                      >
                         View Details
-                      </Button>
+                      </Typography>
                     </Grid>
                   </Grid>
                 ))}
