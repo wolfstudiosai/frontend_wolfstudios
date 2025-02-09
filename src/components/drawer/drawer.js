@@ -22,7 +22,7 @@ export const DrawerContainer = ({ children, open, handleDrawerClose, actionButto
         '& .MuiBackdrop-root': {
           // background: 'linear-gradient(to right, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0))',
           background: 'transparent',
-          boxShadow: '0px 0px 60px 25px rgba(255, 255, 255, 0.5)',
+          // boxShadow: '0px 0px 60px 25px rgba(255, 255, 255, 0.5)',
         },
       }}
     >
