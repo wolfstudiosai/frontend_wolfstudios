@@ -1,13 +1,14 @@
 'use client';
 
-import React from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { getRandomGradientColor, pxToRem } from '@/utils/helper';
-import { Box, Button, Link, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import React from 'react';
+import { CampaignCard } from './_components/campaign-card';
 
 import { SettingsContext } from '@/contexts/settings';
 
@@ -17,7 +18,7 @@ import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.
 const CampaignData = [
   {
     name: 'REVO',
-    description: 'Session with Mary Ann, shot by Combina in February 2018',
+    description: 'Our campaign aims to bring resources, education, and support to local communities, empowering individuals to create lasting change. By focusing on collaboration and growth, we encourage small businesses, nonprofits, and local organizations to join forces and make a real difference. Through workshops, networking events, and financial support.',
     campaigns: Array.from({ length: 10 }, (_, i) => ({
       title: `REVO Campaign ${i + 1}`,
       slug: `revo-campaign-${i + 1}`,
@@ -46,12 +47,12 @@ const CampaignData = [
       },
       callToAction: `Book a similar shoot with us for REVO Campaign ${i + 1}!`,
       testimonial: `Amazing experience on REVO Campaign ${i + 1}!`,
-      image: `https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671541de64121943821caa00_DSC01725-p-500.jpg`,
+      image: `https://5.imimg.com/data5/SELLER/Default/2024/10/458706621/RQ/UH/KF/10171600/female-modeling-photography-service.jpg`,
     })),
   },
   {
     name: 'BOGOMORE',
-    description: 'Session with Sharee Michelle, shot by Combina in November 2018',
+    description: 'The Environmental Sustainability Campaign is dedicated to combating climate change and promoting eco-friendly practices. By focusing on reducing waste, conserving resources, and encouraging green initiatives, we aim to raise awareness and drive real action. From reducing carbon footprints to supporting renewable energy, our campaign brings individuals, businesses, and governments together to protect the planet. ',
     campaigns: Array.from({ length: 10 }, (_, i) => ({
       title: `BOGOMORE Campaign ${i + 1}`,
       slug: `bogomore-campaign-${i + 1}`,
@@ -188,13 +189,13 @@ export const CampaignView = () => {
               <Grid size={{ xs: 12, md: 4 }}>
                 <Box
                   sx={{
-                    background: getRandomGradientColor(index),
+                    // background: getRandomGradientColor(index),
+                    backgroundColor: getRandomGradientColor(index),
                     borderRadius: 2,
                     padding: 4,
                     position: 'sticky',
                     top: pxToRem(openSubNav ? 152 : 106),
                     boxShadow: 3,
-                    color: 'white',
                   }}
                 >
                   <Typography
@@ -202,91 +203,44 @@ export const CampaignView = () => {
                     fontWeight="bold"
                     gutterBottom
                     sx={{
-                      fontSize: '2rem',
+                      fontSize: '2.2rem',
                       letterSpacing: '0.5px',
                       textTransform: 'uppercase',
                       color: 'text.primary',
                     }}
                   >
-                    Amplify Your Impact
+                    {campaignGroup.name}
                   </Typography>
                   <Typography
                     variant="body1"
                     sx={{
-                      fontSize: '1rem',
+                      fontSize: '1.1rem',
                       color: 'text.primary',
                     }}
                   >
-                    Welcome to the space where potential meets possibility. Our agency prides itself on establishing
-                    authentic, meaningful partnerships that put our creators first.
+                    {campaignGroup.description}
                   </Typography>
                 </Box>
               </Grid>
 
               <Grid size={{ xs: 12, md: 8 }}>
-                {visibleCampaigns.map((item, index) => (
-                  <Grid
-                    container
-                    key={item.slug}
-                    spacing={2}
-                    mb={4}
-                    // alignItems="center"
-                    sx={{
-                      border: '1px solid var(--mui-palette-divider)',
-                      borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-                      boxShadow: '1px 1px 5px rgba(0, 0, 0, 0.05)',
-                      height: pxToRem(170),
-                      overflow: 'hidden',
-                    }}
+                <Stack direction='column' gap={2}>
+                  {visibleCampaigns.map((item) => (
+                    <CampaignCard key={item.slug} item={item} />
+                  ))}
+                </Stack>
+                <Stack direction='row' justifyContent='center' sx={{ my: 1 }}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => toggleGroupView(campaignGroup.name)}
+                    endIcon={
+                      <Iconify icon={isExpanded ? 'solar:square-arrow-up-broken' : 'solar:square-arrow-down-broken'} />
+                    }
                   >
-                    <Grid size={{ xs: 2 }}>
-                      <Box
-                        component="img"
-                        sx={{
-                          height: '100%',
-                          width: '100%',
-                        }}
-                        src={item.image}
-                        alt={item.title}
-                      />
-                    </Grid>
-                    <Grid size={{ xs: 8 }} position="relative" >
-                      <Typography variant="h6" fontWeight="bold">
-                        {item.title}
-                      </Typography>
-                      {/* <Box position="absolute" top={1} left={16} color="primary.main" px={1}>
-                        <Typography
-                          sx={{
-                            fontSize: '5.75rem',
-                            opacity: 0.07,
-                          }}
-                        >
-                          {index + 1}
-                        </Typography>
-                      </Box> */}
-                      <Typography variant="body2" color="text.secondary">
-                        {item.description}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ mt: 1, cursor: 'pointer', textDecoration: 'underline' }}
-                      >
-                        View Details
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                ))}
-                <Button
-                  variant="text"
-                  color="primary"
-                  onClick={() => toggleGroupView(campaignGroup.name)}
-                  endIcon={
-                    <Iconify icon={isExpanded ? 'solar:square-arrow-up-broken' : 'solar:square-arrow-down-broken'} />
-                  }
-                >
-                  {isExpanded ? 'Show Less' : 'Show More'}
-                </Button>
+                    {isExpanded ? 'Show Less' : 'Show More'}
+                  </Button>
+                </Stack>
               </Grid>
             </Grid>
           );

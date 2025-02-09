@@ -163,7 +163,7 @@ export const CampaignQuickView = ({ data }) => {
       <Button variant="contained">Join</Button>
       <Divider sx={{ my: 2 }} />
       <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>
-        {data?.gallery.map((item, index) => (
+        {data?.gallery?.map((item, index) => (
           <Grid item size={{ xs: 2 }} key={index}>
             {isVideoContent(item) ? (
               <Box

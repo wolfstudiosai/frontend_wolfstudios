@@ -16,10 +16,12 @@ export const DrawerContainer = ({ children, open, handleDrawerClose, actionButto
           mb: 5,
           borderRadius: 1,
           height: '100%',
-          maxHeight: 'calc(100vh - 75px)',
+          maxHeight: 'calc(100vh - 76px)',
+          boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px;'
         },
         '& .MuiBackdrop-root': {
-          background: 'linear-gradient(to right, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0))',
+          // background: 'linear-gradient(to right, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0))',
+          background: 'transparent',
           boxShadow: '0px 0px 60px 25px rgba(255, 255, 255, 0.5)',
         },
       }}
