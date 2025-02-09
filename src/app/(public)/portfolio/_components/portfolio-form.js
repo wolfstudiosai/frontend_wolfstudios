@@ -1,26 +1,21 @@
 'use client';
 
-import React from 'react';
 import { CustomDatePicker } from '@/components/formFields/custom-date-picker';
 import { CustomTextField } from '@/components/formFields/custom-textfield';
 import { ErrorMessage } from '@/components/formFields/error-message';
 import { Iconify } from '@/components/iconify/iconify';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
-import { MediaUploader } from '@/components/uploaders/media-uploader';
 import { MediaUploaderTrigger } from '@/components/uploaders/media-uploader-trigger';
-import { isVideoContent } from '@/utils/helper';
-import { Box, FormControl, FormLabel, IconButton, InputAdornment, Stack } from '@mui/material';
+import { FormControl, FormLabel, InputAdornment } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import React from 'react';
 
-import { deleteFileAsync } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
 
 export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
   const [values, setValues] = React.useState(data || defaultPortfolio);
-
-  console.log(values, 'values....');
-
+  
   // *********************States*********************************
   const [mediaPreview, setMediaPreview] = React.useState(null);
   const [openVerticalUploadDialog, setOpenVerticalUploadDialog] = React.useState(false);

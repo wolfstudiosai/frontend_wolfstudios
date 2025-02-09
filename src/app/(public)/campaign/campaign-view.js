@@ -2,192 +2,97 @@
 
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
+import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
-import { Box, CircularProgress } from '@mui/material';
+import { getRandomGradientColor, pxToRem } from '@/utils/helper';
+import { Box, Button, Stack, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import React from 'react';
+import { CampaignCard } from './_components/campaign-card';
 
-import { CampaignGridView } from './_components/campaign-grid-view';
-import { CampaignTabView } from './_components/campaign-tab-view';
-import { defaultCampaignData } from './_lib/campagin.data';
+import { SettingsContext } from '@/contexts/settings';
+
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
 
 // todo: remove this after completing data poppulation
 const CampaignData = [
   {
-    title: 'Mary Ann',
-    slug: 'mary-ann',
-    thumbnail: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670d11d77dff7fcc24e16f1c_2_DSC03975.jpeg',
-    description: 'Session with Mary Ann, shot by Combina in February 2018',
-    model: 'Mary Ann',
-    dp: 'Combina Key',
-    projectLink: 'Link to project',
-    category: 'Editorial',
-    date: '2018-02-15',
-    location: 'New York, USA',
-    client: 'Vogue',
-    tags: ['fashion', 'editorial', 'portraits'],
-    videoLink: 'https://www.youtube.com/watch?v=example',
-    gallery: ['https://picsum.photos/400/300?random=1', 'https://picsum.photos/400/300?random=2'],
-    photographerBio: 'https://combina-key-portfolio.com',
-    team: {
-      stylist: 'Jane Doe',
-      makeupArtist: 'Emily Smith',
-      creativeDirector: 'John Carter',
-    },
-    engagementStats: {
-      views: 12000,
-      likes: 3400,
-      shares: 450,
-    },
-    callToAction: 'Book a similar shoot with us!',
-    testimonial: 'Loved working on this shoot! - Mary Ann',
-    image: 'https://picsum.photos/300/200?random=1',
+    name: 'REVO',
+    description: 'Our campaign aims to bring resources, education, and support to local communities, empowering individuals to create lasting change. By focusing on collaboration and growth, we encourage small businesses, nonprofits, and local organizations to join forces and make a real difference. Through workshops, networking events, and financial support.',
+    campaigns: Array.from({ length: 10 }, (_, i) => ({
+      title: `REVO Campaign ${i + 1}`,
+      slug: `revo-campaign-${i + 1}`,
+      thumbnail: `https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671541de64121943821caa00_DSC01725-p-500.jpg`,
+      description: `It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors  ${i + 1}`,
+      model: `Model ${i + 1}`,
+      dp: 'Combina Key',
+      projectLink: 'Link to project',
+      category: 'Editorial',
+      date: `202${i % 5}-0${(i % 9) + 1}-15`,
+      location: 'New York, USA',
+      client: `Client ${i + 1}`,
+      tags: ['fashion', 'editorial', 'portraits'],
+      videoLink: `https://www.youtube.com/watch?v=example${i + 1}`,
+      gallery: [`https://picsum.photos/400/300?random=${i + 11}`, `https://picsum.photos/400/300?random=${i + 12}`],
+      photographerBio: 'https://combina-key-portfolio.com',
+      team: {
+        stylist: `Stylist ${i + 1}`,
+        makeupArtist: `Makeup Artist ${i + 1}`,
+        creativeDirector: `Creative Director ${i + 1}`,
+      },
+      engagementStats: {
+        views: 10000 + i * 500,
+        likes: 3000 + i * 200,
+        shares: 400 + i * 50,
+      },
+      callToAction: `Book a similar shoot with us for REVO Campaign ${i + 1}!`,
+      testimonial: `Amazing experience on REVO Campaign ${i + 1}!`,
+      image: `https://5.imimg.com/data5/SELLER/Default/2024/10/458706621/RQ/UH/KF/10171600/female-modeling-photography-service.jpg`,
+    })),
   },
   {
-    title: 'Prints: Abstract',
-    slug: 'prints-abstract',
-    thumbnail:
-      'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/6712275879e29b61d2c2dc79_DSC05709%20(1).jpg',
-    description: 'On Session production for portraits, shot by Combina in November 2016.',
-    dp: 'Combina Key',
-    projectLink: 'Link to project',
-    category: 'Portrait',
-    date: '2016-11-10',
-    location: 'Los Angeles, USA',
-    client: 'Elle Magazine',
-    tags: ['prints', 'abstract', 'portrait'],
-    videoLink: 'https://www.youtube.com/watch?v=example2',
-    gallery: ['https://picsum.photos/400/300?random=3', 'https://picsum.photos/400/300?random=4'],
-    photographerBio: 'https://combina-key-portfolio.com',
-    team: {
-      stylist: 'Michael Taylor',
-      makeupArtist: 'Sarah Lee',
-      creativeDirector: 'Daniel Brown',
-    },
-    engagementStats: {
-      views: 8900,
-      likes: 2500,
-      shares: 320,
-    },
-    callToAction: 'Contact us for editorial campaigns!',
-    testimonial: 'A fantastic experience! - Elle Team',
-    image: 'https://picsum.photos/300/200?random=2',
-  },
-  {
-    title: 'Kansha: Love Bite',
-    slug: 'kansha-love-bite',
-    thumbnail:
-      'https://player.vimeo.com/progressive_redirect/playback/1008919226/rendition/1080p/file.mp4?loc=external&signature=bf4233dc5593395173302057f4757f83ccb3c307dd4c49f373ecf1e8f5d31ffb',
-    description: 'In Studio Production for Kansha Magazine, shot by Combina Key in August 2018.',
-    publication: 'Kansha',
-    dp: 'Combina Key',
-    projectLink: 'Link to project',
-    category: 'Magazine Feature',
-    date: '2018-08-22',
-    location: 'Tokyo, Japan',
-    client: 'Kansha Magazine',
-    tags: ['studio', 'fashion', 'love'],
-    videoLink: null,
-    gallery: ['https://picsum.photos/400/300?random=5', 'https://picsum.photos/400/300?random=6'],
-    photographerBio: 'https://combina-key-portfolio.com',
-    team: {
-      stylist: 'Anna Martinez',
-      makeupArtist: 'Kevin James',
-      creativeDirector: 'Olivia Parker',
-    },
-    engagementStats: {
-      views: 15000,
-      likes: 4800,
-      shares: 570,
-    },
-    callToAction: 'Explore more Kansha exclusives!',
-    testimonial: 'This shoot was an absolute dream! - Kansha Team',
-    image: 'https://picsum.photos/300/200?random=3',
-  },
-  {
-    title: 'Pump Magazine: Sharee',
-    slug: 'pump-magazine-sharee',
-    thumbnail:
-      'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/67023b95692662e57485fae7_1ACCCEF7-605C-4365-B7D4-5084FDC835C6_1_105_c.jpeg',
-    description: 'In Studio Production with Sharee Michelle for Pump Magazine, shot by Combina Key in November 2018.',
-    model: 'Sharee Michelle',
-    publication: 'Pump Magazine',
-    dp: 'Combina Key',
-    projectLink: 'Link to project',
-    category: 'Magazine Cover',
-    date: '2018-11-05',
-    location: 'Paris, France',
-    client: 'Pump Magazine',
-    tags: ['editorial', 'beauty', 'high-fashion'],
-    videoLink: 'https://www.youtube.com/watch?v=example4',
-    gallery: ['https://picsum.photos/400/300?random=7', 'https://picsum.photos/400/300?random=8'],
-    photographerBio: 'https://combina-key-portfolio.com',
-    team: {
-      stylist: 'Sophia Green',
-      makeupArtist: 'James Carter',
-      creativeDirector: 'Emma White',
-    },
-    engagementStats: {
-      views: 21000,
-      likes: 6300,
-      shares: 890,
-    },
-    callToAction: 'Discover the latest trends in Pump Magazine!',
-    testimonial: 'Incredible team effort! - Sharee Michelle',
-    image: 'https://picsum.photos/300/200?random=4',
-  },
-  {
-    title: 'Elegant Magazine: Elena',
-    slug: 'elegant-magazine-elena',
-    thumbnail:
-      'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/6715276ce15620dc4dd4440f_12957620_1589024814746137_4884333050968345441_o.jpg',
-    description: 'In Studio Production with Elena for Elegant Magazine, shot by Combina Key in May 2019.',
-    model: 'Elena',
-    publication: 'Elegant Magazine',
-    dp: 'Combina Key',
-    projectLink: 'Link to project',
-    category: 'Fashion Editorial',
-    date: '2019-05-18',
-    location: 'Milan, Italy',
-    client: 'Elegant Magazine',
-    tags: ['elegance', 'fashion', 'studio'],
-    videoLink: 'https://www.youtube.com/watch?v=example5',
-    gallery: ['https://picsum.photos/400/300?random=9', 'https://picsum.photos/400/300?random=10'],
-    photographerBio: 'https://combina-key-portfolio.com',
-    team: {
-      stylist: 'David Brown',
-      makeupArtist: 'Sophia Turner',
-      creativeDirector: 'Lucas Adams',
-    },
-    engagementStats: {
-      views: 17500,
-      likes: 5200,
-      shares: 620,
-    },
-    callToAction: 'Explore more in Elegant Magazine!',
-    testimonial: 'One of my favorite shoots! - Elena',
-    image: 'https://picsum.photos/300/200?random=5',
+    name: 'BOGOMORE',
+    description: 'The Environmental Sustainability Campaign is dedicated to combating climate change and promoting eco-friendly practices. By focusing on reducing waste, conserving resources, and encouraging green initiatives, we aim to raise awareness and drive real action. From reducing carbon footprints to supporting renewable energy, our campaign brings individuals, businesses, and governments together to protect the planet. ',
+    campaigns: Array.from({ length: 10 }, (_, i) => ({
+      title: `BOGOMORE Campaign ${i + 1}`,
+      slug: `bogomore-campaign-${i + 1}`,
+      thumbnail: `https://cdn.prod.website-files.com/66836d311a49ad62d048361e/67174bb0d168aa30e7fca8ef_DSC01881-p-500.jpg`,
+      description: `It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors  ${i + 1}`,
+      model: `Model ${i + 11}`,
+      dp: 'Combina Key',
+      projectLink: 'Link to project',
+      category: 'Fashion Editorial',
+      date: `202${i % 5}-0${(i % 9) + 1}-22`,
+      location: 'Paris, France',
+      client: `Client ${i + 11}`,
+      tags: ['fashion', 'beauty', 'editorial'],
+      videoLink: `https://www.youtube.com/watch?v=example${i + 11}`,
+      gallery: [`https://picsum.photos/400/300?random=${i + 31}`, `https://picsum.photos/400/300?random=${i + 32}`],
+      photographerBio: 'https://combina-key-portfolio.com',
+      team: {
+        stylist: `Stylist ${i + 11}`,
+        makeupArtist: `Makeup Artist ${i + 11}`,
+        creativeDirector: `Creative Director ${i + 11}`,
+      },
+      engagementStats: {
+        views: 12000 + i * 600,
+        likes: 3500 + i * 250,
+        shares: 500 + i * 60,
+      },
+      callToAction: `Discover the latest trends with BOGOMORE Campaign ${i + 1}!`,
+      testimonial: `Fantastic work on BOGOMORE Campaign ${i + 1}!`,
+      image: `https://cdn.prod.website-files.com/66836d311a49ad62d048361e/67174bb0d168aa30e7fca8ef_DSC01881-p-500.jpg`,
+    })),
   },
 ];
 
-const mockGetCampaignListAsync = async ({ page, rowsPerPage }) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const startIndex = (page - 1) * rowsPerPage;
-      const paginatedData = CampaignData.slice(startIndex, startIndex + rowsPerPage);
+const INITIAL_VISIBLE_COUNT = 5;
 
-      resolve({
-        success: true,
-        data: paginatedData,
-        totalRecords: CampaignData.length,
-      });
-    }, 1000);
-  });
-};
 export const CampaignView = () => {
-  // const featuredData = data.filter((item) => item.featured === true);
   const observerRef = React.useRef(null);
-
+  const {
+    customSettings: { openSubNav },
+  } = React.useContext(SettingsContext);
   const [loading, setLoading] = React.useState(false);
   const [isFetching, setIsFetching] = React.useState(false);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
@@ -200,6 +105,14 @@ export const CampaignView = () => {
     SORTING: [],
     VIEW: 'grid',
   });
+  const [expandedGroups, setExpandedGroups] = React.useState([]);
+
+  const toggleGroupView = (groupName) => {
+    setExpandedGroups((prev) => ({
+      ...prev,
+      [groupName]: !prev[groupName],
+    }));
+  };
 
   async function fetchList() {
     if (isFetching) return;
@@ -266,21 +179,72 @@ export const CampaignView = () => {
           showFilters={false}
           showColSlider={false}
         />
-        {filters.VIEW === 'list' ? (
-          <CampaignTabView />
-        ) : (
-          <Box>
-            <CampaignGridView
-              data={data || [defaultCampaignData]}
-              fetchList={fetchList}
-              loading={loading}
-              colums={filters.COL}
-            />
-            <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
-              {isFetching && <CircularProgress size="30px" />}
-            </div>
-          </Box>
-        )}
+        {CampaignData.map((campaignGroup, index) => {
+          const isExpanded = expandedGroups[campaignGroup.name];
+          const visibleCampaigns = isExpanded
+            ? campaignGroup.campaigns
+            : campaignGroup.campaigns.slice(0, INITIAL_VISIBLE_COUNT);
+          return (
+            <Grid key={campaignGroup.name} container sx={{ mb: 2, position: 'relative' }} spacing={2}>
+              <Grid size={{ xs: 12, md: 4 }}>
+                <Box
+                  sx={{
+                    // background: getRandomGradientColor(index),
+                    backgroundColor: getRandomGradientColor(index),
+                    borderRadius: 2,
+                    padding: 4,
+                    position: 'sticky',
+                    top: pxToRem(openSubNav ? 152 : 106),
+                    boxShadow: 3,
+                  }}
+                >
+                  <Typography
+                    variant="h4"
+                    fontWeight="bold"
+                    gutterBottom
+                    sx={{
+                      fontSize: '2.2rem',
+                      letterSpacing: '0.5px',
+                      textTransform: 'uppercase',
+                      color: 'text.primary',
+                    }}
+                  >
+                    {campaignGroup.name}
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontSize: '1.1rem',
+                      color: 'text.primary',
+                    }}
+                  >
+                    {campaignGroup.description}
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid size={{ xs: 12, md: 8 }}>
+                <Stack direction='column' gap={2}>
+                  {visibleCampaigns.map((item) => (
+                    <CampaignCard key={item.slug} item={item} />
+                  ))}
+                </Stack>
+                <Stack direction='row' justifyContent='center' sx={{ my: 1 }}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => toggleGroupView(campaignGroup.name)}
+                    endIcon={
+                      <Iconify icon={isExpanded ? 'solar:square-arrow-up-broken' : 'solar:square-arrow-down-broken'} />
+                    }
+                  >
+                    {isExpanded ? 'Show Less' : 'Show More'}
+                  </Button>
+                </Stack>
+              </Grid>
+            </Grid>
+          );
+        })}
       </PageLoader>
     </PageContainer>
   );
