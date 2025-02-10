@@ -1,157 +1,190 @@
 'use client';
 
-import React from 'react';
-import Image from 'next/image';
+import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
-import { getRandomColor } from '@/utils/helper';
-import { Box, Card, Chip, Stack, Typography } from '@mui/material';
+import { getRandomGradientColor, pxToRem } from '@/utils/helper';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import React from 'react';
 
-import { singleCampaignData } from '../_lib/campagin.data';
-import { ManageCampaignRightPanel } from './manage-campaign-right-panel';
-import { isVideoContent } from '@/utils/helper';
+import { SettingsContext } from '@/contexts/settings';
 
-export const CampaignGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
-  const slider_data = data.filter((item) => item.featured);
+import { CampaignCard } from './campaign-card';
+
+// todo: remove this after completing data poppulation
+const CampaignData = [
+  {
+    name: 'REVO',
+    description:
+      'Our campaign aims to bring resources, education, and support to local communities, empowering individuals to create lasting change. By focusing on collaboration and growth, we encourage small businesses, nonprofits, and local organizations to join forces and make a real difference. Through workshops, networking events, and financial support.',
+    campaigns: Array.from({ length: 10 }, (_, i) => ({
+      title: `REVO Campaign ${i + 1}`,
+      slug: `revo-campaign-${i + 1}`,
+      thumbnail: `https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671541de64121943821caa00_DSC01725-p-500.jpg`,
+      description: `It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors  ${i + 1}`,
+      model: `Model ${i + 1}`,
+      dp: 'Combina Key',
+      projectLink: 'Link to project',
+      category: 'Editorial',
+      date: `202${i % 5}-0${(i % 9) + 1}-15`,
+      location: 'New York, USA',
+      client: `Client ${i + 1}`,
+      tags: ['fashion', 'editorial', 'portraits'],
+      videoLink: `https://www.youtube.com/watch?v=example${i + 1}`,
+      gallery: [
+        'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671f73189e8433871403c301_6700ce647b1bae09a801a438_101F0090-2A4F-4A34-8EA5-5A160A35AC3A_1_105_c.jpeg',
+        'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671a2467ecc2b689879d3288_DSC01190-p-800.jpg',
+        'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/672a68398a0546bb263ef24a_IMG_2156-p-800.jpg',
+        'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66fcecf5793a3e5d867d6d4b_F18F2EBD-DD3E-4D35-B35F-B16E1E6AEF5D_1_105_c.jpeg',
+        'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671a166f1260d41c15c305c7_670f57d45ad541aa5f58e9a3_67040092fc0406aea44cf646_DSC08662-p-800.jpeg',
+        'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670be14aa60fa816cf457054_19055002_1812151462433470_492009593312992502_o-p-500.jpeg',
+      ],
+      photographerBio: 'https://combina-key-portfolio.com',
+      team: {
+        stylist: `Stylist ${i + 1}`,
+        makeupArtist: `Makeup Artist ${i + 1}`,
+        creativeDirector: `Creative Director ${i + 1}`,
+      },
+      engagementStats: {
+        views: 10000 + i * 500,
+        likes: 3000 + i * 200,
+        shares: 400 + i * 50,
+      },
+      callToAction: `Book a similar shoot with us for REVO Campaign ${i + 1}!`,
+      testimonial: `Amazing experience on REVO Campaign ${i + 1}!`,
+      image: `https://5.imimg.com/data5/SELLER/Default/2024/10/458706621/RQ/UH/KF/10171600/female-modeling-photography-service.jpg`,
+    })),
+  },
+  {
+    name: 'BOGOMORE',
+    description:
+      'The Environmental Sustainability Campaign is dedicated to combating climate change and promoting eco-friendly practices. By focusing on reducing waste, conserving resources, and encouraging green initiatives, we aim to raise awareness and drive real action. From reducing carbon footprints to supporting renewable energy, our campaign brings individuals, businesses, and governments together to protect the planet. ',
+    campaigns: Array.from({ length: 10 }, (_, i) => ({
+      title: `BOGOMORE Campaign ${i + 1}`,
+      slug: `bogomore-campaign-${i + 1}`,
+      thumbnail: `https://cdn.prod.website-files.com/66836d311a49ad62d048361e/67174bb0d168aa30e7fca8ef_DSC01881-p-500.jpg`,
+      description: `It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors  ${i + 1}`,
+      model: `Model ${i + 11}`,
+      dp: 'Combina Key',
+      projectLink: 'Link to project',
+      category: 'Fashion Editorial',
+      date: `202${i % 5}-0${(i % 9) + 1}-22`,
+      location: 'Paris, France',
+      client: `Client ${i + 11}`,
+      tags: ['fashion', 'beauty', 'editorial'],
+      videoLink: `https://www.youtube.com/watch?v=example${i + 11}`,
+      gallery: [
+        'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671f73189e8433871403c301_6700ce647b1bae09a801a438_101F0090-2A4F-4A34-8EA5-5A160A35AC3A_1_105_c.jpeg',
+        'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671a2467ecc2b689879d3288_DSC01190-p-800.jpg',
+        'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/672a68398a0546bb263ef24a_IMG_2156-p-800.jpg',
+        'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66fcecf5793a3e5d867d6d4b_F18F2EBD-DD3E-4D35-B35F-B16E1E6AEF5D_1_105_c.jpeg',
+        'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671a166f1260d41c15c305c7_670f57d45ad541aa5f58e9a3_67040092fc0406aea44cf646_DSC08662-p-800.jpeg',
+        'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670be14aa60fa816cf457054_19055002_1812151462433470_492009593312992502_o-p-500.jpeg',
+      ],
+      photographerBio: 'https://combina-key-portfolio.com',
+      team: {
+        stylist: `Stylist ${i + 11}`,
+        makeupArtist: `Makeup Artist ${i + 11}`,
+        creativeDirector: `Creative Director ${i + 11}`,
+      },
+      engagementStats: {
+        views: 12000 + i * 600,
+        likes: 3500 + i * 250,
+        shares: 500 + i * 60,
+      },
+      callToAction: `Discover the latest trends with BOGOMORE Campaign ${i + 1}!`,
+      testimonial: `Fantastic work on BOGOMORE Campaign ${i + 1}!`,
+      image: `https://cdn.prod.website-files.com/66836d311a49ad62d048361e/67174bb0d168aa30e7fca8ef_DSC01881-p-500.jpg`,
+    })),
+  },
+];
+
+export const CampaignGridView = () => {
+  const INITIAL_VISIBLE_COUNT = 5;
+  const {
+    customSettings: { openSubNav },
+  } = React.useContext(SettingsContext);
+
+  const [loading, setLoading] = React.useState(false);
+  const [expandedGroups, setExpandedGroups] = React.useState([]);
+
+  const toggleGroupView = (groupName) => {
+    setExpandedGroups((prev) => ({
+      ...prev,
+      [groupName]: !prev[groupName],
+    }));
+  };
 
   return (
     <PageLoader loading={loading} error={null}>
-      <Grid container spacing={1} columns={{ xs: 28 }} sx={{ mt: 2 }}>
-        {data.map((portfolio, index) => (
-          <Grid item size={{ xs: 12, md: colums }} key={index}>
-            <CampaignCard item={portfolio} fetchList={fetchList} />
-          </Grid>
-        ))}
-      </Grid>
+      <>
+        {CampaignData.map((campaignGroup, index) => {
+          const isExpanded = expandedGroups[campaignGroup.name];
+          const visibleCampaigns = isExpanded
+            ? campaignGroup.campaigns
+            : campaignGroup.campaigns.slice(0, INITIAL_VISIBLE_COUNT);
+          return (
+            <Grid key={campaignGroup.name} container sx={{ mb: 2, position: 'relative' }} spacing={2}>
+              <Grid size={{ xs: 12, md: 4 }}>
+                <Box
+                  sx={{
+                    // background: getRandomGradientColor(index),
+                    backgroundColor: getRandomGradientColor(index),
+                    borderRadius: 2,
+                    padding: 4,
+                    position: 'sticky',
+                    top: pxToRem(openSubNav ? 152 : 106),
+                    boxShadow: 3,
+                  }}
+                >
+                  <Typography
+                    variant="h4"
+                    fontWeight="bold"
+                    gutterBottom
+                    sx={{
+                      fontSize: '2.2rem',
+                      letterSpacing: '0.5px',
+                      textTransform: 'uppercase',
+                      color: 'text.primary',
+                    }}
+                  >
+                    {campaignGroup.name}
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontSize: '1.1rem',
+                      color: 'text.primary',
+                    }}
+                  >
+                    {campaignGroup.description}
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid size={{ xs: 12, md: 8 }}>
+                <Stack direction="column" gap={2}>
+                  {visibleCampaigns.map((item) => (
+                    <CampaignCard key={item.slug} item={item} />
+                  ))}
+                </Stack>
+                <Stack direction="row" justifyContent="center" sx={{ my: 1 }}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => toggleGroupView(campaignGroup.name)}
+                    endIcon={
+                      <Iconify icon={isExpanded ? 'solar:square-arrow-up-broken' : 'solar:square-arrow-down-broken'} />
+                    }
+                  >
+                    {isExpanded ? 'Show Less' : 'Show More'}
+                  </Button>
+                </Stack>
+              </Grid>
+            </Grid>
+          );
+        })}
+      </>
     </PageLoader>
-  );
-};
-
-const CampaignCard = ({ item, fetchList }) => {
-  const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
-
-  return (
-    <>
-      <Card
-        sx={{
-          width: '100%',
-          aspectRatio: '9 / 12',
-          borderRadius: 2,
-          border: 'unset',
-          overflow: 'hidden',
-          position: 'relative',
-          backgroundColor: '#333',
-          borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-          border: 'solid .1px var(--mui-palette-divider)',
-          cursor: 'pointer',
-          '&:hover .portfolio-card-overlay': {
-            opacity: 1,
-          },
-        }}
-        onClick={(e) => {
-          setOpenPortfolioRightPanel(item);
-        }}
-      >
-        {isVideoContent(item.thumbnail || '') ? (
-          <Box
-            component="video"
-            src={item.thumbnail}
-            // controls
-            muted
-            autoPlay
-            loop
-            draggable={false}
-            playsInline
-            sx={{
-              height: '100%',
-              width: '100%',
-              objectFit: 'cover',
-              borderRadius: 1,
-            }}
-          />
-        ) : (
-          <Image
-            // src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
-            src={item.thumbnail}
-            alt={item.title}
-            draggable={false}
-            style={{
-              objectFit: 'cover',
-              filter: 'blur(20px)',
-              transition: 'filter 0.2s ease-out',
-            }}
-            loading="lazy"
-            sizes="100vw"
-            fill={true}
-            onLoad={(e) => {
-              e.target.style.filter = 'blur(0px)';
-            }}
-          />
-        )}
-        <Stack
-          direction="column"
-          px={2}
-          sx={{
-            position: 'absolute',
-            bottom: 0,
-            right: 0,
-            left: 0,
-            width: '100%',
-            py: 1,
-            background: 'linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))',
-          }}
-        >
-          <Typography fontWeight={600} color="var(--mui-palette-common-white)" fontSize={{ xs: 12, md: 14 }}>
-            {item.title}
-          </Typography>
-          <Typography variant="body" color="var(--mui-palette-common-white)" sx={{ fontSize: '12px' }}>
-            {item.state}
-          </Typography>
-          <Box
-            sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px',
-              mt: 1,
-            }}
-          >
-            {item?.category &&
-              item?.category
-                ?.split(',')
-                .map((category, index) => (
-                  <Chip
-                    key={index}
-                    label={category.trim()}
-                    size="small"
-                    sx={{ backgroundColor: getRandomColor(), fontSize: '10px', py: '2px' }}
-                  />
-                ))}
-          </Box>
-        </Stack>
-        {/* <Stack
-          direction="row"
-          justifyContent={'flex-end'}
-          sx={{ position: 'absolute', top: 20, right: 10, width: '100%' }}
-        >
-          <AvatarGroup
-            spacing={'small'}
-            total={42}
-            sx={{ '& .MuiAvatar-root': { width: 32, height: 32, fontSize: 12, mb: 0.5 } }}
-          >
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-            <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-            <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-          </AvatarGroup>
-        </Stack> */}
-        <ManageCampaignRightPanel
-          view={'QUICK'}
-          fetchList={fetchList}
-          width="70%"
-          open={openPortfolioRightPanel ? true : false}
-          data={singleCampaignData}
-          onClose={() => setOpenPortfolioRightPanel(false)}
-        />
-      </Card>
-    </>
   );
 };
