@@ -52,33 +52,3 @@ export const singleCampaignData = {
   image: 'https://picsum.photos/300/200?random=1',
 };
 
-export const defaultCampaignData = {
-  title: '',
-  slug: '',
-  thumbnail: '',
-  description: '',
-  model: '',
-  dp: '',
-  projectLink: '',
-  category: '',
-  date: '',
-  location: '',
-  client: '',
-  tags: [],
-  videoLink: '',
-  gallery: [],
-  photographerBio: '',
-  team: {
-    stylist: '',
-    makeupArtist: '',
-    creativeDirector: '',
-  },
-  engagementStats: {
-    views: null,
-    likes: null,
-    shares: null,
-  },
-  callToAction: '',
-  testimonial: '',
-  image: '',
-};

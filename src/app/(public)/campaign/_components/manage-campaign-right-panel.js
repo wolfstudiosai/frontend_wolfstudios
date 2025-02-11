@@ -14,7 +14,7 @@ import useAuth from '@/hooks/useAuth';
 
 import { CampaignForm } from '../_components/campaign-form';
 import { CampaignQuickView } from '../_components/campaign-quick-view';
-import { defaultCampaignData } from '../_lib/campagin.data';
+import { defaultCampaign } from '../_lib/campaign.types';
 import { createCampaignAsync, updateCampaignAsync } from '../_lib/portfolio.actions';
 
 export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
@@ -28,11 +28,14 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
 
   const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
     useFormik({
-      initialValues: defaultCampaignData,
+      initialValues: defaultCampaign,
       validate: (values) => {
         const errors = {};
         if (!values.name) {
           errors.name = formConstants.required;
+        }
+        if (!values.campaign_image) {
+          errors.campaign_image = formConstants.required;
         }
 
         return errors;
@@ -135,7 +138,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
 
   React.useEffect(() => {
     return () => {
-      setValues(defaultCampaignData);
+      setValues(defaultCampaign);
     };
   }, []);
 

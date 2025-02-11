@@ -12,7 +12,6 @@ import { ManageCampaignRightPanel } from './_components/manage-campaign-right-pa
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
 
 export const CampaignView = ({ groupData }) => {
-  console.log(groupData, 'groupData');
   const observerRef = React.useRef(null);
 
   const [loading, setLoading] = React.useState(false);

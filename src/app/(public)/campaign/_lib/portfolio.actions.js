@@ -26,7 +26,7 @@ export const getPortfolioAsync = async (slug) => {
 
 export const createCampaignAsync = async (file, data) => {
   try {
-    const { slug, id, created_by, user_id, updated_at, campaign_group_id, ...rest } = data;
+    const { slug, id, created_by, user_id, updated_at, campaign_group_name, ...rest } = data;
     let campaign_image = '';
     if (file) {
       const uploadResponse = await uploadFileAsync(file);
@@ -48,7 +48,7 @@ export const createCampaignAsync = async (file, data) => {
 
 export const updateCampaignAsync = async (file, data) => {
   try {
-    const { id, slug, user_id, created_by, created_at, updated_at, campaign_group_id, ...rest } = data;
+    const { id, slug, user_id, created_by, created_at, updated_at, campaign_group_name, ...rest } = data;
     let thumbnailPath = '';
     if (file) {
       const uploadResponse = await uploadFileAsync(file);

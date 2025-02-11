@@ -1,7 +1,8 @@
-const defaultCampaign = {
+export const defaultCampaign = {
   name: '',
   slug: '',
   campaign_group_id: '',
+  campaign_group_name: '',
   guideline: null,
   campaign_image: null,
   content_engagement: 0,

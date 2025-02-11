@@ -16,12 +16,17 @@ import Grid from '@mui/material/Grid2';
 import { defaultCampaign } from '../_lib/campaign.types';
 
 export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
-  const [values, setValues] = React.useState(data || defaultCampaign);
+  const [values, setValues] = React.useState(data);
 
   // *********************States*********************************
   const [mediaPreview, setMediaPreview] = React.useState(null);
   const [openImageGalleryDialog, setOpenImageGalleryDialog] = React.useState(false);
   const [openVideoGalleryDialog, setOpenVideoGalleryDialog] = React.useState(false);
+
+  const handleChangeCampaignGroup = (value) => {
+    setFieldValue('campaign_group_id', value?.id);
+    setFieldValue('campaign_group_name', value?.name);
+  };
 
   // *****************Use Effects*******************************
   React.useEffect(() => {
@@ -44,12 +49,13 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
             <FormLabel>Campaign Group</FormLabel>
             <CampaignAutoSearch
               name={values.campaign_group_name}
-              value={values.campaign_group_id}
-              onSelect={(value) => setFieldValue('campaign_group_id', value.campaign_group_id)}
+              id={values.campaign_group_id}
+              onSelect={(value) => handleChangeCampaignGroup(value)}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField name="name" label="Campaign Name" value={values.name} onChange={onChange} />
+            <ErrorMessage error={errors.name} />
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
@@ -172,6 +178,7 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
                 onDelete={onDeleteThumbnail}
               />
             </FormControl>
+            <ErrorMessage error={errors.campaign_image} />
           </Grid>
           <Grid size={{ xs: 12 }}>
             <CustomTextField name="note" label="Note" value={values.note} onChange={onChange} multiline rows={2} />

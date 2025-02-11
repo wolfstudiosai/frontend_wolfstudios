@@ -3,7 +3,7 @@ import { api } from '@/utils/api';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
-export const CampaignAutoSearch = ({ value, onSelect }) => {
+export const CampaignAutoSearch = ({ name, id, onSelect }) => {
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [options, setOptions] = React.useState([]);
@@ -31,15 +31,17 @@ export const CampaignAutoSearch = ({ value, onSelect }) => {
 
   return (
     <Autocomplete
+      value={id ? { id, name } : null}
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
       size="small"
       options={options}
       loading={loading}
-      isOptionEqualToValue={(option, value) => option.name === value.name}
-      getOptionLabel={(option) => option.name}
-      onChange={(event, newValue) => onSelect(newValue)}
+      isOptionEqualToValue={(option, value) => value.name === option.name}
+      getOptionLabel={(option) => option.name || ''}
+      getValue
+      onChange={(event, newValue) => onSelect(newValue || { id: null, name: '' })}
       renderInput={(params) => <TextField {...params} />}
     />
   );
