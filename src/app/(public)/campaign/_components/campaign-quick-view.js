@@ -90,7 +90,7 @@ export const CampaignQuickView = ({ data }) => {
         sx={{ position: 'sticky', top: 0, left: 0, backgroundColor: theme.palette.background.default, zIndex: 2 }}
       >
         <Typography variant="h5" fontWeight={600} gutterBottom>
-          {data.title || 'Untitled'}
+          {data.name || 'Untitled'}
         </Typography>
         <Typography variant="subtitle2" color="text.secondary" gutterBottom>
           {data.description || 'No description available.'}

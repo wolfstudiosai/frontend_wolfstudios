@@ -6,17 +6,18 @@ import { formConstants } from '@/app/constants/form-constants';
 import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
 import { DrawerContainer } from '@/components/drawer/drawer';
 import { Iconify } from '@/components/iconify/iconify';
-import { RightPanel } from '@/components/rightPanel/right-panel';
-import { Box, Button, FormControlLabel, IconButton, Stack, Switch } from '@mui/material';
+import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
 
 import { paths } from '@/paths';
 import useAuth from '@/hooks/useAuth';
 
+import { CampaignForm } from '../_components/campaign-form';
+import { CampaignQuickView } from '../_components/campaign-quick-view';
 import { defaultCampaignData } from '../_lib/campagin.data';
-import { CampaignQuickView } from './campaign-quick-view';
 
 export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
+  console.log(data, 'data....');
   const isUpdate = data ? true : false;
   const router = useRouter();
   const { isLogin } = useAuth();
@@ -92,6 +93,9 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
     <>
       {isLogin && (
         <>
+          <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
+            <Iconify icon="mynaui:edit-one" />
+          </IconButton>
           <IconButton onClick={() => router.push(paths.public.campaign_analytics + '/bogomore')} title="Quick View">
             <Iconify icon="lets-icons:view-light" />
           </IconButton>
@@ -142,7 +146,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-      <CampaignQuickView data={data} />
+      {sidebarView === 'QUICK' ? <CampaignQuickView data={data} /> : <CampaignForm data={data} errors={errors} />}
     </DrawerContainer>
   );
 };
