@@ -15,9 +15,9 @@ import useAuth from '@/hooks/useAuth';
 import { CampaignForm } from '../_components/campaign-form';
 import { CampaignQuickView } from '../_components/campaign-quick-view';
 import { defaultCampaignData } from '../_lib/campagin.data';
+import { createCampaignAsync, updateCampaignAsync } from '../_lib/portfolio.actions';
 
 export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
-  console.log(data, 'data....');
   const isUpdate = data ? true : false;
   const router = useRouter();
   const { isLogin } = useAuth();
@@ -31,27 +31,27 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
       initialValues: defaultCampaignData,
       validate: (values) => {
         const errors = {};
-        if (!values.project_title) {
-          errors.project_title = formConstants.required;
+        if (!values.name) {
+          errors.name = formConstants.required;
         }
 
         return errors;
       },
       onSubmit: async (values) => {
         setLoading(true);
-        // try {
-        //   const res = isUpdate ? await updatePortfolioAsync(file, values) : await createPortfolioAsync(file, values);
-        //   if (res.success) {
-        //     onClose?.();
-        //     fetchList();
-        //   } else {
-        //     console.error('Operation failed:', res.message);
-        //   }
-        // } catch (error) {
-        //   console.error('Error:', error);
-        // } finally {
-        //   setLoading(false);
-        // }
+        try {
+          const res = isUpdate ? await updateCampaignAsync(file, values) : await createCampaignAsync(file, values);
+          if (res.success) {
+            onClose?.();
+            fetchList();
+          } else {
+            console.error('Operation failed:', res.message);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        } finally {
+          setLoading(false);
+        }
       },
     });
 
@@ -93,11 +93,17 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
     <>
       {isLogin && (
         <>
-          <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
-            <Iconify icon="mynaui:edit-one" />
-          </IconButton>
+          {sidebarView === 'EDIT' ? (
+            <IconButton onClick={() => setSidebarView('QUICK')} title="Edit">
+              <Iconify icon="solar:eye-broken" />
+            </IconButton>
+          ) : (
+            <IconButton onClick={() => setSidebarView('EDIT')} title="Quick">
+              <Iconify icon="mynaui:edit-one" />
+            </IconButton>
+          )}
           <IconButton onClick={() => router.push(paths.public.campaign_analytics + '/bogomore')} title="Quick View">
-            <Iconify icon="lets-icons:view-light" />
+            <Iconify icon="hugeicons:analytics-01" />
           </IconButton>
 
           <FormControlLabel
@@ -107,6 +113,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
                 checked={values?.featured}
                 onChange={() => handleFeatured(!values?.featured)}
                 color="primary"
+                sx={{ ml: 0.4 }}
               />
             }
             label="Featured"
@@ -146,7 +153,17 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-      {sidebarView === 'QUICK' ? <CampaignQuickView data={data} /> : <CampaignForm data={data} errors={errors} />}
+      {sidebarView === 'QUICK' ? (
+        <CampaignQuickView data={data} />
+      ) : (
+        <CampaignForm
+          data={values}
+          errors={errors}
+          setFieldValue={setFieldValue}
+          onChange={handleChange}
+          onSetFile={setFile}
+        />
+      )}
     </DrawerContainer>
   );
 };

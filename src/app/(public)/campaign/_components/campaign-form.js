@@ -1,13 +1,15 @@
 'use client';
 
 import React from 'react';
+import { TextEditor } from '@/components/core/text-editor/text-editor';
 import { CustomDatePicker } from '@/components/formFields/custom-date-picker';
+import { CustomSelect } from '@/components/formFields/custom-select';
 import { CustomTextField } from '@/components/formFields/custom-textfield';
 import { ErrorMessage } from '@/components/formFields/error-message';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
 import { MediaUploaderTrigger } from '@/components/uploaders/media-uploader-trigger';
-import { FormControl, FormLabel } from '@mui/material';
+import { FormControl, FormLabel, InputLabel } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { defaultCampaign } from '../_lib/campaign.types';
@@ -37,43 +39,12 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
     <>
       <form onSubmit={onSubmit}>
         <Grid container spacing={2}>
-          {/* Name */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField name="name" label="Campaign Name" value={values.name} onChange={onChange} />
             {/* <ErrorMessage error={errors.name} /> */}
           </Grid>
 
-          {/* Slug */}
-          <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField name="slug" label="Slug" value={values.slug} onChange={onChange} />
-            {/* <ErrorMessage error={errors.slug} /> */}
-          </Grid>
-
-          {/* Campaign Group ID */}
-          <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField
-              name="campaign_group_id"
-              label="Campaign Group ID"
-              value={values.campaign_group_id}
-              onChange={onChange}
-            />
-            {/* <ErrorMessage error={errors.campaign_group_id} /> */}
-          </Grid>
-
-          {/* Campaign Image */}
-          <Grid size={{ xs: 12, md: 6 }}>
-            <FormControl fullWidth error={Boolean(errors.campaign_image)}>
-              <FormLabel sx={{ mb: 2.8 }}>Campaign Image</FormLabel>
-              <ImageUploader
-                value={values.campaign_image}
-                onFileSelect={(file) => onSetFile(file)}
-                onDelete={onDeleteThumbnail}
-              />
-            </FormControl>
-          </Grid>
-
-          {/* Content Engagement */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
               name="content_engagement"
               label="Content Engagement"
@@ -84,25 +55,77 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
             <ErrorMessage error={errors.content_engagement} />
           </Grid>
 
-          {/* Stakeholder */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField name="stakeholder" label="Stakeholder" value={values.stakeholder} onChange={onChange} />
             <ErrorMessage error={errors.stakeholder} />
           </Grid>
-
-          {/* Campaign Status */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
-              name="campaign_status"
-              label="Campaign Status"
-              value={values.campaign_status}
+              name="retail_partners"
+              label="Retail Partner"
+              value={values.retail_partners}
               onChange={onChange}
             />
-            <ErrorMessage error={errors.campaign_status} />
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField
+              name="proposed_partners"
+              label="Proposed Partner"
+              value={values.proposed_partners}
+              onChange={onChange}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField
+              name="live_partners"
+              label="Live Partner"
+              value={values.live_partners}
+              onChange={onChange}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField
+              name="contributed_partners"
+              label="Contributed Partner"
+              value={values.contributed_partners}
+              onChange={onChange}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField
+              name="campaign_ROI"
+              label="Campaign ROI"
+              value={values.campaign_ROI}
+              onChange={onChange}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField
+              name="spaces"
+              label="Spaces"
+              value={values.spaces}
+              onChange={onChange}
+            />
           </Grid>
 
-          {/* Start Date */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomSelect
+              label={'Status'}
+              value={values.campaign_status}
+              onChange={(value) => setFieldValue('campaign_status', value)}
+              name="campaign_status"
+              options={[
+                { value: 'UPCOMING', label: 'Upcomming' },
+                { value: 'ACTIVE', label: 'Active' },
+                { value: 'PAUSED', label: 'Pause' },
+                { value: 'NEEDS_CASE_STUDY', label: 'Needs Case Study' },
+                { value: 'NEEDS_PARTNERS', label: 'Needs Partners' },
+                { value: 'ONBOARDING_PARTNERS', label: 'Onboarding Partners' },
+              ]}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomDatePicker
               label="Start Date"
               error={errors.start_date}
@@ -111,8 +134,7 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
             />
           </Grid>
 
-          {/* End Date */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomDatePicker
               label="End Date"
               error={errors.end_date}
@@ -121,7 +143,55 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
             />
           </Grid>
 
-          {/* Description */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="budget" label="Budget" value={values.budget} onChange={onChange} type="number" />
+            <ErrorMessage error={errors.budget} />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField
+              name="total_expense"
+              label="Total Expense"
+              value={values.total_expense}
+              onChange={onChange}
+              type="number"
+            />
+            <ErrorMessage error={errors.total_expense} />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField
+              name="product_expense"
+              label="Product Expense"
+              value={values.product_expense}
+              onChange={onChange}
+              type="number"
+            />
+            <ErrorMessage error={errors.product_expense} />
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <FormControl fullWidth error={Boolean(errors.campaign_image)}>
+              <FormLabel sx={{ mb: 2.8 }}>Campaign Image</FormLabel>
+              <ImageUploader
+                value={values.campaign_image}
+                onFileSelect={(file) => onSetFile(file)}
+                onDelete={onDeleteThumbnail}
+              />
+            </FormControl>
+          </Grid>
+          <Grid size={{ xs: 12 }}>
+            <CustomTextField name="note" label="Note" value={values.note} onChange={onChange} multiline rows={2} />
+          </Grid>
+          <Grid size={12}>
+            <FormControl fullWidth error={Boolean(errors.first_name)}>
+              <InputLabel sx={{ mb: 0.8 }}>Guidelines</InputLabel>
+              <TextEditor
+                placeholder={'Write something'}
+                content={values.guideline}
+                onUpdate={(html) => setFieldValue('guideline', html)}
+              />
+            </FormControl>
+          </Grid>
           <Grid size={{ xs: 12 }}>
             <CustomTextField
               name="description"
@@ -131,10 +201,8 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
               multiline
               rows={4}
             />
-            <ErrorMessage error={errors.description} />
           </Grid>
-
-          {/* Image Gallery */}
+          <Grid size={{ xs: 12 }} />
           <Grid size={{ xs: 12, md: 6 }}>
             <MediaUploaderTrigger
               open={openImageGalleryDialog}
@@ -147,7 +215,6 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
             />
           </Grid>
 
-          {/* Video Gallery */}
           <Grid size={{ xs: 12, md: 6 }}>
             <MediaUploaderTrigger
               open={openVideoGalleryDialog}
@@ -159,40 +226,9 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
               onDelete={(filteredUrls) => setFieldValue('video_gallery', filteredUrls)}
             />
           </Grid>
-
-          {/* Budget */}
-          <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField name="budget" label="Budget" value={values.budget} onChange={onChange} type="number" />
-            <ErrorMessage error={errors.budget} />
-          </Grid>
-
-          {/* Total Expense */}
-          <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField
-              name="total_expense"
-              label="Total Expense"
-              value={values.total_expense}
-              onChange={onChange}
-              type="number"
-            />
-            <ErrorMessage error={errors.total_expense} />
-          </Grid>
-
-          {/* Product Expense */}
-          <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField
-              name="product_expense"
-              label="Product Expense"
-              value={values.product_expense}
-              onChange={onChange}
-              type="number"
-            />
-            <ErrorMessage error={errors.product_expense} />
-          </Grid>
         </Grid>
       </form>
 
-      {/* Media Preview Dialog */}
       {mediaPreview && <MediaIframeDialog open={true} data={mediaPreview} onClose={() => setMediaPreview(null)} />}
     </>
   );
