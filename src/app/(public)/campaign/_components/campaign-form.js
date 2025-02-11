@@ -28,6 +28,11 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
     setFieldValue('campaign_group_name', value?.name);
   };
 
+  const handleDeleteThumbnail = () => {
+    setFieldValue('campaign_image', '');
+    onSetFile(null);
+  };
+
   // *****************Use Effects*******************************
   React.useEffect(() => {
     return () => {
@@ -52,7 +57,7 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
               id={values.campaign_group_id}
               onSelect={(value) => handleChangeCampaignGroup(value)}
             />
-             <ErrorMessage error={errors.campaign_group_id} />
+            <ErrorMessage error={errors.campaign_group_id} />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField name="name" label="Campaign Name" value={values.name} onChange={onChange} />
@@ -178,7 +183,7 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
               <ImageUploader
                 value={values.campaign_image}
                 onFileSelect={(file) => onSetFile(file)}
-                onDelete={onDeleteThumbnail}
+                onDelete={handleDeleteThumbnail}
               />
             </FormControl>
             <ErrorMessage error={errors.campaign_image} />

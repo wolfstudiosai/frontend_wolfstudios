@@ -65,7 +65,7 @@ export const ManageCampaignForm = ({ slug }) => {
   };
 
   const handleDeleteThumbnail = () => {
-    setFieldValue('thumbnail', '');
+    setFieldValue('campaign_image', '');
     setFile(null);
   };
 

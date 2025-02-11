@@ -27,6 +27,8 @@ export const CampaignGridView = ({ data }) => {
     }));
   };
 
+  console.log(data, 'data.campaigns....');
+
   return (
     <PageLoader loading={loading} error={null}>
       <>
@@ -74,13 +76,13 @@ export const CampaignGridView = ({ data }) => {
                 </Box>
               </Grid>
 
-              <Grid size={{ xs: 12, md: 8 }} >
+              <Grid size={{ xs: 12, md: 8 }}>
                 <Stack direction="column" gap={2}>
                   {visibleCampaigns.map((item) => (
                     <CampaignCard key={item.slug} item={item} />
                   ))}
                 </Stack>
-                {data.campaigns && data.campaigns.length > 5 && (
+                {campaignGroup.campaigns && campaignGroup.campaigns.length > 5 && (
                   <Stack direction="row" justifyContent="center" sx={{ my: 1 }}>
                     <Button
                       variant="outlined"

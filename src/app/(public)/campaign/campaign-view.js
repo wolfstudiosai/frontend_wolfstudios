@@ -13,11 +13,10 @@ import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.
 import { getCampaignGroupListAsync } from './_lib/portfolio.actions';
 
 export const CampaignView = () => {
-  // const observerRef = React.useRef(null);
 
   const [loading, setLoading] = React.useState(false);
   const [isFetching, setIsFetching] = React.useState(false);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [data, setData] = React.useState([]);
   const [filters, setFilters] = React.useState({
