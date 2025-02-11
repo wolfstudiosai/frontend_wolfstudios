@@ -1,22 +1,19 @@
 'use client';
 
+import React from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
-import React from 'react';
-
-import { SettingsContext } from '@/contexts/settings';
+import { RouteSharp } from '@mui/icons-material';
 
 import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignTabView } from './_components/campaign-tab-view';
+import { ManageCampaignRightPanel } from './_components/manage-campaign-right-panel';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
 
-
-
-
-export const CampaignView = () => {
+export const CampaignView = ({ groupData }) => {
   const observerRef = React.useRef(null);
- 
+
   const [loading, setLoading] = React.useState(false);
   const [isFetching, setIsFetching] = React.useState(false);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
@@ -29,7 +26,6 @@ export const CampaignView = () => {
     SORTING: [],
     VIEW: 'grid',
   });
-
 
   async function fetchList() {
     if (isFetching) return;
@@ -96,7 +92,15 @@ export const CampaignView = () => {
           showFilters={false}
           showColSlider={false}
         />
-        {filters.VIEW === 'grid' ? <CampaignGridView /> : <CampaignTabView />}
+        {filters.VIEW === 'grid' ? <CampaignGridView data={groupData} /> : <CampaignTabView data={groupData} />}
+        <ManageCampaignRightPanel
+          view="EDIT"
+          width="70%"
+          data={null}
+          fetchList={fetchList}
+          open={filters.VIEW === 'add'}
+          onClose={() => setFilters((prev) => ({ ...prev, VIEW: 'grid' }))}
+        />
       </PageLoader>
     </PageContainer>
   );
