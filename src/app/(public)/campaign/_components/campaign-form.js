@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { CampaignAutoSearch } from '@/components/autosearches/campaign-group-autosearch';
 import { TextEditor } from '@/components/core/text-editor/text-editor';
 import { CustomDatePicker } from '@/components/formFields/custom-date-picker';
 import { CustomSelect } from '@/components/formFields/custom-select';
@@ -40,8 +41,15 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
       <form onSubmit={onSubmit}>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 4 }}>
+            <FormLabel>Campaign Group</FormLabel>
+            <CampaignAutoSearch
+              name={values.campaign_group_name}
+              value={values.campaign_group_id}
+              onSelect={(value) => setFieldValue('campaign_group_id', value.campaign_group_id)}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField name="name" label="Campaign Name" value={values.name} onChange={onChange} />
-            {/* <ErrorMessage error={errors.name} /> */}
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
@@ -52,12 +60,10 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
               onChange={onChange}
               type="number"
             />
-            <ErrorMessage error={errors.content_engagement} />
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField name="stakeholder" label="Stakeholder" value={values.stakeholder} onChange={onChange} />
-            <ErrorMessage error={errors.stakeholder} />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
@@ -92,20 +98,10 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
             />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="campaign_ROI"
-              label="Campaign ROI"
-              value={values.campaign_ROI}
-              onChange={onChange}
-            />
+            <CustomTextField name="campaign_ROI" label="Campaign ROI" value={values.campaign_ROI} onChange={onChange} />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="spaces"
-              label="Spaces"
-              value={values.spaces}
-              onChange={onChange}
-            />
+            <CustomTextField name="spaces" label="Spaces" value={values.spaces} onChange={onChange} />
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
@@ -145,7 +141,6 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
 
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField name="budget" label="Budget" value={values.budget} onChange={onChange} type="number" />
-            <ErrorMessage error={errors.budget} />
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
@@ -156,7 +151,6 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
               onChange={onChange}
               type="number"
             />
-            <ErrorMessage error={errors.total_expense} />
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>

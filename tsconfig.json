@@ -31,7 +31,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/components/autosearches/campaign-group-autosearch.js"  ],
   "exclude": [
     "node_modules"
   ]
