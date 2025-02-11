@@ -1,7 +1,7 @@
-import { api } from '@/utils/api';
-import { getSearchQuery } from '@/utils/helper';
-import { uploadFileAsync } from '@/utils/upload-file';
-import { toast } from 'sonner';
+import { api } from "@/utils/api";
+import { getSearchQuery } from "@/utils/helper";
+import { uploadFileAsync } from "@/utils/upload-file";
+import { toast } from "sonner";
 
 export const getPartnerListAsync = async (queryParams) => {
     try {
@@ -10,7 +10,7 @@ export const getPartnerListAsync = async (queryParams) => {
         return { success: true, data: res.data.data, totalRecords: res.data.meta.total };
     } catch (error) {
         toast.error(error.message);
-        return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+        return { success: false, error: error.response ? error.response.data : "An unknown error occurred" };
     }
 };
 
@@ -20,19 +20,19 @@ export const getPartnerAsync = async (slug) => {
         return { success: true, data: res.data.data[0], totalRecords: res.data.meta.total };
     } catch (error) {
         toast.error(error.message);
-        return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+        return { success: false, error: error.response ? error.response.data : "An unknown error occurred" };
     }
 };
 
 export const createPartnerAsync = async (file, data) => {
     try {
         const { id, created_by, user_id, updated_at, ...rest } = data;
-        let profile_image = '';
+        let profile_image = "";
         if (file) {
             const uploadResponse = await uploadFileAsync(file);
             profile_image = uploadResponse[0].path;
         }
-        const partnerResponse = await api.post(`/partner/add`, {
+        const partnerResponse = await api.post("/partner/add", {
             ...rest,
             profile_image,
         });
@@ -40,7 +40,7 @@ export const createPartnerAsync = async (file, data) => {
         toast.success(partnerResponse.data.message);
         return { success: true, data: partnerResponse.data.data };
     } catch (error) {
-        const errorMessage = error.response?.data?.message || error.message || 'An unknown error occurred';
+        const errorMessage = error.response?.data?.message || error.message || "An unknown error occurred";
         toast.error(errorMessage);
         return { success: false, error: errorMessage };
     }
@@ -49,7 +49,7 @@ export const createPartnerAsync = async (file, data) => {
 export const updatePartnerAsync = async (file, data) => {
     try {
         const { id, user_id, created_by, created_at, updated_at, ...rest } = data;
-        let profile_image = '';
+        let profile_image = "";
         if (file) {
             const uploadResponse = await uploadFileAsync(file);
             profile_image = uploadResponse[0].path;
@@ -62,32 +62,32 @@ export const updatePartnerAsync = async (file, data) => {
         return { success: true, data: res.data.data };
     } catch (error) {
         toast.error(error.response.data.message);
-        return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+        return { success: false, error: error.response ? error.response.data : "An unknown error occurred" };
     }
 };
 
 export const deletePartnerAsync = async (ids) => {
     try {
-        const res = await api.delete(`/partner/delete`, {
+        const res = await api.delete("/partner/delete", {
             data: { ids: ids },
         });
         toast.success(res.data.message);
         return { success: true, data: res.data.data };
     } catch (error) {
         toast.error(error.response.data.message);
-        return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+        return { success: false, error: error.response ? error.response.data : "An unknown error occurred" };
     }
 };
 
 export const deleteFileAsync = async (paths) => {
     try {
-        const res = await api.delete(`/file/delete-files`, {
+        const res = await api.delete("/file/delete-files", {
             data: { paths },
         });
         // toast.success(res.data.message);
         return { success: true, data: res.data.data };
     } catch (error) {
         toast.error(error.response.data.message);
-        return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+        return { success: false, error: error.response ? error.response.data : "An unknown error occurred" };
     }
 };
