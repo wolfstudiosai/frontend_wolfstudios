@@ -29,7 +29,7 @@ export const publicRoutes = [
       {
         key: 'partner',
         title: 'Partner',
-        href: paths.private.partner_private,
+        href: paths.public.partner,
       },
       {
         key: 'spaces',

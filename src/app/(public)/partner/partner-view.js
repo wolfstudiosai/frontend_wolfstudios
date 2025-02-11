@@ -1,5 +1,111 @@
-import { ComingSoon } from '@/components/coming-soon/comming-soon';
+'use client';
+
+import { PageContainer } from '@/components/container/PageContainer';
+import { PageHeader } from '@/components/core/page-header';
+import PageLoader from '@/components/PageLoader/PageLoader';
+import { Box } from '@mui/material';
+import React, { useRef } from 'react';
+import { getPartnerListAsync } from './_lib/partner.actions';
 
 export const PartnerView = () => {
-  return <ComingSoon pageName={'Partner HQ'} />;
+  const observerRef = useRef(null);
+  const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [isFetching, setIsFetching] = React.useState(false);
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
+  const [totalRecords, setTotalRecords] = React.useState(0);
+  const [filters, setFilters] = React.useState({
+    COL: 3,
+    TAG: [],
+    FILTER: [],
+    SORTING: [],
+    VIEW: 'grid',
+  });
+
+  const fetchList = React.useCallback(async () => {
+    if (isFetching) return;
+    setIsFetching(true);
+
+    try {
+      const response = await getPartnerListAsync({
+        page: pagination.pageNo,
+        rowsPerPage: pagination.limit,
+      });
+
+      if (response.success) {
+        setData((prev) => [...prev, ...response.data]);
+        setTotalRecords(response.totalRecords);
+        setPagination((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }));
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
+      setLoading(false);
+    }
+  }, [isFetching, pagination])
+
+  const handleFilterChange = (type, value) => {
+    setFilters((prev) => ({ ...prev, [type]: value }));
+  };
+
+  const refreshListView = async () => {
+    const response = await getPartnerListAsync({
+      page: 1,
+      rowsPerPage: 40,
+    });
+
+    if (response.success) {
+      setData(response.data);
+      setTotalRecords(response.totalRecords);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchList();
+  }, [fetchList]);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetching && data.length < totalRecords) {
+          fetchList();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [data, isFetching, totalRecords, fetchList]);
+
+  return (
+    <PageContainer>
+      <PageLoader loading={loading}>
+        <PageHeader
+          title="Partners"
+          values={filters}
+          totalRecords={totalRecords}
+          onFilterChange={handleFilterChange}
+          showFilters={false}
+        />
+
+        {filters.VIEW === 'list' ? (
+          <Box>List view comming soon</Box>
+        ) : (
+          <Box>
+            Grid view
+          </Box>
+        )}
+      </PageLoader>
+    </PageContainer>
+  );
 };
