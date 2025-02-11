@@ -24,17 +24,17 @@ export const getPortfolioAsync = async (slug) => {
   }
 };
 
-export const createPortfolioAsync = async (file, data) => {
+export const createCampaignAsync = async (file, data) => {
   try {
-    const { slug, id, created_by, user_id, updated_at, ...rest } = data;
-    let thumbnail = '';
+    const { slug, id, created_by, user_id, updated_at, campaign_group_name, ...rest } = data;
+    let campaign_image = '';
     if (file) {
       const uploadResponse = await uploadFileAsync(file);
-      thumbnail = uploadResponse[0].path;
+      campaign_image = uploadResponse[0].path;
     }
-    const campaignResponse = await api.post(`/portfolio/add-portfolio`, {
+    const campaignResponse = await api.post(`/campaign/add-campaign`, {
       ...rest,
-      thumbnail: thumbnail,
+      campaign_image,
     });
 
     toast.success(campaignResponse.data.message);
@@ -46,15 +46,15 @@ export const createPortfolioAsync = async (file, data) => {
   }
 };
 
-export const updatePortfolioAsync = async (file, data) => {
+export const updateCampaignAsync = async (file, data) => {
   try {
-    const { id, slug, user_id, created_by, created_at, updated_at, ...rest } = data;
+    const { id, slug, user_id, created_by, created_at, updated_at, campaign_group_name, ...rest } = data;
     let thumbnailPath = '';
     if (file) {
       const uploadResponse = await uploadFileAsync(file);
       thumbnailPath = uploadResponse[0].path;
     }
-    const res = await api.patch(`/portfolio/update/${id}`, {
+    const res = await api.patch(`/campaign/update/${id}`, {
       ...rest,
       thumbnail: thumbnailPath ? thumbnailPath : data.thumbnail,
     });

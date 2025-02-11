@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { isValidToken } from '@/contexts/auth/AuthContext';
 
-import { clearUserSessionFromLocalStore, getTokenFromCookies } from './axios-api.helpers';
+import { clearUserSessionFromLocalStore, getTokenFromCookies, removeTokenFromCookies } from './axios-api.helpers';
 
 export const apiBaseurl =
   process.env['NEXT_PUBLIC_BACKEND_API'] || 'https://wolf-studios-backend-theta.vercel.app/api/v1';
@@ -13,12 +13,15 @@ export const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = getTokenFromCookies();
+    
     if (token) {
       const isTokenValid = isValidToken(token);
       if (!isTokenValid) {
         clearUserSessionFromLocalStore();
       }
       config.headers['Authorization'] = `${token}`;
+    } else {
+      localStorage.clear();
     }
     return config;
   },

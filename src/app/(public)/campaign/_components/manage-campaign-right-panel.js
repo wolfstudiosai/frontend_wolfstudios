@@ -6,15 +6,16 @@ import { formConstants } from '@/app/constants/form-constants';
 import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
 import { DrawerContainer } from '@/components/drawer/drawer';
 import { Iconify } from '@/components/iconify/iconify';
-import { RightPanel } from '@/components/rightPanel/right-panel';
-import { Box, Button, FormControlLabel, IconButton, Stack, Switch } from '@mui/material';
+import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
 
 import { paths } from '@/paths';
 import useAuth from '@/hooks/useAuth';
 
-import { defaultCampaignData } from '../_lib/campagin.data';
-import { CampaignQuickView } from './campaign-quick-view';
+import { CampaignForm } from '../_components/campaign-form';
+import { CampaignQuickView } from '../_components/campaign-quick-view';
+import { defaultCampaign } from '../_lib/campaign.types';
+import { createCampaignAsync, updateCampaignAsync } from '../_lib/portfolio.actions';
 
 export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
   const isUpdate = data ? true : false;
@@ -27,30 +28,33 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
 
   const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
     useFormik({
-      initialValues: defaultCampaignData,
+      initialValues: defaultCampaign,
       validate: (values) => {
         const errors = {};
-        if (!values.project_title) {
-          errors.project_title = formConstants.required;
+        if (!values.name) {
+          errors.name = formConstants.required;
+        }
+        if (!values.campaign_image) {
+          errors.campaign_image = formConstants.required;
         }
 
         return errors;
       },
       onSubmit: async (values) => {
         setLoading(true);
-        // try {
-        //   const res = isUpdate ? await updatePortfolioAsync(file, values) : await createPortfolioAsync(file, values);
-        //   if (res.success) {
-        //     onClose?.();
-        //     fetchList();
-        //   } else {
-        //     console.error('Operation failed:', res.message);
-        //   }
-        // } catch (error) {
-        //   console.error('Error:', error);
-        // } finally {
-        //   setLoading(false);
-        // }
+        try {
+          const res = isUpdate ? await updateCampaignAsync(file, values) : await createCampaignAsync(file, values);
+          if (res.success) {
+            onClose?.();
+            fetchList();
+          } else {
+            console.error('Operation failed:', res.message);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        } finally {
+          setLoading(false);
+        }
       },
     });
 
@@ -92,8 +96,17 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
     <>
       {isLogin && (
         <>
+          {sidebarView === 'EDIT' ? (
+            <IconButton onClick={() => setSidebarView('QUICK')} title="Edit">
+              <Iconify icon="solar:eye-broken" />
+            </IconButton>
+          ) : (
+            <IconButton onClick={() => setSidebarView('EDIT')} title="Quick">
+              <Iconify icon="mynaui:edit-one" />
+            </IconButton>
+          )}
           <IconButton onClick={() => router.push(paths.public.campaign_analytics + '/bogomore')} title="Quick View">
-            <Iconify icon="lets-icons:view-light" />
+            <Iconify icon="hugeicons:analytics-01" />
           </IconButton>
 
           <FormControlLabel
@@ -103,6 +116,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
                 checked={values?.featured}
                 onChange={() => handleFeatured(!values?.featured)}
                 color="primary"
+                sx={{ ml: 0.4 }}
               />
             }
             label="Featured"
@@ -124,7 +138,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
 
   React.useEffect(() => {
     return () => {
-      setValues(defaultCampaignData);
+      setValues(defaultCampaign);
     };
   }, []);
 
@@ -142,7 +156,17 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-      <CampaignQuickView data={data} />
+      {sidebarView === 'QUICK' ? (
+        <CampaignQuickView data={data} />
+      ) : (
+        <CampaignForm
+          data={values}
+          errors={errors}
+          setFieldValue={setFieldValue}
+          onChange={handleChange}
+          onSetFile={setFile}
+        />
+      )}
     </DrawerContainer>
   );
 };

@@ -31,7 +31,7 @@ export const ManagePartnerForm = ({ slug }) => {
   const [file, setFile] = React.useState(null);
   const router = useRouter();
 
-  const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
+  const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm, onSetFile } =
     useFormik({
       initialValues: defaultCampaign,
       validate: (values) => {

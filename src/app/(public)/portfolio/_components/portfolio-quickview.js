@@ -1,10 +1,8 @@
 'use client';
 
-import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
-import { Iconify } from '@/components/iconify/iconify';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { isVideoContent, pxToRem } from '@/utils/helper';
-import { Box, Button, Divider, FormControlLabel, IconButton, Stack, Switch, Typography, useTheme } from '@mui/material';
+import { isSupabaseUrl, isVideoContent, pxToRem } from '@/utils/helper';
+import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
@@ -66,8 +64,9 @@ export const PortfolioQuickView = ({ data }) => {
                 sx={{
                   height: pxToRem(500),
                   width: '100%',
-                  objectFit: 'cover',
+                  objectFit: 'contain',
                   borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                  border: '1px solid var(--mui-palette-divider)',
                 }}
               />
             ) : (
@@ -116,72 +115,89 @@ export const PortfolioQuickView = ({ data }) => {
         <Divider sx={{ my: 2 }} />
       </Box>
       {/* Gallery Images */}
-      {data.vertical_gallery_images.length > 0 && (
-        <>
-          <Typography variant="subtitle1" fontWeight="bold" mt={3}>
-            Vertical Gallery
-          </Typography>
-          <Box display="flex" gap={1} overflow="auto" sx={{ mt: 1, pb: 1, whiteSpace: 'nowrap' }}>
-            {data.vertical_gallery_images.map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`Vertical ${idx}`}
-                style={{
-                  width: '80px',
-                  height: '80px',
-                  borderRadius: '5px',
-                  boxShadow: `0px 4px 8px ${theme.palette.grey[400]}`,
-                }}
-              />
-            ))}
-          </Box>
-        </>
-      )}
+      <>
+        <Typography variant="subtitle1" fontWeight="bold" mt={3} color="text.secondary">
+          Vertical Gallery
+        </Typography>
+        <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>
+          {data.vertical_gallery_images?.map((item, index) => (
+            <Grid item size={{ xs: 2 }} key={index}>
+              {isVideoContent(item) ? (
+                <Box
+                  component="video"
+                  src={item}
+                  controls
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  sx={{
+                    height: pxToRem(300),
+                    width: '100%',
+                    objectFit: 'contain',
+                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                    border: '1px solid var(--mui-palette-divider)',
+                  }}
+                />
+              ) : (
+                <Box
+                  component="img"
+                  src={isSupabaseUrl(item) ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item}` : item}
+                  sx={{
+                    height: pxToRem(300),
+                    width: '100%',
+                    objectFit: 'contain',
+                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                    border: '1px solid var(--mui-palette-divider)',
+                  }}
+                />
+              )}
+            </Grid>
+          ))}
+        </Grid>
+      </>
 
-      {data.horizontal_gallery_images.length > 0 && (
-        <>
-          <Typography variant="subtitle1" fontWeight="bold" mt={3}>
-            Horizontal Gallery
-          </Typography>
-          <Box display="flex" gap={1} overflow="auto" sx={{ mt: 1, pb: 1, whiteSpace: 'nowrap' }}>
-            {data.horizontal_gallery_images.map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`Horizontal ${idx}`}
-                style={{
-                  width: '100px',
-                  height: '60px',
-                  borderRadius: '5px',
-                  boxShadow: `0px 4px 8px ${theme.palette.grey[400]}`,
-                }}
-              />
-            ))}
-          </Box>
-        </>
-      )}
-
-      <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>
-        {mediaArr.map((item, index) => (
-          <Grid item size={{ xs: 2 }} key={index}>
-            {isVideoContent(item) ? (
-              <Box
-                component="video"
-                src={item}
-                controls
-                autoPlay
-                loop
-                muted
-                playsInline
-                sx={{ height: pxToRem(300), width: '100%', objectFit: 'cover' }}
-              />
-            ) : (
-              <Box component="img" src={item} sx={{ height: pxToRem(300), width: '100%', objectFit: 'cover' }} />
-            )}
-          </Grid>
-        ))}
-      </Grid>
+      <>
+        <Typography variant="subtitle1" fontWeight="bold" mt={3} color="text.secondary">
+          Horizontal Gallery
+        </Typography>
+        <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>
+          {data.horizontal_gallery_images?.map((item, index) => (
+            <Grid item size={{ xs: 2 }} key={index}>
+              {isVideoContent(item) ? (
+                <Box
+                  component="video"
+                  src={item}
+                  controls
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  sx={{
+                    height: pxToRem(200),
+                    width: '100%',
+                    objectFit: 'contain',
+                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                    border: '1px solid var(--mui-palette-divider)',
+                  }}
+                />
+              ) : (
+                <Box
+                  component="img"
+                  src={isSupabaseUrl(item) ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item}` : item}
+                  sx={{
+                    height: '100%',
+                    width: pxToRem(200),
+                    objectFit: 'contain',
+                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                    border: '1px solid var(--mui-palette-divider)',
+                  }}
+                />
+              )}
+            </Grid>
+          ))}
+        </Grid>
+      </>
     </Box>
   );
 };
