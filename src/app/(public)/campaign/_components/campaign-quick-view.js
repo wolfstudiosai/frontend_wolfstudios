@@ -133,7 +133,7 @@ export const CampaignQuickView = ({ data }) => {
       <Typography variant="h6" color="text.secondary">
         Team
       </Typography>
-      <Typography variant="subtitle2" color="text.secondary" component={Link} href={data.team?.stylist}>
+      <Typography variant="subtitle2" color="text.secondary" component={Link} href={data.team?.stylist || ""}>
         Stylist: {data.team?.stylist || 'N/A'}
       </Typography>
       <Typography variant="subtitle2" color="text.secondary">

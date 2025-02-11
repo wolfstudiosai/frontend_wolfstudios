@@ -56,7 +56,6 @@ export const CreatePortfolioDialog = (props) => {
         },
         validationSchema: getValidationSchema(isUpdated),
         onSubmit: async (values) => {
-          console.log(values, "Portfolio data");
           setLoading(true);
           const res = isUpdated
             ? await updatePortfolio({ id: data.id, ...values })

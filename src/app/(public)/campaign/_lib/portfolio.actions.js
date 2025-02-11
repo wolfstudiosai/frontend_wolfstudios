@@ -3,10 +3,10 @@ import { getSearchQuery } from '@/utils/helper';
 import { uploadFileAsync } from '@/utils/upload-file';
 import { toast } from 'sonner';
 
-export const getPortfolioListAsync = async (queryParams) => {
+export const getCampaignGroupListAsync = async (queryParams) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    const res = await api.get(`/portfolio${searchQuery}`);
+    const res = await api.get(`/campaign-group${searchQuery}`);
     return { success: true, data: res.data.data, totalRecords: res.data.meta.total };
   } catch (error) {
     toast.error(error.message);
@@ -14,9 +14,9 @@ export const getPortfolioListAsync = async (queryParams) => {
   }
 };
 
-export const getPortfolioAsync = async (slug) => {
+export const getCampaignAsync = async (slug) => {
   try {
-    const res = await api.get(`/portfolio?slug=${slug}`);
+    const res = await api.get(`/campaign?slug=${slug}`);
     return { success: true, data: res.data.data[0], totalRecords: res.data.meta.total };
   } catch (error) {
     toast.error(error.message);
@@ -56,7 +56,7 @@ export const updateCampaignAsync = async (file, data) => {
     }
     const res = await api.patch(`/campaign/update/${id}`, {
       ...rest,
-      thumbnail: thumbnailPath ? thumbnailPath : data.thumbnail,
+      campaign_image: thumbnailPath ? thumbnailPath : data.campaign_image,
     });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
@@ -66,9 +66,9 @@ export const updateCampaignAsync = async (file, data) => {
   }
 };
 
-export const deletePortfolioAsync = async (ids) => {
+export const deleteCampaignAsync = async (ids) => {
   try {
-    const res = await api.delete(`/portfolio/delete`, {
+    const res = await api.delete(`/campaign/delete`, {
       data: { ids: ids },
     });
     toast.success(res.data.message);

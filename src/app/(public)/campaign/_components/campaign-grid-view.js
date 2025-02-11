@@ -42,7 +42,7 @@ export const CampaignGridView = ({ data }) => {
                   sx={{
                     // background: getRandomGradientColor(index),
                     backgroundColor: getRandomGradientColor(index),
-                    borderRadius: 2,
+                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
                     padding: 4,
                     position: 'sticky',
                     top: pxToRem(openSubNav ? 152 : 106),

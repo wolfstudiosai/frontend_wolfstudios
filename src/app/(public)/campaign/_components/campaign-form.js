@@ -10,7 +10,7 @@ import { ErrorMessage } from '@/components/formFields/error-message';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
 import { MediaUploaderTrigger } from '@/components/uploaders/media-uploader-trigger';
-import { FormControl, FormLabel, InputLabel } from '@mui/material';
+import { FormControl, FormLabel, InputLabel, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { defaultCampaign } from '../_lib/campaign.types';
@@ -52,6 +52,7 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
               id={values.campaign_group_id}
               onSelect={(value) => handleChangeCampaignGroup(value)}
             />
+             <ErrorMessage error={errors.campaign_group_id} />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField name="name" label="Campaign Name" value={values.name} onChange={onChange} />
@@ -170,8 +171,10 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
             <ErrorMessage error={errors.product_expense} />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
+            <Typography sx={{ fontSize: '14px', mb: 0.5 }} color="text.primary">
+              Campaign Image
+            </Typography>
             <FormControl fullWidth error={Boolean(errors.campaign_image)}>
-              <FormLabel sx={{ mb: 2.8 }}>Campaign Image</FormLabel>
               <ImageUploader
                 value={values.campaign_image}
                 onFileSelect={(file) => onSetFile(file)}

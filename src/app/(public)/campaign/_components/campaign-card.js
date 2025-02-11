@@ -1,12 +1,12 @@
 import React from 'react';
 import { Iconify } from '@/components/iconify/iconify';
+import { isSupabaseUrl } from '@/utils/helper';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
 import { ManageCampaignRightPanel } from './manage-campaign-right-panel';
 
-export const CampaignCard = ({ item }) => {
-  console.log(item, 'item....');
+export const CampaignCard = ({ item, fetchList }) => {
   const [openCampaignRightPanel, setOpenCampaignRightPanel] = React.useState(null);
 
   return (
@@ -15,16 +15,25 @@ export const CampaignCard = ({ item }) => {
         direction="row"
         sx={{
           height: '260px',
-          borderRadius: 2,
+          borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
           border: '1px solid var(--mui-palette-divider)',
           boxShadow: '1px 1px 5px rgba(0, 0, 0, 0.05)',
         }}
       >
         <Box
           component="img"
-          src={item.campaign_image}
+          src={
+            isSupabaseUrl(item.campaign_image)
+              ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.campaign_image}`
+              : item.campaign_image
+          }
           alt={item.title}
-          sx={{ width: '26%', height: '100%', objectFit: 'cover', borderRadius: '16px 0px 0px 16px' }}
+          sx={{
+            width: '30rem',
+            height: '100%',
+            objectFit: 'cover',
+            borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+          }}
         />
         <Stack direction="column" justifyContent="space-between" gap={1} sx={{ p: 2, width: '74%' }}>
           <Box>
@@ -67,6 +76,7 @@ export const CampaignCard = ({ item }) => {
       <ManageCampaignRightPanel
         view={'QUICK'}
         width="70%"
+        fetchList={fetchList}
         open={openCampaignRightPanel ? true : false}
         data={openCampaignRightPanel}
         onClose={() => setOpenCampaignRightPanel(false)}
