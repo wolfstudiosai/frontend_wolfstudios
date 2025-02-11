@@ -1,21 +1,21 @@
 'use client';
 
-import React from 'react';
-import { useRouter } from 'next/navigation';
 import { formConstants } from '@/app/constants/form-constants';
 import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
 import { DrawerContainer } from '@/components/drawer/drawer';
 import { Iconify } from '@/components/iconify/iconify';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
+import React from 'react';
 
-import { paths } from '@/paths';
 import useAuth from '@/hooks/useAuth';
+import { paths } from '@/paths';
 
 import { CampaignForm } from '../_components/campaign-form';
 import { CampaignQuickView } from '../_components/campaign-quick-view';
 import { defaultCampaign } from '../_lib/campaign.types';
-import { createCampaignAsync, updateCampaignAsync } from '../_lib/portfolio.actions';
+import { createCampaignAsync, deleteCampaignAsync, updateCampaignAsync } from '../_lib/portfolio.actions';
 
 export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
   const isUpdate = data ? true : false;
@@ -34,8 +34,8 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
         if (!values.name) {
           errors.name = formConstants.required;
         }
-        if (!values.campaign_image) {
-          errors.campaign_image = formConstants.required;
+        if (!values.campaign_group_id) {
+          errors.campaign_group_id = formConstants.required;
         }
 
         return errors;
@@ -74,7 +74,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
   };
 
   const handleDelete = async () => {
-    const response = await deletePortfolioAsync([data.id]);
+    const response = await deleteCampaignAsync([data.id]);
     if (response.success) {
       fetchList();
     }
@@ -105,7 +105,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
               <Iconify icon="mynaui:edit-one" />
             </IconButton>
           )}
-          <IconButton onClick={() => router.push(paths.public.campaign_analytics + '/bogomore')} title="Quick View">
+          <IconButton onClick={() => router.push(paths.public.campaign_analytics + '/' + data.slug)} title="Quick View">
             <Iconify icon="hugeicons:analytics-01" />
           </IconButton>
 
@@ -122,7 +122,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
             label="Featured"
           />
 
-          <DeleteConfirmationPopover title={`Want to delete ${data?.project_title}?`} onDelete={() => handleDelete()} />
+          <DeleteConfirmationPopover title={`Want to delete ${data?.name}?`} onDelete={() => handleDelete()} />
 
           {sidebarView === 'EDIT' && (
             <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>

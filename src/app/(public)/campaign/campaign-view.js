@@ -10,13 +10,14 @@ import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignTabView } from './_components/campaign-tab-view';
 import { ManageCampaignRightPanel } from './_components/manage-campaign-right-panel';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
+import { getCampaignGroupListAsync } from './_lib/portfolio.actions';
 
-export const CampaignView = ({ groupData }) => {
-  const observerRef = React.useRef(null);
+export const CampaignView = () => {
+  // const observerRef = React.useRef(null);
 
   const [loading, setLoading] = React.useState(false);
   const [isFetching, setIsFetching] = React.useState(false);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [data, setData] = React.useState([]);
   const [filters, setFilters] = React.useState({
@@ -32,13 +33,13 @@ export const CampaignView = ({ groupData }) => {
     setIsFetching(true);
 
     try {
-      const response = await mockGetCampaignListAsync({
+      const response = await getCampaignGroupListAsync({
         page: pagination.pageNo,
         rowsPerPage: pagination.limit,
       });
 
       if (response.success) {
-        setData((prev) => [...prev, ...response.data]);
+        setData(response.data);
         setTotalRecords(response.totalRecords);
         setPagination((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }));
       }
@@ -54,26 +55,18 @@ export const CampaignView = ({ groupData }) => {
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
-  React.useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !isFetching && data.length < totalRecords) {
-          fetchList();
-        }
-      },
-      { rootMargin: '100px' }
-    );
 
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
+    const refreshListView = async () => {
+      const response = await getCampaignGroupListAsync({
+        page: 1,
+        rowsPerPage: 10,
+      });
+  
+      if (response.success) {
+        setData(response.data);
+        setTotalRecords(response.totalRecords);
       }
     };
-  }, [data, isFetching, totalRecords]);
 
   React.useEffect(() => {
     fetchList();
@@ -92,12 +85,12 @@ export const CampaignView = ({ groupData }) => {
           showFilters={false}
           showColSlider={false}
         />
-        {filters.VIEW === 'grid' ? <CampaignGridView data={groupData} /> : <CampaignTabView data={groupData} />}
+        {filters.VIEW === 'grid' ? <CampaignGridView data={data} /> : <CampaignTabView data={data} />}
         <ManageCampaignRightPanel
           view="EDIT"
           width="70%"
           data={null}
-          fetchList={fetchList}
+          fetchList={refreshListView}
           open={filters.VIEW === 'add'}
           onClose={() => setFilters((prev) => ({ ...prev, VIEW: 'grid' }))}
         />
