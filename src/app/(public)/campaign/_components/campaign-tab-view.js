@@ -5,24 +5,11 @@ import Grid from '@mui/material/Grid2';
 
 import { CampaignTabCard } from '../_components/campaign-tab-card';
 import { getCampaignListAsync } from '../_lib/portfolio.actions';
+import { campaignProgressStatus } from '../_lib/campaign.constants';
 
-const tabsArr = [
-  { label: 'Gather Rates', value: 'GATHER_RATES' },
-  { label: 'Review Rates', value: 'REVIEW_RATES' },
-  { label: 'Approved For Campaign', value: 'APPROVED_FOR_CAMPAIGN' },
-  { label: 'In Negotiation', value: 'IN_NEGOTIATION' },
-  { label: 'Awaiting Shipment', value: 'AWAITING_SHIPMENT' },
-  { label: 'Awaiting Deliverables', value: 'AWAITING_DELIVERABLES' },
-  { label: 'Content Review', value: 'CONTENT_REVIEW' },
-  { label: 'Awaiting Partner Post', value: 'AWAITING_PARTNER_POST' },
-  { label: 'Approved For Payment', value: 'APPROVED_FOR_PAYMENT' },
-  { label: 'Complete', value: 'COMPLETE' },
-  { label: 'Not Approved', value: 'NOT_APPROVED' },
-  { label: 'All Partners', value: 'ALL_PARTNERS' },
-];
 
 export const CampaignTabView = () => {
-  const [selectedTab, setSelectedTab] = React.useState(tabsArr[0].value);
+  const [selectedTab, setSelectedTab] = React.useState(campaignProgressStatus[0].value);
   const [data, setData] = React.useState([]);
   const [filteredData, setFilteredData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -62,18 +49,20 @@ export const CampaignTabView = () => {
   return (
     <>
       <TabContainer
-        tabs={tabsArr.map((tab) => tab.label)}
-        value={tabsArr.findIndex((tab) => tab.value === selectedTab)}
-        onTabChange={(e, value) => setSelectedTab(tabsArr[value].value)}
+        tabs={campaignProgressStatus.map((tab) => tab.label)}
+        value={campaignProgressStatus.findIndex((tab) => tab.value === selectedTab)}
+        onTabChange={(e, value) => setSelectedTab(campaignProgressStatus[value].value)}
       />
 
       <Grid container>
         {filteredData.map((item) => (
           <Grid key={item.id} size={{ xs: 6, md: 2 }}>
-            <CampaignTabCard campaign={item} options={tabsArr} fetchList={fetchList} />
+            <CampaignTabCard campaign={item} fetchList={fetchList} />
           </Grid>
         ))}
       </Grid>
+
+      
     </>
   );
 };

@@ -13,6 +13,7 @@ import { MediaUploaderTrigger } from '@/components/uploaders/media-uploader-trig
 import { FormControl, FormLabel, InputLabel, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
+import { campaignProgressStatus } from '../_lib/campaign.constants';
 import { defaultCampaign } from '../_lib/campaign.types';
 
 export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
@@ -130,6 +131,15 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
                 { value: 'NEEDS_PARTNERS', label: 'Needs Partners' },
                 { value: 'ONBOARDING_PARTNERS', label: 'Onboarding Partners' },
               ]}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomSelect
+              label={'Campaign Progress'}
+              value={values.campaign_progress}
+              onChange={(value) => setFieldValue('campaign_progress', value)}
+              name="campaign_progress"
+              options={campaignProgressStatus}
             />
           </Grid>
 

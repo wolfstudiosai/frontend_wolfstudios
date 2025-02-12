@@ -4,10 +4,12 @@ import { isSupabaseUrl } from '@/utils/helper';
 import { Box, Chip, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
+import { campaignProgressStatus } from '../_lib/campaign.constants';
 import { updateCampaignAsync } from '../_lib/portfolio.actions';
+import { ManageCampaignRightPanel } from './manage-campaign-right-panel';
 
-export const CampaignTabCard = ({ campaign, options, fetchList }) => {
-  const [openDetails, setOpenDetails] = React.useState(false);
+export const CampaignTabCard = ({ campaign, fetchList }) => {
+  const [openCampaignRightPanel, setOpenCampaignRightPanel] = React.useState(null);
   const [campaignProgress, setCampaignProgress] = React.useState(campaign.campaign_progress || '');
 
   async function updateCampaign() {
@@ -59,6 +61,7 @@ export const CampaignTabCard = ({ campaign, options, fetchList }) => {
             borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
             border: '1px solid var(--mui-palette-divider)',
           }}
+          onClick={() => setOpenCampaignRightPanel(campaign)}
         />
         <Box>
           <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
@@ -125,17 +128,22 @@ export const CampaignTabCard = ({ campaign, options, fetchList }) => {
             Change Status
           </Typography>
           <CustomSelect
-            // label={'Status'}
             value={campaignProgress}
             onChange={(value) => setCampaignProgress(value)}
             name="campaign_status"
-            options={options}
+            options={campaignProgressStatus}
           />
         </Box>
       </Stack>
 
-      {/* Details Panel (Optional) */}
-      {openDetails && <Box>{/* You can implement a right-side panel/modal here */}</Box>}
+      <ManageCampaignRightPanel
+        view={'QUICK'}
+        width="70%"
+        fetchList={fetchList}
+        open={openCampaignRightPanel ? true : false}
+        data={openCampaignRightPanel}
+        onClose={() => setOpenCampaignRightPanel(false)}
+      />
     </>
   );
 };
