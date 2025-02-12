@@ -1,5 +1,4 @@
 export const defaultPartner = {
-    id: '',
     name: '',
     email: '',
     phone: '',
@@ -27,12 +26,10 @@ export const defaultPartner = {
     contract: '',
     products: '',
     contributed_campaigns: '',
-    profile_category: '',
-    current_status: '',
+    profile_category: 'MODEL',
+    current_status: 'NOT_STARTED',
     profile_status: '',
     stakeholder: '',
     total_audience: 0,
     sourced_from: '',
-    created_at: '',
-    updated_at: ''
 };

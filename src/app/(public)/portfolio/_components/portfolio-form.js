@@ -49,20 +49,6 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
             />
             <ErrorMessage error={errors.project_title} />
           </Grid>
-
-          {/* <Grid size={{ xs: 12 }}>
-            <CustomSelect
-              label="Category"
-              name="category"
-              id="category"
-              value={values.category}
-              onChange={onChange}
-              options={[
-                { value: 'FACEBOOK', label: 'Facebook' },
-                { value: 'TWITTER', label: 'Twitter' },
-              ]}
-            />
-          </Grid> */}
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField name="category" label="Category" value={values.category} onChange={onChange} />
           </Grid>

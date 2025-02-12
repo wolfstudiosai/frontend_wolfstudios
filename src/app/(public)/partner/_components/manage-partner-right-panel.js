@@ -31,6 +31,9 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
         if (!values.name) {
           errors.name = formConstants.required;
         }
+        if (!values.email) {
+          errors.email = formConstants.required;
+        }
 
         return errors;
       },
