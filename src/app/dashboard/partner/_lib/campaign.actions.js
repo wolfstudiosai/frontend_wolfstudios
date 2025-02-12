@@ -76,3 +76,15 @@ export const deleteCampaignAsync = async (ids) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
+export const deleteCampaignGroupAsync = async (ids) => {
+  try {
+    const res = await api.delete(`/campaign-group/delete`, {
+      data: { ids: ids },
+    });
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};

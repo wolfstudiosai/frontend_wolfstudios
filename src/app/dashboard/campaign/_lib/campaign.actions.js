@@ -46,6 +46,20 @@ export const createCampaignAsync = async (file, data) => {
     return { success: false, error: errorMessage };
   }
 };
+export const createCampaignGroupAsync = async (data) => {
+  try {
+    const { created_by, updated_at, ...rest } = data;
+
+    const response = await api.post(`/campaign-group/add`, rest);
+
+    toast.success(response.data.message);
+    return { success: true, data: response.data.data };
+  } catch (error) {
+    const errorMessage = error.response?.data?.message || error.message || 'An unknown error occurred';
+    toast.error(errorMessage);
+    return { success: false, error: errorMessage };
+  }
+};
 
 export const updateUCampaignAsync = async (file, data) => {
   try {
@@ -59,6 +73,18 @@ export const updateUCampaignAsync = async (file, data) => {
       ...rest,
       thumbnail: thumbnailPath ? thumbnailPath : data.thumbnail,
     });
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+export const updateUCampaignGroupAsync = async (file, data) => {
+  try {
+    const { created_at, updated_at, ...rest } = data;
+
+    const res = await api.patch(`/campaign/update/${id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {

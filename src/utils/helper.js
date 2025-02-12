@@ -23,6 +23,7 @@ export const getSearchQuery = (queryParams) => {
 };
 
 export const getSpeficiLengthString = (string, length) => {
+  if (!string) return '';
   if (string.length > length) {
     return string.substring(0, length) + '...';
   }
@@ -137,12 +138,11 @@ const gradients = [
   // 'linear-gradient(135deg, #0470DC 0%, #A704FD 100%)',
   // 'linear-gradient(135deg, #A704FD 0%, #7367F0 100%);',
 
-
-  // 'linear-gradient(135deg, #B3CFFF 0%, #9EB8FF 50%, #8AA8FF 100%)', 
-  // 'linear-gradient(135deg, #D8E2F0 0%, #C1CEDD 50%, #B8C7DC 100%)', 
-  // 'linear-gradient(135deg, #C2E4FE 0%, #A9D4FD 50%, #90D1FC 100%)', 
-  // 'linear-gradient(135deg, #E6CFF2 0%, #D8BCE6 50%, #D4AEE8 100%)', 
-  // 'linear-gradient(135deg, #BBDEFB 0%, #A6D1F9 50%, #90CAF9 100%)', 
+  // 'linear-gradient(135deg, #B3CFFF 0%, #9EB8FF 50%, #8AA8FF 100%)',
+  // 'linear-gradient(135deg, #D8E2F0 0%, #C1CEDD 50%, #B8C7DC 100%)',
+  // 'linear-gradient(135deg, #C2E4FE 0%, #A9D4FD 50%, #90D1FC 100%)',
+  // 'linear-gradient(135deg, #E6CFF2 0%, #D8BCE6 50%, #D4AEE8 100%)',
+  // 'linear-gradient(135deg, #BBDEFB 0%, #A6D1F9 50%, #90CAF9 100%)',
 ];
 
 export const getRandomGradientColor = (index) => {

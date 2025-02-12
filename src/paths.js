@@ -150,6 +150,7 @@ export const paths = {
     content_analytics: '/content-analytics',
 
     // campaign HQ
+    campaign_group: '/campaign-group',
     revo: '/revo',
     campaign_add_new: '/campaign-add-new',
 

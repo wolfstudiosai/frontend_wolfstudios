@@ -223,6 +223,13 @@ export const privateRoutes = [
     icon: 'nimbus:marketing',
     items: [
       {
+        key: 'campaign_group',
+        title: 'Campaign Group',
+        href: paths.private.campaign_group,
+        icon: 'formkit:group',
+        allowedRoles: ['admin', 'user'],
+      },
+      {
         key: 'revo',
         title: 'Revo',
         href: paths.private.revo,

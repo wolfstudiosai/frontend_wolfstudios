@@ -55,6 +55,19 @@ export const createCampaignAsync = async (file, data) => {
     return { success: false, error: errorMessage };
   }
 };
+export const createCampaignGroupAsync = async (data) => {
+  try {
+    const { created_at, updated_at, campaigns, ...rest } = data;
+    const campaignResponse = await api.post(`/campaign-group/add`, rest);
+
+    toast.success(campaignResponse.data.message);
+    return { success: true, data: campaignResponse.data.data };
+  } catch (error) {
+    const errorMessage = error.response?.data?.message || error.message || 'An unknown error occurred';
+    toast.error(errorMessage);
+    return { success: false, error: errorMessage };
+  }
+};
 
 export const updateCampaignAsync = async (file, data) => {
   try {

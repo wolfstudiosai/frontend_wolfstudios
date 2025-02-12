@@ -25,3 +25,9 @@ export const defaultCampaign = {
   spaces: null,
   product_expense: null,
 };
+
+export const defaultCampaignGroup = {
+  name: '',
+  description: '',
+  campaigns: [],
+};
