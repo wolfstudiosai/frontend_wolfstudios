@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { CustomChip } from '@/components/core/custom-chip';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { IconText } from '@/components/utils/icon-text';
@@ -14,7 +15,7 @@ export const PartnerGridView = ({ data, colums, fetchList, loading, handlePagina
   return (
     <Box>
       <PageLoader loading={loading} error={null}>
-        <Grid container spacing={1} columns={{ xs: 24 }} sx={{ mt: 2 }}>
+        <Grid container spacing={1} columns={{ xs: 24 }}>
           {data.map((partner, index) => (
             <Grid item size={{ xs: 6, md: colums }} key={index}>
               <PartnerCard item={partner} fetchList={fetchList} />
@@ -34,7 +35,7 @@ const PartnerCard = ({ item, fetchList }) => {
       <Stack
         direction="row"
         gap={1}
-        sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, cursor: 'pointer' }}
+        sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, cursor: 'pointer', overflow: 'hidden' }}
         onClick={() => setOpenPartnerRightPanel(item)}
       >
         <Box
@@ -45,13 +46,13 @@ const PartnerCard = ({ item, fetchList }) => {
               : item?.profile_image
           }
           alt={item?.name}
-          sx={{ width: '30%', height: '200px', objectFit: 'cover' }}
+          sx={{ width: '30%', minHeight: '200px', objectFit: 'cover' }}
         />
         <Stack direction="column" sx={{ p: 2 }}>
           <Box>
             <Stack direction="row" alignItems="center" gap={2}>
               <Typography variant="h5">{item?.name}</Typography>
-              <Chip label="active" size="small" variant="soft" color="success" sx={{ borderRadius: 4, px: 1 }} />
+              <CustomChip label={item?.profile_category} />
             </Stack>
             <Stack
               direction="row"
@@ -68,6 +69,7 @@ const PartnerCard = ({ item, fetchList }) => {
             <IconText icon="proicons:call" text={item?.phone} sx={{ color: 'text.secondary' }} />
             <IconText icon="clarity:email-line" text={item?.email} sx={{ color: 'text.secondary' }} />
             <IconText icon="mynaui:globe" text={item?.website} sx={{ color: 'text.secondary' }} />
+            <IconText icon="fluent:status-48-regular" text={item?.current_status} sx={{ color: 'text.secondary' }} />
           </Stack>
         </Stack>
       </Stack>
