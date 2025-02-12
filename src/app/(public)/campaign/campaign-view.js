@@ -58,17 +58,12 @@ export const CampaignView = () => {
       page: 1,
       rowsPerPage: 10,
     });
-    console.log("refresh list view");
 
     if (response.success) {
       setData(response.data);
       setTotalRecords(response.totalRecords);
     }
   };
-
-  const checkFunction = () => {
-    console.log("check funtion called");
-  }
 
   React.useEffect(() => {
     fetchList();

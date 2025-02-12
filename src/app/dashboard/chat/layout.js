@@ -257,7 +257,6 @@ export default function Layout({ children }) {
           }
         };
 
-        // console.log("threadsRes data:",threadsRes.data.data)
         for (const thread of threadsRes.data.data || []) {
           await fetchMessagesForThread(thread?.id);
         }
