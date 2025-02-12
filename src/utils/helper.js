@@ -149,3 +149,7 @@ export const getRandomGradientColor = (index) => {
   const newIndex = index > colors.length - 1 ? 0 : index;
   return gradients[newIndex];
 };
+
+export function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
