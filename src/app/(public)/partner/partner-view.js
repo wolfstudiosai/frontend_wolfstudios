@@ -5,7 +5,9 @@ import { PageHeader } from '@/components/core/page-header';
 import PageLoader from '@/components/PageLoader/PageLoader';
 import { Box } from '@mui/material';
 import React, { useRef } from 'react';
+import { PartnerGridView } from './_components/partner-gridview';
 import { getPartnerListAsync } from './_lib/partner.actions';
+import { defaultPartner } from './_lib/partner.types';
 
 export const PartnerView = () => {
   const observerRef = useRef(null);
@@ -33,7 +35,7 @@ export const PartnerView = () => {
       });
 
       if (response.success) {
-        setData((prev) => [...prev, ...response.data]);
+        setData(response?.data);
         setTotalRecords(response.totalRecords);
         setPagination((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }));
       }
@@ -63,7 +65,7 @@ export const PartnerView = () => {
 
   React.useEffect(() => {
     fetchList();
-  }, [fetchList]);
+  }, []);
 
   React.useEffect(() => {
     const observer = new IntersectionObserver(
@@ -102,7 +104,11 @@ export const PartnerView = () => {
           <Box>List view comming soon</Box>
         ) : (
           <Box>
-            Grid view
+            <PartnerGridView
+              data={data || [defaultPartner]}
+              fetchList={refreshListView}
+              loading={loading}
+            />
           </Box>
         )}
       </PageLoader>
