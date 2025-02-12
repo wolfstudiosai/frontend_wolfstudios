@@ -1,14 +1,12 @@
 'use client';
 
-import React from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
-import { RouteSharp } from '@mui/icons-material';
+import React from 'react';
 
 import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignTabView } from './_components/campaign-tab-view';
-import { ManageCampaignRightPanel } from './_components/manage-campaign-right-panel';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
 import { getCampaignGroupListAsync } from './_lib/portfolio.actions';
 
@@ -55,17 +53,22 @@ export const CampaignView = () => {
   };
 
 
-    const refreshListView = async () => {
-      const response = await getCampaignGroupListAsync({
-        page: 1,
-        rowsPerPage: 10,
-      });
-  
-      if (response.success) {
-        setData(response.data);
-        setTotalRecords(response.totalRecords);
-      }
-    };
+  const refreshListView = async () => {
+    const response = await getCampaignGroupListAsync({
+      page: 1,
+      rowsPerPage: 10,
+    });
+    console.log("refresh list view");
+
+    if (response.success) {
+      setData(response.data);
+      setTotalRecords(response.totalRecords);
+    }
+  };
+
+  const checkFunction = () => {
+    console.log("check funtion called");
+  }
 
   React.useEffect(() => {
     fetchList();
@@ -84,15 +87,7 @@ export const CampaignView = () => {
           showFilters={false}
           showColSlider={false}
         />
-        {filters.VIEW === 'grid' ? <CampaignGridView data={data} /> : <CampaignTabView data={data} />}
-        <ManageCampaignRightPanel
-          view="EDIT"
-          width="70%"
-          data={null}
-          // fetchList={refreshListView}
-          open={filters.VIEW === 'add'}
-          onClose={() => setFilters((prev) => ({ ...prev, VIEW: 'grid' }))}
-        />
+        {filters.VIEW === 'grid' ? <CampaignGridView data={data} fetchList={refreshListView} /> : <CampaignTabView data={data} />}
       </PageLoader>
     </PageContainer>
   );
