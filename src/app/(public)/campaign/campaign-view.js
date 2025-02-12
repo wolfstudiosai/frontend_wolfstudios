@@ -1,17 +1,18 @@
 'use client';
 
+import React from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
-import React from 'react';
 
 import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignTabView } from './_components/campaign-tab-view';
-import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
+import { ManageCampaignRightPanel } from './_components/manage-campaign-right-panel';
 import { getCampaignGroupListAsync } from './_lib/campaign.actions';
+import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
+import { defaultCampaign } from './_lib/campaign.types';
 
 export const CampaignView = () => {
-
   const [loading, setLoading] = React.useState(false);
   const [isFetching, setIsFetching] = React.useState(false);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
@@ -52,7 +53,6 @@ export const CampaignView = () => {
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
-
   const refreshListView = async () => {
     const response = await getCampaignGroupListAsync({
       page: 1,
@@ -82,7 +82,19 @@ export const CampaignView = () => {
           showFilters={false}
           showColSlider={false}
         />
-        {filters.VIEW === 'grid' ? <CampaignGridView data={data} fetchList={refreshListView} /> : <CampaignTabView data={data} />}
+        {filters.VIEW === 'grid' ? (
+          <CampaignGridView data={data} fetchList={refreshListView} />
+        ) : (
+          <CampaignTabView data={data} />
+        )}
+        <ManageCampaignRightPanel
+          view="EDIT"
+          width="70%"
+          data={defaultCampaign}
+          fetchList={refreshListView}
+          open={filters.VIEW === 'add'}
+          onClose={() => setFilters((prev) => ({ ...prev, VIEW: 'grid' }))}
+        />
       </PageLoader>
     </PageContainer>
   );

@@ -14,8 +14,8 @@ import useAuth from '@/hooks/useAuth';
 
 import { CampaignForm } from '../_components/campaign-form';
 import { CampaignQuickView } from '../_components/campaign-quick-view';
-import { defaultCampaign } from '../_lib/campaign.types';
 import { createCampaignAsync, deleteCampaignAsync, updateCampaignAsync } from '../_lib/campaign.actions';
+import { defaultCampaign } from '../_lib/campaign.types';
 
 export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
   const isUpdate = data ? true : false;
@@ -81,29 +81,17 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
     }
   };
 
-  const handleDeleteThumbnail = () => {
-    setFieldValue('thumbnail', '');
-    setFile(null);
-  };
-
-  const handleFeatured = async (featured) => {
-    setFieldValue('featured', featured);
-    await updatePortfolioAsync(file, { ...values, featured });
-    // fetchList();
-    window.location.reload();
-  };
-
   // *****************Action Buttons*******************************
   const actionButtons = (
     <>
       {isLogin && (
         <>
-          {sidebarView === 'EDIT' ? (
+          {sidebarView === 'EDIT' && data?.id ? (
             <IconButton onClick={() => setSidebarView('QUICK')} title="Edit">
               <Iconify icon="solar:eye-broken" />
             </IconButton>
           ) : (
-            data !== null && (
+            data?.id && (
               <IconButton onClick={() => setSidebarView('EDIT')} title="Quick">
                 <Iconify icon="mynaui:edit-one" />
               </IconButton>
