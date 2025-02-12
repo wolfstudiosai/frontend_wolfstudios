@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { CampaignTabCard } from '../_components/campaign-tab-card';
-import { getCampaignListAsync } from '../_lib/portfolio.actions';
+import { getCampaignListAsync } from '../_lib/campaign.actions';
 import { campaignProgressStatus } from '../_lib/campaign.constants';
 
 

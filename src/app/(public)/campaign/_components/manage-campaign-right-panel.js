@@ -15,7 +15,7 @@ import useAuth from '@/hooks/useAuth';
 import { CampaignForm } from '../_components/campaign-form';
 import { CampaignQuickView } from '../_components/campaign-quick-view';
 import { defaultCampaign } from '../_lib/campaign.types';
-import { createCampaignAsync, deleteCampaignAsync, updateCampaignAsync } from '../_lib/portfolio.actions';
+import { createCampaignAsync, deleteCampaignAsync, updateCampaignAsync } from '../_lib/campaign.actions';
 
 export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
   const isUpdate = data ? true : false;

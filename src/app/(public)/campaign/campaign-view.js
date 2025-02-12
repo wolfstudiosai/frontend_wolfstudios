@@ -8,7 +8,7 @@ import React from 'react';
 import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignTabView } from './_components/campaign-tab-view';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
-import { getCampaignGroupListAsync } from './_lib/portfolio.actions';
+import { getCampaignGroupListAsync } from './_lib/campaign.actions';
 
 export const CampaignView = () => {
 

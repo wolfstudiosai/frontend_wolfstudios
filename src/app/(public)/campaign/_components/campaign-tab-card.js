@@ -5,7 +5,7 @@ import { Box, Chip, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
 import { campaignProgressStatus } from '../_lib/campaign.constants';
-import { updateCampaignAsync } from '../_lib/portfolio.actions';
+import { updateCampaignAsync } from '../_lib/campaign.actions';
 import { ManageCampaignRightPanel } from './manage-campaign-right-panel';
 
 export const CampaignTabCard = ({ campaign, fetchList }) => {

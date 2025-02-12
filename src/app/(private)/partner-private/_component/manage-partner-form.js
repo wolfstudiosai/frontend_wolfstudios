@@ -18,7 +18,7 @@ import PageLoader from '@/components/PageLoader/PageLoader';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
 import { paths } from '/src/paths';
 
-import { createCampaignAsync, getCampaignAsync, updateUCampaignAsync } from '../_lib/campaign.actions';
+import { createCampaignAsync, getCampaignAsync, updateUCampaignAsync } from '../_lib/partner-private.actions';
 import { defaultCampaign } from '../_lib/campaign.types';
 import { ContentGuideline } from './content-guideline';
 

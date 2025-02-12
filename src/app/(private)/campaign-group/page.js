@@ -3,7 +3,7 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { defaultCampaignGroup } from '@/app/(public)/campaign/_lib/campaign.types';
-import { getCampaignGroupListAsync } from '@/app/(public)/campaign/_lib/portfolio.actions';
+import { getCampaignGroupListAsync } from '@/app/(public)/campaign/_lib/campaign.actions';
 import { deleteCampaignGroupAsync } from '@/app/dashboard/partner/_lib/campaign.actions';
 import { FilterButton } from '@/components/core/filter-button';
 import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopover';
@@ -139,7 +139,7 @@ export default function Page({ searchParams }) {
       <Stack spacing={4}>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} sx={{ alignItems: 'flex-start' }}>
           <Box sx={{ flex: '1 1 auto' }}>
-            <Typography variant="h4">Users</Typography>
+            <Typography variant="h4">Campaign Group</Typography>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button startIcon={<PlusIcon />} variant="contained" onClick={() => handleOpenModal(defaultCampaignGroup)}>

@@ -25,7 +25,7 @@ import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
 import { paths } from '@/paths';
 
-import { deleteCampaignAsync, getCampaignListAsync } from './_lib/campaign.actions';
+import { deleteCampaignAsync, getCampaignListAsync } from './_lib/partner-private.actions';
 
 export default function Page() {
   const router = useRouter();

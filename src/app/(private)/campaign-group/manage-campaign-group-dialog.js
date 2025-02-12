@@ -6,7 +6,7 @@ import { ErrorMessage } from '@/components/formFields/error-message';
 import { Button, CircularProgress, FormControl, InputLabel, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useFormik } from 'formik';
-import { createCampaignGroupAsync, updateUCampaignGroupAsync } from 'src/app/(public)/campaign/_lib/portfolio.actions';
+import { createCampaignGroupAsync, updateCampaignGroupAsync } from '@/app/(public)/campaign/_lib/campaign.actions';
 
 export const ManageCampaignGroupDialog = (props) => {
   const { open, onClose, onConfirm, data } = props;
@@ -28,7 +28,7 @@ export const ManageCampaignGroupDialog = (props) => {
       onSubmit: async (values) => {
         setLoading(true);
         const res = isUpdated
-          ? await updateUCampaignGroupAsync({
+          ? await updateCampaignGroupAsync({
               id: data.id,
               name: values.name,
               description: values.description,
