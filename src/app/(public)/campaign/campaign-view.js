@@ -89,7 +89,7 @@ export const CampaignView = () => {
           view="EDIT"
           width="70%"
           data={null}
-          fetchList={refreshListView}
+          // fetchList={refreshListView}
           open={filters.VIEW === 'add'}
           onClose={() => setFilters((prev) => ({ ...prev, VIEW: 'grid' }))}
         />

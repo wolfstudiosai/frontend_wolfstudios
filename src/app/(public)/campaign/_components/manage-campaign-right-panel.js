@@ -46,7 +46,8 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
           const res = isUpdate ? await updateCampaignAsync(file, values) : await createCampaignAsync(file, values);
           if (res.success) {
             onClose?.();
-            fetchList();
+            // fetchList();
+            window.location.reload()
           } else {
             console.error('Operation failed:', res.message);
           }
@@ -76,7 +77,8 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
   const handleDelete = async () => {
     const response = await deleteCampaignAsync([data.id]);
     if (response.success) {
-      fetchList();
+      // fetchList();
+      window.location.reload()
     }
   };
 
@@ -88,7 +90,8 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
   const handleFeatured = async (featured) => {
     setFieldValue('featured', featured);
     await updatePortfolioAsync(file, { ...values, featured });
-    fetchList();
+    // fetchList();
+    window.location.reload()
   };
 
   // *****************Action Buttons*******************************
@@ -109,7 +112,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
             <Iconify icon="hugeicons:analytics-01" />
           </IconButton>
 
-          <FormControlLabel
+          {/* <FormControlLabel
             control={
               <Switch
                 size="small"
@@ -120,7 +123,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
               />
             }
             label="Featured"
-          />
+          /> */}
 
           <DeleteConfirmationPopover title={`Want to delete ${data?.name}?`} onDelete={() => handleDelete()} />
 
