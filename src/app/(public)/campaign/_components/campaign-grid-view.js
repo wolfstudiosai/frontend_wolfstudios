@@ -1,17 +1,17 @@
 'use client';
 
-import React from 'react';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/PageLoader/PageLoader';
 import { getRandomGradientColor, pxToRem } from '@/utils/helper';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import React from 'react';
 
 import { SettingsContext } from '@/contexts/settings';
 
 import { CampaignCard } from './campaign-card';
 
-export const CampaignGridView = ({ data }) => {
+export const CampaignGridView = ({ data, fetchList }) => {
   const INITIAL_VISIBLE_COUNT = 5;
   const {
     customSettings: { openSubNav },
@@ -26,8 +26,6 @@ export const CampaignGridView = ({ data }) => {
       [groupName]: !prev[groupName],
     }));
   };
-
-  console.log(data, 'data.campaigns....');
 
   return (
     <PageLoader loading={loading} error={null}>
@@ -79,7 +77,7 @@ export const CampaignGridView = ({ data }) => {
               <Grid size={{ xs: 12, md: 8 }}>
                 <Stack direction="column" gap={2}>
                   {visibleCampaigns.map((item) => (
-                    <CampaignCard key={item.slug} item={item} />
+                    <CampaignCard key={item.slug} item={item} fetchList={fetchList} />
                   ))}
                 </Stack>
                 {campaignGroup.campaigns && campaignGroup.campaigns.length > 5 && (

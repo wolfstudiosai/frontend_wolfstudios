@@ -4,7 +4,7 @@ import { formConstants } from '@/app/constants/form-constants';
 import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
 import { DrawerContainer } from '@/components/drawer/drawer';
 import { Iconify } from '@/components/iconify/iconify';
-import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -45,9 +45,8 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
         try {
           const res = isUpdate ? await updateCampaignAsync(file, values) : await createCampaignAsync(file, values);
           if (res.success) {
-            onClose?.();
-            // fetchList();
-            window.location.reload()
+            onClose();
+            fetchList();
           } else {
             console.error('Operation failed:', res.message);
           }
