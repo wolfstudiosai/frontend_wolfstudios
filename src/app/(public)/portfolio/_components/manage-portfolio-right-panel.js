@@ -101,9 +101,11 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
               <Iconify icon="mynaui:edit-one" />
             </IconButton>
           ) : (
-            <IconButton onClick={() => setSidebarView('QUICK')} title="Quick View">
-              <Iconify icon="lets-icons:view-light" />
-            </IconButton>
+            data !== null && (
+              <IconButton onClick={() => setSidebarView('QUICK')} title="Quick View">
+                <Iconify icon="lets-icons:view-light" />
+              </IconButton>
+            )
           )}
 
           <FormControlLabel

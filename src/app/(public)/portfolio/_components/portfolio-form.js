@@ -11,6 +11,7 @@ import Grid from '@mui/material/Grid2';
 import React from 'react';
 
 import { defaultPortfolio } from '../_lib/portfolio.types';
+import { MediaUploaderTrigger } from '@/components/uploaders/media-uploader-trigger';
 
 export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
   const [values, setValues] = React.useState(data || defaultPortfolio);
@@ -39,15 +40,6 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
       {/* <PageLoader loading={loading} error={null}> */}
       <form onSubmit={onSubmit}>
         <Grid container spacing={2}>
-          <Grid size={{ xs: 12 }}>
-            <Button
-              endIcon={<Iconify icon="lucide:upload" />}
-              variant="contained"
-              onClick={() => setOpenUploadDialog(true)}
-            >
-              Upload
-            </Button>
-          </Grid>
           <Grid size={{ xs: 12 }}>
             <CustomTextField
               name="project_title"

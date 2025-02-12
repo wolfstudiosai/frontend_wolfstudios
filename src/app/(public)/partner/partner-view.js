@@ -1,13 +1,15 @@
 'use client';
 
+import React, { useRef } from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
 import PageLoader from '@/components/PageLoader/PageLoader';
 import { Box } from '@mui/material';
-import React, { useRef } from 'react';
+
 import { PartnerGridView } from './_components/partner-gridview';
 import { getPartnerListAsync } from './_lib/partner.actions';
 import { defaultPartner } from './_lib/partner.types';
+import { ManagePartnerRightPanel } from './_components/manage-partner-right-panel';
 
 export const PartnerView = () => {
   const observerRef = useRef(null);
@@ -45,7 +47,7 @@ export const PartnerView = () => {
       setIsFetching(false);
       setLoading(false);
     }
-  }, [isFetching, pagination])
+  }, [isFetching, pagination]);
 
   const handleFilterChange = (type, value) => {
     setFilters((prev) => ({ ...prev, [type]: value }));
@@ -104,13 +106,18 @@ export const PartnerView = () => {
           <Box>List view comming soon</Box>
         ) : (
           <Box>
-            <PartnerGridView
-              data={data || [defaultPartner]}
-              fetchList={refreshListView}
-              loading={loading}
-            />
+            <PartnerGridView data={data || [defaultPartner]} fetchList={refreshListView} loading={loading} />
           </Box>
         )}
+
+        <ManagePartnerRightPanel
+          view="EDIT"
+          width="70%"
+          data={null}
+          // fetchList={refreshListView}
+          open={filters.VIEW === 'add'}
+          onClose={() => setFilters((prev) => ({ ...prev, VIEW: 'grid' }))}
+        />
       </PageLoader>
     </PageContainer>
   );

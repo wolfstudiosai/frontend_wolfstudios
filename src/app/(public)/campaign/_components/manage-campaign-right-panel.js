@@ -1,16 +1,16 @@
 'use client';
 
+import React from 'react';
+import { useRouter } from 'next/navigation';
 import { formConstants } from '@/app/constants/form-constants';
 import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
 import { DrawerContainer } from '@/components/drawer/drawer';
 import { Iconify } from '@/components/iconify/iconify';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
-import { useRouter } from 'next/navigation';
-import React from 'react';
 
-import useAuth from '@/hooks/useAuth';
 import { paths } from '@/paths';
+import useAuth from '@/hooks/useAuth';
 
 import { CampaignForm } from '../_components/campaign-form';
 import { CampaignQuickView } from '../_components/campaign-quick-view';
@@ -47,7 +47,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
           if (res.success) {
             onClose?.();
             // fetchList();
-            window.location.reload()
+            window.location.reload();
           } else {
             console.error('Operation failed:', res.message);
           }
@@ -78,7 +78,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
     const response = await deleteCampaignAsync([data.id]);
     if (response.success) {
       // fetchList();
-      window.location.reload()
+      window.location.reload();
     }
   };
 
@@ -91,7 +91,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
     setFieldValue('featured', featured);
     await updatePortfolioAsync(file, { ...values, featured });
     // fetchList();
-    window.location.reload()
+    window.location.reload();
   };
 
   // *****************Action Buttons*******************************
@@ -104,9 +104,11 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
               <Iconify icon="solar:eye-broken" />
             </IconButton>
           ) : (
-            <IconButton onClick={() => setSidebarView('EDIT')} title="Quick">
-              <Iconify icon="mynaui:edit-one" />
-            </IconButton>
+            data !== null && (
+              <IconButton onClick={() => setSidebarView('EDIT')} title="Quick">
+                <Iconify icon="mynaui:edit-one" />
+              </IconButton>
+            )
           )}
           <IconButton onClick={() => router.push(paths.public.campaign_analytics + '/' + data.slug)} title="Quick View">
             <Iconify icon="hugeicons:analytics-01" />
