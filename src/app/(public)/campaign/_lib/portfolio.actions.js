@@ -13,6 +13,16 @@ export const getCampaignGroupListAsync = async (queryParams) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
+export const getCampaignListAsync = async (queryParams) => {
+  try {
+    const searchQuery = getSearchQuery(queryParams);
+    const res = await api.get(`/campaign${searchQuery}`);
+    return { success: true, data: res.data.data, totalRecords: res.data.meta.total };
+  } catch (error) {
+    toast.error(error.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
 
 export const getCampaignAsync = async (slug) => {
   try {
@@ -48,7 +58,8 @@ export const createCampaignAsync = async (file, data) => {
 
 export const updateCampaignAsync = async (file, data) => {
   try {
-    const { id, slug, user_id, created_by, created_at, updated_at, campaign_group_name, ...rest } = data;
+    const { id, slug, user_id, created_by, created_at, updated_at, campaign_group_name, campaign_group, ...rest } =
+      data;
     let thumbnailPath = '';
     if (file) {
       const uploadResponse = await uploadFileAsync(file);
