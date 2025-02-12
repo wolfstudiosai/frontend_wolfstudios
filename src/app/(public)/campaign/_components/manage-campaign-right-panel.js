@@ -18,7 +18,7 @@ import { createCampaignAsync, deleteCampaignAsync, updateCampaignAsync } from '.
 import { defaultCampaign } from '../_lib/campaign.types';
 
 export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
-  const isUpdate = data ? true : false;
+  const isUpdate = data?.id ? true : false;
   const router = useRouter();
   const { isLogin } = useAuth();
 
@@ -86,20 +86,25 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
     <>
       {isLogin && (
         <>
-          {sidebarView === 'EDIT' && data?.id ? (
+          {sidebarView === 'EDIT' && isUpdate ? (
             <IconButton onClick={() => setSidebarView('QUICK')} title="Edit">
               <Iconify icon="solar:eye-broken" />
             </IconButton>
           ) : (
-            data?.id && (
+            isUpdate && (
               <IconButton onClick={() => setSidebarView('EDIT')} title="Quick">
                 <Iconify icon="mynaui:edit-one" />
               </IconButton>
             )
           )}
-          <IconButton onClick={() => router.push(paths.public.campaign_analytics + '/' + data.slug)} title="Quick View">
-            <Iconify icon="hugeicons:analytics-01" />
-          </IconButton>
+          {isUpdate && (
+            <IconButton
+              onClick={() => router.push(paths.public.campaign_analytics + '/' + data.slug)}
+              title="Quick View"
+            >
+              <Iconify icon="hugeicons:analytics-01" />
+            </IconButton>
+          )}
 
           {/* <FormControlLabel
             control={
