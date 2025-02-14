@@ -42,7 +42,6 @@ export default async function Layout({ children }) {
                   <I18nProvider lng={settings.language}>
                     <ThemeProvider>
                       <Progressbar />
-                      {/* {children} */}
                       <AuthGuard>
                         <VerticalLayout>{children}</VerticalLayout>
                       </AuthGuard>

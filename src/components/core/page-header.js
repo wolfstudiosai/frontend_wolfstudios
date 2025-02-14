@@ -40,7 +40,7 @@ export const PageHeader = ({
       sx={{
         width: '100%',
         position: 'sticky',
-        top: openSubNav ? 90 : 44,
+        top: openSubNav ? 107 : 44,
         zIndex: 100,
         backgroundColor: 'background.paper',
       }}
@@ -48,10 +48,8 @@ export const PageHeader = ({
       <Stack
         direction={'column'}
         sx={{
-          // backgroundColor: 'var(--mui-palette-background-level1)',
-          p: 1,
+          py: 1,
           borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-          // border: 'solid .1px var(--mui-palette-divider)',
         }}
       >
         <Stack direction={'row'} alignItems={'center'} >  

@@ -45,7 +45,7 @@ export const CampaignGridView = ({ data, fetchList }) => {
                     borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
                     padding: 4,
                     position: 'sticky',
-                    top: pxToRem(openSubNav ? 152 : 106),
+                    top: pxToRem(openSubNav ? 170 : 106),
                     boxShadow: 3,
                   }}
                 >

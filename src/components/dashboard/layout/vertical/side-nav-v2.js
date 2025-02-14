@@ -32,8 +32,6 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
   const [openMenus, setOpenMenus] = React.useState({});
   const router = useRouter();
 
-  console.log(openMenus, '  openMenus');
-
   const toggleMenuItem = (key) => {
     setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
   };
@@ -98,14 +96,14 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
           height: '100%',
           left: 10,
           position: 'fixed',
-          top: isFeaturedCardVisible ? 95 : 50,
+          top: isFeaturedCardVisible ? 118 : 60,
           width: open ? 'var(--SideNav-width)' : '70px',
           zIndex: 'var(--SideNav-zIndex)',
           transition: 'width 0.3s ease',
           borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
           marginBottom: '10px',
           border: '1px solid var(--mui-palette-background-level2)',
-          height: isFeaturedCardVisible ? 'calc(100vh - 135px)' : 'calc(100vh - 90px)',
+          height: isFeaturedCardVisible ? 'calc(100vh - 160px)' : 'calc(100vh - 103px)',
           paddingRight: pxToRem(5),
           overflowY: 'auto',
           '&::-webkit-scrollbar': {

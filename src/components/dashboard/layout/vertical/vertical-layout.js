@@ -54,19 +54,19 @@ export function VerticalLayout({ children }) {
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
-          // minHeight: '100%',
         }}
       >
         <MainNavV2 onToggle={handleSidebarToggle} onFeatureCardVisible={setIsFeaturedCardVisible} />
         {isLogin && (
           <Box
             sx={{
+              backgroundColor: 'var(--mui-palette-background-default)',
               transform: isFeaturedCardVisible ? 'translateY(100)' : 'translateY(-100%)',
               opacity: isFeaturedCardVisible ? 1 : 0,
               transition: 'transform 0.5s ease, opacity 0.5s ease',
               width: '100%',
               position: 'sticky',
-              top: 45,
+              top: 43,
               zIndex: 100,
             }}
           >
@@ -78,7 +78,7 @@ export function VerticalLayout({ children }) {
             display: isFeaturedCardVisible ? 'flex' : 'block',
             flex: '1 1 auto',
             flexDirection: 'column',
-            pl: { lg: isLogin && openSidebar ? pxToRem(260) : '0px' },
+            pl: { lg: isLogin && openSidebar ? pxToRem(270) : '0px' },
           }}
         >
           {isLogin && openSidebar && (

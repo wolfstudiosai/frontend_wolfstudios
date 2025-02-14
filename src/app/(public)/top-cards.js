@@ -1,11 +1,7 @@
 'use client';
 
-import { PageContainer } from '@/components/container/PageContainer';
-import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { pxToRem, textShortner } from '@/utils/helper';
 import { Box, Card, Typography } from '@mui/material';
-import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
-import { SwiperSlide } from 'swiper/react';
 
 export function FeatureCards() {
   const cardsdata = [
@@ -94,110 +90,114 @@ export function FeatureCards() {
   return (
     <Box
       sx={{
+        display: 'flex',
+        gap: 1,
+        overflowX: 'auto',
+        whiteSpace: 'nowrap',
+        // p: 2,
         pt: { xs: pxToRem(2), lg: pxToRem(6) },
         mx: 1.5,
+        position: 'sticky',
+        top: 45,
+        zIndex: 999,
         backgroundColor: 'var(--mui-palette-background-default)',
+        scrollBehavior: 'smooth',
+        '&::-webkit-scrollbar': {
+          height: '0px', //i remove the scrollbar. if you want to use the scrollbar, increase height
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: 'var(--mui-palette-background-level2)',
+          borderRadius: '4px',
+        },
+        '&::-webkit-scrollbar-thumb:hover': {
+          backgroundColor: '#555',
+        },
+        // overflow: "hidden"
       }}
     >
-      <SliderWrapper
-        modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
-        // autoplay={{ delay: 4000, disableOnInteraction: true }}
-        breakpoints={{
-          0: { slidesPerView: 3 },
-          768: { slidesPerView: 4 },
-          1140: { slidesPerView: 6 },
-        }}
-        // pauseOnHover
-        // speed={2000}
-        spaceBetween={10}
-      >
-        {cardsdata.map((card, index) => (
-          <SwiperSlide key={index}>
-            <Card
-              key={card.id}
+      {cardsdata.map((card) => (
+        <Card
+          key={card.id}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            minWidth: pxToRem(350),
+            width: { xs: '100%', sm: pxToRem(200) },
+            flex: '0 0 auto',
+            paddingX: 1,
+            paddingY: 1,
+            boxShadow: 3,
+            borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+            border: 'solid .1px var(--mui-palette-divider)',
+            backgroundColor: 'var(--mui-palette-background-paper)',
+            overflow: 'hidden',
+          }}
+        >
+          {/* Image Section */}
+          <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 2 }}>
+            <img
+              src={card.image}
+              alt={card.title}
+              style={{
+                width: 30,
+                height: 30,
+                borderRadius: '50%',
+                objectFit: 'cover',
+              }}
+            />
+          </Box>
+
+          {/* Title and Description Section */}
+          <Box sx={{ flexGrow: 1 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              {/* Title */}
+              <Typography
+                variant="h6"
+                sx={{
+                  fontSize: pxToRem(15),
+                  whiteSpace: 'normal',
+                }}
+              >
+                {card.title}
+              </Typography>
+
+              {/* Timestamp */}
+              <Typography
+                sx={{
+                  fontSize: pxToRem(12),
+                  color: 'text.secondary',
+                }}
+              >
+                {card.timestamp}
+              </Typography>
+            </Box>
+
+            {/* Description Section */}
+            <Typography
+              variant="body2"
+              color="text.secondary"
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                // minWidth: pxToRem(250),
-                // width: { xs: '100%' },
-                flex: '0 0 auto',
-                paddingX: 1,
-                paddingY: 0.5,
-                boxShadow: 3,
-                borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-                border: 'solid .1px var(--mui-palette-divider)',
-                backgroundColor: 'var(--mui-palette-background-paper)',
-                overflow: 'hidden',
-                cursor: 'pointer',
+                fontSize: pxToRem(15),
+                whiteSpace: 'normal',
               }}
             >
-              {/* Image Section */}
-              <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 2 }}>
-                <img
-                  src={card.image}
-                  alt={card.title}
-                  style={{
-                    width: 30,
-                    height: 30,
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                  }}
-                />
-              </Box>
+              {textShortner(card.description, 35)}
+            </Typography>
+          </Box>
 
-              {/* Title and Description Section */}
-              <Box sx={{ flexGrow: 1 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  {/* Title */}
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontSize: pxToRem(15),
-                      whiteSpace: 'normal',
-                    }}
-                  >
-                    {card.title}
-                  </Typography>
-
-                  {/* Timestamp */}
-                  <Typography
-                    sx={{
-                      fontSize: pxToRem(12),
-                      color: 'text.secondary',
-                    }}
-                  >
-                    {card.timestamp}
-                  </Typography>
-                </Box>
-
-                {/* Description Section */}
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{
-                    fontSize: pxToRem(14),
-                    whiteSpace: 'normal',
-                  }}
-                >
-                  {textShortner(card.description, 35)}
-                </Typography>
-              </Box>
-
-              {/* Image Section with Timestamp */}
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'relative',
-                }}
-              ></Box>
-            </Card>
-          </SwiperSlide>
-        ))}
-      </SliderWrapper>
+          {/* Image Section with Timestamp */}
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+            }}
+          ></Box>
+        </Card>
+      ))}
     </Box>
   );
 }
