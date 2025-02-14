@@ -2,7 +2,7 @@
 
 import { MultiReadonlyStatusChip, ReadonlyStatusChip } from '@/components/formFields/readonly-status';
 import { WrapedText } from '@/components/formFields/wraped-text';
-import PageLoader from '@/components/PageLoader/PageLoader';
+import PageLoader from '@/components/loaders/PageLoader';
 import { Typography } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';

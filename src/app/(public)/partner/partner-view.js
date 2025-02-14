@@ -3,7 +3,7 @@
 import React, { useRef } from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
-import PageLoader from '@/components/PageLoader/PageLoader';
+import PageLoader from '@/components/loaders/PageLoader';
 import { Box } from '@mui/material';
 
 import { PartnerGridView } from './_components/partner-gridview';

@@ -2,7 +2,7 @@
 
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
-import PageLoader from '@/components/PageLoader/PageLoader';
+import PageLoader from '@/components/loaders/PageLoader';
 import { sliderToGridColsCoverter } from '@/utils/helper';
 import { Box, CircularProgress } from '@mui/material';
 import React, { useRef } from 'react';

@@ -3,7 +3,7 @@
 import React from 'react';
 import { CustomChip } from '@/components/core/custom-chip';
 import { Iconify } from '@/components/iconify/iconify';
-import { PageLoader } from '@/components/PageLoader/PageLoader';
+import { PageLoader } from '@/components/loaders/PageLoader';
 import { IconText } from '@/components/utils/icon-text';
 import { capitalizeFirstLetter, isSupabaseUrl } from '@/utils/helper';
 import { Box, Stack, Typography } from '@mui/material';

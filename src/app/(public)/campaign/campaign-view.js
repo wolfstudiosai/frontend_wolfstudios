@@ -3,7 +3,7 @@
 import React from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
-import { PageLoader } from '@/components/PageLoader/PageLoader';
+import { PageLoader } from '@/components/loaders/PageLoader';
 
 import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignTabView } from './_components/campaign-tab-view';
@@ -81,6 +81,7 @@ export const CampaignView = () => {
           onFilterChange={handleFilterChange}
           showFilters={false}
           showColSlider={false}
+          totalRecords={totalRecords}
         />
         {filters.VIEW === 'grid' ? (
           <CampaignGridView data={data} fetchList={refreshListView} />

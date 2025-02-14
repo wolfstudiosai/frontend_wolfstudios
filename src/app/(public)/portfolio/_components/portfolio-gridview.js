@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { DrawerContainer } from '@/components/drawer/drawer';
-import { PageLoader } from '@/components/PageLoader/PageLoader';
+import { PageLoader } from '@/components/loaders/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { getFancyColor, getRandomColor, isVideoContent } from '@/utils/helper';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';

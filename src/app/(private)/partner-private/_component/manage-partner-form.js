@@ -14,7 +14,7 @@ import { CustomTextField } from '@/components/formFields/custom-textfield';
 import { ErrorMessage } from '@/components/formFields/error-message';
 import { Iconify } from '@/components/iconify/iconify';
 import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
-import PageLoader from '@/components/PageLoader/PageLoader';
+import PageLoader from '@/components/loaders/PageLoader';
 import { ImageUploader } from '@/components/uploaders/image-uploader';
 import { paths } from '/src/paths';
 

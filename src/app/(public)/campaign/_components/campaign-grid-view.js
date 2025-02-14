@@ -1,7 +1,7 @@
 'use client';
 
 import { Iconify } from '@/components/iconify/iconify';
-import { PageLoader } from '@/components/PageLoader/PageLoader';
+import { PageLoader } from '@/components/loaders/PageLoader';
 import { getRandomGradientColor, pxToRem } from '@/utils/helper';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -83,8 +83,8 @@ export const CampaignGridView = ({ data, fetchList }) => {
                 {campaignGroup.campaigns && campaignGroup.campaigns.length > 5 && (
                   <Stack direction="row" justifyContent="center" sx={{ my: 1 }}>
                     <Button
-                      variant="outlined"
-                      color="primary"
+                      variant="text"
+                      color="inherit"
                       onClick={() => toggleGroupView(campaignGroup.name)}
                       endIcon={
                         <Iconify
