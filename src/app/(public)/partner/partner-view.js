@@ -100,6 +100,7 @@ export const PartnerView = () => {
           totalRecords={totalRecords}
           onFilterChange={handleFilterChange}
           showFilters={false}
+          showColSlider={false}
         />
 
         {filters.VIEW === 'list' ? (

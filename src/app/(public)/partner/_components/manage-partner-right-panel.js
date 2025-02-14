@@ -79,7 +79,7 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
   };
 
   const handleDeleteThumbnail = () => {
-    setFieldValue('thumbnail', '');
+    setFieldValue('profile_image', '');
     setFile(null);
   };
 
@@ -142,7 +142,7 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
           onSubmit={handleSubmit}
           onChange={handleChange}
           onSetFile={setFile}
-          onDeleteThumbnail={handleDeleteThumbnail}
+          onDelete={handleDeleteThumbnail}
           setFieldValue={setFieldValue}
         />
       )}
