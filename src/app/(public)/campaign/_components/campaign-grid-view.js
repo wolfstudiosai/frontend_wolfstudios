@@ -38,7 +38,6 @@ export const CampaignGridView = ({ data, fetchList, loading }) => {
               <Grid size={{ xs: 12, md: 4 }}>
                 <Box
                   sx={{
-                    // background: getRandomGradientColor(index),
                     backgroundColor: getRandomGradientColor(index),
                     borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
                     padding: 4,
@@ -60,15 +59,7 @@ export const CampaignGridView = ({ data, fetchList, loading }) => {
                   >
                     {campaignGroup.name}
                   </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontSize: '1.1rem',
-                      color: 'text.primary',
-                    }}
-                  >
-                    {campaignGroup.description || '--'}
-                  </Typography>
+                  <ShowMoreTextBox text={campaignGroup.description} length={200} />
                 </Box>
               </Grid>
 
@@ -100,5 +91,57 @@ export const CampaignGridView = ({ data, fetchList, loading }) => {
         })}
       </>
     </PageLoader>
+  );
+};
+
+const ShowMoreTextBox = ({ text, length }) => {
+  const [expanded, setExpanded] = React.useState(false);
+  return (
+    <Typography
+      variant="body1"
+      sx={{
+        fontSize: '1.1rem',
+        color: 'text.primary',
+        display: 'inline',
+      }}
+    >
+      {text.length > length && !expanded ? (
+        <>
+          {text.slice(0, length)}...
+          <Box
+            component="span"
+            onClick={() => setExpanded(true)}
+            sx={{
+              color: 'text.primary',
+              cursor: 'pointer',
+              // fontWeight: 'bold',
+              marginLeft: 0.5,
+              textDecoration: 'underline',
+            }}
+          >
+            read more
+          </Box>
+        </>
+      ) : (
+        <>
+          {text}
+          {text.length > length && (
+            <Box
+              component="span"
+              onClick={() => setExpanded(false)}
+              sx={{
+                color: 'text.primary',
+                cursor: 'pointer',
+                // fontWeight: 'bold',
+                marginLeft: 0.5,
+                textDecoration: 'underline',
+              }}
+            >
+              show less
+            </Box>
+          )}
+        </>
+      )}
+    </Typography>
   );
 };

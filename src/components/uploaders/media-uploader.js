@@ -19,8 +19,16 @@ import {
 
 import { Iconify } from '../iconify/iconify';
 
-export const MediaUploader = ({ open, onClose, onSave, multiple = true }) => {
-  const [tab, setTab] = React.useState(0);
+export const MediaUploader = ({
+  open,
+  onClose,
+  onSave,
+  multiple = true,
+  hideImageUploader = false,
+  hideVideoUploader = false,
+}) => {
+
+  const [tab, setTab] = React.useState(hideImageUploader ? 1 : 0);
   const [urls, setUrls] = React.useState([]);
   const [files, setFiles] = React.useState([]);
   const [uploading, setUploading] = React.useState(false);
@@ -123,14 +131,14 @@ export const MediaUploader = ({ open, onClose, onSave, multiple = true }) => {
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-      <DialogTitle>Add image/video</DialogTitle>
+      <DialogTitle>Media Uploader</DialogTitle>
       <DialogContent>
         <Tabs value={tab} onChange={handleTabChange} centered>
-          <Tab label="Image" />
-          <Tab label="Video" />
+          {!hideImageUploader && <Tab label="Add Image" />}
+          {!hideVideoUploader && <Tab label="Add Video" />}
         </Tabs>
         <Box mt={2}>
-          {tab === 0 && (
+          {tab === 0 && !hideImageUploader && (
             <>
               <Stack direction="row" gap={2}>
                 <Button
