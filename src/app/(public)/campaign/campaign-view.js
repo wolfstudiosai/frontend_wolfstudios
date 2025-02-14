@@ -27,8 +27,7 @@ export const CampaignView = () => {
   });
 
   async function fetchList() {
-    if (isFetching) return;
-    setIsFetching(true);
+    setLoading(true);
 
     try {
       const response = await getCampaignGroupListAsync({
@@ -44,7 +43,6 @@ export const CampaignView = () => {
     } catch (error) {
       console.error('Error fetching campaigns:', error);
     } finally {
-      setIsFetching(false);
       setLoading(false);
     }
   }
@@ -71,32 +69,30 @@ export const CampaignView = () => {
 
   return (
     <PageContainer>
-      <PageLoader loading={loading}>
-        <PageHeader
-          title="Campaign"
-          values={filters}
-          tags={campaignTags}
-          filters={campaignFilters}
-          sorting={campaignSorting}
-          onFilterChange={handleFilterChange}
-          showFilters={false}
-          showColSlider={false}
-          totalRecords={totalRecords}
-        />
-        {filters.VIEW === 'grid' ? (
-          <CampaignGridView data={data} fetchList={refreshListView} />
-        ) : (
-          <CampaignTabView data={data} />
-        )}
-        <ManageCampaignRightPanel
-          view="EDIT"
-          width="70%"
-          data={defaultCampaign}
-          fetchList={refreshListView}
-          open={filters.VIEW === 'add'}
-          onClose={() => setFilters((prev) => ({ ...prev, VIEW: 'grid' }))}
-        />
-      </PageLoader>
+      <PageHeader
+        title="Campaign"
+        values={filters}
+        tags={campaignTags}
+        filters={campaignFilters}
+        sorting={campaignSorting}
+        onFilterChange={handleFilterChange}
+        showFilters={false}
+        showColSlider={false}
+        totalRecords={totalRecords}
+      />
+      {filters.VIEW === 'grid' ? (
+        <CampaignGridView loading={loading} data={data} fetchList={refreshListView} />
+      ) : (
+        <CampaignTabView data={data} />
+      )}
+      <ManageCampaignRightPanel
+        view="EDIT"
+        width="70%"
+        data={defaultCampaign}
+        fetchList={refreshListView}
+        open={filters.VIEW === 'add'}
+        onClose={() => setFilters((prev) => ({ ...prev, VIEW: 'grid' }))}
+      />
     </PageContainer>
   );
 };

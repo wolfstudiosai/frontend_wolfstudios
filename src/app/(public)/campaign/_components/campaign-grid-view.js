@@ -1,23 +1,21 @@
 'use client';
 
+import React from 'react';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/loaders/PageLoader';
 import { getRandomGradientColor, pxToRem } from '@/utils/helper';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import React from 'react';
 
 import { SettingsContext } from '@/contexts/settings';
 
 import { CampaignCard } from './campaign-card';
 
-export const CampaignGridView = ({ data, fetchList }) => {
+export const CampaignGridView = ({ data, fetchList, loading }) => {
   const INITIAL_VISIBLE_COUNT = 5;
   const {
     customSettings: { openSubNav },
   } = React.useContext(SettingsContext);
-
-  const [loading, setLoading] = React.useState(false);
   const [expandedGroups, setExpandedGroups] = React.useState([]);
 
   const toggleGroupView = (groupName) => {

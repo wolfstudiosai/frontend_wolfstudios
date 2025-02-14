@@ -16,8 +16,6 @@ export const CampaignTabView = () => {
   const [pagination] = React.useState({ pageNo: 1, limit: 40 });
   const [totalRecords, setTotalRecords] = React.useState(0);
 
-  console.log(loading, 'loading....');
-
   async function fetchList() {
     try {
       setLoading(true);
@@ -49,13 +47,15 @@ export const CampaignTabView = () => {
   return (
     <>
       <TabContainer
-        tabs={campaignProgressStatus.map((tab) => tab.label)}
+        tabs={campaignProgressStatus.map(
+          (tab) => `${tab.label} (${data.filter((item) => item.campaign_progress === tab.value).length})`
+        )}
         value={campaignProgressStatus.findIndex((tab) => tab.value === selectedTab)}
         onTabChange={(e, value) => setSelectedTab(campaignProgressStatus[value].value)}
       />
 
-      <SectionLoader loading={loading} height={'300px'}>
-        <Grid container>
+      <SectionLoader loading={loading} height={'300px'} >
+        <Grid container spacing={1}>
           {filteredData.map((item) => (
             <Grid key={item.id} size={{ xs: 6, md: 2 }}>
               <CampaignTabCard campaign={item} fetchList={fetchList} />
