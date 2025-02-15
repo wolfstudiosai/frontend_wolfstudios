@@ -188,6 +188,13 @@ export const privateRoutes = [
     icon: 'fa6-solid:dollar-sign',
     items: [
       {
+        key: 'all_content',
+        title: 'All Content',
+        href: paths.private.all_content,
+        icon: 'fluent:approvals-app-20-regular',
+        allowedRoles: ['admin', 'user'],
+      },
+      {
         key: 'content_discovery',
         title: 'Discovery',
         href: paths.dashboardPublic.partner,

@@ -145,6 +145,7 @@ export const paths = {
     venue: '/venue',
 
     // content HQ
+    all_content: '/all-content',
     content_needs_approval: '/content-needs-approval',
     by_platform: '/by-platform',
     content_analytics: '/content-analytics',

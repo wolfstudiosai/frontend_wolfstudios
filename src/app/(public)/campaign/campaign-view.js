@@ -1,9 +1,8 @@
 'use client';
 
-import React from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
-import { PageLoader } from '@/components/loaders/PageLoader';
+import React from 'react';
 
 import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignTabView } from './_components/campaign-tab-view';
@@ -24,6 +23,7 @@ export const CampaignView = () => {
     FILTER: [],
     SORTING: [],
     VIEW: 'grid',
+    ADD: false
   });
 
   async function fetchList() {
@@ -90,8 +90,8 @@ export const CampaignView = () => {
         width="70%"
         data={defaultCampaign}
         fetchList={refreshListView}
-        open={filters.VIEW === 'add'}
-        onClose={() => setFilters((prev) => ({ ...prev, VIEW: 'grid' }))}
+        open={filters.ADD}
+        onClose={() => setFilters((prev) => ({ ...prev, ADD: false }))}
       />
     </PageContainer>
   );

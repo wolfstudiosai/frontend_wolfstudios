@@ -27,6 +27,7 @@ export const PortfolioView = () => {
     FILTER: [],
     SORTING: [],
     VIEW: 'grid',
+    ADD: false
   });
 
   async function fetchList() {
@@ -126,8 +127,8 @@ export const PortfolioView = () => {
           width="70%"
           data={null}
           fetchList={refreshListView}
-          open={filters.VIEW === 'add'}
-          onClose={() => setFilters((prev) => ({ ...prev, VIEW: 'grid' }))}
+          open={filters.ADD}
+          onClose={() => setFilters((prev) => ({ ...prev, ADD: false }))}
         />
       </PageLoader>
     </PageContainer>

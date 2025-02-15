@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
 import { pxToRem } from '@/utils/helper';
 import { Box, Chip, IconButton, Slider, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import React from 'react';
 
 import { SettingsContext } from '@/contexts/settings';
 import useAuth from '@/hooks/useAuth';
@@ -17,7 +17,7 @@ export const PageHeader = ({
   sorting = [],
   onFilterChange,
   totalRecords = 0,
-  showFilters = true, 
+  showFilters = true,
   showColSlider = true
 }) => {
   const {
@@ -25,13 +25,18 @@ export const PageHeader = ({
   } = React.useContext(SettingsContext);
   const [currentSection, setCurrentSection] = React.useState('TAG');
   const { isLogin } = useAuth();
+
   const handleFilter = (type, value) => {
     onFilterChange?.(type, value);
   };
 
   const handleToggle = (event, value) => {
     if (value !== null) {
-      handleFilter('VIEW', value);
+      if (value === 'add') {
+        handleFilter('ADD', !values.ADD);
+      } else {
+        handleFilter('VIEW', value);
+      }
     }
   };
 
@@ -52,7 +57,7 @@ export const PageHeader = ({
           borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
         }}
       >
-        <Stack direction={'row'} alignItems={'center'} >  
+        <Stack direction={'row'} alignItems={'center'} >
           <Typography
             variant="h6"
             fontWeight={600}
@@ -70,7 +75,7 @@ export const PageHeader = ({
           <IconButton size="small" variant="contained" color="error" sx={{ mr: .5 }}>
             <Iconify icon="material-symbols-light:bookmark-outline" width={22} height={22} />
           </IconButton>
-          {showColSlider &&  <Stack justifyContent={'center'} alignItems={'center'} sx={{ width: pxToRem(100) }}>
+          {showColSlider && <Stack justifyContent={'center'} alignItems={'center'} sx={{ width: pxToRem(100) }}>
             <Slider
               size="small"
               aria-label="show-columns"
@@ -104,7 +109,7 @@ export const PageHeader = ({
               <ToggleButton value="list" aria-label="list view" sx={{ padding: '2px' }}>
                 <Iconify icon="solar:list-bold" width={20} height={20} />
               </ToggleButton>
-              <ToggleButton value="add" aria-label="add new" sx={{ padding: '2px' }}>
+              <ToggleButton value="add" aria-label="add new" sx={{ padding: '2px', backgroundColor: values.ADD ? 'grey.200' : '' }}>
                 <Iconify icon="mynaui:plus" width={20} height={20} />
               </ToggleButton>
             </ToggleButtonGroup>
