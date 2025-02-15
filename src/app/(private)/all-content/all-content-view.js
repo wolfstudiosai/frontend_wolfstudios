@@ -71,8 +71,9 @@ export const AllContentView = () => {
                 values={filters}
                 onFilterChange={handleFilterChange}
                 showFilters={false}
-                showColSlider={true}
+                showColSlider={false}
                 totalRecords={totalRecords}
+                
             />
             {filters.VIEW === 'grid' ? (
                 <AllContentCardView data={data} loading={loading} columns={sliderToGridColsCoverter(filters.COL)} />

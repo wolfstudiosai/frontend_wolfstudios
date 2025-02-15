@@ -60,7 +60,6 @@ const PortfolioCard = ({ item, fetchList }) => {
         sx={{
           width: '100%',
           aspectRatio: '9 / 12',
-          borderRadius: 2,
           border: 'unset',
           overflow: 'hidden',
           position: 'relative',
