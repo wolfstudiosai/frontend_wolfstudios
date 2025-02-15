@@ -4,8 +4,8 @@ import { isSupabaseUrl } from '@/utils/helper';
 import { Box, Chip, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
-import { campaignProgressStatus } from '../_lib/campaign.constants';
 import { updateCampaignAsync } from '../_lib/campaign.actions';
+import { campaignProgressStatus } from '../_lib/campaign.constants';
 import { ManageCampaignRightPanel } from './manage-campaign-right-panel';
 
 export const CampaignTabCard = ({ campaign, fetchList }) => {
@@ -54,12 +54,12 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
               : campaign.campaign_image
           }
           sx={{
-            height: '100%',
+            height: '200px',
             width: '100%',
-            // width: pxToRem(200),
             objectFit: 'contain',
             borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
             border: '1px solid var(--mui-palette-divider)',
+            cursor: 'pointer',
           }}
           onClick={() => setOpenCampaignRightPanel(campaign)}
         />

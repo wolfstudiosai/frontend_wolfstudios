@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid2';
 
 import { defaultPartner } from '../_lib/partner.types';
 
-export const PartnerForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteProfileImage, setFieldValue }) => {
+export const PartnerForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelete, setFieldValue }) => {
   const [values, setValues] = React.useState(data || defaultPartner);
 
   // *********************States*********************************
@@ -184,11 +184,11 @@ export const PartnerForm = ({ data, onSubmit, onChange, errors, onSetFile, onDel
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <FormControl fullWidth error={Boolean(errors.thumbnail)}>
-              <FormLabel sx={{ mb: 2.8 }}>Profile Image</FormLabel>
+              <FormLabel sx={{ mb: 1 }}>Profile Image</FormLabel>
               <ImageUploader
                 value={values.profile_image}
                 onFileSelect={(file) => onSetFile(file)}
-                onDelete={onDeleteProfileImage}
+                onDelete={onDelete}
               />
             </FormControl>
           </Grid>

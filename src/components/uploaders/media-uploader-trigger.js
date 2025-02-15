@@ -6,7 +6,17 @@ import { Box, FormLabel, IconButton, Stack } from '@mui/material';
 import { Iconify } from '../iconify/iconify';
 import { MediaUploader } from './media-uploader';
 
-export const MediaUploaderTrigger = ({ open, onClose, onSave, value, label, onAdd, onDelete }) => {
+export const MediaUploaderTrigger = ({
+  open,
+  onClose,
+  onSave,
+  value,
+  label,
+  onAdd,
+  onDelete,
+  hideImageUploader,
+  hideVideoUploader,
+}) => {
   const handleRemoveFile = async (item) => {
     if (isSupabaseUrl(item)) {
       await deleteFileAsync([item]);
@@ -127,7 +137,14 @@ export const MediaUploaderTrigger = ({ open, onClose, onSave, value, label, onAd
         </Stack>
       )}
 
-      <MediaUploader open={open} onClose={onClose} onSave={(paths) => onSave([...value, ...paths])} multiple />
+      <MediaUploader
+        open={open}
+        onClose={onClose}
+        onSave={(paths) => onSave([...value, ...paths])}
+        multiple
+        hideImageUploader={hideImageUploader}
+        hideVideoUploader={hideVideoUploader}
+      />
     </React.Fragment>
   );
 };

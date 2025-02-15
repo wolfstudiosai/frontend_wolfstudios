@@ -231,6 +231,7 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
               label="Image Gallery"
               onAdd={() => setOpenImageGalleryDialog(true)}
               onDelete={(filteredUrls) => setFieldValue('image_gallery', filteredUrls)}
+              hideVideoUploader={true}
             />
           </Grid>
 
@@ -243,6 +244,7 @@ export const CampaignForm = ({ data, onSubmit, onChange, errors, onSetFile, onDe
               label="Video Gallery"
               onAdd={() => setOpenVideoGalleryDialog(true)}
               onDelete={(filteredUrls) => setFieldValue('video_gallery', filteredUrls)}
+              hideImageUploader={true}
             />
           </Grid>
         </Grid>

@@ -2,39 +2,13 @@
 
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { isVideoContent, pxToRem } from '@/utils/helper';
-import { Box, Button, Divider, Stack, Typography, useTheme } from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import Link from 'next/link';
+import { Box, Button, Chip, Divider, Stack, Typography, useTheme } from '@mui/material';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
-const mediaArr = [
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670d11d77dff7fcc24e16f1c_2_DSC03975.jpeg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/6712275879e29b61d2c2dc79_DSC05709%20(1).jpg',
-  'https://player.vimeo.com/progressive_redirect/playback/1008919226/rendition/1080p/file.mp4?loc=external&signature=bf4233dc5593395173302057f4757f83ccb3c307dd4c49f373ecf1e8f5d31ffb',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/67023b95692662e57485fae7_1ACCCEF7-605C-4365-B7D4-5084FDC835C6_1_105_c.jpeg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/6715276ce15620dc4dd4440f_12957620_1589024814746137_4884333050968345441_o.jpg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57cef550fb1eff420953_6704c33770670bf02efed363_DSC02976.jpeg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/6700cebb14edd020aabfc239_66e46ffa64b6346acab2aff8_MjlmMg.jpeg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/6714acdd01014c6861e52708_DSC09507.jpg',
-  'https://player.vimeo.com/progressive_redirect/playback/1008947433/rendition/1080p/file.mp4?loc=external&signature=395c363decf2b9c5efa59010005a9ccc97b2524fab8fcba75bd44be7e72e16f7',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66f8d1a7375ebfdf94f49c3c_H4GHJcXPb_zOb6Lw8Kx-4jALSl7doDJy2V30K63_o2g.jpeg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/67170dd5c7259b4b76267d1f_DSC00747.jpg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671a2d4f4cbbc6d3e7c13aa5_DSC02474s.jpg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671a0ffb65f22701e5420fe0_DSC05443.jpg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66f8e5f0d68063b6f16d6d55_z8pS_CpmIatuha7Fa9oHmwtlWlJy5F3v9blibpSrOkQ-p-800.jpeg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57d47703bf6e5069bcb3_6704c1ab0db136d6b6183dab_DSC09888.jpeg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671c9306a2d018d04d75a44c_00000.jpg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671f73189e8433871403c301_6700ce647b1bae09a801a438_101F0090-2A4F-4A34-8EA5-5A160A35AC3A_1_105_c.jpeg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671a2467ecc2b689879d3288_DSC01190-p-800.jpg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/672a68398a0546bb263ef24a_IMG_2156-p-800.jpg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66fcecf5793a3e5d867d6d4b_F18F2EBD-DD3E-4D35-B35F-B16E1E6AEF5D_1_105_c.jpeg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671a166f1260d41c15c305c7_670f57d45ad541aa5f58e9a3_67040092fc0406aea44cf646_DSC08662-p-800.jpeg',
-  'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670be14aa60fa816cf457054_19055002_1812151462433470_492009593312992502_o-p-500.jpeg',
-];
-
 export const CampaignQuickView = ({ data }) => {
   const theme = useTheme();
+  const mediaArr = [...(data?.image_gallery || []), ...(data?.video_gallery || [])];
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -64,8 +38,9 @@ export const CampaignQuickView = ({ data }) => {
                 sx={{
                   height: pxToRem(500),
                   width: '100%',
-                  objectFit: 'cover',
+                  objectFit: 'contain',
                   borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                  border: '1px solid var(--mui-palette-divider)',
                 }}
               />
             ) : (
@@ -75,8 +50,9 @@ export const CampaignQuickView = ({ data }) => {
                 sx={{
                   height: pxToRem(500),
                   width: '100%',
-                  objectFit: 'cover',
+                  objectFit: 'contain',
                   borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                  border: '1px solid var(--mui-palette-divider)',
                 }}
               />
             )}
@@ -93,7 +69,7 @@ export const CampaignQuickView = ({ data }) => {
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Box>
             <Typography variant="h5" fontWeight={600} gutterBottom>
-              {data.title || 'Untitled'}
+              {data.name || 'Untitled'}
             </Typography>
             <Typography variant="subtitle2" color="text.secondary" gutterBottom>
               {data.description || 'No description available.'}
@@ -103,88 +79,68 @@ export const CampaignQuickView = ({ data }) => {
         </Stack>
         <Divider sx={{ my: 2 }} />
       </Box>
-      <Stack direction="row" spacing={2} mb={2} flexWrap="wrap">
-        <Typography variant="subtitle1" color="text.secondary">
-          Category: {data.category || 'N/A'}
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          Date: {data.date || 'N/A'}
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          Location: {data.location || 'N/A'}
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          Client: {data.client || 'N/A'}
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          Photographer: {data.dp || 'N/A'}
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          Model: {data.model || 'N/A'}
-        </Typography>
+      <Stack direction="column" spacing={2} mb={2} flexWrap="wrap">
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            Current Status
+          </Typography>
+          <Chip label={data.campaign_progress} size="small" sx={{ fontSize: '10px' }} />
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            Stakeholder
+          </Typography>
+          <Typography sx={{ fontSize: '14px' }} color="text.secodary">
+            {data.stakeholder || '-'}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            Campaign Status
+          </Typography>
+          <Chip label={data.campaign_status} size="small" sx={{ fontSize: '10px' }} />
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            Start Date
+          </Typography>
+          <Typography sx={{ fontSize: '14px' }} color="text.secodary">
+            {data.start_date ? dayjs(data.start_date).format('DD MMM YYYY') : '-'}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            End Date
+          </Typography>
+          <Typography sx={{ fontSize: '14px' }} color="text.secodary">
+            {data.start_date ? dayjs(data.end_data).format('DD MMM YYYY') : '-'}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            Budget
+          </Typography>
+          <Typography sx={{ fontSize: '14px' }} color="text.secodary">
+            {data.budget || '-'}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            Total Expense
+          </Typography>
+          <Typography sx={{ fontSize: '14px' }} color="text.secodary">
+            {data.total_expense || '-'}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            Campaign ROI
+          </Typography>
+          <Typography sx={{ fontSize: '14px' }} color="text.secodary">
+            {data.campaign_ROI || '-'}
+          </Typography>
+        </Box>
       </Stack>
-
-      <Divider sx={{ my: 2 }} />
-      <Typography variant="body1" color="text.secondary">
-        {data.full_description || 'No additional details available.'}
-      </Typography>
-
-      <Divider sx={{ my: 2 }} />
-      <Typography variant="h6" color="text.secondary">
-        Team
-      </Typography>
-      <Typography variant="subtitle2" color="text.secondary" component={Link} href={data.team?.stylist || ""}>
-        Stylist: {data.team?.stylist || 'N/A'}
-      </Typography>
-      <Typography variant="subtitle2" color="text.secondary">
-        Makeup Artist: {data.team?.makeupArtist || 'N/A'}
-      </Typography>
-      <Typography variant="subtitle2" color="text.secondary">
-        Creative Director: {data.team?.creativeDirector || 'N/A'}
-      </Typography>
-
-      <Divider sx={{ my: 2 }} />
-      <Typography variant="h6" color="text.secondary">
-        Social Engagement
-      </Typography>
-      <Typography variant="subtitle2" color="text.secondary">
-        Views: {data.engagementStats?.views || 0}
-      </Typography>
-      <Typography variant="subtitle2" color="text.secondary">
-        Likes: {data.engagementStats?.likes || 0}
-      </Typography>
-      <Typography variant="subtitle2" color="text.secondary">
-        Shares: {data.engagementStats?.shares || 0}
-      </Typography>
-
-      <Divider sx={{ my: 2 }} />
-      <Typography variant="h6" color="text.secondary">
-        Testimonial
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {data.testimonial || 'No testimonial available.'}
-      </Typography>
-      <Divider sx={{ my: 2 }} />
-      <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>
-        {data?.gallery?.map((item, index) => (
-          <Grid item size={{ xs: 2 }} key={index}>
-            {isVideoContent(item) ? (
-              <Box
-                component="video"
-                src={item}
-                controls
-                autoPlay
-                loop
-                muted
-                playsInline
-                sx={{ height: pxToRem(300), width: '100%', objectFit: 'cover' }}
-              />
-            ) : (
-              <Box component="img" src={item} sx={{ height: pxToRem(300), width: '100%', objectFit: 'cover' }} />
-            )}
-          </Grid>
-        ))}
-      </Grid>
     </Box>
   );
 };

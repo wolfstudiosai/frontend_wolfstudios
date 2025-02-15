@@ -3,10 +3,10 @@
 import React from 'react';
 import { CustomChip } from '@/components/core/custom-chip';
 import { Iconify } from '@/components/iconify/iconify';
-import { PageLoader } from '@/components/PageLoader/PageLoader';
+import { PageLoader } from '@/components/loaders/PageLoader';
 import { IconText } from '@/components/utils/icon-text';
 import { capitalizeFirstLetter, isSupabaseUrl } from '@/utils/helper';
-import { Box, Chip, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { ManagePartnerRightPanel } from './manage-partner-right-panel';
@@ -35,8 +35,7 @@ const PartnerCard = ({ item, fetchList }) => {
       <Stack
         direction="row"
         gap={1}
-        sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, cursor: 'pointer', overflow: 'hidden' }}
-        onClick={() => setOpenPartnerRightPanel(item)}
+        sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, overflow: 'hidden' }}
       >
         <Box
           component="img"
@@ -46,7 +45,8 @@ const PartnerCard = ({ item, fetchList }) => {
               : item?.profile_image
           }
           alt={item?.name}
-          sx={{ width: '30%', minHeight: '200px', objectFit: 'cover' }}
+          sx={{ width: '30%', minHeight: '200px', objectFit: 'cover', cursor: 'pointer' }}
+          onClick={() => setOpenPartnerRightPanel(item)}
         />
         <Stack direction="column" sx={{ p: 2 }}>
           <Box>
@@ -66,8 +66,8 @@ const PartnerCard = ({ item, fetchList }) => {
             </Stack>
           </Box>
           <Stack direction="column" gap={0.5} sx={{ mt: 2 }}>
-            <IconText icon="proicons:call" text={item?.phone} sx={{ color: 'text.secondary' }} />
-            <IconText icon="clarity:email-line" text={item?.email} sx={{ color: 'text.secondary' }} />
+            <CopyIconText text={item?.phone} icon="proicons:call" sx={{ color: 'text.secondary' }} />
+            <CopyIconText text={item?.email} icon="clarity:email-line" sx={{ color: 'text.secondary' }} />
             <IconText icon="mynaui:globe" text={item?.website} sx={{ color: 'text.secondary' }} />
             <IconText icon="fluent:status-48-regular" text={item?.current_status} sx={{ color: 'text.secondary' }} />
           </Stack>
@@ -82,5 +82,27 @@ const PartnerCard = ({ item, fetchList }) => {
         onClose={() => setOpenPartnerRightPanel(false)}
       />
     </>
+  );
+};
+
+const CopyIconText = ({ icon, text, sx = {} }) => {
+  const [copied, setCopied] = React.useState(false);
+  const handleCopy = () => {
+    if (text) {
+      navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(), 1500);
+    }
+  };
+  return (
+    <Stack direction="row" alignItems="center" gap={1} sx={{ cursor: 'pointer', ...sx }}>
+      <Iconify icon={icon} />
+      <Typography variant="body2">{text}</Typography>
+      <Iconify
+        icon={copied ? 'mdi:check' : 'mdi:content-copy'}
+        sx={{ cursor: 'pointer', color: copied ? 'success.main' : 'text.secondary', width: 15, height: 15 }}
+        onClick={handleCopy}
+      />
+    </Stack>
   );
 };

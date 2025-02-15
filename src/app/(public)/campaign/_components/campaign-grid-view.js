@@ -1,23 +1,21 @@
 'use client';
 
+import React from 'react';
 import { Iconify } from '@/components/iconify/iconify';
-import { PageLoader } from '@/components/PageLoader/PageLoader';
+import { PageLoader } from '@/components/loaders/PageLoader';
 import { getRandomGradientColor, pxToRem } from '@/utils/helper';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import React from 'react';
 
 import { SettingsContext } from '@/contexts/settings';
 
 import { CampaignCard } from './campaign-card';
 
-export const CampaignGridView = ({ data, fetchList }) => {
+export const CampaignGridView = ({ data, fetchList, loading }) => {
   const INITIAL_VISIBLE_COUNT = 5;
   const {
     customSettings: { openSubNav },
   } = React.useContext(SettingsContext);
-
-  const [loading, setLoading] = React.useState(false);
   const [expandedGroups, setExpandedGroups] = React.useState([]);
 
   const toggleGroupView = (groupName) => {
@@ -40,7 +38,6 @@ export const CampaignGridView = ({ data, fetchList }) => {
               <Grid size={{ xs: 12, md: 4 }}>
                 <Box
                   sx={{
-                    // background: getRandomGradientColor(index),
                     backgroundColor: getRandomGradientColor(index),
                     borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
                     padding: 4,
@@ -62,15 +59,7 @@ export const CampaignGridView = ({ data, fetchList }) => {
                   >
                     {campaignGroup.name}
                   </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontSize: '1.1rem',
-                      color: 'text.primary',
-                    }}
-                  >
-                    {campaignGroup.description || '--'}
-                  </Typography>
+                  <ShowMoreTextBox text={campaignGroup.description} length={200} />
                 </Box>
               </Grid>
 
@@ -83,8 +72,8 @@ export const CampaignGridView = ({ data, fetchList }) => {
                 {campaignGroup.campaigns && campaignGroup.campaigns.length > 5 && (
                   <Stack direction="row" justifyContent="center" sx={{ my: 1 }}>
                     <Button
-                      variant="outlined"
-                      color="primary"
+                      variant="text"
+                      color="inherit"
                       onClick={() => toggleGroupView(campaignGroup.name)}
                       endIcon={
                         <Iconify
@@ -102,5 +91,57 @@ export const CampaignGridView = ({ data, fetchList }) => {
         })}
       </>
     </PageLoader>
+  );
+};
+
+const ShowMoreTextBox = ({ text, length }) => {
+  const [expanded, setExpanded] = React.useState(false);
+  return (
+    <Typography
+      variant="body1"
+      sx={{
+        fontSize: '1.1rem',
+        color: 'text.primary',
+        display: 'inline',
+      }}
+    >
+      {text.length > length && !expanded ? (
+        <>
+          {text.slice(0, length)}...
+          <Box
+            component="span"
+            onClick={() => setExpanded(true)}
+            sx={{
+              color: 'text.primary',
+              cursor: 'pointer',
+              // fontWeight: 'bold',
+              marginLeft: 0.5,
+              textDecoration: 'underline',
+            }}
+          >
+            read more
+          </Box>
+        </>
+      ) : (
+        <>
+          {text}
+          {text.length > length && (
+            <Box
+              component="span"
+              onClick={() => setExpanded(false)}
+              sx={{
+                color: 'text.primary',
+                cursor: 'pointer',
+                // fontWeight: 'bold',
+                marginLeft: 0.5,
+                textDecoration: 'underline',
+              }}
+            >
+              show less
+            </Box>
+          )}
+        </>
+      )}
+    </Typography>
   );
 };

@@ -10,7 +10,7 @@ import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopov
 import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
 import { DataTable } from '@/components/data-table/data-table';
 import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
-import PageLoader from '@/components/PageLoader/PageLoader';
+import PageLoader from '@/components/loaders/PageLoader';
 import { getSpeficiLengthString } from '@/utils/helper';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';

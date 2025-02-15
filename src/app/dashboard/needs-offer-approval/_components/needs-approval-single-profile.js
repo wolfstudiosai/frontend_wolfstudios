@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 
 import { ReadonlyStatus, ReadonlyStatusChip } from '@/components/formFields/readonly-status';
 import { WrapedText } from '@/components/formFields/wraped-text';
-import PageLoader from '@/components/PageLoader/PageLoader';
+import PageLoader from '@/components/loaders/PageLoader';
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import Image from 'next/image';

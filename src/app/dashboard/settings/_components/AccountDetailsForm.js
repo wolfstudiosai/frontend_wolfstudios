@@ -19,7 +19,7 @@ import { User as UserIcon } from '@phosphor-icons/react/dist/ssr/User';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import PageLoader from '@/components/PageLoader/PageLoader';
+import PageLoader from '@/components/loaders/PageLoader';
 import ProfileUploader from '@/components/uploaders/profile-uploader';
 
 import { getProfileData, updateProfileData } from '../_lib/actions';

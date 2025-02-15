@@ -1,4 +1,5 @@
 import React from 'react';
+import { CustomChip } from '@/components/core/custom-chip';
 import { Iconify } from '@/components/iconify/iconify';
 import { isSupabaseUrl } from '@/utils/helper';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
@@ -12,12 +13,12 @@ export const CampaignCard = ({ item, fetchList }) => {
   return (
     <>
       <Stack
-        direction="row"
+        direction={{ sm: 'column', md: 'row' }}
         sx={{
-          height: '260px',
+          height: '265px',
           borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-          border: '1px solid var(--mui-palette-divider)',
-          boxShadow: '1px 1px 5px rgba(0, 0, 0, 0.05)',
+          boxShadow: '1px 1px 5px rgba(0, 0, 0, 0.09)',
+          overflow: 'visible',
         }}
       >
         <Box
@@ -29,13 +30,14 @@ export const CampaignCard = ({ item, fetchList }) => {
           }
           alt={item.title}
           sx={{
-            width: '30rem',
+            width: { sm: '100%', md: '30rem' },
             height: '100%',
             objectFit: 'cover',
-            borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+            borderRadius: 'calc(2* var(--mui-shape-borderRadius))',
+            padding: 1.5,
           }}
         />
-        <Stack direction="column" justifyContent="space-between" gap={1} sx={{ p: 2, width: '74%' }}>
+        <Stack direction="column" justifyContent="space-between" gap={1} sx={{ p: 2, width: '100%' }}>
           <Box>
             <Typography
               variant="caption"
@@ -44,28 +46,26 @@ export const CampaignCard = ({ item, fetchList }) => {
             >
               {item.name}
             </Typography>
-            <Typography sx={{ fontSize: '1rem', color: 'text.secondary' }}>{item.description}</Typography>
             <Typography sx={{ fontSize: '1rem', color: 'text.secondary' }}>
               Content engagement: {item.content_engagement}
             </Typography>
+            <Typography sx={{ fontSize: '1rem', color: 'text.secondary', mt: 2}}>
+              {item.description ?? 'No description'}
+            </Typography>
           </Box>
-          <Stack direction="row" justifyContent="space-between">
+          <Stack direction={{ md: 'row', sm: 'column' }} justifyContent="space-between" gap={1}>
             <Stack
               direction="row"
               alignItems="center"
-              gap={1}
               divider={<Iconify icon="pepicons-pencil:line-y" sx={{ color: 'grey.400' }} />}
             >
-              <Stack direction="row" alignItems="center" gap="4px">
-                <Iconify icon="mdi:camera-outline" />
-                <Typography sx={{ textTransform: 'capitalize' }}>{item.campaign_status}</Typography>
-              </Stack>
-              <Stack direction="row" alignItems="center" gap="4px">
-                <Iconify icon="solar:calendar-outline" />
-                <Typography>
-                  {dayjs(item.start_date).format('DD MMM YYYY')} - {dayjs(item.end_date).format('DD MMM YYYY')}
-                </Typography>
-              </Stack>
+              <CustomChip label={item.campaign_status} color="success" size="small" variant="soft" />
+              <CustomChip
+                label={`${dayjs(item.start_date).isValid() ? dayjs(item.start_date).format('DD MMM YYYY') : '-/-'} : ${dayjs(item.end_date).isValid() ? dayjs(item.end_date).format('DD MMM YYYY') : '-/-'}`}
+                color="success"
+                size="small"
+                variant="soft"
+              />
             </Stack>
             <Button variant="outlined" size="small" color="inherit" onClick={() => setOpenCampaignRightPanel(item)}>
               View details

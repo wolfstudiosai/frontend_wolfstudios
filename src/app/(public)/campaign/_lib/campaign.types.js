@@ -10,6 +10,7 @@ export const defaultCampaign = {
   note: null,
   stakeholder: null,
   campaign_status: 'UPCOMING',
+  campaign_progress: 'NOT_APPROVED',
   retail_partners: null,
   proposed_partners: null,
   live_partners: null,

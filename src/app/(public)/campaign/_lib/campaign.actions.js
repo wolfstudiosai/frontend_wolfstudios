@@ -76,7 +76,7 @@ export const updateCampaignAsync = async (file, data) => {
     let thumbnailPath = '';
     if (file) {
       const uploadResponse = await uploadFileAsync(file);
-      thumbnailPath = uploadResponse[0].path;
+      thumbnailPath = uploadResponse.length > 0 ? uploadResponse[0].path : '';
     }
     const res = await api.patch(`/campaign/update/${id}`, {
       ...rest,
