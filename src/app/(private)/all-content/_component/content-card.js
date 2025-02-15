@@ -15,7 +15,7 @@ export const ContentCard = ({ content, handleOpenRightPnale }) => {
     >
       <Box
         component="img"
-        src="https://images.pexels.com/photos/1839963/pexels-photo-1839963.jpeg?cs=srgb&dl=pexels-abir-hasan-912465-1839963.jpg&fm=jpg"
+        src="https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57d588f4b57625814b04_67014a7ff7209b375680d65a_41199266_2086471245001489_187941219047833600_n.jpeg"
         alt="demo image"
         sx={{ width: '100%', height: '260px', objectFit: 'cover' }}
       />

@@ -4,6 +4,7 @@ import React from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
 import { sliderToGridColsCoverter } from '@/utils/helper';
+import { CircularProgress } from '@mui/material';
 
 import { AllContentGridView } from './_component/all-content-grid-view';
 import AllContentListView from './_component/all-content-list-view';
@@ -11,6 +12,7 @@ import { ManageContentRightPanel } from './_component/manage-content-right-panel
 import { getContentList } from './_lib/all-content.actions';
 
 export const AllContentView = () => {
+  const observerRef = React.useRef(null);
   const [loading, setLoading] = React.useState(false);
   const [isFetching, setIsFetching] = React.useState(false);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
@@ -26,7 +28,8 @@ export const AllContentView = () => {
   });
 
   async function fetchList(paginateData = pagination) {
-    setLoading(true);
+    if (isFetching) return;
+    setIsFetching(true);
 
     try {
       const response = await getContentList({
@@ -37,10 +40,12 @@ export const AllContentView = () => {
       if (response.success) {
         setData(response.data);
         setTotalRecords(response.totalRecords);
+        setPagination((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }));
       }
     } catch (error) {
       console.error('Error fetching campaigns:', error);
     } finally {
+      setIsFetching(false);
       setLoading(false);
     }
   }
@@ -62,8 +67,29 @@ export const AllContentView = () => {
   };
 
   React.useEffect(() => {
-    fetchList(pagination);
-  }, [pagination]);
+    fetchList();
+  }, []);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetching && data.length < totalRecords) {
+          fetchList();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [data, isFetching, totalRecords]);
 
   return (
     <PageContainer>
@@ -76,7 +102,12 @@ export const AllContentView = () => {
         totalRecords={totalRecords}
       />
       {filters.VIEW === 'grid' ? (
-        <AllContentGridView data={data} loading={loading} columns={sliderToGridColsCoverter(filters.COL)} />
+        <>
+          <AllContentGridView data={data} loading={loading} columns={sliderToGridColsCoverter(filters.COL)} />
+          <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
+            {isFetching && <CircularProgress size="30px" />}
+          </div>
+        </>
       ) : (
         <AllContentListView
           setPagination={setPagination}
