@@ -1,16 +1,14 @@
 'use client';
 
-import Link from 'next/link';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
 import { isVideoContent, pxToRem } from '@/utils/helper';
-import { Box, Button, Divider, Stack, Typography, useTheme } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import { Box, Button, Chip, Divider, Stack, Typography, useTheme } from '@mui/material';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
 export const CampaignQuickView = ({ data }) => {
   const theme = useTheme();
-  const mediaArr = [...data.image_gallery, ...data.video_gallery];
+  const mediaArr = [...(data?.image_gallery || []), ...(data?.video_gallery || [])];
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -71,7 +69,7 @@ export const CampaignQuickView = ({ data }) => {
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Box>
             <Typography variant="h5" fontWeight={600} gutterBottom>
-              {data.title || 'Untitled'}
+              {data.name || 'Untitled'}
             </Typography>
             <Typography variant="subtitle2" color="text.secondary" gutterBottom>
               {data.description || 'No description available.'}
@@ -81,88 +79,68 @@ export const CampaignQuickView = ({ data }) => {
         </Stack>
         <Divider sx={{ my: 2 }} />
       </Box>
-      <Stack direction="row" spacing={2} mb={2} flexWrap="wrap">
-        <Typography variant="subtitle1" color="text.secondary">
-          Category: {data.category || 'N/A'}
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          Date: {data.date || 'N/A'}
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          Location: {data.location || 'N/A'}
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          Client: {data.client || 'N/A'}
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          Photographer: {data.dp || 'N/A'}
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          Model: {data.model || 'N/A'}
-        </Typography>
+      <Stack direction="column" spacing={2} mb={2} flexWrap="wrap">
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            Current Status
+          </Typography>
+          <Chip label={data.campaign_progress} size="small" sx={{ fontSize: '10px' }} />
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            Stakeholder
+          </Typography>
+          <Typography sx={{ fontSize: '14px' }} color="text.secodary">
+            {data.stakeholder || '-'}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            Campaign Status
+          </Typography>
+          <Chip label={data.campaign_status} size="small" sx={{ fontSize: '10px' }} />
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            Start Date
+          </Typography>
+          <Typography sx={{ fontSize: '14px' }} color="text.secodary">
+            {data.start_date ? dayjs(data.start_date).format('DD MMM YYYY') : '-'}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            End Date
+          </Typography>
+          <Typography sx={{ fontSize: '14px' }} color="text.secodary">
+            {data.start_date ? dayjs(data.end_data).format('DD MMM YYYY') : '-'}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            Budget
+          </Typography>
+          <Typography sx={{ fontSize: '14px' }} color="text.secodary">
+            {data.budget || '-'}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            Total Expense
+          </Typography>
+          <Typography sx={{ fontSize: '14px' }} color="text.secodary">
+            {data.total_expense || '-'}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
+            Campaign ROI
+          </Typography>
+          <Typography sx={{ fontSize: '14px' }} color="text.secodary">
+            {data.campaign_ROI || '-'}
+          </Typography>
+        </Box>
       </Stack>
-
-      <Divider sx={{ my: 2 }} />
-      <Typography variant="body1" color="text.secondary">
-        {data.full_description || 'No additional details available.'}
-      </Typography>
-
-      <Divider sx={{ my: 2 }} />
-      <Typography variant="h6" color="text.secondary">
-        Team
-      </Typography>
-      <Typography variant="subtitle2" color="text.secondary" component={Link} href={data.team?.stylist || ''}>
-        Stylist: {data.team?.stylist || 'N/A'}
-      </Typography>
-      <Typography variant="subtitle2" color="text.secondary">
-        Makeup Artist: {data.team?.makeupArtist || 'N/A'}
-      </Typography>
-      <Typography variant="subtitle2" color="text.secondary">
-        Creative Director: {data.team?.creativeDirector || 'N/A'}
-      </Typography>
-
-      <Divider sx={{ my: 2 }} />
-      <Typography variant="h6" color="text.secondary">
-        Social Engagement
-      </Typography>
-      <Typography variant="subtitle2" color="text.secondary">
-        Views: {data.engagementStats?.views || 0}
-      </Typography>
-      <Typography variant="subtitle2" color="text.secondary">
-        Likes: {data.engagementStats?.likes || 0}
-      </Typography>
-      <Typography variant="subtitle2" color="text.secondary">
-        Shares: {data.engagementStats?.shares || 0}
-      </Typography>
-
-      <Divider sx={{ my: 2 }} />
-      <Typography variant="h6" color="text.secondary">
-        Testimonial
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {data.testimonial || 'No testimonial available.'}
-      </Typography>
-      <Divider sx={{ my: 2 }} />
-      <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>
-        {data?.gallery?.map((item, index) => (
-          <Grid item size={{ xs: 2 }} key={index}>
-            {isVideoContent(item) ? (
-              <Box
-                component="video"
-                src={item}
-                controls
-                autoPlay
-                loop
-                muted
-                playsInline
-                sx={{ height: pxToRem(300), width: '100%', objectFit: 'cover' }}
-              />
-            ) : (
-              <Box component="img" src={item} sx={{ height: pxToRem(300), width: '100%', objectFit: 'cover' }} />
-            )}
-          </Grid>
-        ))}
-      </Grid>
     </Box>
   );
 };

@@ -54,10 +54,8 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
               : campaign.campaign_image
           }
           sx={{
-            // height: '100%',
             height: '200px',
             width: '100%',
-            // width: pxToRem(200),
             objectFit: 'contain',
             borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
             border: '1px solid var(--mui-palette-divider)',
