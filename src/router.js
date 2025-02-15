@@ -81,14 +81,6 @@ export const privateRoutes = [
         allowedRoles: ['admin', 'user'],
       },
       {
-        key: 'records',
-        title: 'Records',
-        href: paths.private.record,
-        icon: 'material-symbols-light:data-table-outline',
-        count: 5,
-        allowedRoles: ['admin', 'user'],
-      },
-      {
         key: 'expense',
         title: 'Expense',
         href: paths.private.expense,
@@ -191,14 +183,14 @@ export const privateRoutes = [
         key: 'all_content',
         title: 'All Content',
         href: paths.private.all_content,
-        icon: 'fluent:approvals-app-20-regular',
+        icon: 'lsicon:list-outline',
         allowedRoles: ['admin', 'user'],
       },
       {
         key: 'content_discovery',
         title: 'Discovery',
         href: paths.dashboardPublic.partner,
-        icon: 'fluent:approvals-app-20-regular',
+        icon: 'iconamoon:discover-light',
         allowedRoles: ['admin', 'user'],
       },
       {
@@ -271,6 +263,14 @@ export const privateRoutes = [
         icon: 'tabler:point',
         allowedRoles: ['admin', 'user'],
       },
+      {
+        key: 'records',
+        title: 'Records',
+        icon: 'material-symbols-light:data-table-outline',
+        href: paths.private.record,
+        allowedRoles: ['admin', 'user'],
+        // Optional: add a count if needed, e.g. count: 5,
+      },
     ],
   },
 ];
@@ -282,14 +282,7 @@ export const dashboardFavItems = [
     title: 'Favorite',
     icon: 'noto:red-heart',
     items: [
-      {
-        key: 'records',
-        title: 'Records',
-        icon: 'material-symbols-light:data-table-outline',
-        href: paths.private.record,
-        allowedRoles: ['admin', 'user'],
-        // Optional: add a count if needed, e.g. count: 5,
-      },
+    
       {
         key: 'campaign',
         title: 'Campaign',

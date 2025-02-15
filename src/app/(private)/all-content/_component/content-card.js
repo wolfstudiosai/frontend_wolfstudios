@@ -2,9 +2,17 @@ import { IconText } from '@/components/utils/icon-text';
 import { Avatar, Box, Card, Chip, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
-export const ContentCard = ({ content }) => {
+export const ContentCard = ({ content, handleOpenRightPnale }) => {
   return (
-    <Card sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 'calc(1* var(--mui-shape-borderRadius))' }}>
+    <Card
+      sx={{
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+        cursor: 'pointer',
+      }}
+      onClick={() => handleOpenRightPnale(content)}
+    >
       <Box
         component="img"
         src="https://images.pexels.com/photos/1839963/pexels-photo-1839963.jpeg?cs=srgb&dl=pexels-abir-hasan-912465-1839963.jpg&fm=jpg"
