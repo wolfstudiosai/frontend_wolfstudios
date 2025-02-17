@@ -15,13 +15,25 @@ export const PartnerGridView = ({ data, colums, fetchList, loading, handlePagina
   return (
     <Box>
       <PageLoader loading={loading} error={null}>
-        <Grid container spacing={1} columns={{ xs: 24 }}>
-          {data.map((partner, index) => (
-            <Grid item size={{ xs: 6, md: colums }} key={index}>
+        {data.map((partner, index) => (
+          <Grid key={index} container spacing={1}>
+            <Grid item size={{ xs: 6, md: 3 }} key={index}>
               <PartnerCard item={partner} fetchList={fetchList} />
             </Grid>
-          ))}
-        </Grid>
+            <Grid item size={{ xs: 6, md: 3 }} key={index}>
+              <PartnerCard item={partner} fetchList={fetchList} />
+            </Grid>
+            <Grid item size={{ xs: 6, md: 3 }} key={index}>
+              <PartnerCard item={partner} fetchList={fetchList} />
+            </Grid>
+            <Grid item size={{ xs: 6, md: 3 }} key={index}>
+              <PartnerCard item={partner} fetchList={fetchList} />
+            </Grid>
+            <Grid item size={{ xs: 6, md: 3 }} key={index}>
+              <PartnerCard item={partner} fetchList={fetchList} />
+            </Grid>
+          </Grid>
+        ))}
       </PageLoader>
     </Box>
   );
@@ -37,39 +49,99 @@ const PartnerCard = ({ item, fetchList }) => {
         gap={1}
         sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, overflow: 'hidden' }}
       >
-        <Box
-          component="img"
-          src={
-            isSupabaseUrl(item?.profile_image)
-              ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item?.profile_image}`
-              : item?.profile_image
-          }
-          alt={item?.name}
-          sx={{ width: '30%', minHeight: '200px', objectFit: 'cover', cursor: 'pointer' }}
-          onClick={() => setOpenPartnerRightPanel(item)}
-        />
-        <Stack direction="column" sx={{ p: 2 }}>
-          <Box>
-            <Stack direction="row" alignItems="center" gap={2}>
-              <Typography variant="h5">{item?.name}</Typography>
-              <CustomChip label={item?.profile_category} />
-            </Stack>
-            <Stack
-              direction="row"
-              gap={1}
-              alignItems="center"
-              divider={<Iconify icon="pepicons-pop:line-y" sx={{ color: 'grey.300' }} />}
-              sx={{ mt: 1 }}
-            >
-              <Typography>{capitalizeFirstLetter(item?.profile_category)}</Typography>
-              <Typography>{item?.state}</Typography>
-            </Stack>
-          </Box>
-          <Stack direction="column" gap={0.5} sx={{ mt: 2 }}>
-            <CopyIconText text={item?.phone} icon="proicons:call" sx={{ color: 'text.secondary' }} />
-            <CopyIconText text={item?.email} icon="clarity:email-line" sx={{ color: 'text.secondary' }} />
-            <IconText icon="mynaui:globe" text={item?.website} sx={{ color: 'text.secondary' }} />
-            <IconText icon="fluent:status-48-regular" text={item?.current_status} sx={{ color: 'text.secondary' }} />
+        <Box sx={{ position: 'relative', width: '50%', minHeight: '200px' }}>
+          <Box
+            component="img"
+            // src={
+            //   isSupabaseUrl(item?.profile_image)
+            //     ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item?.profile_image}`
+            //     : item?.profile_image
+            // }
+            src="https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66f8d87567db1d54b9d6b5d4_2CoCP5UkbBxnruHemWWGaYSct3ZRB8VF0-84yJknGQc-p-800.jpeg"
+            alt={item?.name}
+            sx={{ width: '100%', height: '100%', objectFit: 'cover', cursor: 'pointer', display: 'block' }}
+            onClick={() => setOpenPartnerRightPanel(item)}
+          />
+          <Stack
+            direction={'row'}
+            spacing={0.5}
+            sx={{
+              position: 'absolute',
+              bottom: 8,
+              left: 8,
+              zIndex: 2,
+              boxShadow: 1,
+            }}
+          >
+            <CustomChip label={'Live Campaign'} color={'primary'} height="18px" />
+            <CustomChip label={'Current Status'} color={'primary'} />
+          </Stack>
+        </Box>
+        <Stack direction="column" sx={{ px: 2 }}>
+          <Typography fontSize={{ xs: '22px', md: '26px' }} fontWeight={800}>
+            {item?.name}
+          </Typography>
+          <Stack
+            direction="row"
+            alignItems="center"
+            divider={<Iconify icon="pepicons-pop:line-y" sx={{ color: 'grey.300' }} />}
+            // sx={{ mt: 0.4 }}
+          >
+            <Typography fontSize="14px">303M</Typography>
+            <Typography fontSize="14px">$202</Typography>
+          </Stack>
+          <Stack direction="row" gap={1} mt={1}>
+            <Typography fontSize="14px">Products</Typography>
+            <CustomChip label={'Product 1'} height="18px" variant={'soft'} />
+            <CustomChip label={'Product 1'} height="18px" variant={'soft'} />
+          </Stack>
+          <Stack direction="row" gap={1} mt={0.5}>
+            <Typography fontSize="14px">Proposed</Typography>
+            <CustomChip label={'Product 1'} height="18px" variant={'soft'} />
+            <CustomChip label={'Product 1'} height="18px" variant={'soft'} />
+          </Stack>
+          <Stack direction="row" gap={1} mt={0.5}>
+            <Typography fontSize="14px">Contributed</Typography>
+            <CustomChip label={'Product 1'} height="18px" variant={'soft'} />
+            <CustomChip label={'Product 1'} height="18px" variant={'soft'} />
+          </Stack>
+          <Stack gap={1} sx={{ my: .5 }}>
+            <SocialIconWithText
+              icon="hugeicons:instagram"
+              url={'https://www.instagram.com/'}
+              text="100K"
+              value={'400$'}
+            />
+            <SocialIconWithText
+              icon="hugeicons:youtube"
+              url={'https://www.instagram.com/'}
+              text="100K"
+              value={'400$'}
+            />
+            <SocialIconWithText
+              icon="mingcute:facebook-line"
+              url={'https://www.instagram.com/'}
+              text="100K"
+              value={'400$'}
+            />
+            <SocialIconWithText
+              icon="hugeicons:new-twitter-ellipse"
+              url={'https://www.instagram.com/'}
+              text="100K"
+              value={'400$'}
+            />
+            <SocialIconWithText icon="circum:linkedin" url={'https://www.instagram.com/'} text="100K" value={'400$'} />
+            <SocialIconWithText
+              icon="hugeicons:pinterest"
+              url={'https://www.instagram.com/'}
+              text="100K"
+              value={'400$'}
+            />
+          </Stack>
+          <Stack direction={'row'} spacing={2} mb={2}>
+            <SocialIconWithRedirectionUrl icon={'ri:drive-fill'} url={'https://www.instagram.com/'} />
+            <SocialIconWithRedirectionUrl icon={'mage:email'} url={'https://www.instagram.com/'} />
+            <SocialIconWithRedirectionUrl icon={'ri:amazon-fill'} url={'https://www.instagram.com/'} />
           </Stack>
         </Stack>
       </Stack>
@@ -105,4 +177,27 @@ const CopyIconText = ({ icon, text, sx = {} }) => {
       />
     </Stack>
   );
+};
+const SocialIconWithText = ({ icon, url, text, value, sx = {} }) => {
+  const handleRedirect = () => {
+    if (url) {
+      window.open(url, '_blank');
+    }
+  };
+  return (
+    <Stack direction="row" alignItems="center" gap={1} sx={{ ...sx }}>
+      <Iconify onClick={handleRedirect} sx={{ cursor: 'pointer' }} icon={icon} />
+      <Typography variant="body2">{' - ' + text}</Typography>
+      <Typography variant="body2">{' - ' + value}</Typography>
+    </Stack>
+  );
+};
+
+const SocialIconWithRedirectionUrl = ({ icon, url }) => {
+  const handleRedirect = () => {
+    if (url) {
+      window.open(url, '_blank');
+    }
+  };
+  return <Iconify onClick={handleRedirect} sx={{ cursor: 'pointer' }} icon={icon} />;
 };
