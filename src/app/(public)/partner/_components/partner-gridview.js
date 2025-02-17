@@ -47,7 +47,7 @@ const PartnerCard = ({ item, fetchList }) => {
         gap={1}
         sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, overflow: 'hidden' }}
       >
-        <Box sx={{ position: 'relative', width: { xs: '100%', md: '50%' }, minHeight: '200px' }}>
+        <Box sx={{ position: 'relative',  minHeight: '250px' }}>
           <Box
             component="img"
             // src={
@@ -57,11 +57,11 @@ const PartnerCard = ({ item, fetchList }) => {
             // }
             src="https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66f8d87567db1d54b9d6b5d4_2CoCP5UkbBxnruHemWWGaYSct3ZRB8VF0-84yJknGQc-p-800.jpeg"
             alt={item?.name}
-            sx={{ width: '100%', height: '100%', objectFit: 'cover', cursor: 'pointer', display: 'block' }}
+            sx={{ width: '180px', height: '100%', objectFit: 'cover', cursor: 'pointer', display: 'block' }}
             onClick={() => setOpenPartnerRightPanel(item)}
           />
           <Stack
-            direction={'row'}
+            direction={'column'}
             spacing={0.5}
             sx={{
               position: 'absolute',
@@ -75,7 +75,7 @@ const PartnerCard = ({ item, fetchList }) => {
             <CustomChip label={'Current Status'} color={'primary'} />
           </Stack>
         </Box>
-        <Stack direction="column" sx={{ px: 2 }}>
+        <Stack direction="column" sx={{ px: 1 }}>
           <Typography fontSize={{ xs: '22px', md: '26px' }} fontWeight={800}>
             {item?.name}
           </Typography>
@@ -83,25 +83,25 @@ const PartnerCard = ({ item, fetchList }) => {
             direction="row"
             alignItems="center"
             divider={<Iconify icon="pepicons-pop:line-y" sx={{ color: 'grey.300' }} />}
-            // sx={{ mt: 0.4 }}
           >
             <Typography fontSize="14px">303M</Typography>
             <Typography fontSize="14px">$202</Typography>
           </Stack>
-          <Stack direction="row" gap={1} mt={1}>
-            <Typography fontSize="15px">Products</Typography>
-            <CustomChip label={'Product 1'} height="18px" variant={'soft'} fontSize="14px" />
-            <CustomChip label={'Product 1'} height="18px" variant={'soft'} fontSize="14px" />
+          <Stack direction="row" flexWrap={"wrap"} gap={1} mt={1} alignItems={"center"}>
+            <Typography fontSize="13px" fontWeight={600}>Products:</Typography>
+            <CustomChip label={'Product 1'} height="14px" variant={'soft'} fontSize="12px" />
+            <CustomChip label={'Product 1'} height="14px" variant={'soft'} fontSize="12px" />
+            <CustomChip label={'Product 1'} height="14px" variant={'soft'} fontSize="12px" />
           </Stack>
-          <Stack direction="row" gap={1} mt={0.5}>
-            <Typography fontSize="15px">Proposed</Typography>
-            <CustomChip label={'Product 1'} height="18px" variant={'soft'} fontSize="14px" />
-            <CustomChip label={'Product 1'} height="18px" variant={'soft'} fontSize="14px" />
+          <Stack direction="row" flexWrap={"wrap"} gap={1} mt={0.5} alignItems={"center"}>
+            <Typography fontSize="13px" fontWeight={600}>Proposed:</Typography>
+            <CustomChip label={'Product 1'} height="14px" variant={'soft'} fontSize="12px" />
+            <CustomChip label={'Product 1'} height="14px" variant={'soft'} fontSize="12px" />
           </Stack>
-          <Stack direction="row" gap={1} mt={0.5}>
-            <Typography fontSize="15px">Contributed</Typography>
-            <CustomChip label={'Product 1'} height="18px" variant={'soft'} fontSize="14px" />
-            <CustomChip label={'Product 1'} height="18px" variant={'soft'} fontSize="14px" />
+          <Stack direction="row" flexWrap={"wrap"} gap={1} mt={0.5} alignItems={"center"}>
+            <Typography fontSize="13px" fontWeight={600}>Contributed:</Typography>
+            <CustomChip label={'Product 1'} height="14px" variant={'soft'} fontSize="12px" />
+            <CustomChip label={'Product 1'} height="14px" variant={'soft'} fontSize="12px" />
           </Stack>
           <Stack gap={1} sx={{ my: 1 }}>
             <SocialIconWithText
