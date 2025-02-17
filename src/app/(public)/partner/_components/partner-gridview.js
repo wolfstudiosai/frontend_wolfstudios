@@ -4,8 +4,6 @@ import React from 'react';
 import { CustomChip } from '@/components/core/custom-chip';
 import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/loaders/PageLoader';
-import { IconText } from '@/components/utils/icon-text';
-import { capitalizeFirstLetter, isSupabaseUrl } from '@/utils/helper';
 import { Box, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
@@ -17,19 +15,19 @@ export const PartnerGridView = ({ data, colums, fetchList, loading, handlePagina
       <PageLoader loading={loading} error={null}>
         {data.map((partner, index) => (
           <Grid key={index} container spacing={1}>
-            <Grid item size={{ xs: 6, md: 3 }} key={index}>
+            <Grid item size={{ xs: 12, md: 3 }} key={index}>
               <PartnerCard item={partner} fetchList={fetchList} />
             </Grid>
-            <Grid item size={{ xs: 6, md: 3 }} key={index}>
+            <Grid item size={{ xs: 12, md: 3 }} key={index}>
               <PartnerCard item={partner} fetchList={fetchList} />
             </Grid>
-            <Grid item size={{ xs: 6, md: 3 }} key={index}>
+            <Grid item size={{ xs: 12, md: 3 }} key={index}>
               <PartnerCard item={partner} fetchList={fetchList} />
             </Grid>
-            <Grid item size={{ xs: 6, md: 3 }} key={index}>
+            <Grid item size={{ xs: 12, md: 3 }} key={index}>
               <PartnerCard item={partner} fetchList={fetchList} />
             </Grid>
-            <Grid item size={{ xs: 6, md: 3 }} key={index}>
+            <Grid item size={{ xs: 12, md: 3 }} key={index}>
               <PartnerCard item={partner} fetchList={fetchList} />
             </Grid>
           </Grid>
@@ -45,11 +43,11 @@ const PartnerCard = ({ item, fetchList }) => {
   return (
     <>
       <Stack
-        direction="row"
+        direction={{ xs: 'column', md: 'row' }}
         gap={1}
         sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, overflow: 'hidden' }}
       >
-        <Box sx={{ position: 'relative', width: '50%', minHeight: '200px' }}>
+        <Box sx={{ position: 'relative', width: { xs: '100%', md: '50%' }, minHeight: '200px' }}>
           <Box
             component="img"
             // src={
@@ -91,21 +89,21 @@ const PartnerCard = ({ item, fetchList }) => {
             <Typography fontSize="14px">$202</Typography>
           </Stack>
           <Stack direction="row" gap={1} mt={1}>
-            <Typography fontSize="14px">Products</Typography>
-            <CustomChip label={'Product 1'} height="18px" variant={'soft'} />
-            <CustomChip label={'Product 1'} height="18px" variant={'soft'} />
+            <Typography fontSize="15px">Products</Typography>
+            <CustomChip label={'Product 1'} height="18px" variant={'soft'} fontSize="14px" />
+            <CustomChip label={'Product 1'} height="18px" variant={'soft'} fontSize="14px" />
           </Stack>
           <Stack direction="row" gap={1} mt={0.5}>
-            <Typography fontSize="14px">Proposed</Typography>
-            <CustomChip label={'Product 1'} height="18px" variant={'soft'} />
-            <CustomChip label={'Product 1'} height="18px" variant={'soft'} />
+            <Typography fontSize="15px">Proposed</Typography>
+            <CustomChip label={'Product 1'} height="18px" variant={'soft'} fontSize="14px" />
+            <CustomChip label={'Product 1'} height="18px" variant={'soft'} fontSize="14px" />
           </Stack>
           <Stack direction="row" gap={1} mt={0.5}>
-            <Typography fontSize="14px">Contributed</Typography>
-            <CustomChip label={'Product 1'} height="18px" variant={'soft'} />
-            <CustomChip label={'Product 1'} height="18px" variant={'soft'} />
+            <Typography fontSize="15px">Contributed</Typography>
+            <CustomChip label={'Product 1'} height="18px" variant={'soft'} fontSize="14px" />
+            <CustomChip label={'Product 1'} height="18px" variant={'soft'} fontSize="14px" />
           </Stack>
-          <Stack gap={1} sx={{ my: .5 }}>
+          <Stack gap={1} sx={{ my: 1 }}>
             <SocialIconWithText
               icon="hugeicons:instagram"
               url={'https://www.instagram.com/'}
@@ -178,7 +176,7 @@ const CopyIconText = ({ icon, text, sx = {} }) => {
     </Stack>
   );
 };
-const SocialIconWithText = ({ icon, url, text, value, sx = {} }) => {
+export const SocialIconWithText = ({ icon, url, text, value, sx = {} }) => {
   const handleRedirect = () => {
     if (url) {
       window.open(url, '_blank');
@@ -193,11 +191,16 @@ const SocialIconWithText = ({ icon, url, text, value, sx = {} }) => {
   );
 };
 
-const SocialIconWithRedirectionUrl = ({ icon, url }) => {
+export const SocialIconWithRedirectionUrl = ({ icon, url, text }) => {
   const handleRedirect = () => {
     if (url) {
       window.open(url, '_blank');
     }
   };
-  return <Iconify onClick={handleRedirect} sx={{ cursor: 'pointer' }} icon={icon} />;
+  return (
+    <Stack direction="row" alignItems="center" gap={1}>
+      <Iconify onClick={handleRedirect} sx={{ cursor: 'pointer' }} icon={icon} />
+      <Typography variant="body2">{text}</Typography>
+    </Stack>
+  );
 };
