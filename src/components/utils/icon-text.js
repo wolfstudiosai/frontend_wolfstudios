@@ -23,8 +23,8 @@ export const IconWithoutText = ({ icon, value, type, sx = {} }) => {
     }
   };
   return (
-    <Stack direction="row" alignItems="center" gap={1} sx={{ ...sx }}>
-      <Iconify icon={icon} onClick={handleNavigate} />
+    <Stack direction="row" alignItems="center" gap={1} sx={{cursor: 'pointer', ...sx }}>
+      <Iconify icon={icon} onClick={handleNavigate} sx={{ '&:hover': { color: 'primary.main' } }} />
     </Stack>
   );
 };

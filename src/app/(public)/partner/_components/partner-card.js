@@ -2,23 +2,7 @@ import React from 'react';
 import { CustomChip } from '@/components/core/custom-chip';
 import { Iconify } from '@/components/iconify/iconify';
 import { IconWithoutText } from '@/components/utils/icon-text';
-import { ContentCopy, ContentCut, ContentPaste } from '@mui/icons-material';
-import {
-  Box,
-  Button,
-  Card,
-  Divider,
-  ListItem,
-  ListItemText,
-  MenuItem,
-  MenuList,
-  Popover,
-  Stack,
-  Typography,
-} from '@mui/material';
-import Grid from '@mui/material/Grid2';
-
-import { usePopover } from '@/hooks/use-popover';
+import { Box, Button, Divider, MenuItem, MenuList, Popover, Stack, Typography } from '@mui/material';
 
 export const PartnerCard = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -35,7 +19,7 @@ export const PartnerCard = () => {
         border: '1px solid var(--mui-palette-divider)',
         borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
         overflow: 'hidden',
-        boxShadow: 1,
+        boxShadow: 2,
         bgcolor: 'background.paper',
       }}
     >
@@ -44,10 +28,23 @@ export const PartnerCard = () => {
           component="img"
           src="https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66f8d87567db1d54b9d6b5d4_2CoCP5UkbBxnruHemWWGaYSct3ZRB8VF0-84yJknGQc-p-800.jpeg"
           alt="Partner name"
-          sx={{ width: '48%', height: '200px', objectFit: 'cover' }}
+          sx={{
+            width: '48%',
+            height: '170px',
+            objectFit: 'cover',
+            borderRight: '1px solid var(--mui-palette-divider)',
+            borderBottom: '1px solid var(--mui-palette-divider)',
+            borderRadius: '0 0 calc(1* var(--mui-shape-borderRadius)) 0',
+          }}
         />
-        <Stack spacing={1.5} sx={{ p: 2, flex: 1 }}>
-          <Typography sx={{fontSize: '24px', fontWeight: 800}}>
+        <Stack sx={{ p: 2, flex: 1 }}>
+          <Typography
+            sx={{
+              fontSize: '22px',
+              fontWeight: 900,
+              color: 'text.primary',
+            }}
+          >
             Partner name
           </Typography>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -59,7 +56,7 @@ export const PartnerCard = () => {
               $202
             </Typography>
           </Stack>
-          <Stack direction={'row'} gap={1} flexWrap="wrap">
+          <Stack direction={'row'} gap={1.5} flexWrap="wrap" sx={{ py: 1.5 }}>
             <IconWithoutText icon="mage:email" value={'pDZKl@example.com'} type={'email'} />
             <IconWithoutText icon="line-md:phone" value={'123456789'} type={'phone'} />
             <IconWithoutText icon="mynaui:globe" value={'www.example.com'} type={'url'} />
@@ -76,14 +73,14 @@ export const PartnerCard = () => {
               variant="text"
               onClick={handleOpenAddToPopover}
               size="small"
-              sx={{ textTransform: 'none', borderRadius: '8px', px: 2 }}
+              sx={{ textTransform: 'none', borderRadius: '8px', px: 2, padding: '0' }}
             >
               Add to
             </Button>
           </Box>
         </Stack>
       </Stack>
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ px: 2 }}>
         <Stack spacing={0.5}>
           <Stack direction="row" flexWrap={'wrap'} gap={1} alignItems={'center'}>
             <Typography fontSize="14px" fontWeight={500}>
@@ -105,7 +102,7 @@ export const PartnerCard = () => {
             <CustomChip label={'Product 4'} height="14px" variant={'soft'} fontSize="12px" />
           </Stack>
         </Stack>
-        <Stack direction={'row'} gap={1} flexWrap={'wrap'} sx={{ mt: 2 }}>
+        <Stack direction={'row'} gap={1} flexWrap={'wrap'} sx={{ mt: 1.5 }}>
           <SocialInfo icon="hugeicons:instagram" follower="123k" rate={100} />
           <SocialInfo icon="hugeicons:youtube" follower="123k" rate={100} />
           <SocialInfo icon="mingcute:facebook-line" follower="123k" rate={100} />
