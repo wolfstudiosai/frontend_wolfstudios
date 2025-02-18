@@ -1,10 +1,34 @@
+import React from 'react';
 import { CustomChip } from '@/components/core/custom-chip';
 import { Iconify } from '@/components/iconify/iconify';
 import { IconWithoutText } from '@/components/utils/icon-text';
-import { Box, Button, Card, Stack, Typography } from '@mui/material';
+import { ContentCopy, ContentCut, ContentPaste } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Card,
+  Divider,
+  ListItem,
+  ListItemText,
+  MenuItem,
+  MenuList,
+  Popover,
+  Stack,
+  Typography,
+} from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
+import { usePopover } from '@/hooks/use-popover';
+
 export const PartnerCard = () => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleOpenAddToPopover = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseAddToPopover = () => {
+    setAnchorEl(null);
+  };
   return (
     <Box sx={{ border: '1px solid var(--mui-palette-divider)', borderRadius: '8px' }}>
       <Stack direction="row">
@@ -98,6 +122,33 @@ export const PartnerCard = () => {
             <SocialInfo icon="mingcute:facebook-line" follower="123k" rate={100} sx={{ width: '50%' }} />
           </Grid>
         </Grid>
+        <Box>
+          <Button
+            endIcon={<Iconify icon="icon-park-solid:down-one" />}
+            variant="outlined"
+            onClick={handleOpenAddToPopover}
+            size='small'
+          >
+            Add to
+          </Button>
+          <Popover
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+            open={Boolean(anchorEl)}
+            onClose={handleCloseAddToPopover}
+            anchorEl={anchorEl}
+          >
+            <MenuList sx={{minWidth: "160px"}}>
+              <MenuItem>
+                <Typography>Partner</Typography>
+              </MenuItem>
+              <Divider />
+              <MenuItem>
+                <Typography>Partner</Typography>
+              </MenuItem>
+            </MenuList>
+          </Popover>
+        </Box>
       </Stack>
     </Box>
   );
