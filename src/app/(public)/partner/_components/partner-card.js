@@ -75,6 +75,16 @@ export const PartnerCard = () => {
             <CustomChip label={'Live Campaign'} color={'primary'} height="18px" />
             <CustomChip label={'Current Status'} color={'primary'} />
           </Stack>
+          <Box>
+            <Button
+              endIcon={<Iconify icon="icon-park-solid:down-one" />}
+              variant="text"
+              onClick={handleOpenAddToPopover}
+              size="small"
+            >
+              Add to
+            </Button>
+          </Box>
         </Stack>
       </Stack>
       <Stack direction={'column'} gap={1}>
@@ -123,14 +133,6 @@ export const PartnerCard = () => {
           </Grid>
         </Grid>
         <Box>
-          <Button
-            endIcon={<Iconify icon="icon-park-solid:down-one" />}
-            variant="outlined"
-            onClick={handleOpenAddToPopover}
-            size='small'
-          >
-            Add to
-          </Button>
           <Popover
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             transformOrigin={{ vertical: 'top', horizontal: 'left' }}
@@ -138,7 +140,7 @@ export const PartnerCard = () => {
             onClose={handleCloseAddToPopover}
             anchorEl={anchorEl}
           >
-            <MenuList sx={{minWidth: "160px"}}>
+            <MenuList sx={{ minWidth: '160px' }}>
               <MenuItem>
                 <Typography>Partner</Typography>
               </MenuItem>
