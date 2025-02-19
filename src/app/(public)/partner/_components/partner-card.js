@@ -3,9 +3,11 @@ import { CustomChip } from '@/components/core/custom-chip';
 import { Iconify } from '@/components/iconify/iconify';
 import { IconWithoutText } from '@/components/utils/icon-text';
 import { Box, Button, Divider, MenuItem, MenuList, Popover, Stack, Typography } from '@mui/material';
+import { ManagePartnerRightPanel } from './manage-partner-right-panel';
 
-export const PartnerCard = () => {
+export const PartnerCard = ({ item, fetchList }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [openPartnerRightPanel, setOpenPartnerRightPanel] = React.useState(null);
   const handleOpenAddToPopover = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -36,6 +38,7 @@ export const PartnerCard = () => {
             borderBottom: '1px solid var(--mui-palette-divider)',
             borderRadius: '0 0 calc(1* var(--mui-shape-borderRadius)) 0',
           }}
+          onClick={() => setOpenPartnerRightPanel(item)}
         />
         <Stack sx={{ p: 2, flex: 1 }}>
           <Typography
@@ -58,7 +61,7 @@ export const PartnerCard = () => {
           </Stack>
           <Stack direction={'row'} gap={1.5} flexWrap="wrap" sx={{ py: 1.5 }}>
             <IconWithoutText icon="mage:email" value={'pDZKl@example.com'} type={'email'} />
-            <IconWithoutText icon="line-md:phone" value={'123456789'} type={'phone'} />
+            <IconWithoutText icon="proicons:call" value={'123456789'} type={'phone'} />
             <IconWithoutText icon="mynaui:globe" value={'www.example.com'} type={'url'} />
             <IconWithoutText icon="ri:drive-fill" value={'https://www.instagram.com'} type={'url'} />
             <IconWithoutText icon="ri:amazon-fill" value={'www.example.com'} type={'url'} />
@@ -130,6 +133,15 @@ export const PartnerCard = () => {
           </Popover>
         </Box>
       </Box>
+
+      <ManagePartnerRightPanel
+        view="QUICK"
+        fetchList={fetchList}
+        width={"50vw"}
+        open={openPartnerRightPanel ? true : false}
+        data={openPartnerRightPanel}
+        onClose={() => setOpenPartnerRightPanel(false)}
+      />
     </Box>
   );
 };

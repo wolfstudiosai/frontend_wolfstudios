@@ -132,7 +132,7 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
   }, []);
 
   return (
-    <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
+    <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons} width={width}>
       {sidebarView === 'QUICK' ? (
         <PartnerQuickView data={values} />
       ) : (

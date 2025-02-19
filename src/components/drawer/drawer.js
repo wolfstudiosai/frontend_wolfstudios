@@ -1,6 +1,6 @@
 import { Box, Drawer, Stack } from '@mui/material';
 
-export const DrawerContainer = ({ children, open, handleDrawerClose, actionButtons }) => {
+export const DrawerContainer = ({ children, open, handleDrawerClose, actionButtons, width = '70vw' }) => {
   const handleStopPropagation = (e) => {
     e.stopPropagation();
     handleDrawerClose();
@@ -27,7 +27,7 @@ export const DrawerContainer = ({ children, open, handleDrawerClose, actionButto
     >
       <Box
         sx={{
-          width: '70vw',
+          width: { md: width, xs: '10vw' },
           height: '100%',
           p: 2,
           position: 'relative',
