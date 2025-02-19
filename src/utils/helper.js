@@ -139,3 +139,16 @@ export const getRandomGradientColor = (index) => {
 export function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }
+
+export const formatCompactNumber = (number) => {
+  const num = Number(number || 0);
+  if (num >= 1_000_000_000) {
+    return (num / 1_000_000_000).toFixed(1) + 'B';
+  } else if (num >= 1_000_000) {
+    return (num / 1_000_000).toFixed(1) + 'M';
+  } else if (num >= 1_000) {
+    return (num / 1_000).toFixed(1) + 'K';
+  }
+
+  return num.toString();
+};

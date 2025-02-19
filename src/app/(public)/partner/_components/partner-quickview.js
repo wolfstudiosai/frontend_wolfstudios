@@ -2,8 +2,8 @@ import { CustomChip } from '@/components/core/custom-chip';
 import { SectionTitle } from '@/components/core/section-title';
 import { Iconify } from '@/components/iconify/iconify';
 import { IconWithoutText } from '@/components/utils/icon-text';
-import { pxToRem } from '@/utils/helper';
-import { Avatar, Box, Stack, Typography } from '@mui/material';
+import { isSupabaseUrl, pxToRem } from '@/utils/helper';
+import { Box, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { SocialIconWithRedirectionUrl, SocialIconWithText } from './partner-gridview';
@@ -14,7 +14,11 @@ export const PartnerQuickView = ({ data }) => {
       <Box sx={{ position: 'relative' }}>
         <Box
           component="img"
-          src="https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66f8d87567db1d54b9d6b5d4_2CoCP5UkbBxnruHemWWGaYSct3ZRB8VF0-84yJknGQc-p-800.jpeg"
+          src={
+            isSupabaseUrl(data.profile_image)
+              ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${data.profile_image}`
+              : data.profile_image
+          }
           sx={{
             width: pxToRem(500),
             height: '100%',
@@ -174,7 +178,7 @@ export const PartnerQuickView = ({ data }) => {
               <strong>Stakeholder:</strong> {data?.stakeholder}
             </Typography>
             <Typography variant="body2">
-              <strong>Total Audience:</strong> {data?.total_audience.toLocaleString()}
+              <strong>Total Audience:</strong> {data?.total_audience?.toLocaleString()}
             </Typography>
             <Typography variant="body2">
               <strong>Products:</strong> {data?.products || 'N/A'}

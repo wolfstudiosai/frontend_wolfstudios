@@ -4,20 +4,20 @@ import { Iconify } from '@/components/iconify/iconify';
 import { PageLoader } from '@/components/loaders/PageLoader';
 import { Box, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { PartnerCard } from './partner-card';
 
+import { PartnerCard } from './partner-card';
 
 export const PartnerGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
   return (
     <Box>
       <PageLoader loading={loading} error={null}>
-        {data.map((partner, index) => (
-          <Grid key={index} container spacing={1}>
-            <Grid item size={{ xs: 12, md: 3 }} key={index}>
-              <PartnerCard  item={partner} fetchList={fetchList}/>
+        <Grid  container spacing={1}>
+          {data.map((partner, index) => (
+            <Grid key={index} item size={{ xs: 12, md: 3 }} >
+              <PartnerCard item={partner} fetchList={fetchList} />
             </Grid>
-          </Grid>
-        ))}
+          ))}
+        </Grid>
       </PageLoader>
     </Box>
   );
