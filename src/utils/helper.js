@@ -1,4 +1,5 @@
 import { alpha } from '@mui/material';
+import { toast } from 'sonner';
 
 export const getSearchQuery = (queryParams) => {
   const { page, rowsPerPage, status } = queryParams; // value, columns, fromDate, toDate
@@ -151,4 +152,18 @@ export const formatCompactNumber = (number) => {
   }
 
   return num.toString();
+};
+
+export const handleCopy = async (text) => {
+  if (text.length === 0) {
+    toast.error("No text to copy.");
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(text);
+    toast.success("Copied to clipboard!");
+  } catch (err) {
+    toast.error("Failed to copy text.");
+    console.error("Error copying text:", err);
+  }
 };
