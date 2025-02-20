@@ -1,8 +1,8 @@
-import { IconText } from '@/components/utils/icon-text';
+import { IconWithText } from '@/components/utils/icon-text';
 import { Avatar, Box, Card, Chip, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
-export const ContentCard = ({ content, handleOpenRightPnale }) => {
+export const ContentCard = ({ content, handleOpenRightPanel }) => {
   return (
     <Card
       sx={{
@@ -11,7 +11,7 @@ export const ContentCard = ({ content, handleOpenRightPnale }) => {
         borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
         cursor: 'pointer',
       }}
-      onClick={() => handleOpenRightPnale(content)}
+      onClick={() => handleOpenRightPanel(content)}
     >
       <Box
         component="img"
@@ -27,7 +27,7 @@ export const ContentCard = ({ content, handleOpenRightPnale }) => {
             <Box>
               <Typography variant="subtitle2">{content.stakeholder}</Typography>
               <Stack>
-                <IconText icon="solar:calendar-linear" text={dayjs(content?.created_at).format('MMM D, YYYY')} />
+                <IconWithText icon="solar:calendar-linear" text={dayjs(content?.created_at).format('MMM D, YYYY')} />
               </Stack>
             </Box>
           </Stack>
@@ -38,9 +38,9 @@ export const ContentCard = ({ content, handleOpenRightPnale }) => {
           </Stack>
         </Stack>
         <Stack direction={'row'} gap={2}>
-          <IconText icon="hugeicons:instagram" text={content.IG_view} />
-          <IconText icon="hugeicons:youtube" text={content.partner_YT_view} />
-          <IconText icon="basil:pinterest-outline" text={content.pinterest_view} />
+          <IconWithText icon="hugeicons:instagram" text={content.IG_view} />
+          <IconWithText icon="hugeicons:youtube" text={content.partner_YT_view} />
+          <IconWithText icon="basil:pinterest-outline" text={content.pinterest_view} />
         </Stack>
       </Stack>
     </Card>

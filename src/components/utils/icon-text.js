@@ -10,6 +10,7 @@ export const IconWithText = ({ icon, text, sx = {} }) => {
     </Stack>
   );
 };
+
 export const IconWithoutText = ({ icon, value, type, sx = {} }) => {
   const handleNavigate = () => {
     if (value && type === 'url') {
@@ -23,7 +24,7 @@ export const IconWithoutText = ({ icon, value, type, sx = {} }) => {
     }
   };
   return (
-    <Stack direction="row" alignItems="center" gap={1} sx={{cursor: 'pointer', ...sx }}>
+    <Stack direction="row" alignItems="center" gap={1} sx={{ cursor: 'pointer', ...sx }}>
       <Iconify icon={icon} onClick={handleNavigate} sx={{ '&:hover': { color: 'primary.main' } }} />
     </Stack>
   );
