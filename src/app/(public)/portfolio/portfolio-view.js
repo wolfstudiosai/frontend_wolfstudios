@@ -22,7 +22,7 @@ export const PortfolioView = () => {
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filters, setFilters] = React.useState({
-    COL: 3,
+    COL: 4.5,
     TAG: [],
     FILTER: [],
     SORTING: [],

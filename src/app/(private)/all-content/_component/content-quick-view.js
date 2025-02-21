@@ -110,7 +110,7 @@ export const ContentQuickView = ({ data }) => {
                 </Timeline>
               )
             }
-            <Stack sx={{ boxShadow: (theme) => theme.shadows[19], px: 1, pt: 1 }}>
+            <Stack sx={{ pt: 1 }}>
               {
                 selectedFiles.length > 0 && (
                   <>
@@ -120,18 +120,19 @@ export const ContentQuickView = ({ data }) => {
                           <Box key={index} sx={{ width: '120px', height: '120px', position: 'relative' }}>
                             <Box component='img' src={URL.createObjectURL(file)} sx={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 0.5 }} />
                             <IconButton size='small' sx={{ position: 'absolute', top: 3, right: 3, backgroundColor: 'rgba(0, 0, 0, 0.6)', borderRadius: '50%', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.8)' } }} onClick={() => handleRemoveFile(index)}>
-                              <Iconify icon='mingcute:close-fill' sx={{ color: '#fff' }} />
+                              <Iconify icon='mingcute:close-fill' sx={{ color: '#fff', width: '16px', height: '16px' }} />
                             </IconButton>
                           </Box>
                         ))
                       }
                     </Stack>
-                    <Divider sx={{ borderStyle: 'divider', my: 1 }} />
+                    <Divider sx={{ borderStyle: 'dashed', my: 1 }} />
                   </>
                 )
               }
               <FormControl variant="standard">
                 <Input
+                  placeholder='Add a comment...'
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   id="input-with-icon-adornment"
