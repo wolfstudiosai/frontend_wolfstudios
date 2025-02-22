@@ -1,8 +1,8 @@
 'use client';
 
-import { PageLoader } from '@/components/loaders/PageLoader';
-import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { getFancyColor, isVideoContent } from '@/utils/helper';
+import { PageLoader } from '/src/components/loaders/PageLoader';
+import { SliderWrapper } from '/src/components/slider/slider-wrapper';
+import { getFancyColor, isVideoContent } from '/src/utils/helper';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import Image from 'next/image';

@@ -8,7 +8,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 import * as React from 'react';
 
-import { CustomPasswordInput } from '@/components/formFields/CustomPasswordInput';
+import { CustomPasswordInput } from '/src/components/formFields/CustomPasswordInput';
 import { CircularProgress } from '@mui/material';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';

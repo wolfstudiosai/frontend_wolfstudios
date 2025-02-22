@@ -1,10 +1,10 @@
-import { GuestGuard } from '@/components/auth/guest-guard';
-import { SplitLayout } from '@/components/auth/split-layout';
-import { DynamicLogo } from '@/components/core/logo';
+import { GuestGuard } from '/src/components/auth/guest-guard';
+import { SplitLayout } from '/src/components/auth/split-layout';
+import { DynamicLogo } from '/src/components/core/logo';
 import { Box, Stack, Typography } from '@mui/material';
 import { default as Link, default as RouterLink } from 'next/link';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 import { config } from '/src/config';
 
 import { LoginForm } from '../_components/LoginForm';

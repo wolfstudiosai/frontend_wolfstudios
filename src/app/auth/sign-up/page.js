@@ -1,5 +1,5 @@
-import { GuestGuard } from '@/components/auth/guest-guard';
-import { SplitLayout } from '@/components/auth/split-layout';
+import { GuestGuard } from '/src/components/auth/guest-guard';
+import { SplitLayout } from '/src/components/auth/split-layout';
 import RouterLink from 'next/link';
 import { config } from '/src/config';
 

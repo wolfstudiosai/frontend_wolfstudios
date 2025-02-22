@@ -1,6 +1,6 @@
 'use client';
 
-import { Iconify } from '@/components/iconify/iconify';
+import { Iconify } from '/src/components/iconify/iconify';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -13,7 +13,7 @@ import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
 
-import useAuth from '@/hooks/useAuth';
+import useAuth from '/src/hooks/useAuth';
 import { isNavItemActive } from '/src/lib/is-nav-item-active';
 
 import { navColorStyles } from './styles';

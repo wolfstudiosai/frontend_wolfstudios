@@ -2,14 +2,14 @@ import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
 
 import '/src/styles/global.css';
 
-import { AuthGuard } from '@/app/auth/guard/auth-guard';
-import { Analytics } from '@/components/core/analytics';
-import { I18nProvider } from '@/components/core/i18n-provider';
-import { LocalizationProvider } from '@/components/core/localization-provider';
-import { ThemeProvider } from '@/components/core/theme-provider/theme-provider';
-import { Toaster } from '@/components/core/toaster';
-import { VerticalLayout } from '@/components/dashboard/layout/vertical/vertical-layout';
-import { Progressbar } from '@/components/utils/Progressbar';
+import { AuthGuard } from '/src/app/auth/guard/auth-guard';
+import { Analytics } from '/src/components/core/analytics';
+import { I18nProvider } from '/src/components/core/i18n-provider';
+import { LocalizationProvider } from '/src/components/core/localization-provider';
+import { ThemeProvider } from '/src/components/core/theme-provider/theme-provider';
+import { Toaster } from '/src/components/core/toaster';
+import { VerticalLayout } from '/src/components/dashboard/layout/vertical/vertical-layout';
+import { Progressbar } from '/src/components/utils/Progressbar';
 
 import { config } from '/src/config';
 import { applyDefaultSettings } from '/src/lib/settings/apply-default-settings';

@@ -1,4 +1,4 @@
-import { Dialog } from "@/components/dialog/Dialog";
+import { Dialog } from "/src/components/dialog/Dialog";
 import { Button, CircularProgress, FormControl, FormHelperText, InputLabel, MenuItem, OutlinedInput, Select, Stack } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { useFormik } from "formik";

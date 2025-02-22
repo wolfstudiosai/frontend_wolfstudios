@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 
 import { paths } from '/src/paths';
 import { createClient as createSupabaseClient } from '/src/lib/supabase/client';
-import { toast } from '@/components/core/toaster';
+import { toast } from '/src/components/core/toaster';
 
 export function SignUpResendButton({ children, email }) {
   const [supabaseClient] = React.useState(createSupabaseClient());

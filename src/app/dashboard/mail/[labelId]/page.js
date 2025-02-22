@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { config } from '/src/config';
-import { ThreadsView } from '@/components/dashboard/mail/threads-view';
+import { ThreadsView } from '/src/components/dashboard/mail/threads-view';
 
 export const metadata = { title: `Mail | Dashboard | ${config.site.name}` };
 

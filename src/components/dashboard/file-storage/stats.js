@@ -17,8 +17,8 @@ import Typography from '@mui/material/Typography';
 import { Lightning as LightningIcon } from '@phosphor-icons/react/dist/ssr/Lightning';
 import { RadialBar, RadialBarChart } from 'recharts';
 
-import { FileIcon } from '@/components/core/file-icon';
-import { NoSsr } from '@/components/core/no-ssr';
+import { FileIcon } from '/src/components/core/file-icon';
+import { NoSsr } from '/src/components/core/no-ssr';
 
 const totals = [
   { extension: 'mp4', itemsCount: 25, label: 'MP4', size: '22.75 GB' },

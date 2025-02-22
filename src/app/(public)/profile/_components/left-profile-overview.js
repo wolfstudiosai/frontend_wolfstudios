@@ -1,7 +1,7 @@
-import { pxToRem } from '@/utils/helper';
+import { pxToRem } from '/src/utils/helper';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 
-import { Iconify } from '@/components/iconify/iconify';
+import { Iconify } from '/src/components/iconify/iconify';
 
 export const LeftProfileOverview = () => {
   return (

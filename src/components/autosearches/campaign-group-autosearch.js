@@ -1,5 +1,5 @@
 import React from 'react';
-import { api } from '@/utils/api';
+import { api } from '/src/utils/api';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 

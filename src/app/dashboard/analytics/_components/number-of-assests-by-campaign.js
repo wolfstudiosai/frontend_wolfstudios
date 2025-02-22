@@ -15,7 +15,7 @@ import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsT
 import { ShareNetwork as ShareNetworkIcon } from '@phosphor-icons/react/dist/ssr/ShareNetwork';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-import { NoSsr } from '@/components/core/no-ssr';
+import { NoSsr } from '/src/components/core/no-ssr';
 
 const bars = [
   { name: 'Sessions', dataKey: 'v1', color: 'var(--mui-palette-primary-main)' },

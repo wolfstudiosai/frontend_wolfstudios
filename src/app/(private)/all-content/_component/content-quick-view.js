@@ -1,7 +1,7 @@
 'use client';
-import { SectionTitle } from '@/components/core/section-title';
-import { Iconify } from '@/components/iconify/iconify';
-import { handleCopy } from '@/utils/helper';
+import { SectionTitle } from '/src/components/core/section-title';
+import { Iconify } from '/src/components/iconify/iconify';
+import { handleCopy } from '/src/utils/helper';
 import Timeline from '@mui/lab/Timeline';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';

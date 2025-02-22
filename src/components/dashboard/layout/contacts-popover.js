@@ -13,7 +13,7 @@ import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 
 import { dayjs } from '/src/lib/dayjs';
-import { Presence } from '@/components/core/presence';
+import { Presence } from '/src/components/core/presence';
 
 const contacts = [
   {

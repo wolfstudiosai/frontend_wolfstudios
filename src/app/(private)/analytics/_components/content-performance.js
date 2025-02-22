@@ -1,10 +1,10 @@
 import { Box, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { TotalContributedEngagement } from "./total-contributed-engagement";
-import { IgViewsByPost } from "@/components/dashboard/analytics/ig-views-by-post";
+import { IgViewsByPost } from "/src/components/dashboard/analytics/ig-views-by-post";
 import { NumberOfAssestsByCampaign } from "./number-of-assests-by-campaign";
 import { PercentOfAssetsByProduct } from "./percent-of-assets-by-product";
-import { colorPalette } from '@/constants/constants';
+import { colorPalette } from '/src/constants/constants';
 
 export const ContentPerformance = () => {
     return (

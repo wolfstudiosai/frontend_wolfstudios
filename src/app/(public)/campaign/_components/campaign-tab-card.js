@@ -1,6 +1,6 @@
 import React from 'react';
-import { CustomSelect } from '@/components/formFields/custom-select';
-import { isSupabaseUrl } from '@/utils/helper';
+import { CustomSelect } from '/src/components/formFields/custom-select';
+import { isSupabaseUrl } from '/src/utils/helper';
 import { Box, Chip, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 

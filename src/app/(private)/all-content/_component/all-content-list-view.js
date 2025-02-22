@@ -7,11 +7,11 @@ import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import moment from 'moment';
 import * as React from 'react';
 
-import { CardTitle } from '@/components/cardTitle/CardTitle';
-import { PageContainer } from '@/components/container/PageContainer';
-import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
-import { EditableDataTable } from '@/components/data-table/editable-data-table';
-import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
+import { CardTitle } from '/src/components/cardTitle/CardTitle';
+import { PageContainer } from '/src/components/container/PageContainer';
+import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
+import { EditableDataTable } from '/src/components/data-table/editable-data-table';
+import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
 
 import { createContentAsync, deleteContentAsync, updateContentAsync } from '../_lib/all-content.actions';
 import { defaultContent } from '../_lib/all-content.types';

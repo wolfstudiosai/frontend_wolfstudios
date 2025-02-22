@@ -7,7 +7,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import {List as ListIcon} from "@phosphor-icons/react/dist/ssr/List";
 import  Badge from "@mui/material/Badge";
-import useAuth from "@/hooks/useAuth";
+import useAuth from "/src/hooks/useAuth";
 export function ThreadToolbar({ thread }) {
   const  {userInfo}  = useAuth();
 

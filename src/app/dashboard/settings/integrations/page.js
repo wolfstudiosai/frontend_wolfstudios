@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { config } from '/src/config';
-import { Integrations } from '@/components/dashboard/settings/integrations';
+import { Integrations } from '/src/components/dashboard/settings/integrations';
 
 export const metadata = { title: `Integrations | Settings | Dashboard | ${config.site.name}` };
 

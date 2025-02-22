@@ -1,4 +1,4 @@
-import { config } from '@/config';
+import { config } from '/src/config';
 import { Typography } from '@mui/material';
 
 export const metadata = { title: `Dashboard | Content | ${config.site.name}` };

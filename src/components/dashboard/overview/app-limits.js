@@ -17,7 +17,7 @@ import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsT
 import { Lightning as LightningIcon } from '@phosphor-icons/react/dist/ssr/Lightning';
 import { RadialBar, RadialBarChart } from 'recharts';
 
-import { NoSsr } from '@/components/core/no-ssr';
+import { NoSsr } from '/src/components/core/no-ssr';
 
 export function AppLimits({ usage }) {
   const chartSize = 240;

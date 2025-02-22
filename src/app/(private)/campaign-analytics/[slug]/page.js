@@ -1,4 +1,4 @@
-import { PageContainer } from '@/components/container/PageContainer';
+import { PageContainer } from '/src/components/container/PageContainer';
 
 import { CampaignAnalyticsView } from './campaign-analytics-view';
 

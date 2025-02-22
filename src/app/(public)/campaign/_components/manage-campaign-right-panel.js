@@ -2,15 +2,15 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { formConstants } from '@/app/constants/form-constants';
-import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
-import { DrawerContainer } from '@/components/drawer/drawer';
-import { Iconify } from '@/components/iconify/iconify';
+import { formConstants } from '/src/app/constants/form-constants';
+import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
+import { DrawerContainer } from '/src/components/drawer/drawer';
+import { Iconify } from '/src/components/iconify/iconify';
 import { Button, IconButton } from '@mui/material';
 import { useFormik } from 'formik';
 
-import { paths } from '@/paths';
-import useAuth from '@/hooks/useAuth';
+import { paths } from '/src/paths';
+import useAuth from '/src/hooks/useAuth';
 
 import { CampaignForm } from '../_components/campaign-form';
 import { CampaignQuickView } from '../_components/campaign-quick-view';

@@ -1,4 +1,4 @@
-import { getSearchQuery } from '@/utils/helper';
+import { getSearchQuery } from '/src/utils/helper';
 import { toast } from 'sonner';
 
 import { api, publicApi } from '/src/utils/api';

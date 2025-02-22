@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { MainNav } from '@/components/navbar/main-nav';
 import { Container } from '@mui/material';
 import GlobalStyles from '@mui/material/GlobalStyles';
+import * as React from 'react';
 import { Footer } from 'src/components/navbar/footer';
+import { MainNav } from '/src/components/navbar/main-nav';
 
-import Breadcrumbs, { TopBreadcrumbs } from './breadcrumbs.js';
+import { TopBreadcrumbs } from './breadcrumbs.js';
 import { FeatureCards } from './top-cards.js';
 
 export default function Layout({ children }) {

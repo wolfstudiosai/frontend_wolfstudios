@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { MemberCard } from '@/components/dashboard/jobs/member-card';
+import { MemberCard } from '/src/components/dashboard/jobs/member-card';
 
 const members = [
   {

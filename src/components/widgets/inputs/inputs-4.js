@@ -6,7 +6,7 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from '@mui/material/Select';
 
-import { Option } from '@/components/core/option';
+import { Option } from '/src/components/core/option';
 
 export function Inputs4() {
   return (

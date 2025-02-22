@@ -1,7 +1,7 @@
 
-import { GuestGuard } from '@/components/auth/guest-guard';
-import { SplitLayout } from '@/components/auth/split-layout';
-import { DynamicLogo } from '@/components/core/logo';
+import { GuestGuard } from '/src/components/auth/guest-guard';
+import { SplitLayout } from '/src/components/auth/split-layout';
+import { DynamicLogo } from '/src/components/core/logo';
 import { Box, Stack, Typography } from '@mui/material';
 import RouterLink from 'next/link';
 import { ForgotPasswordForm } from '../_components/FogotPasswordForm';

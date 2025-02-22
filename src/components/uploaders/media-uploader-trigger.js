@@ -1,6 +1,6 @@
 import React from 'react';
-import { deleteFileAsync } from '@/app/(public)/portfolio/_lib/portfolio.actions';
-import { isSupabaseUrl, isVideoContent } from '@/utils/helper';
+import { deleteFileAsync } from '/src/app/(public)/portfolio/_lib/portfolio.actions';
+import { isSupabaseUrl, isVideoContent } from '/src/utils/helper';
 import { Box, FormLabel, IconButton, Stack } from '@mui/material';
 
 import { Iconify } from '../iconify/iconify';

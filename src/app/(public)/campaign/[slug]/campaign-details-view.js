@@ -1,11 +1,11 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
-import { Iconify } from '@/components/iconify/iconify';
+import { Iconify } from '/src/components/iconify/iconify';
 
 import { CampaignDetailsRightPanel } from '../_components/campaign-details-right-panel';
 import { CampaignDetailsSidebar } from '../_components/campaign-details-sidebar';
-import { PageContainer } from '@/components/container/PageContainer';
+import { PageContainer } from '/src/components/container/PageContainer';
 
 // import { CampaignDetailsRightPanel } from "../_components/campaign-details-right-panel";
 // import { CampaignDetailsSidebar } from "../_components/campaign-details-sidebar";

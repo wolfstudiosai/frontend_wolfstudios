@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { ErrorText } from '@/components/core/error-text';
-import { CustomPasswordInput } from '@/components/formFields/CustomPasswordInput';
+import { ErrorText } from '/src/components/core/error-text';
+import { CustomPasswordInput } from '/src/components/formFields/CustomPasswordInput';
 import { CircularProgress } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
@@ -15,8 +15,8 @@ import Stack from '@mui/material/Stack';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { paths } from '@/paths';
-import useAuth from '@/hooks/useAuth';
+import { paths } from '/src/paths';
+import useAuth from '/src/hooks/useAuth';
 
 const oAuthProviders = [{ id: 'google', name: 'Google', logo: '/assets/logo-google.svg' }];
 const defaultValues = { email: '', password: '' };

@@ -23,9 +23,9 @@ import { z as zod } from 'zod';
 
 import { paths } from '/src/paths';
 import { logger } from '/src/lib/default-logger';
-import { Option } from '@/components/core/option';
-import { TextEditor } from '@/components/core/text-editor/text-editor';
-import { toast } from '@/components/core/toaster';
+import { Option } from '/src/components/core/option';
+import { TextEditor } from '/src/components/core/text-editor/text-editor';
+import { toast } from '/src/components/core/toaster';
 
 const schema = zod.object({
   name: zod.string().min(1, 'Name is required').max(255),

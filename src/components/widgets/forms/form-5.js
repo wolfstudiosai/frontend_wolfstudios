@@ -13,7 +13,7 @@ import Switch from '@mui/material/Switch';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 import { dayjs } from '/src/lib/dayjs';
-import { Option } from '@/components/core/option';
+import { Option } from '/src/components/core/option';
 
 export function Form5() {
   return (

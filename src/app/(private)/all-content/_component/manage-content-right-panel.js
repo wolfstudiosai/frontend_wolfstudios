@@ -1,14 +1,14 @@
 'use client';
 
-import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
-import { DrawerContainer } from '@/components/drawer/drawer';
-import { Iconify } from '@/components/iconify/iconify';
+import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
+import { DrawerContainer } from '/src/components/drawer/drawer';
+import { Iconify } from '/src/components/iconify/iconify';
 import { IconButton } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-import useAuth from '@/hooks/useAuth';
-import { paths } from '@/paths';
+import useAuth from '/src/hooks/useAuth';
+import { paths } from '/src/paths';
 
 import { ContentQuickView } from './content-quick-view';
 // import { createCampaignAsync, deleteCampaignAsync, updateCampaignAsync } from '../_lib/campaign.actions';

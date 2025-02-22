@@ -1,15 +1,15 @@
 'use client';
 
 import React from 'react';
-import { CampaignAutoSearch } from '@/components/autosearches/campaign-group-autosearch';
-import { TextEditor } from '@/components/core/text-editor/text-editor';
-import { CustomDatePicker } from '@/components/formFields/custom-date-picker';
-import { CustomSelect } from '@/components/formFields/custom-select';
-import { CustomTextField } from '@/components/formFields/custom-textfield';
-import { ErrorMessage } from '@/components/formFields/error-message';
-import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
-import { ImageUploader } from '@/components/uploaders/image-uploader';
-import { MediaUploaderTrigger } from '@/components/uploaders/media-uploader-trigger';
+import { CampaignAutoSearch } from '/src/components/autosearches/campaign-group-autosearch';
+import { TextEditor } from '/src/components/core/text-editor/text-editor';
+import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
+import { CustomSelect } from '/src/components/formFields/custom-select';
+import { CustomTextField } from '/src/components/formFields/custom-textfield';
+import { ErrorMessage } from '/src/components/formFields/error-message';
+import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-iframe-dialog';
+import { ImageUploader } from '/src/components/uploaders/image-uploader';
+import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 import { FormControl, FormLabel, InputLabel, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 

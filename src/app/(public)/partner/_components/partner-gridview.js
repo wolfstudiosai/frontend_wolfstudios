@@ -1,7 +1,7 @@
 'use client';
 
-import { Iconify } from '@/components/iconify/iconify';
-import { PageLoader } from '@/components/loaders/PageLoader';
+import { Iconify } from '/src/components/iconify/iconify';
+import { PageLoader } from '/src/components/loaders/PageLoader';
 import { Box, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 

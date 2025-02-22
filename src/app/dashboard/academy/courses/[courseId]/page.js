@@ -8,8 +8,8 @@ import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/Arrow
 
 import { config } from '/src/config';
 import { paths } from '/src/paths';
-import { ChapterView } from '@/components/dashboard/academy/chapter-view';
-import { CourseSummary } from '@/components/dashboard/academy/course-summary';
+import { ChapterView } from '/src/components/dashboard/academy/chapter-view';
+import { CourseSummary } from '/src/components/dashboard/academy/course-summary';
 
 export const metadata = { title: `Course | Academy | ${config.site.name}` };
 

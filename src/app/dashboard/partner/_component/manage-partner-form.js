@@ -8,15 +8,15 @@ import Grid from '@mui/material/Grid2';
 import { useFormik } from 'formik';
 
 import { paths } from '/src/paths';
-import { TextEditor } from '@/components/core/text-editor/text-editor';
-import { CustomDatePicker } from '@/components/formFields/custom-date-picker';
-import { CustomSelect } from '@/components/formFields/custom-select';
-import { CustomTextField } from '@/components/formFields/custom-textfield';
-import { ErrorMessage } from '@/components/formFields/error-message';
-import { Iconify } from '@/components/iconify/iconify';
-import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
-import PageLoader from '@/components/loaders/PageLoader';
-import { ImageUploader } from '@/components/uploaders/image-uploader';
+import { TextEditor } from '/src/components/core/text-editor/text-editor';
+import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
+import { CustomSelect } from '/src/components/formFields/custom-select';
+import { CustomTextField } from '/src/components/formFields/custom-textfield';
+import { ErrorMessage } from '/src/components/formFields/error-message';
+import { Iconify } from '/src/components/iconify/iconify';
+import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-iframe-dialog';
+import PageLoader from '/src/components/loaders/PageLoader';
+import { ImageUploader } from '/src/components/uploaders/image-uploader';
 
 import { createCampaignAsync, getCampaignAsync, updateUCampaignAsync } from '../_lib/campaign.actions';
 import { defaultCampaign } from '../_lib/campaign.types';

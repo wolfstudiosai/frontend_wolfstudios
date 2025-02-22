@@ -1,6 +1,6 @@
 import React from 'react';
-import { SectionLoader } from '@/components/loaders/section-loader';
-import { TabContainer } from '@/components/tabs/tab-container';
+import { SectionLoader } from '/src/components/loaders/section-loader';
+import { TabContainer } from '/src/components/tabs/tab-container';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 

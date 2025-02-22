@@ -1,16 +1,16 @@
 'use client';
 
-import { LoginForm } from '@/app/auth/_components/LoginForm';
-import { Dropdown } from '@/components/core/dropdown/dropdown';
-import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
-import { DropdownTrigger } from '@/components/core/dropdown/dropdown-trigger';
-import { Logo } from '@/components/core/logo';
-import { Iconify } from '@/components/iconify/iconify';
-import { MobileNav } from '@/components/navbar/mobile-nav';
-import { NavSearchV2 } from '@/components/navbar/nav-search-v2';
-import { isNavItemActive } from '@/lib/is-nav-item-active';
-import { publicRoutes } from '@/router';
-import { pxToRem } from '@/utils/helper';
+import { LoginForm } from '/src/app/auth/_components/LoginForm';
+import { Dropdown } from '/src/components/core/dropdown/dropdown';
+import { DropdownPopover } from '/src/components/core/dropdown/dropdown-popover';
+import { DropdownTrigger } from '/src/components/core/dropdown/dropdown-trigger';
+import { Logo } from '/src/components/core/logo';
+import { Iconify } from '/src/components/iconify/iconify';
+import { MobileNav } from '/src/components/navbar/mobile-nav';
+import { NavSearchV2 } from '/src/components/navbar/nav-search-v2';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
+import { publicRoutes } from '/src/router';
+import { pxToRem } from '/src/utils/helper';
 import { Button, Popover } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -21,10 +21,10 @@ import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/Caret
 import RouterLink from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
-import { SettingsContext } from 'src/contexts/settings';
+import { SettingsContext } from '/src/contexts/settings';
 
-import useAuth from '@/hooks/useAuth';
-import { paths } from '@/paths';
+import useAuth from '/src/hooks/useAuth';
+import { paths } from '/src/paths';
 
 import { NotificationPopover } from '../_components/notificaiton-popover';
 import { SettingsGear } from '../_components/settings-gear';

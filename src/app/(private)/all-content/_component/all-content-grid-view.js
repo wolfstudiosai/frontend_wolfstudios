@@ -1,4 +1,4 @@
-import PageLoader from '@/components/loaders/PageLoader';
+import PageLoader from '/src/components/loaders/PageLoader';
 import Grid from '@mui/material/Grid2';
 import React from 'react';
 

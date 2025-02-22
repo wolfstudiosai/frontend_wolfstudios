@@ -1,7 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
-import { RightPanel } from '@/components/rightPanel/right-panel';
+import { RightPanel } from '/src/components/rightPanel/right-panel';
 
 export const RightSlideContent = ({ open, data, onClose }) => {
   return (

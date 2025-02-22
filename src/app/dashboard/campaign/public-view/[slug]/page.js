@@ -1,6 +1,6 @@
-import { CampaignDetailsView } from '@/app/(public)/campaign/[slug]/campaign-details-view';
-import { config } from '@/config';
-import { publicApi } from '@/utils/api';
+import { CampaignDetailsView } from '/src/app/(public)/campaign/[slug]/campaign-details-view';
+import { config } from '/src/config';
+import { publicApi } from '/src/utils/api';
 import { Container } from '@mui/material';
 
 export const metadata = { title: config.site.name, description: 'Campaigns list page' };

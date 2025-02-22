@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 import { applyDefaultSettings } from '/src/lib/settings/apply-default-settings';
-import useAuth from '@/hooks/useAuth';
+import useAuth from '/src/hooks/useAuth';
 
 export const SettingsContext = React.createContext({
   settings: applyDefaultSettings({}),

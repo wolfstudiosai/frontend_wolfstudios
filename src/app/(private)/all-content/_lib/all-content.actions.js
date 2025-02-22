@@ -1,7 +1,7 @@
-import { getSearchQuery } from '@/utils/helper';
+import { getSearchQuery } from '/src/utils/helper';
 import { toast } from 'sonner';
 
-import { api } from '@/utils/api';
+import { api } from '/src/utils/api';
 
 export const getContentList = async (queryParams) => {
   try {

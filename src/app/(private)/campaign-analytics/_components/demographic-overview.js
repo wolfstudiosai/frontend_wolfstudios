@@ -4,10 +4,10 @@ import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 
-import { CustomBarGraph } from '@/components/bar-chart/custom-bar-graph';
-import { CustomPieGraph } from '@/components/bar-chart/custom-pie-graph';
-import { pxToRem } from '@/utils/helper';
-import { colorPalette } from '@/constants/constants';
+import { CustomBarGraph } from '/src/components/bar-chart/custom-bar-graph';
+import { CustomPieGraph } from '/src/components/bar-chart/custom-pie-graph';
+import { pxToRem } from '/src/utils/helper';
+import { colorPalette } from '/src/constants/constants';
 
 export function DemographicOverview() {
   return (

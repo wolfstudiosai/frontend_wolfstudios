@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { footerRoutes } from '@/router';
-// import { footerRoutes } from '@/router';
+import { footerRoutes } from '/src/router';
+// import { footerRoutes } from '/src/router';
 import { Box, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 

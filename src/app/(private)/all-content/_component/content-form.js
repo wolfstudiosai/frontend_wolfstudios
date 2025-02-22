@@ -1,8 +1,8 @@
 'use client';
 
-import { CampaignAutoSearch } from '@/components/autosearches/campaign-group-autosearch';
-import { ErrorMessage } from '@/components/formFields/error-message';
-import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
+import { CampaignAutoSearch } from '/src/components/autosearches/campaign-group-autosearch';
+import { ErrorMessage } from '/src/components/formFields/error-message';
+import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-iframe-dialog';
 import { FormLabel } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import React from 'react';

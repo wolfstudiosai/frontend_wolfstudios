@@ -1,14 +1,14 @@
 'use client';
 
 import * as React from 'react';
-import { config } from '@/config';
+import { config } from '/src/config';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 import { useRouter, usePathname } from 'next/navigation';
 
 export const metadata = { title: `Not found | ${config.site.name}` };

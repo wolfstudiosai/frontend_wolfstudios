@@ -1,8 +1,8 @@
 'use client';
 
-import { PageContainer } from '@/components/container/PageContainer';
-import { PageHeader } from '@/components/core/page-header';
-import { sliderToGridColsCoverter } from '@/utils/helper';
+import { PageContainer } from '/src/components/container/PageContainer';
+import { PageHeader } from '/src/components/core/page-header';
+import { sliderToGridColsCoverter } from '/src/utils/helper';
 import React from 'react';
 import AllContentGridView from './_component/all-content-grid-view';
 

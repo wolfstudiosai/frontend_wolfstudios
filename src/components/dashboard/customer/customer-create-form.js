@@ -28,8 +28,8 @@ import { z as zod } from 'zod';
 
 import { paths } from '/src/paths';
 import { logger } from '/src/lib/default-logger';
-import { Option } from '@/components/core/option';
-import { toast } from '@/components/core/toaster';
+import { Option } from '/src/components/core/option';
+import { toast } from '/src/components/core/toaster';
 
 const countryOptions = [
   { label: 'United States', value: 'us' },

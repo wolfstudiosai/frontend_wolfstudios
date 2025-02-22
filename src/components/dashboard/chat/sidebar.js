@@ -11,12 +11,12 @@ import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
-import { paths } from '@/paths';
-import { useMediaQuery } from '@/hooks/use-media-query';
+import { paths } from '/src/paths';
+import { useMediaQuery } from '/src/hooks/use-media-query';
 
 import { DirectSearch } from './direct-search';
 import { ThreadItem } from './thread-item';
-import { api } from '@/utils/api';
+import { api } from '/src/utils/api';
 
 export function Sidebar({
   currentThreadId,

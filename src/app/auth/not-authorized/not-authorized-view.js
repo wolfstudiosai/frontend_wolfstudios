@@ -1,7 +1,7 @@
 'use client';
 
 import { default as Link, default as RouterLink } from 'next/link';
-import { Iconify } from '@/components/iconify/iconify';
+import { Iconify } from '/src/components/iconify/iconify';
 import { Button, Container, Typography } from '@mui/material';
 
 import useAuth from '/src/hooks/useAuth';

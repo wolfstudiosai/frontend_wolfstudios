@@ -13,9 +13,9 @@ import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/Arrow
 
 import { config } from '/src/config';
 import { paths } from '/src/paths';
-import { PropertyItem } from '@/components/core/property-item';
-import { PropertyList } from '@/components/core/property-list';
-import { CompanyTabs } from '@/components/dashboard/jobs/company-tabs';
+import { PropertyItem } from '/src/components/core/property-item';
+import { PropertyList } from '/src/components/core/property-list';
+import { CompanyTabs } from '/src/components/dashboard/jobs/company-tabs';
 
 export const metadata = { title: `Company | Jobs | Dashboard | ${config.site.name}` };
 

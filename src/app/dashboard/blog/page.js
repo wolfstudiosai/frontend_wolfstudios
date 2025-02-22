@@ -15,9 +15,9 @@ import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/Arr
 import { config } from '/src/config';
 import { paths } from '/src/paths';
 import { dayjs } from '/src/lib/dayjs';
-import { BreadcrumbsSeparator } from '@/components/core/breadcrumbs-separator';
-import { Newsletter } from '@/components/dashboard/blog/newsletter';
-import { PostCard } from '@/components/dashboard/blog/post-card';
+import { BreadcrumbsSeparator } from '/src/components/core/breadcrumbs-separator';
+import { Newsletter } from '/src/components/dashboard/blog/newsletter';
+import { PostCard } from '/src/components/dashboard/blog/post-card';
 
 export const metadata = { title: `List | Blog | Dashboard | ${config.site.name}` };
 

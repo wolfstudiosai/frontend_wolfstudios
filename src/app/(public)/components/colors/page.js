@@ -1,15 +1,15 @@
 import * as React from 'react';
 
 import { config } from '/src/config';
-import { Colors1 } from '@/components/widgets/colors/colors-1';
-import { Colors2 } from '@/components/widgets/colors/colors-2';
-import { Colors3 } from '@/components/widgets/colors/colors-3';
-import { Colors4 } from '@/components/widgets/colors/colors-4';
-import { Colors5 } from '@/components/widgets/colors/colors-5';
-import { Colors6 } from '@/components/widgets/colors/colors-6';
-import { Colors7 } from '@/components/widgets/colors/colors-7';
-import { Colors8 } from '@/components/widgets/colors/colors-8';
-import { Layout } from '@/components/widgets/layout';
+import { Colors1 } from '/src/components/widgets/colors/colors-1';
+import { Colors2 } from '/src/components/widgets/colors/colors-2';
+import { Colors3 } from '/src/components/widgets/colors/colors-3';
+import { Colors4 } from '/src/components/widgets/colors/colors-4';
+import { Colors5 } from '/src/components/widgets/colors/colors-5';
+import { Colors6 } from '/src/components/widgets/colors/colors-6';
+import { Colors7 } from '/src/components/widgets/colors/colors-7';
+import { Colors8 } from '/src/components/widgets/colors/colors-8';
+import { Layout } from '/src/components/widgets/layout';
 
 export const metadata = { title: `Colors | Components | ${config.site.name}` };
 

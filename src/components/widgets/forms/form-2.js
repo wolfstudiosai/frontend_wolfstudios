@@ -12,7 +12,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 
-import { MultiSelect } from '@/components/core/multi-select';
+import { MultiSelect } from '/src/components/core/multi-select';
 
 const typeOptions = [
   { label: 'Digital', value: 'digital' },

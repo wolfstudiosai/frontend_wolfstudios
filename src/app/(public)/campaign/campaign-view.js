@@ -1,7 +1,7 @@
 'use client';
 
-import { PageContainer } from '@/components/container/PageContainer';
-import { PageHeader } from '@/components/core/page-header';
+import { PageContainer } from '/src/components/container/PageContainer';
+import { PageHeader } from '/src/components/core/page-header';
 import React from 'react';
 
 import { CampaignGridView } from './_components/campaign-grid-view';

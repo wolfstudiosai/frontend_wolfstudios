@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { config } from '@/config';
+import { config } from '/src/config';
 
 export const metadata = { title: `Chat | Dashboard | ${config.site.name}` };
 

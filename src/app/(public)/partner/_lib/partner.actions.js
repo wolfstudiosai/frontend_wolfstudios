@@ -1,6 +1,6 @@
-import { api } from "@/utils/api";
-import { getSearchQuery } from "@/utils/helper";
-import { uploadFileAsync } from "@/utils/upload-file";
+import { api } from "/src/utils/api";
+import { getSearchQuery } from "/src/utils/helper";
+import { uploadFileAsync } from "/src/utils/upload-file";
 import { toast } from "sonner";
 
 export const getPartnerListAsync = async (queryParams) => {

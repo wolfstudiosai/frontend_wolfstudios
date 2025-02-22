@@ -5,9 +5,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { dayjs } from '/src/lib/dayjs';
-import { CompanyReviewAdd } from '@/components/dashboard/jobs/review-add';
-import { ReviewCard } from '@/components/dashboard/jobs/review-card';
-import { ReviewsSummary } from '@/components/dashboard/jobs/reviews-summary';
+import { CompanyReviewAdd } from '/src/components/dashboard/jobs/review-add';
+import { ReviewCard } from '/src/components/dashboard/jobs/review-card';
+import { ReviewsSummary } from '/src/components/dashboard/jobs/reviews-summary';
 
 const reviews = [
   {

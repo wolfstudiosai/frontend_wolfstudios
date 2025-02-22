@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { textShortner } from '@/utils/helper';
+import { textShortner } from '/src/utils/helper';
 import { Box, Paper, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 

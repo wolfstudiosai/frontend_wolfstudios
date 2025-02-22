@@ -1,14 +1,14 @@
 'use client';
 
 import React from 'react';
-import { formConstants } from '@/app/constants/form-constants';
-import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
-import { DrawerContainer } from '@/components/drawer/drawer';
-import { Iconify } from '@/components/iconify/iconify';
+import { formConstants } from '/src/app/constants/form-constants';
+import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
+import { DrawerContainer } from '/src/components/drawer/drawer';
+import { Iconify } from '/src/components/iconify/iconify';
 import { Button, IconButton } from '@mui/material';
 import { useFormik } from 'formik';
 
-import useAuth from '@/hooks/useAuth';
+import useAuth from '/src/hooks/useAuth';
 
 import { createPartnerAsync, deletePartnerAsync, getPartnerAsync, updatePartnerAsync } from '../_lib/partner.actions';
 import { defaultPartner } from '../_lib/partner.types';

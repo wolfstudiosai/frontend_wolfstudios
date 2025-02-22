@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { footerRoutes } from '@/router';
-import { pxToRem } from '@/utils/helper';
+import { footerRoutes } from '/src/router';
+import { pxToRem } from '/src/utils/helper';
 import { Box, Container, Stack, Typography } from '@mui/material';
 
 export const ThinerFooter = () => {

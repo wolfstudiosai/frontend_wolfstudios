@@ -1,13 +1,13 @@
-import { CustomChip } from '@/components/core/custom-chip';
-import { SectionTitle } from '@/components/core/section-title';
-import { Iconify } from '@/components/iconify/iconify';
-import { handleCopy, isVideoContent, pxToRem } from '@/utils/helper';
+import { CustomChip } from '/src/components/core/custom-chip';
+import { SectionTitle } from '/src/components/core/section-title';
+import { Iconify } from '/src/components/iconify/iconify';
+import { handleCopy, isVideoContent, pxToRem } from '/src/utils/helper';
 import { Box, IconButton, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
-import { SliderWrapper } from '@/components/slider/slider-wrapper';
+import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 import { SocialIconWithText } from './partner-gridview';
 
 const mediaArr = [

@@ -1,8 +1,8 @@
 'use client';
 
-import { PageContainer } from '@/components/container/PageContainer';
-import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { pxToRem, textShortner } from '@/utils/helper';
+import { PageContainer } from '/src/components/container/PageContainer';
+import { SliderWrapper } from '/src/components/slider/slider-wrapper';
+import { pxToRem, textShortner } from '/src/utils/helper';
 import { Box, Card, Typography } from '@mui/material';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';

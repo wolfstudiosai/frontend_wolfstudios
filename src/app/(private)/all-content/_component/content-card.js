@@ -1,4 +1,4 @@
-import { IconWithText } from '@/components/utils/icon-text';
+import { IconWithText } from '/src/components/utils/icon-text';
 import { Avatar, Box, Card, Chip, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 

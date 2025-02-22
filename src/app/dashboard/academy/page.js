@@ -5,10 +5,10 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { config } from '/src/config';
-import { CourseCard } from '@/components/dashboard/academy/course-card';
-import { CoursesFilters } from '@/components/dashboard/academy/courses-filters';
-import { DailyProgress } from '@/components/dashboard/academy/daily-progress';
-import { Help } from '@/components/dashboard/academy/help';
+import { CourseCard } from '/src/components/dashboard/academy/course-card';
+import { CoursesFilters } from '/src/components/dashboard/academy/courses-filters';
+import { DailyProgress } from '/src/components/dashboard/academy/daily-progress';
+import { Help } from '/src/components/dashboard/academy/help';
 
 export const metadata = { title: `Browse | Academy | ${config.site.name}` };
 

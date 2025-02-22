@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Iconify } from '@/components/iconify/iconify';
-import { PageLoader } from '@/components/loaders/PageLoader';
-import { getRandomGradientColor, pxToRem } from '@/utils/helper';
+import { Iconify } from '/src/components/iconify/iconify';
+import { PageLoader } from '/src/components/loaders/PageLoader';
+import { getRandomGradientColor, pxToRem } from '/src/utils/helper';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
-import { SettingsContext } from '@/contexts/settings';
+import { SettingsContext } from '/src/contexts/settings';
 
 import { CampaignCard } from './campaign-card';
 

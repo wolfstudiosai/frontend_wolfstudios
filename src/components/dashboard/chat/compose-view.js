@@ -9,7 +9,7 @@ import { ChatContext } from './chat-context';
 import { GroupRecipients } from './group-recipients';
 import { MessageAdd } from './message-add';
 import { paths } from '/src/paths';
-import useAuth from '@/hooks/useAuth';
+import useAuth from '/src/hooks/useAuth';
 import { OutlinedInput } from '@mui/material';
 import Typography from '@mui/material/Typography';
 function useRecipients() {

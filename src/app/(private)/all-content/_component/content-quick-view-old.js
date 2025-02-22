@@ -1,8 +1,8 @@
 'use client';
 
-import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { IconWithText } from '@/components/utils/icon-text';
-import { isVideoContent, pxToRem } from '@/utils/helper';
+import { SliderWrapper } from '/src/components/slider/slider-wrapper';
+import { IconWithText } from '/src/components/utils/icon-text';
+import { isVideoContent, pxToRem } from '/src/utils/helper';
 import { Avatar, Box, Chip, Stack, Typography, useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';

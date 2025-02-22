@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useEffect, useCallback, useState } from 'react';
-import useAuth from '@/hooks/useAuth';
+import useAuth from '/src/hooks/useAuth';
 
-import {api, } from '@/utils/api';
+import {api, } from '/src/utils/api';
 import { createClient } from '../../../lib/supabase/client';
 
 

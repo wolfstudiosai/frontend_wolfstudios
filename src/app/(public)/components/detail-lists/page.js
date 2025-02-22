@@ -1,14 +1,14 @@
 import * as React from 'react';
 
 import { config } from '/src/config';
-import { DetailList1 } from '@/components/widgets/detail-lists/detail-list-1';
-import { DetailList2 } from '@/components/widgets/detail-lists/detail-list-2';
-import { DetailList3 } from '@/components/widgets/detail-lists/detail-list-3';
-import { DetailList4 } from '@/components/widgets/detail-lists/detail-list-4';
-import { DetailList5 } from '@/components/widgets/detail-lists/detail-list-5';
-import { DetailList6 } from '@/components/widgets/detail-lists/detail-list-6';
-import { DetailList7 } from '@/components/widgets/detail-lists/detail-list-7';
-import { Layout } from '@/components/widgets/layout';
+import { DetailList1 } from '/src/components/widgets/detail-lists/detail-list-1';
+import { DetailList2 } from '/src/components/widgets/detail-lists/detail-list-2';
+import { DetailList3 } from '/src/components/widgets/detail-lists/detail-list-3';
+import { DetailList4 } from '/src/components/widgets/detail-lists/detail-list-4';
+import { DetailList5 } from '/src/components/widgets/detail-lists/detail-list-5';
+import { DetailList6 } from '/src/components/widgets/detail-lists/detail-list-6';
+import { DetailList7 } from '/src/components/widgets/detail-lists/detail-list-7';
+import { Layout } from '/src/components/widgets/layout';
 
 export const metadata = { title: `Detail lists | Components | ${config.site.name}` };
 

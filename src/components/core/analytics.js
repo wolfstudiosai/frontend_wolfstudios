@@ -5,7 +5,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { GTMProvider, useGTMDispatch } from '@elgorditosalsero/react-gtm-hook';
 import { config } from '/src/config';
 
-// import { config } from '@/components/core/config';
+// import { config } from '/src/components/core/config';
 
 function PageViewTracker({ children }) {
   const dispatch = useGTMDispatch();

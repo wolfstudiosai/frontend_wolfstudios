@@ -19,7 +19,7 @@ import { z as zod } from 'zod';
 
 import { paths } from '/src/paths';
 import { getFirebaseAuth } from '/src/lib/auth/firebase/client';
-import { DynamicLogo } from '@/components/core/logo';
+import { DynamicLogo } from '/src/components/core/logo';
 
 const schema = zod.object({ email: zod.string().min(1, { message: 'Email is required' }).email() });
 

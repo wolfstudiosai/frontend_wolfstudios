@@ -1,18 +1,18 @@
 import * as React from 'react';
 
 import { config } from '/src/config';
-import { Layout } from '@/components/widgets/layout';
-import { QuickStats1 } from '@/components/widgets/quick-stats/quick-stats-1';
-import { QuickStats2 } from '@/components/widgets/quick-stats/quick-stats-2';
-import { QuickStats3 } from '@/components/widgets/quick-stats/quick-stats-3';
-import { QuickStats4 } from '@/components/widgets/quick-stats/quick-stats-4';
-import { QuickStats5 } from '@/components/widgets/quick-stats/quick-stats-5';
-import { QuickStats6 } from '@/components/widgets/quick-stats/quick-stats-6';
-import { QuickStats7 } from '@/components/widgets/quick-stats/quick-stats-7';
-import { QuickStats8 } from '@/components/widgets/quick-stats/quick-stats-8';
-import { QuickStats9 } from '@/components/widgets/quick-stats/quick-stats-9';
-import { QuickStats10 } from '@/components/widgets/quick-stats/quick-stats-10';
-import { QuickStats11 } from '@/components/widgets/quick-stats/quick-stats-11';
+import { Layout } from '/src/components/widgets/layout';
+import { QuickStats1 } from '/src/components/widgets/quick-stats/quick-stats-1';
+import { QuickStats2 } from '/src/components/widgets/quick-stats/quick-stats-2';
+import { QuickStats3 } from '/src/components/widgets/quick-stats/quick-stats-3';
+import { QuickStats4 } from '/src/components/widgets/quick-stats/quick-stats-4';
+import { QuickStats5 } from '/src/components/widgets/quick-stats/quick-stats-5';
+import { QuickStats6 } from '/src/components/widgets/quick-stats/quick-stats-6';
+import { QuickStats7 } from '/src/components/widgets/quick-stats/quick-stats-7';
+import { QuickStats8 } from '/src/components/widgets/quick-stats/quick-stats-8';
+import { QuickStats9 } from '/src/components/widgets/quick-stats/quick-stats-9';
+import { QuickStats10 } from '/src/components/widgets/quick-stats/quick-stats-10';
+import { QuickStats11 } from '/src/components/widgets/quick-stats/quick-stats-11';
 
 export const metadata = { title: `Quick stats | Components | ${config.site.name}` };
 

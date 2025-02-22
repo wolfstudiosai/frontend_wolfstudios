@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 
-import { PageContainer } from '@/components/container/PageContainer';
+import { PageContainer } from '/src/components/container/PageContainer';
 
 export default function Layout({ children }) {
     return (

@@ -3,15 +3,15 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Iconify } from '@/components/iconify/iconify';
-import { dashboardFavItems, privateRoutes } from '@/router';
-import { pxToRem } from '@/utils/helper';
+import { Iconify } from '/src/components/iconify/iconify';
+import { dashboardFavItems, privateRoutes } from '/src/router';
+import { pxToRem } from '/src/utils/helper';
 import { Collapse, Divider, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useColorScheme } from '@mui/material/styles';
 
-import useAuth from '@/hooks/useAuth';
+import useAuth from '/src/hooks/useAuth';
 
 import { navColorStyles } from './styles';
 

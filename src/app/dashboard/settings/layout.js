@@ -2,8 +2,8 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
-import { SideNav } from '@/components/dashboard/settings/side-nav';
-import { PageContainer } from '@/components/container/PageContainer';
+import { SideNav } from '/src/components/dashboard/settings/side-nav';
+import { PageContainer } from '/src/components/container/PageContainer';
 
 export default function Layout({ children }) {
   return (

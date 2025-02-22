@@ -12,8 +12,8 @@ import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsT
 
 import { config } from '/src/config';
 import { paths } from '/src/paths';
-import { BreadcrumbsSeparator } from '@/components/core/breadcrumbs-separator';
-import { PostForm } from '@/components/dashboard/blog/post-form';
+import { BreadcrumbsSeparator } from '/src/components/core/breadcrumbs-separator';
+import { PostForm } from '/src/components/dashboard/blog/post-form';
 
 export const metadata = { title: `Create | Blog | Dashboard | ${config.site.name}` };
 

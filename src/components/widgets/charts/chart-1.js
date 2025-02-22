@@ -10,7 +10,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-import { NoSsr } from '@/components/core/no-ssr';
+import { NoSsr } from '/src/components/core/no-ssr';
 
 const areas = [
   { name: 'New customers', dataKey: 'v1', fill: 'var(--mui-palette-primary-main)' },

@@ -3,8 +3,8 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Logo } from '@/components/core/logo';
-import { publicRoutes } from '@/router';
+import { Logo } from '/src/components/core/logo';
+import { publicRoutes } from '/src/router';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -15,7 +15,7 @@ import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/Caret
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 import { isNavItemActive } from '/src/lib/is-nav-item-active';
 
 import { NavSearch } from './nav-search';

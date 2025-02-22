@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { config } from '/src/config';
-import { Layout } from '@/components/widgets/layout';
-import { Typography1 } from '@/components/widgets/typography/typography-1';
+import { Layout } from '/src/components/widgets/layout';
+import { Typography1 } from '/src/components/widgets/typography/typography-1';
 
 export const metadata = { title: `Typography | Components | ${config.site.name}` };
 

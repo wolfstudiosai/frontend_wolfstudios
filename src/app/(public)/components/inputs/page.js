@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import { config } from '/src/config';
-import { Inputs1 } from '@/components/widgets/inputs/inputs-1';
-import { Inputs2 } from '@/components/widgets/inputs/inputs-2';
-import { Inputs3 } from '@/components/widgets/inputs/inputs-3';
-import { Inputs4 } from '@/components/widgets/inputs/inputs-4';
-import { Layout } from '@/components/widgets/layout';
+import { Inputs1 } from '/src/components/widgets/inputs/inputs-1';
+import { Inputs2 } from '/src/components/widgets/inputs/inputs-2';
+import { Inputs3 } from '/src/components/widgets/inputs/inputs-3';
+import { Inputs4 } from '/src/components/widgets/inputs/inputs-4';
+import { Layout } from '/src/components/widgets/layout';
 
 export const metadata = { title: `Inputs | Components | ${config.site.name}` };
 

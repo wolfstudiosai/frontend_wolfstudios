@@ -1,18 +1,18 @@
 import * as React from 'react';
 
 import { config } from '/src/config';
-import { Chart1 } from '@/components/widgets/charts/chart-1';
-import { Chart2 } from '@/components/widgets/charts/chart-2';
-import { Chart3 } from '@/components/widgets/charts/chart-3';
-import { Chart4 } from '@/components/widgets/charts/chart-4';
-import { Chart5 } from '@/components/widgets/charts/chart-5';
-import { Chart6 } from '@/components/widgets/charts/chart-6';
-import { Chart7 } from '@/components/widgets/charts/chart-7';
-import { Chart8 } from '@/components/widgets/charts/chart-8';
-import { Chart9 } from '@/components/widgets/charts/chart-9';
-import { Chart10 } from '@/components/widgets/charts/chart-10';
-import { Chart11 } from '@/components/widgets/charts/chart-11';
-import { Layout } from '@/components/widgets/layout';
+import { Chart1 } from '/src/components/widgets/charts/chart-1';
+import { Chart2 } from '/src/components/widgets/charts/chart-2';
+import { Chart3 } from '/src/components/widgets/charts/chart-3';
+import { Chart4 } from '/src/components/widgets/charts/chart-4';
+import { Chart5 } from '/src/components/widgets/charts/chart-5';
+import { Chart6 } from '/src/components/widgets/charts/chart-6';
+import { Chart7 } from '/src/components/widgets/charts/chart-7';
+import { Chart8 } from '/src/components/widgets/charts/chart-8';
+import { Chart9 } from '/src/components/widgets/charts/chart-9';
+import { Chart10 } from '/src/components/widgets/charts/chart-10';
+import { Chart11 } from '/src/components/widgets/charts/chart-11';
+import { Layout } from '/src/components/widgets/layout';
 
 export const metadata = { title: `Charts | Components | ${config.site.name}` };
 

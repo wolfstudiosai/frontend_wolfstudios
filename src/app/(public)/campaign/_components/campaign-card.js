@@ -1,7 +1,7 @@
 import React from 'react';
-import { CustomChip } from '@/components/core/custom-chip';
-import { Iconify } from '@/components/iconify/iconify';
-import { isSupabaseUrl } from '@/utils/helper';
+import { CustomChip } from '/src/components/core/custom-chip';
+import { Iconify } from '/src/components/iconify/iconify';
+import { isSupabaseUrl } from '/src/utils/helper';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 

@@ -1,4 +1,4 @@
-import { pxToRem } from '@/utils/helper';
+import { pxToRem } from '/src/utils/helper';
 import {
   Box,
   Card,
@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
-import { Iconify } from '@/components/iconify/iconify';
+import { Iconify } from '/src/components/iconify/iconify';
 
 export const ConversionRate = () => {
   const rows = [

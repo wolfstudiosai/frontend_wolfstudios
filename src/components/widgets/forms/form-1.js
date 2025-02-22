@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 
-import { Option } from '@/components/core/option';
+import { Option } from '/src/components/core/option';
 
 export function Form1() {
   return (

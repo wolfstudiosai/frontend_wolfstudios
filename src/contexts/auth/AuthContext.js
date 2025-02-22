@@ -2,10 +2,10 @@
 
 import React, { createContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { api, server_base_api } from '@/utils/api';
+import { api, server_base_api } from '/src/utils/api';
 import { jwtDecode } from 'jwt-decode';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 import { removeTokenFromCookies, setTokenInCookies } from '/src/utils/axios-api.helpers';
 

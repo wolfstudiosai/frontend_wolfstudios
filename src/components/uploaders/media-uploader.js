@@ -1,6 +1,6 @@
 import React from 'react';
-import { api } from '@/utils/api';
-import { isVideoContent, pxToRem } from '@/utils/helper';
+import { api } from '/src/utils/api';
+import { isVideoContent, pxToRem } from '/src/utils/helper';
 import {
   Box,
   Button,

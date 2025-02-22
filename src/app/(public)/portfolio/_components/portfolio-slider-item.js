@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { getFancyColor, getRandomColor } from '@/utils/helper';
+import { getFancyColor, getRandomColor } from '/src/utils/helper';
 import { Avatar, AvatarGroup, Box, Card, Chip, Stack, Typography } from '@mui/material';
 
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';

@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import { CaretRight as CaretRightIcon } from '@phosphor-icons/react/dist/ssr/CaretRight';
 
 import { paths } from '/src/paths';
-import { NoSsr } from '@/components/core/no-ssr';
+import { NoSsr } from '/src/components/core/no-ssr';
 
 export function StartBuilding() {
   const { colorScheme } = useColorScheme();

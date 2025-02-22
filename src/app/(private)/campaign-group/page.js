@@ -2,16 +2,16 @@
 
 import * as React from 'react';
 import RouterLink from 'next/link';
-import { defaultCampaignGroup } from '@/app/(public)/campaign/_lib/campaign.types';
-import { getCampaignGroupListAsync } from '@/app/(public)/campaign/_lib/campaign.actions';
-import { deleteCampaignGroupAsync } from '@/app/dashboard/partner/_lib/campaign.actions';
-import { FilterButton } from '@/components/core/filter-button';
-import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopover';
-import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
-import { DataTable } from '@/components/data-table/data-table';
-import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
-import PageLoader from '@/components/loaders/PageLoader';
-import { getSpeficiLengthString } from '@/utils/helper';
+import { defaultCampaignGroup } from '/src/app/(public)/campaign/_lib/campaign.types';
+import { getCampaignGroupListAsync } from '/src/app/(public)/campaign/_lib/campaign.actions';
+import { deleteCampaignGroupAsync } from '/src/app/dashboard/partner/_lib/campaign.actions';
+import { FilterButton } from '/src/components/core/filter-button';
+import { StatusFilterPopover } from '/src/components/core/filters/StatusFilterPopover';
+import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
+import { DataTable } from '/src/components/data-table/data-table';
+import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
+import PageLoader from '/src/components/loaders/PageLoader';
+import { getSpeficiLengthString } from '/src/utils/helper';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';

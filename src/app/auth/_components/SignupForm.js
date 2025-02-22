@@ -1,6 +1,6 @@
 'use client';
 
-import { CustomPasswordInput } from '@/components/formFields/CustomPasswordInput';
+import { CustomPasswordInput } from '/src/components/formFields/CustomPasswordInput';
 import { CircularProgress } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';

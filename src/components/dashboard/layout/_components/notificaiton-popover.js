@@ -1,6 +1,6 @@
 import React from 'react';
-import { Iconify } from '@/components/iconify/iconify';
-import { pxToRem } from '@/utils/helper';
+import { Iconify } from '/src/components/iconify/iconify';
+import { pxToRem } from '/src/utils/helper';
 import {
   Badge,
   Box,

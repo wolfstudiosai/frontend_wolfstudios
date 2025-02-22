@@ -2,13 +2,13 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { NoSsr } from '@/components/core/no-ssr';
-import { pxToRem } from '@/utils/helper';
+import { NoSsr } from '/src/components/core/no-ssr';
+import { pxToRem } from '/src/utils/helper';
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { useColorScheme } from '@mui/material/styles';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 const HEIGHT = 25;
 const WIDTH = '100%';

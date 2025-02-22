@@ -12,7 +12,7 @@ import { Image as ImageIcon } from '@phosphor-icons/react/dist/ssr/Image';
 import { UserPlus as UserPlusIcon } from '@phosphor-icons/react/dist/ssr/UserPlus';
 
 import { config } from '/src/config';
-import { ProfileTabs } from '@/components/dashboard/social/profile-tabs';
+import { ProfileTabs } from '/src/components/dashboard/social/profile-tabs';
 
 export const metadata = { title: `Profile | Social | Dashboard | ${config.site.name}` };
 

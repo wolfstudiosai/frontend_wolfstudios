@@ -1,4 +1,4 @@
-import { PageContainer } from '@/components/container/PageContainer';
+import { PageContainer } from '/src/components/container/PageContainer';
 import { Box } from '@mui/material';
 
 import { config } from '/src/config';

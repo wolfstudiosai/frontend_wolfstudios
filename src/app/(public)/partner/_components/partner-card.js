@@ -1,8 +1,8 @@
 import React from 'react';
-import { CustomChip } from '@/components/core/custom-chip';
-import { Iconify } from '@/components/iconify/iconify';
-import { IconWithoutText } from '@/components/utils/icon-text';
-import { formatCompactNumber, formatViewCount, isSupabaseUrl } from '@/utils/helper';
+import { CustomChip } from '/src/components/core/custom-chip';
+import { Iconify } from '/src/components/iconify/iconify';
+import { IconWithoutText } from '/src/components/utils/icon-text';
+import { formatCompactNumber, formatViewCount, isSupabaseUrl } from '/src/utils/helper';
 import { Box, Button, Divider, MenuItem, MenuList, Popover, Stack, Typography } from '@mui/material';
 
 import { ManagePartnerRightPanel } from './manage-partner-right-panel';

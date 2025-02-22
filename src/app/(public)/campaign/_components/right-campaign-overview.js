@@ -1,13 +1,13 @@
 "use client";
 import Link from 'next/link';
-import { Iconify } from '@/components/iconify/iconify';
-import { textShortner } from '@/utils/helper';
+import { Iconify } from '/src/components/iconify/iconify';
+import { textShortner } from '/src/utils/helper';
 import { Box, Chip, Paper, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import dayjs from 'dayjs';
 
-import { paths } from '@/paths';
-import useAuth from '@/hooks/useAuth';
+import { paths } from '/src/paths';
+import useAuth from '/src/hooks/useAuth';
 
 export const RightCampaignOverview = ({ data }) => {
   return (

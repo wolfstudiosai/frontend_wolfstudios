@@ -9,11 +9,11 @@ import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
 import { config } from '/src/config';
 import { dayjs } from '/src/lib/dayjs';
-import { OrderModal } from '@/components/dashboard/order/order-modal';
-import { OrdersFilters } from '@/components/dashboard/order/orders-filters';
-import { OrdersPagination } from '@/components/dashboard/order/orders-pagination';
-import { OrdersSelectionProvider } from '@/components/dashboard/order/orders-selection-context';
-import { OrdersTable } from '@/components/dashboard/order/orders-table';
+import { OrderModal } from '/src/components/dashboard/order/order-modal';
+import { OrdersFilters } from '/src/components/dashboard/order/orders-filters';
+import { OrdersPagination } from '/src/components/dashboard/order/orders-pagination';
+import { OrdersSelectionProvider } from '/src/components/dashboard/order/orders-selection-context';
+import { OrdersTable } from '/src/components/dashboard/order/orders-table';
 
 export const metadata = { title: `List | Orders | Dashboard | ${config.site.name}` };
 

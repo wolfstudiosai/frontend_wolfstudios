@@ -14,7 +14,7 @@ import { Rows as RowsIcon } from '@phosphor-icons/react/dist/ssr/Rows';
 import { SquaresFour as SquaresFourIcon } from '@phosphor-icons/react/dist/ssr/SquaresFour';
 
 import { paths } from '/src/paths';
-import { Option } from '@/components/core/option';
+import { Option } from '/src/components/core/option';
 
 export function ItemsFilters({ filters = {}, sortDir = 'desc', view = 'grid' }) {
   const router = useRouter();

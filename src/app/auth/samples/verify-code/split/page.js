@@ -12,8 +12,8 @@ import { ArrowLeft as ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr/Arrow
 
 import { config } from '/src/config';
 import { paths } from '/src/paths';
-import { SplitLayout } from '@/components/auth/split-layout';
-import { DynamicLogo } from '@/components/core/logo';
+import { SplitLayout } from '/src/components/auth/split-layout';
+import { DynamicLogo } from '/src/components/core/logo';
 
 export const metadata = { title: `Verify code | Samples | Auth | ${config.site.name}` };
 

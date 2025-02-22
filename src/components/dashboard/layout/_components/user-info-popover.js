@@ -1,10 +1,10 @@
 import React from 'react';
 import RouterLink from 'next/link';
-import { Iconify } from '@/components/iconify/iconify';
+import { Iconify } from '/src/components/iconify/iconify';
 import { Avatar, Badge, Box, Divider, List, ListItemIcon, MenuItem, Popover, Typography } from '@mui/material';
 
-import { paths } from '@/paths';
-import useAuth from '@/hooks/useAuth';
+import { paths } from '/src/paths';
+import useAuth from '/src/hooks/useAuth';
 
 export const UserInfoPopover = () => {
   const { userInfo } = useAuth();

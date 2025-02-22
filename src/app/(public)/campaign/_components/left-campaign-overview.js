@@ -1,6 +1,6 @@
 import RouterLink from 'next/link';
-import { Iconify } from '@/components/iconify/iconify';
-import { pxToRem, textShortner } from '@/utils/helper';
+import { Iconify } from '/src/components/iconify/iconify';
+import { pxToRem, textShortner } from '/src/utils/helper';
 import { Box, Card, CardContent, Paper, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 

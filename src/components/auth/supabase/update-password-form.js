@@ -18,7 +18,7 @@ import { z as zod } from 'zod';
 
 import { paths } from '/src/paths';
 import { createClient as createSupabaseClient } from '/src/lib/supabase/client';
-import { DynamicLogo } from '@/components/core/logo';
+import { DynamicLogo } from '/src/components/core/logo';
 
 const schema = zod
   .object({

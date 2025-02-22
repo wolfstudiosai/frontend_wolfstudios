@@ -1,6 +1,6 @@
 import RouterLink from 'next/link';
-import { ContactForm } from '@/components/marketing/contact/contact-form';
-import { Customers } from '@/components/marketing/contact/customers';
+import { ContactForm } from '/src/components/marketing/contact/contact-form';
+import { Customers } from '/src/components/marketing/contact/customers';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';

@@ -20,7 +20,7 @@ import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/Arr
 import { ChatCircleText as ChatCircleTextIcon } from '@phosphor-icons/react/dist/ssr/ChatCircleText';
 import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsThree';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 import { dayjs } from '/src/lib/dayjs';
 
 export function AppChat({ messages }) {

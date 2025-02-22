@@ -1,7 +1,7 @@
 'use client';
 
-import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { isVideoContent, pxToRem } from '@/utils/helper';
+import { SliderWrapper } from '/src/components/slider/slider-wrapper';
+import { isVideoContent, pxToRem } from '/src/utils/helper';
 import { Box, Button, Chip, Divider, Stack, Typography, useTheme } from '@mui/material';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';

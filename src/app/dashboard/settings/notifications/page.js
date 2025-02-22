@@ -3,8 +3,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { config } from '/src/config';
-import { EmailNotifications } from '@/components/dashboard/settings/email-notifications';
-import { PhoneNotifications } from '@/components/dashboard/settings/phone-notifications';
+import { EmailNotifications } from '/src/components/dashboard/settings/email-notifications';
+import { PhoneNotifications } from '/src/components/dashboard/settings/phone-notifications';
 
 export const metadata = { title: `Notifications | Settings | Dashboard | ${config.site.name}` };
 

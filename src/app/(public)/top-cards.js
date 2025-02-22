@@ -1,6 +1,6 @@
 'use client';
 
-import { pxToRem, textShortner } from '@/utils/helper';
+import { pxToRem, textShortner } from '/src/utils/helper';
 import { Box, Card, Typography } from '@mui/material';
 
 export function FeatureCards() {

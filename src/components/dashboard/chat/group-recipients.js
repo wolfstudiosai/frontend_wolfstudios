@@ -19,7 +19,7 @@
 // import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 
 // import { logger } from '/src/lib/default-logger';
-// import { api } from '@/utils/api';
+// import { api } from '/src/utils/api';
 
 // export function GroupRecipients({ contacts, onRecipientAdd, onRecipientRemove, recipients = [] }) {
 //   const searchRef = React.useRef(null);
@@ -226,7 +226,7 @@ import Typography from '@mui/material/Typography';
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 
 import { logger } from '/src/lib/default-logger';
-import { api } from '@/utils/api';
+import { api } from '/src/utils/api';
 
 export function GroupRecipients({ onRecipientAdd, onRecipientRemove, recipients = [] }) {
   const searchRef = React.useRef(null);

@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { dayjs } from '/src/lib/dayjs';
-import { MailProvider } from '@/components/dashboard/mail/mail-context';
-import { MailView } from '@/components/dashboard/mail/mail-view';
+import { MailProvider } from '/src/components/dashboard/mail/mail-context';
+import { MailView } from '/src/components/dashboard/mail/mail-view';
 
 function filterThreads(threads, labelId) {
   return threads.filter((thread) => {

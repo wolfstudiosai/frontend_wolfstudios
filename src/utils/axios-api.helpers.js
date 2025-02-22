@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 export const setTokenInCookies = (access_token) => {
   Cookies?.set('token', access_token);

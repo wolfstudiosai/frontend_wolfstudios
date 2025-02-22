@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { PageContainer } from '@/components/container/PageContainer';
-import { PageHeader } from '@/components/core/page-header';
-import PageLoader from '@/components/loaders/PageLoader';
+import { PageContainer } from '/src/components/container/PageContainer';
+import { PageHeader } from '/src/components/core/page-header';
+import PageLoader from '/src/components/loaders/PageLoader';
 import { Box } from '@mui/material';
 
 import { PartnerGridView } from './_components/partner-gridview';

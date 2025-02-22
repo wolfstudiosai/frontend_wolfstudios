@@ -21,7 +21,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
 import { paths } from '/src/paths';
-import { DynamicLogo } from '@/components/core/logo';
+import { DynamicLogo } from '/src/components/core/logo';
 
 const schema = zod.object({
   email: zod.string().min(1, { message: 'Email is required' }).email(),

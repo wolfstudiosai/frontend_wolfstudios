@@ -3,15 +3,15 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ForgotPasswordForm } from '@/app/auth/_components/FogotPasswordForm';
-import { LoginForm } from '@/app/auth/_components/LoginForm';
-import { SignupForm } from '@/app/auth/_components/SignupForm';
-import { Dropdown } from '@/components/core/dropdown/dropdown';
-import { DropdownPopover } from '@/components/core/dropdown/dropdown-popover';
-import { DropdownTrigger } from '@/components/core/dropdown/dropdown-trigger';
-import { Logo } from '@/components/core/logo';
-import { isNavItemActive } from '@/lib/is-nav-item-active';
-// import { navData } from '@/router';
+import { ForgotPasswordForm } from '/src/app/auth/_components/FogotPasswordForm';
+import { LoginForm } from '/src/app/auth/_components/LoginForm';
+import { SignupForm } from '/src/app/auth/_components/SignupForm';
+import { Dropdown } from '/src/components/core/dropdown/dropdown';
+import { DropdownPopover } from '/src/components/core/dropdown/dropdown-popover';
+import { DropdownTrigger } from '/src/components/core/dropdown/dropdown-trigger';
+import { Logo } from '/src/components/core/logo';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
+// import { navData } from '/src/router';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
@@ -21,12 +21,12 @@ import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/Caret
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
 import { MenuIcon } from 'lucide-react';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 import { RightPanel } from '../rightPanel/right-panel';
 import { MobileNav } from './mobile-nav';
 import { NavSearch } from './nav-search';
-import { dashboardNavData, navData } from '@/router';
+import { dashboardNavData, navData } from '/src/router';
 
 const LOGIN = 'Login';
 const SIGNUP = 'Signup';

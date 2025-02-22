@@ -1,6 +1,6 @@
 'use client';
 
-import { getSpeficiLengthString } from '@/utils/helper';
+import { getSpeficiLengthString } from '/src/utils/helper';
 import { Card, FormControl, InputBase, InputLabel, MenuItem, Paper, Select } from '@mui/material';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';

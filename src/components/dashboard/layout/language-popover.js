@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import { setSettings as setPersistedSettings } from '/src/lib/settings/set-settings';
 import { useSettings } from '/src/hooks/use-settings';
-import { toast } from '@/components/core/toaster';
+import { toast } from '/src/components/core/toaster';
 
 export const languageFlags = {
   en: '/assets/flag-uk.svg',

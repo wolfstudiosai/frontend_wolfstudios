@@ -1,5 +1,5 @@
-import { ProfileView } from '@/app/(public)/profile/profile-view';
-import { config } from '@/config';
+import { ProfileView } from '/src/app/(public)/profile/profile-view';
+import { config } from '/src/config';
 
 
 export const metadata = { title: config.site.name, description: config.site.description };

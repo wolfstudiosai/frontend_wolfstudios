@@ -14,7 +14,7 @@ import { Eye as EyeIcon } from '@phosphor-icons/react/dist/ssr/Eye';
 import { Image as ImageIcon } from '@phosphor-icons/react/dist/ssr/Image';
 
 import { paths } from '/src/paths';
-import { DataTable } from '@/components/data-table/data-table';
+import { DataTable } from '/src/components/data-table/data-table';
 
 const columns = [
   {

@@ -3,15 +3,15 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { useRouter } from 'next/navigation';
-import { PageContainer } from '@/components/container/PageContainer';
-import { FilterButton } from '@/components/core/filter-button';
-import { StatusFilterPopover } from '@/components/core/filters/StatusFilterPopover';
-import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
-import { DataTable } from '@/components/data-table/data-table';
-import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
-import PageLoader from '@/components/loaders/PageLoader';
-import { dayjs } from '@/lib/dayjs';
-import { dateFormatter } from '@/utils/date-formatter';
+import { PageContainer } from '/src/components/container/PageContainer';
+import { FilterButton } from '/src/components/core/filter-button';
+import { StatusFilterPopover } from '/src/components/core/filters/StatusFilterPopover';
+import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
+import { DataTable } from '/src/components/data-table/data-table';
+import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
+import PageLoader from '/src/components/loaders/PageLoader';
+import { dayjs } from '/src/lib/dayjs';
+import { dateFormatter } from '/src/utils/date-formatter';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -23,7 +23,7 @@ import Typography from '@mui/material/Typography';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { paths } from '@/paths';
+import { paths } from '/src/paths';
 
 import { deleteCampaignAsync, getCampaignListAsync } from './_lib/partner-private.actions';
 

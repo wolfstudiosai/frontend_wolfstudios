@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { colorPalette } from '@/constants/constants';
+import { colorPalette } from '/src/constants/constants';
 import { SalesByCategory } from "./sales-by-category";
 import { TotalRoi } from "./total-roi";
 import { PartnersByCategory } from "./partners-by-category";

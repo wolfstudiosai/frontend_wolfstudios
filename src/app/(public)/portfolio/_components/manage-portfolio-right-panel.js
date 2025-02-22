@@ -1,14 +1,8 @@
 'use client';
 
-import React from 'react';
-import { formConstants } from '@/app/constants/form-constants';
-import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
-import { DrawerContainer } from '@/components/drawer/drawer';
-import { Iconify } from '@/components/iconify/iconify';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
-
-import useAuth from '@/hooks/useAuth';
+import React from 'react';
 
 import {
   createPortfolioAsync,
@@ -19,6 +13,11 @@ import {
 import { defaultPortfolio } from '../_lib/portfolio.types';
 import { PortfolioForm } from './portfolio-form';
 import { PortfolioQuickView } from './portfolio-quickview';
+import { formConstants } from '/src/app/constants/form-constants';
+import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
+import { DrawerContainer } from '/src/components/drawer/drawer';
+import { Iconify } from '/src/components/iconify/iconify';
+import useAuth from '/src/hooks/useAuth';
 
 export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
   const isUpdate = data ? true : false;

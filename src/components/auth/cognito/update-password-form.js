@@ -19,8 +19,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
 import { paths } from '/src/paths';
-import { DynamicLogo } from '@/components/core/logo';
-import { toast } from '@/components/core/toaster';
+import { DynamicLogo } from '/src/components/core/logo';
+import { toast } from '/src/components/core/toaster';
 
 import { ResetPasswordButton } from './reset-password-button';
 

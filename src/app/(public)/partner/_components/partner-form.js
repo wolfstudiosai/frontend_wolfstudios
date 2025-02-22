@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
-import { CustomSelect } from '@/components/formFields/custom-select';
-import { CustomTextField } from '@/components/formFields/custom-textfield';
-import { ErrorMessage } from '@/components/formFields/error-message';
-import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
-import { ImageUploader } from '@/components/uploaders/image-uploader';
+import { CustomSelect } from '/src/components/formFields/custom-select';
+import { CustomTextField } from '/src/components/formFields/custom-textfield';
+import { ErrorMessage } from '/src/components/formFields/error-message';
+import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-iframe-dialog';
+import { ImageUploader } from '/src/components/uploaders/image-uploader';
 import { FormControl, FormLabel } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 

@@ -7,7 +7,7 @@ import Alert from '@mui/material/Alert';
 import { paths } from '/src/paths';
 import { logger } from '/src/lib/default-logger';
 import { createClient as createSupabaseClient } from '/src/lib/supabase/client';
-import { toast } from '@/components/core/toaster';
+import { toast } from '/src/components/core/toaster';
 
 // NOTE: This is a `Page` and not a `GET` route because
 //  Supabase has endpoints that still use

@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { DotsThree as DotsThreeIcon } from '@phosphor-icons/react/dist/ssr/DotsThree';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 
-import { NoSsr } from '@/components/core/no-ssr';
+import { NoSsr } from '/src/components/core/no-ssr';
 
 const data = [
   { name: 'Subscriptions', value: 56, color: 'var(--mui-palette-primary-main)' },

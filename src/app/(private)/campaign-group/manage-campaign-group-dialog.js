@@ -1,12 +1,12 @@
 import React from 'react';
-import { formConstants } from '@/app/constants/form-constants';
-import { Dialog } from '@/components/dialog/Dialog';
-import { CustomTextField } from '@/components/formFields/custom-textfield';
-import { ErrorMessage } from '@/components/formFields/error-message';
+import { formConstants } from '/src/app/constants/form-constants';
+import { Dialog } from '/src/components/dialog/Dialog';
+import { CustomTextField } from '/src/components/formFields/custom-textfield';
+import { ErrorMessage } from '/src/components/formFields/error-message';
 import { Button, CircularProgress, FormControl, InputLabel, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useFormik } from 'formik';
-import { createCampaignGroupAsync, updateCampaignGroupAsync } from '@/app/(public)/campaign/_lib/campaign.actions';
+import { createCampaignGroupAsync, updateCampaignGroupAsync } from '/src/app/(public)/campaign/_lib/campaign.actions';
 
 export const ManageCampaignGroupDialog = (props) => {
   const { open, onClose, onConfirm, data } = props;

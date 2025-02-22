@@ -8,16 +8,16 @@ import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import moment from 'moment';
 
-import { CardTitle } from '@/components/cardTitle/CardTitle';
-import { PageContainer } from '@/components/container/PageContainer';
-import { FilterButton } from '@/components/core/filter-button';
-import { RefreshPlugin } from '@/components/core/plugins/RefreshPlugin';
-import { EditableDataTable } from '@/components/data-table/editable-data-table';
-import { DeleteConfirmationPopover } from '@/components/dialog/delete-confirmation-popover';
+import { CardTitle } from '/src/components/cardTitle/CardTitle';
+import { PageContainer } from '/src/components/container/PageContainer';
+import { FilterButton } from '/src/components/core/filter-button';
+import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
+import { EditableDataTable } from '/src/components/data-table/editable-data-table';
+import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
 
 import { createRecordAsync, deleteRecordAsync, getRecordList, updateRecordAsync } from './_lib/records.actions';
 import { defaultRecord } from './_lib/records.types';
-import { HideColumsPopover } from '@/components/core/filters/HideColumsPopover';
+import { HideColumsPopover } from '/src/components/core/filters/HideColumsPopover';
 
 // table columns
 const columns = [

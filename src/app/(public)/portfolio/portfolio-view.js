@@ -1,9 +1,9 @@
 'use client';
 
-import { PageContainer } from '@/components/container/PageContainer';
-import { PageHeader } from '@/components/core/page-header';
-import PageLoader from '@/components/loaders/PageLoader';
-import { sliderToGridColsCoverter } from '@/utils/helper';
+import { PageContainer } from '/src/components/container/PageContainer';
+import { PageHeader } from '/src/components/core/page-header';
+import PageLoader from '/src/components/loaders/PageLoader';
+import { sliderToGridColsCoverter } from '/src/utils/helper';
 import { Box, CircularProgress } from '@mui/material';
 import React, { useRef } from 'react';
 
