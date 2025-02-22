@@ -88,7 +88,7 @@
     "stylis": "4.3.4",
     "stylis-plugin-rtl": "2.1.1",
     "yup": "^1.4.0",
-    "zod": "3.23.8", 
+    "zod": "3.23.8",
     "swiper": "^11.1.15"
   },
   "devDependencies": {
@@ -102,14 +102,12 @@
     "@types/react-dom": "18.3.1",
     "@types/react-simple-maps": "3.0.6",
     "@types/react-syntax-highlighter": "15.5.13",
-    "@typescript-eslint/parser": "8.10.0",
     "@vercel/style-guide": "6.0.0",
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.15",
     "eslint-config-prettier": "9.1.0",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
-    "prettier": "3.3.3",
-    "typescript": "5.6.3"
+    "prettier": "3.3.3"
   }
 }
