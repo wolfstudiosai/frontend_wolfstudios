@@ -63,7 +63,7 @@ export const PartnerQuickView = ({ data }) => {
                 muted
                 playsInline
                 sx={{
-                  height: pxToRem(500),
+                  height: pxToRem(300),
                   width: '100%',
                   objectFit: 'contain',
                   borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
@@ -75,7 +75,7 @@ export const PartnerQuickView = ({ data }) => {
                 component="img"
                 src={item}
                 sx={{
-                  height: pxToRem(500),
+                  height: pxToRem(300),
                   width: '100%',
                   objectFit: 'cover',
                   borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
