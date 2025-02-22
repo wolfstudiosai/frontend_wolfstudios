@@ -130,7 +130,7 @@ export const PartnerQuickView = ({ data }) => {
           <SocialIconWithText
             icon="circum:linkedin"
             url={data?.linkedin}
-            text={`${data?.linkedin_following.toLocaleString()} Followers`}
+            text={`${data?.linkedin_following?.toLocaleString()} Followers`}
             value={'N/A'}
           />
         )}

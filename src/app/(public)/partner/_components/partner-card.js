@@ -39,10 +39,12 @@ export const PartnerCard = ({ item, fetchList }) => {
           sx={{
             width: '48%',
             height: '170px',
-            objectFit: 'contain',
+            objectFit: 'cover',
             borderRight: '1px solid var(--mui-palette-divider)',
             borderBottom: '1px solid var(--mui-palette-divider)',
-            borderRadius: '0 0 calc(1* var(--mui-shape-borderRadius)) 0',
+            borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+            ml: "5px",
+            mt: "5px"
           }}
           onClick={() => setOpenPartnerRightPanel(item)}
         />
