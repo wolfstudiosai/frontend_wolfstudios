@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 
-export const SectionTitle = ({ title }) => {
+export const SectionTitle = ({ title, sx }) => {
   return (
     <Box
       sx={{
@@ -9,6 +9,7 @@ export const SectionTitle = ({ title }) => {
         fontSize: '18px',
         fontWeight: 500,
         color: 'text.primary',
+        ...sx
       }}
     >
       {title}

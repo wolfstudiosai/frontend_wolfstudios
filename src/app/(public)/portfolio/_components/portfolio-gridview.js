@@ -1,13 +1,12 @@
 'use client';
 
-import React from 'react';
-import Image from 'next/image';
-import { DrawerContainer } from '@/components/drawer/drawer';
 import { PageLoader } from '@/components/loaders/PageLoader';
 import { SliderWrapper } from '@/components/slider/slider-wrapper';
-import { getFancyColor, getRandomColor, isVideoContent } from '@/utils/helper';
+import { getFancyColor, isVideoContent } from '@/utils/helper';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import Image from 'next/image';
+import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
@@ -39,7 +38,7 @@ export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagi
         </SliderWrapper>
       </Box>
       <PageLoader loading={loading} error={null}>
-        <Grid container spacing={1} columns={{ xs: 24 }} sx={{ mt: 2 }}>
+        <Grid container spacing={1} columns={{ xs: 36 }} sx={{ mt: 2 }}>
           {data.map((portfolio, index) => (
             <Grid item size={{ xs: 12, md: colums }} key={index}>
               <PortfolioCard item={portfolio} fetchList={fetchList} />

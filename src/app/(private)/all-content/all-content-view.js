@@ -1,12 +1,12 @@
 'use client';
 
-import React from 'react';
 import { PageContainer } from '@/components/container/PageContainer';
 import { PageHeader } from '@/components/core/page-header';
 import { sliderToGridColsCoverter } from '@/utils/helper';
-import { CircularProgress } from '@mui/material';
+import React from 'react';
+import AllContentGridView from './_component/all-content-grid-view';
 
-import { AllContentGridView } from './_component/all-content-grid-view';
+import { CircularProgress } from '@mui/material';
 import AllContentListView from './_component/all-content-list-view';
 import { ManageContentRightPanel } from './_component/manage-content-right-panel';
 import { getContentList } from './_lib/all-content.actions';
