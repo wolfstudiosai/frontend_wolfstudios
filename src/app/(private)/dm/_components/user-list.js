@@ -79,7 +79,7 @@ export const UserList = () => {
                         <Stack key={index} direction='row' gap={1} sx={{ cursor: 'pointer', py: 0.5, position: 'relative', '&:hover .hover-action': { opacity: 1 } }}>
                             <Avatar />
                             <Box>
-                                <Stack direction='row' justifyContent='space-between'>
+                                <Stack direction='row' justifyContent='space-between' alignItems='center'>
                                     <Typography sx={{ fontWeight: 'medium', fontSize: '1rem' }}>{user.user?.name}</Typography>
                                     <Typography variant="caption" sx={{ color: 'text.secondary' }}>{user.timestamp}</Typography>
                                 </Stack>
