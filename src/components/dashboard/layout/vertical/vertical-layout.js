@@ -1,9 +1,9 @@
 'use client';
 
-import { FeatureCards } from '@/app/(public)/top-cards';
-import { ThinerFooter } from '@/components/navbar/thinner-footer';
-import { privateRoutes } from '@/router';
-import { pxToRem } from '@/utils/helper';
+import { FeatureCards } from '/src/app/(public)/top-cards';
+import { ThinerFooter } from '/src/components/navbar/thinner-footer';
+import { privateRoutes } from '/src/router';
+import { pxToRem } from '/src/utils/helper';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import * as React from 'react';

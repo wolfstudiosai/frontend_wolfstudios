@@ -1,6 +1,6 @@
 "use client";
 
-import { Iconify } from "@/components/iconify/iconify";
+import { Iconify } from "/src/components/iconify/iconify";
 import { Box, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { ActivityView } from "./_components/activity-view";

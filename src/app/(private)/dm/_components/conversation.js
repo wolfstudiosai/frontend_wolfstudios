@@ -1,7 +1,7 @@
 "use client";
 
-import { TextEditor } from '@/components/core/text-editor/text-editor';
-import { Iconify } from "@/components/iconify/iconify";
+import { TextEditor } from '/src/components/core/text-editor/text-editor';
+import { Iconify } from "/src/components/iconify/iconify";
 import { Box, Divider, IconButton, Stack, Tab, Tabs, Typography } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';

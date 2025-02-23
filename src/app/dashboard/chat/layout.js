@@ -4,7 +4,7 @@ import * as React from 'react';
 import { dayjs } from '/src/lib/dayjs';
 import { ChatProvider } from '/src/components/dashboard/chat/chat-context';
 import { ChatView } from '/src/components/dashboard/chat/chat-view';
-import {api, server_base_api} from "src/utils/api"
+import {api, server_base_api} from "/src/utils/api"
 import useAuth from '/src/hooks/useAuth';
 import { getUsers } from '../users/_lib/user.actions';
 

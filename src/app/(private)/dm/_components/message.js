@@ -1,4 +1,4 @@
-import { Iconify } from "@/components/iconify/iconify";
+import { Iconify } from "/src/components/iconify/iconify";
 import { Avatar, Box, ButtonGroup, IconButton, Stack, Typography } from "@mui/material";
 
 export const Message = ({ message, openThreadConversation }) => {

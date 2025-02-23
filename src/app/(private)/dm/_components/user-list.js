@@ -1,4 +1,4 @@
-import { Iconify } from "@/components/iconify/iconify";
+import { Iconify } from "/src/components/iconify/iconify";
 import { Avatar, Box, ButtonGroup, Divider, FormControlLabel, IconButton, InputAdornment, Stack, Switch, TextField, Typography } from "@mui/material";
 
 const USER_DEMO_DATA = [

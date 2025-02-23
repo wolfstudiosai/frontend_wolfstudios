@@ -1,8 +1,8 @@
 'use client';
 
-import { Iconify } from '@/components/iconify/iconify';
-import { dashboardFavItems, privateRoutes } from '@/router';
-import { pxToRem } from '@/utils/helper';
+import { Iconify } from '/src/components/iconify/iconify';
+import { dashboardFavItems, privateRoutes } from '/src/router';
+import { pxToRem } from '/src/utils/helper';
 import { Collapse, Divider, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';

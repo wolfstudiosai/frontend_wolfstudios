@@ -17,7 +17,7 @@ import { TextItalic as TextItalicIcon } from '@phosphor-icons/react/dist/ssr/Tex
 import { TextStrikethrough as TextStrikethroughIcon } from '@phosphor-icons/react/dist/ssr/TextStrikethrough';
 import * as React from 'react';
 
-import { Option } from '@/components/core/option';
+import { Option } from '/src/components/core/option';
 import { usePopover } from '/src/hooks/use-popover';
 
 export function TextEditorToolbar({ editor }) {
