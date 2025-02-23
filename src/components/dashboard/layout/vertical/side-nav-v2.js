@@ -1,8 +1,5 @@
 'use client';
 
-import * as React from 'react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
 import { Iconify } from '@/components/iconify/iconify';
 import { dashboardFavItems, privateRoutes } from '@/router';
 import { pxToRem } from '@/utils/helper';
@@ -10,6 +7,9 @@ import { Collapse, Divider, ListItemIcon, ListItemText, MenuItem, MenuList } fro
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useColorScheme } from '@mui/material/styles';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import * as React from 'react';
 
 import useAuth from '@/hooks/useAuth';
 
@@ -31,8 +31,6 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
   const logoColor = logoColors[colorScheme][color];
   const [openMenus, setOpenMenus] = React.useState({});
   const router = useRouter();
-
-  console.log(openMenus, '  openMenus');
 
   const toggleMenuItem = (key) => {
     setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -130,7 +128,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
               <ListItemText sx={{ color: 'text.primary' }}>Drafts</ListItemText>
               <Chip label={12} size="small" fontSize={10} color="text.primary" sx={{ borderRadius: 1 }} />
             </MenuItem>
-            <MenuItem>
+            <MenuItem onClick={() => router.push('/dm')}>
               <ListItemIcon>
                 <Iconify
                   icon="material-symbols-light:chat-outline-rounded"
