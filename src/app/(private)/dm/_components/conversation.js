@@ -1,16 +1,17 @@
 "use client";
 
-import { TextEditor } from '/src/components/core/text-editor/text-editor';
-import { Iconify } from "/src/components/iconify/iconify";
 import { Box, Divider, IconButton, Stack, Tab, Tabs, Typography } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
-import { USER_DEMO_DATA } from '../_lib/demo_data';
+import { useContext, useState } from 'react';
+import { ChatContext } from "../context";
 import { Message } from './message';
+// import { TextEditor } from '/src/components/core/text-editor/text-editor';
+import { MessageForm } from './message-form';
+import { Iconify } from "/src/components/iconify/iconify";
 
-const StyledBadge = styled(Badge, {
+export const StyledBadge = styled(Badge, {
     shouldForwardProp: (prop) => prop !== 'isOnline',
 })(({ theme, isOnline }) => ({
     '& .MuiBadge-badge': {
@@ -24,7 +25,7 @@ const StyledBadge = styled(Badge, {
             width: '100%',
             height: '100%',
             borderRadius: '50%',
-            animation: 'ripple 1.2s infinite ease-in-out',
+            ...(isOnline && { animation: 'ripple 1.2s infinite ease-in-out', }),
             border: '1px solid currentColor',
             content: '""',
         },
@@ -44,11 +45,14 @@ const StyledBadge = styled(Badge, {
 
 }));
 
-export const Conversation = ({ showThreadConversation, openThreadConversation }) => {
-    const [activeTab, setActiveTab] = useState(0);
+export const Conversation = () => {
+    const [activeTab, setActiveTab] = useState('messages');
+
+    const { activeConversation, activeReceiver, activeThread } = useContext(ChatContext);
+
 
     return (
-        <Stack sx={{ p: 2, width: showThreadConversation ? '40%' : '70%', ...(showThreadConversation && { borderRight: '1px solid', borderColor: 'divider' }) }}>
+        <Stack sx={{ p: 2, width: activeThread ? '40%' : '70%', ...(activeThread && { borderRight: '1px solid', borderColor: 'divider' }) }}>
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
                 <Stack direction='row' alignItems='center' gap={1}>
                     <Box>
@@ -56,12 +60,12 @@ export const Conversation = ({ showThreadConversation, openThreadConversation })
                             overlap="circular"
                             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                             variant="dot"
-                            isOnline={2 !== 2}
+                            isOnline={activeReceiver.active}
                         >
-                            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: 30, height: 30 }} />
+                            <Avatar alt={activeReceiver.name} src={activeReceiver.profile_image} sx={{ width: 30, height: 30 }} />
                         </StyledBadge>
                     </Box>
-                    <Typography sx={{ fontWeight: 'medium', fontSize: '1.2rem' }}>Combina Key</Typography>
+                    <Typography sx={{ fontWeight: 'medium', fontSize: '1.2rem' }}>{activeReceiver.name}</Typography>
                 </Stack>
                 <IconButton>
                     <Iconify icon="bi:three-dots-vertical" />
@@ -110,14 +114,19 @@ export const Conversation = ({ showThreadConversation, openThreadConversation })
                             },
                         }}>
                             {
-                                USER_DEMO_DATA.map((message, index) => (
-                                    <Message key={index} message={message} openThreadConversation={openThreadConversation} />
-                                ))
+                                activeConversation?.length > 0 ? (
+                                    activeConversation.map((message, index) => (
+                                        <Message key={index} message={message} />
+                                    ))
+                                ) : (
+                                    <Typography>No messages</Typography>
+                                )
                             }
                         </Stack>
-                        <Box sx={{ boxShadow: 'var(--mui-shadows-16)', borderRadius: 1, mt: 2 }}>
+                        <MessageForm />
+                        {/* <Box sx={{ boxShadow: 'var(--mui-shadows-16)', borderRadius: 1, mt: 2, width: '100%' }}> 
                             <TextEditor />
-                        </Box>
+                        </Box> */}
                     </>
                 )
             }

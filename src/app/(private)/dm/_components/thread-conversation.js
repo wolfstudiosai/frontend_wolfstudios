@@ -1,18 +1,20 @@
 "use client";
 
-import { TextEditor } from '/src/components/core/text-editor/text-editor';
-import { Iconify } from "/src/components/iconify/iconify";
-import { Box, Divider, IconButton, Stack, Typography } from "@mui/material";
-import { USER_DEMO_DATA } from '../_lib/demo_data';
+import { Divider, IconButton, Stack, Typography } from "@mui/material";
+import { useContext } from 'react';
+import { ChatContext } from '../context';
 import { Message } from './message';
+import { MessageForm } from "./message-form";
+import { Iconify } from "/src/components/iconify/iconify";
 
-export const ThreadConversation = ({ closeThreadConversation }) => {
+export const ThreadConversation = () => {
+    const { handleActiveThread, activeThread } = useContext(ChatContext);
 
     return (
         <Stack sx={{ p: 2, width: '30%' }}>
             <Stack direction='row' gap={1} alignItems='center' justifyContent='space-between'>
                 <Typography sx={{ fontWeight: 'medium', fontSize: '1.2rem' }}>Thread</Typography>
-                <IconButton onClick={closeThreadConversation}>
+                <IconButton onClick={() => handleActiveThread(null)}>
                     <Iconify icon="mingcute:close-fill" />
                 </IconButton>
             </Stack>
@@ -24,14 +26,16 @@ export const ThreadConversation = ({ closeThreadConversation }) => {
                 },
             }}>
                 {
-                    USER_DEMO_DATA.map((message, index) => (
-                        <Message key={index} message={message} />
-                    ))
+                    activeThread?.length > 0 ? (
+                        activeThread?.map((message, index) => (
+                            <Message key={index} message={message} in_thread={true} />
+                        ))
+                    ) : (
+                        <Typography>No thread found</Typography>
+                    )
                 }
             </Stack>
-            <Box sx={{ boxShadow: 'var(--mui-shadows-16)', borderRadius: 1, mt: 2 }}>
-                <TextEditor />
-            </Box>
+            <MessageForm />
         </Stack>
     )
 }

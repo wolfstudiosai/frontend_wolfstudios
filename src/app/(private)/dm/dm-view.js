@@ -1,17 +1,17 @@
 "use client";
 
-import { Iconify } from "/src/components/iconify/iconify";
 import { Box, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { ActivityView } from "./_components/activity-view";
 import { DMsView } from "./_components/dms-view";
+import { Iconify } from "/src/components/iconify/iconify";
 
 const DMView = () => {
     const [active, setActive] = useState("dms");
 
     const subMenuItems = [
-        { label: "DMs", icon: 'mage:we-chat', value: 'dms' },
-        { label: "Activity", icon: 'streamline:notification-alarm-2-solid', value: 'activity' }
+        { label: "DMs", icon: 'eva:message-circle-outline', active_icon: 'eva:message-circle-fill', value: 'dms' },
+        { label: "Activity", icon: 'mdi:bell-notification-outline', active_icon: 'mdi:bell-notification', value: 'activity' }
     ];
 
     return (
@@ -29,7 +29,7 @@ const DMView = () => {
                             onClick={() => setActive(item.value)}
                         >
                             <Box sx={{ backgroundColor: 'white', px: 0.8, py: 0.5, borderRadius: 1 }}>
-                                <Iconify className='icon' icon={item.icon} sx={{ width: '24px', height: '24px', color: "var(--SideNav-color)", transition: 'transform 0.3s ease-in-out' }} />
+                                <Iconify className='icon' icon={active === item.value ? item.active_icon : item.icon} sx={{ width: '24px', height: '24px', color: "var(--SideNav-color)", transition: 'transform 0.3s ease-in-out' }} />
                             </Box>
                             <Typography sx={{ fontWeight: 'medium', fontSize: '0.8rem', color: "var(--SideNav-color)" }}>{item.label}</Typography>
                         </Stack>
