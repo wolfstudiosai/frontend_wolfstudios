@@ -1,21 +1,21 @@
 'use client';
 
-import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
-import { CustomTextField } from '/src/components/formFields/custom-textfield';
-import { ErrorMessage } from '/src/components/formFields/error-message';
-import { Iconify } from '/src/components/iconify/iconify';
-import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-iframe-dialog';
-import { ImageUploader } from '/src/components/uploaders/image-uploader';
+import { CustomDatePicker } from '@/components/formFields/custom-date-picker';
+import { CustomTextField } from '@/components/formFields/custom-textfield';
+import { ErrorMessage } from '@/components/formFields/error-message';
+import { Iconify } from '@/components/iconify/iconify';
+import { MediaIframeDialog } from '@/components/media-iframe-dialog/media-iframe-dialog';
+import { ImageUploader } from '@/components/uploaders/image-uploader';
+import { MediaUploaderTrigger } from '@/components/uploaders/media-uploader-trigger';
 import { Button, FormControl, FormLabel, InputAdornment } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import React from 'react';
 
 import { defaultPortfolio } from '../_lib/portfolio.types';
-import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
 export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
   const [values, setValues] = React.useState(data || defaultPortfolio);
-  
+
   // *********************States*********************************
   const [mediaPreview, setMediaPreview] = React.useState(null);
   const [openVerticalUploadDialog, setOpenVerticalUploadDialog] = React.useState(false);

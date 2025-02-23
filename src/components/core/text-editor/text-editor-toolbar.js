@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
@@ -16,9 +15,10 @@ import { ListNumbers as ListNumbersIcon } from '@phosphor-icons/react/dist/ssr/L
 import { TextB as TextBIcon } from '@phosphor-icons/react/dist/ssr/TextB';
 import { TextItalic as TextItalicIcon } from '@phosphor-icons/react/dist/ssr/TextItalic';
 import { TextStrikethrough as TextStrikethroughIcon } from '@phosphor-icons/react/dist/ssr/TextStrikethrough';
+import * as React from 'react';
 
+import { Option } from '@/components/core/option';
 import { usePopover } from '/src/hooks/use-popover';
-import { Option } from '/src/components/core/option';
 
 export function TextEditorToolbar({ editor }) {
   const linkPopover = usePopover();
@@ -34,6 +34,7 @@ export function TextEditorToolbar({ editor }) {
         {editor ? (
           <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center', flexWrap: 'wrap' }}>
             <Select
+              size='small'
               onChange={(event) => {
                 const value = event.target.value;
 
@@ -76,7 +77,7 @@ export function TextEditorToolbar({ editor }) {
                 editor.chain().focus().toggleBold().run();
               }}
             >
-              <TextBIcon />
+              <TextBIcon width={16} />
             </ToolbarButton>
             <ToolbarButton
               active={editor.isActive('italic')}
@@ -85,7 +86,7 @@ export function TextEditorToolbar({ editor }) {
                 editor.chain().focus().toggleItalic().run();
               }}
             >
-              <TextItalicIcon />
+              <TextItalicIcon width={16} />
             </ToolbarButton>
             <ToolbarButton
               active={editor.isActive('strike')}
@@ -94,7 +95,7 @@ export function TextEditorToolbar({ editor }) {
                 editor.chain().focus().toggleStrike().run();
               }}
             >
-              <TextStrikethroughIcon />
+              <TextStrikethroughIcon width={16} />
             </ToolbarButton>
             <ToolbarButton
               active={editor.isActive('codeBlock')}
@@ -103,7 +104,7 @@ export function TextEditorToolbar({ editor }) {
                 editor.chain().focus().toggleCodeBlock();
               }}
             >
-              <CodeIcon />
+              <CodeIcon width={16} />
             </ToolbarButton>
             <ToolbarButton
               active={editor.isActive('bulletList')}
@@ -112,7 +113,7 @@ export function TextEditorToolbar({ editor }) {
                 editor.chain().focus().toggleBulletList().run();
               }}
             >
-              <ListDashesIcon />
+              <ListDashesIcon width={16} />
             </ToolbarButton>
             <ToolbarButton
               active={editor.isActive('orderedList')}
@@ -121,7 +122,7 @@ export function TextEditorToolbar({ editor }) {
                 editor.chain().focus().toggleOrderedList().run();
               }}
             >
-              <ListNumbersIcon />
+              <ListNumbersIcon width={16} />
             </ToolbarButton>
             <ToolbarButton
               onClick={() => {
@@ -139,7 +140,7 @@ export function TextEditorToolbar({ editor }) {
                 editor.chain().focus().unsetLink().run();
               }}
             >
-              <LinkBreakIcon />
+              <LinkBreakIcon width={16} />
             </ToolbarButton>
           </Stack>
         ) : null}
@@ -201,9 +202,9 @@ function getFontValue(editor) {
                 : 'p';
 }
 
-const ToolbarButton = React.forwardRef(function ToolbarButton({ active, children, disabled, onClick }, ref) {
+const ToolbarButton = React.forwardRef(function ToolbarButton({ active, children, disabled, onClick, size = 'small' }, ref) {
   return (
-    <IconButton color={active ? 'primary' : 'secondary'} disabled={disabled} onClick={onClick} ref={ref}>
+    <IconButton size={size} color={active ? 'primary' : 'secondary'} disabled={disabled} onClick={onClick} ref={ref}>
       {children}
     </IconButton>
   );
