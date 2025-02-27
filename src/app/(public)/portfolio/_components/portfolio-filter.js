@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
 import { Box, Button, Stack, Typography } from '@mui/material';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const TAGS = [
   'Music',

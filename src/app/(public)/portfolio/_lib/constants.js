@@ -10,11 +10,11 @@ export const portfolioTags = [
   { label: 'Fashion', value: 'fashion' },
   { label: 'Commercial', value: 'commercial' },
   { label: 'Lifestyle', value: 'lifestyle' },
-  { label: 'Portraiture', value: 'portraiture' },
-  { label: 'Film', value: 'film' },
-  { label: 'Events', value: 'events' },
-  { label: 'Mood', value: 'mood' },
-  { label: 'Home', value: 'home' },
+  // { label: 'Portraiture', value: 'portraiture' },
+  // { label: 'Film', value: 'film' },
+  // { label: 'Events', value: 'events' },
+  // { label: 'Mood', value: 'mood' },
+  // { label: 'Home', value: 'home' },
 ];
 
 export const portfolioFilters = [
