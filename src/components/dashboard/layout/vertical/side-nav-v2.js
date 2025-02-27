@@ -1,21 +1,20 @@
 'use client';
 
-import { Iconify } from '/src/components/iconify/iconify';
-import { dashboardFavItems, privateRoutes } from '/src/router';
-import { pxToRem } from '/src/utils/helper';
 import { Collapse, Divider, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useColorScheme } from '@mui/material/styles';
-import Link from 'next/link';
+// import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
+import { Iconify } from '/src/components/iconify/iconify';
+import { dashboardFavItems, privateRoutes } from '/src/router';
+import { pxToRem } from '/src/utils/helper';
 
 import useAuth from '/src/hooks/useAuth';
 
+import Link from 'next/link';
 import { navColorStyles } from './styles';
-
-// import Link from 'next/link';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
@@ -93,17 +92,16 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
           color: 'var(--SideNav-color)',
           display: { xs: 'none', lg: 'flex' },
           flexDirection: 'column',
-          height: '100%',
           left: 10,
           position: 'fixed',
-          top: isFeaturedCardVisible ? 118 : 60,
-          width: open ? 'var(--SideNav-width)' : '70px',
+          top: isFeaturedCardVisible ? 118 : 50,
+          width: 'var(--SideNav-width)',
           zIndex: 'var(--SideNav-zIndex)',
           transition: 'width 0.3s ease',
           borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
           marginBottom: '10px',
           border: '1px solid var(--mui-palette-background-level2)',
-          height: isFeaturedCardVisible ? 'calc(100vh - 160px)' : 'calc(100vh - 103px)',
+          height: isFeaturedCardVisible ? 'calc(100vh - 160px)' : 'calc(100vh - 93px)',
           paddingRight: pxToRem(5),
           overflowY: 'auto',
           '&::-webkit-scrollbar': {
@@ -128,7 +126,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
               <ListItemText sx={{ color: 'text.primary' }}>Drafts</ListItemText>
               <Chip label={12} size="small" fontSize={10} color="text.primary" sx={{ borderRadius: 1 }} />
             </MenuItem>
-            <MenuItem onClick={() => router.push('/dm')}>
+            {/* <MenuItem onClick={() => router.push('/dm')}>
               <ListItemIcon>
                 <Iconify
                   icon="material-symbols-light:chat-outline-rounded"
@@ -139,7 +137,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
               </ListItemIcon>
               <ListItemText sx={{ color: 'text.primary' }}>Inbox</ListItemText>
               <Chip label={12} size="small" fontSize={10} color="text.primary" sx={{ borderRadius: 1 }} />
-            </MenuItem>
+            </MenuItem> */}
           </MenuList>
         </Box>
         <MenuList>{renderMenuItems(dashboardFavItems)}</MenuList>

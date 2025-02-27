@@ -2,7 +2,6 @@
 
 import { Box, Stack, Typography } from "@mui/material";
 import { useState } from "react";
-import { ActivityView } from "./_components/activity-view";
 import { DMsView } from "./_components/dms-view";
 import { Iconify } from "/src/components/iconify/iconify";
 
@@ -39,11 +38,6 @@ const DMView = () => {
             {
                 active === 'dms' && (
                     <DMsView />
-                )
-            }
-            {
-                active === 'activity' && (
-                    <ActivityView />
                 )
             }
         </Stack>

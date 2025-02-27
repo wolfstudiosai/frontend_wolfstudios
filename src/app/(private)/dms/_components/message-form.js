@@ -1,7 +1,7 @@
 import { Avatar, Box, Divider, FormControl, IconButton, Input, InputAdornment, Stack } from "@mui/material";
 import { useContext, useRef, useState } from "react";
-import { ChatContext } from "../context";
 import { Iconify } from "/src/components/iconify/iconify";
+import { ChatContext } from "/src/contexts/chat";
 
 export const MessageForm = ({ sx = {} }) => {
     const [newMessage, setNewMessage] = useState('');
@@ -22,11 +22,11 @@ export const MessageForm = ({ sx = {} }) => {
     };
 
     return (
-        <Stack sx={{ ...sx }}>
+        <Stack sx={{ ...sx, }}>
             {
                 selectedFiles.length > 0 && (
                     <>
-                        <Stack direction='row' gap={0.6} sx={{ flexWrap: 'wrap' }}>
+                        <Stack direction='row' gap={0.6} sx={{ flexWrap: 'wrap', p: 1 }}>
                             {
                                 selectedFiles?.map((file, index) => (
                                     <Box key={index} sx={{ width: '120px', height: '120px', position: 'relative' }}>

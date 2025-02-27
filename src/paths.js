@@ -160,6 +160,10 @@ export const paths = {
     needs_offer_approval: '/needs-offer-approval',
     partner_private: '/partner-private',
     chat: '/chat',
+
+    // contact
+    dms: '/dms',
+    activity: '/activity',
   },
   dashboardPublic: {
     // HQs

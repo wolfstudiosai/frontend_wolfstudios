@@ -1,8 +1,9 @@
-import { Avatar, Box, ButtonGroup, Divider, FormControlLabel, IconButton, InputAdornment, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Avatar, Box, ButtonGroup, FormControlLabel, IconButton, InputAdornment, Stack, Switch, TextField, Typography } from "@mui/material";
+import dayjs from "dayjs";
 import { useContext, useState } from "react";
-import { ChatContext } from "../context";
-import { StyledBadge } from "./conversation";
+import { StyledBadge } from "./avatar-badge";
 import { Iconify } from "/src/components/iconify/iconify";
+import { ChatContext } from "/src/contexts/chat";
 
 export const UserList = () => {
     const { userData, handleActiveConversation, handleSearchUser, handleActiveUser } = useContext(ChatContext);
@@ -28,7 +29,7 @@ export const UserList = () => {
                     ),
                 },
             }} />
-            <Stack direction='column' gap={1} divider={<Divider sx={{ borderStyle: 'dashed' }} />} sx={{
+            <Stack direction='column' gap={1.5} sx={{
                 mt: 2, height: '80%', overflowY: 'scroll', scrollbarWidth: 'none',
                 '&::-webkit-scrollbar': {
                     display: 'none'
@@ -47,10 +48,10 @@ export const UserList = () => {
                                     <Avatar alt={user.name} src={user.profile_image} sx={{ width: 40, height: 40 }} />
                                 </StyledBadge>
                             </Box>
-                            <Box>
+                            <Box sx={{ width: '100%' }}>
                                 <Stack direction='row' justifyContent='space-between' alignItems='center'>
                                     <Typography sx={{ fontWeight: 'medium', fontSize: '1rem' }}>{user.name}</Typography>
-                                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>{user.last_message?.timestamp}</Typography>
+                                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>{dayjs(user.last_message?.timestamp).format('DD MMM, YYYY - hh:mm A')}</Typography>
                                 </Stack>
                                 <Typography variant="body2">{user.last_message?.message}</Typography>
                             </Box>

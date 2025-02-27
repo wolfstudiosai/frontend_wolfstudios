@@ -2,57 +2,22 @@
 
 import { Box, Divider, IconButton, Stack, Tab, Tabs, Typography } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
-import Badge from '@mui/material/Badge';
-import { styled } from '@mui/material/styles';
 import { useContext, useState } from 'react';
-import { ChatContext } from "../context";
 import { Message } from './message';
 // import { TextEditor } from '/src/components/core/text-editor/text-editor';
+import { StyledBadge } from "./avatar-badge";
 import { MessageForm } from './message-form';
 import { Iconify } from "/src/components/iconify/iconify";
-
-export const StyledBadge = styled(Badge, {
-    shouldForwardProp: (prop) => prop !== 'isOnline',
-})(({ theme, isOnline }) => ({
-    '& .MuiBadge-badge': {
-        backgroundColor: isOnline ? '#44b700' : '#565e73',
-        color: isOnline ? '#44b700' : '#565e73',
-        boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-        '&::after': {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            borderRadius: '50%',
-            ...(isOnline && { animation: 'ripple 1.2s infinite ease-in-out', }),
-            border: '1px solid currentColor',
-            content: '""',
-        },
-    },
-    ...(isOnline && {
-        '@keyframes ripple': {
-            '0%': {
-                transform: 'scale(.8)',
-                opacity: 1,
-            },
-            '100%': {
-                transform: 'scale(2.4)',
-                opacity: 0,
-            },
-        },
-    })
-
-}));
+import { ChatContext } from "/src/contexts/chat";
 
 export const Conversation = () => {
     const [activeTab, setActiveTab] = useState('messages');
 
-    const { activeConversation, activeReceiver, activeThread } = useContext(ChatContext);
+    const { activeConversation, activeReceiver, activeThread, activeProfile } = useContext(ChatContext);
 
 
     return (
-        <Stack sx={{ p: 2, width: activeThread ? '40%' : '70%', ...(activeThread && { borderRight: '1px solid', borderColor: 'divider' }) }}>
+        <Stack sx={{ p: 2, width: (activeThread || activeProfile) ? '40%' : '70%', ...((activeThread || activeProfile) && { borderRight: '1px solid', borderColor: 'divider' }) }}>
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
                 <Stack direction='row' alignItems='center' gap={1}>
                     <Box>
@@ -107,7 +72,7 @@ export const Conversation = () => {
             {
                 activeTab === 'messages' && (
                     <>
-                        <Stack direction='column' gap={1} divider={<Divider sx={{ borderStyle: 'dashed' }} />} sx={{
+                        <Stack direction='column' gap={1.5} sx={{
                             mt: 2, height: '80%', overflowY: 'scroll', scrollbarWidth: 'none',
                             '&::-webkit-scrollbar': {
                                 display: 'none'

@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { DEMO_CONVERSATIONS, DEMO_USERS } from "../_lib/demo_data";
+import { DEMO_CONVERSATIONS, DEMO_USERS } from "/src/app/(private)/dms/_lib/demo_data";
 
 const loggedInUser = {
     userId: "u1",
@@ -20,6 +20,7 @@ export const ChatContextProvider = ({ children }) => {
     const [activeConversation, setActiveConversation] = useState(DEMO_CONVERSATIONS[`u1-${DEMO_USERS[0].userId}`].messages);
     const [activeReceiver, setActiveReceiver] = useState(DEMO_USERS[0]);
     const [activeThread, setActiveThread] = useState(null);
+    const [activeProfile, setActiveProfile] = useState(null);
 
     const findUser = (id) => {
         if (id === loggedInUser.userId) return loggedInUser;
@@ -42,8 +43,10 @@ export const ChatContextProvider = ({ children }) => {
             const thread = message?.thread_conversation
             if (thread) {
                 setActiveThread(thread);
+                setActiveProfile(null);
             } else {
-                setActiveThread([message])
+                setActiveThread([message]);
+                setActiveProfile(null)
             }
         }
     }
@@ -70,6 +73,19 @@ export const ChatContextProvider = ({ children }) => {
         console.log("add message handler");
     }
 
+    const handleActiveProfile = (userID) => {
+        if (userID) {
+            const profile = DEMO_USERS.find((user) => user.userId === userID) || (loggedInUser.userId === userID && loggedInUser);
+
+            if (profile) {
+                setActiveThread(null);
+                setActiveProfile(profile);
+            }
+        } else {
+            setActiveProfile(null);
+        }
+    }
+
     const contextValue = {
         userData,
         activeConversation,
@@ -81,7 +97,9 @@ export const ChatContextProvider = ({ children }) => {
         handleSearchUser,
         handleActiveUser,
         handleAddMessage,
-        loggedInUser
+        loggedInUser,
+        activeProfile,
+        handleActiveProfile
     };
 
     return (

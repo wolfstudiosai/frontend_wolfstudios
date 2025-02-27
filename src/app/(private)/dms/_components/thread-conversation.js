@@ -2,10 +2,10 @@
 
 import { Divider, IconButton, Stack, Typography } from "@mui/material";
 import { useContext } from 'react';
-import { ChatContext } from '../context';
 import { Message } from './message';
 import { MessageForm } from "./message-form";
 import { Iconify } from "/src/components/iconify/iconify";
+import { ChatContext } from "/src/contexts/chat";
 
 export const ThreadConversation = () => {
     const { handleActiveThread, activeThread } = useContext(ChatContext);
