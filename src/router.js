@@ -278,11 +278,32 @@ export const privateRoutes = [
 // dashboard fav items
 export const dashboardFavItems = [
   {
+    key: 'contact',
+    title: 'Contact',
+    icon: 'material-symbols-light:chat-outline-rounded',
+    items: [
+      {
+        key: 'dms',
+        title: 'DMs',
+        icon: 'eva:message-circle-outline',
+        href: paths.private.dms,
+        allowedRoles: ['admin', 'user'],
+      },
+      {
+        key: 'activity',
+        title: 'Activity',
+        icon: 'mdi:bell-notification-outline',
+        href: paths.private.activity,
+        allowedRoles: ['admin', 'user'],
+      },
+    ],
+  },
+  {
     key: 'favorite',
     title: 'Favorite',
     icon: 'noto:red-heart',
     items: [
-    
+
       {
         key: 'campaign',
         title: 'Campaign',

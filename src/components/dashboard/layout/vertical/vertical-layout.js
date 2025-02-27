@@ -1,12 +1,11 @@
 'use client';
 
-import { FeatureCards } from '/src/app/(public)/top-cards';
-import { ThinerFooter } from '/src/components/navbar/thinner-footer';
-import { privateRoutes } from '/src/router';
-import { pxToRem } from '/src/utils/helper';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import * as React from 'react';
+import { FeatureCards } from '/src/app/(public)/top-cards';
+import { ThinerFooter } from '/src/components/navbar/thinner-footer';
+import { pxToRem } from '/src/utils/helper';
 
 import useAuth from '/src/hooks/useAuth';
 
@@ -82,9 +81,9 @@ export function VerticalLayout({ children }) {
           }}
         >
           {isLogin && openSidebar && (
+            // <MiniNav color={settings.navColor} open={openSidebar} isFeaturedCardVisible={isFeaturedCardVisible} />
             <SideNavV2
               color={settings.navColor}
-              items={privateRoutes}
               open={openSidebar}
               isFeaturedCardVisible={isFeaturedCardVisible}
             />

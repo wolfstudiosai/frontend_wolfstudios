@@ -3,18 +3,18 @@
 import { Avatar, Box, ButtonGroup, IconButton, Stack, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import { useContext } from "react";
-import { ChatContext } from "../context";
 import { Iconify } from "/src/components/iconify/iconify";
+import { ChatContext } from "/src/contexts/chat";
 
 export const Message = ({ message, in_thread }) => {
-    const { findUser, handleActiveThread, activeThread } = useContext(ChatContext);
+    const { findUser, handleActiveThread, handleActiveProfile } = useContext(ChatContext);
 
     return (
-        <Stack direction='row' gap={1} sx={{ cursor: 'pointer', py: 0.5, position: 'relative', '&:hover .hover-action': { opacity: 1 } }}>
-            <Avatar src={findUser(message.senderId)?.profile_image} alt={findUser(message.senderId)?.name} variant="square" sx={{ borderRadius: 1 }} />
+        <Stack direction='row' gap={1} sx={{ py: 0.5, position: 'relative', '&:hover .hover-action': { opacity: 1 } }}>
+            <Avatar src={findUser(message.senderId)?.profile_image} alt={findUser(message.senderId)?.name} variant="square" sx={{ borderRadius: 1, cursor: 'pointer' }} onClick={() => handleActiveProfile(message.senderId)} />
             <Box>
                 <Stack direction='row' gap={1.5} alignItems='center'>
-                    <Typography sx={{ fontWeight: 'medium', fontSize: '1rem' }}>{findUser(message.senderId)?.name}</Typography>
+                    <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', cursor: 'pointer' }} onClick={() => handleActiveProfile(message.senderId)}>{findUser(message.senderId)?.name}</Typography>
                     <Typography variant="caption" sx={{ color: 'text.secondary' }}>{dayjs(message.timestamp).format('DD MMM, YYYY - hh:mm A')}</Typography>
                 </Stack>
                 <Typography variant="body2">{message.content}</Typography>
