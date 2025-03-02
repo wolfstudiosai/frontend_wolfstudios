@@ -36,11 +36,11 @@ export const publicRoutes = [
         title: 'Spaces',
         href: paths.dashboardPublic.spaces,
       },
-      {
-        key: 'chat',
-        title: 'Chat',
-        href: paths.private.chat,
-      },
+      // {
+      //   key: 'chat',
+      //   title: 'Chat',
+      //   href: paths.private.chat,
+      // },
     ],
   },
 ];
