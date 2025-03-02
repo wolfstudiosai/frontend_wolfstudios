@@ -1,4 +1,4 @@
-import { ComingSoon } from '/src/components/coming-soon/comming-soon';
+import { ComingSoon } from '../../../components/coming-soon/coming-soon';
 
 export const BlogView = () => {
   return <ComingSoon pageName={'Blog'} />;

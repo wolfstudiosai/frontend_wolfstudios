@@ -4,7 +4,7 @@ import { Button, Container, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { Iconify } from "../iconify/iconify";
 
-const CommingSoon = ({ pageName }) => {
+export const ComingSoon = ({ pageName }) => {
     const router = useRouter();
 
     const handleRedirect = () => {
@@ -49,5 +49,3 @@ const CommingSoon = ({ pageName }) => {
         </Container>
     )
 }
-
-export default CommingSoon;
