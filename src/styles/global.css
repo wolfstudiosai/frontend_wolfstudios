@@ -166,9 +166,16 @@ body {
   height: 100%;
 }
 
-/* :root {
+
+:root {
   --custom-light-level-1: #F4F4F2;
   --custom-dark-level-1: #181818;
   --custom-light-level-2: #E8E8E8;
   --custom-dark-level-2: #121212;
-} */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}

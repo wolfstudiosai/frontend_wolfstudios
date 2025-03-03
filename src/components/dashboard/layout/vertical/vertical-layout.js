@@ -95,7 +95,7 @@ export function VerticalLayout({ children }) {
               // '--Content-maxWidth': 'var(--maxWidth-xl)',
               '--Content-paddingY': { xs: pxToRem(2), lg: pxToRem(4) },
               '--Content-paddingX': { xs: pxToRem(4), md: pxToRem(6) },
-              '--Content-padding': 'var(--Content-paddingY) var(--Content-paddingX)',
+              '--Content-padding': 'var(--Content-paddingY) 0',
               '--Content-width': '100%',
               display: 'flex',
               flex: '1 1 auto',

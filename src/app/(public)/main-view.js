@@ -3,6 +3,12 @@
 import React from 'react';
 import { Box } from '@mui/material';
 
+import { HeroSection } from './components/home/hero-section';
+
 export const MainView = () => {
-  return <Box>Homepage content will be here soon.</Box>;
+  return (
+    <Box sx={{ border: '3px solid red)' }}>
+      <HeroSection />
+    </Box>
+  );
 };
