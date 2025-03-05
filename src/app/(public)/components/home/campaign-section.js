@@ -1,12 +1,10 @@
 import React from 'react';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { SettingsContext } from '/src/contexts/settings';
-import { CustomChip } from '/src/components/core/custom-chip';
-import { Iconify } from '/src/components/iconify/iconify';
 
-import { getRandomGradientColor, isSupabaseUrl, pxToRem } from '/src/utils/helper';
+import { pxToRem } from '/src/utils/helper';
 
 export const CampaignSection = () => {
   const {
@@ -14,16 +12,14 @@ export const CampaignSection = () => {
   } = React.useContext(SettingsContext);
   return (
     <>
-      <Grid container sx={{ mb: 2, position: 'relative' }} spacing={2}>
+      <Grid container sx={{ mb: 2,  position: 'relative' }} spacing={2}>
         <Grid size={{ xs: 12, md: 8 }}>
           <Box
             sx={{
-              // backgroundColor: '#333',
               borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
               padding: 4,
               position: 'sticky',
               top: pxToRem(openSubNav ? 170 : 106),
-              // boxShadow: 3,
             }}
           >
             <Typography
@@ -37,9 +33,9 @@ export const CampaignSection = () => {
                 color: 'text.primary',
               }}
             >
-              BITCOIN PAYMENT PROCESSING FOR BUSINESS
+              Campaign That we are proud of
             </Typography>
-            <Typography fontSize={21}>
+            <Typography fontSize={21} sx={{ color: 'text.secondary', width: { xs: '100%', md: '70%' } }}>
               Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
               visuals that captivate audiences, evoke emotion, and leave a lasting impact.
             </Typography>
@@ -47,7 +43,7 @@ export const CampaignSection = () => {
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
-          <Stack direction="column" gap={2}>
+          <Stack direction="column" gap={1}>
             <CampaignCard />
             <CampaignCard />
           </Stack>
@@ -57,12 +53,10 @@ export const CampaignSection = () => {
         <Grid size={{ xs: 12, md: 8 }}>
           <Box
             sx={{
-              // backgroundColor: '#333',
               borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
               padding: 4,
               position: 'sticky',
               top: pxToRem(openSubNav ? 170 : 106),
-              // boxShadow: 3,
             }}
           >
             <Typography
@@ -76,9 +70,9 @@ export const CampaignSection = () => {
                 color: 'text.primary',
               }}
             >
-              BITCOIN PAYMENT PROCESSING FOR BUSINESS
+              Campaign That we are proud of 2
             </Typography>
-            <Typography fontSize={21}>
+            <Typography fontSize={21} sx={{ color: 'text.secondary', width: { xs: '100%', md: '70%' } }}>
               Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
               visuals that captivate audiences, evoke emotion, and leave a lasting impact.
             </Typography>
@@ -86,7 +80,7 @@ export const CampaignSection = () => {
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
-          <Stack direction="column" gap={2}>
+          <Stack direction="column" gap={1}>
             <CampaignCard />
             <CampaignCard />
           </Stack>
@@ -96,64 +90,12 @@ export const CampaignSection = () => {
   );
 };
 
-// export const CampaignCard = () => {
-//   return (
-//     <>
-//       <Stack
-//         direction={{ sm: 'column', md: 'row' }}
-//         sx={{
-//           height: '265px',
-//           borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-//           boxShadow: '1px 1px 5px rgba(0, 0, 0, 0.09)',
-//           overflow: 'visible',
-//         }}
-//       >
-//         <Box
-//           component="img"
-//           src={isSupabaseUrl('') ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${''}` : ''}
-//           alt="title"
-//           sx={{
-//             width: { sm: '100%', md: '30rem' },
-//             height: '100%',
-//             objectFit: 'cover',
-//             borderRadius: 'calc(2* var(--mui-shape-borderRadius))',
-//             padding: 1.5,
-//           }}
-//         />
-//         <Stack direction="column" justifyContent="space-between" gap={1} sx={{ p: 2, width: '100%' }}>
-//           <Box>
-//             <Typography
-//               variant="caption"
-//               component="h4"
-//               sx={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'secondary.main' }}
-//             >
-//               name
-//             </Typography>
-//             <Typography sx={{ fontSize: '1rem', color: 'text.secondary' }}>Content engagement:</Typography>
-//             <Typography sx={{ fontSize: '1rem', color: 'text.secondary', mt: 2 }}>{'No description'}</Typography>
-//           </Box>
-//           <Stack direction={{ md: 'row', sm: 'column' }} justifyContent="space-between" gap={1}>
-//             <Stack
-//               direction="row"
-//               alignItems="center"
-//               divider={<Iconify icon="pepicons-pencil:line-y" sx={{ color: 'grey.400' }} />}
-//             >
-//               <CustomChip label="status" color="success" size="small" variant="soft" />
-//             </Stack>
-//           </Stack>
-//         </Stack>
-//       </Stack>
-//     </>
-//   );
-// };
-
 const CampaignCard = () => {
   return (
     <Box
       sx={{
         position: 'relative',
         height: 450,
-        // width: 450,
         overflow: 'hidden',
         bgcolor: 'neutral.200',
         '&:hover .image': {
@@ -170,7 +112,7 @@ const CampaignCard = () => {
           right: 0,
           bottom: 0,
           zIndex: 0,
-          backgroundImage: `url(https://picsum.photos/300/200?random=2)`,
+          backgroundImage: `url(https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57c56327d6ab7a4dda60_66f299235cc7eab712895f06_lionne-clothing-1-3.jpeg)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           transition: 'transform 300ms',

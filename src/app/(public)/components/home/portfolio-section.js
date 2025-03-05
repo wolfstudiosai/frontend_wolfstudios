@@ -10,24 +10,31 @@ import { isVideoContent } from '/src/utils/helper';
 
 export const PortfolioSection = () => {
   return (
-    //apply the gray gradient bg here
     <Box
       sx={{
         py: { xs: 4, md: 6 },
         px: { xs: 2, md: 4 },
-        // background: 'linear-gradient(to bottom, rgb(230, 235, 240), rgb(200, 205, 210))',
       }}
     >
       <Grid container spacing={4}>
-        {/* Total Contributed Engagement by Post Over 20K */}
         <Grid
           size={{
             md: 3,
             xs: 12,
           }}
         >
-          <Typography variant="h2" fontWeight="bold" gutterBottom>
-            Portfolios{' '}
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            gutterBottom
+            sx={{
+              fontSize: '2.2rem',
+              letterSpacing: '0.5px',
+              textTransform: 'uppercase',
+              color: 'text.primary',
+            }}
+          >
+            Portfolios
           </Typography>
           <Typography fontSize={21}>
             Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
@@ -79,22 +86,22 @@ export const PortfolioSection = () => {
               spaceBetween={5}
             >
               <SwiperSlide>
-                <PortfolioCard variant={2}/>
+                <PortfolioCard variant={2} />
               </SwiperSlide>
               <SwiperSlide>
-                <PortfolioCard variant={2}/>
+                <PortfolioCard variant={2} />
               </SwiperSlide>
               <SwiperSlide>
-                <PortfolioCard variant={2}/>
+                <PortfolioCard variant={2} />
               </SwiperSlide>
               <SwiperSlide>
-                <PortfolioCard variant={2}/>
+                <PortfolioCard variant={2} />
               </SwiperSlide>
               <SwiperSlide>
-                <PortfolioCard variant={2}/>
+                <PortfolioCard variant={2} />
               </SwiperSlide>
               <SwiperSlide>
-                <PortfolioCard variant={2}/>
+                <PortfolioCard variant={2} />
               </SwiperSlide>
             </SliderWrapper>
           </Box>
