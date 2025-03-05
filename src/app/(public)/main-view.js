@@ -1,8 +1,21 @@
 'use client';
 
-import React from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+
+import { HeroSection } from './components/home/hero-section';
+import { PartnerSection } from './components/home/partner-section';
+import { PortfolioSection } from './components/home/portfolio-section';
+import { CampaignSection } from './components/home/campaign-section';
+import { JobSection } from './components/home/job-section';
 
 export const MainView = () => {
-  return <Box>Homepage content will be here soon.</Box>;
+  return (
+    <Box sx={{ border: '3px solid red)' }}>
+      <HeroSection />
+      <PortfolioSection />
+      <PartnerSection />
+      <CampaignSection />
+      <JobSection />
+    </Box>
+  );
 };

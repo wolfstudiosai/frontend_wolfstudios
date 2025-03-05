@@ -9,11 +9,10 @@ import { PortfolioView } from './portfolio/portfolio-view';
 export const metadata = { title: config.site.name, description: config.site.description };
 
 export default function Page() {
-  console.log("check git hub");
   return (
     <PageContainer>
-      {/* <MainView /> */}
-      <PortfolioView />
+      <MainView />
+      {/* <PortfolioView /> */}
     </PageContainer>
   );
 }
