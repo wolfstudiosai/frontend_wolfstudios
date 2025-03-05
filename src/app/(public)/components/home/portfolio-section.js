@@ -36,7 +36,7 @@ export const PortfolioSection = () => {
           >
             Portfolios
           </Typography>
-          <Typography fontSize={21}>
+          <Typography fontSize={18} sx={{ color: 'text.secondary' }}>
             Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
             visuals that captivate audiences, evoke emotion, and leave a lasting impact.
           </Typography>

@@ -18,16 +18,27 @@ export const JobSection = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            borderTop: index === 0 ? 'none' : '1px solid #4A4A4A',
+            borderTop: index === 0 ? 'none' : '1px solid var(--mui-palette-background-level3)',
             paddingY: 4.5,
           }}
         >
           <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography sx={{ color: 'text.primary' }}>{job.id} /</Typography>
-              <Typography sx={{ color: 'text.primary', fontSize: '1.25rem' }}>{job.title}</Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 'bold',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
+                  fontSize: '1.25rem',
+                  color: 'text.primary',
+                }}
+              >
+                {job.title}
+              </Typography>
             </Box>
-            <Typography fontSize={21} sx={{color: 'text.secondary', mt: 1}}>
+            <Typography fontSize={18} sx={{ color: 'text.secondary', mt: 1, width: { xs: '100%', md: '70%' } }}>
               Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
               visuals that captivate audiences, evoke emotion, and leave a lasting impact.
             </Typography>
