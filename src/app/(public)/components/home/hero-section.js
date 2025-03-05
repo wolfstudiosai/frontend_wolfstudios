@@ -55,7 +55,7 @@ export const HeroSection = () => {
           sx={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(to bottom, rgba(45, 45, 45, 0.7), rgba(78, 64, 57, 0.5))',
+            background: 'linear-gradient(to bottom, rgba(45, 45, 45, 0.1), rgba(78, 64, 57, 0.6))',
           }}
         />
         <Box
@@ -78,11 +78,12 @@ export const HeroSection = () => {
           </Typography>
         </Box>
       </Box>
+      {/* second part */}
       <Stack direction="row" sx={{ position: 'relative', width: '100%', minHeight: `${boxHeight}vh` }}>
         <Typography
           fontSize={{ xs: '1rem', md: '1.8rem' }}
           fontWeight={'bold'}
-          sx={{ width: '40%', minWidth: '40%', p: 4 }}
+          sx={{ width: '40%', minWidth: '40%', p: 4, color: 'text.primary' }}
           gutterBottom
         >
           Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling

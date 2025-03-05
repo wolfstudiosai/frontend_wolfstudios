@@ -1,5 +1,6 @@
-import { Box, Card, Stack, Typography } from '@mui/material';
 import Image from 'next/image';
+import { Box, Card, Stack, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
@@ -17,42 +18,93 @@ export const PortfolioSection = () => {
         // background: 'linear-gradient(to bottom, rgb(230, 235, 240), rgb(200, 205, 210))',
       }}
     >
-      <Typography variant="h2" fontWeight="bold" gutterBottom>
-        Portfolios{' '}
-      </Typography>
-      <SliderWrapper
-        modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
-        breakpoints={{
-          0: { slidesPerView: 1 },
-          768: { slidesPerView: 2 },
-          1024: { slidesPerView: 5 },
-        }}
-        spaceBetween={5}
-      >
-        <SwiperSlide>
-          <PortfolioCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <PortfolioCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <PortfolioCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <PortfolioCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <PortfolioCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <PortfolioCard />
-        </SwiperSlide>
-      </SliderWrapper>
+      <Grid container spacing={4}>
+        {/* Total Contributed Engagement by Post Over 20K */}
+        <Grid
+          size={{
+            md: 3,
+            xs: 12,
+          }}
+        >
+          <Typography variant="h2" fontWeight="bold" gutterBottom>
+            Portfolios{' '}
+          </Typography>
+          <Typography fontSize={21}>
+            Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
+            visuals that captivate audiences, evoke emotion, and leave a lasting impact.
+          </Typography>
+        </Grid>
+        <Grid
+          size={{
+            md: 9,
+            xs: 12,
+          }}
+        >
+          <SliderWrapper
+            modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
+            breakpoints={{
+              0: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 5 },
+            }}
+            spaceBetween={5}
+          >
+            <SwiperSlide>
+              <PortfolioCard />
+            </SwiperSlide>
+            <SwiperSlide>
+              <PortfolioCard />
+            </SwiperSlide>
+            <SwiperSlide>
+              <PortfolioCard />
+            </SwiperSlide>
+            <SwiperSlide>
+              <PortfolioCard />
+            </SwiperSlide>
+            <SwiperSlide>
+              <PortfolioCard />
+            </SwiperSlide>
+            <SwiperSlide>
+              <PortfolioCard />
+            </SwiperSlide>
+          </SliderWrapper>
+          <Box sx={{ mt: 0.7 }}>
+            <SliderWrapper
+              modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
+              breakpoints={{
+                0: { slidesPerView: 1 },
+                768: { slidesPerView: 2 },
+                1024: { slidesPerView: 5 },
+              }}
+              spaceBetween={5}
+            >
+              <SwiperSlide>
+                <PortfolioCard variant={2}/>
+              </SwiperSlide>
+              <SwiperSlide>
+                <PortfolioCard variant={2}/>
+              </SwiperSlide>
+              <SwiperSlide>
+                <PortfolioCard variant={2}/>
+              </SwiperSlide>
+              <SwiperSlide>
+                <PortfolioCard variant={2}/>
+              </SwiperSlide>
+              <SwiperSlide>
+                <PortfolioCard variant={2}/>
+              </SwiperSlide>
+              <SwiperSlide>
+                <PortfolioCard variant={2}/>
+              </SwiperSlide>
+            </SliderWrapper>
+          </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 };
 
-const PortfolioCard = () => {
+const PortfolioCard = ({ variant }) => {
   return (
     <>
       <Card
@@ -91,7 +143,11 @@ const PortfolioCard = () => {
         ) : (
           <Image
             // src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
-            src={`https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57d588f4b57625814b04_67014a7ff7209b375680d65a_41199266_2086471245001489_187941219047833600_n.jpeg`}
+            src={
+              variant === 2
+                ? 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57cef550fb1eff420953_6704c33770670bf02efed363_DSC02976.jpeg'
+                : `https://cdn.prod.website-files.com/66836d311a49ad62d048361e/672a68398a0546bb263ef24a_IMG_2156-p-800.jpg`
+            }
             alt={'alt-image'}
             draggable={false}
             style={{
@@ -121,13 +177,11 @@ const PortfolioCard = () => {
           }}
         >
           <Typography fontWeight={600} color="var(--mui-palette-common-white)" fontSize={{ xs: 12, md: 14 }}>
-            Project Title
+            Portfolio title
           </Typography>
-          <Stack direction={'row'} spacing={1} justifyContent={'space-between'} alignItems={'center'} mt={1}>
-            <Typography variant="body" color="var(--mui-palette-common-white)" sx={{ fontSize: '12px' }}>
-              Title
-            </Typography>
-          </Stack>
+          <Typography variant="body" color="var(--mui-palette-common-white)" sx={{ fontSize: '12px' }}>
+            Short description goes here
+          </Typography>
         </Stack>
       </Card>
     </>
