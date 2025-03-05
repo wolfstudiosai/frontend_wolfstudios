@@ -69,7 +69,7 @@ export const HeroSection = () => {
             textAlign: 'left',
           }}
         >
-          <Typography fontSize={{ xs: '1rem', md: '3.2rem' }} fontWeight={500} >
+          <Typography fontSize={{ xs: '1rem', md: '3.2rem' }} fontWeight={600} >
             Wolf Studios® – Every Shoot Tells a Story.
           </Typography>
           <Typography fontSize={21}>

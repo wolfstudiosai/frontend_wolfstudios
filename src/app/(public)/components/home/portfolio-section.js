@@ -1,11 +1,11 @@
+import { Box, Card, Stack, Typography } from '@mui/material';
 import Image from 'next/image';
-import { Box, Card, Chip, Stack, Typography } from '@mui/material';
-import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
+import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
-import { getFancyColor, isVideoContent } from '/src/utils/helper';
+import { isVideoContent } from '/src/utils/helper';
 
 export const PortfolioSection = () => {
   return (

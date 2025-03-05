@@ -6,6 +6,7 @@ import { HeroSection } from './components/home/hero-section';
 import { PartnerSection } from './components/home/partner-section';
 import { PortfolioSection } from './components/home/portfolio-section';
 import { CampaignSection } from './components/home/campaign-section';
+import { JobSection } from './components/home/job-section';
 
 export const MainView = () => {
   return (
@@ -14,7 +15,7 @@ export const MainView = () => {
       <PortfolioSection />
       <PartnerSection />
       <CampaignSection />
-      <PartnerSection />
+      <JobSection />
     </Box>
   );
 };
