@@ -13,6 +13,8 @@ export const MainView = () => {
       <PortfolioSection />
       <PartnerSection />
       <PortfolioSection />
+      <PortfolioSection />
+      <PortfolioSection />
     </Box>
   );
 };

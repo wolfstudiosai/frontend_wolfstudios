@@ -56,19 +56,24 @@ const HorizontalScrollCarousel = ({ direction }) => {
   });
 
   // Set the scroll transformation based on the direction
-  const x = useTransform(scrollYProgress, [0, 1], direction === 'left' ? ['1%', '-95%'] : ['-1%', '95%']);
+  const x = useTransform(scrollYProgress, [0, 1], direction === 'left' ? ['1%', '-95%'] : ['-1%', '35%']);
 
   return (
-    <Box ref={targetRef} sx={{ position: 'relative', height: '450px', bgcolor: 'neutral.900', border: '1px solid red' }}>
+    <Box
+      ref={targetRef}
+      sx={{
+        position: 'relative',
+        height: '450px',
+        background: 'linear-gradient(to bottom, rgb(230, 235, 240), rgb(200, 205, 210))',
+      }}
+    >
       <Box
         sx={{
           position: 'sticky',
           top: 0,
           display: 'flex',
-        //   height: '100vh',
           alignItems: 'center',
           overflow: 'hidden',
-          border: '1px solid red',
         }}
       >
         <motion.div style={{ x, display: 'flex', gap: 2 }}>
