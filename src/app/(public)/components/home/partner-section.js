@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
 import { Box, Typography } from '@mui/material';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import React from 'react';
 
 const cards = [
   {
@@ -38,26 +38,42 @@ const cards = [
     title: 'Title 7',
     id: 7,
   },
+  {
+    url: 'https://picsum.photos/300/200?random=7',
+    title: 'Title 8',
+    id: 8,
+  },
+  {
+    url: 'https://picsum.photos/300/200?random=7',
+    title: 'Title 9',
+    id: 9,
+  },
+  {
+    url: 'https://picsum.photos/300/200?random=7',
+    title: 'Title 10',
+    id: 10,
+  },
 ];
 
 export const PartnerSection = () => {
   return (
-    <Box sx={{ bgcolor: 'neutral.800' }}>
+    <Box sx={{ py: 4 }}>
       <HorizontalScrollCarousel direction="left" />
       <HorizontalScrollCarousel direction="right" />
     </Box>
   );
 };
 
-
 const HorizontalScrollCarousel = ({ direction }) => {
   const targetRef = React.useRef(null);
   const { scrollYProgress } = useScroll({ target: targetRef });
-  const [scrollLocked, setScrollLocked] = React.useState(false);
 
-  // Set the scroll transformation based on the direction
-  const x = useTransform(scrollYProgress, [0, 1], direction === 'left' ? ['0%', '-90%'] : ['-45%', '35%']);
-
+  const totalWidth = React.useMemo(() => cards.length * 450, []);
+  const x = useTransform(
+    scrollYProgress,
+    [0, 1],
+    direction === 'left' ? [0, -totalWidth + window.innerWidth] : [-totalWidth + window.innerWidth, 0]
+  );
 
   return (
     <Box
@@ -65,7 +81,6 @@ const HorizontalScrollCarousel = ({ direction }) => {
       sx={{
         position: 'relative',
         height: '450px',
-        background: 'linear-gradient(to bottom, rgb(230, 235, 240), rgb(200, 205, 210))',
         overflow: 'hidden',
       }}
     >
@@ -87,7 +102,6 @@ const HorizontalScrollCarousel = ({ direction }) => {
     </Box>
   );
 };
-
 
 const Card = ({ card }) => {
   return (
