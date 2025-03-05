@@ -4,16 +4,16 @@ import React, { useEffect, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 
 export const HeroSection = () => {
-  const [boxSize, setBoxSize] = useState(50); 
-  const [boxHeight, setBoxHeight] = useState(60); 
+  const [boxSize, setBoxSize] = useState(50);
+  const [boxHeight, setBoxHeight] = useState(60);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      const maxScroll = 500; 
+      const maxScroll = 500;
 
       const newWidth = Math.min(100, Math.max(50, 50 + (scrollPosition / maxScroll) * 50));
-      const newHeight = Math.min(100, Math.max(60, 60 + (scrollPosition / maxScroll) * 40)); 
+      const newHeight = Math.min(110, Math.max(60, 60 + (scrollPosition / maxScroll) * 40));
 
       setBoxSize(newWidth);
       setBoxHeight(newHeight);
@@ -55,11 +55,9 @@ export const HeroSection = () => {
           sx={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(to bottom, rgba(45, 45, 45, 0.7), rgba(78, 64, 57, 0.9))',
+            background: 'linear-gradient(to bottom, rgba(45, 45, 45, 0.7), rgba(78, 64, 57, 0.5))',
           }}
         />
-
-        {/* Text Content */}
         <Box
           sx={{
             position: 'absolute',
@@ -71,7 +69,7 @@ export const HeroSection = () => {
             textAlign: 'left',
           }}
         >
-          <Typography variant="h2" fontWeight="bold" gutterBottom>
+          <Typography fontSize={{ xs: '1rem', md: '3.2rem' }} fontWeight={500} >
             Wolf Studios® – Every Shoot Tells a Story.
           </Typography>
           <Typography fontSize={21}>
