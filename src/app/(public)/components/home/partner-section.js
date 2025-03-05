@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { Box, Typography } from '@mui/material';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
@@ -49,14 +49,15 @@ export const PartnerSection = () => {
   );
 };
 
+
 const HorizontalScrollCarousel = ({ direction }) => {
-  const targetRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-  });
+  const targetRef = React.useRef(null);
+  const { scrollYProgress } = useScroll({ target: targetRef });
+  const [scrollLocked, setScrollLocked] = React.useState(false);
 
   // Set the scroll transformation based on the direction
-  const x = useTransform(scrollYProgress, [0, 1], direction === 'left' ? ['1%', '-95%'] : ['-1%', '35%']);
+  const x = useTransform(scrollYProgress, [0, 1], direction === 'left' ? ['0%', '-90%'] : ['-45%', '35%']);
+
 
   return (
     <Box
@@ -65,6 +66,7 @@ const HorizontalScrollCarousel = ({ direction }) => {
         position: 'relative',
         height: '450px',
         background: 'linear-gradient(to bottom, rgb(230, 235, 240), rgb(200, 205, 210))',
+        overflow: 'hidden',
       }}
     >
       <Box
@@ -85,6 +87,7 @@ const HorizontalScrollCarousel = ({ direction }) => {
     </Box>
   );
 };
+
 
 const Card = ({ card }) => {
   return (
