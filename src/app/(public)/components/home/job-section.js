@@ -22,15 +22,15 @@ export const JobSection = () => {
             paddingY: 4.5,
             '&:hover': {
               '& .job-id': {
-                opacity: 0,  // Fade the ID instead of removing it completely
-                transition: 'opacity 0.4s ease-in-out', // Smooth opacity transition
+                opacity: 0,  
+                transition: 'opacity 0.4s ease-in-out',
               },
               '& .job-title': {
-                marginLeft: 0, // Ensure title shifts left smoothly
-                transition: 'margin-left 0.4s ease-in-out', // Transition margin-left
+                marginLeft: 0, 
+                transition: 'margin-left 0.4s ease-in-out',
               },
               '& .arrow-icon': {
-                transform: 'rotate(90deg)', // Smooth rotation for arrow
+                transform: 'rotate(90deg)', 
                 transition: 'transform 0.4s ease-in-out',
               },
             },
@@ -41,8 +41,8 @@ export const JobSection = () => {
               className="job-id"
               sx={{
                 color: 'text.primary',
-                opacity: 1,  // Initially visible
-                transition: 'opacity 0.4s ease-in-out', // Transition opacity
+                opacity: 1,  
+                transition: 'opacity 0.4s ease-in-out',
               }}
             >
               {job.id} /
@@ -56,8 +56,8 @@ export const JobSection = () => {
                 letterSpacing: '1px',
                 fontSize: '1.25rem',
                 color: 'text.primary',
-                marginLeft: '8px', // Add spacing initially
-                transition: 'margin-left 0.4s ease-in-out', // Smooth transition for the title
+                marginLeft: '8px', 
+                transition: 'margin-left 0.4s ease-in-out', 
               }}
             >
               {job.title}
