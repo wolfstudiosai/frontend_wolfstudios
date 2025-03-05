@@ -59,12 +59,11 @@ const PortfolioCard = () => {
         sx={{
           width: '100%',
           aspectRatio: '9 / 12',
-          border: 'unset',
           overflow: 'hidden',
           position: 'relative',
           backgroundColor: '#333',
-          borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-          border: 'solid .1px var(--mui-palette-divider)',
+          borderRadius: 'calc(0* var(--mui-shape-borderRadius))',
+          // border: 'solid .1px var(--mui-palette-divider)',
           cursor: 'pointer',
           '&:hover .portfolio-card-overlay': {
             opacity: 1,

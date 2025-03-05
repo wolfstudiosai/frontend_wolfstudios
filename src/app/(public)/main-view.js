@@ -5,6 +5,7 @@ import { Box, Typography } from '@mui/material';
 import { HeroSection } from './components/home/hero-section';
 import { PartnerSection } from './components/home/partner-section';
 import { PortfolioSection } from './components/home/portfolio-section';
+import { CampaignSection } from './components/home/campaign-section';
 
 export const MainView = () => {
   return (
@@ -12,9 +13,8 @@ export const MainView = () => {
       <HeroSection />
       <PortfolioSection />
       <PartnerSection />
-      <PortfolioSection />
-      <PortfolioSection />
-      <PortfolioSection />
+      <CampaignSection />
+      <PartnerSection />
     </Box>
   );
 };
