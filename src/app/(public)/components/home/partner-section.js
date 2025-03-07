@@ -94,9 +94,9 @@ export const PartnerSection = () => {
     <Stack spacing={0.2} sx={{ px: 4, py: 1 }}>
       <HorizontalScrollCarousel direction="left" fetchList={fetchPartners} />
       <HorizontalScrollCarousel direction="right" fetchList={fetchPartners} />
-      <Stack direction='row' justifyContent='right' sx={{ mt: 2 }}>
+      {/* <Stack direction='row' justifyContent='right' sx={{ mt: 2 }}>
         <Button variant='outlined' onClick={() => router.push('/partner')}>See all partners</Button>
-      </Stack>
+      </Stack> */}
     </Stack>
   );
 };
