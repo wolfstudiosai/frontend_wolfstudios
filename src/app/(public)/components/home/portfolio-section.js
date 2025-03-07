@@ -33,8 +33,7 @@ export const PortfolioSection = () => {
   return (
     <Box
       sx={{
-        pt: { xs: 4, md: 6 },
-        pb: 1,
+        py: 1,
         px: { xs: 2, md: 4 },
       }}
     >

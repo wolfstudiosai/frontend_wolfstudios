@@ -117,7 +117,7 @@ export const CampaignSection = () => {
                                 {group.description}
                             </Typography>
                         </Stack>
-                        <HorizontalScrollCarousel data={group.campaigns} direction="right" fetchList={fetchCampaignGroups} />
+                        <HorizontalScrollCarousel data={group.campaigns.slice(0, 5)} direction="right" fetchList={fetchCampaignGroups} />
                     </React.Fragment>
                 ))
             }

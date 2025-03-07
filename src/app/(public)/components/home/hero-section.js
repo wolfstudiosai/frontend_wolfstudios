@@ -79,7 +79,7 @@ export const HeroSection = () => {
         </Box>
       </Box>
       {/* second part */}
-      <Stack direction="row" sx={{ position: 'relative', width: '100%', minHeight: `${boxHeight}vh` }}>
+      <Stack direction="row" sx={{ position: 'relative', width: '100%', minHeight: `${boxHeight}vh`, overflow: 'hidden' }}>
         <Typography
           fontSize={{ xs: '1rem', md: '1.8rem' }}
           fontWeight={'bold'}
