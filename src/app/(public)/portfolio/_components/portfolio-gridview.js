@@ -1,14 +1,14 @@
 'use client';
 
-import { PageLoader } from '/src/components/loaders/PageLoader';
-import { SliderWrapper } from '/src/components/slider/slider-wrapper';
-import { getFancyColor, isVideoContent } from '/src/utils/helper';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import Image from 'next/image';
 import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
+import { PageLoader } from '/src/components/loaders/PageLoader';
+import { SliderWrapper } from '/src/components/slider/slider-wrapper';
+import { getFancyColor, isVideoContent } from '/src/utils/helper';
 
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 import { PortfolioSliderItem } from './portfolio-slider-item';
@@ -50,7 +50,7 @@ export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagi
   );
 };
 
-const PortfolioCard = ({ item, fetchList }) => {
+export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
 
   return (
@@ -69,6 +69,7 @@ const PortfolioCard = ({ item, fetchList }) => {
           '&:hover .portfolio-card-overlay': {
             opacity: 1,
           },
+          ...sx
         }}
         onClick={() => setOpenPortfolioRightPanel(item)}
       >
@@ -92,7 +93,7 @@ const PortfolioCard = ({ item, fetchList }) => {
         ) : (
           <Image
             src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
-            alt={item.title}
+            alt={item.title || 'Portfolio Image'}
             draggable={false}
             style={{
               objectFit: 'cover',
@@ -100,7 +101,7 @@ const PortfolioCard = ({ item, fetchList }) => {
               transition: 'filter 0.2s ease-out',
             }}
             loading="lazy"
-            sizes="100vw"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Adjust based on screen size
             fill={true}
             onLoad={(e) => {
               e.target.style.filter = 'blur(0px)';
@@ -118,6 +119,7 @@ const PortfolioCard = ({ item, fetchList }) => {
             width: '100%',
             py: 1,
             background: 'linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))',
+            ...infoSx
           }}
         >
           <Typography fontWeight={600} color="var(--mui-palette-common-white)" fontSize={{ xs: 12, md: 14 }}>

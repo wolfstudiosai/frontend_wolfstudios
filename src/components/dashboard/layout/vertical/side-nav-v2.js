@@ -87,7 +87,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
         sx={{
           ...styles,
           bgcolor: 'text-primary',
-          backgroundColor: 'var(--mui-palette-background-level2)',
+          // backgroundColor: 'var(--mui-palette-background-level2)',
           borderRight: 'var(--SideNav-border)',
           color: 'var(--SideNav-color)',
           display: { xs: 'none', lg: 'flex' },
@@ -107,6 +107,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
           '&::-webkit-scrollbar': {
             width: '0px',
           },
+          background: 'transparent'
           // '&::-webkit-scrollbar-thumb': {
           //   backgroundColor: 'transparent', // Hide the thumb
           // },

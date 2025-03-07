@@ -9,6 +9,8 @@ export const UserList = () => {
     const { userData, handleActiveConversation, handleSearchUser, handleActiveUser } = useContext(ChatContext);
     const [searchTerm, setSearchTerm] = useState('');
 
+    console.log(userData);
+
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
         handleSearchUser(e.target.value);
@@ -37,7 +39,7 @@ export const UserList = () => {
             }}>
                 {
                     userData.map((user, index) => (
-                        <Stack key={index} onClick={() => handleActiveConversation(user.userId)} direction='row' gap={1} sx={{ cursor: 'pointer', py: 0.5, position: 'relative', '&:hover .hover-action': { opacity: 1 } }}>
+                        <Stack key={index} onClick={() => handleActiveConversation(user.id)} direction='row' gap={1} sx={{ cursor: 'pointer', py: 0.5, position: 'relative', '&:hover .hover-action': { opacity: 1 } }}>
                             <Box>
                                 <StyledBadge
                                     overlap="circular"
@@ -45,12 +47,12 @@ export const UserList = () => {
                                     variant="dot"
                                     isOnline={user.active}
                                 >
-                                    <Avatar alt={user.name} src={user.profile_image} sx={{ width: 40, height: 40 }} />
+                                    <Avatar alt={`${user.first_name} ${user.last_name && user.last_name}`} src={user.profile_pic} sx={{ width: 40, height: 40 }} />
                                 </StyledBadge>
                             </Box>
                             <Box sx={{ width: '100%' }}>
                                 <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                                    <Typography sx={{ fontWeight: 'medium', fontSize: '1rem' }}>{user.name}</Typography>
+                                    <Typography sx={{ fontWeight: 'medium', fontSize: '1rem' }}>{user?.last_name ? `${user.first_name} ${user.last_name}` : user.first_name}</Typography>
                                     <Typography variant="caption" sx={{ color: 'text.secondary' }}>{dayjs(user.last_message?.timestamp).format('DD MMM, YYYY - hh:mm A')}</Typography>
                                 </Stack>
                                 <Typography variant="body2">{user.last_message?.message}</Typography>

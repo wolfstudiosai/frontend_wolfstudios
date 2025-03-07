@@ -1,15 +1,15 @@
 'use client';
 
-import React, { createContext, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { api, server_base_api } from '/src/utils/api';
 import { jwtDecode } from 'jwt-decode';
+import { useRouter } from 'next/navigation';
+import React, { createContext, useState } from 'react';
+import { api, server_base_api } from '/src/utils/api';
 
-import { paths } from '/src/paths';
 
 import { removeTokenFromCookies, setTokenInCookies } from '/src/utils/axios-api.helpers';
 
 export const INITIAL_AUTH_STATE = {
+  id: '',
   token: '',
   name: '',
   email: '',
@@ -21,8 +21,8 @@ export const INITIAL_AUTH_STATE = {
 export const AuthContext = createContext({
   userInfo: INITIAL_AUTH_STATE,
   isLogin: false,
-  login: () => {},
-  logout: () => {},
+  login: () => { },
+  logout: () => { },
 });
 
 export const isValidToken = (token) => {
@@ -60,7 +60,10 @@ export const AuthProvider = (props) => {
       });
       const token = res.data.data.token;
 
+      console.log(res.data);
+
       const userData = {
+        id: res.data.data.id,
         token: token,
         name: res.data.data.name,
         email: res.data.data.email,

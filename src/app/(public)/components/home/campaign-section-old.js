@@ -1,17 +1,17 @@
-import React from 'react';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import React from 'react';
 
 import { SettingsContext } from '/src/contexts/settings';
 
 import { pxToRem } from '/src/utils/helper';
 
-export const CampaignSection = () => {
+export const CampaignSectionOld = () => {
   const {
     customSettings: { openSubNav },
   } = React.useContext(SettingsContext);
   return (
-    <Box sx={{ px: 4, pt: 1 }}>
+    <Box sx={{ px: 4, py: 1 }}>
       <Grid container sx={{ mb: 2, position: 'relative' }} spacing={2}>
         <Grid size={{ xs: 12, md: 8 }}>
           <Box
@@ -156,7 +156,7 @@ const CampaignCard = () => {
             textTransform: 'uppercase',
             color: 'rgba(255, 255, 255, 0.7)',
             fontSize: '0.85rem',
-            mt: 1,
+            mt: 1
           }}
         >
           Category

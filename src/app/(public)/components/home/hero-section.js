@@ -1,7 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
+import { motion } from 'framer-motion';
+
+import { FadeIn } from '/src/components/animation/fade-in';
 
 export const HeroSection = () => {
   const [boxSize, setBoxSize] = useState(50);
@@ -13,7 +16,7 @@ export const HeroSection = () => {
       const maxScroll = 500;
 
       const newWidth = Math.min(100, Math.max(50, 50 + (scrollPosition / maxScroll) * 50));
-      const newHeight = Math.min(110, Math.max(60, 60 + (scrollPosition / maxScroll) * 40));
+      const newHeight = Math.min(100, Math.max(60, 60 + (scrollPosition / maxScroll) * 40));
 
       setBoxSize(newWidth);
       setBoxHeight(newHeight);
@@ -69,26 +72,52 @@ export const HeroSection = () => {
             textAlign: 'left',
           }}
         >
-          <Typography fontSize={{ xs: '1rem', md: '3.2rem' }} fontWeight={600} >
-            Wolf Studios® – Every Shoot Tells a Story.
-          </Typography>
-          <Typography fontSize={21}>
+          <FadeIn>
+            <Typography fontSize={{ xs: '1rem', md: '3.2rem' }} fontWeight={600}>
+              Wolf Studios® – Every Shoot Tells a Story.
+            </Typography>
+
+            <Typography fontSize={21}>
+              Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
+              visuals that captivate audiences, evoke emotion, and leave a lasting impact.
+            </Typography>
+          </FadeIn>
+        </Box>
+      </Box>
+
+      {/* second part */}
+      <Stack
+        direction="row"
+        sx={{
+          position: 'relative',
+          width: '100%',
+          minHeight: `${boxHeight}vh`,
+          overflow: 'hidden',
+          zIndex: 2,
+        }}
+      >
+        <motion.div
+          initial={{ scaleX: 0, scaleY: 0, originX: 1, originY: 1 }}
+          animate={{ scaleX: 1, scaleY: 1 }}
+          transition={{ duration: 1, ease: 'easeOut' }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundColor: '#DFDED8',
+            zIndex: -1,
+          }}
+        />
+        <FadeIn>
+          <Typography
+            fontSize={{ xs: '1rem', md: '1.8rem' }}
+            fontWeight={'bold'}
+            sx={{ width: '40%', minWidth: '40%', p: 4, color: 'text.primary' }}
+            gutterBottom
+          >
             Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
             visuals that captivate audiences, evoke emotion, and leave a lasting impact.
           </Typography>
-        </Box>
-      </Box>
-      {/* second part */}
-      <Stack direction="row" sx={{ position: 'relative', width: '100%', minHeight: `${boxHeight}vh` }}>
-        <Typography
-          fontSize={{ xs: '1rem', md: '1.8rem' }}
-          fontWeight={'bold'}
-          sx={{ width: '40%', minWidth: '40%', p: 4, color: 'text.primary' }}
-          gutterBottom
-        >
-          Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
-          visuals that captivate audiences, evoke emotion, and leave a lasting impact.
-        </Typography>
+        </FadeIn>
         <Box
           sx={{
             position: 'absolute',
@@ -112,6 +141,7 @@ export const HeroSection = () => {
               height: `100%`,
               objectFit: 'cover',
               objectPosition: 'top center',
+              // boxShadow: '0px 5px 5px rgba(0, 0, 0, 0.25), 0px 5px 5px rgba(0, 0, 0, 0.2)',
             }}
           >
             <source src="/videos/hero_bg.mp4" type="video/mp4" />

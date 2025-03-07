@@ -1,5 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { DEMO_CONVERSATIONS, DEMO_USERS } from "/src/app/(private)/dms/_lib/demo_data";
+import { api } from '/src/utils/api';
 
 const loggedInUser = {
     userId: "u1",
@@ -16,11 +17,12 @@ const loggedInUser = {
 export const ChatContext = createContext({});
 
 export const ChatContextProvider = ({ children }) => {
-    const [userData, setUserData] = useState(DEMO_USERS);
+    const [userData, setUserData] = useState([]);
     const [activeConversation, setActiveConversation] = useState(DEMO_CONVERSATIONS[`u1-${DEMO_USERS[0].userId}`].messages);
-    const [activeReceiver, setActiveReceiver] = useState(DEMO_USERS[0]);
+    const [activeReceiver, setActiveReceiver] = useState(null);
     const [activeThread, setActiveThread] = useState(null);
     const [activeProfile, setActiveProfile] = useState(null);
+    const [messages, setMessages] = useState([]);
 
     const findUser = (id) => {
         if (id === loggedInUser.userId) return loggedInUser;
@@ -28,7 +30,7 @@ export const ChatContextProvider = ({ children }) => {
     }
 
     const handleActiveConversation = (id) => {
-        const user = userData.find((u) => u.userId === id);
+        const user = userData.find((u) => u.id === id);
         setActiveReceiver(user);
         setActiveConversation(DEMO_CONVERSATIONS[`u1-${id}`]?.messages);
     }
@@ -99,8 +101,41 @@ export const ChatContextProvider = ({ children }) => {
         handleAddMessage,
         loggedInUser,
         activeProfile,
-        handleActiveProfile
+        handleActiveProfile,
+        messages
     };
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await api.get(`/user/inbox`);
+                if (response.data && response.data?.success) {
+                    setUserData(response.data.data);
+                    setActiveReceiver(response.data.data[0]);
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        }
+
+        fetchUserData();
+    }, []);
+
+    useEffect(() => {
+        const fetchMessages = async () => {
+            try {
+                const response = await api.get(`/message/${activeReceiver.id}`);
+                if (response.data && response.data?.success) {
+                    setMessages(response.data.data);
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        }
+        if (activeReceiver) {
+            fetchMessages();
+        }
+    }, [activeReceiver])
 
     return (
         <ChatContext.Provider value={contextValue}>
