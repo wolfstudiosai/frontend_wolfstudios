@@ -1,7 +1,10 @@
 'use client';
 
-import { Box, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { Box, Stack, Typography } from '@mui/material';
+import { motion } from 'framer-motion';
+
+import { FadeIn } from '/src/components/animation/fade-in';
 
 export const HeroSection = () => {
   const [boxSize, setBoxSize] = useState(50);
@@ -69,26 +72,40 @@ export const HeroSection = () => {
             textAlign: 'left',
           }}
         >
-          <Typography fontSize={{ xs: '1rem', md: '3.2rem' }} fontWeight={600} >
-            Wolf Studios® – Every Shoot Tells a Story.
-          </Typography>
-          <Typography fontSize={21}>
-            Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
-            visuals that captivate audiences, evoke emotion, and leave a lasting impact.
-          </Typography>
+          <FadeIn>
+            <Typography fontSize={{ xs: '1rem', md: '3.2rem' }} fontWeight={600}>
+              Wolf Studios® – Every Shoot Tells a Story.
+            </Typography>
+
+            <Typography fontSize={21}>
+              Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
+              visuals that captivate audiences, evoke emotion, and leave a lasting impact.
+            </Typography>
+          </FadeIn>
         </Box>
       </Box>
       {/* second part */}
-      <Stack direction="row" sx={{ position: 'relative', width: '100%', minHeight: `${boxHeight}vh`, overflow: 'hidden' }}>
-        <Typography
-          fontSize={{ xs: '1rem', md: '1.8rem' }}
-          fontWeight={'bold'}
-          sx={{ width: '40%', minWidth: '40%', p: 4, color: 'text.primary' }}
-          gutterBottom
-        >
-          Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
-          visuals that captivate audiences, evoke emotion, and leave a lasting impact.
-        </Typography>
+      <Stack
+        direction="row"
+        sx={{
+          position: 'relative',
+          width: '100%',
+          minHeight: `${boxHeight}vh`,
+          overflow: 'hidden',
+          bgcolor: '#333',
+        }}
+      >
+        <FadeIn>
+          <Typography
+            fontSize={{ xs: '1rem', md: '1.8rem' }}
+            fontWeight={'bold'}
+            sx={{ width: '40%', minWidth: '40%', p: 4, color: 'text.primary' }}
+            gutterBottom
+          >
+            Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
+            visuals that captivate audiences, evoke emotion, and leave a lasting impact.
+          </Typography>
+        </FadeIn>
         <Box
           sx={{
             position: 'absolute',
