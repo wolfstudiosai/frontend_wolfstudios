@@ -114,7 +114,7 @@ export const privateRoutes = [
   {
     key: 'partner_hq',
     title: 'Partner HQ',
-    icon: 'noto:fire',
+    icon: 'arcticons:partnerkaart',
     items: [
       {
         key: 'needs_approval',
@@ -247,7 +247,7 @@ export const privateRoutes = [
   {
     key: 'archive',
     title: 'Archive',
-    icon: 'fluent-emoji-flat:radioactive',
+    icon: 'ph:archive-light',
     items: [
       {
         key: 'partner_by_campaing',
@@ -301,7 +301,7 @@ export const dashboardFavItems = [
   {
     key: 'favorite',
     title: 'Favorite',
-    icon: 'noto:red-heart',
+    icon: 'iconamoon:heart-light',
     items: [
 
       {
