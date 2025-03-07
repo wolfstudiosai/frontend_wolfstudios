@@ -1,12 +1,13 @@
 'use client';
 
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 
+import { CampaignSection } from './components/home/campaign-section';
+// import { CampaignSectionOld } from './components/home/campaign-section-old';
 import { HeroSection } from './components/home/hero-section';
+import { JobSection } from './components/home/job-section';
 import { PartnerSection } from './components/home/partner-section';
 import { PortfolioSection } from './components/home/portfolio-section';
-import { CampaignSection } from './components/home/campaign-section';
-import { JobSection } from './components/home/job-section';
 
 export const MainView = () => {
   return (
@@ -15,6 +16,7 @@ export const MainView = () => {
       <PortfolioSection />
       <PartnerSection />
       <CampaignSection />
+      {/* <CampaignSectionOld /> */}
       <JobSection />
     </Box>
   );

@@ -13,25 +13,29 @@ import { ChatContext } from "/src/contexts/chat";
 export const Conversation = () => {
     const [activeTab, setActiveTab] = useState('messages');
 
-    const { activeConversation, activeReceiver, activeThread, activeProfile } = useContext(ChatContext);
+    const { messages, activeReceiver, activeThread, activeProfile } = useContext(ChatContext);
 
 
     return (
         <Stack sx={{ p: 2, width: (activeThread || activeProfile) ? '40%' : '70%', ...((activeThread || activeProfile) && { borderRight: '1px solid', borderColor: 'divider' }) }}>
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
-                <Stack direction='row' alignItems='center' gap={1}>
-                    <Box>
-                        <StyledBadge
-                            overlap="circular"
-                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                            variant="dot"
-                            isOnline={activeReceiver.active}
-                        >
-                            <Avatar alt={activeReceiver.name} src={activeReceiver.profile_image} sx={{ width: 30, height: 30 }} />
-                        </StyledBadge>
-                    </Box>
-                    <Typography sx={{ fontWeight: 'medium', fontSize: '1.2rem' }}>{activeReceiver.name}</Typography>
-                </Stack>
+                {
+                    activeReceiver && (
+                        <Stack direction='row' alignItems='center' gap={1}>
+                            <Box>
+                                <StyledBadge
+                                    overlap="circular"
+                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                    variant="dot"
+                                    isOnline={activeReceiver?.active}
+                                >
+                                    <Avatar alt={activeReceiver?.last_name ? `${activeReceiver.first_name} ${activeReceiver.last_name}` : activeReceiver.first_name} src={activeReceiver?.profile_pic} sx={{ width: 30, height: 30 }} />
+                                </StyledBadge>
+                            </Box>
+                            <Typography sx={{ fontWeight: 'medium', fontSize: '1.2rem' }}>{activeReceiver?.last_name ? `${activeReceiver.first_name} ${activeReceiver.last_name}` : activeReceiver.first_name}</Typography>
+                        </Stack>
+                    )
+                }
                 <IconButton>
                     <Iconify icon="bi:three-dots-vertical" />
                 </IconButton>
@@ -79,9 +83,9 @@ export const Conversation = () => {
                             },
                         }}>
                             {
-                                activeConversation?.length > 0 ? (
-                                    activeConversation.map((message, index) => (
-                                        <Message key={index} message={message} />
+                                messages?.length > 0 ? (
+                                    messages.map((message) => (
+                                        <Message key={message.id} message={message} />
                                     ))
                                 ) : (
                                     <Typography>No messages</Typography>

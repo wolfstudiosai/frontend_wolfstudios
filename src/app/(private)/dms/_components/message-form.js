@@ -2,14 +2,18 @@ import { Avatar, Box, Divider, FormControl, IconButton, Input, InputAdornment, S
 import { useContext, useRef, useState } from "react";
 import { Iconify } from "/src/components/iconify/iconify";
 import { ChatContext } from "/src/contexts/chat";
+import useWebSocket from '/src/hooks/use-web-socket';
+import useAuth from '/src/hooks/useAuth';
 
 export const MessageForm = ({ sx = {} }) => {
-    const [newMessage, setNewMessage] = useState('');
+    const [messageContent, setMessageContent] = useState('');
     const [selectedFiles, setSelectedFiles] = useState([]);
 
-    const attachmentRef = useRef(null);
+    const { activeReceiver } = useContext(ChatContext);
+    const { userInfo } = useAuth();
 
-    const { handleAddMessage, loggedInUser } = useContext(ChatContext);
+    const { sendMessage } = useWebSocket(userInfo.id);
+    const attachmentRef = useRef(null);
 
     const handleFileSelect = (event) => {
         if (event.target.files?.length) {
@@ -20,6 +24,19 @@ export const MessageForm = ({ sx = {} }) => {
     const handleRemoveFile = (indexToRemove) => {
         setSelectedFiles((prevFiles) => prevFiles.filter((_, index) => index !== indexToRemove));
     };
+
+    const handleSendMessage = () => {
+        if (!messageContent.trim()) return;
+
+        const newMessage = {
+            sender_id: userInfo?.id,
+            receiver_id: activeReceiver?.id,
+            content: messageContent,
+        };
+
+        sendMessage(newMessage);
+        setMessageContent("");
+    }
 
     return (
         <Stack sx={{ ...sx, }}>
@@ -46,12 +63,12 @@ export const MessageForm = ({ sx = {} }) => {
                 <Input
                     fullWidth
                     placeholder='Type a message...'
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
+                    value={messageContent}
+                    onChange={(e) => setMessageContent(e.target.value)}
                     id="input-with-icon-adornment"
                     startAdornment={
                         <InputAdornment position="start">
-                            <Avatar src={loggedInUser?.profile_image} alt={loggedInUser?.name} sx={{ width: '30px', height: '30px' }} />
+                            <Avatar src={userInfo?.profile_pic} alt={userInfo?.name} sx={{ width: '30px', height: '30px' }} />
                         </InputAdornment>
                     }
                     endAdornment={
@@ -62,8 +79,8 @@ export const MessageForm = ({ sx = {} }) => {
                             <IconButton size='small' sx={{ borderRadius: '50%' }}>
                                 <Iconify icon='material-symbols-light:add-reaction-outline' sx={{ color: 'grey.800' }} />
                             </IconButton>
-                            <IconButton size='small' sx={{ borderRadius: '50%', ...((newMessage.length > 0 || selectedFiles.length > 0) && { backgroundColor: 'primary.main', '&:hover': { backgroundColor: 'primary.main' } }) }} onClick={handleAddMessage}>
-                                <Iconify icon='mingcute:arrow-up-fill' sx={{ color: (newMessage.length > 0 || selectedFiles.length > 0) ? '#fff' : 'grey.800' }} />
+                            <IconButton size='small' sx={{ borderRadius: '50%', ...((messageContent.length > 0 || selectedFiles.length > 0) && { backgroundColor: 'primary.main', '&:hover': { backgroundColor: 'primary.main' } }) }} onClick={handleSendMessage}>
+                                <Iconify icon='mingcute:arrow-up-fill' sx={{ color: (messageContent.length > 0 || selectedFiles.length > 0) ? '#fff' : 'grey.800' }} />
                             </IconButton>
                         </InputAdornment>
                     }

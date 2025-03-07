@@ -10,7 +10,7 @@ const jobSections = [
 
 export const JobSection = () => {
   return (
-    <Box sx={{ padding: 4 }}>
+    <Box sx={{ px: 4, py: 1 }}>
       {jobSections.map((job, index) => (
         <Box
           key={index}
@@ -22,15 +22,15 @@ export const JobSection = () => {
             paddingY: 4.5,
             '&:hover': {
               '& .job-id': {
-                opacity: 0,  
+                opacity: 0,
                 transition: 'opacity 0.4s ease-in-out',
               },
               '& .job-title': {
-                marginLeft: 0, 
+                marginLeft: 0,
                 transition: 'margin-left 0.4s ease-in-out',
               },
               '& .arrow-icon': {
-                transform: 'rotate(90deg)', 
+                transform: 'rotate(90deg)',
                 transition: 'transform 0.4s ease-in-out',
               },
             },
@@ -41,7 +41,7 @@ export const JobSection = () => {
               className="job-id"
               sx={{
                 color: 'text.primary',
-                opacity: 1,  
+                opacity: 1,
                 transition: 'opacity 0.4s ease-in-out',
               }}
             >
@@ -56,8 +56,8 @@ export const JobSection = () => {
                 letterSpacing: '1px',
                 fontSize: '1.25rem',
                 color: 'text.primary',
-                marginLeft: '8px', 
-                transition: 'margin-left 0.4s ease-in-out', 
+                marginLeft: '8px',
+                transition: 'margin-left 0.4s ease-in-out',
               }}
             >
               {job.title}

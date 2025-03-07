@@ -1,16 +1,5 @@
 'use client';
 
-import { LoginForm } from '/src/app/auth/_components/LoginForm';
-import { Dropdown } from '/src/components/core/dropdown/dropdown';
-import { DropdownPopover } from '/src/components/core/dropdown/dropdown-popover';
-import { DropdownTrigger } from '/src/components/core/dropdown/dropdown-trigger';
-import { Logo } from '/src/components/core/logo';
-import { Iconify } from '/src/components/iconify/iconify';
-import { MobileNav } from '/src/components/navbar/mobile-nav';
-import { NavSearchV2 } from '/src/components/navbar/nav-search-v2';
-import { isNavItemActive } from '/src/lib/is-nav-item-active';
-import { publicRoutes } from '/src/router';
-import { pxToRem } from '/src/utils/helper';
 import { Button, Popover } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -21,7 +10,18 @@ import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/Caret
 import RouterLink from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
+import { LoginForm } from '/src/app/auth/_components/LoginForm';
+import { Dropdown } from '/src/components/core/dropdown/dropdown';
+import { DropdownPopover } from '/src/components/core/dropdown/dropdown-popover';
+import { DropdownTrigger } from '/src/components/core/dropdown/dropdown-trigger';
+import { Logo } from '/src/components/core/logo';
+import { Iconify } from '/src/components/iconify/iconify';
+import { MobileNav } from '/src/components/navbar/mobile-nav';
+import { NavSearchV2 } from '/src/components/navbar/nav-search-v2';
 import { SettingsContext } from '/src/contexts/settings';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
+import { publicRoutes } from '/src/router';
+import { pxToRem } from '/src/utils/helper';
 
 import useAuth from '/src/hooks/useAuth';
 import { paths } from '/src/paths';
@@ -110,8 +110,8 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                 <Logo height={40} width={120} />
               </Box>
               <Stack component="ul" direction="row" spacing={1} sx={{ listStyle: 'none', m: 0, p: 0 }}>
-                {publicRoutes.map((section, index) =>
-                  section.items.map((item) => (
+                {publicRoutes.map((section) =>
+                  section.items.map((item, index) => (
                     <NavItem
                       key={index}
                       href={item.href}

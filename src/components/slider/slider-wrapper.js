@@ -18,6 +18,7 @@ export const SliderWrapper = ({
   slidesPerView = 3,
   navigation = false,
   pauseOnHover = false,
+  sx,
   ...restProps
 }) => {
   const swiperRef = React.useRef(null);
@@ -39,7 +40,7 @@ export const SliderWrapper = ({
   };
 
   return (
-    <Box sx={{ overflow: 'hidden' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <Box sx={{ overflow: 'hidden', ...sx }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <Swiper
         loop={loop}
         autoplay={autoplay}

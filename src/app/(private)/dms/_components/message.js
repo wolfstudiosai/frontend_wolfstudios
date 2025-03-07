@@ -5,16 +5,30 @@ import dayjs from "dayjs";
 import { useContext } from "react";
 import { Iconify } from "/src/components/iconify/iconify";
 import { ChatContext } from "/src/contexts/chat";
+import useAuth from '/src/hooks/useAuth';
 
 export const Message = ({ message, in_thread }) => {
-    const { findUser, handleActiveThread, handleActiveProfile } = useContext(ChatContext);
+    const { handleActiveThread, handleActiveProfile } = useContext(ChatContext);
+    const { userInfo } = useAuth();
 
     return (
         <Stack direction='row' gap={1} sx={{ py: 0.5, position: 'relative', '&:hover .hover-action': { opacity: 1 } }}>
-            <Avatar src={findUser(message.senderId)?.profile_image} alt={findUser(message.senderId)?.name} variant="square" sx={{ borderRadius: 1, cursor: 'pointer' }} onClick={() => handleActiveProfile(message.senderId)} />
+            {
+                userInfo?.id === message.sender_id ? (
+                    <Avatar src={message?.sender?.profile_pic} alt={message?.sender?.last_name ? `${message?.sender?.first_name} ${message?.sender?.last_name}` : message?.sender?.first_name} variant="square" sx={{ borderRadius: 1, cursor: 'pointer' }} onClick={() => handleActiveProfile(message?.sender_id)} />
+                ) : (
+                    <Avatar src={message?.receiver?.profile_pic} alt={message?.receiver?.last_name ? `${message?.receiver?.first_name} ${message?.receiver?.last_name}` : message?.receiver?.first_name} variant="square" sx={{ borderRadius: 1, cursor: 'pointer' }} onClick={() => handleActiveProfile(message?.receiver_id)} />
+                )
+            }
             <Box>
                 <Stack direction='row' gap={1.5} alignItems='center'>
-                    <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', cursor: 'pointer' }} onClick={() => handleActiveProfile(message.senderId)}>{findUser(message.senderId)?.name}</Typography>
+                    {
+                        userInfo?.id === message.sender_id ? (
+                            <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', cursor: 'pointer' }} onClick={() => handleActiveProfile(message.sender_id)}>{message?.sender?.last_name ? `${message?.sender?.first_name} ${message?.sender?.last_name}` : message?.sender?.first_name}</Typography>
+                        ) : (
+                            <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', cursor: 'pointer' }} onClick={() => handleActiveProfile(message.receiver_id)}>{message?.receiver?.last_name ? `${message?.receiver?.first_name} ${message?.receiver?.last_name}` : message?.receiver?.first_name}</Typography>
+                        )
+                    }
                     <Typography variant="caption" sx={{ color: 'text.secondary' }}>{dayjs(message.timestamp).format('DD MMM, YYYY - hh:mm A')}</Typography>
                 </Stack>
                 <Typography variant="body2">{message.content}</Typography>

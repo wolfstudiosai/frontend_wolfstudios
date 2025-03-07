@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 export const HeroSection = () => {
   const [boxSize, setBoxSize] = useState(50);
