@@ -16,7 +16,7 @@ export const HeroSection = () => {
       const maxScroll = 500;
 
       const newWidth = Math.min(100, Math.max(50, 50 + (scrollPosition / maxScroll) * 50));
-      const newHeight = Math.min(110, Math.max(60, 60 + (scrollPosition / maxScroll) * 40));
+      const newHeight = Math.min(100, Math.max(60, 60 + (scrollPosition / maxScroll) * 40));
 
       setBoxSize(newWidth);
       setBoxHeight(newHeight);
@@ -84,6 +84,7 @@ export const HeroSection = () => {
           </FadeIn>
         </Box>
       </Box>
+
       {/* second part */}
       <Stack
         direction="row"
@@ -92,9 +93,20 @@ export const HeroSection = () => {
           width: '100%',
           minHeight: `${boxHeight}vh`,
           overflow: 'hidden',
-          bgcolor: '#333',
+          zIndex: 2,
         }}
       >
+        <motion.div
+          initial={{ scaleX: 0, scaleY: 0, originX: 1, originY: 1 }}
+          animate={{ scaleX: 1, scaleY: 1 }}
+          transition={{ duration: 1, ease: 'easeOut' }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundColor: '#DFDED8',
+            zIndex: -1,
+          }}
+        />
         <FadeIn>
           <Typography
             fontSize={{ xs: '1rem', md: '1.8rem' }}
@@ -129,6 +141,7 @@ export const HeroSection = () => {
               height: `100%`,
               objectFit: 'cover',
               objectPosition: 'top center',
+              boxShadow: '0px 5px 5px rgba(0, 0, 0, 0.25), 0px 5px 5px rgba(0, 0, 0, 0.2)',
             }}
           >
             <source src="/videos/hero_bg.mp4" type="video/mp4" />
