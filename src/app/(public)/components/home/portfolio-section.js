@@ -94,12 +94,14 @@ export const PortfolioSection = () => {
             >
               {portfolios.slice(0, portfolios.length / 2).map((portfolio, index) => (
                 <SwiperSlide key={index}>
-                  <PortfolioCard
-                    item={portfolio}
-                    fetchList={fetchPortfolios}
-                    sx={{ borderRadius: 0 }}
-                    infoSx={{ width: '86%' }}
-                  />
+                  <FadeIn>
+                    <PortfolioCard
+                      item={portfolio}
+                      fetchList={fetchPortfolios}
+                      sx={{ borderRadius: 0 }}
+                      infoSx={{ width: '86%' }}
+                    />
+                  </FadeIn>
                 </SwiperSlide>
               ))}
             </SliderWrapper>
@@ -114,12 +116,14 @@ export const PortfolioSection = () => {
             >
               {portfolios.slice(26).map((portfolio, index) => (
                 <SwiperSlide key={index}>
-                  <PortfolioCard
-                    item={portfolio}
-                    fetchList={fetchPortfolios}
-                    sx={{ borderRadius: 0 }}
-                    infoSx={{ width: '86%' }}
-                  />
+                  <FadeIn>
+                    <PortfolioCard
+                      item={portfolio}
+                      fetchList={fetchPortfolios}
+                      sx={{ borderRadius: 0 }}
+                      infoSx={{ width: '86%' }}
+                    />
+                  </FadeIn>
                 </SwiperSlide>
               ))}
             </SliderWrapper>
@@ -129,4 +133,3 @@ export const PortfolioSection = () => {
     </Box>
   );
 };
-

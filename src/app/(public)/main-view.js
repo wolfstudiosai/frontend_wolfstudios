@@ -15,9 +15,9 @@ export const MainView = () => {
       <HeroSection />
       <PortfolioSection />
       <PartnerSection />
+      <JobSection />
       <CampaignSection />
       {/* <CampaignSectionOld /> */}
-      <JobSection />
     </Box>
   );
 };

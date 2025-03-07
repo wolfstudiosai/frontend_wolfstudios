@@ -141,7 +141,7 @@ export const HeroSection = () => {
               height: `100%`,
               objectFit: 'cover',
               objectPosition: 'top center',
-              boxShadow: '0px 5px 5px rgba(0, 0, 0, 0.25), 0px 5px 5px rgba(0, 0, 0, 0.2)',
+              // boxShadow: '0px 5px 5px rgba(0, 0, 0, 0.25), 0px 5px 5px rgba(0, 0, 0, 0.2)',
             }}
           >
             <source src="/videos/hero_bg.mp4" type="video/mp4" />

@@ -73,8 +73,6 @@ const cards = [
 export const PartnerSection = () => {
   const [partners, setPartners] = useState([]);
 
-  console.log("partners: ", partners);
-
   const router = useRouter();
 
   const fetchPartners = async () => {
@@ -91,7 +89,7 @@ export const PartnerSection = () => {
   }, []);
 
   return (
-    <Stack spacing={0.2} sx={{ px: 4, py: 1 }}>
+    <Stack spacing={0.2} sx={{ px: 4, pt: 1 }}>
       <HorizontalScrollCarousel direction="left" fetchList={fetchPartners} />
       <HorizontalScrollCarousel direction="right" fetchList={fetchPartners} />
       {/* <Stack direction='row' justifyContent='right' sx={{ mt: 2 }}>
