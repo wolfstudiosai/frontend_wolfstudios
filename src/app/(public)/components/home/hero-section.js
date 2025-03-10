@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 import { FadeIn } from '/src/components/animation/fade-in';
 
@@ -111,7 +111,7 @@ export const HeroSection = () => {
           <Typography
             fontSize={{ xs: '1rem', md: '1.8rem' }}
             fontWeight={'bold'}
-            sx={{ width: '40%', minWidth: '40%', p: 4, color: 'text.primary' }}
+            sx={{ width: '40%', minWidth: '40%', p: 4, color: 'grey.800' }}
             gutterBottom
           >
             Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling

@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
@@ -39,7 +39,7 @@ export const PortfolioSection = () => {
         px: { xs: 2, md: 4 },
       }}
     >
-      <Grid container spacing={4}>
+      <Grid container spacing={2}>
         <Grid
           size={{
             md: 3,
@@ -98,19 +98,27 @@ export const PortfolioSection = () => {
                     <PortfolioCard
                       item={portfolio}
                       fetchList={fetchPortfolios}
-                      sx={{ borderRadius: 0 }}
-                      infoSx={{ width: '86%' }}
+                      sx={{ borderRadius: 0, height: { xs: '300px' } }}
+                      infoSx={{ width: '86%', '& .category-chip': { backgroundColor: 'transparent', border: '1px solid #fff' } }}
                     />
                   </FadeIn>
                 </SwiperSlide>
               ))}
             </SliderWrapper>
+          </Grid>
+        )}
+        {portfolios?.length > 0 && (
+          <Grid
+            size={{
+              xs: 12,
+            }}
+          >
             <SliderWrapper
               modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
               breakpoints={{
                 0: { slidesPerView: 1 },
                 768: { slidesPerView: 2 },
-                1024: { slidesPerView: 5 },
+                1024: { slidesPerView: 6 },
               }}
               spaceBetween={2}
             >
@@ -120,8 +128,8 @@ export const PortfolioSection = () => {
                     <PortfolioCard
                       item={portfolio}
                       fetchList={fetchPortfolios}
-                      sx={{ borderRadius: 0 }}
-                      infoSx={{ width: '86%' }}
+                      sx={{ borderRadius: 0, height: { xs: '300px' } }}
+                      infoSx={{ width: '86%', '& .category-chip': { backgroundColor: 'transparent', border: '1px solid #fff' } }}
                     />
                   </FadeIn>
                 </SwiperSlide>
