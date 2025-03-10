@@ -1,6 +1,7 @@
 'use client';
 
 import { Box, Stack, Typography } from '@mui/material';
+import { useTheme } from "@mui/material/styles";
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
@@ -9,6 +10,10 @@ import { FadeIn } from '/src/components/animation/fade-in';
 export const HeroSection = () => {
   const [boxSize, setBoxSize] = useState(50);
   const [boxHeight, setBoxHeight] = useState(60);
+
+  const theme = useTheme();
+
+  console.log("theme : ", theme.palette.mode);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -103,7 +108,7 @@ export const HeroSection = () => {
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundColor: '#DFDED8',
+            backgroundColor: theme?.palette?.mode === 'light' ? '#DFDED8' : '#090a0b',
             zIndex: -1,
           }}
         />
@@ -111,7 +116,7 @@ export const HeroSection = () => {
           <Typography
             fontSize={{ xs: '1rem', md: '1.8rem' }}
             fontWeight={'bold'}
-            sx={{ width: '40%', minWidth: '40%', p: 4, color: 'grey.800' }}
+            sx={{ width: '40%', minWidth: '40%', p: 4, color: 'text.primary' }}
             gutterBottom
           >
             Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
