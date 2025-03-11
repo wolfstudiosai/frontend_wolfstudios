@@ -146,6 +146,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
                       label={category.trim()}
                       size="small"
                       sx={{ backgroundColor: getFancyColor(index), fontSize: '10px' }}
+                      className='category-chip'
                     />
                   ))}
             </Box>

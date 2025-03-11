@@ -14,8 +14,8 @@ export const MainView = () => {
     <Box sx={{ border: '3px solid red)' }}>
       <HeroSection />
       <PortfolioSection />
-      <PartnerSection />
       <JobSection />
+      <PartnerSection />
       <CampaignSection />
       {/* <CampaignSectionOld /> */}
     </Box>

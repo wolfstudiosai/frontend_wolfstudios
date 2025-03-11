@@ -4,10 +4,9 @@ import { Box, Typography } from '@mui/material';
 import { FadeIn } from '/src/components/animation/fade-in';
 
 const jobSections = [
-  { id: '01', title: 'PRODUCT DESIGN', image: 'https://picsum.photos/300/200?random=1' },
-  { id: '02', title: 'BRAND IDENTITY', image: 'https://picsum.photos/300/200?random=2' },
-  { id: '03', title: 'BRAND IDENTITY', image: 'https://picsum.photos/300/200?random=3' },
-  { id: '04', title: 'BRAND IDENTITY', image: 'https://picsum.photos/300/200?random=4' },
+  { id: '01', title: 'AFFILIATE MGMT', image: 'https://picsum.photos/300/200?random=1' },
+  { id: '02', title: 'PRODUCTION MGMT', image: 'https://picsum.photos/300/200?random=2' },
+  { id: '03', title: 'PRODUCT LAUNCH', image: 'https://picsum.photos/300/200?random=3' }
 ];
 
 export const JobSection = () => {
