@@ -65,7 +65,7 @@ export const JobSection = () => {
                   {job.title}
                 </Typography>
               </Box>
-              <Typography fontSize={18} sx={{ color: 'text.secondary', mt: 1, width: { xs: '100%', md: '70%' } }}>
+              <Typography fontSize={18} sx={{ color: 'text.main', mt: 1, width: { xs: '100%', md: '70%' } }}>
                 Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft
                 compelling visuals that captivate audiences, evoke emotion, and leave a lasting impact.
               </Typography>
