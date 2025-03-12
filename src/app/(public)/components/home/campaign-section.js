@@ -76,7 +76,6 @@ const cards = [
 export const CampaignSection = () => {
   const [campaignGroups, setCampaignGroups] = useState([]);
 
-  console.log("campaigns groups: ", campaignGroups);
 
   const router = useRouter();
 
@@ -113,11 +112,12 @@ export const CampaignSection = () => {
               >
                 {group.name}
               </Typography>
-              <Typography sx={{ color: 'text.secondary', fontSize: '1.2rem' }}>
+              <Typography sx={{ color: 'text.main', fontSize: '1.2rem' }}>
                 {group.description}
               </Typography>
             </Stack>
-            <HorizontalScrollCarousel data={group.campaigns} direction="right" fetchList={fetchCampaignGroups} />
+            <Typography>Campaign card will be here</Typography>
+            {/* <HorizontalScrollCarousel data={group.campaigns} direction="right" fetchList={fetchCampaignGroups} /> */}
           </React.Fragment>
         ))
       }
@@ -128,143 +128,143 @@ export const CampaignSection = () => {
   );
 };
 
-const HorizontalScrollCarousel = ({ direction, fetchList, data }) => {
-  const targetRef = React.useRef(null);
-  const { scrollYProgress } = useScroll({ target: targetRef });
+// const HorizontalScrollCarousel = ({ direction, fetchList, data }) => {
+//   const targetRef = React.useRef(null);
+//   const { scrollYProgress } = useScroll({ target: targetRef });
 
-  const totalWidth = React.useMemo(() => data?.length * 600, [data]);
-  const x = useTransform(
-    scrollYProgress,
-    [0, 1],
-    direction === 'left' ? [0, -totalWidth + window.innerWidth] : [-totalWidth + window.innerWidth, 0]
-  );
+//   const totalWidth = React.useMemo(() => data?.length * 600, [data]);
+//   const x = useTransform(
+//     scrollYProgress,
+//     [0, 1],
+//     direction === 'left' ? [0, -totalWidth + window.innerWidth] : [-totalWidth + window.innerWidth, 0]
+//   );
 
-  return (
-    <Box
-      ref={targetRef}
-      sx={{
-        position: 'relative',
-        height: '350px',
-        overflow: 'hidden',
-      }}
-    >
-      <Box
-        sx={{
-          position: 'sticky',
-          top: 0,
-          display: 'flex',
-          alignItems: 'center',
-          overflow: 'hidden',
-        }}
-      >
-        <motion.div style={{ x, display: 'flex', gap: 2 }}>
-          {data.map((campaign, index) => (
-            <Card key={index} campaign={campaign} fetchList={fetchList} />
-          ))}
-        </motion.div>
-      </Box>
-    </Box>
-  );
-};
+//   return (
+//     <Box
+//       ref={targetRef}
+//       sx={{
+//         position: 'relative',
+//         height: '350px',
+//         overflow: 'hidden',
+//       }}
+//     >
+//       <Box
+//         sx={{
+//           position: 'sticky',
+//           top: 0,
+//           display: 'flex',
+//           alignItems: 'center',
+//           overflow: 'hidden',
+//         }}
+//       >
+//         <motion.div style={{ x, display: 'flex', gap: 2 }}>
+//           {data.map((campaign, index) => (
+//             <Card key={index} campaign={campaign} fetchList={fetchList} />
+//           ))}
+//         </motion.div>
+//       </Box>
+//     </Box>
+//   );
+// };
 
-const Card = ({ campaign, fetchList }) => {
-  const [openCampaignRightPanel, setOpenCampaignRightPanel] = useState(null);
-  return (
-    <>
-      <Box
-        key={campaign.id}
-        sx={{
-          position: 'relative',
-          height: 350,
-          width: 600,
-          overflow: 'hidden',
-          boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
-          transition: 'transform 300ms ease',
-        }}
-        onClick={() => setOpenCampaignRightPanel(campaign)}
-      >
-        {/* Background Image */}
-        <Box
-          className="image"
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 0,
-            backgroundImage: `url(${'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57c56327d6ab7a4dda60_66f299235cc7eab712895f06_lionne-clothing-1-3.jpeg'})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            transition: 'transform 300ms ease',
-          }}
-        />
+// const Card = ({ campaign, fetchList }) => {
+//   const [openCampaignRightPanel, setOpenCampaignRightPanel] = useState(null);
+//   return (
+//     <>
+//       <Box
+//         key={campaign.id}
+//         sx={{
+//           position: 'relative',
+//           height: 350,
+//           width: 600,
+//           overflow: 'hidden',
+//           boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
+//           transition: 'transform 300ms ease',
+//         }}
+//         onClick={() => setOpenCampaignRightPanel(campaign)}
+//       >
+//         {/* Background Image */}
+//         <Box
+//           className="image"
+//           sx={{
+//             position: 'absolute',
+//             top: 0,
+//             left: 0,
+//             right: 0,
+//             bottom: 0,
+//             zIndex: 0,
+//             backgroundImage: `url(${'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57c56327d6ab7a4dda60_66f299235cc7eab712895f06_lionne-clothing-1-3.jpeg'})`,
+//             backgroundSize: 'cover',
+//             backgroundPosition: 'center',
+//             transition: 'transform 300ms ease',
+//           }}
+//         />
 
-        {/* Gradient Overlay */}
-        <Box
-          sx={{
-            position: 'absolute',
-            left: 0,
-            bottom: 0,
-            width: '100%',
-            height: '40%',
-            background: 'linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))',
-            zIndex: 5,
-          }}
-        />
+//         {/* Gradient Overlay */}
+//         <Box
+//           sx={{
+//             position: 'absolute',
+//             left: 0,
+//             bottom: 0,
+//             width: '100%',
+//             height: '40%',
+//             background: 'linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))',
+//             zIndex: 5,
+//           }}
+//         />
 
-        {/* Title & Description */}
-        <Box
-          sx={{
-            position: 'absolute',
-            left: 0,
-            bottom: 0,
-            zIndex: 10,
-            width: '100%',
-            padding: 2,
-          }}
-        >
-          <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 'bold',
-                textTransform: 'uppercase',
-                color: 'white',
-                letterSpacing: '1px',
-                fontSize: '1.25rem',
-              }}
-            >
-              {campaign.name}
-            </Typography>
-            <Stack
-              direction="row"
-              alignItems="center"
-              divider={<Iconify icon="pepicons-pencil:line-y" sx={{ color: 'grey.400' }} />}
-            >
-              <CustomChip label={campaign.campaign_status} color="success" size="small" variant="soft" sx={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', color: '#fff' }} />
-              <CustomChip
-                label={`${dayjs(campaign.start_date).isValid() ? dayjs(campaign.start_date).format('DD MMM YYYY') : '-/-'} - ${dayjs(campaign.end_date).isValid() ? dayjs(campaign.end_date).format('DD MMM YYYY') : '-/-'}`}
-                color="success"
-                size="small"
-                variant="soft"
-                sx={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', color: '#fff' }}
-              />
-            </Stack>
-          </Stack>
-        </Box>
-      </Box>
-      <ManageCampaignRightPanel
-        view='QUICK'
-        width="70%"
-        fetchList={fetchList}
-        open={openCampaignRightPanel ? true : false}
-        data={openCampaignRightPanel}
-        onClose={() => setOpenCampaignRightPanel(false)}
-      />
-    </>
-  );
-};
+//         {/* Title & Description */}
+//         <Box
+//           sx={{
+//             position: 'absolute',
+//             left: 0,
+//             bottom: 0,
+//             zIndex: 10,
+//             width: '100%',
+//             padding: 2,
+//           }}
+//         >
+//           <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+//             <Typography
+//               variant="h6"
+//               sx={{
+//                 fontWeight: 'bold',
+//                 textTransform: 'uppercase',
+//                 color: 'white',
+//                 letterSpacing: '1px',
+//                 fontSize: '1.25rem',
+//               }}
+//             >
+//               {campaign.name}
+//             </Typography>
+//             <Stack
+//               direction="row"
+//               alignItems="center"
+//               divider={<Iconify icon="pepicons-pencil:line-y" sx={{ color: 'grey.400' }} />}
+//             >
+//               <CustomChip label={campaign.campaign_status} color="success" size="small" variant="soft" sx={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', color: '#fff' }} />
+//               <CustomChip
+//                 label={`${dayjs(campaign.start_date).isValid() ? dayjs(campaign.start_date).format('DD MMM YYYY') : '-/-'} - ${dayjs(campaign.end_date).isValid() ? dayjs(campaign.end_date).format('DD MMM YYYY') : '-/-'}`}
+//                 color="success"
+//                 size="small"
+//                 variant="soft"
+//                 sx={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', color: '#fff' }}
+//               />
+//             </Stack>
+//           </Stack>
+//         </Box>
+//       </Box>
+//       <ManageCampaignRightPanel
+//         view='QUICK'
+//         width="70%"
+//         fetchList={fetchList}
+//         open={openCampaignRightPanel ? true : false}
+//         data={openCampaignRightPanel}
+//         onClose={() => setOpenCampaignRightPanel(false)}
+//       />
+//     </>
+//   );
+// };
 
 
 

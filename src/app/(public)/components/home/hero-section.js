@@ -1,7 +1,6 @@
 'use client';
 
 import { Box, Stack, Typography } from '@mui/material';
-import { useTheme } from "@mui/material/styles";
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
@@ -10,10 +9,6 @@ import { FadeIn } from '/src/components/animation/fade-in';
 export const HeroSection = () => {
   const [boxSize, setBoxSize] = useState(50);
   const [boxHeight, setBoxHeight] = useState(60);
-
-  const theme = useTheme();
-
-  console.log("theme : ", theme.palette.mode);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -108,7 +103,7 @@ export const HeroSection = () => {
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundColor: theme?.palette?.mode === 'light' ? '#DFDED8' : '#090a0b',
+            backgroundColor: 'var(--mui-palette-background-secondaryBackground)',
             zIndex: -1,
           }}
         />

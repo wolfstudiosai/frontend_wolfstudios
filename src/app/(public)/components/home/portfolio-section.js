@@ -57,9 +57,9 @@ export const PortfolioSection = () => {
                 color: 'text.primary',
               }}
             >
-              Portfolios
+              Project Drop
             </Typography>
-            <Typography fontSize={18} sx={{ color: 'text.secondary', mt: 1, mb: 4 }}>
+            <Typography fontSize={18} sx={{ mt: 1, mb: 4 }}>
               Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
               visuals that captivate audiences, evoke emotion, and leave a lasting impact.
             </Typography>

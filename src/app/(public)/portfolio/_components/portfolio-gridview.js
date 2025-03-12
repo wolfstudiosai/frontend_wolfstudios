@@ -144,8 +144,9 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
                     <Chip
                       key={index}
                       label={category.trim()}
+                      
                       size="small"
-                      sx={{ backgroundColor: getFancyColor(index), fontSize: '10px' }}
+                      sx={{ backgroundColor: getFancyColor(index), fontSize: '10px', color: 'var(--mui-palette-common-white)' }}
                       className='category-chip'
                     />
                   ))}
