@@ -2,8 +2,9 @@
 
 import { Box } from '@mui/material';
 
-import { CampaignSection } from './components/home/campaign-section';
+// import { CampaignSection } from './components/home/campaign-section';
 // import { CampaignSectionOld } from './components/home/campaign-section-old';
+import { ContentSection } from './components/home/content-section';
 import { HeroSection } from './components/home/hero-section';
 import { JobSection } from './components/home/job-section';
 import { PartnerSection } from './components/home/partner-section';
@@ -16,7 +17,8 @@ export const MainView = () => {
       <PortfolioSection />
       <JobSection />
       <PartnerSection />
-      <CampaignSection />
+      {/* <CampaignSection /> */}
+      <ContentSection />
       {/* <CampaignSectionOld /> */}
     </Box>
   );
