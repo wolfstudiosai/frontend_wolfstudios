@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 export const getPortfolioListAsync = async (queryParams) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    const res = await api.get(`/portfolio${searchQuery}`);
+    const res = await api.get(`/portfolios${searchQuery}`);
     return { success: true, data: res.data.data, totalRecords: res.data.meta.total };
   } catch (error) {
     toast.error(error.message);

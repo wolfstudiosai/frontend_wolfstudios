@@ -12,14 +12,14 @@ import { Iconify } from '/src/components/iconify/iconify';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
 import { PortfolioCard } from '../../portfolio/_components/portfolio-gridview';
-import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
+import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 
-export const PortfolioSection = () => {
-  const [portfolios, setPortfolios] = useState([]);
+export const PartnerSectionNew = () => {
+  const [partners, setPartners] = useState([]);
 
   const router = useRouter();
 
-  const dummyPortfolios = [
+  const dummyPartners = [
     {
       id: 1,
       title: 'Project Alpha',
@@ -143,18 +143,18 @@ export const PortfolioSection = () => {
     // Add more dummy data as needed
   ];
 
-  const fetchPortfolios = async () => {
-    const response = await getPortfolioListAsync({
+  const fetchPartners = async () => {
+    const response = await getPartnerListAsync({
       page: 1,
       rowsPerPage: 20,
     });
     if (response?.success) {
-      setPortfolios((prev) => [...prev, ...response.data]);
+      setPartners((prev) => [...prev, ...response.data]);
     }
   };
 
   useEffect(() => {
-    fetchPortfolios();
+    fetchPartners();
   }, []);
 
   return (
@@ -182,7 +182,7 @@ export const PortfolioSection = () => {
                 color: 'text.primary',
               }}
             >
-              Portfolio Drop
+              Partners Drop
             </Typography>
             <Typography fontSize={18} sx={{ mt: 1, mb: 4 }}>
               Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
@@ -192,15 +192,15 @@ export const PortfolioSection = () => {
           <Stack direction="row">
             <Button
               variant="text"
-              onClick={() => router.push('/portfolio')}
+              onClick={() => router.push('/partners')}
               endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
               sx={{ margin: 0, padding: 0 }}
             >
-              See all portfolios
+              See all partners
             </Button>
           </Stack>
         </Grid>
-        {dummyPortfolios?.length > 0 && (
+        {dummyPartners?.length > 0 && (
           <Grid
             size={{
               md: 9,
@@ -217,12 +217,13 @@ export const PortfolioSection = () => {
               spaceBetween={2}
               sx={{ mb: 0.1 }}
             >
-              {dummyPortfolios.slice(0, dummyPortfolios.length / 2).map((portfolio, index) => (
+              {dummyPartners.slice(0, dummyPartners.length / 2).map((partner, index) => (
                 <SwiperSlide key={index}>
                   <FadeIn>
+                    {/* We are using reusable PortfolioCard component for Partners */}
                     <PortfolioCard
-                      item={portfolio}
-                      fetchList={fetchPortfolios}
+                      item={partner}
+                      fetchList={fetchPartners}
                       sx={{ borderRadius: 0, height: { xs: '300px' } }}
                       infoSx={{ width: '86%', '& .category-chip': { backgroundColor: 'transparent', border: '1px solid #fff' } }}
                     />
@@ -232,7 +233,7 @@ export const PortfolioSection = () => {
             </SliderWrapper>
           </Grid>
         )}
-        {portfolios?.length > 0 && (
+        {partners?.length > 0 && (
           <Grid
             size={{
               xs: 12,
@@ -247,12 +248,13 @@ export const PortfolioSection = () => {
               }}
               spaceBetween={2}
             >
-              {portfolios.slice(26).map((portfolio, index) => (
+              {partners.slice(26).map((partner, index) => (
                 <SwiperSlide key={index}>
                   <FadeIn>
+                    {/* We are using reusable PortfolioCard component for Partners */}
                     <PortfolioCard
-                      item={portfolio}
-                      fetchList={fetchPortfolios}
+                      item={partner}
+                      fetchList={fetchPartners}
                       sx={{ borderRadius: 0, height: { xs: '300px' } }}
                       infoSx={{ width: '86%', '& .category-chip': { backgroundColor: 'transparent', border: '1px solid #fff' } }}
                     />

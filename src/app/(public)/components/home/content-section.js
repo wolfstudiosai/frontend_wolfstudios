@@ -20,18 +20,31 @@ export function ContentSection() {
   return (
     <Stack direction="column" gap={3} sx={{ px: 4, py: 4 }}>
       <FadeIn>
-        <Typography
-          variant="h4"
-          fontWeight="bold"
-          sx={{
-            fontSize: '2.2rem',
-            letterSpacing: '0.5px',
-            textTransform: 'uppercase',
-            color: 'text.primary',
-          }}
-        >
-          Content name
-        </Typography>
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 4,
+          flexWrap: 'wrap',
+        }}>
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            sx={{
+              fontSize: '2.2rem',
+              letterSpacing: '0.5px',
+              textTransform: 'uppercase',
+              color: 'text.primary',
+            }}
+          >
+            Project Drop
+          </Typography>
+          <Typography 
+            fontSize={18} sx={{ color: 'text.main', mt: 1, width: { xs: '100%', md: '70%' } }}>
+              Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft
+              compelling visuals that captivate audiences, evoke emotion, and leave a lasting impact.
+          </Typography>
+        </Box>
       </FadeIn>
       <Stack direction="row" gap={2}>
         <Stack
@@ -47,17 +60,17 @@ export function ContentSection() {
                 src="https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66fceb82b74027628836d005_66f6664e6c10316b602127e7_DSC09046-2.jpeg"
                 sx={{ width: '160px', height: '200px', objectFit: 'cover' }}
               />
-              <Stack direction="column" justifyContent="flex-end">
-                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                  +500
-                </Typography>
-                <Typography>Positive reviews</Typography>
-              </Stack>
             </Stack>
             <Stack direction="row" gap={1} alignItems="center">
               <Rating name="read-only" value={3.5} readOnly />
               <Typography variant="caption">4.5</Typography>
             </Stack>
+            <Stack direction="column" justifyContent="flex-end">
+                <Typography variant="h4" sx={{ fontWeight: 'semibold' }}>
+                  +500
+                </Typography>
+                <Typography>Positive reviews</Typography>
+              </Stack>
           </Stack>
           <Stack>
             <Typography sx={{ fontWeight: 'medium', textTransform: 'uppercase' }}>Specifications itype pro</Typography>
@@ -100,27 +113,7 @@ export function ContentSection() {
             src="https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66fceb82b74027628836d005_66f6664e6c10316b602127e7_DSC09046-2.jpeg"
             sx={{ width: '100%', height: '600px', objectFit: 'cover', zIndex: 9 }}
           />
-          <Stack sx={{ position: 'absolute', top: 0, bottom: 0, right: 0, p: 4, left: 0, zIndex: 10 }}>
-            <Box
-              sx={{
-                bgcolor: 'rgba(255, 255, 255, 0.2)',
-                backdropFilter: 'blur(5px)',
-                p: 1,
-                borderRadius: '50px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <TextField placeholder="Enter your email" variant="standard" fullWidth sx={{ flex: 1, px: 1 }} />
-              <Button
-                variant="contained"
-                size="small"
-                sx={{ borderRadius: '30px' }}
-                endIcon={<Iconify icon="si:double-arrow-right-fill" />}
-              >
-                Subscribe
-              </Button>
-            </Box>
+          <Stack sx={{ position: 'absolute', top: 0, bottom: 0, right: 0, p: 4, left: 0, zIndex: 10, justifyContent: 'space-between' }}>
             <Stack direction="column" justifyContent="space-around" alignItems="center" sx={{ flexGrow: 1, my: 2 }}>
               {[
                 'Built-in artificial intelligence',
@@ -156,6 +149,26 @@ export function ContentSection() {
                 </Stack>
               ))}
             </Stack>
+            <Box
+              sx={{
+                bgcolor: 'rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(5px)',
+                p: 1,
+                borderRadius: '50px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <TextField placeholder="Enter your email" variant="standard" fullWidth sx={{ flex: 1, px: 1 }} />
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ borderRadius: '30px' }}
+                endIcon={<Iconify icon="si:double-arrow-right-fill" />}
+              >
+                Subscribe
+              </Button>
+            </Box>
           </Stack>
         </Stack>
         <Stack sx={{ width: '30%', border: '1px solid', borderColor: 'divider', p: 3 }}>

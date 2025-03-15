@@ -19,7 +19,7 @@ export const getSearchQuery = (queryParams) => {
   // if (toDate) {
   //     query += `to_date=${toDate}&`;
   // }
-  query += `page=${page}&limit=${rowsPerPage}`;
+  query += `page=${page}&size=${rowsPerPage}`;
   return query;
 };
 
