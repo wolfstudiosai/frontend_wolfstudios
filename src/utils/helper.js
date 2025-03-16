@@ -19,7 +19,7 @@ export const getSearchQuery = (queryParams) => {
   // if (toDate) {
   //     query += `to_date=${toDate}&`;
   // }
-  query += `page=${page}&limit=${rowsPerPage}`;
+  query += `page=${page}&size=${rowsPerPage > 30 ? 30 : rowsPerPage}`;
   return query;
 };
 
@@ -75,7 +75,6 @@ export const isVideoContent = (url) => {
 };
 
 export const sliderToGridColsCoverter = (sliderCols) => {
-  console.log("slider value: ", sliderCols);
   switch (sliderCols) {
     case 1:
       return 3;
@@ -157,14 +156,14 @@ export const formatCompactNumber = (number) => {
 
 export const handleCopy = async (text) => {
   if (text.length === 0) {
-    toast.error("No text to copy.");
+    toast.error('No text to copy.');
     return;
   }
   try {
     await navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard!");
+    toast.success('Copied to clipboard!');
   } catch (err) {
-    toast.error("Failed to copy text.");
-    console.error("Error copying text:", err);
+    toast.error('Failed to copy text.');
+    console.error('Error copying text:', err);
   }
 };
