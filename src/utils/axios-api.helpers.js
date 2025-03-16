@@ -15,9 +15,9 @@ export const removeTokenFromCookies = () => {
 };
 
 export const getAuthTokenFromLocalStore = () => {
-  const auth = localStorage.getItem('auth');
-  if (auth) {
-    return JSON.parse(auth).token;
+  const token = localStorage.getItem('accessToken');
+  if (token) {
+    return token;
   }
   return null;
 };
@@ -25,7 +25,7 @@ export const getAuthTokenFromLocalStore = () => {
 export const clearUserSessionFromLocalStore = (redirectToHome = false) => {
   // Cleaning the local storage
   removeTokenFromCookies();
-  localStorage.clear();
+  // localStorage.clear();
 
   // Redirect to the login page or perform any other required action
   window.alert('Attention: Your session has expired. Please log in again to continue. Thank you!');
