@@ -1,13 +1,14 @@
+import { toast } from 'sonner';
+
 import { api } from '/src/utils/api';
 import { getSearchQuery } from '/src/utils/helper';
 import { uploadFileAsync } from '/src/utils/upload-file';
-import { toast } from 'sonner';
 
 export const getPortfolioListAsync = async (queryParams) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    const res = await api.get(`/portfolio${searchQuery}`);
-    return { success: true, data: res.data.data, totalRecords: res.data.meta.total };
+    const res = await api.get(`/portfolios${searchQuery}`);
+    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     toast.error(error.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
@@ -16,7 +17,7 @@ export const getPortfolioListAsync = async (queryParams) => {
 
 export const getPortfolioAsync = async (slug) => {
   try {
-    const res = await api.get(`/portfolio?slug=${slug}`);
+    const res = await api.get(`/portfolios?slug=${slug}`);
     return { success: true, data: res.data.data[0], totalRecords: res.data.meta.total };
   } catch (error) {
     toast.error(error.message);

@@ -1,17 +1,18 @@
 'use client';
 
+import React from 'react';
+import Image from 'next/image';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import Image from 'next/image';
-import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
+
 import { PageLoader } from '/src/components/loaders/PageLoader';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
-import { getFancyColor, isVideoContent } from '/src/utils/helper';
 
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 import { PortfolioSliderItem } from './portfolio-slider-item';
+import { getFancyColor, isVideoContent } from '/src/utils/helper';
 
 export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
   const slider_data = data.filter((item) => item.featured);
@@ -69,7 +70,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
           '&:hover .portfolio-card-overlay': {
             opacity: 1,
           },
-          ...sx
+          ...sx,
         }}
         onClick={() => setOpenPortfolioRightPanel(item)}
       >
@@ -92,7 +93,8 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
           />
         ) : (
           <Image
-            src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
+            // src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
+            src={item?.ThumbnailImage?.at(0) || item?.Imagefield?.at(0) || '/'}
             alt={item.title || 'Portfolio Image'}
             draggable={false}
             style={{
@@ -119,7 +121,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
             width: '100%',
             py: 1,
             background: 'linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))',
-            ...infoSx
+            ...infoSx,
           }}
         >
           <Typography fontWeight={600} color="var(--mui-palette-common-white)" fontSize={{ xs: 12, md: 14 }}>
@@ -138,18 +140,19 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
               }}
             >
               {item?.category &&
-                item?.category
-                  ?.split(',')
-                  .map((category, index) => (
-                    <Chip
-                      key={index}
-                      label={category.trim()}
-                      
-                      size="small"
-                      sx={{ backgroundColor: getFancyColor(index), fontSize: '10px', color: 'var(--mui-palette-common-white)' }}
-                      className='category-chip'
-                    />
-                  ))}
+                item?.category?.split(',').map((category, index) => (
+                  <Chip
+                    key={index}
+                    label={category.trim()}
+                    size="small"
+                    sx={{
+                      backgroundColor: getFancyColor(index),
+                      fontSize: '10px',
+                      color: 'var(--mui-palette-common-white)',
+                    }}
+                    className="category-chip"
+                  />
+                ))}
             </Box>
           </Stack>
         </Stack>
