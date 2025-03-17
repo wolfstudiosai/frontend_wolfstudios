@@ -1,11 +1,13 @@
 'use client';
 
-import { SliderWrapper } from '/src/components/slider/slider-wrapper';
-import { isSupabaseUrl, isVideoContent, pxToRem } from '/src/utils/helper';
 import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
+
+import { SliderWrapper } from '/src/components/slider/slider-wrapper';
+
+import { isSupabaseUrl, isVideoContent, pxToRem } from '/src/utils/helper';
 
 const mediaArr = [
   'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670d11d77dff7fcc24e16f1c_2_DSC03975.jpeg',
@@ -50,7 +52,7 @@ export const PortfolioQuickView = ({ data }) => {
         // speed={2000}
         spaceBetween={10}
       >
-        {mediaArr.map((item, index) => (
+        {data?.SinglePageHeroImage?.map((item, index) => (
           <SwiperSlide key={index}>
             {isVideoContent(item) ? (
               <Box
@@ -95,23 +97,24 @@ export const PortfolioQuickView = ({ data }) => {
         <Divider sx={{ my: 2 }} />
 
         <Typography variant="subtitle1" color="text.secondary" fontWeight={'bold'}>
-          {data?.project_title}
+          {data?.projectTitle}
         </Typography>
         <Stack direction="row" spacing={2} mb={2}>
           <Typography variant="subtitle1" color="text.secondary">
-            Category: {data.category || 'N/A'}
+            Category:{' '}
+            {data?.PortfolioCategoriesPortfolios?.map((item) => item?.PortfolioCategories?.Name)?.join(', ') || 'N/A'}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
-            State: {data.state || 'N/A'}
+            State: {data?.ByStatesPortfolios?.map((item) => item?.ByStates?.Name)?.join(', ') || 'N/A'}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
-            Partner HQ: {data.partner_hq || 'N/A'}
+            Partner HQ: {data?.PartnerHQPortfolios?.map((item) => item?.PartnerHQ?.Name)?.join(', ') || 'N/A'}
           </Typography>
         </Stack>
 
         <Divider sx={{ my: 2 }} />
 
-        <Typography variant="body1">{data.full_description || 'No description available.'}</Typography>
+        <Typography variant="body1">{data?.Projectsinglepagefulldescription || 'No description available.'}</Typography>
         <Divider sx={{ my: 2 }} />
       </Box>
       {/* Gallery Images */}
@@ -120,7 +123,7 @@ export const PortfolioQuickView = ({ data }) => {
           Vertical Gallery
         </Typography>
         <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>
-          {data.vertical_gallery_images?.map((item, index) => (
+          {data.VerticalImageGallery?.map((item, index) => (
             <Grid item size={{ xs: 2 }} key={index}>
               {isVideoContent(item) ? (
                 <Box
@@ -162,7 +165,7 @@ export const PortfolioQuickView = ({ data }) => {
           Horizontal Gallery
         </Typography>
         <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>
-          {data.horizontal_gallery_images?.map((item, index) => (
+          {data.HorizontalImageGallery?.map((item, index) => (
             <Grid item size={{ xs: 2 }} key={index}>
               {isVideoContent(item) ? (
                 <Box

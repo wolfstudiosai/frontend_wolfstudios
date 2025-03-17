@@ -13,6 +13,7 @@ const config = {
       'images.unsplash.com',
       'bryrhmtbdhskxqbdbryf.supabase.co',
       'cdn.prod.website-files.com',
+      'regular-media.s3.eu-north-1.amazonaws.com',
     ],
   },
 };

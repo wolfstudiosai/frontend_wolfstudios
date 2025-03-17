@@ -1,11 +1,11 @@
 'use client';
 
+import React, { useRef } from 'react';
+import { Box, CircularProgress } from '@mui/material';
+
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 import PageLoader from '/src/components/loaders/PageLoader';
-import { sliderToGridColsCoverter } from '/src/utils/helper';
-import { Box, CircularProgress } from '@mui/material';
-import React, { useRef } from 'react';
 
 import { ManagePortfolioRightPanel } from './_components/manage-portfolio-right-panel';
 import { PortfolioGridView } from './_components/portfolio-gridview';
@@ -13,6 +13,7 @@ import { PortfolioListView } from './_components/portfolio-listview';
 import { portfolioFilters, portfolioSorting, portfolioTags } from './_lib/constants';
 import { getPortfolioListAsync } from './_lib/portfolio.actions';
 import { defaultPortfolio } from './_lib/portfolio.types';
+import { sliderToGridColsCoverter } from '/src/utils/helper';
 
 export const PortfolioView = () => {
   const observerRef = useRef(null);
@@ -27,7 +28,7 @@ export const PortfolioView = () => {
     FILTER: [],
     SORTING: [],
     VIEW: 'grid',
-    ADD: false
+    ADD: false,
   });
 
   async function fetchList() {
@@ -60,7 +61,7 @@ export const PortfolioView = () => {
   const refreshListView = async () => {
     const response = await getPortfolioListAsync({
       page: 1,
-      rowsPerPage: 40,
+      rowsPerPage: 20,
     });
 
     if (response.success) {
