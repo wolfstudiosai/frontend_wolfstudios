@@ -21,130 +21,6 @@ export const PortfolioSection = () => {
 
   const router = useRouter();
 
-  const dummyPortfolios = [
-    {
-      id: 1,
-      title: 'Project Alpha',
-      description: 'A cutting-edge project showcasing innovation.',
-      image: 'https://picsum.photos/300/200?random=1',
-      category: 'Technology',
-      date: '2023-10-01',
-    },
-    {
-      id: 2,
-      title: 'Project Beta',
-      description: 'Revolutionizing the way we think about design.',
-      image: 'https://picsum.photos/300/200?random=2',
-      category: 'Design',
-      date: '2023-09-15',
-    },
-    {
-      id: 3,
-      title: 'Project Gamma',
-      description: 'Transforming ideas into reality.',
-      image: 'https://picsum.photos/300/200?random=3',
-      category: 'Innovation',
-      date: '2023-08-20',
-    },
-    {
-      id: 4,
-      title: 'Project Delta',
-      description: 'Pushing the boundaries of creativity.',
-      image: 'https://picsum.photos/300/200?random=4',
-      category: 'Art',
-      date: '2023-07-10',
-    },
-    {
-      id: 5,
-      title: 'Project Epsilon',
-      description: 'A journey into the future of technology.',
-      image: 'https://picsum.photos/300/200?random=5',
-      category: 'Technology',
-      date: '2023-06-05',
-    },
-    {
-      id: 6,
-      title: 'Project Epsilon',
-      description: 'A journey into the future of technology.',
-      image: 'https://picsum.photos/300/200?random=6',
-      category: 'Technology',
-      date: '2023-06-05',
-    },
-    {
-      id: 7,
-      title: 'Project Epsilon',
-      description: 'A journey into the future of technology.',
-      image: 'https://picsum.photos/300/200?random=7',
-      category: 'Technology',
-      date: '2023-06-05',
-    },
-    {
-      id: 8,
-      title: 'Project Epsilon',
-      description: 'A journey into the future of technology.',
-      image: 'https://picsum.photos/300/200?random=8',
-      category: 'Technology',
-      date: '2023-06-05',
-    },
-    {
-      id: 9,
-      title: 'Project Epsilon',
-      description: 'A journey into the future of technology.',
-      image: 'https://picsum.photos/300/200?random=9',
-      category: 'Technology',
-      date: '2023-06-05',
-    },
-    {
-      id: 10,
-      title: 'Project Epsilon',
-      description: 'A journey into the future of technology.',
-      image: 'https://picsum.photos/300/200?random=10',
-      category: 'Technology',
-      date: '2023-06-05',
-    },
-    {
-      id: 11,
-      title: 'Project Epsilon',
-      description: 'A journey into the future of technology.',
-      image: 'https://picsum.photos/300/200?random=11',
-      category: 'Technology',
-      date: '2023-06-05',
-    },
-    {
-      id: 12,
-      title: 'Project Epsilon',
-      description: 'A journey into the future of technology.',
-      image: 'https://picsum.photos/300/200?random=12',
-      category: 'Technology',
-      date: '2023-06-05',
-    },
-    {
-      id: 13,
-      title: 'Project Epsilon',
-      description: 'A journey into the future of technology.',
-      image: 'https://picsum.photos/300/200?random=13',
-      category: 'Technology',
-      date: '2023-06-05',
-    },
-    {
-      id: 14,
-      title: 'Project Epsilon',
-      description: 'A journey into the future of technology.',
-      image: 'https://picsum.photos/300/200?random=14',
-      category: 'Technology',
-      date: '2023-06-05',
-    },
-    {
-      id: 15,
-      title: 'Project Epsilon',
-      description: 'A journey into the future of technology.',
-      image: 'https://picsum.photos/300/200?random=15',
-      category: 'Technology',
-      date: '2023-06-05',
-    },
-    // Add more dummy data as needed
-  ];
-
   const fetchPortfolios = async () => {
     const response = await getPortfolioListAsync({
       page: 1,
@@ -202,7 +78,7 @@ export const PortfolioSection = () => {
             </Button>
           </Stack>
         </Grid>
-        {dummyPortfolios?.length > 0 && (
+        {portfolios?.length > 0 && (
           <Grid
             size={{
               md: 8,
@@ -219,7 +95,7 @@ export const PortfolioSection = () => {
               spaceBetween={2}
               sx={{ mb: 0.1 }}
             >
-              {dummyPortfolios.slice(0, dummyPortfolios.length / 2).map((portfolio, index) => (
+              {portfolios.map((portfolio, index) => (
                 <SwiperSlide key={index}>
                   <FadeIn>
                     <PortfolioCard
@@ -234,7 +110,7 @@ export const PortfolioSection = () => {
             </SliderWrapper>
           </Grid>
         )}
-        {portfolios?.length > 0 && (
+        {/* {portfolios?.length > 0 && (
           <Grid
             size={{
               xs: 12,
@@ -263,7 +139,7 @@ export const PortfolioSection = () => {
               ))}
             </SliderWrapper>
           </Grid>
-        )}
+        )} */}
       </Grid>
     </Box>
   );
@@ -271,6 +147,7 @@ export const PortfolioSection = () => {
 
 export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = useState(null);
+  console.log(item,'item');
   
   return (
     <>
@@ -292,11 +169,11 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
         }}
         onClick={() => setOpenPortfolioRightPanel(item)}
       >
-        {isVideoContent(item.thumbnail || '') ? (
+        {isVideoContent(item.VideoLink || '') ? (
           <Box
             component="video"
             src={item.thumbnail}
-            // controls
+            controls
             muted
             autoPlay
             loop
@@ -319,8 +196,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
             }}
           >
           <Image
-            // src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
-            src = {item.image || 'https://picsum.photos/300/200?random=2'}
+            src = {item.ThumbnailImage[0] || '/'}
             alt={item.title || 'Portfolio Image'}
             draggable={false}
             style={{

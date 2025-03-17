@@ -261,7 +261,7 @@ const Card = ({ card, fetchList }) => {
         sx={{
           position: 'relative',
           height: 450,
-          width: 350,
+          width: 300,
           overflow: 'hidden',
           boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
           transition: 'transform 300ms ease',
@@ -363,6 +363,7 @@ const Card = ({ card, fetchList }) => {
               sx={{
                 color: 'white',
                 fontSize: '1rem',
+                fontFamily: 'Crimson Text, serif',
                 fontWeight: 500,
                 textTransform: 'uppercase',
                 marginBottom: '7px',
@@ -378,6 +379,7 @@ const Card = ({ card, fetchList }) => {
                 sx={{
                   color: 'rgba(255, 255, 255, 0.8)',
                   fontSize: '0.9rem',
+                  fontFamily: 'Crimson Text, serif',
                   lineHeight: 1.2,
                   marginRight: 'auto'
                 }}
@@ -388,6 +390,7 @@ const Card = ({ card, fetchList }) => {
                 sx={{
                   color: 'rgba(255, 255, 255, 0.8)',
                   fontSize: '0.9rem',
+                  fontFamily: 'Crimson Text, serif',
                   lineHeight: 1.2,
                   marginRight: '10px'
                 }}
@@ -398,6 +401,7 @@ const Card = ({ card, fetchList }) => {
                 sx={{
                   color: 'rgba(255, 255, 255, 0.8)',
                   fontSize: '0.9rem',
+                  fontFamily: 'Crimson Text, serif',
                   lineHeight: 1.2,
                 }}
               >
@@ -410,6 +414,7 @@ const Card = ({ card, fetchList }) => {
                 sx={{
                   color: 'rgba(255, 255, 255, 0.8)',
                   fontSize: '0.9rem',
+                  fontFamily: 'Crimson Text, serif',
                   lineHeight: 1.2,
                   marginRight: 'auto'
                 }}
@@ -420,6 +425,7 @@ const Card = ({ card, fetchList }) => {
                 sx={{
                   color: 'rgba(255, 255, 255, 0.8)',
                   fontSize: '0.9rem',
+                  fontFamily: 'Crimson Text, serif',
                   lineHeight: 1.2,
                   marginRight: '10px'
                 }}
@@ -430,6 +436,7 @@ const Card = ({ card, fetchList }) => {
                 sx={{
                   color: 'rgba(255, 255, 255, 0.8)',
                   fontSize: '0.9rem',
+                  fontFamily: 'Crimson Text, serif',
                   lineHeight: 1.2,
                 }}
               >
