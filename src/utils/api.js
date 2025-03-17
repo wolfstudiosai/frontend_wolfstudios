@@ -9,8 +9,7 @@ import {
   removeTokenFromCookies,
 } from './axios-api.helpers';
 
-export const apiBaseurl =
-  process.env['NEXT_PUBLIC_BACKEND_API'] || 'https://wolf-studios-backend-theta.vercel.app/api/v1';
+export const apiBaseurl = process.env['NEXT_PUBLIC_BACKEND_API'] || 'https://api.wolfstudios.ai/api';
 
 export const api = axios.create({
   baseURL: `${apiBaseurl}`,
@@ -44,7 +43,7 @@ export const publicApi = axios.create({
 
 //################################ server_base_api ##########################################
 export const server_base_api = axios.create({
-  baseURL: process.env['NEXT_PUBLIC_BACKEND_API'] || 'https://wolf-studios-backend-theta.vercel.app/api/v1',
+  baseURL: process.env['NEXT_PUBLIC_BACKEND_API'] || 'https://api.wolfstudios.ai/api',
 });
 
 server_base_api.interceptors.request.use((config) => {
