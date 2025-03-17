@@ -1,11 +1,12 @@
 import React from 'react';
+import { Box, Button, Divider, MenuItem, MenuList, Popover, Stack, Typography } from '@mui/material';
+
 import { CustomChip } from '/src/components/core/custom-chip';
 import { Iconify } from '/src/components/iconify/iconify';
 import { IconWithoutText } from '/src/components/utils/icon-text';
-import { formatCompactNumber, formatViewCount, isSupabaseUrl } from '/src/utils/helper';
-import { Box, Button, Divider, MenuItem, MenuList, Popover, Stack, Typography } from '@mui/material';
 
 import { ManagePartnerRightPanel } from './manage-partner-right-panel';
+import { formatCompactNumber, formatViewCount, isSupabaseUrl } from '/src/utils/helper';
 
 export const PartnerCard = ({ item, fetchList }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -31,11 +32,12 @@ export const PartnerCard = ({ item, fetchList }) => {
         <Box
           component="img"
           src={
-            isSupabaseUrl(item.profile_image)
-              ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.profile_image}`
-              : item.profile_image
+            // isSupabaseUrl(item.profile_image)
+            //   ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.profile_image}`
+            //   : item.profile_image
+            item?.ProfileImage?.at(0) ?? '/'
           }
-          alt="Partner name"
+          alt={item?.Name}
           sx={{
             width: '48%',
             height: '170px',
@@ -43,8 +45,8 @@ export const PartnerCard = ({ item, fetchList }) => {
             borderRight: '1px solid var(--mui-palette-divider)',
             borderBottom: '1px solid var(--mui-palette-divider)',
             borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-            ml: "5px",
-            mt: "5px"
+            ml: '5px',
+            mt: '5px',
           }}
           onClick={() => setOpenPartnerRightPanel(item)}
         />
@@ -56,26 +58,26 @@ export const PartnerCard = ({ item, fetchList }) => {
               color: 'text.primary',
             }}
           >
-            {item?.name}
+            {item?.Name}
           </Typography>
           <Stack direction="row" spacing={1} alignItems="center">
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {formatCompactNumber(item?.total_audience)}
+              {formatCompactNumber(item?.TotalAudience)}
             </Typography>
             <Divider orientation="vertical" flexItem />
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {'$' + formatCompactNumber(item?.hourly_rate)}
+              {'$' + formatCompactNumber(item?.HourlyRate)}
             </Typography>
           </Stack>
           <Stack direction={'row'} gap={1.5} flexWrap="wrap" sx={{ py: 1.5 }}>
-            <IconWithoutText icon="mage:email" value={item?.email} type={'email'} />
-            <IconWithoutText icon="proicons:call" value={item?.phone} type={'phone'} />
-            <IconWithoutText icon="mynaui:globe" value={item?.website} type={'url'} />
-            <IconWithoutText icon="ri:drive-fill" value={item?.google_drive_files} type={'url'} />
-            <IconWithoutText icon="ri:amazon-fill" value={item?.amazon_review_link} type={'url'} />
+            <IconWithoutText icon="mage:email" value={item?.Email} type={'email'} />
+            <IconWithoutText icon="proicons:call" value={item?.Phone} type={'phone'} />
+            <IconWithoutText icon="mynaui:globe" value={item?.Website} type={'url'} />
+            <IconWithoutText icon="ri:drive-fill" value={item?.GoogleDriveFiles} type={'url'} />
+            <IconWithoutText icon="ri:amazon-fill" value={item?.AmazonReviewLink} type={'url'} />
           </Stack>
           <Stack direction={'row'} gap={1}>
-            {item?.current_status && <CustomChip key="item" label={item.current_status} color={'primary'} />}
+            {item?.ProfileStatus && <CustomChip key="item" label={item.ProfileStatus?.at(0)} color={'primary'} />}
           </Stack>
           <Box>
             <Button
@@ -96,16 +98,28 @@ export const PartnerCard = ({ item, fetchList }) => {
             <Typography fontSize="14px" fontWeight={500}>
               Products:
             </Typography>
-            {item?.products?.split(',').map((product) => (
-              <CustomChip key={product} label={product} variant={'soft'} fontSize="12px" />
-            ))}
+            {item?.ByProductPartnerHQ?.length > 0
+              ? item?.ByProductPartnerHQ?.map((product) => (
+                  <CustomChip
+                    key={product?.ByProduct?.Name}
+                    label={product?.ByProduct?.Name}
+                    variant={'soft'}
+                    fontSize="12px"
+                  />
+                ))
+              : 'N/A'}
           </Stack>
           <Stack direction="row" flexWrap={'wrap'} gap={1} alignItems={'center'}>
             <Typography fontSize="14px" fontWeight={500}>
               Proposed:
             </Typography>
-            {item?.proposals?.split(',').map((item) => (
-              <CustomChip key={item} label={item} variant={'soft'} fontSize="12px" />
+            {item?.ByCampaignsProposedPartners?.map((item) => (
+              <CustomChip
+                key={item?.ByCampaigns?.Name}
+                label={item?.ByCampaigns?.Name}
+                variant={'soft'}
+                fontSize="12px"
+              />
             ))}
           </Stack>
           <Stack direction="row" flexWrap={'wrap'} gap={1} alignItems={'center'}>
@@ -120,38 +134,38 @@ export const PartnerCard = ({ item, fetchList }) => {
         <Stack direction={'row'} gap={1} flexWrap={'wrap'} sx={{ mt: 1.5 }}>
           <SocialInfo
             icon="hugeicons:instagram"
-            follower={formatCompactNumber(item?.instagram_following)}
-            url={item?.instagram}
+            follower={formatCompactNumber(item?.InstagramFollowing)}
+            url={item?.Instagram}
             rate={100}
           />
           <SocialInfo
             icon="hugeicons:youtube"
-            follower={formatCompactNumber(item?.youtube_following)}
-            url={item?.youtube}
+            follower={formatCompactNumber(item?.YoutubeFollowing)}
+            url={item?.Youtube}
             rate={100}
           />
           <SocialInfo
             icon="mingcute:facebook-line"
-            follower={formatCompactNumber(item?.facebook_following)}
-            url={item?.facebook}
+            follower={formatCompactNumber(item?.FacebookFollowing)}
+            url={item?.Facebook}
             rate={100}
           />
           <SocialInfo
             icon="hugeicons:new-twitter-ellipse"
-            follower={formatCompactNumber(item?.x_following)}
-            url={item?.x}
+            follower={formatCompactNumber(item?.XFollowing)}
+            url={item?.X}
             rate={100}
           />
           <SocialInfo
             icon="hugeicons:pinterest"
-            follower={formatCompactNumber(item?.pinterest_following)}
-            url={item?.pinterest}
+            follower={formatCompactNumber(item?.PinterestFollowing)}
+            url={item?.Pinterest}
             rate={100}
           />
           <SocialInfo
             icon="mingcute:linkedin-line"
-            follower={formatCompactNumber(item?.linkedin_connection)}
-            url={item?.linkedin}
+            follower={formatCompactNumber(item?.LinkedInConnections)}
+            url={item?.LinkedIn}
             rate={100}
           />
         </Stack>
