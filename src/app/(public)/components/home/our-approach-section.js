@@ -191,7 +191,7 @@ export const OurApproachSection = ({ isSecondHorizontal }) => {
                         width: '100%',
                     }}
                     >
-                    transform concepts into strong creative execution that's driven by both form and function.
+                    {"transform concepts into strong creative execution that's driven by both form and function."}
                     </Typography>
                 </Box>
                 </FadeIn>
