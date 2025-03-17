@@ -2,13 +2,14 @@
 
 import React from 'react';
 import { notFound, usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { SplashScreen } from '/src/components/splash-screen/splash-screen';
-import { additionalRoutes, dashboardItems, privateRoutes } from '/src/router';
 import { useColorScheme } from '@mui/material';
 
 import { paths } from '/src/paths';
 import { isValidToken } from '/src/contexts/auth/AuthContext';
 import useAuth from '/src/hooks/useAuth';
+import { SplashScreen } from '/src/components/splash-screen/splash-screen';
+
+import { additionalRoutes, dashboardItems, privateRoutes } from '/src/router';
 
 export function AuthGuard({ children }) {
   const router = useRouter();
