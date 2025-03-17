@@ -113,7 +113,7 @@ export const HeroSection = () => {
               fontWeight="bold"
               sx={{ width: '40%', minWidth: '40%', p: 4, pb: 2, color: 'text.primary' }}
             >
-              Project Drop
+              Product Drop
             </Typography>
           <Typography
             fontSize={{ xs: '1rem', md: '1.3rem' }}

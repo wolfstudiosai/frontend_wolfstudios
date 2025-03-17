@@ -26,6 +26,7 @@ export function ContentSection() {
           alignItems: 'center',
           gap: 4,
           flexWrap: 'wrap',
+          display: 'none'
         }}>
           <Typography
             variant="h4"
