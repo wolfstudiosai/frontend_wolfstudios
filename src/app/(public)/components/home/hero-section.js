@@ -108,10 +108,17 @@ export const HeroSection = () => {
           }}
         />
         <FadeIn>
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+              sx={{ width: '40%', minWidth: '40%', p: 4, pb: 2, color: 'text.primary' }}
+            >
+              Product Drop
+            </Typography>
           <Typography
-            fontSize={{ xs: '1rem', md: '1.8rem' }}
-            fontWeight={'bold'}
-            sx={{ width: '40%', minWidth: '40%', p: 4, color: 'text.primary' }}
+            fontSize={{ xs: '1rem', md: '1.3rem' }}
+            fontWeight={'semibold'}
+            sx={{ width: '40%', minWidth: '40%', p: 4, pt: 0, color: 'text.primary' }}
             gutterBottom
           >
             Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling

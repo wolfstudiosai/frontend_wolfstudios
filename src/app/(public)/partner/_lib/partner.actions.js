@@ -6,7 +6,7 @@ import { toast } from "sonner";
 export const getPartnerListAsync = async (queryParams) => {
     try {
         const searchQuery = getSearchQuery(queryParams);
-        const res = await api.get(`/partner${searchQuery}`);
+        const res = await api.get(`/partner-HQ${searchQuery}`);
         return { success: true, data: res.data.data, totalRecords: res.data.meta.total };
     } catch (error) {
         toast.error(error.message);

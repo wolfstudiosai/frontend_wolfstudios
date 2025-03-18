@@ -59,7 +59,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
       <Card
         sx={{
           width: '100%',
-          aspectRatio: '9 / 12',
+          aspectRatio: '9 / 16',
           border: 'unset',
           overflow: 'hidden',
           position: 'relative',
@@ -92,6 +92,14 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
             }}
           />
         ) : (
+          <Box
+            sx={{
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+              overflow: 'hidden',
+            }}
+          >
           <Image
             // src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
             src={item?.ThumbnailImage?.at(0) || item?.Imagefield?.at(0) || '/'}
@@ -109,6 +117,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
               e.target.style.filter = 'blur(0px)';
             }}
           />
+          </Box>
         )}
         <Stack
           direction="column"

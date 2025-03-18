@@ -81,7 +81,8 @@ export const CampaignSection = () => {
 
   const fetchCampaignGroups = async () => {
     const response = await getCampaignGroupListAsync({
-      rowsPerPage: 50,
+      page: 1,
+      rowsPerPage: 20,
     });
     if (response?.success && response.data) {
       setCampaignGroups(response.data);

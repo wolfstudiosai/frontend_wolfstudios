@@ -1,6 +1,7 @@
 'use client';
 
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Button, Card, Chip, Stack, Typography } from '@mui/material';
+import Image from 'next/image';
 import Grid from '@mui/material/Grid2';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -11,8 +12,9 @@ import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
-import { PortfolioCard } from '../../portfolio/_components/portfolio-gridview';
+import { getFancyColor, isVideoContent } from '/src/utils/helper';
 import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
+import { ManagePortfolioRightPanel } from '../../portfolio/_components/manage-portfolio-right-panel';
 
 export const PortfolioSection = () => {
   const [portfolios, setPortfolios] = useState([]);
@@ -21,7 +23,8 @@ export const PortfolioSection = () => {
 
   const fetchPortfolios = async () => {
     const response = await getPortfolioListAsync({
-      rowsPerPage: 50,
+      page: 1,
+      rowsPerPage: 20,
     });
     if (response?.success) {
       setPortfolios((prev) => [...prev, ...response.data]);
@@ -42,7 +45,7 @@ export const PortfolioSection = () => {
       <Grid container spacing={2}>
         <Grid
           size={{
-            md: 3,
+            md: 4,
             xs: 12,
           }}
         >
@@ -57,7 +60,7 @@ export const PortfolioSection = () => {
                 color: 'text.primary',
               }}
             >
-              Project Drop
+              Portfolio Drop
             </Typography>
             <Typography fontSize={18} sx={{ mt: 1, mb: 4 }}>
               Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
@@ -78,7 +81,7 @@ export const PortfolioSection = () => {
         {portfolios?.length > 0 && (
           <Grid
             size={{
-              md: 9,
+              md: 8,
               xs: 12,
             }}
           >
@@ -87,12 +90,12 @@ export const PortfolioSection = () => {
               breakpoints={{
                 0: { slidesPerView: 1 },
                 768: { slidesPerView: 2 },
-                1024: { slidesPerView: 5 },
+                1024: { slidesPerView: 4 },
               }}
               spaceBetween={2}
               sx={{ mb: 0.1 }}
             >
-              {portfolios.slice(0, portfolios.length / 2).map((portfolio, index) => (
+              {portfolios.map((portfolio, index) => (
                 <SwiperSlide key={index}>
                   <FadeIn>
                     <PortfolioCard
@@ -107,7 +110,7 @@ export const PortfolioSection = () => {
             </SliderWrapper>
           </Grid>
         )}
-        {portfolios?.length > 0 && (
+        {/* {portfolios?.length > 0 && (
           <Grid
             size={{
               xs: 12,
@@ -136,8 +139,133 @@ export const PortfolioSection = () => {
               ))}
             </SliderWrapper>
           </Grid>
-        )}
+        )} */}
       </Grid>
     </Box>
+  );
+};
+
+export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
+  const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = useState(null);
+  
+  return (
+    <>
+      <Card
+        sx={{
+          width: '100%',
+          aspectRatio: '9 / 16',
+          border: 'unset',
+          overflow: 'hidden',
+          position: 'relative',
+          backgroundColor: '#333',
+          borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+          border: 'solid .1px var(--mui-palette-divider)',
+          cursor: 'pointer',
+          '&:hover .portfolio-card-overlay': {
+            opacity: 1,
+          },
+          ...sx
+        }}
+        onClick={() => setOpenPortfolioRightPanel(item)}
+      >
+        {isVideoContent(item.VideoLink || '') ? (
+          <Box
+            component="video"
+            src={item.thumbnail}
+            controls
+            muted
+            autoPlay
+            loop
+            draggable={false}
+            playsInline
+            sx={{
+              height: '100%',
+              width: '100%',
+              objectFit: 'cover',
+              borderRadius: 1,
+            }}
+          />
+        ) : (
+          <Box
+            sx={{
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+              overflow: 'hidden',
+            }}
+          >
+          <Image
+            src = {item.ThumbnailImage[0] || '/'}
+            alt={item.title || 'Portfolio Image'}
+            draggable={false}
+            style={{
+              objectFit: 'cover',
+              filter: 'blur(20px)',
+              transition: 'filter 0.2s ease-out',
+            }}
+            loading="lazy"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Adjust based on screen size
+            fill={true}
+            onLoad={(e) => {
+              e.target.style.filter = 'blur(0px)';
+            }}
+          />
+          </Box>
+        )}
+        <Stack
+          direction="column"
+          px={2}
+          sx={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0,
+            left: 0,
+            width: '100%',
+            py: 1,
+            background: 'linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))',
+            ...infoSx
+          }}
+        >
+          <Typography fontWeight={600} color="var(--mui-palette-common-white)" fontSize={{ xs: 12, md: 14 }}>
+            {item.project_title}
+          </Typography>
+          <Stack direction={'row'} spacing={1} justifyContent={'space-between'} alignItems={'center'} mt={1}>
+            <Typography variant="body" color="var(--mui-palette-common-white)" sx={{ fontSize: '12px' }}>
+              {item.state}
+            </Typography>
+            <Box
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                // mt: 1,
+              }}
+            >
+              {item?.category &&
+                item?.category
+                  ?.split(',')
+                  .map((category, index) => (
+                    <Chip
+                      key={index}
+                      label={category.trim()}
+                      
+                      size="small"
+                      sx={{ backgroundColor: getFancyColor(index), fontSize: '10px', color: 'var(--mui-palette-common-white)' }}
+                      className='category-chip'
+                    />
+                  ))}
+            </Box>
+          </Stack>
+        </Stack>
+        <ManagePortfolioRightPanel
+          view={'QUICK'}
+          fetchList={fetchList}
+          width="70%"
+          open={openPortfolioRightPanel ? true : false}
+          data={openPortfolioRightPanel}
+          onClose={() => setOpenPortfolioRightPanel(false)}
+        />
+      </Card>
+    </>
   );
 };
