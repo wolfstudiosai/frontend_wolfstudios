@@ -140,9 +140,15 @@ export const OurApproachSection = ({ isSecondHorizontal }) => {
                     display: 'flex',
                     flexDirection: 'row',
                     alignItems: 'flex-start',
-                    gap: '225px',
+                    gap: {
+                      xs: "50px",
+                      lg: "225px"
+                    },
                     flexWrap: 'wrap',
-                    }}
+                    '@media (max-width: 1024px)': {
+                      gap: "50px"
+                    }
+                  }}
                 >
                     <Typography
                     variant="h4"

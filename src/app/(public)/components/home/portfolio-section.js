@@ -90,7 +90,7 @@ export const PortfolioSection = () => {
               breakpoints={{
                 0: { slidesPerView: 1 },
                 768: { slidesPerView: 2 },
-                1024: { slidesPerView: 5 },
+                1024: { slidesPerView: 4 },
               }}
               spaceBetween={2}
               sx={{ mb: 0.1 }}
@@ -147,7 +147,6 @@ export const PortfolioSection = () => {
 
 export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = useState(null);
-  console.log(item,'item');
   
   return (
     <>

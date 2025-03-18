@@ -242,9 +242,27 @@ export function ContentSection() {
           </Stack>
 
           {/* Footer Links */}
-          <Stack direction="row" justifyContent="space-between" gap={1} sx={{ mt: 'auto' }}>
+          <Stack 
+            direction={{ xs: 'column', sm: 'row' }} 
+            justifyContent="space-between" 
+            gap={1} 
+            sx={{ 
+              mt: { xs: 2, sm: 'auto' }, 
+              p: 2,
+              flexWrap: 'wrap'
+            }}
+          >
             {['• Delivery', '• Reviews', '• Services', '• Contact'].map((item, index) => (
-              <Chip key={index} label={item} size="small" variant="soft" />
+              <Chip 
+                key={index} 
+                label={item} 
+                size="small" 
+                variant="soft" 
+                sx={{ 
+                  fontSize: { xs: 10, sm: 12 },
+                  m: { xs: '2px', sm: 0 }
+                }}
+              />
             ))}
           </Stack>
         </Stack>
