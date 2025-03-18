@@ -1,6 +1,9 @@
 "use client";
 
 import { Box, Button, Stack, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
+import { FadeIn } from '/src/components/animation/fade-in';
+import { Iconify } from '/src/components/iconify/iconify';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -77,7 +80,8 @@ export const PartnerSection = () => {
 
   const fetchPartners = async () => {
     const response = await getPartnerListAsync({
-      rowsPerPage: 50,
+      page: 1,
+      rowsPerPage: 20,
     });
     if (response?.success) {
       setPartners((prev) => [...prev, ...response.data]);
@@ -89,13 +93,68 @@ export const PartnerSection = () => {
   }, []);
 
   return (
-    <Stack spacing={0.2} sx={{ px: 4, pt: 1 }}>
-      <HorizontalScrollCarousel direction="left" fetchList={fetchPartners} />
-      <HorizontalScrollCarousel direction="right" fetchList={fetchPartners} />
-      {/* <Stack direction='row' justifyContent='right' sx={{ mt: 2 }}>
-        <Button variant='outlined' onClick={() => router.push('/partner')}>See all partners</Button>
-      </Stack> */}
-    </Stack>
+    <Box
+    sx={{
+      pt: 1,
+      px: { xs: 2, md: 4 },
+      mb: '10px'
+    }}
+  >
+      <Grid container spacing={2} alignItems="center" sx={{ flexWrap: 'nowrap' }}>
+        <Grid
+          item
+          size={{
+            md: 9,
+            xs: 12,
+          }}
+          >
+            <FadeIn>
+                    <Typography
+                      variant="h4"
+                      fontWeight="bold"
+                      sx={{
+                        fontSize: '2.2rem',
+                        letterSpacing: '0.5px',
+                        textTransform: 'uppercase',
+                        color: 'text.primary',
+                      }}
+                    >
+                      Partner Drop
+                    </Typography>
+                    <Typography fontSize={18} sx={{ mt: 1, mb: 4 }}>
+                      Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
+                      visuals that captivate audiences, evoke emotion, and leave a lasting impact.
+                    </Typography>
+            </FadeIn>
+            <Stack direction="row">
+                <Button
+                  variant="text"
+                  onClick={() => router.push('/partners')}
+                  endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
+                  sx={{ margin: 0, padding: 0 }}
+                  >
+                   See all partners
+                </Button>
+            </Stack>
+        </Grid>
+        <Grid
+          item
+          md={3}
+          xs={12}
+        >
+          <Stack spacing={0.2} sx={{ px: 4, pt: 1 }}>
+          <HorizontalScrollCarousel direction="left" fetchList={fetchPartners} />
+          </Stack>
+        </Grid>
+        {/* <Stack spacing={0.2} sx={{ px: 4, pt: 1 }}>
+          <HorizontalScrollCarousel direction="left" fetchList={fetchPartners} />
+          <HorizontalScrollCarousel direction="right" fetchList={fetchPartners} /> */}
+          {/* <Stack direction='row' justifyContent='right' sx={{ mt: 2 }}>
+            <Button variant='outlined' onClick={() => router.push('/partner')}>See all partners</Button>
+          </Stack> */}
+        {/* </Stack> */}
+      </Grid>
+    </Box>
   );
 };
 
