@@ -1,14 +1,15 @@
-import { CustomChip } from '/src/components/core/custom-chip';
-import { SectionTitle } from '/src/components/core/section-title';
-import { Iconify } from '/src/components/iconify/iconify';
-import { handleCopy, isVideoContent, pxToRem } from '/src/utils/helper';
 import { Box, IconButton, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
+import { CustomChip } from '/src/components/core/custom-chip';
+import { SectionTitle } from '/src/components/core/section-title';
+import { Iconify } from '/src/components/iconify/iconify';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
+
 import { SocialIconWithText } from './partner-gridview';
+import { formatCompactNumber, handleCopy, isVideoContent, pxToRem } from '/src/utils/helper';
 
 const mediaArr = [
   'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670d11d77dff7fcc24e16f1c_2_DSC03975.jpeg',
@@ -36,7 +37,6 @@ const mediaArr = [
 ];
 
 export const PartnerQuickView = ({ data }) => {
-
   return (
     <Stack spacing={2}>
       <SliderWrapper
@@ -51,7 +51,7 @@ export const PartnerQuickView = ({ data }) => {
         // speed={2000}
         spaceBetween={10}
       >
-        {mediaArr.map((item, index) => (
+        {data?.PartnerGallery?.map((item, index) => (
           <SwiperSlide key={index}>
             {isVideoContent(item) ? (
               <Box
@@ -85,17 +85,10 @@ export const PartnerQuickView = ({ data }) => {
           </SwiperSlide>
         ))}
       </SliderWrapper>
-      <Stack
-        direction={'row'}
-        spacing={0.5}
-      >
-        <CustomChip label={'Live_Campaign'} color={'primary'} height="18px" />
-        {
-          data?.profile_status && <CustomChip label={data?.profile_status} color={'primary'} />
-        }
-        {
-          data?.current_status && <CustomChip label={data?.current_status} color={'primary'} />
-        }
+      <Stack direction={'row'} spacing={0.5}>
+        {/* <CustomChip label={'Live_Campaign'} color={'primary'} height="18px" /> */}
+        {data?.ProfileStatus && <CustomChip label={data?.ProfileStatus} color={'primary'} />}
+        {data?.CurrentStatus && <CustomChip label={data?.CurrentStatus} color={'primary'} />}
       </Stack>
       {/* <Box sx={{ position: 'relative' }}>
         <Box
@@ -134,24 +127,24 @@ export const PartnerQuickView = ({ data }) => {
           }
         </Stack>
       </Box> */}
-      <Stack direction='row' alignItems='center' gap={2}>
+      <Stack direction="row" alignItems="center" gap={2}>
         <Typography fontSize={{ xs: '22px', md: '26px' }} fontWeight={800}>
-          {data?.name}
+          {data?.Name}
         </Typography>
-        <Stack direction="row" alignItems='center'>
-          <IconButton size='small' onClick={() => handleCopy(data?.phone || '')}>
+        <Stack direction="row" alignItems="center">
+          <IconButton size="small" onClick={() => handleCopy(data?.Phone || '')}>
             <Iconify icon="solar:phone-outline" />
           </IconButton>
-          <IconButton size='small' onClick={() => handleCopy(data?.whatsapp || '')}>
+          <IconButton size="small" onClick={() => handleCopy(data?.WhatsApp || '')}>
             <Iconify icon="ic:twotone-whatsapp" />
           </IconButton>
-          <IconButton size='small' onClick={() => handleCopy(data?.email || '')}>
+          <IconButton size="small" onClick={() => handleCopy(data?.Email || '')}>
             <Iconify icon="mage:email" />
           </IconButton>
-          <IconButton size='small' onClick={() => handleCopy(data?.website || '')}>
+          <IconButton size="small" onClick={() => handleCopy(data?.Website || '')}>
             <Iconify icon="mynaui:globe" />
           </IconButton>
-          <IconButton size='small' onClick={() => handleCopy(data?.amazon_review_link || '')}>
+          <IconButton size="small" onClick={() => handleCopy(data?.AmazonReviewLink || '')}>
             <Iconify icon="ri:amazon-fill" />
           </IconButton>
         </Stack>
@@ -161,11 +154,10 @@ export const PartnerQuickView = ({ data }) => {
         alignItems="center"
         divider={<Iconify icon="pepicons-pop:line-y" sx={{ color: 'grey.300' }} />}
       >
-        <Typography fontSize="14px">303M</Typography>
-        <Typography fontSize="14px">Hourly Rate: $202</Typography>
-        <Typography fontSize="14px">partner_360_rate: $202</Typography>
-        <Typography fontSize="14px">$202</Typography>
-        {data?.occupation && <CustomChip label={data?.occupation} color={'primary'} />}
+        <Typography fontSize="14px">{formatCompactNumber(data?.TotalAudience)}</Typography>
+        <Typography fontSize="14px">Hourly Rate: {data?.HourlyRate || 'N/A'}</Typography>
+        <Typography fontSize="14px">Partner 360 Rate: {data?.Partner360Rate || 'N/A'}</Typography>
+        {data?.Occupation && <CustomChip label={data?.Occupation} color={'primary'} />}
       </Stack>
 
       {/* Contact Info */}
@@ -180,67 +172,67 @@ export const PartnerQuickView = ({ data }) => {
 
       {/* Social Media Stats */}
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-        {data?.instagram && (
+        {data?.Instagram && data?.Instagram !== 'Not Found' && data?.Instagram !== 'Not Provided' && (
           <SocialIconWithText
             icon="hugeicons:instagram"
-            url={data?.instagram}
-            text={`${data?.instagram_following?.toLocaleString()}`}
-            value={`$${data?.partner_IG_rate}`}
+            url={data?.Instagram}
+            text={`${data?.InstagramFollowing?.toLocaleString()}`}
+            value={`$${data?.PartnerIGRate}`}
           />
         )}
-        {data?.tiktok && (
+        {data?.Tiktok && data?.Tiktok !== 'Not Found' && data?.Tiktok !== 'Not Provided' && (
           <SocialIconWithText
             icon="hugeicons:tiktok"
-            url={data?.tiktok}
-            text={`${data?.tiktok_following?.toLocaleString()}`}
-            value={`$${data?.partner_TT_rate}`}
+            url={data?.Tiktok}
+            text={`${data?.TiktokFollowing?.toLocaleString()}`}
+            value={`$${data?.PartnerTTRate}`}
           />
         )}
-        {data?.youtube && (
+        {data?.Youtube && data?.Youtube !== 'Not Found' && data?.Youtube !== 'Not Provided' && (
           <SocialIconWithText
             icon="hugeicons:youtube"
-            url={data?.youtube}
-            text={`${data?.youtube_following?.toLocaleString()}`}
-            value={`$${data?.partner_YT_rate}`}
+            url={data?.Youtube}
+            text={`${data?.YoutubeFollowing?.toLocaleString()}`}
+            value={`$${data?.PartnerYTRate}`}
           />
         )}
-        {data?.x && (
+        {data?.X && data?.X !== 'Not Found' && data?.X !== 'Not Provided' && (
           <SocialIconWithText
             icon="hugeicons:new-twitter-ellipse"
-            url={data?.x}
-            text={`${data?.x_following?.toLocaleString()}`}
+            url={data?.X}
+            text={`${data?.XFollowing?.toLocaleString()}`}
             value={'N/A'}
           />
         )}
-        {data?.facebook && (
+        {data?.Facebook && data?.Facebook !== 'Not Found' && data?.Facebook !== 'Not Provided' && (
           <SocialIconWithText
             icon="mingcute:facebook-line"
-            url={data?.facebook}
-            text={`${data?.facebook_following?.toLocaleString()}`}
+            url={data?.Facebook}
+            text={`${data?.FacebookFollowing?.toLocaleString()}`}
             value={'N/A'}
           />
         )}
-        {data?.pinterest && (
+        {data?.Pinterest && data?.Pinterest !== 'Not Found' && data?.Pinterest !== 'Not Provided' && (
           <SocialIconWithText
             icon="hugeicons:pinterest"
-            url={data?.pinterest}
-            text={`${data?.pinterest_following?.toLocaleString()}`}
+            url={data?.Pinterest}
+            text={`${data?.PinterestFollowing?.toLocaleString()}`}
             value={'N/A'}
           />
         )}
-        {data?.snapchat && (
+        {data?.Snapchat && data?.Snapchat !== 'Not Found' && data?.Snapchat !== 'Not Provided' && (
           <SocialIconWithText
             icon="hhugeicons:snapchat"
-            url={data?.snapchat}
-            text={`${data?.snapchat_following?.toLocaleString()}`}
+            url={data?.Snapchat}
+            text={`${data?.SnapchatFollowing?.toLocaleString()}`}
             value={'N/A'}
           />
         )}
-        {data?.linkedin && (
+        {data?.Linkedin && data?.Linkedin !== 'Not Found' && data?.Linkedin !== 'Not Provided' && (
           <SocialIconWithText
             icon="circum:linkedin"
-            url={data?.linkedin}
-            text={`${data?.linkedin_connection?.toLocaleString()}`}
+            url={data?.Linkedin}
+            text={`${data?.LinkedinConnection?.toLocaleString()}`}
             value={'N/A'}
           />
         )}
@@ -252,25 +244,31 @@ export const PartnerQuickView = ({ data }) => {
           <SectionTitle title="Personal Info" sx={{ px: 2, py: 1, borderRadius: 1 }} />
           <Stack spacing={1} mt={1}>
             <Typography variant="body2">
-              <strong>State:</strong> {data?.state || 'N/A'}
+              <strong>State:</strong>{' '}
+              {data?.ByStatesPartnerHQ?.map((item) => item?.ByStates?.Name)?.join(', ') || 'N/A'}
             </Typography>
             <Typography variant="body2">
-              <strong>Country:</strong> {data?.country || 'N/A'}
+              <strong>Country:</strong>{' '}
+              {data?.ByCountryPartners?.map((item) => item?.ByCountry?.Name)?.join(', ') || 'N/A'}
             </Typography>
             <Typography variant="body2">
-              <strong>City:</strong> {data?.city || 'N/A'}
+              <strong>City:</strong> {data?.ByCityPartnerHQ?.map((item) => item?.ByCity?.Name)?.join(', ') || 'N/A'}
             </Typography>
             <Typography variant="body2">
-              <strong>Mailing Address:</strong> {data?.mailing_address || 'N/A'}
+              <strong>Mailing Address:</strong> {data?.MailingAddress || 'N/A'}
             </Typography>
             <Typography variant="body2">
               <strong>Website:</strong>{' '}
-              <a href={data?.website} target="_blank" rel="noopener noreferrer">
-                {data?.website}
-              </a>
+              {data?.Website && data?.Website !== 'Not Found' ? (
+                <a href={data?.Website} target="_blank" rel="noopener noreferrer">
+                  {data?.Website}
+                </a>
+              ) : (
+                'N/A'
+              )}
             </Typography>
             <Typography variant="body2">
-              <strong>Age Range:</strong> {data?.age_bracket || 'N/A'}
+              <strong>Age Range:</strong> {data?.AgeBracket?.join(', ') || 'N/A'}
             </Typography>
           </Stack>
         </Grid>
@@ -279,34 +277,38 @@ export const PartnerQuickView = ({ data }) => {
           <SectionTitle title="Contract Info" sx={{ px: 2, py: 1, borderRadius: 1 }} />
           <Stack spacing={1} mt={1}>
             <Typography variant="body2">
-              <strong>Contract:</strong> {data?.contract}
+              <strong>Contract:</strong> {data?.Contracts?.join(', ') || 'N/A'}
             </Typography>
             <Typography variant="body2">
-              <strong>Profile Category:</strong> {data?.profile_category}
+              <strong>Profile Category:</strong>{' '}
+              {data?.PartnerHQProfileCategory?.map((item) => item?.ProfileCategory?.Name)?.join(', ') || 'N/A'}
             </Typography>
             <Typography variant="body2">
-              <strong>Affiliate Platform:</strong> {data?.affiliate_platform || 'N/A'}
+              <strong>Affiliate Platform:</strong> {data?.AffiliatePlatform?.join(', ') || 'N/A'}
             </Typography>
             <Typography variant="body2">
-              <strong>Stakeholder:</strong> {data?.stakeholder}
+              <strong>Stakeholder:</strong>{' '}
+              {data?.PartnerHQStakeholder?.map((item) => item?.Stakeholder?.Name)?.join(', ') || 'N/A'}
             </Typography>
             <Typography variant="body2">
-              <strong>Total Audience:</strong> {data?.total_audience?.toLocaleString()}
+              <strong>Total Audience:</strong> {data?.TotalAudience?.toLocaleString()}
             </Typography>
             <Typography variant="body2">
-              <strong>Products:</strong> {data?.products || 'N/A'}
+              <strong>Products:</strong>{' '}
+              {data?.ByProductPartnerHQ?.map((item) => item?.ByProduct?.Name)?.join(', ') || 'N/A'}
             </Typography>
             <Typography variant="body2">
-              <strong>Contributed Campaigns:</strong> {data?.contributed_campaigns || 'N/A'}
+              <strong>Contributed Campaigns:</strong>{' '}
+              {data?.ByCampaignsProposedPartners?.map((item) => item?.ByCampaigns?.Name)?.join(', ') || 'N/A'}
             </Typography>
             <Typography variant="body2">
-              <strong>Live Campaign:</strong> {data?.live_campaign || 'N/A'}
+              <strong>Live Campaign:</strong> N/A
             </Typography>
             <Typography variant="body2">
-              <strong>Open to Gifting:</strong> {data?.open_to_gifting ? 'Yes' : 'No'}
+              <strong>Open to Gifting:</strong> {data?.OpentoGifting}
             </Typography>
             <Typography variant="body2">
-              <strong>Open to Whitelisting:</strong> {data?.open_to_whitelisting ? 'Yes' : 'No'}
+              <strong>Open to Whitelisting:</strong> {data?.OpentoWhitelisting}
             </Typography>
           </Stack>
         </Grid>
@@ -315,34 +317,40 @@ export const PartnerQuickView = ({ data }) => {
           <SectionTitle title="Other Info" sx={{ px: 2, py: 1, borderRadius: 1 }} />
           <Stack spacing={1} mt={1}>
             <Typography variant="body2">
-              <strong>Source:</strong> {data?.sourced_from}
+              <strong>Source:</strong> {data?.SourcedFrom?.join(', ') || 'N/A'}
             </Typography>
-            {data?.payment_link && (
+            {data?.PaymentLink && (
               <Typography variant="body2">
-                <strong>Payment Link:</strong> {data?.payment_link}
+                <strong>Payment Link:</strong> {data?.PaymentLink}
               </Typography>
             )}
-            {data?.tags && (
+            {data?.ByTagsPartnerHQ && (
               <Typography variant="body2">
                 <strong>Tags:</strong>{' '}
-                {data?.tags?.split(',')?.map((tag) => (
-                  <CustomChip key={tag} label={tag} height="18px" variant={'soft'} fontSize="14px" />
+                {data?.ByTagsPartnerHQ?.map((tag) => (
+                  <CustomChip
+                    key={tag?.ByTags?.Name}
+                    label={tag?.ByTags?.Name}
+                    height="18px"
+                    variant={'soft'}
+                    fontSize="14px"
+                  />
                 ))}
               </Typography>
             )}
-            {data?.note && (
+            {data?.Notes && (
               <Typography variant="body2">
-                <strong>Note:</strong> {data?.note}
+                <strong>Note:</strong> {data?.Notes}
               </Typography>
             )}
-            {data?.podcast && (
+            {data?.Podcast && (
               <Typography variant="body2">
-                <strong>Podcast:</strong> {data?.podcast}
+                <strong>Podcast:</strong> {data?.Podcast}
               </Typography>
             )}
-            {data?.refusal_reason && (
+            {data?.RefusalReason && (
               <Typography variant="body2">
-                <strong>Refusal Reason:</strong> {data?.refusal_reason}
+                <strong>Refusal Reason:</strong> {data?.RefusalReason}
               </Typography>
             )}
           </Stack>
@@ -351,32 +359,32 @@ export const PartnerQuickView = ({ data }) => {
         <Grid size={{ xs: 12, md: 4 }}>
           <SectionTitle title="Amazon Info" sx={{ px: 2, py: 1, borderRadius: 1 }} />
           <Stack spacing={1} mt={1}>
-            {data?.revo_amazon_order_confirmation_number && (
+            {data?.REVOAmazonOrderConfirmationNumber && (
               <Typography variant="body2">
-                <strong>Amazon order confirmation no:</strong> {data?.revo_amazon_order_confirmation_number}
+                <strong>Amazon order confirmation no:</strong> {data?.REVOAmazonOrderConfirmationNumber}
               </Typography>
             )}
-            {data?.amazon_review_link && (
+            {data?.AmazonReviewLink && (
               <Typography variant="body2">
                 <strong>Amazon review link:</strong>{' '}
-                <a href={data?.amazon_review_link} target="_blank" rel="noopener noreferrer">
-                  {data?.amazon_review_link}
+                <a href={data?.AmazonReviewLink} target="_blank" rel="noopener noreferrer">
+                  {data?.AmazonReviewLink}
                 </a>
               </Typography>
             )}
-            {data?.amazon_review_cupper && (
+            {data?.AmazonReviewCupper && (
               <Typography variant="body2">
-                <strong>Amazon review cupper:</strong> {data?.amazon_review_cupper}
+                <strong>Amazon review cupper:</strong> {data?.AmazonReviewCupper}
               </Typography>
             )}
-            {data?.amazon_review_the_pill && (
+            {data?.AmazonReviewThePill && (
               <Typography variant="body2">
-                <strong>Amazon review pill:</strong> {data?.amazon_review_the_pill}
+                <strong>Amazon review pill:</strong> {data?.AmazonReviewThePill}
               </Typography>
             )}
-            {data?.amazon_storefront && (
+            {data?.AmazonStorefront && (
               <Typography variant="body2">
-                <strong>Amazon storefront:</strong> {data?.amazon_storefront}
+                <strong>Amazon storefront:</strong> {data?.AmazonStorefront}
               </Typography>
             )}
           </Stack>

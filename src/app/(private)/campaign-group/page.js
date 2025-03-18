@@ -2,16 +2,6 @@
 
 import * as React from 'react';
 import RouterLink from 'next/link';
-import { defaultCampaignGroup } from '/src/app/(public)/campaign/_lib/campaign.types';
-import { getCampaignGroupListAsync } from '/src/app/(public)/campaign/_lib/campaign.actions';
-import { deleteCampaignGroupAsync } from '/src/app/dashboard/partner/_lib/campaign.actions';
-import { FilterButton } from '/src/components/core/filter-button';
-import { StatusFilterPopover } from '/src/components/core/filters/StatusFilterPopover';
-import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
-import { DataTable } from '/src/components/data-table/data-table';
-import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
-import PageLoader from '/src/components/loaders/PageLoader';
-import { getSpeficiLengthString } from '/src/utils/helper';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -23,10 +13,20 @@ import Typography from '@mui/material/Typography';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
+import { paths } from '/src/paths';
 import { dayjs } from '/src/lib/dayjs';
+import { FilterButton } from '/src/components/core/filter-button';
+import { StatusFilterPopover } from '/src/components/core/filters/StatusFilterPopover';
+import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
+import { DataTable } from '/src/components/data-table/data-table';
+import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
+import PageLoader from '/src/components/loaders/PageLoader';
 
 import { ManageCampaignGroupDialog } from './manage-campaign-group-dialog';
-import { paths } from '/src/paths';
+import { getCampaignGroupListAsync } from '/src/app/(public)/campaign/_lib/campaign.actions';
+import { defaultCampaignGroup } from '/src/app/(public)/campaign/_lib/campaign.types';
+import { deleteCampaignGroupAsync } from '/src/app/dashboard/partner/_lib/campaign.actions';
+import { getSpeficiLengthString } from '/src/utils/helper';
 
 export default function Page({ searchParams }) {
   const { email, phone, sortDir } = searchParams;
@@ -105,7 +105,7 @@ export default function Page({ searchParams }) {
             sx={{ whiteSpace: 'nowrap' }}
             variant="subtitle2"
           >
-            {row.name}
+            {row.Name}
           </Link>
         </Stack>
       ),
@@ -114,7 +114,7 @@ export default function Page({ searchParams }) {
     {
       formatter: (row) => (
         <Typography color="text.secondary" variant="body2">
-          {getSpeficiLengthString(row.description, 20)}
+          {getSpeficiLengthString(row.CampaignDescription, 20)}
         </Typography>
       ),
       name: 'Description',
