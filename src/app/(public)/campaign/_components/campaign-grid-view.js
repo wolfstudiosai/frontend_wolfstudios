@@ -25,16 +25,19 @@ export const CampaignGridView = ({ data, fetchList, loading }) => {
     }));
   };
 
+  //group by client field
+  const groupCampaigns = Object.groupBy(data, (campaign) => campaign.Client);
+
   return (
     <PageLoader loading={loading} error={null}>
       <>
-        {data.map((campaignGroup, index) => {
-          // const isExpanded = expandedGroups[campaignGroup.name];
-          // const visibleCampaigns = isExpanded
-          //   ? campaignGroup.campaigns
-          //   : campaignGroup.campaigns.slice(0, INITIAL_VISIBLE_COUNT);
+        {Object.keys(groupCampaigns).map((client, index) => {
+          const isExpanded = expandedGroups[client];
+          const visibleCampaigns = isExpanded
+            ? groupCampaigns[client]
+            : groupCampaigns[client].slice(0, INITIAL_VISIBLE_COUNT);
           return (
-            <Grid key={campaignGroup.name} container sx={{ mb: 2, position: 'relative' }} spacing={2}>
+            <Grid key={index} container sx={{ mb: 2, position: 'relative' }} spacing={2}>
               <Grid size={{ xs: 12, md: 4 }}>
                 <Box
                   sx={{
@@ -57,26 +60,26 @@ export const CampaignGridView = ({ data, fetchList, loading }) => {
                       color: 'text.primary',
                     }}
                   >
-                    {campaignGroup?.Name}
+                    {client}
                   </Typography>
-                  <ShowMoreTextBox text={campaignGroup?.CampaignDescription} length={200} />
+                  <ShowMoreTextBox text={groupCampaigns[client][0]?.CampaignDescription} length={200} />
                 </Box>
               </Grid>
 
               <Grid size={{ xs: 12, md: 8 }}>
                 <Stack direction="column" gap={2}>
-                  <CampaignCard key={index} item={campaignGroup} fetchList={fetchList} />
+                  {/* <CampaignCard key={index} item={campaignGroup} fetchList={fetchList} /> */}
 
-                  {/* {visibleCampaigns.map((item) => (
-                    <CampaignCard key={item.slug} item={item} fetchList={fetchList} />
-                  ))} */}
+                  {visibleCampaigns.map((item, index) => (
+                    <CampaignCard key={index} item={item} fetchList={fetchList} />
+                  ))}
                 </Stack>
-                {/* {campaignGroup.campaigns && campaignGroup.campaigns.length > 5 && (
+                {groupCampaigns[client] && groupCampaigns[client].length > 5 && (
                   <Stack direction="row" justifyContent="center" sx={{ my: 1 }}>
                     <Button
                       variant="text"
                       color="inherit"
-                      onClick={() => toggleGroupView(campaignGroup.Name)}
+                      onClick={() => toggleGroupView(client)}
                       endIcon={
                         <Iconify
                           icon={isExpanded ? 'solar:square-arrow-up-broken' : 'solar:square-arrow-down-broken'}
@@ -86,7 +89,7 @@ export const CampaignGridView = ({ data, fetchList, loading }) => {
                       {isExpanded ? 'Show Less' : 'Show More'}
                     </Button>
                   </Stack>
-                )} */}
+                )}
               </Grid>
             </Grid>
           );
