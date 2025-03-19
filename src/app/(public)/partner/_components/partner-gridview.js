@@ -1,9 +1,10 @@
 'use client';
 
-import { Iconify } from '/src/components/iconify/iconify';
-import { PageLoader } from '/src/components/loaders/PageLoader';
 import { Box, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+
+import { Iconify } from '/src/components/iconify/iconify';
+import { PageLoader } from '/src/components/loaders/PageLoader';
 
 import { PartnerCard } from './partner-card';
 
@@ -11,9 +12,9 @@ export const PartnerGridView = ({ data, colums, fetchList, loading, handlePagina
   return (
     <Box>
       <PageLoader loading={loading} error={null}>
-        <Grid  container spacing={1}>
-          {data.map((partner, index) => (
-            <Grid key={index} item size={{ xs: 12, md: 3 }} >
+        <Grid container spacing={1}>
+          {data?.map((partner, index) => (
+            <Grid key={index} item size={{ xs: 12, md: 3 }}>
               <PartnerCard item={partner} fetchList={fetchList} />
             </Grid>
           ))}

@@ -1,11 +1,12 @@
 import React from 'react';
-import { CustomChip } from '/src/components/core/custom-chip';
-import { Iconify } from '/src/components/iconify/iconify';
-import { isSupabaseUrl } from '/src/utils/helper';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
+import { CustomChip } from '/src/components/core/custom-chip';
+import { Iconify } from '/src/components/iconify/iconify';
+
 import { ManageCampaignRightPanel } from './manage-campaign-right-panel';
+import { isSupabaseUrl } from '/src/utils/helper';
 
 export const CampaignCard = ({ item, fetchList }) => {
   const [openCampaignRightPanel, setOpenCampaignRightPanel] = React.useState(null);
@@ -28,7 +29,7 @@ export const CampaignCard = ({ item, fetchList }) => {
               ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.campaign_image}`
               : item.campaign_image
           }
-          alt={item.title}
+          alt={item.Name}
           sx={{
             width: { sm: '100%', md: '30rem' },
             height: '100%',
@@ -44,13 +45,24 @@ export const CampaignCard = ({ item, fetchList }) => {
               component="h4"
               sx={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'secondary.main' }}
             >
-              {item.name}
+              {item?.Name}
             </Typography>
             <Typography sx={{ fontSize: '1rem', color: 'text.secondary' }}>
-              Content engagement: {item.content_engagement}
+              Content engagement: {item?.TotalContentEngagement}
             </Typography>
-            <Typography sx={{ fontSize: '1rem', color: 'text.secondary', mt: 2}}>
-              {item.description ?? 'No description'}
+            <Typography
+              sx={{
+                fontSize: '1rem',
+                color: 'text.secondary',
+                mt: 2,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: '2',
+                WebkitBoxOrient: 'vertical',
+              }}
+            >
+              {item?.CampaignDescription ?? 'No description'}
             </Typography>
           </Box>
           <Stack direction={{ md: 'row', sm: 'column' }} justifyContent="space-between" gap={1}>
@@ -61,7 +73,7 @@ export const CampaignCard = ({ item, fetchList }) => {
             >
               <CustomChip label={item.campaign_status} color="success" size="small" variant="soft" />
               <CustomChip
-                label={`${dayjs(item.start_date).isValid() ? dayjs(item.start_date).format('DD MMM YYYY') : '-/-'} : ${dayjs(item.end_date).isValid() ? dayjs(item.end_date).format('DD MMM YYYY') : '-/-'}`}
+                label={`${dayjs(item.StartDate).isValid() ? dayjs(item.StartDate).format('DD MMM YYYY') : '-/-'} : ${dayjs(item.EndDate).isValid() ? dayjs(item.EndDate).format('DD MMM YYYY') : '-/-'}`}
                 color="success"
                 size="small"
                 variant="soft"

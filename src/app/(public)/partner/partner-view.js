@@ -1,15 +1,16 @@
 'use client';
 
 import React, { useRef } from 'react';
+import { Box } from '@mui/material';
+
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 import PageLoader from '/src/components/loaders/PageLoader';
-import { Box } from '@mui/material';
 
+import { ManagePartnerRightPanel } from './_components/manage-partner-right-panel';
 import { PartnerGridView } from './_components/partner-gridview';
 import { getPartnerListAsync } from './_lib/partner.actions';
 import { defaultPartner } from './_lib/partner.types';
-import { ManagePartnerRightPanel } from './_components/manage-partner-right-panel';
 
 export const PartnerView = () => {
   const observerRef = useRef(null);

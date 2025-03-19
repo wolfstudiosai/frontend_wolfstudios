@@ -1,6 +1,7 @@
-import { IconWithText } from '/src/components/utils/icon-text';
 import { Avatar, Box, Card, Chip, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
+
+import { IconWithText } from '/src/components/utils/icon-text';
 
 export const ContentCard = ({ content, handleOpenRightPanel }) => {
   return (
@@ -15,32 +16,34 @@ export const ContentCard = ({ content, handleOpenRightPanel }) => {
     >
       <Box
         component="img"
-        src="https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57d588f4b57625814b04_67014a7ff7209b375680d65a_41199266_2086471245001489_187941219047833600_n.jpeg"
-        alt="demo image"
+        src={content?.Image?.at(0) || '/'}
+        alt={content?.Name}
         sx={{ width: '100%', height: '260px', objectFit: 'cover' }}
       />
       <Stack direction="column" justifyContent="space-between" gap={2} sx={{ p: 2 }}>
         <Stack direction="column" spacing={2}>
-          <Typography variant="h5">{content.title}</Typography>
+          <Typography variant="h5">{content?.Name}</Typography>
           <Stack direction="row" alignItems="center" gap={1}>
-            <Avatar />
+            <Avatar src={content?.ContentHQStakeholder?.at(0)?.Stakeholder?.StakeholderThumbnailImage?.at(0) || '/'} />
             <Box>
-              <Typography variant="subtitle2">{content.stakeholder}</Typography>
+              <Typography variant="subtitle2">{content?.ContentHQStakeholder?.at(0)?.Stakeholder?.Name}</Typography>
               <Stack>
-                <IconWithText icon="solar:calendar-linear" text={dayjs(content?.created_at).format('MMM D, YYYY')} />
+                <IconWithText icon="solar:calendar-linear" text={content?.MonthUploaded} />
               </Stack>
             </Box>
           </Stack>
-          <Typography variant="body2">{content.posting_quality}</Typography>
+          <Typography variant="body2">{content?.PostingQuality}</Typography>
           <Stack direction="row" gap={1} sx={{ flexWrap: 'wrap' }}>
-            {content?.product &&
-              content?.product.split(',').map((tag) => <Chip key={tag} size="small" variant="soft" label={tag} />)}
+            {content?.ByProductContentHQ &&
+              content?.ByProductContentHQ.map((product) => (
+                <Chip key={product?.ByProduct?.Name} size="small" variant="soft" label={product?.ByProduct?.Name} />
+              ))}
           </Stack>
         </Stack>
         <Stack direction={'row'} gap={2}>
-          <IconWithText icon="hugeicons:instagram" text={content.IG_view} />
-          <IconWithText icon="hugeicons:youtube" text={content.partner_YT_view} />
-          <IconWithText icon="basil:pinterest-outline" text={content.pinterest_view} />
+          <IconWithText icon="hugeicons:instagram" text={content?.IGTotalViews} />
+          <IconWithText icon="hugeicons:youtube" text={content?.YTClubREVOTotalViews} />
+          <IconWithText icon="basil:pinterest-outline" text={content?.PinterestTotalViews} />
         </Stack>
       </Stack>
     </Card>
