@@ -50,6 +50,7 @@ export const PortfolioSection = () => {
           }}
         >
           <FadeIn>
+          <Stack direction="row">
             <Typography
               variant="h4"
               fontWeight="bold"
@@ -60,14 +61,21 @@ export const PortfolioSection = () => {
                 color: 'text.primary',
               }}
             >
-              Portfolio
+              Portfolios
             </Typography>
+            <Button
+              variant="text"
+              onClick={() => router.push('/portfolio')}
+              endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
+              sx={{ margin: 0, padding: 0 }}
+            ></Button>
+          </Stack>
             <Typography fontSize={18} sx={{ mt: 1, mb: 4 }}>
               Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
               visuals that captivate audiences, evoke emotion, and leave a lasting impact.
             </Typography>
           </FadeIn>
-          <Stack direction="row">
+          {/* <Stack direction="row">
             <Button
               variant="text"
               onClick={() => router.push('/portfolio')}
@@ -76,7 +84,7 @@ export const PortfolioSection = () => {
             >
               See all portfolios
             </Button>
-          </Stack>
+          </Stack> */}
         </Grid>
         {portfolios?.length > 0 && (
           <Grid
