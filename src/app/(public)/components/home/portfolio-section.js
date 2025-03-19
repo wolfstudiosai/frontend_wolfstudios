@@ -60,7 +60,7 @@ export const PortfolioSection = () => {
                 color: 'text.primary',
               }}
             >
-              Portfolio Drop
+              Portfolio
             </Typography>
             <Typography fontSize={18} sx={{ mt: 1, mb: 4 }}>
               Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
@@ -90,7 +90,7 @@ export const PortfolioSection = () => {
               breakpoints={{
                 0: { slidesPerView: 1 },
                 768: { slidesPerView: 2 },
-                1024: { slidesPerView: 4 },
+                1024: { slidesPerView: 5 },
               }}
               spaceBetween={2}
               sx={{ mb: 0.1 }}
