@@ -179,3 +179,37 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
+
+/* Footer Animation */
+
+#page1{
+  height: 200px;
+  width: 100%;
+  background-color: #232323;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.letter {
+  display: inline-block; 
+  font-size: 10rem;
+  font-weight: 400;
+  color: #fff;
+  font-family: 'Salvalyng, sans-serif';
+}
+.letter:last-child {
+  font-size: 92px;
+  color: #505050;
+}
+.h1{
+  font-size: 2rem;
+  font-weight: 700;
+  position: absolute;
+  bottom: -357px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  z-index: 1;
+}

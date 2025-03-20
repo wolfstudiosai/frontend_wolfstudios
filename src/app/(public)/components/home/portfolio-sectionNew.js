@@ -9,6 +9,9 @@ import { useRouter } from 'next/navigation';
 import { ManagePortfolioRightPanel } from '../../portfolio/_components/manage-portfolio-right-panel';
 import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { SliderWrapper } from '/src/components/slider/slider-wrapper';
+import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
+import { SwiperSlide } from 'swiper/react';
 
 export const PortfolioSectionNew = () => {
   const [portfolios, setPortfolios] = useState([]);
@@ -37,15 +40,22 @@ export const PortfolioSectionNew = () => {
       mb: '10px'
     }}
   >
-      <Grid container spacing={2} alignItems="center">
+      <Grid container spacing={2} alignItems="flex-start">
         <Grid
           item
           size={{
-            md: 4,
+            md: 3,
             xs: 12,
+          }}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            height: '100%',
           }}
           >
             <FadeIn>
+                 <Stack direction="row" alignItems="center">
                     <Typography
                       variant="h4"
                       fontWeight="bold"
@@ -56,75 +66,68 @@ export const PortfolioSectionNew = () => {
                         color: 'text.primary',
                       }}
                     >
-                      Portfolio
+                      Portfolios
                     </Typography>
+                    <Button
+                      variant="text"
+                      onClick={() => router.push('/portfolio')}
+                      endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
+                      sx={{ margin: 0, padding: 0 }}
+                      >
+                    </Button>
+                  </Stack>
                     <Typography fontSize={18} sx={{ mt: 1, mb: 4 }}>
                       Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
                       visuals that captivate audiences, evoke emotion, and leave a lasting impact.
                     </Typography>
             </FadeIn>
-            <Stack direction="row">
-                <Button
-                  variant="text"
-                  onClick={() => router.push('/portfolio')}
-                  endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
-                  sx={{ margin: 0, padding: 0 }}
-                  >
-                   See all portfolios
-                </Button>
-            </Stack>
         </Grid>
-        <Grid
-         size={{
-              md: 8,
+        <Grid size={{
+              md: 9,
               xs: 12,
-            }}
-        >
-          <Stack spacing={0.2} sx={{ px: 4, pt: 1 }}>
-            <HorizontalScrollCarousel direction="right" fetchList={portfolios} />
+            }}>
+          <Stack spacing={2} sx={{ px: 3, pt: 1 }}>
+            <SliderWrapper
+              modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
+              breakpoints={{
+                0: {
+                  slidesPerView: 1,
+                  spaceBetween: 16
+                },
+                768: {
+                  slidesPerView: 2,
+                  spaceBetween: 20
+                },
+                1024: {
+                  slidesPerView: 3,
+                  spaceBetween: 24
+                },
+                1440: {
+                  slidesPerView: 4,
+                  spaceBetween: 28
+                }
+              }}
+              sx={{
+                '& .swiper-slide': {
+                  width: 'auto !important',
+                  marginRight: '0 !important',
+                  height: 'auto'
+                },
+                // Add negative margin to compensate for container padding
+                mx: { xs: -1.5, md: -2 }
+              }}
+            >
+              {portfolios.map((portfolio) => (
+                <SwiperSlide key={portfolio.id}>
+                  <FadeIn>
+                    <Card card={portfolio} fetchList={portfolios} />
+                  </FadeIn>
+                </SwiperSlide>
+              ))}
+            </SliderWrapper>
           </Stack>
         </Grid>
       </Grid>
-    </Box>
-  );
-};
-
-const HorizontalScrollCarousel = ({ direction, fetchList }) => {
-  const targetRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: targetRef });
-
-  const totalWidth = useMemo(() => 12 * 350, []);
-  
-  const x = useTransform(
-    scrollYProgress,
-    [0, 1],
-    direction === 'left' ? [0, -totalWidth + window.innerWidth] : [-totalWidth + window.innerWidth, 0]
-  );
-
-  return (
-    <Box
-      ref={targetRef}
-      sx={{
-        position: 'relative',
-        height: '450px',
-        overflow: 'hidden',
-      }}
-    >
-      <Box
-        sx={{
-          position: 'sticky',
-          top: 0,
-          display: 'flex',
-          alignItems: 'center',
-          overflow: 'hidden',
-        }}
-      >
-        <motion.div style={{ x, display: 'flex', gap: 2 }}>
-          {fetchList.map((card) => (
-            <Card card={card} key={card.id} fetchList={fetchList} />
-          ))}
-        </motion.div>
-      </Box>
     </Box>
   );
 };
@@ -137,8 +140,8 @@ const Card = ({ card, fetchList }) => {
         key={card.id}
         sx={{
           position: 'relative',
-          height: 450,
-          width: 300,
+          height: '400px',
+          width: { xs: '300px', sm: '280px', md: '260px' },
           overflow: 'hidden',
           boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
           transition: 'transform 300ms ease',
@@ -184,105 +187,139 @@ const Card = ({ card, fetchList }) => {
             zIndex: 10,
             width: '100%',
             padding: 2,
+            boxSizing: 'border-box',
           }}
         >
-          {/* Add new text elements here */}
-                    <Typography
-                        sx={{
-                          color: 'white',
-                          fontSize: '1rem',
-                          fontFamily: 'Crimson Text, serif',
-                          fontWeight: 500,
-                          textTransform: 'uppercase',
-                          marginBottom: '7px',
-                        }}
-                      >
-                        {card.ProjectTitle.split(' ').length > 4
-                          ? card.ProjectTitle.split(' ').slice(0, 4).join(' ') + '...' 
-                          : card.ProjectTitle}
-                    </Typography>
-                      
-                      <Stack spacing={0.5} direction={'row'} justifyContent={'space-between'} alignItems={'center'} marginBottom={1.2}>
-                        <Typography
-                          sx={{
-                            color: 'rgba(255, 255, 255, 0.8)',
-                            fontSize: '0.9rem',
-                            fontFamily: 'Crimson Text, serif',
-                            lineHeight: 1.2,
-                            marginRight: 'auto'
-                          }}
-                        >
-                          Lorem Ipsum
-                        </Typography>
-                        <Typography
-                          sx={{
-                            color: 'rgba(255, 255, 255, 0.8)',
-                            fontSize: '0.9rem',
-                            fontFamily: 'Crimson Text, serif',
-                            lineHeight: 1.2,
-                            marginRight: '10px'
-                          }}
-                        >
-                          {card.designation}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            color: 'rgba(255, 255, 255, 0.8)',
-                            fontSize: '0.9rem',
-                            fontFamily: 'Crimson Text, serif',
-                            lineHeight: 1.2,
-                          }}
-                        >
-                          {card.designation}
-                        </Typography>
-                      </Stack>
+          <Typography
+            sx={{
+              color: 'white',
+              fontSize: { xs: '0.9rem', md: '1rem' },
+              fontFamily: 'Crimson Text, serif',
+              fontWeight: 500,
+              textTransform: 'uppercase',
+              marginBottom: '7px',
+              width: '100%',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {card.ProjectTitle}
+          </Typography>
+
+          <Box
+            sx={{
+              width: '100%',
+              height: '1px',
+              backgroundColor: '#ffff',
+              marginBottom: '7px',
+            }}
+          />
           
-                      <Stack spacing={0.5} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-                        <Typography
-                          sx={{
-                            color: 'rgba(255, 255, 255, 0.8)',
-                            fontSize: '0.9rem',
-                            fontFamily: 'Crimson Text, serif',
-                            lineHeight: 1.2,
-                            marginRight: 'auto'
-                          }}
-                        >
-                          Lorem Ipsum
-                        </Typography>
-                        <Typography
-                          sx={{
-                            color: 'rgba(255, 255, 255, 0.8)',
-                            fontSize: '0.9rem',
-                            fontFamily: 'Crimson Text, serif',
-                            lineHeight: 1.2,
-                            marginRight: '10px'
-                          }}
-                        >
-                          {card.designation}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            color: 'rgba(255, 255, 255, 0.8)',
-                            fontSize: '0.9rem',
-                            fontFamily: 'Crimson Text, serif',
-                            lineHeight: 1.2,
-                          }}
-                        >
-                          {card.designation}
-                        </Typography>
-                      </Stack>    
-          {/* Add new text elements here */}
+          <Stack 
+            spacing={0.5} 
+            direction="row" 
+            justifyContent="space-between" 
+            alignItems="center" 
+            marginBottom={1.2}
+            sx={{ width: '100%' }}
+          >
+            {['Lorem Ipsum', card.designation, card.designation].map((text, index) => (
+              <Typography
+                key={index}
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.9rem' },
+                  fontFamily: 'Crimson Text, serif',
+                  lineHeight: 1.2,
+                  flex: index === 0 ? 1 : 'none',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  maxWidth: index === 0 ? '40%' : '30%',
+                }}
+              >
+                {text}
+              </Typography>
+            ))}
+          </Stack>
+
+          <Stack 
+            spacing={0.5} 
+            direction="row" 
+            justifyContent="space-between" 
+            alignItems="center"
+            sx={{ width: '100%' }}
+          >
+            {['Lorem Ipsum', card.designation, card.designation].map((text, index) => (
+              <Typography
+                key={index}
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.9rem' },
+                  fontFamily: 'Crimson Text, serif',
+                  lineHeight: 1.2,
+                  flex: index === 0 ? 1 : 'none',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  maxWidth: index === 0 ? '40%' : '30%',
+                }}
+              >
+                {text}
+              </Typography>
+            ))}
+          </Stack>
         </Box>
       </Box>
       <ManagePortfolioRightPanel
-          view={'QUICK'}
-          fetchList={fetchList}
-          width="70%"
-          open={openPortfolioRightPanel ? true : false}
-          data={openPortfolioRightPanel}
-          onClose={() => setOpenPortfolioRightPanel(false)}
-        />
+        view="QUICK"
+        fetchList={fetchList}
+        width="70%"
+        open={!!openPortfolioRightPanel}
+        data={openPortfolioRightPanel}
+        onClose={() => setOpenPortfolioRightPanel(false)}
+      />
     </>
   );
 };
 
+const HorizontalScrollCarousel = ({ direction, fetchList }) => {
+  const targetRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: targetRef });
+
+  const totalWidth = useMemo(() => 12 * 350, []);
+  
+  const x = useTransform(
+    scrollYProgress,
+    [0, 1],
+    direction === 'left' ? [0, -totalWidth + window.innerWidth] : [-totalWidth + window.innerWidth, 0]
+  );
+
+  return (
+    <Box
+      ref={targetRef}
+      sx={{
+        position: 'relative',
+        height: '450px',
+        overflow: 'hidden',
+      }}
+    >
+      <Box
+        sx={{
+          position: 'sticky',
+          top: 0,
+          display: 'flex',
+          alignItems: 'center',
+          overflow: 'hidden',
+        }}
+      >
+        <motion.div style={{ x, display: 'flex', gap: 2 }}>
+          {fetchList.map((card) => (
+            <Card card={card} key={card.id} fetchList={fetchList} />
+          ))}
+        </motion.div>
+      </Box>
+    </Box>
+  );
+};

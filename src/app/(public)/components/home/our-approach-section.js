@@ -1,9 +1,10 @@
 "use client";
 
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { FadeIn } from '/src/components/animation/fade-in';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { Iconify } from '/src/components/iconify/iconify';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { ManagePartnerRightPanel } from '../../partner/_components/manage-partner-right-panel';
@@ -131,130 +132,148 @@ export const OurApproachSection = ({ isSecondHorizontal }) => {
   }, []);
 
   return (
+    // <Grid container spacing={2} alignItems="center">
+    //     <Grid item xs={12}>
+    //         <Stack direction="column" sx={{ px: 4, py: 4 }}>
+    //             <FadeIn>
+    //             <Box
+    //                 sx={{
+    //                 display: 'flex',
+    //                 flexDirection: 'row',
+    //                 alignItems: 'flex-start',
+    //                 gap: {
+    //                   xs: "50px",
+    //                   lg: "225px"
+    //                 },
+    //                 flexWrap: 'wrap',
+    //                 '@media (max-width: 1024px)': {
+    //                   gap: "50px"
+    //                 }
+    //               }}
+    //             >
+    //                 <Typography
+    //                 variant="h4"
+    //                 fontWeight="bold"
+    //                 sx={{
+    //                     fontSize: '1rem',
+    //                     letterSpacing: '0.5px',
+    //                     textTransform: 'uppercase',
+    //                     color: 'text.primary',
+    //                     whiteSpace: 'nowrap',
+    //                     paddingTop:'1rem'
+    //                 }}
+    //                 >
+    //                 (Our Approach)
+    //                 </Typography>
+
+    //                 <Typography
+    //                 fontSize="55px"
+    //                 fontWeight="semibold"
+    //                 sx={{
+    //                     color: 'text.primary',
+    //                     maxWidth: '70%',
+    //                     lineHeight: 1,
+    //                     width: '100%',
+    //                 }}
+    //                 >
+    //                 By developing from the idea up, we 
+    //                 </Typography>
+    //             </Box>
+    //             <Box
+    //                 sx={{
+    //                 display: 'flex',
+    //                 flexDirection: 'row',
+    //                 alignItems: 'flex-start',
+    //                 gap: 4,
+    //                 flexWrap: 'wrap',
+    //                 }}
+    //             >
+    //                 <Typography
+    //                 fontSize="55px"
+    //                 fontWeight="semibold"
+    //                 sx={{
+    //                     color: 'text.primary',
+    //                     maxWidth: '100%',
+    //                     lineHeight: 1,
+    //                     width: '100%',
+    //                 }}
+    //                 >
+    //                 {"transform concepts into strong creative execution that's driven by both form and function."}
+    //                 </Typography>
+    //             </Box>
+    //             </FadeIn>
+    //         </Stack>
+    //     </Grid>
+
+    //     <Grid
+    //         item
+    //         md={12}
+    //         xs={12}>
+    //         <Stack spacing={0.2} sx={{ px: 4, pt: 1 }}>
+    //         <HorizontalScrollCarousel direction="left" fetchList={fetchPartners} />
+    //         {isSecondHorizontal && (
+    //         <HorizontalScrollCarousel direction="right" fetchList={fetchPartners} />
+    //       )}
+    //         </Stack>
+    //     </Grid>
+    //  </Grid>
     <Grid container spacing={2} alignItems="center">
-        <Grid item xs={12}>
-            <Stack direction="column" sx={{ px: 4, py: 4 }}>
-                <FadeIn>
-                <Box
-                    sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'flex-start',
-                    gap: {
-                      xs: "50px",
-                      lg: "225px"
-                    },
-                    flexWrap: 'wrap',
-                    '@media (max-width: 1024px)': {
-                      gap: "50px"
-                    }
-                  }}
-                >
-                    <Typography
-                    variant="h4"
-                    fontWeight="bold"
-                    sx={{
-                        fontSize: '1rem',
-                        letterSpacing: '0.5px',
-                        textTransform: 'uppercase',
-                        color: 'text.primary',
-                        whiteSpace: 'nowrap',
-                        paddingTop:'1rem'
-                    }}
-                    >
-                    (Our Approach)
+      <Grid item xs={12}>
+        <Stack direction="column" sx={{ px: 4, py: 4 }}>
+            <FadeIn>
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: { xs: "50px", lg: "192px" }, flexWrap: 'wrap' }}>
+                  <Stack direction="row">
+                          <Typography 
+                            variant="h4"
+                            fontWeight="bold"
+                            sx={{
+                              fontSize: '2.2rem',
+                              letterSpacing: '0.5px',
+                              textTransform: 'uppercase',
+                              color: 'text.primary',
+                            }}>
+                            Portfolios
+                          </Typography>
+                            <Button
+                                variant="text"
+                                onClick={() => router.push('/portfolio')}
+                                endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
+                                sx={{ margin: 0, padding: 0 }}
+                            ></Button>
+                  </Stack>
+                    <Typography fontSize="40px" fontWeight="semibold" sx={{ color: 'text.primary', maxWidth: '70%', lineHeight: 1, width: '100%' }}>
+                        By developing from the idea up, we
                     </Typography>
-
-                    <Typography
-                    fontSize="55px"
-                    fontWeight="semibold"
-                    sx={{
-                        color: 'text.primary',
-                        maxWidth: '70%',
-                        lineHeight: 1,
-                        width: '100%',
-                    }}
-                    >
-                    By developing from the idea up, we 
-                    </Typography>
-                </Box>
-                <Box
-                    sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'flex-start',
-                    gap: 4,
-                    flexWrap: 'wrap',
-                    }}
-                >
-                    <Typography
-                    fontSize="55px"
-                    fontWeight="semibold"
-                    sx={{
-                        color: 'text.primary',
-                        maxWidth: '100%',
-                        lineHeight: 1,
-                        width: '100%',
-                    }}
-                    >
+              </Box>
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: 4, flexWrap: 'wrap' }}>
+                <Typography fontSize="40px" fontWeight="semibold" sx={{ color: 'text.primary', maxWidth: '100%', lineHeight: 1, width: '100%' }}>
                     {"transform concepts into strong creative execution that's driven by both form and function."}
-                    </Typography>
-                </Box>
-                </FadeIn>
-            </Stack>
-        </Grid>
-
-        <Grid
-            item
-            md={12}
-            xs={12}>
-            <Stack spacing={0.2} sx={{ px: 4, pt: 1 }}>
-            <HorizontalScrollCarousel direction="left" fetchList={fetchPartners} />
-            {isSecondHorizontal && (
-            <HorizontalScrollCarousel direction="right" fetchList={fetchPartners} />
-          )}
-            </Stack>
-        </Grid>
-     </Grid>    
+                </Typography>
+              </Box>
+            </FadeIn>
+        </Stack>
+      </Grid>
+      <Grid item md={12} xs={12}>
+        <StaticGridView fetchList={fetchPartners} isSecondHorizontal={isSecondHorizontal} />
+      </Grid>
+    </Grid>
   );
 };
 
-const HorizontalScrollCarousel = ({ direction, fetchList }) => {
-  const targetRef = React.useRef(null);
-  const { scrollYProgress } = useScroll({ target: targetRef });
-
-  const totalWidth = React.useMemo(() => cards.length * 350, []);
-  const x = useTransform(
-    scrollYProgress,
-    [0, 1],
-    direction === 'left' ? [0, -totalWidth + window.innerWidth] : [-totalWidth + window.innerWidth, 0]
-  );
-
+const StaticGridView = ({ fetchList, isSecondHorizontal }) => {
   return (
-    <Box
-      ref={targetRef}
-      sx={{
-        position: 'relative',
-        height: '450px',
-        overflow: 'hidden',
-      }}
-    >
-      <Box
-        sx={{
-          position: 'sticky',
-          top: 0,
-          display: 'flex',
-          alignItems: 'center',
-          overflow: 'hidden',
-        }}
-      >
-        <motion.div style={{ x, display: 'flex', gap: 2 }}>
-          {cards.map((card) => (
-            <Card card={card} key={card.id} fetchList={fetchList} />
-          ))}
-        </motion.div>
-      </Box>
-    </Box>
+    <Grid container spacing={0.7} sx={{ px: 2, py: 2 }}>
+      {cards.slice(0, 5).map((card) => (
+        <Grid item xs={12} sm={6} md={4} lg={2.4} key={card.id}>
+          <Stack spacing={0.7}>
+            <Card card={card} fetchList={fetchList} />
+            {isSecondHorizontal && (
+              <Card card={card} fetchList={fetchList} />
+            )}
+          </Stack>
+        </Grid>
+      ))}
+    </Grid>
   );
 };
 
@@ -266,8 +285,8 @@ const Card = ({ card, fetchList }) => {
         key={card.id}
         sx={{
           position: 'relative',
-          height: 450,
-          width: 300,
+          height: "440px",
+          width: '293px',
           overflow: 'hidden',
           boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
           transition: 'transform 300ms ease',
@@ -338,32 +357,6 @@ const Card = ({ card, fetchList }) => {
             padding: 2,
           }}
         >
-          {/* <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 'bold',
-                textTransform: 'uppercase',
-                color: 'white',
-                letterSpacing: '1px',
-                fontSize: '1.25rem',
-              }}
-            >
-              {card.name}
-            </Typography>
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 'bold',
-                textTransform: 'uppercase',
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontSize: '0.85rem',
-              }}
-            >
-              {card.designation}
-            </Typography>
-          </Stack> */}
-
           {/* Add new text elements here */}
             <Typography
               sx={{
@@ -379,7 +372,16 @@ const Card = ({ card, fetchList }) => {
                 ? card.title.split(' ').slice(0, 4).join(' ') + '...' 
                 : card.title}
             </Typography>
-            
+
+            {/* Thin Line */}
+            <Box
+            sx={{
+              width: '100%',
+              height: '0.8px',
+              backgroundColor: '#ffff',
+              marginBottom: '7px',
+            }}
+          />
             <Stack spacing={0.5} direction={'row'} justifyContent={'space-between'} alignItems={'center'} marginBottom={1.2}>
               <Typography
                 sx={{
@@ -461,5 +463,44 @@ const Card = ({ card, fetchList }) => {
         onClose={() => setOpenPartnerRightPanel(false)}
       />
     </>
+  );
+};
+
+const HorizontalScrollCarousel = ({ direction, fetchList }) => {
+  const targetRef = React.useRef(null);
+  const { scrollYProgress } = useScroll({ target: targetRef });
+
+  const totalWidth = React.useMemo(() => cards.length * 350, []);
+  const x = useTransform(
+    scrollYProgress,
+    [0, 1],
+    direction === 'left' ? [0, -totalWidth + window.innerWidth] : [-totalWidth + window.innerWidth, 0]
+  );
+
+  return (
+    <Box
+      ref={targetRef}
+      sx={{
+        position: 'relative',
+        height: '44px',
+        overflow: 'hidden',
+      }}
+    >
+      <Box
+        sx={{
+          position: 'sticky',
+          top: 0,
+          display: 'flex',
+          alignItems: 'center',
+          overflow: 'hidden',
+        }}
+      >
+        <motion.div style={{ x, display: 'flex', gap: 1 }}>
+          {cards.map((card) => (
+            <Card card={card} key={card.id} fetchList={fetchList} />
+          ))}
+        </motion.div>
+      </Box>
+    </Box>
   );
 };
