@@ -7,7 +7,7 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineItem, { timelineItemClasses } from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import { Avatar, Box, Chip, Divider, IconButton, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Chip, Divider, IconButton, Stack, TextField, Typography } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -18,7 +18,7 @@ import { Iconify } from '/src/components/iconify/iconify';
 
 import { handleCopy } from '/src/utils/helper';
 
-export const ContentQuickView = ({ data }) => {
+export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
   const [comments, setComments] = useState([
     {
       id: 1,
@@ -44,8 +44,37 @@ export const ContentQuickView = ({ data }) => {
   ]);
   const [newComment, setNewComment] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]);
-
   const attachmentRef = useRef(null);
+  const [contentInfo, setContentInfo] = useState({
+    InstagramLikes: data?.IGTotalLikes,
+    InstagramComments: data?.IGTotalComments,
+    InstagramShares: data?.IGTotalShares,
+    InstagramViews: data?.IGTotalViews,
+    InstagramSocialSetsUsed: data?.IGSocialSetsUsed,
+    RevoTwitter: data?.REVOTwitter,
+    RevoTiktok: data?.REVOTikTok,
+    RevoTiktokViews: data?.REVOTTViews,
+    TiktokAccountUsed: data?.TikTokAccountsused,
+    TiktokDummyAccountUsed: data?.TTDummyAccountsUsed?.at(0),
+    YoutubeTAccountUsed: data?.YTAccountsUsed,
+    YoutubeClubRevoTotalViews: data?.YTClubREVOTotalViews,
+  });
+
+  const [partnerInfo, setPartnerInfo] = useState({
+    PartnerInstargramLink: data?.PartnerIGLink,
+    PartnerTiktokLink: data?.PartnerTikTokLink,
+    PartnerTiktokComments: data?.PartnerTTComments,
+    PartnerTiktokLikes: data?.PartnerTTLikes,
+    PartnerTiktokShares: data?.PartnerTTShares,
+    PartnerTiktokViews: data?.PartnerTTViews,
+    PartnerTiktokSaves: data?.PartnerTTSaves,
+    PartnerYoutubeLink: data?.PartnerYTLink,
+    YoutubePartnerTotallikes: data?.YTPartnerTotallikes,
+    YoutubePartnerTotalcomments: data?.YTPartnerTotalcomments,
+    YoutubePartnerTotalSaves: data?.YTPartnerTotalSaves,
+    YoutubePartnerTotalViews: data?.YTPartnerTotalViews,
+  });
+
 
   const handleAddComment = () => {
     if (!newComment.trim() && !selectedFiles.length) return;
@@ -73,10 +102,30 @@ export const ContentQuickView = ({ data }) => {
     setSelectedFiles((prevFiles) => prevFiles.filter((_, index) => index !== indexToRemove));
   };
 
+  const handleChange = (section, field, value) => {
+    let updatedData;
+    if (section === 'content') {
+      updatedData = { ...contentInfo, [field]: value };
+      setContentInfo(updatedData);
+    } else {
+      updatedData = { ...partnerInfo, [field]: value };
+      setPartnerInfo(updatedData);
+    }
+
+    // Send updated data to parent using call back function
+    if (onUpdate) {
+      onUpdate({
+        ...contentInfo,
+        ...partnerInfo,
+        [field]: value, // Only updates the changed field
+      });
+    }
+  };
+
   return (
     <>
       <Stack direction="row" gap={1}>
-        <Stack sx={{ width: '60%' }}>
+        <Stack sx={{ width: '50%' }}>
           <Box
             component="img"
             src={data?.Image?.at(0) || '/'}
@@ -208,7 +257,7 @@ export const ContentQuickView = ({ data }) => {
             </Stack>
           </Stack>
         </Stack>
-        <Stack sx={{ width: '40%' }}>
+        <Stack sx={{ width: '50%' }}>
           <Typography variant="h6">{data?.Name}</Typography>
           <Stack direction="row" alignItems="center" gap={1}>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
@@ -230,7 +279,7 @@ export const ContentQuickView = ({ data }) => {
               <Iconify icon="solar:book-bold" sx={{ color: 'text.secondary' }} />
             </IconButton>
           </Stack>
-          <Stack direction="row" gap={1} sx={{ mt: 1 }}>
+          {/* <Stack direction="row" gap={1} sx={{ mt: 1 }}>
             <Box sx={{ width: '50%' }}>
               <SectionTitle title="Content Information" sx={{ px: 2, py: 1, borderRadius: 1, fontSize: '0.9rem' }} />
               <Box sx={{ ml: 1, mt: 1 }}>
@@ -316,6 +365,54 @@ export const ContentQuickView = ({ data }) => {
                 </Typography>
               </Box>
             </Box>
+          </Stack> */}
+          <Stack direction="row" gap={1} sx={{ mt: 1 }}>
+          <Box sx={{ width: '50%' }}>
+            <SectionTitle title="Content Information" sx={{ px: 2, py: 1, borderRadius: 1, fontSize: '0.9rem' }} />
+            <Box sx={{ ml: 1, mt: 1 }}>
+              {Object.keys(contentInfo).map((key) => (
+                isEdit === 'EDIT' ? (
+                  <TextField
+                    key={key}
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    label={key.replace(/([A-Z])/g, ' $1').trim()}
+                    value={contentInfo[key]}
+                    onChange={(e) => handleChange('content', key, e.target.value)}
+                    sx={{ mb: 1 }}
+                  />
+                ) : (
+                  <Typography key={key} variant="body2" sx={{ mb: 1 }}>
+                    <strong>{key.replace(/([A-Z])/g, ' $1').trim()}:</strong> {contentInfo[key]}
+                  </Typography>
+                )
+              ))}
+            </Box>
+          </Box>
+          <Box sx={{ width: '50%' }}>
+            <SectionTitle title="Partner Information" sx={{ px: 2, py: 1, borderRadius: 1, fontSize: '0.9rem' }} />
+            <Box sx={{ ml: 1, mt: 1 }}>
+              {Object.keys(partnerInfo).map((key) => (
+                isEdit === 'EDIT' ? (
+                  <TextField
+                    key={key}
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    label={key.replace(/([A-Z])/g, ' $1').trim()}
+                    value={partnerInfo[key]}
+                    onChange={(e) => handleChange('partner', key, e.target.value)}
+                    sx={{ mb: 1 }}
+                  />
+                ) : (
+                  <Typography key={key} variant="body2" sx={{ mb: 1 }}>
+                    <strong>{key.replace(/([A-Z])/g, ' $1').trim()}:</strong> {partnerInfo[key]}
+                  </Typography>
+                )
+              ))}
+            </Box>
+          </Box>
           </Stack>
         </Stack>
       </Stack>

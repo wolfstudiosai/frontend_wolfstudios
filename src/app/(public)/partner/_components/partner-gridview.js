@@ -175,8 +175,9 @@ export const SocialIconWithText = ({ icon, url, text, value, sx = {} }) => {
   return (
     <Stack direction="row" alignItems="center" gap={1} sx={{ ...sx }}>
       <Iconify onClick={handleRedirect} sx={{ cursor: 'pointer' }} icon={icon} />
-      <Typography variant="body2">{' - ' + text}</Typography>
-      <Typography variant="body2">{' - ' + value}</Typography>
+      <Typography variant="body2">{'  ' + text}</Typography>
+      <Iconify icon="pepicons-pop:line-y" sx={{ color: 'grey.300' }} />
+      <Typography variant="body2">{'  ' + value}</Typography>
     </Stack>
   );
 };
