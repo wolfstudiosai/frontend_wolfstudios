@@ -251,7 +251,7 @@ export const privateRoutes = [
     items: [
       {
         key: 'partner_by_campaing',
-        title: 'Partner by campaing ',
+        title: 'Partner by Campaign',
         href: paths.private.partners_by_campaign,
         icon: 'tabler:point',
         allowedRoles: ['admin', 'user', 'super_admin'],
