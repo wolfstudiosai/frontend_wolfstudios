@@ -5,10 +5,8 @@ import { DrawerContainer } from '/src/components/drawer/drawer';
 import { Iconify } from '/src/components/iconify/iconify';
 import { Box, Button, IconButton, Popover, TextField, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import React, { forwardRef, useRef, useState } from 'react';
-
+import React, { useRef, useState } from 'react';
 import useAuth from '/src/hooks/useAuth';
-import { paths } from '/src/paths';
 import { ContentForm } from './content-form';
 import { ContentQuickView } from './content-quick-view';
 import { defaultContent } from '../_lib/all-content.types';
@@ -19,10 +17,10 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
   const isUpdate = data?.id ? true : false;
   const router = useRouter();
   const { isLogin } = useAuth();
-
   const [sidebarView, setSidebarView] = React.useState(view); //QUICK/ EDIT
   const [file, setFile] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const [formData, setFormData] = useState(data); // formdata
 
     const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
       useFormik({
@@ -64,7 +62,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
     }
   };
 
-  const DeleteConfirmationwithPasswordPopover = ({ title, onDelete, passwordInput }) => {
+  const DeleteConfirmationwithPasswordPopover = ({ title, onDelete, passwordInput, disabled }) => {
     const [password, setPassword] = useState('');
     const [open, setOpen] = useState(false);
     const anchorRef = useRef(null);
@@ -82,8 +80,10 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
           ref={anchorRef}
           onClick={() => setOpen(true)}
           title="Delete"
+          disabled={disabled}
+          color="error"
         >
-          <Iconify icon="solar:trash-bin-trash-bold" />
+          <Iconify icon="ic:outline-delete" width={24} height={24} color="error" />
         </IconButton>
   
         <Popover
@@ -137,21 +137,35 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
     );
   };
 
+  const handleDataUpdate =(data) => {
+    console.log('formdata from child', formData); 
+    // setFormData(data);
+  }
+
   // *****************Action Buttons*******************************
   const actionButtons = (
     <>
       {isLogin && (
         <>
           {sidebarView === 'EDIT' && isUpdate ? (
-            <IconButton onClick={() => setSidebarView('QUICK')} title="Edit">
-              <Iconify icon="solar:eye-broken" />
-            </IconButton>
+             <Button size="small" variant="outlined" onClick={() => setSidebarView('QUICK')} title="Cancel">
+             Cancel
+           </Button>
+            // <IconButton onClick={() => setSidebarView('QUICK')} title="Edit">
+            //   <Iconify icon="solar:eye-broken" />
+            // </IconButton>
           ) : (
             isUpdate && (
               <IconButton onClick={() => setSidebarView('EDIT')} title="Quick">
                 <Iconify icon="mynaui:edit-one" />
               </IconButton>
             )
+          )}
+          {sidebarView === 'EDIT' && (
+            // <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleDataUpdate}>
+              Save
+            </Button>
           )}
           {/* {isUpdate && (
             <IconButton
@@ -176,13 +190,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
           /> */}
 
           {/* <DeleteConfirmationPopover title={`Want to delete ${data?.name}?`} onDelete={() => handleDelete()} /> */}
-          <DeleteConfirmationwithPasswordPopover title={`Want to delete ${data?.name}?`}  onDelete={(password) => handleDelete(password)}  passwordInput />
-
-          {sidebarView === 'EDIT' && (
-            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
-              Save
-            </Button>
-          )}
+          <DeleteConfirmationwithPasswordPopover title={`Want to delete ${data?.name}?`}  onDelete={(password) => handleDelete(password)}  passwordInput disabled={!isUpdate || sidebarView === 'EDIT'} />
         </>
       )}
     </>
@@ -211,15 +219,16 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
       {sidebarView === 'QUICK' ? (
-        <ContentQuickView data={data} />
+        <ContentQuickView data={data} isEdit={sidebarView} />
       ) : (
-        <ContentForm
-          data={values}
-          errors={errors}
-          setFieldValue={setFieldValue}
-          onChange={handleChange}
-          onSetFile={setFile}
-        />
+        // <ContentForm
+        //   data={values}
+        //   errors={errors}
+        //   setFieldValue={setFieldValue}
+        //   onChange={handleChange}
+        //   onSetFile={setFile}
+        // />
+        <ContentQuickView data={data} isEdit={sidebarView} onUpdate={setFormData} />
       )}
     </DrawerContainer>
   );
