@@ -73,6 +73,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
+              borderBottom: '1px solid var(--mui-palette-divider)'
             }}
           >
             {/* Left Section: Logo and Menu */}
@@ -216,7 +217,7 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
   const hasPopover = Boolean(item.items);
 
   const element = (
-    <Box component="li" sx={{ userSelect: 'none' }}>
+    <Box component="li" sx={{ userSelect: 'none', ...(active && { borderBottom: '2px solid var(--mui-palette-primary-main)'}) }}>
       <Box
         {...(hasPopover
           ? {

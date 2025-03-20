@@ -185,7 +185,7 @@ body {
 #page1{
   height: 200px;
   width: 100%;
-  background-color: #232323;
+  background-color: #181818;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -195,17 +195,15 @@ body {
 .letter {
   display: inline-block; 
   font-size: 10rem;
-  font-weight: 400;
+  font-weight: 100;
   color: #fff;
-  font-family: 'Salvalyng, sans-serif';
+  font-family: 'Salvalyn, sans-serif';
 }
 .letter:last-child {
   font-size: 92px;
-  color: #505050;
+  color: #3d3d3d;
 }
 .h1{
-  font-size: 2rem;
-  font-weight: 700;
   position: absolute;
   bottom: -357px;
   left: 50%;

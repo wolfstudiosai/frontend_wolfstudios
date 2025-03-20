@@ -215,8 +215,9 @@ const SocialInfo = ({ sx, icon, follower, rate, url }) => {
         sx={{ width: 22, height: 22, color: 'text.primary', '&:hover': { color: 'primary.main' } }}
         onClick={handleRedirect}
       />
-      <Stack direction="row" divider={<Typography> -</Typography>}>
+      <Stack direction="row" divider={<Typography></Typography>}>
         <Typography fontSize="14px">{follower}</Typography>
+        <Iconify icon="pepicons-pop:line-y" sx={{ color: 'grey.300' }} />
         <Typography fontSize="14px">${rate}</Typography>
       </Stack>
     </Stack>
