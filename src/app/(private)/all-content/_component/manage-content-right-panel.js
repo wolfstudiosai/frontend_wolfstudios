@@ -1,6 +1,6 @@
 'use client';
 
-import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
+import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';  
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import { Iconify } from '/src/components/iconify/iconify';
 import { Box, Button, IconButton, Popover, TextField, Typography } from '@mui/material';
@@ -11,7 +11,7 @@ import { ContentForm } from './content-form';
 import { ContentQuickView } from './content-quick-view';
 import { defaultContent } from '../_lib/all-content.types';
 import { useFormik } from 'formik';
-// import { createCampaignAsync, deleteCampaignAsync, updateCampaignAsync } from '../_lib/campaign.actions';
+import {  deleteCampaignAsync, updateCampaignAsync } from '../_lib/all-content.actions';
 
 export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
   const isUpdate = data?.id ? true : false;
@@ -54,92 +54,20 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
         },
       });
 
-  const handleDelete = async () => {
+  const handleDelete = async (password) => {
     const response = await deleteCampaignAsync([data.id]);
     if (response.success) {
-      // fetchList();
+      fetchList();
       window.location.reload();
     }
   };
 
-  const DeleteConfirmationwithPasswordPopover = ({ title, onDelete, passwordInput, disabled }) => {
-    const [password, setPassword] = useState('');
-    const [open, setOpen] = useState(false);
-    const anchorRef = useRef(null);
-  
-    const handleConfirm = () => {
-      if (passwordInput && !password) return;
-      onDelete(passwordInput ? password : null);
-      setPassword('');
-      setOpen(false);
-    };
-  
-    return (
-      <>
-        <IconButton 
-          ref={anchorRef}
-          onClick={() => setOpen(true)}
-          title="Delete"
-          disabled={disabled}
-          color="error"
-        >
-          <Iconify icon="ic:outline-delete" width={24} height={24} color="error" />
-        </IconButton>
-  
-        <Popover
-          open={open}
-          onClose={() => setOpen(false)}
-          anchorEl={anchorRef.current}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-        >
-          <Box sx={{ p: 2, width: 300 }}>
-            <Typography variant="subtitle1" gutterBottom>
-              {title}
-            </Typography>
-            
-            {passwordInput && (
-              <TextField
-                fullWidth
-                type="password"
-                label="Enter Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                sx={{ mb: 2 }}
-              />
-            )}
-  
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-              <Button 
-                variant="outlined" 
-                onClick={() => setOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button 
-                variant="contained" 
-                color="error"
-                onClick={handleConfirm}
-                disabled={passwordInput && !password}
-              >
-                Delete
-              </Button>
-            </Box>
-          </Box>
-        </Popover>
-      </>
-    );
-  };
-
-  const handleDataUpdate =(data) => {
-    console.log('formdata from child', formData); 
-    // setFormData(data);
+  const handleDataUpdate = async () => {
+    const response = await updateCampaignAsync(file, formData);
+    if (response.success) {
+      fetchList();
+      window.location.reload();
+    }
   }
 
   // *****************Action Buttons*******************************
@@ -188,9 +116,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
             }
             label="Featured"
           /> */}
-
-          {/* <DeleteConfirmationPopover title={`Want to delete ${data?.name}?`} onDelete={() => handleDelete()} /> */}
-          <DeleteConfirmationwithPasswordPopover title={`Want to delete ${data?.name}?`}  onDelete={(password) => handleDelete(password)}  passwordInput disabled={!isUpdate || sidebarView === 'EDIT'} />
+          <DeleteConfirmationPasswordPopover title={`Want to delete ${data?.name}?`}  onDelete={(password) => handleDelete(password)}  passwordInput disabled={!isUpdate || sidebarView === 'EDIT'} />
         </>
       )}
     </>

@@ -1,4 +1,4 @@
-import { Box, IconButton, Stack, Typography } from '@mui/material';
+import { Box, IconButton, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
@@ -10,6 +10,20 @@ import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
 import { SocialIconWithText } from './partner-gridview';
 import { formatCompactNumber, handleCopy, isVideoContent, pxToRem } from '/src/utils/helper';
+import { useState } from 'react';
+import Link from 'next/link';
+
+// Validation functions
+const isValidUrl = (url) => {
+  const pattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+  return pattern.test(url);
+};
+
+const isValidNumber = (value) => {
+  return !isNaN(value) && value !== '';
+};
+
+export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
 
 const mediaArr = [
   'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670d11d77dff7fcc24e16f1c_2_DSC03975.jpeg',
@@ -36,7 +50,127 @@ const mediaArr = [
   'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670be14aa60fa816cf457054_19055002_1812151462433470_492009593312992502_o-p-500.jpeg',
 ];
 
-export const PartnerQuickView = ({ data }) => {
+const [personalInfo, setPersonalInfo] = useState({
+  States: data?.ByStatesPartnerHQ?.map(item => item?.ByStates?.Name)?.join(', ') || 'N/A',
+  Country: data?.ByCountryPartners?.map(item => item?.ByCountry?.Name)?.join(', ') || 'N/A',
+  City: data?.ByCityPartnerHQ?.map(item => item?.ByCity?.Name)?.join(', ') || 'N/A',
+  MailingAddress: data?.MailingAddress || 'N/A',
+  Website: data?.Website || 'N/A',
+  AgeRange: data?.AgeBracket?.join(', ') || 'N/A'
+});
+
+const [contractInfo, setContractInfo] = useState({
+  Contract: data?.Contracts?.join(', ') || 'N/A',
+  ProfileCategory: data?.PartnerHQProfileCategory?.map(item => item?.ProfileCategory?.Name)?.join(', ') || 'N/A',
+  AffiliatePlatform: data?.AffiliatePlatform?.join(', ') || 'N/A',
+  Stakeholder: data?.PartnerHQStakeholder?.map(item => item?.Stakeholder?.Name)?.join(', ') || 'N/A',
+  TotalAudience: data?.TotalAudience?.toLocaleString() || 'N/A',
+  Products: data?.ByProductPartnerHQ?.map(item => item?.ByProduct?.Name)?.join(', ') || 'N/A',
+  ContributedCampaigns: data?.ByCampaignsProposedPartners?.map(item => item?.ByCampaigns?.Name)?.join(', ') || 'N/A',
+  LiveCampaign: 'N/A',
+  OpenToGifting: data?.OpentoGifting || 'N/A',
+  OpenToWhitelisting: data?.OpentoWhitelisting || 'N/A'
+});
+
+const [otherInfo, setOtherInfo] = useState({
+  Source: data?.SourcedFrom?.join(', ') || 'N/A',
+  PaymentLink: data?.PaymentLink || 'N/A',
+  Tags: data?.ByTagsPartnerHQ?.map(tag => tag?.ByTags?.Name)?.join(', ') || 'N/A',
+  Note: data?.Notes || 'N/A',
+  Podcast: data?.Podcast || 'N/A',
+  RefusalReason: data?.RefusalReason || 'N/A'
+});
+
+const [amazonInfo, setAmazonInfo] = useState({
+  REVOAmazonOrderConfirmationNumber: data?.REVOAmazonOrderConfirmationNumber || 'N/A',
+  AmazonReviewLink: data?.AmazonReviewLink || 'N/A',
+  AmazonReviewCupper: data?.AmazonReviewCupper || 'N/A',
+  AmazonReviewThePill: data?.AmazonReviewThePill || 'N/A',
+  AmazonStorefront: data?.AmazonStorefront || 'N/A'
+});
+
+const handleChange = (section, field, value) => {
+  const validation = {
+    TotalAudience: (val) => isValidNumber(val),
+    REVOAmazonOrderConfirmationNumber: (val) => isValidNumber(val),
+     // Add other field validations as needed
+  };
+  if (validation[field] && !validation[field](value)) return;
+
+  const updateFunctions = {
+    personal: setPersonalInfo,
+    contract: setContractInfo,
+    other: setOtherInfo,
+    amazon: setAmazonInfo
+  };
+
+  updateFunctions[section](prev => {
+    const updated = { ...prev, [field]: value };
+    onUpdate?.({ ...personalInfo, ...contractInfo, ...otherInfo, ...amazonInfo, [field]: value });
+    return updated;
+  });
+};
+
+const renderField = (section, field, label, type = 'text') => {
+  const value = {
+    personal: personalInfo,
+    contract: contractInfo,
+    other: otherInfo,
+    amazon: amazonInfo
+  }[section][field];
+
+  if (isEdit === 'EDIT') {
+    return (
+      <TextField
+        fullWidth
+        variant="outlined"
+        size="small"
+        label={label}
+        value={value}
+        onChange={(e) => handleChange(section, field, e.target.value)}
+        sx={{ mb: 0.5 }}
+        type={type === 'link' ? 'url' : type}
+          inputProps={{
+            ...(type === 'number' && { min: 0, inputMode: 'numeric' }),
+            ...(type === 'link' && { pattern: 'https?://.*' })
+          }}
+          error={
+            (type === 'number' && !isValidNumber(value)) ||
+            (type === 'link' && value !== '' && !isValidUrl(value))
+          }
+          helperText={
+            (type === 'number' && !isValidNumber(value) && 'Must be a valid number') ||
+            (type === 'link' && value !== '' && !isValidUrl(value) && 'Invalid URL format')
+          }
+      />
+    );
+  }
+  // if (value === 'N/A') return null;
+
+  return (
+    <Typography variant="body2">
+      <strong>{label}:</strong> {type === 'link' ? (
+        <Link href={value} target="_blank" rel="noopener noreferrer">
+          {value}
+        </Link>
+      ) : type === 'chips' ? (
+        value.split(', ').map((tag, index) => (
+          <CustomChip
+            key={index}
+            label={tag}
+            height="18px"
+            variant="soft"
+            fontSize="14px"
+            sx={{ ml: 0.5 }}
+          />
+        ))
+      ) : (
+        value
+      )}
+    </Typography>
+  );
+};
+
   return (
     <Stack spacing={2}>
       <SliderWrapper
@@ -237,158 +371,62 @@ export const PartnerQuickView = ({ data }) => {
           />
         )}
       </Box>
-
+      {/* All other Info */}
       <Grid container spacing={2}>
-        {/* Personal Info */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <SectionTitle title="Personal Info" sx={{ px: 2, py: 1, borderRadius: 1 }} />
-          <Stack spacing={1} mt={1}>
-            <Typography variant="body2">
-              <strong>State:</strong>{' '}
-              {data?.ByStatesPartnerHQ?.map((item) => item?.ByStates?.Name)?.join(', ') || 'N/A'}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Country:</strong>{' '}
-              {data?.ByCountryPartners?.map((item) => item?.ByCountry?.Name)?.join(', ') || 'N/A'}
-            </Typography>
-            <Typography variant="body2">
-              <strong>City:</strong> {data?.ByCityPartnerHQ?.map((item) => item?.ByCity?.Name)?.join(', ') || 'N/A'}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Mailing Address:</strong> {data?.MailingAddress || 'N/A'}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Website:</strong>{' '}
-              {data?.Website && data?.Website !== 'Not Found' ? (
-                <a href={data?.Website} target="_blank" rel="noopener noreferrer">
-                  {data?.Website}
-                </a>
-              ) : (
-                'N/A'
-              )}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Age Range:</strong> {data?.AgeBracket?.join(', ') || 'N/A'}
-            </Typography>
-          </Stack>
-        </Grid>
-        {/* contract info */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <SectionTitle title="Contract Info" sx={{ px: 2, py: 1, borderRadius: 1 }} />
-          <Stack spacing={1} mt={1}>
-            <Typography variant="body2">
-              <strong>Contract:</strong> {data?.Contracts?.join(', ') || 'N/A'}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Profile Category:</strong>{' '}
-              {data?.PartnerHQProfileCategory?.map((item) => item?.ProfileCategory?.Name)?.join(', ') || 'N/A'}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Affiliate Platform:</strong> {data?.AffiliatePlatform?.join(', ') || 'N/A'}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Stakeholder:</strong>{' '}
-              {data?.PartnerHQStakeholder?.map((item) => item?.Stakeholder?.Name)?.join(', ') || 'N/A'}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Total Audience:</strong> {data?.TotalAudience?.toLocaleString()}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Products:</strong>{' '}
-              {data?.ByProductPartnerHQ?.map((item) => item?.ByProduct?.Name)?.join(', ') || 'N/A'}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Contributed Campaigns:</strong>{' '}
-              {data?.ByCampaignsProposedPartners?.map((item) => item?.ByCampaigns?.Name)?.join(', ') || 'N/A'}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Live Campaign:</strong> N/A
-            </Typography>
-            <Typography variant="body2">
-              <strong>Open to Gifting:</strong> {data?.OpentoGifting}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Open to Whitelisting:</strong> {data?.OpentoWhitelisting}
-            </Typography>
-          </Stack>
-        </Grid>
-        {/* other info */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <SectionTitle title="Other Info" sx={{ px: 2, py: 1, borderRadius: 1 }} />
-          <Stack spacing={1} mt={1}>
-            <Typography variant="body2">
-              <strong>Source:</strong> {data?.SourcedFrom?.join(', ') || 'N/A'}
-            </Typography>
-            {data?.PaymentLink && (
-              <Typography variant="body2">
-                <strong>Payment Link:</strong> {data?.PaymentLink}
-              </Typography>
-            )}
-            {data?.ByTagsPartnerHQ && (
-              <Typography variant="body2">
-                <strong>Tags:</strong>{' '}
-                {data?.ByTagsPartnerHQ?.map((tag) => (
-                  <CustomChip
-                    key={tag?.ByTags?.Name}
-                    label={tag?.ByTags?.Name}
-                    height="18px"
-                    variant={'soft'}
-                    fontSize="14px"
-                  />
-                ))}
-              </Typography>
-            )}
-            {data?.Notes && (
-              <Typography variant="body2">
-                <strong>Note:</strong> {data?.Notes}
-              </Typography>
-            )}
-            {data?.Podcast && (
-              <Typography variant="body2">
-                <strong>Podcast:</strong> {data?.Podcast}
-              </Typography>
-            )}
-            {data?.RefusalReason && (
-              <Typography variant="body2">
-                <strong>Refusal Reason:</strong> {data?.RefusalReason}
-              </Typography>
-            )}
-          </Stack>
-        </Grid>
-        {/* amazon info */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <SectionTitle title="Amazon Info" sx={{ px: 2, py: 1, borderRadius: 1 }} />
-          <Stack spacing={1} mt={1}>
-            {data?.REVOAmazonOrderConfirmationNumber && (
-              <Typography variant="body2">
-                <strong>Amazon order confirmation no:</strong> {data?.REVOAmazonOrderConfirmationNumber}
-              </Typography>
-            )}
-            {data?.AmazonReviewLink && (
-              <Typography variant="body2">
-                <strong>Amazon review link:</strong>{' '}
-                <a href={data?.AmazonReviewLink} target="_blank" rel="noopener noreferrer">
-                  {data?.AmazonReviewLink}
-                </a>
-              </Typography>
-            )}
-            {data?.AmazonReviewCupper && (
-              <Typography variant="body2">
-                <strong>Amazon review cupper:</strong> {data?.AmazonReviewCupper}
-              </Typography>
-            )}
-            {data?.AmazonReviewThePill && (
-              <Typography variant="body2">
-                <strong>Amazon review pill:</strong> {data?.AmazonReviewThePill}
-              </Typography>
-            )}
-            {data?.AmazonStorefront && (
-              <Typography variant="body2">
-                <strong>Amazon storefront:</strong> {data?.AmazonStorefront}
-              </Typography>
-            )}
-          </Stack>
-        </Grid>
+      {/* Personal Info Section */}
+      <Grid size={{ xs: 12, md: 4 }}>
+        <SectionTitle title="Personal Info" sx={{ px: 2, py: 1, borderRadius: 1 }} />
+        <Stack spacing={1} mt={1}>
+          {renderField('personal', 'States', 'State')}
+          {renderField('personal', 'Country', 'Country')}
+          {renderField('personal', 'City', 'City')}
+          {renderField('personal', 'MailingAddress', 'Mailing Address')}
+          {renderField('personal', 'Website', 'Website', 'link')}
+          {renderField('personal', 'AgeRange', 'Age Range')}
+        </Stack>
+      </Grid>
+
+      {/* Contract Info Section */}
+      <Grid size={{ xs: 12, md: 4 }}>
+        <SectionTitle title="Contract Info" sx={{ px: 2, py: 1, borderRadius: 1 }} />
+        <Stack spacing={1} mt={1}>
+          {renderField('contract', 'Contract', 'Contract')}
+          {renderField('contract', 'ProfileCategory', 'Profile Category')}
+          {renderField('contract', 'AffiliatePlatform', 'Affiliate Platform')}
+          {renderField('contract', 'Stakeholder', 'Stakeholder')}
+          {renderField('contract', 'TotalAudience', 'Total Audience', 'number')}
+          {renderField('contract', 'Products', 'Products')}
+          {renderField('contract', 'ContributedCampaigns', 'Contributed Campaigns')}
+          {renderField('contract', 'LiveCampaign', 'Live Campaign')}
+          {renderField('contract', 'OpenToGifting', 'Open to Gifting')}
+          {renderField('contract', 'OpenToWhitelisting', 'Open to Whitelisting')}
+        </Stack>
+      </Grid>
+
+      {/* Other Info Section */}
+      <Grid size={{ xs: 12, md: 4 }}>
+        <SectionTitle title="Other Info" sx={{ px: 2, py: 1, borderRadius: 1 }} />
+        <Stack spacing={1} mt={1}>
+          {renderField('other', 'Source', 'Source')}
+          {renderField('other', 'PaymentLink', 'Payment Link', 'link')}
+          {renderField('other', 'Tags', 'Tags', 'chips')}
+          {renderField('other', 'Note', 'Note')}
+          {renderField('other', 'Podcast', 'Podcast')}
+          {renderField('other', 'RefusalReason', 'Refusal Reason')}
+        </Stack>
+      </Grid>
+
+      {/* Amazon Info Section */}
+      <Grid size={{ xs: 12, md: 4 }}>
+        <SectionTitle title="Amazon Info" sx={{ px: 2, py: 1, borderRadius: 1 }} />
+        <Stack spacing={1} mt={1}>
+          {renderField('amazon', 'REVOAmazonOrderConfirmationNumber', 'Amazon Order Confirmation No', 'number')}
+          {renderField('amazon', 'AmazonReviewLink', 'Amazon Review Link', 'link')}
+          {renderField('amazon', 'AmazonReviewCupper', 'Amazon Review Cupper')}
+          {renderField('amazon', 'AmazonReviewThePill', 'Amazon Review The Pill')}
+          {renderField('amazon', 'AmazonStorefront', 'Amazon Storefront', 'link')}
+        </Stack>
+      </Grid>
       </Grid>
     </Stack>
   );

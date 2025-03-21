@@ -136,37 +136,37 @@ export const PartnerCard = ({ item, fetchList }) => {
             icon="hugeicons:instagram"
             follower={formatCompactNumber(item?.InstagramFollowing)}
             url={item?.Instagram}
-            rate={100}
+            rate={formatCompactNumber(item?.PartnerIGRate) || 0}
           />
           <SocialInfo
             icon="hugeicons:youtube"
             follower={formatCompactNumber(item?.YoutubeFollowing)}
             url={item?.Youtube}
-            rate={100}
+            rate={formatCompactNumber(item?.PartnerYTRate) || 0}
           />
           <SocialInfo
             icon="mingcute:facebook-line"
             follower={formatCompactNumber(item?.FacebookFollowing)}
             url={item?.Facebook}
-            rate={100}
+            rate={formatCompactNumber(item?.PartnerFBRate) || 0}
           />
           <SocialInfo
             icon="hugeicons:new-twitter-ellipse"
             follower={formatCompactNumber(item?.XFollowing)}
             url={item?.X}
-            rate={100}
+            rate={formatCompactNumber(item?.PartnerTTRate) || 0}
           />
           <SocialInfo
             icon="hugeicons:pinterest"
             follower={formatCompactNumber(item?.PinterestFollowing)}
             url={item?.Pinterest}
-            rate={100}
+            rate={formatCompactNumber(item?.PartnerPInterestRate) || 0}
           />
           <SocialInfo
             icon="mingcute:linkedin-line"
             follower={formatCompactNumber(item?.LinkedInConnections)}
             url={item?.LinkedIn}
-            rate={100}
+            rate={formatCompactNumber(item?.PartnerLinkedinRate) || 0}
           />
         </Stack>
         <Box sx={{ mt: 2 }}>

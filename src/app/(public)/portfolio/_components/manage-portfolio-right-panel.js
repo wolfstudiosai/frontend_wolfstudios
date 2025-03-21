@@ -14,7 +14,7 @@ import { defaultPortfolio } from '../_lib/portfolio.types';
 import { PortfolioForm } from './portfolio-form';
 import { PortfolioQuickView } from './portfolio-quickview';
 import { formConstants } from '/src/app/constants/form-constants';
-import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
+import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import { Iconify } from '/src/components/iconify/iconify';
 import useAuth from '/src/hooks/useAuth';
@@ -71,7 +71,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
     }
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (password) => {
     const response = await deletePortfolioAsync([data.id]);
     if (response.success) {
       fetchList();
@@ -119,7 +119,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
             label="Featured"
           />
 
-          <DeleteConfirmationPopover title={`Want to delete ${data?.project_title}?`} onDelete={() => handleDelete()} />
+          <DeleteConfirmationPasswordPopover title={`Want to delete ${data?.project_title}?`}  onDelete={(password) => handleDelete(password)}  passwordInput />
 
           {sidebarView === 'EDIT' && (
             <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
