@@ -133,42 +133,74 @@ export const PartnerSectionNew = ({ isSecondHorizontal }) => {
 
   return (
     <Grid container spacing={2} alignItems="center">
-      <Grid item xs={12}>
-        <Stack direction="column" sx={{ px: 4, py: 4 }}>
-          <FadeIn>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: { xs: "50px", lg: "225px" }, flexWrap: 'wrap' }}>
-            <Stack direction="row">
-              <Typography 
-                variant="h4"
-                fontWeight="bold"
-                sx={{
-                  fontSize: '2.2rem',
-                  letterSpacing: '0.5px',
-                  textTransform: 'uppercase',
-                  color: 'text.primary',
+      <Grid xs={12}>
+          <Stack direction="column" sx={{ px: { xs: 2, md: 4 }, py: 4 }}>
+              <FadeIn>
+                <Box sx={{ 
+                  display: 'flex', 
+                  flexDirection: { xs: 'column', md: 'row' }, 
+                  alignItems: 'flex-start',
+                  gap: { xs: 2, md: 4, lg: 8 },
                 }}>
-                Partners
-              </Typography>
-                <Button
-                    variant="text"
-                    onClick={() => router.push('/partners')}
-                    endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
-                    sx={{ margin: 0, padding: 0 }}
-                ></Button>
-            </Stack>
-              <Typography fontSize="40px" fontWeight="semibold" sx={{ color: 'text.primary', maxWidth: '70%', lineHeight: 1, width: '100%' }}>
-                By developing from the idea up, we
-              </Typography>
-            </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: 4, flexWrap: 'wrap' }}>
-              <Typography fontSize="40px" fontWeight="semibold" sx={{ color: 'text.primary', maxWidth: '100%', lineHeight: 1, width: '100%' }}>
-                {"transform concepts into strong creative execution that's driven by both form and function."}
-              </Typography>
-            </Box>
-          </FadeIn>
-        </Stack>
+                    <Stack direction="row" alignItems="center" sx={{ width: '100%' }}>
+                      <Stack direction="row">
+                        <Typography 
+                          variant="h4"
+                          fontWeight="bold"
+                          sx={{
+                            fontSize: { xs: '1.5rem', sm: '2rem', md: '2.2rem' },
+                            letterSpacing: '0.5px',
+                            textTransform: 'uppercase',
+                            color: 'text.primary',
+                            flexGrow: 1
+                          }}>
+                          Partners
+                        </Typography>
+                          <Button
+                              variant="text"
+                              onClick={() => router.push('/partners')}
+                              endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
+                              sx={{ 
+                                margin: 0, 
+                                padding: 0,
+                                display: { xs: 'none', sm: 'flex' } 
+                              }}
+                          ></Button>
+                      </Stack>
+                    </Stack>
+                      <Typography 
+                        fontWeight="semibold" 
+                        sx={{ 
+                          color: 'text.primary', 
+                          lineHeight: 1,
+                          fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem', lg: '40px' },
+                          width: '100%',
+                        }}>
+                          By developing from the idea up, we
+                      </Typography>
+                </Box>
+                <Box sx={{ 
+                  display: 'flex', 
+                  flexDirection: 'row', 
+                  alignItems: 'flex-start', 
+                  gap: 4, 
+                  flexWrap: 'wrap' 
+                }}>
+                  <Typography 
+                    fontWeight="semibold" 
+                    sx={{ 
+                      color: 'text.primary', 
+                      lineHeight: 1,
+                      fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem', lg: '40px' },
+                      width: '100%' 
+                    }}>
+                      {"transform concepts into strong creative execution that's driven by both form and function."}
+                  </Typography>
+                </Box>
+              </FadeIn>
+          </Stack>
       </Grid>
-      <Grid item md={12} xs={12}>
+      <Grid md={12} xs={12}>
         <StaticGridView fetchList={fetchPartners} isSecondHorizontal={isSecondHorizontal} />
       </Grid>
     </Grid>
@@ -177,18 +209,39 @@ export const PartnerSectionNew = ({ isSecondHorizontal }) => {
 
 const StaticGridView = ({ fetchList, isSecondHorizontal }) => {
   return (
-    <Grid container spacing={0.7} sx={{ px: 2, py: 2 }}>
-      {cards.slice(0, 5).map((card) => (
-        <Grid item xs={12} sm={6} md={4} lg={2.4} key={card.id}>
-          <Stack spacing={0.7}>
-            <Card card={card} fetchList={fetchList} />
-            {isSecondHorizontal && (
-              <Card card={card} fetchList={fetchList} />
-            )}
-          </Stack>
-        </Grid>
-      ))}
-    </Grid>
+
+    <Box sx={{
+          overflowX: 'auto',
+          whiteSpace: 'nowrap',
+          px: 2,
+          py: 2,
+          '&::-webkit-scrollbar': { display: 'none' }
+        }}>
+          <Box sx={{ 
+            display: 'inline-flex', 
+            gap: { xs: 0.5, md: 0.7 },
+            width: 'auto',
+            minWidth: '100%',
+            alignItems: 'flex-start'
+          }}>
+             {cards.map((card) => (
+              <Box 
+                key={card.id}
+                sx={{ 
+                  display: 'inline-block',
+                  minWidth: { xs: '280px', sm: '320px', md: '360px', lg: '296px' },
+                  width: { xs: '280px', sm: '320px', md: '360px', lg: '296px' },
+                  flexShrink: 0,
+                }}
+              >
+                <Stack spacing={0.7}>
+                  <Card card={card} fetchList={fetchList} />
+                  {isSecondHorizontal && <Card card={card} fetchList={fetchList} />}
+                </Stack>
+              </Box>
+            ))}
+          </Box>
+        </Box>
   );
 };
 
@@ -200,8 +253,8 @@ const Card = ({ card, fetchList }) => {
         key={card.id}
         sx={{
           position: 'relative',
-          height: "440px",
-          width: '293px',
+          height: { xs: '300px', sm: '340px', md: '380px', lg: '440px' },
+          width: '100%',
           overflow: 'hidden',
           boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
           transition: 'transform 300ms ease',
@@ -276,7 +329,7 @@ const Card = ({ card, fetchList }) => {
             <Typography
               sx={{
                 color: 'white',
-                fontSize: '1rem',
+                fontSize: { xs: '0.875rem', md: '1rem' },
                 fontFamily: 'Crimson Text, serif',
                 fontWeight: 500,
                 textTransform: 'uppercase',
@@ -301,7 +354,7 @@ const Card = ({ card, fetchList }) => {
               <Typography
                 sx={{
                   color: 'rgba(255, 255, 255, 0.8)',
-                  fontSize: '0.9rem',
+                  fontSize: { xs: '0.675rem', md: '0.9rem' },
                   fontFamily: 'Crimson Text, serif',
                   lineHeight: 1.2,
                   marginRight: 'auto'
@@ -312,7 +365,7 @@ const Card = ({ card, fetchList }) => {
               <Typography
                 sx={{
                   color: 'rgba(255, 255, 255, 0.8)',
-                  fontSize: '0.9rem',
+                  fontSize: { xs: '0.675rem', md: '0.9rem' },
                   fontFamily: 'Crimson Text, serif',
                   lineHeight: 1.2,
                   marginRight: '10px'
@@ -323,7 +376,7 @@ const Card = ({ card, fetchList }) => {
               <Typography
                 sx={{
                   color: 'rgba(255, 255, 255, 0.8)',
-                  fontSize: '0.9rem',
+                  fontSize: { xs: '0.675rem', md: '0.9rem' },
                   fontFamily: 'Crimson Text, serif',
                   lineHeight: 1.2,
                 }}
@@ -336,7 +389,7 @@ const Card = ({ card, fetchList }) => {
               <Typography
                 sx={{
                   color: 'rgba(255, 255, 255, 0.8)',
-                  fontSize: '0.9rem',
+                  fontSize: { xs: '0.675rem', md: '0.9rem' },
                   fontFamily: 'Crimson Text, serif',
                   lineHeight: 1.2,
                   marginRight: 'auto'
@@ -347,7 +400,7 @@ const Card = ({ card, fetchList }) => {
               <Typography
                 sx={{
                   color: 'rgba(255, 255, 255, 0.8)',
-                  fontSize: '0.9rem',
+                  fontSize: { xs: '0.675rem', md: '0.9rem' },
                   fontFamily: 'Crimson Text, serif',
                   lineHeight: 1.2,
                   marginRight: '10px'
@@ -358,7 +411,7 @@ const Card = ({ card, fetchList }) => {
               <Typography
                 sx={{
                   color: 'rgba(255, 255, 255, 0.8)',
-                  fontSize: '0.9rem',
+                  fontSize: { xs: '0.675rem', md: '0.9rem' },
                   fontFamily: 'Crimson Text, serif',
                   lineHeight: 1.2,
                 }}
