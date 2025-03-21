@@ -3,7 +3,7 @@
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
-import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
+import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { Iconify } from '/src/components/iconify/iconify';
 import { dateFormatter } from '/src/utils/date-formatter';
 import { IconButton } from '@mui/material';
@@ -135,7 +135,7 @@ export const CampaignListView = () => {
     setRecords([defaultCampaignData, ...records]);
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (password) => {
     const idsToDelete = [];
     selectedRows.forEach((row) => {
       idsToDelete.push(row.id);
@@ -164,11 +164,7 @@ export const CampaignListView = () => {
           <Box>
             <RefreshPlugin onClick={fetchList} />
           </Box>
-          <DeleteConfirmationPopover
-            disabled={selectedRows.length === 0}
-            onDelete={handleDelete}
-            title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
-          />
+          <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}  onDelete={(password) => handleDelete(password)}  passwordInput disabled={selectedRows.length === 0} />
         </Box>
 
         <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>

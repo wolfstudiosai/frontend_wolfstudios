@@ -137,6 +137,15 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
               {(item.ProjectTitle || '').split(/\s+/).slice(0, 4).join(' ') + 
                    (item.ProjectTitle?.split(/\s+/)?.length > 4 ? '...' : '')}
           </Typography>
+            {/* Thin Line */}
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '0.8px',
+                  backgroundColor: '#ffff',
+                  margin: '4px 0',
+                  }}
+              />
           <Stack direction={'row'} spacing={1} justifyContent={'space-between'} alignItems={'center'} mt={1}>
             <Typography variant="body" color="var(--mui-palette-common-white)" sx={{ fontSize: '12px' }}>
               {item.state}

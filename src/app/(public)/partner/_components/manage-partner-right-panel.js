@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { formConstants } from '/src/app/constants/form-constants';
-import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
+import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import { Iconify } from '/src/components/iconify/iconify';
 import { Button, IconButton } from '@mui/material';
@@ -18,7 +18,7 @@ import { PartnerQuickView } from './partner-quickview';
 export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
   const isUpdate = data ? true : false;
   const { isLogin } = useAuth();
-
+  const [formData, setFormData] = useState(data); // formdata
   const [sidebarView, setSidebarView] = React.useState(view); //QUICK/ EDIT
   const [file, setFile] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
@@ -82,6 +82,14 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
     setFieldValue('profile_image', '');
     setFile(null);
   };
+  
+  const handleDataUpdate = async () => {
+    const response = await updatePartnerAsync(file, formData);
+    if (response.success) {
+      fetchList();
+      window.location.reload();
+    }
+  }
 
   // *****************Action Buttons*******************************
   const actionButtons = (
@@ -94,19 +102,19 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
             </IconButton>
           ) : (
             data !== null && (
-              <IconButton onClick={() => setSidebarView('QUICK')} title="Quick View">
-                <Iconify icon="lets-icons:view-light" />
-              </IconButton>
+              <Button size="small" variant="outlined" onClick={() => setSidebarView('QUICK')} title="Cancel">
+              Cancel
+            </Button>
             )
           )}
 
-          <DeleteConfirmationPopover title={`Want to delete ${data?.name}?`} onDelete={() => handleDelete()} />
-
           {sidebarView === 'EDIT' && (
-            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+            // <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleDataUpdate}>
               Save
             </Button>
           )}
+          <DeleteConfirmationPasswordPopover title={`Want to delete ${data?.name}?`}  onDelete={(password) => handleDelete(password)}  passwordInput disabled={!isUpdate || sidebarView === 'EDIT'} />
         </>
       )}
     </>
@@ -134,17 +142,18 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons} width={width}>
       {sidebarView === 'QUICK' ? (
-        <PartnerQuickView data={values} />
+        <PartnerQuickView data={values} isEdit={sidebarView}/>
       ) : (
-        <PartnerForm
-          data={values}
-          errors={errors}
-          onSubmit={handleSubmit}
-          onChange={handleChange}
-          onSetFile={setFile}
-          onDelete={handleDeleteThumbnail}
-          setFieldValue={setFieldValue}
-        />
+        // <PartnerForm
+        //   data={values}
+        //   errors={errors}
+        //   onSubmit={handleSubmit}
+        //   onChange={handleChange}
+        //   onSetFile={setFile}
+        //   onDelete={handleDeleteThumbnail}
+        //   setFieldValue={setFieldValue}
+        // />
+        <PartnerQuickView data={values} isEdit={sidebarView} onUpdate={setFormData}/>
       )}
     </DrawerContainer>
   );
