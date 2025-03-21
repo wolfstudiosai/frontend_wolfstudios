@@ -8,7 +8,7 @@ import { FilterButton } from '/src/components/core/filter-button';
 import { StatusFilterPopover } from '/src/components/core/filters/StatusFilterPopover';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { DataTable } from '/src/components/data-table/data-table';
-import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
+import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { Iconify } from '/src/components/iconify/iconify';
 import PageLoader from '/src/components/loaders/PageLoader';
 import { dayjs } from '/src/lib/dayjs';
@@ -56,7 +56,7 @@ export default function Page() {
       setLoading(false);
     }
   }
-  const handleDelete = async () => {
+  const handleDelete = async (password) => {
     const idsToDelete = [];
     selectedRows.forEach((row) => {
       idsToDelete.push(row.id);
@@ -223,11 +223,7 @@ export default function Page() {
                   }
                   rightItems={
                     <>
-                      <DeleteConfirmationPopover
-                        disabled={selectedRows.length === 0}
-                        onDelete={handleDelete}
-                        title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
-                      />
+                      <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}  onDelete={(password) => handleDelete(password)}  passwordInput disabled={selectedRows.length === 0} />
                     </>
                   }
                   onRowsPerPageChange={(pageNumber, rowsPerPage) =>

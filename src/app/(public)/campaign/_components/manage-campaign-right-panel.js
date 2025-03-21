@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { formConstants } from '/src/app/constants/form-constants';
-import { DeleteConfirmationPopover } from '/src/components/dialog/delete-confirmation-popover';
+import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import { Iconify } from '/src/components/iconify/iconify';
 import { Button, IconButton } from '@mui/material';
@@ -73,7 +73,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
     }
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (password) => {
     const response = await deleteCampaignAsync([data.id]);
     if (response.success) {
       // fetchList();
@@ -119,7 +119,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, width
             label="Featured"
           /> */}
 
-          <DeleteConfirmationPopover title={`Want to delete ${data?.name}?`} onDelete={() => handleDelete()} />
+          <DeleteConfirmationPasswordPopover title={`Want to delete ${data?.name}?`}  onDelete={(password) => handleDelete(password)}  passwordInput/>
 
           {sidebarView === 'EDIT' && (
             <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>

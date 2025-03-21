@@ -18,6 +18,48 @@ import { Iconify } from '/src/components/iconify/iconify';
 
 import { handleCopy } from '/src/utils/helper';
 
+// Add validation functions
+const isValidUrl = (url) => {
+  const pattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+  return pattern.test(url);
+};
+
+const isValidNumber = (value) => {
+  return !isNaN(value) && value !== '';
+};
+
+// Field configuration for validation
+const fieldConfig = {
+  content: {
+    InstagramLikes: 'number',
+    InstagramComments: 'number',
+    InstagramShares: 'number',
+    InstagramViews: 'number',
+    InstagramSocialSetsUsed: 'number',
+    RevoTwitter: 'number',
+    RevoTiktok: 'number',
+    RevoTiktokViews: 'number',
+    TiktokAccountUsed: 'number',
+    TiktokDummyAccountUsed: 'text',
+    YoutubeTAccountUsed: 'number',
+    YoutubeClubRevoTotalViews: 'number'
+  },
+  partner: {
+    PartnerInstargramLink: 'link',
+    PartnerTiktokLink: 'link',
+    PartnerTiktokComments: 'number',
+    PartnerTiktokLikes: 'number',
+    PartnerTiktokShares: 'number',
+    PartnerTiktokViews: 'number',
+    PartnerTiktokSaves: 'number',
+    PartnerYoutubeLink: 'link',
+    YoutubePartnerTotallikes: 'number',
+    YoutubePartnerTotalcomments: 'number',
+    YoutubePartnerTotalSaves: 'number',
+    YoutubePartnerTotalViews: 'number'
+  }
+};
+
 export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
   const [comments, setComments] = useState([
     {
@@ -102,7 +144,19 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
     setSelectedFiles((prevFiles) => prevFiles.filter((_, index) => index !== indexToRemove));
   };
 
-  const handleChange = (section, field, value) => {
+  const handleChange1 = (section, field, value) => {
+    // Validate before updating
+    const fieldType = fieldConfig[section][field];
+    let isValid = true;
+
+    if (fieldType === 'number') {
+      isValid = isValidNumber(value);
+    } else if (fieldType === 'link') {
+      isValid = value === '' || isValidUrl(value);
+    }
+
+    if (!isValid) return;
+
     let updatedData;
     if (section === 'content') {
       updatedData = { ...contentInfo, [field]: value };
@@ -120,6 +174,82 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
         [field]: value, // Only updates the changed field
       });
     }
+  };
+  const handleChange = (section, field, value) => {
+    // Always update the state, but track validity
+    const fieldType = fieldConfig[section][field];
+    let isValid = true;
+  
+    if (fieldType === 'number') {
+      isValid = value === '' || isValidNumber(value);
+    } else if (fieldType === 'link') {
+      isValid = value === '' || isValidUrl(value);
+    }
+  
+    // Update state regardless of validity
+    let updatedData;
+    if (section === 'content') {
+      updatedData = { ...contentInfo, [field]: value };
+      setContentInfo(updatedData);
+    } else {
+      updatedData = { ...partnerInfo, [field]: value };
+      setPartnerInfo(updatedData);
+    }
+  
+    // Send updated data to parent
+    if (onUpdate) {
+      onUpdate({
+        ...contentInfo,
+        ...partnerInfo,
+        [field]: value,
+      });
+    }
+  };
+
+  const renderField = (section, key) => {
+    const value = section === 'content' ? contentInfo[key] : partnerInfo[key];
+    const fieldType = fieldConfig[section][key];
+    const label = key.replace(/([A-Z])/g, ' $1').trim();
+
+    if (isEdit === 'EDIT') {
+      return (
+        <TextField
+          key={key}
+          fullWidth
+          variant="outlined"
+          size="small"
+          label={label}
+          value={value}
+          onChange={(e) => handleChange(section, key, e.target.value)}
+          sx={{ mb: 1 }}
+          type={fieldType === 'number' ? 'number' : fieldType === 'link' ? 'url' : 'text'}
+          inputProps={{
+            ...(fieldType === 'number' && { min: 0 }),
+            ...(fieldType === 'link' && { pattern: 'https?://.*' })
+          }}
+          error={
+            (fieldType === 'number' && !isValidNumber(value)) ||
+            (fieldType === 'link' && value !== '' && !isValidUrl(value))
+          }
+          helperText={
+            (fieldType === 'number' && !isValidNumber(value) && 'Must be a valid number') ||
+            (fieldType === 'link' && value !== '' && !isValidUrl(value) && 'Invalid URL format')
+          }
+        />
+      );
+    }
+
+    return (
+      <Typography key={key} variant="body2" sx={{ mb: 1 }}>
+        <strong>{label}:</strong> {
+          fieldType === 'number' && !isNaN(value) 
+            ? Number(value).toLocaleString() 
+            : fieldType === 'link' && value !== '' 
+              ? <a href={value} target="_blank" rel="noopener">{value}</a>
+              : value
+        }
+      </Typography>
+    );
   };
 
   return (
@@ -279,98 +409,12 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
               <Iconify icon="solar:book-bold" sx={{ color: 'text.secondary' }} />
             </IconButton>
           </Stack>
-          {/* <Stack direction="row" gap={1} sx={{ mt: 1 }}>
-            <Box sx={{ width: '50%' }}>
-              <SectionTitle title="Content Information" sx={{ px: 2, py: 1, borderRadius: 1, fontSize: '0.9rem' }} />
-              <Box sx={{ ml: 1, mt: 1 }}>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Instagram like: {data?.IGTotalLikes}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Instagram comment: {data?.IGTotalComments}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Instagram share: {data?.IGTotalShares}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Instagram view: {data?.IGTotalViews}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Instagram social sets used: {data?.IGSocialSetsUsed}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  REVO Twitter: {data?.REVOTwitter}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  REVO Tiktok: {data?.REVOTikTok}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  REVO Tiktok view: {data?.REVOTTViews}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Tiktok account used: {data?.TikTokAccountsused}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Tiktok dummy account used: {data?.TTDummyAccountsUsed?.at(0)}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Youtube account used: {data?.YTAccountsUsed}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Youtube view: {data?.YTClubREVOTotalViews}
-                </Typography>
-              </Box>
-            </Box>
-            <Box sx={{ width: '50%' }}>
-              <SectionTitle title="Partner Information" sx={{ px: 2, py: 1, borderRadius: 1, fontSize: '0.9rem' }} />
-              <Box sx={{ ml: 1, mt: 1 }}>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Instagram link: {data?.PartnerIGLink}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  TikTok link: {data?.PartnerTikTokLink}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  TikTok comment: {data?.PartnerTTComments}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  TikTok like: {data?.PartnerTTLikes}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  TikTok comments: {data?.PartnerTTComments}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  TikTok share: {data?.PartnerTTShares}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  TikTok view: {data?.PartnerTTViews}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  TikTok save: {data?.PartnerTTSaves}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Youtube link: {data?.PartnerYTLink}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Youtube like: {data?.YTPartnerTotallikes}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Youtube comment: {data?.YTPartnerTotalcomments}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Youtube save: {data?.YTPartnerTotalSaves}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.seconday', fontSize: '0.8rem' }}>
-                  Youtube view: {data?.YTPartnerTotalViews}
-                </Typography>
-              </Box>
-            </Box>
-          </Stack> */}
+          
           <Stack direction="row" gap={1} sx={{ mt: 1 }}>
           <Box sx={{ width: '50%' }}>
             <SectionTitle title="Content Information" sx={{ px: 2, py: 1, borderRadius: 1, fontSize: '0.9rem' }} />
             <Box sx={{ ml: 1, mt: 1 }}>
-              {Object.keys(contentInfo).map((key) => (
+              {/* {Object.keys(contentInfo).map((key) => (
                 isEdit === 'EDIT' ? (
                   <TextField
                     key={key}
@@ -387,13 +431,14 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
                     <strong>{key.replace(/([A-Z])/g, ' $1').trim()}:</strong> {contentInfo[key]}
                   </Typography>
                 )
-              ))}
+              ))} */}
+              {Object.keys(contentInfo).map((key) => renderField('content', key))}
             </Box>
           </Box>
           <Box sx={{ width: '50%' }}>
             <SectionTitle title="Partner Information" sx={{ px: 2, py: 1, borderRadius: 1, fontSize: '0.9rem' }} />
             <Box sx={{ ml: 1, mt: 1 }}>
-              {Object.keys(partnerInfo).map((key) => (
+              {/* {Object.keys(partnerInfo).map((key) => (
                 isEdit === 'EDIT' ? (
                   <TextField
                     key={key}
@@ -410,7 +455,8 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
                     <strong>{key.replace(/([A-Z])/g, ' $1').trim()}:</strong> {partnerInfo[key]}
                   </Typography>
                 )
-              ))}
+              ))} */}
+              {Object.keys(partnerInfo).map((key) => renderField('partner', key))}
             </Box>
           </Box>
           </Stack>

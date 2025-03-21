@@ -6,7 +6,7 @@ export const IconWithText = ({ icon, text, sx = {} }) => {
   return (
     <Stack direction="row" alignItems="center" gap={1} sx={{ ...sx }}>
       <Iconify icon={icon} />
-      <Typography>{text || '-'}</Typography>
+      <Typography>{text || '0'}</Typography>
     </Stack>
   );
 };
