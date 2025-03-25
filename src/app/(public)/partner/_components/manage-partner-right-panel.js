@@ -84,7 +84,9 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
   };
   
   const handleDataUpdate = async () => {
-    const response = await updatePartnerAsync(file, formData);
+    let currentID = data?.id;
+    const updatedFormData = { ...formData, id: currentID };
+    const response = await updatePartnerAsync(updatedFormData);
     if (response.success) {
       fetchList();
       window.location.reload();

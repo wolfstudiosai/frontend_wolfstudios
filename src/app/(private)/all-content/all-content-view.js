@@ -10,6 +10,7 @@ import { CircularProgress } from '@mui/material';
 import AllContentListView from './_component/all-content-list-view';
 import { ManageContentRightPanel } from './_component/manage-content-right-panel';
 import { getContentList } from './_lib/all-content.actions';
+import { defaultContent } from './_lib/all-content.types';
 
 export const AllContentView = () => {
   const observerRef = React.useRef(null);
@@ -18,6 +19,7 @@ export const AllContentView = () => {
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [data, setData] = React.useState([]);
+  const [selectedContent, setSelectedContent] = React.useState(null);
   const [filters, setFilters] = React.useState({
     COL: 4,
     TAG: [],
@@ -51,7 +53,15 @@ export const AllContentView = () => {
   }
 
   const handleFilterChange = (type, value) => {
+    if (type === 'ADD') {
+      setSelectedContent(value ? defaultContent : null);
+    }
     setFilters((prev) => ({ ...prev, [type]: value }));
+  };
+
+  const handleContentCreated = () => {
+    setFilters(prev => ({ ...prev, ADD: false }));
+    refreshListView();
   };
 
   const refreshListView = async () => {
@@ -100,6 +110,7 @@ export const AllContentView = () => {
         showFilters={false}
         showColSlider={false}
         totalRecords={totalRecords}
+        showAdd={true}
       />
       {filters.VIEW === 'grid' ? (
         <>
@@ -125,7 +136,8 @@ export const AllContentView = () => {
         // data={defaultCampaign}
         fetchList={refreshListView}
         open={filters.ADD}
-        onClose={() => setFilters((prev) => ({ ...prev, ADD: false }))}
+        onClose={handleContentCreated}
+        isAdd = {filters.ADD && !data?.id}
       />
     </PageContainer>
   );

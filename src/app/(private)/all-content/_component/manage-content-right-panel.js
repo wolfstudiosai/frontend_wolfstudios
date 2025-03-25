@@ -11,17 +11,29 @@ import { ContentForm } from './content-form';
 import { ContentQuickView } from './content-quick-view';
 import { defaultContent } from '../_lib/all-content.types';
 import { useFormik } from 'formik';
-import {  deleteCampaignAsync, updateCampaignAsync } from '../_lib/all-content.actions';
+import { updateContentAsync, deleteContentAsync,createContentAsync  } from '../_lib/all-content.actions';
 
-export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
+export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width, view, isAdd }) => {
   const isUpdate = data?.id ? true : false;
   const router = useRouter();
   const { isLogin } = useAuth();
-  const [sidebarView, setSidebarView] = React.useState(view); //QUICK/ EDIT
+  const [sidebarView, setSidebarView] = React.useState(view); // QUICK // EDIT
   const [file, setFile] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [formData, setFormData] = useState(data); // formdata
-
+  
+  React.useEffect(() => {
+    if (isAdd) {
+      // Reset to default content when adding new
+      // setValues(defaultContent);
+      setSidebarView('EDIT');
+    } else if (data?.id) {
+      // Load existing data when available
+      // setValues(data);
+      setSidebarView('QUICK');
+    }
+  }, [isAdd, data]);
+  
     const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
       useFormik({
         initialValues: defaultContent,
@@ -39,7 +51,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
         onSubmit: async (values) => {
           setLoading(true);
           try {
-            const res = isUpdate ? await updatePartnerAsync(file, values) : await createPartnerAsync(file, values);
+            const res = isUpdate ? await updateContentAsync(file, values) : await createContentAsync(file, values);
             if (res.success) {
               onClose?.();
               fetchList();
@@ -55,7 +67,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
       });
 
   const handleDelete = async (password) => {
-    const response = await deleteCampaignAsync([data.id]);
+    const response = await deleteContentAsync([data.id]);
     if (response.success) {
       fetchList();
       window.location.reload();
@@ -63,9 +75,10 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
   };
 
   const handleDataUpdate = async () => {
-    const response = await updateCampaignAsync(file, formData);
+    let currentID = data?.id;
+    const updatedFormData = { ...formData, id: currentID };
+    const response = await updateContentAsync(updatedFormData, file);
     if (response.success) {
-      fetchList();
       window.location.reload();
     }
   }
@@ -92,7 +105,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
           {sidebarView === 'EDIT' && (
             // <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
             <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleDataUpdate}>
-              Save
+              {isAdd ? 'Create' : 'Save'}
             </Button>
           )}
           {/* {isUpdate && (
@@ -144,7 +157,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-      {sidebarView === 'QUICK' ? (
+      {/* {sidebarView === 'QUICK' ? (
         <ContentQuickView data={data} isEdit={sidebarView} />
       ) : (
         // <ContentForm
@@ -156,6 +169,30 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
         // />
         <ContentQuickView data={data} isEdit={sidebarView} onUpdate={setFormData} />
       )}
-    </DrawerContainer>
+      { isAdd &&
+        <ContentForm
+          data={values}
+          errors={errors}
+          setFieldValue={setFieldValue}
+          onChange={handleChange}
+          onSetFile={setFile}
+        />
+      } */}
+      {isAdd ? (
+      // Show ContentForm for add new content
+      <ContentForm
+        data={values}
+        errors={errors}
+        setFieldValue={setFieldValue}
+        onChange={handleChange}
+        onSetFile={setFile}
+      />
+    ) : sidebarView === 'QUICK' ? (
+      // Show ContentQuickView for viewing
+      <ContentQuickView data={data} isEdit={false} />
+    ) : (
+      <ContentQuickView data={data} isEdit={sidebarView} onUpdate={setFormData} />
+    )}
+      </DrawerContainer>
   );
 };
