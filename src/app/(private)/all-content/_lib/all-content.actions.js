@@ -15,7 +15,8 @@ export const getContentList = async (queryParams) => {
 };
 export const getContent = async (id) => {
   try {
-    const res = await api.get(`/record?id=${id}`);
+    // const res = await api.get(`/record?id=${id}`);
+    const res = await api.get(`/content-HQ/${id}`);
     if (!res.data.success) return;
     return { success: true, data: res.data.data[0] };
   } catch (error) {
@@ -27,7 +28,8 @@ export const getContent = async (id) => {
 export const createContentAsync = async (data) => {
   try {
     const { ...rest } = data;
-    let res = await api.post(`/record/add-record`, rest);
+    // let res = await api.post(`/record/add-record`, rest);
+    let res = await api.post(`/content-HQ`, rest);
 
     if (!res.data.success) return;
     toast.success(res.data.message);
@@ -38,10 +40,28 @@ export const createContentAsync = async (data) => {
   }
 };
 
-export const updateContentAsync = async (data) => {
+export const updateContentAsync = async (data, file = null) => {
   try {
-    const payload = { ...data };
-    const res = await api.patch(`/record/update-record/${data.id}`, payload);
+    debugger
+    if (file) {
+      const uploadResponse = await uploadFileAsync(file);
+      profile_image = uploadResponse[0].path;
+    }
+    const payload = {...data };
+    // const res = await api.patch(`/record/update-record/${data.id}`, payload);
+    const res = await api.patch(`/content-HQ/${data.id}`, payload);
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
+export const deleteContentAsync = async (ids) => {
+  try {
+    const res = await api.delete(`/record/delete-records`, {data: { ids: ids }});
+    // const res1 = await api.delete(`/content-HQ/${ids}`, {data: { ids: ids }}); //need to update from backend which can take multiple ids
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
@@ -50,11 +70,12 @@ export const updateContentAsync = async (data) => {
   }
 };
 
-export const deleteContentAsync = async (ids) => {
+export const createCommentAsync = async (contentID , data) => {
   try {
-    const res = await api.delete(`/record/delete-records`, {
-      data: { ids: ids },
-    });
+    const payload = {
+      comment: data.comment
+    };
+    const res = await api.post(`/content-HQ/${contentID}/comments`, payload);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {

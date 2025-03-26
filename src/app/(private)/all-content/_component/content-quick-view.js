@@ -17,6 +17,7 @@ import { SectionTitle } from '/src/components/core/section-title';
 import { Iconify } from '/src/components/iconify/iconify';
 
 import { handleCopy } from '/src/utils/helper';
+import { createCommentAsync } from '../_lib/all-content.actions';
 
 // Add validation functions
 const isValidUrl = (url) => {
@@ -64,23 +65,35 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
   const [comments, setComments] = useState([
     {
       id: 1,
-      name: 'Combina key',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, ipsa repellat quibusdam natus culpa neque ducimus dolores quos corrupti tempore. Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      time: '2m ago',
+      user: {
+        firstName: 'Combina',
+        lastName: 'Key',
+        avatar: '', // Add avatar URL if available
+      },
+      comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit...',
+      createdAt: new Date(Date.now() - 120000), // 2 minutes ago
       files: [],
     },
     {
       id: 2,
-      name: 'Fazly Alahi Nahid',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, ipsa repellat quibusdam natus culpa neque ducimus dolores quos corrupti tempore. Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      time: '1m ago',
+      user: {
+        firstName: 'Fazly',
+        lastName: 'Alahi Nahid',
+        avatar: '',
+      },
+      comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit...',
+      createdAt: new Date(Date.now() - 60000), // 1 minute ago
       files: [],
     },
     {
       id: 3,
-      name: 'Riayazul Haque',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, ipsa repellat quibusdam natus culpa neque ducimus dolores quos corrupti tempore. Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      time: 'just now',
+      user: {
+        firstName: 'Riayazul',
+        lastName: 'Haque',
+        avatar: '',
+      },
+      comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit...',
+      createdAt: new Date(),
       files: [],
     },
   ]);
@@ -117,19 +130,20 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
     YoutubePartnerTotalViews: data?.YTPartnerTotalViews,
   });
 
-
-  const handleAddComment = () => {
+  const handleAddComment = async () => {
     if (!newComment.trim() && !selectedFiles.length) return;
-
-    const newCommentData = {
-      id: comments.length + 1,
-      name: 'Combina Key',
-      text: newComment,
-      time: 'just now',
-      files: selectedFiles.map((file) => URL.createObjectURL(file)),
-    };
-
-    setComments([...comments, newCommentData]);
+    try{
+      let contendID = data?.id;
+      const response = await createCommentAsync(contendID,{
+        comment: newComment,
+        files: selectedFiles // Add this if API accepts files
+      });
+        if (response.success) {
+          window.location.reload();
+      }
+    }catch (error) {
+      console.error('Error:', error);
+    }
     setNewComment('');
     setSelectedFiles([]);
   };
@@ -263,6 +277,7 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
             sx={{ height: '500px', objectFit: 'contain', border: '1px solid', borderColor: 'divider' }}
           />
           <Stack sx={{ mb: 4, pl: 1 }}>
+             {/* {comments.length > 0 && ( */}
             {data?.ContentHQComments?.length > 0 && (
               <Timeline
                 sx={{
@@ -274,6 +289,7 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
                   py: 0,
                 }}
               >
+                 {/* {comments.map((comment, index) => ( */}
                 {data?.ContentHQComments?.map((comment, index) => (
                   <TimelineItem key={index}>
                     <TimelineSeparator>

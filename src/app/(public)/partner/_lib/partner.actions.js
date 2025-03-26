@@ -33,7 +33,7 @@ export const createPartnerAsync = async (file, data) => {
       const uploadResponse = await uploadFileAsync(file);
       profile_image = uploadResponse[0].path;
     }
-    const partnerResponse = await api.post('/partner/add', {
+    const partnerResponse = await api.post('/partner-HQ', {
       ...rest,
       profile_image,
     });
@@ -47,7 +47,7 @@ export const createPartnerAsync = async (file, data) => {
   }
 };
 
-export const updatePartnerAsync = async (file, data) => {
+export const updatePartnerAsyncOld = async (file, data) => {
   try {
     const { id, user_id, created_by, created_at, updated_at, ...rest } = data;
     let profile_image = '';
@@ -56,6 +56,27 @@ export const updatePartnerAsync = async (file, data) => {
       profile_image = uploadResponse[0].path;
     }
     const res = await api.patch(`/partner/update/${id}`, {
+      ...rest,
+      profile_image: profile_image ? profile_image : data.thumbnail,
+    });
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
+export const updatePartnerAsync = async (data, file = null) => {
+  debugger;
+  try {
+    const { id, user_id, created_by, created_at, updated_at, ...rest } = data;
+    let profile_image = '';
+    if (file) {
+      const uploadResponse = await uploadFileAsync(file);
+      profile_image = uploadResponse[0].path;
+    }
+    const res = await api.patch(`/partner-HQ/${id}`, {
       ...rest,
       profile_image: profile_image ? profile_image : data.thumbnail,
     });
