@@ -45,7 +45,7 @@ export const AllContentView = () => {
         setPagination((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }));
       }
     } catch (error) {
-      console.error('Error fetching campaigns:', error);
+      console.error('Error fetching contents:', error);
     } finally {
       setIsFetching(false);
       setLoading(false);
@@ -65,7 +65,7 @@ export const AllContentView = () => {
   };
 
   const refreshListView = async () => {
-    const response = await getCampaignGroupListAsync({
+    const response = await getContentList({
       page: 1,
       rowsPerPage: 10,
     });
@@ -133,7 +133,7 @@ export const AllContentView = () => {
         view="QUICK"
         width="70%"
         showAdd={false}
-        // data={defaultCampaign}
+        data={defaultContent}
         fetchList={refreshListView}
         open={filters.ADD}
         onClose={handleContentCreated}

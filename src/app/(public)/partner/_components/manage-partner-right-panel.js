@@ -15,7 +15,7 @@ import { defaultPartner } from '../_lib/partner.types';
 import { PartnerForm } from './partner-form';
 import { PartnerQuickView } from './partner-quickview';
 
-export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
+export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width, view, isAdd }) => {
   const isUpdate = data ? true : false;
   const { isLogin } = useAuth();
   const [formData, setFormData] = useState(data); // formdata
@@ -98,7 +98,7 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
     <>
       {isLogin && (
         <>
-          {sidebarView === 'QUICK' ? (
+          {sidebarView === 'QUICK' && !isAdd ? (
             <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
               <Iconify icon="mynaui:edit-one" />
             </IconButton>
@@ -110,11 +110,14 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
             )
           )}
 
-          {sidebarView === 'EDIT' && (
+          {sidebarView === 'EDIT' && !isAdd && (
             // <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
             <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleDataUpdate}>
               Save
             </Button>
+          )}
+          {isAdd && (
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>Create</Button>
           )}
           <DeleteConfirmationPasswordPopover title={`Want to delete ${data?.name}?`}  onDelete={(password) => handleDelete(password)}  passwordInput disabled={!isUpdate || sidebarView === 'EDIT'} />
         </>
@@ -124,6 +127,9 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
   // *****************Use Effects*******************************
 
   React.useEffect(() => {
+    if(isAdd) {
+      setSidebarView('EDIT');
+    }
     return () => {
       setValues(defaultPartner);
     };
@@ -132,6 +138,7 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
   React.useEffect(() => {
     if (data) {
       setValues(data);
+      setSidebarView('QUICK');
     }
   }, [data]);
 
@@ -143,7 +150,7 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons} width={width}>
-      {sidebarView === 'QUICK' ? (
+      {/* {sidebarView === 'QUICK' ? (
         <PartnerQuickView data={values} isEdit={sidebarView}/>
       ) : (
         // <PartnerForm
@@ -156,7 +163,22 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
         //   setFieldValue={setFieldValue}
         // />
         <PartnerQuickView data={values} isEdit={sidebarView} onUpdate={setFormData}/>
-      )}
+      )} */}
+      {isAdd ? (
+        <PartnerForm
+          data={values}
+          errors={errors}
+          onSubmit={handleSubmit}
+          onChange={handleChange}
+          onSetFile={setFile}
+          onDelete={handleDeleteThumbnail}
+          setFieldValue={setFieldValue}
+        />
+        ) : sidebarView === 'QUICK' ? (
+          <PartnerQuickView data={values} isEdit={sidebarView}/>
+        ) : (
+          <PartnerQuickView data={values} isEdit={sidebarView} onUpdate={setFormData}/>
+        )}
     </DrawerContainer>
   );
 };

@@ -33,7 +33,7 @@ export const createPartnerAsync = async (file, data) => {
       const uploadResponse = await uploadFileAsync(file);
       profile_image = uploadResponse[0].path;
     }
-    const partnerResponse = await api.post('/partner/add', {
+    const partnerResponse = await api.post('/partner-HQ', {
       ...rest,
       profile_image,
     });

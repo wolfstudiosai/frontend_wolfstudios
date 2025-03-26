@@ -11,6 +11,7 @@ import { ContentForm } from './content-form';
 import { ContentQuickView } from './content-quick-view';
 import { defaultContent } from '../_lib/all-content.types';
 import { useFormik } from 'formik';
+import { formConstants } from '/src/app/constants/form-constants';
 import { updateContentAsync, deleteContentAsync,createContentAsync  } from '../_lib/all-content.actions';
 
 export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width, view, isAdd }) => {
@@ -20,7 +21,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
   const [sidebarView, setSidebarView] = React.useState(view); // QUICK // EDIT
   const [file, setFile] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
-  const [formData, setFormData] = useState(data); // formdata
+  const [formData, setFormData] = useState(data); // formdata  
   
   React.useEffect(() => {
     if (isAdd) {
@@ -102,74 +103,24 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
               </IconButton>
             )
           )}
-          {sidebarView === 'EDIT' && (
-            // <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+          {sidebarView === 'EDIT' && !isAdd && (
             <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleDataUpdate}>
-              {isAdd ? 'Create' : 'Save'}
+              Save
             </Button>
           )}
-          {/* {isUpdate && (
-            <IconButton
-              onClick={() => router.push(paths.public.campaign_analytics + '/' + data.slug)}
-              title="Quick View"
-            >
-              <Iconify icon="hugeicons:analytics-01" />
-            </IconButton>
-          )} */}
-
-          {/* <FormControlLabel
-            control={
-              <Switch
-                size="small"
-                checked={values?.featured}
-                onChange={() => handleFeatured(!values?.featured)}
-                color="primary"
-                sx={{ ml: 0.4 }}
-              />
-            }
-            label="Featured"
-          /> */}
+          {isAdd && (
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>Create</Button>
+          )}
           <DeleteConfirmationPasswordPopover title={`Want to delete ${data?.name}?`}  onDelete={(password) => handleDelete(password)}  passwordInput disabled={!isUpdate || sidebarView === 'EDIT'} />
         </>
       )}
     </>
   );
 
-  // *****************Use Effects*******************************
-
-  // React.useEffect(() => {
-  //   return () => {
-  //     setValues(defaultCampaign);
-  //   };
-  // }, []);
-
-  // React.useEffect(() => {
-  //   if (data) {
-  //     setValues(data);
-  //   }
-  // }, [data]);
-
-  // React.useEffect(() => {
-  //   if (isUpdate) {
-  //     getSingleData();
-  //   }
-  // }, []);
-
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-      {/* {sidebarView === 'QUICK' ? (
-        <ContentQuickView data={data} isEdit={sidebarView} />
-      ) : (
-        // <ContentForm
-        //   data={values}
-        //   errors={errors}
-        //   setFieldValue={setFieldValue}
-        //   onChange={handleChange}
-        //   onSetFile={setFile}
-        // />
-        <ContentQuickView data={data} isEdit={sidebarView} onUpdate={setFormData} />
-      )}
-      { isAdd &&
+        {isAdd ? (
+        // Show ContentForm for add new content
         <ContentForm
           data={values}
           errors={errors}
@@ -177,22 +128,11 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
           onChange={handleChange}
           onSetFile={setFile}
         />
-      } */}
-      {isAdd ? (
-      // Show ContentForm for add new content
-      <ContentForm
-        data={values}
-        errors={errors}
-        setFieldValue={setFieldValue}
-        onChange={handleChange}
-        onSetFile={setFile}
-      />
-    ) : sidebarView === 'QUICK' ? (
-      // Show ContentQuickView for viewing
-      <ContentQuickView data={data} isEdit={false} />
-    ) : (
-      <ContentQuickView data={data} isEdit={sidebarView} onUpdate={setFormData} />
-    )}
-      </DrawerContainer>
+      ) : sidebarView === 'QUICK' ? (
+        <ContentQuickView data={data} isEdit={false} />
+      ) : (
+        <ContentQuickView data={data} isEdit={sidebarView} onUpdate={setFormData} />
+      )}
+    </DrawerContainer>
   );
 };
