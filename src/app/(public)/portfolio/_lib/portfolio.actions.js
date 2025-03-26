@@ -92,3 +92,14 @@ export const deleteFileAsync = async (paths) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
+
+export const getPortfolioCategoryListAsync = async (queryParams) => {
+  try {
+    const searchQuery = getSearchQuery(queryParams);
+    const res = await api.get(`/portfolio-categories${searchQuery}`);
+    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
+  } catch (error) {
+    toast.error(error.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};

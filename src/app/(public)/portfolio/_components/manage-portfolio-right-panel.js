@@ -32,8 +32,8 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
       initialValues: defaultPortfolio,
       validate: (values) => {
         const errors = {};
-        if (!values.project_title) {
-          errors.project_title = formConstants.required;
+        if (!values.projectTitle) {
+          errors.projectTitle = formConstants.required;
         }
 
         return errors;
@@ -119,7 +119,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
             label="Featured"
           />
 
-          <DeleteConfirmationPasswordPopover title={`Want to delete ${data?.project_title}?`}  onDelete={(password) => handleDelete(password)}  passwordInput />
+          <DeleteConfirmationPasswordPopover title={`Want to delete ${data?.project_title}?`} onDelete={(password) => handleDelete(password)} passwordInput />
 
           {sidebarView === 'EDIT' && (
             <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
