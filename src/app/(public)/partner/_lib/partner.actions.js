@@ -29,15 +29,14 @@ export const createPartnerAsync = async (file, data) => {
   try {
     const { id, created_by, user_id, updated_at, ...rest } = data;
     let profile_image = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      profile_image = uploadResponse[0].path;
-    }
     const partnerResponse = await api.post('/partner-HQ', {
       ...rest,
       profile_image,
     });
-
+    if (file) {
+      const uploadResponse = await uploadFileAsync(file);
+      profile_image = uploadResponse[0].path;
+    }
     toast.success(partnerResponse.data.message);
     return { success: true, data: partnerResponse.data.data };
   } catch (error) {

@@ -26,11 +26,11 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
   React.useEffect(() => {
     if (isAdd) {
       // Reset to default content when adding new
-      // setValues(defaultContent);
+      setValues(defaultContent);
       setSidebarView('EDIT');
     } else if (data?.id) {
       // Load existing data when available
-      // setValues(data);
+      setValues(data);
       setSidebarView('QUICK');
     }
   }, [isAdd, data]);
@@ -40,13 +40,15 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
         initialValues: defaultContent,
         validate: (values) => {
           const errors = {};
-          if (!values.name) {
-            errors.name = formConstants.required;
+          if (!values.title) {
+            errors.title = formConstants.required;
           }
-          if (!values.email) {
-            errors.email = formConstants.required;
-          }
-  
+          // if (!values.campaign) {
+          //   errors.campaign = formConstants.required;
+          // }
+          // if (!values.product) {
+          //   errors.product = formConstants.required;
+          // }
           return errors;
         },
         onSubmit: async (values) => {
@@ -76,11 +78,19 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
   };
 
   const handleDataUpdate = async () => {
-    let currentID = data?.id;
-    const updatedFormData = { ...formData, id: currentID };
-    const response = await updateContentAsync(updatedFormData, file);
-    if (response.success) {
-      window.location.reload();
+    try{
+      setLoading(true);
+      let currentID = data?.id;
+      const updatedFormData = { ...formData, id: currentID };
+      const response = await updateContentAsync(updatedFormData, file);
+      if (response.success) {
+        window.location.reload();
+      }
+    }catch(error){
+      setLoading(false);
+      console.error('Error:', error);
+    }finally{
+      setLoading(false);
     }
   }
 
@@ -124,9 +134,9 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
         <ContentForm
           data={values}
           errors={errors}
-          setFieldValue={setFieldValue}
+          onSubmit={handleSubmit}
           onChange={handleChange}
-          onSetFile={setFile}
+          setFieldValue={setFieldValue}
         />
       ) : sidebarView === 'QUICK' ? (
         <ContentQuickView data={data} isEdit={false} />
