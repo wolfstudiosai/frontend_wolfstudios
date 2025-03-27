@@ -19,12 +19,14 @@ export const PartnerView = () => {
   const [isFetching, setIsFetching] = React.useState(false);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
   const [totalRecords, setTotalRecords] = React.useState(0);
+  const [selectedContent, setSelectedContent] = React.useState(null);
   const [filters, setFilters] = React.useState({
     COL: 3,
     TAG: [],
     FILTER: [],
     SORTING: [],
     VIEW: 'grid',
+    ADD: false,
   });
 
   const fetchList = React.useCallback(async () => {
@@ -51,7 +53,15 @@ export const PartnerView = () => {
   }, [isFetching, pagination]);
 
   const handleFilterChange = (type, value) => {
-    setFilters((prev) => ({ ...prev, [type]: value }));
+    if (type === 'ADD') {
+          setSelectedContent(value ? defaultPartner : null);
+        }
+        setFilters((prev) => ({ ...prev, [type]: value }));
+  };
+
+  const handleContentCreated = () => {
+    setFilters(prev => ({ ...prev, ADD: false }));
+    refreshListView();
   };
 
   const refreshListView = async () => {
@@ -114,11 +124,12 @@ export const PartnerView = () => {
 
         <ManagePartnerRightPanel
           view="EDIT"
-          width="70%"
+          width="60vw"
           data={null}
           fetchList={refreshListView}
-          open={filters.VIEW === 'add'}
-          onClose={() => setFilters((prev) => ({ ...prev, VIEW: 'grid' }))}
+          open={filters.ADD}
+          onClose={handleContentCreated}
+          isAdd = {filters.ADD && !data?.id}
         />
       </PageLoader>
     </PageContainer>
