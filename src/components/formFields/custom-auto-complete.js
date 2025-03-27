@@ -16,7 +16,7 @@ export const CustomAutoComplete = ({ value, label, size, multiple, placeholder, 
                         <Chip
                             size='small'
                             color='inherit'
-                            key={option.id}
+                            key={index}
                             label={option.label}
                             {...getTagProps({ index })}
                             sx={{

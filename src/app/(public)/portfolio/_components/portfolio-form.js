@@ -200,12 +200,13 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
               label={'Date'}
               error={errors.date}
               value={values.date}
+              format="MMMM YYYY"
               onChange={(value) => setFieldValue('date', value)}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <FormControl fullWidth error={Boolean(errors.thumbnail)}>
-              <FormLabel sx={{ mb: 2.8 }}>Thumbnail</FormLabel>
+              <FormLabel sx={{ mb: 1 }}>Thumbnail</FormLabel>
               <ImageUploader
                 value={values.thumbnail}
                 onFileSelect={(file) => onSetFile(file)}

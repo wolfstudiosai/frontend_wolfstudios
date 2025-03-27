@@ -8,7 +8,7 @@ import {
   createPortfolioAsync,
   deletePortfolioAsync,
   getPortfolioAsync,
-  updatePortfolioAsync,
+  updatePortfolioAsync
 } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
 import { PortfolioForm } from './portfolio-form';
