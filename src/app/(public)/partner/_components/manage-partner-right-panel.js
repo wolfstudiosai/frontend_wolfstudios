@@ -150,20 +150,6 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons} width={width}>
-      {/* {sidebarView === 'QUICK' ? (
-        <PartnerQuickView data={values} isEdit={sidebarView}/>
-      ) : (
-        // <PartnerForm
-        //   data={values}
-        //   errors={errors}
-        //   onSubmit={handleSubmit}
-        //   onChange={handleChange}
-        //   onSetFile={setFile}
-        //   onDelete={handleDeleteThumbnail}
-        //   setFieldValue={setFieldValue}
-        // />
-        <PartnerQuickView data={values} isEdit={sidebarView} onUpdate={setFormData}/>
-      )} */}
       {isAdd ? (
         <PartnerForm
           data={values}
