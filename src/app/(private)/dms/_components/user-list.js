@@ -5,7 +5,7 @@ import { StyledBadge } from "./avatar-badge";
 import { Iconify } from "/src/components/iconify/iconify";
 import { ChatContext } from "/src/contexts/chat";
 
-export const UserList = () => {
+export const UserList = ({sx}) => {
     const { userData, handleActiveConversation, handleSearchUser, handleActiveUser } = useContext(ChatContext);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -17,7 +17,7 @@ export const UserList = () => {
     }
 
     return (
-        <Stack direction='column' gap={1} sx={{ width: '30%', height: '100%', p: 2, borderRight: '1px solid', borderColor: 'divider' }}>
+        <Stack direction='column' gap={1} sx={{ width: '30%', height: '100%', p: 2, borderRight: '1px solid', borderColor: 'divider',...sx }}>
             <Stack direction='row' alignItems='center' justifyContent='space-between' gap={1}>
                 <Typography variant="h5">Direct messages</Typography>
                 <FormControlLabel control={<Switch onChange={(e) => handleActiveUser(e.target.checked)} />} label="Online" labelPlacement="start" />
@@ -38,7 +38,7 @@ export const UserList = () => {
                 },
             }}>
                 {
-                    userData.map((user, index) => (
+                    userData?.map((user, index) => (
                         <Stack key={index} onClick={() => handleActiveConversation(user.id)} direction='row' gap={1} sx={{ cursor: 'pointer', py: 0.5, position: 'relative', '&:hover .hover-action': { opacity: 1 } }}>
                             <Box>
                                 <StyledBadge

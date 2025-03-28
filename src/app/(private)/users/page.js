@@ -105,7 +105,7 @@ export default function Page({ searchParams }) {
               sx={{ whiteSpace: 'nowrap' }}
               variant="subtitle2"
             >
-              {row.first_name} {row.last_name}
+              {row.firstName} {row.lastName}
             </Link>
             <Typography color="text.secondary" variant="body2">
               {row.email}
@@ -118,7 +118,7 @@ export default function Page({ searchParams }) {
     {
       formatter: (row) => (
         <Typography color="text.secondary" variant="body2">
-          {row.contact_number}
+          {row.contactNumber}
         </Typography>
       ),
       name: 'Phone',

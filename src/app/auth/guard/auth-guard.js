@@ -55,7 +55,7 @@ export function AuthGuard({ children }) {
 const isUserAuthorizedToAccessThisRoute = (role, pathname) => {
   //check if current path is in private routes
   const isPathInPrivateRoutes = privateRoutes.some((section) =>
-    section.items.some((item) => {
+    section.items?.some((item) => {
       if (item.items) {
         return item.items.some((subItem) => subItem.href === pathname);
       }

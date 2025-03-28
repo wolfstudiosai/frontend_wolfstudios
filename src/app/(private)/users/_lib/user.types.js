@@ -1,9 +1,9 @@
 
 export const defaultUser = {
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     email: "",
-    contact_number: "",
+    contactNumber: "",
     role: "USER",
     password: "",
     confirm_password: "", 

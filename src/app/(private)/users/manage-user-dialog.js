@@ -10,7 +10,7 @@ import { createUser, updateUserData } from "./_lib/user.actions";
 const getValidationSchema = (isUpdated) => {
 
     return Yup.object().shape({
-        first_name: Yup.string().required('First name is required'),
+        firstName: Yup.string().required('First name is required'),
         email: Yup.string().email('Invalid email').required('Email is required'),
         role: Yup.string().required('Role is required'),
         password: isUpdated
@@ -45,13 +45,14 @@ export const ManageUserDialog = (props) => {
         initialValues: data,
         validationSchema: getValidationSchema(isUpdated),
         onSubmit: async (values) => {
+            debugger
             setLoading(true)
             const res = isUpdated ? await updateUserData({
                 id: data.id,
                 role: values.role,
                 is_deleted: false,
                 status: values.status,
-                contact_number: values.contact_number
+                contactNumber: values.contactNumber
             }) : await createUser(values);
             if (res.success) {
                 onConfirm()
@@ -69,12 +70,12 @@ export const ManageUserDialog = (props) => {
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
                     <Grid size={6}>
-                        <FormControl fullWidth error={Boolean(errors.first_name)}>
+                        <FormControl fullWidth error={Boolean(errors.firstName)}>
                             <InputLabel>First Name</InputLabel>
 
                             <OutlinedInput
-                                name="first_name"
-                                value={values.first_name}
+                                name="firstName"
+                                value={values.firstName}
                                 onChange={handleChange}
                                 disabled={isUpdated}
                             />
@@ -82,12 +83,12 @@ export const ManageUserDialog = (props) => {
                         </FormControl>
                     </Grid>
                     <Grid size={6}>
-                        <FormControl fullWidth error={Boolean(errors.last_name)}>
+                        <FormControl fullWidth error={Boolean(errors.lastName)}>
                             <InputLabel>Last Name</InputLabel>
 
                             <OutlinedInput
-                                name="last_name"
-                                value={values.last_name}
+                                name="lastName"
+                                value={values.lastName}
                                 onChange={handleChange}
                                 disabled={isUpdated}
                             />
@@ -109,12 +110,12 @@ export const ManageUserDialog = (props) => {
                     </Grid>
 
                     <Grid size={isUpdated ? 12 : 6}>
-                        <FormControl fullWidth error={Boolean(errors.contact_number)}>
+                        <FormControl fullWidth error={Boolean(errors.contactNumber)}>
                             <InputLabel>Contact No.</InputLabel>
 
                             <OutlinedInput
-                                name="contact_number"
-                                value={values.contact_number}
+                                name="contactNumber"
+                                value={values.contactNumber}
                                 onChange={handleChange}
                             />
 
@@ -192,7 +193,7 @@ export const ManageUserDialog = (props) => {
                             type={loading ? "button" : "submit"}
                             startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
                         >
-                            Create
+                            {isUpdated ? "Update" : "Create"}
                         </Button>
                     </Stack>
                 </Grid>

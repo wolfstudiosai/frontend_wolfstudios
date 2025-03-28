@@ -118,12 +118,16 @@ export const PartnerSectionNew = ({ isSecondHorizontal }) => {
   const router = useRouter();
 
   const fetchPartners = async () => {
-    const response = await getPartnerListAsync({
-      page: 1,
-      rowsPerPage: 20,
-    });
-    if (response?.success) {
-      setPartners((prev) => [...prev, ...response.data]);
+    try{
+      const response = await getPartnerListAsync({
+        page: 1,
+        rowsPerPage: 20,
+      });
+      if (response?.success) {
+        setPartners((prev) => [...prev, ...response.data]);
+      }
+    }catch(error){
+      console.error('Error:', error);
     }
   }
 
@@ -201,15 +205,14 @@ export const PartnerSectionNew = ({ isSecondHorizontal }) => {
           </Stack>
       </Grid>
       <Grid md={12} xs={12}>
-        <StaticGridView fetchList={fetchPartners} isSecondHorizontal={isSecondHorizontal} />
+        <StaticGridView partners={partners} isSecondHorizontal={isSecondHorizontal} />
       </Grid>
     </Grid>
   );
 };
 
-const StaticGridView = ({ fetchList, isSecondHorizontal }) => {
+const StaticGridView = ({ partners, isSecondHorizontal }) => {
   return (
-
     <Box sx={{
           overflowX: 'auto',
           whiteSpace: 'nowrap',
@@ -224,9 +227,9 @@ const StaticGridView = ({ fetchList, isSecondHorizontal }) => {
             minWidth: '100%',
             alignItems: 'flex-start'
           }}>
-             {cards.map((card) => (
+             {partners.map((partner) => (
               <Box 
-                key={card.id}
+                key={partner.id}
                 sx={{ 
                   display: 'inline-block',
                   minWidth: { xs: '280px', sm: '320px', md: '360px', lg: '296px' },
@@ -235,8 +238,8 @@ const StaticGridView = ({ fetchList, isSecondHorizontal }) => {
                 }}
               >
                 <Stack spacing={0.7}>
-                  <Card card={card} fetchList={fetchList} />
-                  {isSecondHorizontal && <Card card={card} fetchList={fetchList} />}
+                  <Card card={partner} fetchList={partners} />
+                  {isSecondHorizontal && <Card card={partner} fetchList={partners} />}
                 </Stack>
               </Box>
             ))}
@@ -262,7 +265,7 @@ const Card = ({ card, fetchList }) => {
         onClick={() => setOpenPartnerRightPanel(card)}
       >
         {/* Background Image or Video */}
-        {card.video ? (
+        {card?.video ? (
           <Box
             component="video"
             sx={{
@@ -293,7 +296,7 @@ const Card = ({ card, fetchList }) => {
               right: 0,
               bottom: 0,
               zIndex: 0,
-              backgroundImage: `url(${card.url})`,
+              backgroundImage: `url(${card?.ProfileImage[0]})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               transition: 'transform 300ms ease',
@@ -336,9 +339,9 @@ const Card = ({ card, fetchList }) => {
                 marginBottom: '7px',
               }}
             >
-              {card.title.split(' ').length > 4
-                ? card.title.split(' ').slice(0, 4).join(' ') + '...' 
-                : card.title}
+              {card?.Name?.split(' ').length > 4
+                ? card?.Name?.split(' ').slice(0, 4).join(' ') + '...' 
+                : card?.Name}
             </Typography>
 
             {/* Thin Line */}

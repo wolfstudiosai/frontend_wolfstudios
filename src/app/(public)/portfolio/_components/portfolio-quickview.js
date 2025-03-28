@@ -40,6 +40,9 @@ export const PortfolioQuickView = ({ data }) => {
   return (
     <Box sx={{ position: 'relative' }}>
       {/* Header Image with Overlay */}
+      <Typography variant="subtitle1" fontWeight="bold" mb={2} color="text.secondary">
+          Vertical Gallery
+        </Typography>
       <SliderWrapper
         modules={[Navigation, SwiperPagination, Scrollbar, A11y, Autoplay]}
         autoplay={{ delay: 4000, disableOnInteraction: true }}
@@ -52,7 +55,8 @@ export const PortfolioQuickView = ({ data }) => {
         // speed={2000}
         spaceBetween={10}
       >
-        {data?.SinglePageHeroImage?.map((item, index) => (
+        {/* {data?.SinglePageHeroImage?.map((item, index) => ( */}
+        {data?.VerticalImageGallery?.map((item, index) => (
           <SwiperSlide key={index}>
             {isVideoContent(item) ? (
               <Box
@@ -119,10 +123,10 @@ export const PortfolioQuickView = ({ data }) => {
       </Box>
       {/* Gallery Images */}
       <>
-        <Typography variant="subtitle1" fontWeight="bold" mt={3} color="text.secondary">
+        <Typography variant="subtitle1" fontWeight="bold" mt={3} color="text.secondary" sx={{ display:'none' }}>
           Vertical Gallery
         </Typography>
-        <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>
+        <Grid container spacing={1} sx={{ mt: 2 , display:'none' }} columns={{ xs: 10 }}>
           {data.VerticalImageGallery?.map((item, index) => (
             <Grid item size={{ xs: 2 }} key={index}>
               {isVideoContent(item) ? (

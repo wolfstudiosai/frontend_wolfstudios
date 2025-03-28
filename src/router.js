@@ -16,11 +16,11 @@ export const publicRoutes = [
         title: 'Portfolio',
         href: paths.dashboardPublic.portfolio,
       },
-      // {
-      //   key: 'concept',
-      //   title: 'Content',
-      //   href: paths.dashboardPublic.content,
-      // },
+      {
+        key: 'content',
+        title: 'Content',
+        href: paths.dashboardPublic.content,
+      },
       {
         key: 'production',
         title: 'Production',
@@ -245,6 +245,13 @@ export const privateRoutes = [
     ],
   },
   {
+    key: 'portfolio',
+    title: 'Portfolio',
+    href: paths.public.portfolio,
+    icon: 'fluent:approvals-app-20-regular',
+    allowedRoles: ['admin', 'user', 'super_admin'],
+  },
+  {
     key: 'archive',
     title: 'Archive',
     icon: 'ph:archive-light',
@@ -324,7 +331,7 @@ export const dashboardFavItems = [
 // footer routes
 export const footerRoutes = [
   { label: 'Learn', href: '/learn' },
-  { label: 'Chat', href: '/chat' },
+  { label: 'Chat', href: '/dms' },
   { label: 'Spectate', href: '/spectate' },
   { label: 'Shop', href: '/shop' },
   { label: 'Collaborate', href: '/collaborate' },

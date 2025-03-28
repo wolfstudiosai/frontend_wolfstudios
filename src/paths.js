@@ -170,7 +170,7 @@ export const paths = {
     portfolio: '/portfolio',
     campaign: '/campaign',
     profile: '/profile',
-    content: '/content',
+    content: '/all-content',
     partner: '/partner',
     production: '/production',
     spaces: '/spaces',

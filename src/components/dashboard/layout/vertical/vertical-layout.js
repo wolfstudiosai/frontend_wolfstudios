@@ -94,13 +94,14 @@ export function VerticalLayout({ children }) {
               // '--Content-margin': '1.5rem auto',
               // '--Content-maxWidth': 'var(--maxWidth-xl)',
               '--Content-paddingY': { xs: pxToRem(2), lg: pxToRem(4) },
-              '--Content-paddingX': { xs: pxToRem(4), md: pxToRem(6) },
+              '--Content-paddingX': { xs: pxToRem(4), md: pxToRem(6), lg: pxToRem(8), xl: pxToRem(12) },
               '--Content-padding': 'var(--Content-paddingY) 0',
               '--Content-width': '100%',
               display: 'flex',
               flex: '1 1 auto',
               flexDirection: 'column',
               minHeight: isFeaturedCardVisible ? 'calc(100vh - 78px)' : 'calc(100vh - 76px)',
+              padding: 'var(--Content-paddingY) var(--Content-paddingX)',
             }}
           >
             {children}

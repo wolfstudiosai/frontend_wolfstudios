@@ -7,8 +7,8 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Iconify } from '/src/components/iconify/iconify';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { ManagePartnerRightPanel } from '../../partner/_components/manage-partner-right-panel';
-import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
+import { ManagePortfolioRightPanel } from '../../portfolio/_components/manage-portfolio-right-panel';
+import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
 
 const cards = [
   {
@@ -113,22 +113,26 @@ const cards = [
 ];
 
 export const OurApproachSection = ({ isSecondHorizontal }) => {
-  const [partners, setPartners] = useState([]);
+  const [portfolios, setPortfolios] = useState([]);
     
   const router = useRouter();
 
-  const fetchPartners = async () => {
-    const response = await getPartnerListAsync({
-      page: 1,
-      rowsPerPage: 20,
-    });
-    if (response?.success) {
-      setPartners((prev) => [...prev, ...response.data]);
+  const fetchPortfolios = async () => {
+    try{
+      const response = await getPortfolioListAsync({
+        page: 1,
+        rowsPerPage: 20,
+      });
+      if (response?.success) {
+        setPortfolios(response.data);
+      }
+    }catch(error){
+      console.error('Error:', error);
     }
   }
 
   useEffect(() => {
-    fetchPartners();
+    fetchPortfolios();
   }, []);
 
   return (
@@ -201,13 +205,13 @@ export const OurApproachSection = ({ isSecondHorizontal }) => {
           </Stack>
         </Grid>
         <Grid item xs={12}>
-          <StaticGridView fetchList={fetchPartners} isSecondHorizontal={isSecondHorizontal} />
+          <StaticGridView portfolios={portfolios} isSecondHorizontal={isSecondHorizontal} />
         </Grid>
     </Grid>
   );
 };
 
-const StaticGridView = ({ fetchList, isSecondHorizontal }) => {
+const StaticGridView = ({ portfolios, isSecondHorizontal }) => {
   return (
     <Box sx={{
       overflowX: 'auto',
@@ -222,9 +226,9 @@ const StaticGridView = ({ fetchList, isSecondHorizontal }) => {
         width: 'auto',
         minWidth: '100%'
       }}>
-        {cards.map((card) => (
+        {portfolios.map((portfolio) => (
           <Box 
-            key={card.id}
+            key={portfolio.id}
             sx={{ 
               display: 'inline-block',
               minWidth: { xs: '280px', sm: '320px', md: '360px', lg: '296px' },
@@ -232,8 +236,8 @@ const StaticGridView = ({ fetchList, isSecondHorizontal }) => {
               flexShrink: 0
             }}
           >
-            <Card card={card} fetchList={fetchList} />
-            {isSecondHorizontal && <Card card={card} fetchList={fetchList} />}
+            <Card card={portfolio} fetchList={portfolios} />
+            {isSecondHorizontal && <Card card={portfolio} fetchList={portfolios} />}
           </Box>
         ))}
       </Box>
@@ -242,7 +246,7 @@ const StaticGridView = ({ fetchList, isSecondHorizontal }) => {
 };
 
 const Card = ({ card, fetchList }) => {
-  const [openPartnerRightPanel, setOpenPartnerRightPanel] = useState(null);
+  const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = useState(null);
   return (
     <>
       <Box
@@ -255,10 +259,10 @@ const Card = ({ card, fetchList }) => {
           boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
           transition: 'transform 300ms ease',
         }}
-        onClick={() => setOpenPartnerRightPanel(card)}
+        onClick={() => setOpenPortfolioRightPanel(card)}
       >
         {/* Background Image or Video */}
-        {card.video ? (
+        {card.VideoLink? (
           <Box
             component="video"
             sx={{
@@ -276,7 +280,7 @@ const Card = ({ card, fetchList }) => {
             loop
             muted
           >
-            <source src={card.video} type="video/mp4" />
+            <source src={card.VideoLink[0]} type="video/mp4" />
             Your browser does not support the video tag.
           </Box>
         ) : (
@@ -289,7 +293,7 @@ const Card = ({ card, fetchList }) => {
               right: 0,
               bottom: 0,
               zIndex: 0,
-              backgroundImage: `url(${card.url})`,
+              backgroundImage: `url(${card?.ThumbnailImage[0]})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               transition: 'transform 300ms ease',
@@ -332,9 +336,9 @@ const Card = ({ card, fetchList }) => {
                 marginBottom: '7px',
               }}
             >
-              {card.title.split(' ').length > 4
-                ? card.title.split(' ').slice(0, 4).join(' ') + '...' 
-                : card.title}
+              {card?.ProjectTitle?.split(' ').length > 4
+                ? card?.ProjectTitle?.split(' ').slice(0, 4).join(' ') + '...' 
+                : card?.ProjectTitle}
             </Typography>
 
             {/* Thin Line */}
@@ -418,14 +422,14 @@ const Card = ({ card, fetchList }) => {
           {/* Add new text elements here */}
         </Box>
       </Box>
-      <ManagePartnerRightPanel
+      <ManagePortfolioRightPanel
         view="QUICK"
-        fetchList={fetchList}
         width={'50vw'}
-        open={openPartnerRightPanel ? true : false}
-        data={openPartnerRightPanel}
-        onClose={() => setOpenPartnerRightPanel(false)}
-      />
+        fetchList={fetchList}
+        open={openPortfolioRightPanel ? true : false}
+        data={openPortfolioRightPanel}
+        onClose={() => setOpenPortfolioRightPanel(false)}
+        />
     </>
   );
 };
