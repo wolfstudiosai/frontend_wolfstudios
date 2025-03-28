@@ -38,6 +38,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [routes, setRoutes] = React.useState(publicRoutes);
   const [chatOpen, setChatOpen] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const router = useRouter();
 
   const { isLogin } = useAuth();
@@ -62,31 +63,17 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
 
   React.useEffect(() => {
     
-    const checkAuth = () => {
-      let data = localStorage.getItem('auth');
-      let userData = JSON.parse(data);
-      const loggedIn = !!userData;
+    const updatedRoutes = publicRoutes.map((group) => ({
+      ...group,
+      items: group.items.filter(
+        (item) =>
+          (isLogin && item.key !== "portfolio") || 
+          (!isLogin && item.key !== "content") 
+      ),
+  }));
+  setRoutes(updatedRoutes);
 
-      const updatedRoutes = publicRoutes.map((group) => ({
-        ...group,
-        items: group.items.filter(
-          (item) =>
-            (loggedIn && item.key !== "portfolio") || // Hide "Portfolio" if logged in
-            (!loggedIn && item.key !== "content") // Hide "Content" if not logged in
-        ),
-      }));
-
-      setRoutes(updatedRoutes);
-    };
-
-    checkAuth();
-    window.addEventListener("storage", checkAuth);
-
-    return () => {
-      window.removeEventListener("storage", checkAuth);
-    };
-
-  }, [getAuthTokenFromLocalStore()]);
+  }, [isLogin]);
 
   return (
     <React.Fragment>
@@ -186,12 +173,13 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
 
               {/* <Iconify icon="ph:gear-light" width={20} style={{ color: 'var(--mui-palette-neutral-400)' }} /> */}
               <SettingsGear />
-              <ChatSidePanel 
-                open={chatOpen} 
-                onClose={() => setChatOpen(false)}
-                onToggle={handleChatToggle}
-              />
-
+              {isLogin &&
+                <ChatSidePanel 
+                  open={chatOpen} 
+                  onClose={() => setChatOpen(false)}
+                  onToggle={handleChatToggle}
+                />
+              }
               {/* Notifications and User Actions */}
               {isLogin ? (
                 <React.Fragment>
