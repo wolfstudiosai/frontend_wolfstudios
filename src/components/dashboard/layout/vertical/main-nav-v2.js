@@ -29,11 +29,15 @@ import { paths } from '/src/paths';
 import { NotificationPopover } from '../_components/notificaiton-popover';
 import { SettingsGear } from '../_components/settings-gear';
 import { UserInfoPopover } from '../_components/user-info-popover';
+import { getAuthTokenFromLocalStore } from '/src/utils/axios-api.helpers';
+import { ChatSidePanel } from '../_components/chat-side-panel';
 
 export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const { customSettings: { setOpenSubNav } } = React.useContext(SettingsContext);
   const [openNav, setOpenNav] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [routes, setRoutes] = React.useState(publicRoutes);
+  const [chatOpen, setChatOpen] = React.useState(false);
   const router = useRouter();
 
   const { isLogin } = useAuth();
@@ -47,10 +51,43 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
     setAnchorEl(null);
   };
 
+  const handleChatToggle = () => {
+    setChatOpen(!chatOpen);
+  };
+
   const handleRedirect = (path) => {
     router.push(paths.auth.default.sign_in);
     handleClose();
   };
+
+  React.useEffect(() => {
+    
+    const checkAuth = () => {
+      let data = localStorage.getItem('auth');
+      let userData = JSON.parse(data);
+      const loggedIn = !!userData;
+
+      const updatedRoutes = publicRoutes.map((group) => ({
+        ...group,
+        items: group.items.filter(
+          (item) =>
+            (loggedIn && item.key !== "portfolio") || // Hide "Portfolio" if logged in
+            (!loggedIn && item.key !== "content") // Hide "Content" if not logged in
+        ),
+      }));
+
+      setRoutes(updatedRoutes);
+    };
+
+    checkAuth();
+    window.addEventListener("storage", checkAuth);
+
+    return () => {
+      window.removeEventListener("storage", checkAuth);
+    };
+
+  }, [getAuthTokenFromLocalStore()]);
+
   return (
     <React.Fragment>
       <Box
@@ -111,7 +148,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                 <Logo height={40} width={120} />
               </Box>
               <Stack component="ul" direction="row" spacing={1} sx={{ listStyle: 'none', m: 0, p: 0 }}>
-                {publicRoutes.map((section) =>
+                {routes.map((section) =>
                   section.items.map((item, index) => (
                     <NavItem
                       key={index}
@@ -149,6 +186,11 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
 
               {/* <Iconify icon="ph:gear-light" width={20} style={{ color: 'var(--mui-palette-neutral-400)' }} /> */}
               <SettingsGear />
+              <ChatSidePanel 
+                open={chatOpen} 
+                onClose={() => setChatOpen(false)}
+                onToggle={handleChatToggle}
+              />
 
               {/* Notifications and User Actions */}
               {isLogin ? (

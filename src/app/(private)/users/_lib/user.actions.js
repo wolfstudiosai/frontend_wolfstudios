@@ -6,8 +6,8 @@ export const getUsers = async (queryParams) => {
 
     try {
         const searchQuery = getSearchQuery(queryParams);
-        const res = await api.get(`/user${searchQuery}`);
-        return { success: true, data: res.data.data, totalRecords: res.data.meta.total };
+        const res = await api.get(`/users${searchQuery}`);
+        return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
     } catch (error) {
         toast.error(error.message)
         return { success: false, error: error.response ? error.response.data : "An unknown error occurred" };
@@ -19,9 +19,9 @@ export const createUser = async (data, isPublicRegistration = false) => {
         const { confirm_password, status, ...rest } = data
         let res = ""
         if (isPublicRegistration) {
-            res = await publicApi.post(`/auth/create-user`, rest);
+            res = await publicApi.post(`/users`, rest);
         } else {
-            res = await api.post(`/auth/create-user`, rest);
+            res = await api.post(`/users`, rest);
         }
         if (!res.data.success) return
         toast.success(res.data.message);
@@ -40,7 +40,7 @@ export const updateUserData = async (data) => {
             status: data.status,
             contact_number: data.contact_number
         }
-        const res = await api.patch(`/user/update-user/${data.id}`, payload);
+        const res = await api.patch(`/users/${data.id}`, payload);
         toast.success(res.data.message);
         return { success: true, data: res.data.data };
     } catch (error) {
