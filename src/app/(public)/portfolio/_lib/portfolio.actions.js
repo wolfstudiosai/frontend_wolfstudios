@@ -27,15 +27,15 @@ export const getPortfolioAsync = async (slug) => {
 
 export const createPortfolioAsync = async (file, data) => {
   try {
-    const { slug, id, created_by, user_id, updated_at, ...rest } = data;
-    let thumbnail = '';
+    const { slug, id, created_by, user_id, updated_at, video_url, hero_image, field_image, thumbnail, vertical_gallery_images, horizontal_gallery_images, ...rest } = data;
+    let thumbnailImage = '';
     if (file) {
       const uploadResponse = await uploadFileAsync(file);
-      thumbnail = uploadResponse[0].path;
+      thumbnailImage = uploadResponse[0].path;
     }
-    const campaignResponse = await api.post(`/portfolio/add-portfolio`, {
+
+    const campaignResponse = await api.post(`/portfolios`, {
       ...rest,
-      thumbnail: thumbnail,
     });
 
     toast.success(campaignResponse.data.message);
@@ -89,6 +89,17 @@ export const deleteFileAsync = async (paths) => {
     return { success: true, data: res.data.data };
   } catch (error) {
     toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
+export const getPortfolioCategoryListAsync = async (queryParams) => {
+  try {
+    const searchQuery = getSearchQuery(queryParams);
+    const res = await api.get(`/portfolio-categories${searchQuery}`);
+    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
+  } catch (error) {
+    toast.error(error.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };

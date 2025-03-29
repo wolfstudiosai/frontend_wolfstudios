@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
-import Image from 'next/image';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import Image from 'next/image';
+import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
@@ -16,6 +16,7 @@ import { getFancyColor, isVideoContent } from '/src/utils/helper';
 
 export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
   const slider_data = data.filter((item) => item.featured);
+
   return (
     <Box>
       <Box sx={{ mt: 2 }}>
@@ -148,7 +149,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
               />
           <Stack direction={'row'} spacing={1} justifyContent={'space-between'} alignItems={'center'} mt={1}>
             <Typography variant="body" color="var(--mui-palette-common-white)" sx={{ fontSize: '12px' }}>
-              {item.state}
+              {item.ByStatesPortfolios?.map((state) => state?.ByStates?.Name).join(', ')}
             </Typography>
             <Box
               sx={{
