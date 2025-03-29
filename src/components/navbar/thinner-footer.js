@@ -1,8 +1,8 @@
-import React from 'react';
+import { Box, Container, Stack, Typography } from '@mui/material';
 import Link from 'next/link';
+import React from 'react';
 import { footerRoutes } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
-import { Box, Container, Stack, Typography } from '@mui/material';
 
 export const ThinerFooter = () => {
   const links = [

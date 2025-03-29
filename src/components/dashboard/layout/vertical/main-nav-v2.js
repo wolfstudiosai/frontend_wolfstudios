@@ -96,8 +96,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center',
-              borderBottom: '1px solid var(--mui-palette-divider)'
+              alignItems: 'center'
             }}
           >
             {/* Left Section: Logo and Menu */}
