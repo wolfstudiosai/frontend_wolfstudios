@@ -3,13 +3,8 @@
 import React from 'react';
 import useAuth from '/src/hooks/useAuth';
 import { useFormik } from 'formik';
-import { Button, FormControlLabel, IconButton, Switch, Box, Typography } from '@mui/material';
-import {
-  createSpaceAsync,
-  deleteSpaceAsync,
-  getSpaceAsync,
-  updateSpaceAsync
-} from '../_lib/space.actions';
+import { Button, FormControlLabel, IconButton, Switch} from '@mui/material';
+import {createSpaceAsync, deleteSpaceAsync, getSpaceAsync, updateSpaceAsync} from '../_lib/space.actions';
 import { defaultSpace } from '../_lib/space.types';
 import { SpaceForm } from './space-form';
 import { SpaceQuickView } from './space-quickview';
