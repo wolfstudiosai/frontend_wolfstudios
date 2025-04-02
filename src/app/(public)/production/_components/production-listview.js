@@ -20,6 +20,7 @@ import {
 import { defaultProduction } from '../_lib/production.types';
 import { ManageProductionRightPanel } from './manage-production-right-panel';
 import { dateFormatter } from '/src/utils/date-formatter';
+import PageLoader from '/src/components/loaders/PageLoader';
 
 export const ProductionListView = () => {
 
@@ -180,6 +181,7 @@ export const ProductionListView = () => {
 
     return (
         <PageContainer>
+         <PageLoader loading={loading}>
               <Card>
                 <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
                   <Box>
@@ -209,7 +211,7 @@ export const ProductionListView = () => {
                 data={openDetails}
                 fetchList={fetchList}
               />
-              {/* </PageLoader> */}
-            </PageContainer>
+          </PageLoader>
+        </PageContainer>
     )
 };

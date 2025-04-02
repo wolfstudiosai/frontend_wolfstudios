@@ -2,14 +2,13 @@
 
 import React, { useRef } from 'react';
 import { Box, CircularProgress } from '@mui/material';
-import { ComingSoon } from "/src/components/coming-soon/coming-soon";
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 import PageLoader from '/src/components/loaders/PageLoader';
 
 import { ManageProductionRightPanel } from './_components/manage-production-right-panel';
 import { ProductionGridView } from './_components/production-gridview';
-import { ProductionListView } from './_components/production-listview';
+import  {ProductionListView}  from './_components/production-listview';
 import { productionFilters, productionSorting, productionTags } from './_lib/constant';
 import { getProductionListAsync } from './_lib/production.action';
 import { defaultProduction } from './_lib/production.types';
@@ -96,45 +95,41 @@ export const ProductionView = () => {
         }, [data, isFetching, totalRecords]);
 
     return(
-        // <PageContainer>
-        //     <PageLoader loading={loading}>
-        //         <PageHeader
-        //           title="Production"
-        //           values={filters}
-        //           tags={productionTags}
-        //           filters={productionFilters}
-        //           sorting={productionSorting}
-        //           totalRecords={totalRecords}
-        //           onFilterChange={handleFilterChange}
-        //         />
-        
-        //         {filters.VIEW === 'list' ? (
-        //           <ProductionListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />
-        //         ) : (
-        //           <Box>
-        //             <ProductionGridView
-        //               data={data || [defaultProduction]}
-        //               fetchList={refreshListView}
-        //               loading={loading}
-        //               colums={sliderToGridColsCoverter(filters.COL)}
-        //             />
-        //             <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
-        //               {isFetching && <CircularProgress size="30px" />}
-        //             </div>
-        //           </Box>
-        //         )}
-        //         <ManageProductionRightPanel
-        //           view="EDIT"
-        //           width="70%"
-        //           data={null}
-        //           fetchList={refreshListView}
-        //           open={filters.ADD}
-        //           onClose={() => setFilters((prev) => ({ ...prev, ADD: false }))}
-        //         />
-        //     </PageLoader>
-        // </PageContainer>
-        <>
-          <ComingSoon pageName={'Production'} />;
-        </>
+        <PageContainer>
+            <PageLoader loading={loading}>
+                <PageHeader
+                  title="Production"
+                  values={filters}
+                  tags={productionTags}
+                  filters={productionFilters}
+                  sorting={productionSorting}
+                  totalRecords={totalRecords}
+                  onFilterChange={handleFilterChange}
+                />
+                {filters.VIEW === 'list' ? (
+                  <ProductionListView totalRecords1={totalRecords} fetchList1={fetchList} data={data} loading1={loading} />
+                ) : (
+                  <Box>
+                    <ProductionGridView
+                      data={data || [defaultProduction]}
+                      fetchList={refreshListView}
+                      loading={loading}
+                      colums={sliderToGridColsCoverter(filters.COL)}
+                    />
+                    <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
+                      {isFetching && <CircularProgress size="30px" />}
+                    </div>
+                  </Box>
+                )}
+                <ManageProductionRightPanel
+                  view="EDIT"
+                  width="70%"
+                  data={null}
+                  fetchList={refreshListView}
+                  open={filters.ADD}
+                  onClose={() => setFilters((prev) => ({ ...prev, ADD: false }))}
+                />
+            </PageLoader>
+        </PageContainer>
     );
 };

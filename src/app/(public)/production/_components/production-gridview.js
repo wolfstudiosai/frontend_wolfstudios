@@ -7,7 +7,7 @@ import React from 'react';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
-import { PageLoader } from '/src/components/loaders/PageLoader';
+import PageLoader from '/src/components/loaders/PageLoader';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -15,7 +15,7 @@ import { ManageProductionRightPanel } from './manage-production-right-panel';
 import { ProductionSliderItem } from './production-slider-item';
 import { getFancyColor, isVideoContent } from '/src/utils/helper';
 
-export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
+export const ProductionGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
     const slider_data = data.filter((item) => item.featured);
     return (
         <Box>
@@ -41,9 +41,9 @@ export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagi
         </Box>
         <PageLoader loading={loading} error={null}>
           <Grid container spacing={1} columns={{ xs: 36 }} sx={{ mt: 2 }}>
-            {data.map((portfolio, index) => (
+            {data.map((production, index) => (
               <Grid item size={{ xs: 12, md: colums }} key={index}>
-                <ProductionCard item={portfolio} fetchList={fetchList} />
+                <ProductionCard item={production} fetchList={fetchList} />
               </Grid>
             ))}
           </Grid>
@@ -125,7 +125,7 @@ export const ProductionCard = ({ item, fetchList, sx, infoSx }) => {
               <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
                 <Image
                   src={item?.ThumbnailImage?.at(0) || item?.Imagefield?.at(0) || '/'}
-                  alt={item.title || 'Portfolio Image'}
+                  alt={item.title || 'Production Image'}
                   draggable={false}
                   style={{
                     objectFit: 'cover',
