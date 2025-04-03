@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Popover } from '@mui/material';
+import { Button, Popover, Drawer, useMediaQuery, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
@@ -31,6 +31,8 @@ import { SettingsGear } from '../_components/settings-gear';
 import { UserInfoPopover } from '../_components/user-info-popover';
 import { getAuthTokenFromLocalStore } from '/src/utils/axios-api.helpers';
 import { ChatSidePanel } from '../_components/chat-side-panel';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 
 export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const { customSettings: { setOpenSubNav } } = React.useContext(SettingsContext);
@@ -38,7 +40,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [routes, setRoutes] = React.useState(publicRoutes);
   const [chatOpen, setChatOpen] = React.useState(false);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
   const router = useRouter();
 
   const { isLogin } = useAuth();
@@ -59,6 +61,21 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const handleRedirect = (path) => {
     router.push(paths.auth.default.sign_in);
     handleClose();
+    handleCloseAuth();
+  };
+
+  //mobile nav 
+  const toggleMobileNav = () => {
+    console.log('mobileNavOpen', mobileNavOpen);
+    setMobileNavOpen(!mobileNavOpen);
+  };
+
+  const handleOpenAuth = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseAuth = () => {
+    setAnchorEl(null);
   };
 
   React.useEffect(() => {
@@ -134,7 +151,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
               <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
                 <Logo height={40} width={120} />
               </Box>
-              <Stack component="ul" direction="row" spacing={1} sx={{ listStyle: 'none', m: 0, p: 0 }}>
+              <Stack component="ul" direction="row" spacing={1} sx={{ display: { xs: 'none', md: 'flex' } ,listStyle: 'none', m: 0, p: 0 }}>
                 {routes.map((section) =>
                   section.items.map((item, index) => (
                     <NavItem
@@ -163,15 +180,25 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
               <Box
                 sx={{
                   flex: 1,
-                  display: 'flex',
                   justifyContent: 'flex-end',
                   minWidth: pxToRem(150),
+                  display: { xs: 'none', md: 'flex' }
                 }}
               >
                 <NavSearchV2 />
               </Box>
 
-              {/* <Iconify icon="ph:gear-light" width={20} style={{ color: 'var(--mui-palette-neutral-400)' }} /> */}
+              {/* Mobile Nav Menu Button */}
+              <IconButton
+                color="inherit"
+                aria-label="open mobile menu"
+                edge="end"
+                onClick={toggleMobileNav}
+                sx={{ display: { md: 'none' }, color: 'var(--mui-palette-neutral-400)' }}
+              >
+                {mobileNavOpen ? <CloseIcon /> : <MenuIcon />}
+              </IconButton>
+
               <SettingsGear />
               {isLogin &&
                 <ChatSidePanel 
@@ -200,6 +227,16 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
           </Stack>
         </Container>
       </Box>
+      {/* Mobile Navigation */}
+      <MobileNavV2
+        open={mobileNavOpen}
+        onClose={toggleMobileNav}
+        routes={routes}
+        isLogin={isLogin}
+        pathname={pathname}
+        handleOpenAuth={handleOpenAuth}
+      />
+
       <MobileNav
         onClose={() => {
           setOpenNav(false);
@@ -209,7 +246,8 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
       <Popover
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
-        onClose={handleClose}
+        // onClose={handleClose}
+        onClose={handleCloseAuth}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'center',
@@ -224,7 +262,8 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
             p: 2,
           }}
         >
-          <LoginForm onLoginSuccess={handleClose} />
+          {/* <LoginForm onLoginSuccess={handleClose} /> */}
+          <LoginForm onLoginSuccess={handleCloseAuth} />
           <Typography color="text.secondary" variant="body2" sx={{ my: 1 }}>
             Don&#39;t have an account?{' '}
             <Typography
@@ -359,3 +398,58 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
 
   return element;
 }
+
+// Mobile Navigation Component
+const MobileNavV2 = ({ open, onClose, routes, isLogin, pathname, handleOpenAuth }) => {
+  const theme = useTheme();
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+
+  return (
+    <Drawer
+      variant="temporary"
+      anchor="right"
+      open={open}
+      onClose={onClose}
+      ModalProps={{ keepMounted: true }}
+      sx={{
+        display: { xs: 'block', md: 'none' },
+        '& .MuiDrawer-paper': {
+          width: 280,
+          boxSizing: 'border-box',
+          p: 2,
+          bgcolor: 'var(--mui-palette-background-default)',
+          borderLeft: '1px solid var(--mui-palette-divider)'
+        },
+      }}
+    >
+      <Stack gap={2}>
+        {/* Navigation Items */}
+        {routes.map((section) =>
+          section.items.map((item, index) => (
+            <NavItem
+              key={index}
+              href={item.href}
+              pathname={pathname}
+              item={item}
+              title={item.title}
+              icon={item.icon}
+              mobile
+            />
+          ))
+        )}
+
+        {/* Mobile-only Actions */}
+        {!isLogin && (
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ backgroundColor: 'var(--mui-palette-warning-700)' }}
+            onClick={handleOpenAuth}
+          >
+            Sign in
+          </Button>
+        )}
+      </Stack>
+    </Drawer>
+  );
+};

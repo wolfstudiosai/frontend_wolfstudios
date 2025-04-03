@@ -231,8 +231,8 @@ const StaticGridView = ({ portfolios, isSecondHorizontal }) => {
             key={portfolio.id}
             sx={{ 
               display: 'inline-block',
-              minWidth: { xs: '280px', sm: '320px', md: '360px', lg: '296px' },
-              width: { xs: '280px', sm: '320px', md: '360px', lg: '296px' },
+              minWidth: { xs: '300px', sm: '280px', md: '260px' },
+              width: { xs: '300px', sm: '280px', md: '260px' },
               flexShrink: 0
             }}
           >
@@ -253,7 +253,7 @@ const Card = ({ card, fetchList }) => {
         key={card.id}
         sx={{
           position: 'relative',
-          height: { xs: '300px', sm: '340px', md: '380px', lg: '440px' },
+          height: '400px',
           width: '100%',
           overflow: 'hidden',
           boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
