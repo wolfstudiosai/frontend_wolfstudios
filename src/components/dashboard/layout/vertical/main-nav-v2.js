@@ -29,7 +29,6 @@ import { paths } from '/src/paths';
 import { NotificationPopover } from '../_components/notificaiton-popover';
 import { SettingsGear } from '../_components/settings-gear';
 import { UserInfoPopover } from '../_components/user-info-popover';
-import { getAuthTokenFromLocalStore } from '/src/utils/axios-api.helpers';
 import { ChatSidePanel } from '../_components/chat-side-panel';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
@@ -198,31 +197,39 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
               >
                 {mobileNavOpen ? <CloseIcon /> : <MenuIcon />}
               </IconButton>
-
-              <SettingsGear />
-              {isLogin &&
-                <ChatSidePanel 
-                  open={chatOpen} 
-                  onClose={() => setChatOpen(false)}
-                  onToggle={handleChatToggle}
-                />
-              }
-              {/* Notifications and User Actions */}
-              {isLogin ? (
-                <React.Fragment>
-                  <NotificationPopover />
-                  <UserInfoPopover />
-                </React.Fragment>
-              ) : (
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={{ backgroundColor: 'var(--mui-palette-warning-700)', flexShrink: 0 }}
-                  onClick={handleOpen}
-                >
-                  Sign in
-                </Button>
-              )}
+              <Box sx={{ 
+                display: 'flex',
+                gap: 2,
+                alignItems: 'center',
+                '@media (max-width: 376px)': {
+                  display: 'none'
+                }
+              }}>
+                <SettingsGear />
+                {isLogin &&
+                  <ChatSidePanel 
+                    open={chatOpen} 
+                    onClose={() => setChatOpen(false)}
+                    onToggle={handleChatToggle}
+                  />
+                }
+                {/* Notifications and User Actions */}
+                {isLogin ? (
+                  <React.Fragment>
+                    <NotificationPopover />
+                  </React.Fragment>
+                ) : (
+                  <Button
+                    variant="contained"
+                    size="small"
+                    sx={{ backgroundColor: 'var(--mui-palette-warning-700)', flexShrink: 0 }}
+                    onClick={handleOpen}
+                  >
+                    Sign in
+                  </Button>
+                )}
+              </Box>
+              <UserInfoPopover />
             </Stack>
           </Stack>
         </Container>
@@ -438,7 +445,7 @@ const MobileNavV2 = ({ open, onClose, routes, isLogin, pathname, handleOpenAuth 
           ))
         )}
 
-        {/* Mobile-only Actions */}
+        {/* Sign In Option */}
         {!isLogin && (
           <Button
             variant="contained"

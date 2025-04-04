@@ -23,8 +23,8 @@ import { Iconify } from "/src/components/iconify/iconify"
 export function ContentSection() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm")) // 0-600px
-  const isTablet = useMediaQuery(theme.breakpoints.down("md")) // 0-900px
-  const isSmallLaptop = useMediaQuery(theme.breakpoints.down("lg")) // 0-1200px
+  // const isTablet = useMediaQuery(theme.breakpoints.down("md")) // 0-900px
+  // const isSmallLaptop = useMediaQuery(theme.breakpoints.down("lg")) // 0-1200px
 
   return (
     <Stack direction="column" gap={3} sx={{ px: { xs: 2, sm: 3, md: 4 }, py: 4 }}>
@@ -67,8 +67,7 @@ export function ContentSection() {
         gap={2}
         sx={{
           "& > *": {
-            // Apply to all direct children
-            maxWidth: { md: "calc(50% - 8px)", lg: "auto" }, // Two columns on md (1024px)
+            maxWidth: { md: "100%", lg: "auto" },
           },
         }}
       >
@@ -78,12 +77,13 @@ export function ContentSection() {
           gap={3}
           justifyContent="space-between"
           sx={{
-            width: { xs: "100%", md: "50%", lg: "30%" },
+            width: { xs: "100%", md: "48%", lg: "30%" },
             border: "1px solid",
             borderColor: "divider",
             p: { xs: 2, sm: 3 },
-            order: { xs: 2, md: 2, lg: 1 }, // Reorder on mobile
+            order: { xs: 2, md: 1, lg: 1 },
             alignSelf: { md: "flex-start" },
+            height: { md: "auto" },
           }}
         >
           <Stack direction="column" gap={1}>
@@ -95,7 +95,7 @@ export function ContentSection() {
                   width: { xs: "140px", sm: "160px", md: "180px" },
                   height: { xs: "180px", sm: "200px", md: "220px" },
                   objectFit: "cover",
-                  borderRadius: "4px", // Add slight rounding
+                  borderRadius: "4px",
                 }}
               />
             </Stack>
@@ -111,6 +111,7 @@ export function ContentSection() {
             </Stack>
           </Stack>
           <Stack>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography
               sx={{
                 fontWeight: "medium",
@@ -121,7 +122,6 @@ export function ContentSection() {
             >
               Specifications itype pro
             </Typography>
-            <Stack direction="row" justifyContent="right">
               <Button
                 variant="text"
                 endIcon={<Iconify icon="mdi:arrow-top-right" />}
@@ -197,12 +197,13 @@ export function ContentSection() {
         {/* Middle Column - Full width on mobile/tablet */}
         <Stack
           sx={{
-            width: { xs: "100%", lg: "40%" },
+            width: { xs: "100%", md: "100%", lg: "40%" },
             position: "relative",
             minHeight: { xs: "350px", sm: "400px", md: "500px", lg: "600px" },
-            order: { xs: 1, lg: 2 }, // Reorder on mobile - show first
-            maxWidth: { sm: "600px", md: "100%" }, // Limit width on tablet
-            mx: { xs: "auto", lg: 0 }, // Center on tablet
+            order: { xs: 1, md: 3, lg: 2 },
+            maxWidth: { sm: "600px", md: "100%" },
+            mx: { xs: "auto", lg: 0 },
+            marginBottom: { md: 2 },
           }}
         >
           <Box
@@ -212,8 +213,9 @@ export function ContentSection() {
               width: "100%",
               height: { xs: "350px", sm: "400px", md: "500px", lg: "600px" },
               objectFit: "cover",
+              objectPosition: "center",
               zIndex: 9,
-              borderRadius: { sm: "8px", md: "0" }, // Add slight rounding on tablet
+              borderRadius: { xs: "8px", sm: "8px", md: "8px", lg: "0" },
             }}
           />
           <Stack
@@ -319,12 +321,16 @@ export function ContentSection() {
         {/* Right Column - Full width on mobile/tablet */}
         <Stack
           sx={{
-            width: { xs: "100%", md: "50%", lg: "30%" },
+            width: { xs: "100%", md: "48%", lg: "30%" },
             border: "1px solid",
             borderColor: "divider",
             p: { xs: 2, sm: 3 },
-            order: { xs: 3, md: 3, lg: 3 },
+            order: { xs: 3, md: 2, lg: 3 },
             alignSelf: { md: "flex-start" },
+            height: { md: "auto" },
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
           }}
         >
           <Typography
@@ -364,8 +370,8 @@ export function ContentSection() {
               height: { xs: "100px", sm: "110px", md: "130px" },
               objectFit: "cover",
               my: 2,
-              mx: { xs: "auto", sm: 0 },
-              borderRadius: "4px", // Add slight rounding
+              mx: { xs: "auto", sm: 0, md: "0" },
+              borderRadius: "4px",
             }}
           />
 
