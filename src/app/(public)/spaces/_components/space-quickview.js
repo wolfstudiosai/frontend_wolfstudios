@@ -14,7 +14,7 @@ export const SpaceQuickView = ({ data }) => {
     <Box sx={{ position: 'relative' }}>
       {/* Header Image with Overlay */}
       <Typography variant="subtitle1" fontWeight="bold" mb={2} color="text.secondary">
-          Vertical Gallery
+          Gallery
         </Typography>
       <SliderWrapper
         modules={[Navigation, SwiperPagination, Scrollbar, A11y, Autoplay]}
@@ -28,8 +28,7 @@ export const SpaceQuickView = ({ data }) => {
         // speed={2000}
         spaceBetween={10}
       >
-        {/* {data?.SinglePageHeroImage?.map((item, index) => ( */}
-        {data?.VerticalImageGallery?.map((item, index) => (
+        {data?.Gallery?.map((item, index) => (
           <SwiperSlide key={index}>
             {isVideoContent(item) ? (
               <Box
@@ -69,29 +68,57 @@ export const SpaceQuickView = ({ data }) => {
       <Box
         mt={3}
         width="100%"
-        sx={{ position: 'sticky', top: 0, left: 0, backgroundColor: theme.palette.background.default, zIndex: 2 }}
+        sx={{ 
+          position: 'sticky', 
+          top: 0, 
+          left: 0, 
+          backgroundColor: theme.palette.background.default, 
+          zIndex: 2 
+        }}
       >
         <Divider sx={{ my: 2 }} />
 
-        <Typography variant="subtitle1" color="text.secondary" fontWeight={'bold'}>
-          {data?.projectTitle}
+        <Typography variant="subtitle1" color="text.secondary" fontWeight={'bold'} mb={1} >
+          {data?.Name || 'No title available.'}
         </Typography>
-        <Stack direction="row" spacing={2} mb={2}>
-          <Typography variant="subtitle1" color="text.secondary">
-            Category:{' '}
-            {data?.PortfolioCategoriesPortfolios?.map((item) => item?.PortfolioCategories?.Name)?.join(', ') || 'N/A'}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            State: {data?.ByStatesPortfolios?.map((item) => item?.ByStates?.Name)?.join(', ') || 'N/A'}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            Partner HQ: {data?.PartnerHQPortfolios?.map((item) => item?.PartnerHQ?.Name)?.join(', ') || 'N/A'}
-          </Typography>
+
+        <Stack direction="column" spacing={1} mb={2}>
+          {/* Category */}
+          <Stack direction="row" spacing={1}>
+            <Typography variant="subtitle1" color="text.secondary" fontWeight="bold">
+              Category:
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              {data?.ByTagsSpaces?.map((item) => item?.ByTags?.Name)?.join(', ') || 'N/A'}
+            </Typography>
+          </Stack>
+
+          {/* State */}
+          <Stack direction="row" spacing={1}>
+            <Typography variant="subtitle1" color="text.secondary" fontWeight="bold">
+              State:
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              {data?.ByStatesSpaces?.map((item) => item?.ByStates?.Name)?.join(', ') || 'N/A'}
+            </Typography>
+          </Stack>
+
+          {/* Features */}
+          <Stack direction="row" spacing={1}>
+            <Typography variant="subtitle1" color="text.secondary" fontWeight="bold">
+              Features:
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              {data?.Features?.map((item) => item)?.join(', ') || 'N/A'}
+            </Typography>
+          </Stack>
         </Stack>
 
         <Divider sx={{ my: 2 }} />
 
-        <Typography variant="body1">{data?.Projectsinglepagefulldescription || 'No description available.'}</Typography>
+        <Typography variant="body1">
+          {data?.Projectsinglepagefulldescription || 'No description available.'}
+        </Typography>
         <Divider sx={{ my: 2 }} />
       </Box>
       {/* Gallery Images */}
@@ -138,7 +165,7 @@ export const SpaceQuickView = ({ data }) => {
       </>
 
       <>
-        <Typography variant="subtitle1" fontWeight="bold" mt={3} color="text.secondary">
+        <Typography variant="subtitle1" fontWeight="bold" mt={3} color="text.secondary" sx={{ display:'none' }}>
           Horizontal Gallery
         </Typography>
         <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>

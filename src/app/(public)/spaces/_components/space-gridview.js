@@ -105,10 +105,10 @@ export const SpaceCard = ({ item, fetchList, sx, infoSx }) => {
         </Box>
 
         <Box className="image-container" sx={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
-          {isVideoContent(item.thumbnail || '') ? (
+          {isVideoContent(item.videoLink || '') ? (
             <Box
               component="video"
-              src={item.thumbnail}
+              src={item?.videoLink || ''}
               muted
               autoPlay
               loop
@@ -155,8 +155,8 @@ export const SpaceCard = ({ item, fetchList, sx, infoSx }) => {
             }}
           >
             <Typography fontWeight={400} color="white" fontSize={{ xs: 12, md: 14 }} noWrap>
-              {(item.ProjectTitle || '').split(/\s+/).slice(0, 4).join(' ') + 
-               (item.ProjectTitle?.split(/\s+/)?.length > 4 ? '...' : '')}
+              {(item.Name || '').split(/\s+/).slice(0, 4).join(' ') + 
+               (item.Name?.split(/\s+/)?.length > 4 ? '...' : '')}
             </Typography>
             {/* Thin Line */}
             <Box
@@ -200,7 +200,7 @@ export const SpaceCard = ({ item, fetchList, sx, infoSx }) => {
                 textDecoration: 'underline',
               }
             }}>
-              {item.ByStatesPortfolios?.map((state) => state?.ByStates?.Name).join(', ')}
+              {item.ByStatesSpaces?.map((state) => state?.ByStates?.Name).join(', ')}
             </Typography>
             
             <Box sx={{ 
