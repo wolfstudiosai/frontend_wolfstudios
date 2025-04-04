@@ -7,7 +7,7 @@ import { uploadFileAsync } from '/src/utils/upload-file';
 export const getSpaceListAsync = async (queryParams) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    const res = await api.get(`/portfolios${searchQuery}`);
+    const res = await api.get(`/spaces${searchQuery}`);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     toast.error(error.message);
@@ -17,7 +17,7 @@ export const getSpaceListAsync = async (queryParams) => {
 
 export const getSpaceAsync = async (slug) => {
   try {
-    const res = await api.get(`/portfolios?slug=${slug}`);
+    const res = await api.get(`/spaces/${slug}`);
     return { success: true, data: res.data.data[0], totalRecords: res.data.meta.total };
   } catch (error) {
     toast.error(error.message);

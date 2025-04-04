@@ -32,14 +32,14 @@ export const SpaceListView = ({data, fetchList1, totalRecords1, loading1}) => {
             </IconButton>
           ),
         },
-        { field: 'ProjectTitle', headerName: 'Project Title', width: 280, editable: true },
+        { field: 'Name', headerName: 'Project Title', width: 280, editable: true },
         {
           field: 'category',
-          headerName: 'Category',
+          headerName: 'Tag Spaces',
           width: 150,
           editable: true,
           valueGetter: (value, row) =>
-            row.PortfolioCategoriesPortfolios.map((item) => item.PortfolioCategories.Name).join(', '),
+            row.ByTagsSpaces.map((item) => item.ByTags.Name).join(', '),
         },
         { field: 'VideoLink', headerName: 'Video URL', width: 200, editable: true },
         // { field: 'hero_image', headerName: 'Hero Image', width: 150, editable: true },
@@ -57,18 +57,25 @@ export const SpaceListView = ({data, fetchList1, totalRecords1, loading1}) => {
         { field: 'Projectshortdescription', headerName: 'Short Description', width: 200, editable: true },
         { field: 'Projectsinglepagefulldescription', headerName: 'Full Description', width: 300, editable: true },
         {
+          field: 'city',
+          headerName: 'City',
+          width: 150,
+          editable: true,
+          valueGetter: (value, row) => row.ByCitySpaces.map((item) => item.ByCities?.Name).join(', '),
+        },
+        {
           field: 'state',
           headerName: 'State',
           width: 150,
           editable: true,
-          valueGetter: (value, row) => row.ByStatesPortfolios.map((item) => item.ByStates.Name).join(', '),
+          valueGetter: (value, row) => row.ByStatesSpaces.map((item) => item.ByStates?.Name).join(', '),
         },
         {
-          field: 'partner_hq',
-          headerName: 'Partner HQ',
+          field: 'country',
+          headerName: 'Country',
           width: 150,
           editable: true,
-          valueGetter: (value, row) => row.PartnerHQPortfolios.map((item) => item.PartnerHQ.Name).join(', '),
+          valueGetter: (value, row) => row.ByCountrySpaces.map((item) => item.ByCountry?.Name).join(', '),
         },
         // { field: 'user_id', headerName: 'User ID', width: 150, editable: true },
         {
