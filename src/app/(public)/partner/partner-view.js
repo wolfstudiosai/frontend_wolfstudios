@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { Box } from '@mui/material';
+import { Box,CircularProgress } from '@mui/material';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
@@ -40,7 +40,7 @@ export const PartnerView = () => {
       });
 
       if (response.success) {
-        setData(response?.data);
+        setData((prev) => [...prev, ...response.data]);
         setTotalRecords(response.totalRecords);
         setPagination((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }));
       }
@@ -100,7 +100,7 @@ export const PartnerView = () => {
         observer.unobserve(observerRef.current);
       }
     };
-  }, [data, isFetching, totalRecords, fetchList]);
+  }, [data, isFetching, totalRecords]);
 
   return (
     <PageContainer>
@@ -119,6 +119,9 @@ export const PartnerView = () => {
         ) : (
           <Box>
             <PartnerGridView data={data || [defaultPartner]} fetchList={refreshListView} loading={loading} />
+            <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
+                 {isFetching && <CircularProgress size="30px" />}
+            </div>
           </Box>
         )}
 

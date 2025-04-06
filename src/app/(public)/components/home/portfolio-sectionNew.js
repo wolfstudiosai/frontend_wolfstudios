@@ -151,22 +151,45 @@ const Card = ({ card, fetchList }) => {
         }}
         onClick={() => setOpenPortfolioRightPanel(card)}
       >
-        {/* Background Image */}
-        <Box
-          className="image"
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 0,
-            backgroundImage: `url(${card.ThumbnailImage[0]})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            transition: 'transform 300ms ease',
-          }}
-        />
+        {/* Background Image or Video */}
+          {card.VideoLink? (
+            <Box
+              component="video"
+              sx={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                }}
+                autoPlay
+                loop
+                muted
+              >
+                <source src={card.VideoLink[0]} type="video/mp4" />
+                  Your browser does not support the video tag.
+            </Box>
+                ) : (
+            <Box
+              className="image"
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 0,
+                backgroundImage: `url(${card.ThumbnailImage[0]})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                transition: 'transform 300ms ease',
+              }}
+            />
+          )}
 
         {/* Gradient Overlay */}
         <Box
