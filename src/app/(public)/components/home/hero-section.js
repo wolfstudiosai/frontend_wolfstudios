@@ -1,7 +1,6 @@
 "use client"
 
 import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
-import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 
 import { FadeIn } from "/src/components/animation/fade-in"
@@ -108,7 +107,7 @@ export const HeroSection = () => {
           zIndex: 2,
         }}
       >
-        <motion.div
+        {/* <motion.div
           initial={{ scaleX: 0, scaleY: 0, originX: 1, originY: 1 }}
           animate={{ scaleX: 1, scaleY: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
@@ -119,7 +118,6 @@ export const HeroSection = () => {
             zIndex: -1,
           }}
         />
-<<<<<<< HEAD
         <FadeIn>
           <Typography
             variant="h4"
@@ -137,11 +135,9 @@ export const HeroSection = () => {
             Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
             visuals that captivate audiences, evoke emotion, and leave a lasting impact.
           </Typography>
-        </FadeIn>
-=======
+        </FadeIn> */}
 
         {/* Text Content */}
->>>>>>> ff28eaa5df9397a1e4bf5d5c5c60bd121d870ede
         <Box
           sx={{
             width: { xs: "100%", md: "40%" },
@@ -198,7 +194,7 @@ export const HeroSection = () => {
             <source src="/videos/hero_bg.mp4" type="video/mp4" />
           </video>
         </Box>
-      </Stack>
+      </Stack >
     </>
   )
 }
