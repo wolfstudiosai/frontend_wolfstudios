@@ -21,3 +21,29 @@ export const defaultProduction = {
     created_by: '',
     updated_at: '',
   };
+
+  export const defaultProduction1 = {
+    id: '',
+    name: '',
+    internalNotes: '',
+    status:[],
+    totalExpense:'',
+    cardsUsed:[],
+    proposedDate:'',
+    recordShootDate:'',
+    spaceExpense:'',
+    talentExpense: '',
+	  crewExpense: '',
+	  foodExpense: '',
+	  equipmentRentals: '',
+	  googleDriveFiles: '',
+	  productionUsage: [],
+	  directorExpense: '',
+	  producerExpense: '',
+
+	  //relations
+	  spaces: [],
+	  stakeholders: [],
+	  partners: []
+
+  }

@@ -3,6 +3,7 @@ export const defaultUser = {
     firstName: "",
     lastName: "",
     email: "",
+    username: "",
     contactNumber: "",
     role: "USER",
     password: "",

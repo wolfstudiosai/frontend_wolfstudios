@@ -228,7 +228,9 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                   </Button>
                 )}
               </Box>
+              {isLogin && (
               <UserInfoPopover />
+              )}
             </Stack>
           </Stack>
         </Container>
