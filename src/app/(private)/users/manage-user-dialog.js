@@ -13,6 +13,7 @@ const getValidationSchema = (isUpdated) => {
         firstName: Yup.string().required('First name is required'),
         email: Yup.string().email('Invalid email').required('Email is required'),
         role: Yup.string().required('Role is required'),
+        username: Yup.string().required('User Name is required'),
         password: isUpdated
             ? Yup.string()
             : Yup.string().required('Password is required'),
@@ -45,7 +46,6 @@ export const ManageUserDialog = (props) => {
         initialValues: data,
         validationSchema: getValidationSchema(isUpdated),
         onSubmit: async (values) => {
-            debugger
             setLoading(true)
             const res = isUpdated ? await updateUserData({
                 id: data.id,
@@ -103,6 +103,19 @@ export const ManageUserDialog = (props) => {
                             <OutlinedInput
                                 name="email"
                                 value={values.email}
+                                onChange={handleChange}
+                                disabled={isUpdated}
+                            />
+                        </FormControl>
+                    </Grid>
+
+                    <Grid size={12}>
+                        <FormControl fullWidth error={Boolean(errors.username)}>
+                            <InputLabel>User Name</InputLabel>
+
+                            <OutlinedInput
+                                name="username"
+                                value={values.username}
                                 onChange={handleChange}
                                 disabled={isUpdated}
                             />

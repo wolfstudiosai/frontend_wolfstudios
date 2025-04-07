@@ -8,6 +8,7 @@ export const getProductionListAsync = async (queryParams) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
     const res = await api.get(`/portfolios${searchQuery}`);
+    const res1 = await api.get(`/production-HQ${searchQuery}`);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     toast.error(error.message);
@@ -17,7 +18,7 @@ export const getProductionListAsync = async (queryParams) => {
 
 export const getProductionAsync = async (slug) => {
   try {
-    const res = await api.get(`/portfolios?slug=${slug}`);
+    const res = await api.get(`/production-HQ/${slug}`);
     return { success: true, data: res.data.data[0], totalRecords: res.data.meta.total };
   } catch (error) {
     toast.error(error.message);
@@ -27,19 +28,20 @@ export const getProductionAsync = async (slug) => {
 
 export const createProductionAsync = async (file, data) => {
   try {
-    const { slug, id, created_by, user_id, updated_at, video_url, hero_image, field_image, thumbnail, vertical_gallery_images, horizontal_gallery_images, ...rest } = data;
+    // const { slug, id, created_by, user_id, updated_at, video_url, hero_image, field_image, thumbnail, vertical_gallery_images, horizontal_gallery_images, ...rest } = data;
+    const { slug, id, created_by, user_id, updated_at, ...rest } = data;
     let thumbnailImage = '';
     if (file) {
       const uploadResponse = await uploadFileAsync(file);
       thumbnailImage = uploadResponse[0].path;
     }
 
-    const campaignResponse = await api.post(`/portfolios`, {
+    const productionResponse = await api.post(`/production-HQ`, {
       ...rest,
     });
 
-    toast.success(campaignResponse.data.message);
-    return { success: true, data: campaignResponse.data.data };
+    toast.success(productionResponse.data.message);
+    return { success: true, data: productionResponse.data.data };
   } catch (error) {
     const errorMessage = error.response?.data?.message || error.message || 'An unknown error occurred';
     toast.error(errorMessage);
@@ -55,7 +57,7 @@ export const updateProductionAsync = async (file, data) => {
       const uploadResponse = await uploadFileAsync(file);
       thumbnailPath = uploadResponse[0].path;
     }
-    const res = await api.patch(`/portfolio/update/${id}`, {
+    const res = await api.patch(`/production-HQ/${id}`, {
       ...rest,
       thumbnail: thumbnailPath ? thumbnailPath : data.thumbnail,
     });
@@ -69,8 +71,8 @@ export const updateProductionAsync = async (file, data) => {
 
 export const deleteProductionAsync = async (ids) => {
   try {
-    const res = await api.delete(`/portfolio/delete`, {
-      data: { ids: ids },
+    const res = await api.delete(`/production-HQ/bulk`, {
+      data: { IDs: ids },
     });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };

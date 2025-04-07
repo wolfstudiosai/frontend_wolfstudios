@@ -32,8 +32,8 @@ export const ManageProductionRightPanel = ({ open, onClose, fetchList, data, wid
         initialValues: defaultProduction,
         validate: (values) => {
           const errors = {};
-          if (!values.projectTitle) {
-            errors.projectTitle = formConstants.required;
+          if (!values.name) {
+            errors.name = formConstants.required;
           }
   
           return errors;

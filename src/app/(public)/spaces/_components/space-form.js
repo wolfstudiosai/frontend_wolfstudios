@@ -12,10 +12,51 @@ import { ImageUploader } from '/src/components/uploaders/image-uploader';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getSpaceCategoryListAsync } from '../_lib/space.actions';
-import { defaultSpace } from '../_lib/space.types';
+import { defaultSpace1 } from '../_lib/space.types';
 
 export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
-    const [values, setValues] = React.useState(data || defaultSpace);
+    const [values, setValues] = React.useState(data || defaultSpace1);
+    const types = [
+        { value: 'Castle', label: 'Castle' },
+        { value: 'Studio', label: 'Studio' },
+        { value: 'Creative', label: 'Creative' },
+        { value: 'House', label: 'House' },
+    ]
+
+    const spaceStyle = [
+        { value: 'Artistic', label: 'Artistic' },
+        { value: 'Bright', label: 'Bright' },
+        { value: 'Creative', label: 'Creative' },
+    ]
+
+    const props = [
+        { value: 'Camera', label: 'Camera' },
+        { value: 'Lighting Kit', label: 'Lighting Kit' },
+    ]
+
+    const theme = [
+        { value: 'Creative', label: 'Creative' },
+        { value: 'Inspiring', label: 'Inspiring' },
+        { value: 'Lifestyle', label: 'Lifestyle' },
+    ]
+
+    const availableLighting = [
+        { value: 'Natural', label: 'Natural' },
+        { value: 'Softbox', label: 'Softbox' },
+        { value: 'LED', label: 'LED' },
+        { value: 'Fluorescent', label: 'Fluorescent' },
+    ]
+
+    const adOns = [
+        { value: 'Photography Equipment', label: 'Photography Equipment' },
+        { value: 'Sound System', label: 'Sound System' },
+        { value: 'Lighting', label: 'Lighting' },
+    ]
+
+    const features = [
+      { value: 'Camera', label: 'Camera' },
+      { value: 'Lighting Kit', label: 'Lighting Kit' },
+    ]
 
     // *********************States*********************************
     const [mediaPreview, setMediaPreview] = React.useState(null);
@@ -30,7 +71,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
     
       React.useEffect(() => {
         return () => {
-          setValues(defaultSpace);
+          setValues(defaultSpace1);
         };
       }, []);
     
@@ -107,152 +148,275 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
           <Grid container spacing={2}>
             <Grid size={{ xs: 12 }}>
               <CustomTextField
-                name="projectTitle"
-                label="Project Title"
-                value={values.projectTitle}
+                name="name"
+                label="Name"
+                value={values.name}
                 onChange={onChange}
               />
-              <ErrorMessage error={errors.projectTitle} />
+              <ErrorMessage error={errors.name} />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <CustomTextField
+                name="startingRatehr"
+                label='Starting Rate/hr'
+                value={values.startingRatehr}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                name="bookingLink"
+                label='Booking Link'
+                value={values.bookingLink}
+                onChange={onChange}
+              />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
               <CustomAutoComplete
-                label='Categories'
-                value={values.spaceCategories}
-                onChange={(_, value) => setFieldValue('spaceCategories', value.map(i => i.value))}
-                options={spaceCategories}
+                label='Type'
+                value={values.type}
+                onChange={(_, value) => setFieldValue('type', value.map(i => i.value))}
+                options={types}
                 multiple
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
               <CustomAutoComplete
-                label='Partners'
-                value={values.partnerHQ}
-                onChange={(_, value) => setFieldValue('partnerHQ', value.map(i => i.value))}
-                options={partners}
+                label='Space Style'
+                value={values.spaceStyle}
+                onChange={(_, value) => setFieldValue('spaceStyle', value.map(i => i.value))}
+                options={spaceStyle}
                 multiple
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
               <CustomAutoComplete
-                label='States'
-                value={values.states}
-                onChange={(_, value) => setFieldValue('states', value.map(i => i.value))}
-                options={states}
+                label='Props'
+                value={values.props}
+                onChange={(_, value) => setFieldValue('props', value.map(i => i.value))}
+                options={props}
                 multiple
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
               <CustomAutoComplete
-                label='Countries'
-                value={values.countries}
-                onChange={(_, value) => setFieldValue('countries', value.map(i => i.value))}
-                options={countries}
+                label='Theme'
+                value={values.theme}
+                onChange={(_, value) => setFieldValue('theme', value.map(i => i.value))}
+                options={theme}
+                multiple
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <CustomAutoComplete
+                label='Available Lighting'
+                value={values.availableLighting}
+                onChange={(_, value) => setFieldValue('availableLighting', value.map(i => i.value))}
+                options={availableLighting}
+                multiple
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <CustomAutoComplete
+                label='Add Ons'
+                value={values.adOns}
+                onChange={(_, value) => setFieldValue('adOns', value.map(i => i.value))}
+                options={adOns}
                 multiple
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
               <CustomTextField
-                name="video_url"
-                label="Video URL"
-                value={values.video_url}
+                label='CycWall'
+                name="cycWall"
+                value={values.cycWall}
                 onChange={onChange}
-                slotProps={{
-                  input: {
-                    endAdornment: (
-                      <InputAdornment position="end" title="Preview Video">
-                        <Iconify
-                          style={{ cursor: 'pointer' }}
-                          icon="lucide:view"
-                          onClick={() => setMediaPreview(values.video_url)}
-                        />
-                      </InputAdornment>
-                    ),
-                  },
-                }}
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
-              <CustomTextField
-                name="hero_image"
-                label="Hero Image"
-                value={values.hero_image}
+            <CustomTextField
+                label='Backdrop System'
+                name="backdropSystem"
+                value={values.backdropSystem}
                 onChange={onChange}
-                slotProps={{
-                  input: {
-                    endAdornment: (
-                      <InputAdornment position="end" title="Preview Image">
-                        <Iconify
-                          style={{ cursor: 'pointer' }}
-                          icon="lucide:view"
-                          onClick={() => setMediaPreview(values.hero_image)}
-                        />
-                      </InputAdornment>
-                    ),
-                  },
-                }}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <CustomAutoComplete
+                label='Features'
+                value={values.features}
+                onChange={(_, value) => setFieldValue('features', value.map(i => i.value))}
+                options={features}
+                multiple
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Minimum Hourly Booking'
+                name="minimumHourlyBooking"
+                value={values.minimumHourlyBooking}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Intro'
+                name="intro"
+                value={values.intro}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='About this Space'
+                name="aboutThisSpace"
+                value={values.aboutThisSpace}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='See the Space'
+                name="seeTheSpace"
+                value={values.seeTheSpace}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Add to Project'
+                name="addToProject"
+                value={values.addToProject}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Recent Creators Who Booked Here'
+                name="recentCreatorsWhoBookedHere"
+                value={values.recentCreatorsWhoBookedHere}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Phone Number'
+                name="phoneNumber"
+                value={values.phoneNumber}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Attendee Limit'
+                name="attendeeLimit"
+                value={values.attendeeLimit}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Color Tone'
+                name="colorTone"
+                value={values.colorTone}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Parking Instructions'
+                name="parkingInstructions"
+                value={values.parkingInstructions}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Lighting Information'
+                name="lightingInformation"
+                value={values.lightingInformation}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Sound Information'
+                name="soundInformation"
+                value={values.soundInformation}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Space Access'
+                name="spaceAccess"
+                value={values.spaceAccess}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Host Rules'
+                name="hostRules"
+                value={values.hostRules}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Electrical'
+                name="electrical"
+                value={values.electrical}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Permit Details'
+                name="permitDetails"
+                value={values.permitDetails}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Bedrooms'
+                name="bedrooms"
+                value={values.bedrooms}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Bathrooms'
+                name="bathrooms"
+                value={values.bathrooms}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Square Footage'
+                name="squareFootage"
+                value={values.squareFootage}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+                label='Available Hours'
+                name="availableHours"
+                value={values.availableHours}
+                onChange={onChange}
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
               <CustomDatePicker
-                label={'Date'}
+                label={'Date Listed'}
                 error={errors.date}
-                value={values.date}
+                value={values.dateListed}
                 format="MMMM YYYY"
-                onChange={(value) => setFieldValue('date', value)}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
-              <FormControl fullWidth error={Boolean(errors.thumbnail)}>
-                <FormLabel sx={{ mb: 1 }}>Thumbnail</FormLabel>
-                <ImageUploader
-                  value={values.thumbnail}
-                  onFileSelect={(file) => onSetFile(file)}
-                  onDelete={onDeleteThumbnail}
-                />
-              </FormControl>
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <CustomTextField
-                name="shortDescription"
-                label="Short Description"
-                value={values.shortDescription}
-                onChange={onChange}
-                multiline
-                rows={2}
-              />
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <CustomTextField
-                name="fullDescription"
-                label="Full Description"
-                value={values.full_description}
-                onChange={onChange}
-                multiline
-                rows={4}
-              />
-            </Grid>
-  
-            <Grid size={{ xs: 12, md: 6 }}>
-              <MediaUploaderTrigger
-                open={openVerticalUploadDialog}
-                onClose={() => setOpenVerticalUploadDialog(false)}
-                onSave={(urls) => setFieldValue('vertical_gallery_images', urls)}
-                value={values?.vertical_gallery_images}
-                label={'Vertical Gallery Images'}
-                onAdd={() => setOpenVerticalUploadDialog(true)}
-                onDelete={(filteredUrls) => setFieldValue('vertical_gallery_images', filteredUrls)}
-              />
-            </Grid>
-  
-            <Grid size={{ xs: 12, md: 6 }}>
-              <MediaUploaderTrigger
-                open={openHorizontalUploadDialog}
-                onClose={() => setOpenHorizontalUploadDialog(false)}
-                onSave={(urls) => setFieldValue('horizontal_gallery_images', urls)}
-                value={values?.horizontal_gallery_images}
-                label={'Horizontal Gallery Images'}
-                onAdd={() => setOpenHorizontalUploadDialog(true)}
-                onDelete={(filteredUrls) => setFieldValue('horizontal_gallery_images', filteredUrls)}
+                onChange={(value) => setFieldValue('dateListed', value)}
               />
             </Grid>
           </Grid>
