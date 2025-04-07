@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Popover, Drawer, useMediaQuery, useTheme } from '@mui/material';
+import { Button, Drawer, Popover, useMediaQuery, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
@@ -26,12 +26,12 @@ import { pxToRem } from '/src/utils/helper';
 import useAuth from '/src/hooks/useAuth';
 import { paths } from '/src/paths';
 
+import CloseIcon from '@mui/icons-material/Close';
+import MenuIcon from '@mui/icons-material/Menu';
+import { ChatSidePanel } from '../_components/chat-side-panel';
 import { NotificationPopover } from '../_components/notificaiton-popover';
 import { SettingsGear } from '../_components/settings-gear';
 import { UserInfoPopover } from '../_components/user-info-popover';
-import { ChatSidePanel } from '../_components/chat-side-panel';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
 
 export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const { customSettings: { setOpenSubNav } } = React.useContext(SettingsContext);
@@ -78,16 +78,16 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   };
 
   React.useEffect(() => {
-    
+
     const updatedRoutes = publicRoutes.map((group) => ({
       ...group,
       items: group.items.filter(
         (item) =>
-          (isLogin && item.key !== "portfolio") || 
-          (!isLogin && item.key !== "content") 
+          (isLogin && item.key !== "portfolio") ||
+          (!isLogin && item.key !== "content")
       ),
-  }));
-  setRoutes(updatedRoutes);
+    }));
+    setRoutes(updatedRoutes);
 
   }, [isLogin]);
 
@@ -149,7 +149,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
               <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
                 <Logo height={40} width={120} />
               </Box>
-              <Stack component="ul" direction="row" spacing={1} sx={{ display: { xs: 'none', md: 'flex' } ,listStyle: 'none', m: 0, p: 0 }}>
+              <Stack component="ul" direction="row" spacing={1} sx={{ display: { xs: 'none', md: 'flex' }, listStyle: 'none', m: 0, p: 0 }}>
                 {routes.map((section) =>
                   section.items.map((item, index) => (
                     <NavItem
@@ -196,7 +196,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
               >
                 {mobileNavOpen ? <CloseIcon /> : <MenuIcon />}
               </IconButton>
-              <Box sx={{ 
+              <Box sx={{
                 display: 'flex',
                 gap: 2,
                 alignItems: 'center',
@@ -206,8 +206,8 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
               }}>
                 <SettingsGear />
                 {isLogin &&
-                  <ChatSidePanel 
-                    open={chatOpen} 
+                  <ChatSidePanel
+                    open={chatOpen}
                     onClose={() => setChatOpen(false)}
                     onToggle={handleChatToggle}
                   />
@@ -292,7 +292,7 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
   const hasPopover = Boolean(item.items);
 
   const element = (
-    <Box component="li" sx={{ userSelect: 'none', ...(active && { borderBottom: '2px solid var(--mui-palette-primary-main)'}) }}>
+    <Box component="li" sx={{ userSelect: 'none', ...(active && { borderBottom: '2px solid var(--mui-palette-primary-main)' }) }}>
       <Box
         {...(hasPopover
           ? {

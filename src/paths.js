@@ -164,6 +164,7 @@ export const paths = {
     // contact
     dms: '/dms',
     activity: '/activity',
+    channel: 'channel'
   },
   dashboardPublic: {
     // HQs

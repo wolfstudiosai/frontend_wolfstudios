@@ -14,5 +14,6 @@ export const ActivityView = () => {
             <ActivityConversation />
             {activeProfile && <UserProfile />}
         </Stack>
+
     )
 }

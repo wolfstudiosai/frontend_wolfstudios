@@ -25,12 +25,12 @@ export const ActivityConversation = () => {
                             overlap="circular"
                             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                             variant="dot"
-                            isOnline={activeReceiver.active}
+                            isOnline={activeReceiver?.active}
                         >
-                            <Avatar alt={activeReceiver.name} src={activeReceiver.profile_image} sx={{ width: 30, height: 30 }} />
+                            <Avatar alt={activeReceiver?.name} src={activeReceiver?.profile_image} sx={{ width: 30, height: 30 }} />
                         </StyledBadge>
                     </Box>
-                    <Typography sx={{ fontWeight: 'medium', fontSize: '1.2rem' }}>{activeReceiver.name}</Typography>
+                    <Typography sx={{ fontWeight: 'medium', fontSize: '1.2rem' }}>{activeReceiver?.name || 'User Name'}</Typography>
                 </Stack>
                 <IconButton>
                     <Iconify icon="bi:three-dots-vertical" />

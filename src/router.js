@@ -303,6 +303,13 @@ export const dashboardFavItems = [
         href: paths.private.activity,
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
+      {
+        key: 'channel',
+        title: 'Channel',
+        icon: 'uil:channel',
+        href: paths.private.channel,
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
     ],
   },
   {

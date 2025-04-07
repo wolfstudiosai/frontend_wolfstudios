@@ -15,18 +15,18 @@ export const Message = ({ message, in_thread }) => {
         <Stack direction='row' gap={1} sx={{ py: 0.5, position: 'relative', '&:hover .hover-action': { opacity: 1 } }}>
             {
                 userInfo?.id === message.sender_id ? (
-                    <Avatar src={message?.sender?.profile_pic} alt={message?.sender?.last_name ? `${message?.sender?.first_name} ${message?.sender?.last_name}` : message?.sender?.first_name} variant="square" sx={{ borderRadius: 1, cursor: 'pointer' }} onClick={() => handleActiveProfile(message?.sender_id)} />
+                    <Avatar src={message?.sender?.profile_pic} alt={message?.sender?.last_name ? `${message?.sender?.first_name} ${message?.sender?.last_name}` : message?.sender?.first_name} variant="square" sx={{ borderRadius: 1, cursor: 'pointer' }} onClick={() => handleActiveProfile(message?.senderId)} />
                 ) : (
-                    <Avatar src={message?.receiver?.profile_pic} alt={message?.receiver?.last_name ? `${message?.receiver?.first_name} ${message?.receiver?.last_name}` : message?.receiver?.first_name} variant="square" sx={{ borderRadius: 1, cursor: 'pointer' }} onClick={() => handleActiveProfile(message?.receiver_id)} />
+                    <Avatar src={message?.receiver?.profile_pic} alt={message?.receiver?.last_name ? `${message?.receiver?.first_name} ${message?.receiver?.last_name}` : message?.receiver?.first_name} variant="square" sx={{ borderRadius: 1, cursor: 'pointer' }} onClick={() => handleActiveProfile(message?.senderId)} />
                 )
             }
             <Box>
                 <Stack direction='row' gap={1.5} alignItems='center'>
                     {
                         userInfo?.id === message.sender_id ? (
-                            <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', cursor: 'pointer' }} onClick={() => handleActiveProfile(message.sender_id)}>{message?.sender?.last_name ? `${message?.sender?.first_name} ${message?.sender?.last_name}` : message?.sender?.first_name}</Typography>
+                            <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', cursor: 'pointer' }} onClick={() => handleActiveProfile(message.senderId)}>User Name</Typography>
                         ) : (
-                            <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', cursor: 'pointer' }} onClick={() => handleActiveProfile(message.receiver_id)}>{message?.receiver?.last_name ? `${message?.receiver?.first_name} ${message?.receiver?.last_name}` : message?.receiver?.first_name}</Typography>
+                            <Typography sx={{ fontWeight: 'medium', fontSize: '1rem', cursor: 'pointer' }} onClick={() => handleActiveProfile(message.senderId)}>User Name</Typography>
                         )
                     }
                     <Typography variant="caption" sx={{ color: 'text.secondary' }}>{dayjs(message.timestamp).format('DD MMM, YYYY - hh:mm A')}</Typography>

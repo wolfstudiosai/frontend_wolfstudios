@@ -1,6 +1,5 @@
-import { createContext, useEffect, useState } from "react";
-import { DEMO_CONVERSATIONS, DEMO_USERS } from "/src/app/(private)/dms/_lib/demo_data";
-import { api } from '/src/utils/api';
+import { createContext, useState } from "react";
+import { DEMO_CONVERSATIONS, DEMO_USERS } from "/src/mock_data";
 
 const loggedInUser = {
     userId: "u1",
@@ -17,7 +16,7 @@ const loggedInUser = {
 export const ChatContext = createContext({});
 
 export const ChatContextProvider = ({ children }) => {
-    const [userData, setUserData] = useState([]);
+    const [userData, setUserData] = useState(DEMO_USERS);
     const [activeConversation, setActiveConversation] = useState(DEMO_CONVERSATIONS[`u1-${DEMO_USERS[0].userId}`].messages);
     const [activeReceiver, setActiveReceiver] = useState(null);
     const [activeThread, setActiveThread] = useState(null);
@@ -36,11 +35,12 @@ export const ChatContextProvider = ({ children }) => {
     }
 
     const handleActiveThread = (messageId) => {
+        console.log(messageId);
         if (!messageId) {
             setActiveThread(null);
             return;
         }
-        const message = activeConversation.find((m) => m.messageId === messageId);
+        const message = DEMO_CONVERSATIONS["u1-u2"]?.messages.find((m) => m.messageId === messageId);
         if (message) {
             const thread = message?.thread_conversation
             if (thread) {
@@ -76,6 +76,7 @@ export const ChatContextProvider = ({ children }) => {
     }
 
     const handleActiveProfile = (userID) => {
+        console.log(userID);
         if (userID) {
             const profile = DEMO_USERS.find((user) => user.userId === userID) || (loggedInUser.userId === userID && loggedInUser);
 
@@ -105,37 +106,37 @@ export const ChatContextProvider = ({ children }) => {
         messages
     };
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const response = await api.get(`/user/inbox`);
-                if (response.data && response.data?.success) {
-                    setUserData(response.data.data);
-                    setActiveReceiver(response.data.data[0]);
-                }
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-            }
-        }
+    // useEffect(() => {
+    //     const fetchUserData = async () => {
+    //         try {
+    //             const response = await api.get(`/user/inbox`);
+    //             if (response.data && response.data?.success) {
+    //                 setUserData(response.data.data);
+    //                 setActiveReceiver(response.data.data[0]);
+    //             }
+    //         } catch (error) {
+    //             console.error("Error fetching user data:", error);
+    //         }
+    //     }
 
-        fetchUserData();
-    }, []);
+    //     fetchUserData();
+    // }, []);
 
-    useEffect(() => {
-        const fetchMessages = async () => {
-            try {
-                const response = await api.get(`/message/${activeReceiver.id}`);
-                if (response.data && response.data?.success) {
-                    setMessages(response.data.data);
-                }
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-            }
-        }
-        if (activeReceiver) {
-            fetchMessages();
-        }
-    }, [activeReceiver])
+    // useEffect(() => {
+    //     const fetchMessages = async () => {
+    //         try {
+    //             const response = await api.get(`/message/${activeReceiver.id}`);
+    //             if (response.data && response.data?.success) {
+    //                 setMessages(response.data.data);
+    //             }
+    //         } catch (error) {
+    //             console.error("Error fetching user data:", error);
+    //         }
+    //     }
+    //     if (activeReceiver) {
+    //         fetchMessages();
+    //     }
+    // }, [activeReceiver])
 
     return (
         <ChatContext.Provider value={contextValue}>
