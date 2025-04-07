@@ -15,10 +15,39 @@ import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-t
 
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getProductionCategoryListAsync } from '../_lib/production.action';
-import { defaultProduction } from '../_lib/production.types';
+import { defaultProduction1 } from '../_lib/production.types';
 
 export const ProductionForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
-    const [values, setValues] = React.useState(data || defaultProduction);
+    const [values, setValues] = React.useState(data || defaultProduction1);
+
+    const status =[
+        { value: 'Planning', label: 'Planning' },
+        { value: 'In Progress', label: 'In Progress' },
+        { value: 'Completed', label: 'Completed' },
+        { value: 'On Hold', label: 'On Hold' },
+        { value: 'Cancelled', label: 'Cancelled' },
+    ]
+
+    const cardsUsed =[
+        { value: 'Card1', label: 'Card1' },
+        { value: 'Card2', label: 'Card2' },
+        { value: 'Card3', label: 'Card3' },
+        { value: 'Card4', label: 'Card4' },
+    ]
+
+    const equipmentRentals =[
+        { value: 'Rental1', label: 'Rental1' },
+        { value: 'Rental2', label: 'Rental2' },
+        { value: 'Rental3', label: 'Rental3' },
+        { value: 'Rental4', label: 'Rental4' },
+    ]
+
+    const productionUsage =[
+        { value: 'Usage1', label: 'Usage1' },
+        { value: 'Usage2', label: 'Usage2' },
+        { value: 'Usage3', label: 'Usage3' },
+        { value: 'Usage4', label: 'Usage4' },
+    ]
     
     // *********************States*********************************
       const [mediaPreview, setMediaPreview] = React.useState(null);
@@ -33,7 +62,7 @@ export const ProductionForm = ({ data, onSubmit, onChange, errors, onSetFile, on
     
       React.useEffect(() => {
         return () => {
-          setValues(defaultProduction);
+          setValues(defaultProduction1);
         };
       }, []);
     
@@ -109,152 +138,145 @@ export const ProductionForm = ({ data, onSubmit, onChange, errors, onSetFile, on
         <Grid container spacing={2}>
           <Grid size={{ xs: 12 }}>
             <CustomTextField
-              name="projectTitle"
-              label="Project Title"
-              value={values.projectTitle}
+              label="Name"
+              name="name"
+              value={values.name}
               onChange={onChange}
             />
-            <ErrorMessage error={errors.projectTitle} />
+            <ErrorMessage error={errors.name} />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomAutoComplete
-              label='Categories'
-              value={values.productionCategories}
-              onChange={(_, value) => setFieldValue('productionCategories', value.map(i => i.value))}
-              options={productionCategories}
-              multiple
+            <CustomTextField
+              label="Internal Notes"
+              name="internalNotes"
+              value={values.internalNotes}
+              onChange={onChange}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoComplete
-              label='Partners'
-              value={values.partnerHQ}
-              onChange={(_, value) => setFieldValue('partnerHQ', value.map(i => i.value))}
-              options={partners}
-              multiple
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <CustomAutoComplete
-              label='States'
-              value={values.states}
-              onChange={(_, value) => setFieldValue('states', value.map(i => i.value))}
-              options={states}
-              multiple
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <CustomAutoComplete
-              label='Countries'
-              value={values.countries}
-              onChange={(_, value) => setFieldValue('countries', value.map(i => i.value))}
-              options={countries}
+              label='Status'
+              value={values.status}
+              onChange={(_, value) => setFieldValue('status', value.map(i => i.value))}
+              options={status}
               multiple
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
-              name="video_url"
-              label="Video URL"
-              value={values.video_url}
+              label="Total Expense"
+              name="totalExpense"
+              value={values.totalExpense}
               onChange={onChange}
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end" title="Preview Video">
-                      <Iconify
-                        style={{ cursor: 'pointer' }}
-                        icon="lucide:view"
-                        onClick={() => setMediaPreview(values.video_url)}
-                      />
-                    </InputAdornment>
-                  ),
-                },
-              }}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField
-              name="hero_image"
-              label="Hero Image"
-              value={values.hero_image}
-              onChange={onChange}
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end" title="Preview Image">
-                      <Iconify
-                        style={{ cursor: 'pointer' }}
-                        icon="lucide:view"
-                        onClick={() => setMediaPreview(values.hero_image)}
-                      />
-                    </InputAdornment>
-                  ),
-                },
-              }}
+            <CustomAutoComplete
+              label='Cards Used'
+              value={values.cardsUsed}
+              onChange={(_, value) => setFieldValue('cardsUsed', value.map(i => i.value))}
+              options={cardsUsed}
+              multiple
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomDatePicker
-              label={'Date'}
-              error={errors.date}
-              value={values.date}
+          <CustomDatePicker
+              label={'Proposed Date'}
+              error={errors.proposedDate}
+              value={values.proposedDate}
               format="MMMM YYYY"
-              onChange={(value) => setFieldValue('date', value)}
+              onChange={(value) => setFieldValue('proposedDate', value)}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <FormControl fullWidth error={Boolean(errors.thumbnail)}>
-              <FormLabel sx={{ mb: 1 }}>Thumbnail</FormLabel>
-              <ImageUploader
-                value={values.thumbnail}
-                onFileSelect={(file) => onSetFile(file)}
-                onDelete={onDeleteThumbnail}
-              />
-            </FormControl>
+          <CustomDatePicker
+              label={'Record Shoot Date'}
+              error={errors.recordShootDate}
+              value={values.recordShootDate}
+              format="MMMM YYYY"
+              onChange={(value) => setFieldValue('recordShootDate', value)}
+            />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
-              name="shortDescription"
-              label="Short Description"
-              value={values.shortDescription}
+              label="Space Expense"
+              name="spaceExpense"
+              value={values.spaceExpense}
               onChange={onChange}
-              multiline
-              rows={2}
             />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
-              name="fullDescription"
-              label="Full Description"
-              value={values.full_description}
+              label="Talent Expense"
+              name="talentExpense"
+              value={values.talentExpense}
               onChange={onChange}
-              multiline
-              rows={4}
             />
           </Grid>
-
           <Grid size={{ xs: 12, md: 6 }}>
-            <MediaUploaderTrigger
-              open={openVerticalUploadDialog}
-              onClose={() => setOpenVerticalUploadDialog(false)}
-              onSave={(urls) => setFieldValue('vertical_gallery_images', urls)}
-              value={values?.vertical_gallery_images}
-              label={'Vertical Gallery Images'}
-              onAdd={() => setOpenVerticalUploadDialog(true)}
-              onDelete={(filteredUrls) => setFieldValue('vertical_gallery_images', filteredUrls)}
+            <CustomTextField
+              label="Crew Expense"
+              name="crewExpense"
+              value={values.crewExpense}
+              onChange={onChange}
             />
           </Grid>
-
           <Grid size={{ xs: 12, md: 6 }}>
-            <MediaUploaderTrigger
-              open={openHorizontalUploadDialog}
-              onClose={() => setOpenHorizontalUploadDialog(false)}
-              onSave={(urls) => setFieldValue('horizontal_gallery_images', urls)}
-              value={values?.horizontal_gallery_images}
-              label={'Horizontal Gallery Images'}
-              onAdd={() => setOpenHorizontalUploadDialog(true)}
-              onDelete={(filteredUrls) => setFieldValue('horizontal_gallery_images', filteredUrls)}
+            <CustomTextField
+              label="Food Expense"
+              name="foodExpense"
+              value={values.foodExpense}
+              onChange={onChange}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoComplete
+              label='Equipment Rentals'
+              value={values.equipmentRentals}
+              onChange={(_, value) => setFieldValue('equipmentRentals', value.map(i => i.value))}
+              options={equipmentRentals}
+              multiple
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+              label="Equipment Expense"
+              name="equipmentExpense"
+              value={values.equipmentExpense}
+              onChange={onChange}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+              label="Google Drive Files"
+              name="googleDriveFiles"
+              value={values.googleDriveFiles}
+              onChange={onChange}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoComplete
+              label='Production Usage'
+              value={values.productionUsage}
+              onChange={(_, value) => setFieldValue('productionUsage', value.map(i => i.value))}
+              options={productionUsage}
+              multiple
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+              label="Director Expense"
+              name="directorExpense"
+              value={values.directorExpense}
+              onChange={onChange}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField
+              label="Producer Expense"
+              name="producerExpense"
+              value={values.producerExpense}
+              onChange={onChange}
             />
           </Grid>
         </Grid>

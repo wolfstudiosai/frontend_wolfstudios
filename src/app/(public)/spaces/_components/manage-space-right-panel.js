@@ -26,8 +26,8 @@ export const ManageSpaceRightPanel = ({ open, onClose, fetchList, data, width, v
             initialValues: defaultSpace,
             validate: (values) => {
             const errors = {};
-            if (!values.projectTitle) {
-                errors.projectTitle = formConstants.required;
+            if (!values.name) {
+                errors.name = formConstants.required;
             }
     
             return errors;

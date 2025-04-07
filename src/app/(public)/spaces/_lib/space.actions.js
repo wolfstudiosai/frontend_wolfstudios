@@ -34,12 +34,12 @@ export const createSpaceAsync = async (file, data) => {
       thumbnailImage = uploadResponse[0].path;
     }
 
-    const campaignResponse = await api.post(`/portfolios`, {
+    const spaceResponse = await api.post(`/spaces`, {
       ...rest,
     });
 
-    toast.success(campaignResponse.data.message);
-    return { success: true, data: campaignResponse.data.data };
+    toast.success(spaceResponse.data.message);
+    return { success: true, data: spaceResponse.data.data };
   } catch (error) {
     const errorMessage = error.response?.data?.message || error.message || 'An unknown error occurred';
     toast.error(errorMessage);
@@ -55,7 +55,7 @@ export const updateSpaceAsync = async (file, data) => {
       const uploadResponse = await uploadFileAsync(file);
       thumbnailPath = uploadResponse[0].path;
     }
-    const res = await api.patch(`/portfolio/update/${id}`, {
+    const res = await api.patch(`/spaces/${id}`, {
       ...rest,
       thumbnail: thumbnailPath ? thumbnailPath : data.thumbnail,
     });
@@ -69,8 +69,8 @@ export const updateSpaceAsync = async (file, data) => {
 
 export const deleteSpaceAsync = async (ids) => {
   try {
-    const res = await api.delete(`/portfolio/delete`, {
-      data: { ids: ids },
+    const res = await api.delete(`/spaces/bulk`, {
+      data: { IDs: ids },
     });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
