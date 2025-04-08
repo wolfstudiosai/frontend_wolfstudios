@@ -154,6 +154,15 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
+            <CustomDatePicker
+              label={'Date'}
+              error={errors.date}
+              value={values.date}
+              format="MMMM YYYY"
+              onChange={(value) => setFieldValue('date', value)}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
               name="video_url"
               label="Video URL"
@@ -174,7 +183,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
               }}
             />
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
               name="hero_image"
               label="Hero Image"
@@ -194,23 +203,34 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
                 },
               }}
             />
+          </Grid> */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <FormControl fullWidth error={Boolean(errors.thumbnail)}>
+              <FormLabel sx={{ mb: 1 }}>Image Field</FormLabel>
+              <ImageUploader
+                value={values.singlePageHeroImage}
+                onFileSelect={(file) => setFieldValue('imagefield', file)}
+                onDelete={() => setFieldValue('imagefield', null)}
+              />
+            </FormControl>
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <CustomDatePicker
-              label={'Date'}
-              error={errors.date}
-              value={values.date}
-              format="MMMM YYYY"
-              onChange={(value) => setFieldValue('date', value)}
-            />
+          <Grid size={{ xs: 12, md: 4 }}>
+            <FormControl fullWidth error={Boolean(errors.thumbnail)}>
+              <FormLabel sx={{ mb: 1 }}>Hero Image</FormLabel>
+              <ImageUploader
+                value={values.singlePageHeroImage}
+                onFileSelect={(file) => setFieldValue('singlePageHeroImage', file)}
+                onDelete={() => setFieldValue('singlePageHeroImage', null)}
+              />
+            </FormControl>
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <FormControl fullWidth error={Boolean(errors.thumbnail)}>
               <FormLabel sx={{ mb: 1 }}>Thumbnail</FormLabel>
               <ImageUploader
                 value={values.thumbnail}
-                onFileSelect={(file) => onSetFile(file)}
-                onDelete={onDeleteThumbnail}
+                onFileSelect={(file) => setFieldValue('thumbnailImage', file)} // onFileSelect(file)}
+                onDelete={() => setFieldValue('thumbnailImage', null)}
               />
             </FormControl>
           </Grid>
