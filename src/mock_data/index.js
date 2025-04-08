@@ -156,3 +156,41 @@ export const DEMO_CONVERSATIONS = {
         ]
     }
 }
+
+export const channelList = [
+    {
+        id: "channel-1",
+        name: "Channel 1",
+        icon: "lucide:hash",
+        isFavourite: true,
+        newMessage: 5
+    },
+    {
+        id: "channel-2",
+        name: "Channel 2",
+        icon: "lucide:hash",
+        isFavourite: false,
+        newMessage: 0
+    },
+    {
+        id: "channel-3",
+        name: "Channel 3",
+        icon: "lucide:hash",
+        isFavourite: true,
+        newMessage: 0
+    },
+    {
+        id: "channel-4",
+        name: "Channel 4",
+        icon: "lucide:hash",
+        isFavourite: false,
+        newMessage: 2
+    },
+    {
+        id: "channel-5",
+        name: "Channel 5",
+        icon: "lucide:hash",
+        isFavourite: true,
+        newMessage: 0
+    }
+]

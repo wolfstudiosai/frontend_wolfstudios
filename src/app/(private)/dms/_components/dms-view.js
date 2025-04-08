@@ -14,7 +14,7 @@ export const DMsView = () => {
     return (
         <Stack direction='row' sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, width: '100%', }}>
             <UserList />
-            <Conversation />
+            <Conversation page="dms" />
             {activeThread && <ThreadConversation />}
             {activeProfile && <UserProfile />}
         </Stack>

@@ -9,18 +9,19 @@ import { StyledBadge } from "./avatar-badge";
 import { MessageForm } from './message-form';
 import { Iconify } from "/src/components/iconify/iconify";
 import { ChatContext } from "/src/contexts/chat";
+import { DEMO_CONVERSATIONS } from "/src/mock_data";
 
-export const Conversation = () => {
+export const Conversation = ({ page }) => {
     const [activeTab, setActiveTab] = useState('messages');
 
-    const { messages, activeReceiver, activeThread, activeProfile } = useContext(ChatContext);
+    const { activeReceiver, activeThread, activeProfile } = useContext(ChatContext);
 
 
     return (
         <Stack sx={{ p: 2, width: (activeThread || activeProfile) ? '40%' : '70%', ...((activeThread || activeProfile) && { borderRight: '1px solid', borderColor: 'divider' }) }}>
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
                 {
-                    activeReceiver && (
+                    (activeReceiver && page === "dms") && (
                         <Stack direction='row' alignItems='center' gap={1}>
                             <Box>
                                 <StyledBadge
@@ -29,11 +30,16 @@ export const Conversation = () => {
                                     variant="dot"
                                     isOnline={activeReceiver?.active}
                                 >
-                                    <Avatar alt={activeReceiver?.last_name ? `${activeReceiver.first_name} ${activeReceiver.last_name}` : activeReceiver.first_name} src={activeReceiver?.profile_pic} sx={{ width: 30, height: 30 }} />
+                                    <Avatar alt={activeReceiver?.name} src={activeReceiver?.profile_image} sx={{ width: 30, height: 30 }} />
                                 </StyledBadge>
                             </Box>
-                            <Typography sx={{ fontWeight: 'medium', fontSize: '1.2rem' }}>{activeReceiver?.last_name ? `${activeReceiver.first_name} ${activeReceiver.last_name}` : activeReceiver.first_name}</Typography>
+                            <Typography sx={{ fontWeight: 'medium', fontSize: '1.2rem' }}>{activeReceiver?.name}</Typography>
                         </Stack>
+                    )
+                }
+                {
+                    page === "channel" && (
+                        <Typography sx={{ fontWeight: 'medium', fontSize: '22px' }}>Channel name</Typography>
                     )
                 }
                 <IconButton>
@@ -83,8 +89,8 @@ export const Conversation = () => {
                             },
                         }}>
                             {
-                                messages?.length > 0 ? (
-                                    messages.map((message) => (
+                                DEMO_CONVERSATIONS["u1-u2"]?.messages.length > 0 ? (
+                                    DEMO_CONVERSATIONS["u1-u2"]?.messages.map((message) => (
                                         <Message key={message.id} message={message} />
                                     ))
                                 ) : (
