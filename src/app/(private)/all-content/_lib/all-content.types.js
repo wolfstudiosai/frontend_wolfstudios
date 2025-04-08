@@ -73,3 +73,75 @@ export const defaultContent = {
     image: '',
     video: '',
 };
+export const defaultContent1 = {
+    // General Information
+    id: '',
+    name: '',
+    pinAccountsUsed: '',
+    postQuality: [],
+    googleDriveFiles: '',
+    playbookLink: '',
+    upPromoteConversion: '',
+    assetStatus: '',
+    monthUploaded: 0,
+    revoInstagram: '',
+    creatorStatus: null,
+    partner :{
+    IGLink:'',
+    TikTokLink: '',
+    TTShares:'',
+    TTSaves:'',
+    TTViews:'',
+    TTLikes:'',
+    TTComments:'',
+    YTLink:'',
+    },
+
+    IG:{
+        SocialSetsUsed:'',
+        TotalComments:'',
+        TotalLikes:'',
+        TotalShares:'',
+        TotalViews:'',
+    },
+
+    YT:{
+        ClubREVOTotalViews: 0,
+        PartnerTotalSaves: 0,
+        PartnerTotalViews: 0,
+        PartnerTotalComments: 0,
+        PartnerTotalLikes: 0,
+        REVOMADICTotalShares: 0,
+        REVOMADICTotalViews: 0,
+        REVOMADICTotalLikes: 0,
+        REVOMADICTotalComments: 0,
+        ClubREVOTotalLikes: 0,
+        AccountsUsed: '',
+    },
+
+    Pinterest:{
+    TotalPinClicks: 0,
+    TotalViews: 0,
+    },
+
+    REVO:{
+    Twitter: '',
+    TTViews: 0,
+    TikTok:'',
+    Youtube: '',
+    ClubRevoYoutube: '',
+    },
+    tikTokAccountsused: '',
+    TTDummyAccountsUsed: [],
+    postingStatus: '',
+    totalContributedEngagement: '',
+
+    //relations
+    campaigns: [],
+    cities:[],
+    products:[],
+    tags:[],
+    stakeholders:[],
+    partners:[],
+    retailPartners:[],
+};
