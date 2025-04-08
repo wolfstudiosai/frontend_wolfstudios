@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
+import axios from 'axios';
 import { useFormik } from 'formik';
 
 import useAuth from '/src/hooks/useAuth';
@@ -84,11 +85,11 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, widt
               // Step 4: Upload files to presigned URLs (e.g., S3)
               const uploadResponses = await Promise.all(
                 filesWithUrls.map(({ url, file }) => {
-                  console.log(file, "file.....");
-                  return api.put(url, file, {
+                  console.log(file, 'file.....');
+                  return axios.put(url, file, {
                     headers: {
-                      "Content-Type": file.type
-                    }
+                      'Content-Type': file.type,
+                    },
                   });
                 })
               );
