@@ -15,13 +15,13 @@ import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-t
 
 import { useFormik } from 'formik';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
-import { createPortfolioAsync, getPortfolioCategoryListAsync, updatePortfolioAsync } from '../_lib/portfolio.actions';
+import { createPortfolioAsync, getPortfolioAsync, getPortfolioCategoryListAsync, updatePortfolioAsync } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
 import { formConstants } from '/src/app/constants/form-constants';
 import { imageUploader } from '/src/utils/upload-file';
 
-export const PortfolioForm = ({ data, onClose, fetchList }) => {
-  console.log(data);
+export const PortfolioForm = ({ id, onClose, fetchList }) => {
+
   // *********************States*********************************
   const [loading, setLoading] = React.useState(false);
   const [mediaPreview, setMediaPreview] = React.useState(null);
@@ -31,12 +31,13 @@ export const PortfolioForm = ({ data, onClose, fetchList }) => {
   const [states, setStates] = React.useState([]);
   const [portfolioCategories, setPortfolioCategories] = React.useState([]);
   const [partners, setPartners] = React.useState([]);
+  const [data, setData] = React.useState(null);
 
   // ***************** Formik *******************************
 
   const { values, errors, handleChange, handleSubmit, setValues, setFieldValue, resetForm } =
     useFormik({
-      initialValues: defaultPortfolio(data),
+      initialValues: defaultPortfolio(),
       validate: (values) => {
         const errors = {};
         if (!values.projectTitle) {
@@ -48,25 +49,40 @@ export const PortfolioForm = ({ data, onClose, fetchList }) => {
       onSubmit: async (values) => {
         setLoading(true);
         try {
+          const finalData = {
+            ...values,
+          }
+
           const imageFields = ['singlePageHeroImage', 'thumbnailImage', 'imagefield'];
 
-          // Step 1: Collect image files and their metadata
+          // Collect image files and their metadata
           for (const field of imageFields) {
-            const file = values[field];
-            if (file instanceof File) {
+            const value = values[field];
+            if (value instanceof File) {
               const res = await imageUploader([{
-                file,
-                fileName: file.name.split('.').slice(0, -1).join('.'),
-                fileType: file.type.split('/')[1],
+                file: value,
+                fileName: value.name.split('.').slice(0, -1).join('.'),
+                fileType: value.type.split('/')[1],
               }], 'portfolios');
 
-              values[field] = res;
+              finalData[field] = res;
+            } else if (typeof value === 'string') {
+              finalData[field] = [value];
             }
           }
 
-          console.log(values);
+          const arrayFields = ['portfolioCategories', 'states', 'countries', "partnerHQ"];
+          for (const field of arrayFields) {
+            const value = values[field];
+            if (value.length > 0) {
+              const arrOfStr = value.map((item) => item.value);
+              finalData[field] = arrOfStr;
+            }
+          }
 
-          const res = data ? await updatePortfolioAsync(values) : await createPortfolioAsync(values);
+          console.log(finalData);
+
+          const res = data ? await updatePortfolioAsync(finalData) : await createPortfolioAsync(finalData);
           if (res.success) {
             onClose?.();
             resetForm();
@@ -90,30 +106,56 @@ export const PortfolioForm = ({ data, onClose, fetchList }) => {
   //   };
   // }, []);
 
-  // React.useEffect(() => {
-  //   if (data) {
-  //     setValues(data);
-  //   }
-  // }, [data]);
+  React.useEffect(() => {
+    if (data) {
+      setValues(defaultPortfolio(data));
+    }
+  }, [data, setValues]);
+
+  React.useEffect(() => {
+    const fetchSinglePortfolios = async () => {
+      try {
+        const res = await getPortfolioAsync(id);
+        if (res?.success) {
+          setData(res.data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    if (id) {
+      fetchSinglePortfolios();
+    }
+  }, [id])
 
   React.useEffect(() => {
     const fetchPrerequisitesData = async () => {
       try {
         const countryResponse = await getCountryListAsync({ page: 1, rowsPerPage: 100 });
         if (countryResponse?.success) {
-          setCountries(countryResponse.data.map((item) => ({ value: item.id, label: item.Name })));
+          const countryOptions = countryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          setCountries(countryOptions);
+          // if (data) {
+          //   const preSelectedOptionsLabel = data?.ByCountryPortfolios?.map((item) => item?.ByCountry?.Name)?.filter(Boolean);
+          //   const preSelected = countryOptions.filter((item) => preSelectedOptionsLabel.includes(item.label));
+          //   setFieldValue("countries", preSelected);
+          // }
         }
         const stateResponse = await getStateListAsync({ page: 1, rowsPerPage: 100 });
         if (stateResponse?.success) {
-          setStates(stateResponse.data.map((item) => ({ value: item.id, label: item.Name })));
+          const stateOptions = stateResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          setStates(stateOptions);
         }
         const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 100 });
         if (categoryResponse?.success) {
-          setPortfolioCategories(categoryResponse.data.map((item) => ({ value: item.id, label: item.Name })));
+          const categoryOptions = categoryResponse.data.map((item) => ({ value: item.id, label: item.Name }))
+          setPortfolioCategories(categoryOptions);
         }
         const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 100 });
         if (partnerResponse?.success) {
-          setPartners(partnerResponse.data.map((item) => ({ value: item.id, label: item.Name })));
+          const partnerOptions = partnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          setPartners(partnerOptions);
         }
       } catch (err) {
         console.error(err);
@@ -121,7 +163,7 @@ export const PortfolioForm = ({ data, onClose, fetchList }) => {
     }
 
     fetchPrerequisitesData();
-  }, []);
+  }, [data, setFieldValue]);
 
   return (
     <>
@@ -141,7 +183,7 @@ export const PortfolioForm = ({ data, onClose, fetchList }) => {
             <CustomAutoComplete
               label='Categories'
               value={values.portfolioCategories}
-              onChange={(_, value) => setFieldValue('portfolioCategories', value.map(i => i.value))}
+              onChange={(_, value) => setFieldValue('portfolioCategories', value)}
               options={portfolioCategories}
               multiple
             />
@@ -150,7 +192,7 @@ export const PortfolioForm = ({ data, onClose, fetchList }) => {
             <CustomAutoComplete
               label='Partners'
               value={values.partnerHQ}
-              onChange={(_, value) => setFieldValue('partnerHQ', value.map(i => i.value))}
+              onChange={(_, value) => setFieldValue('partnerHQ', value)}
               options={partners}
               multiple
             />
@@ -159,7 +201,7 @@ export const PortfolioForm = ({ data, onClose, fetchList }) => {
             <CustomAutoComplete
               label='States'
               value={values.states}
-              onChange={(_, value) => setFieldValue('states', value.map(i => i.value))}
+              onChange={(_, value) => setFieldValue('states', value)}
               options={states}
               multiple
             />
@@ -168,7 +210,7 @@ export const PortfolioForm = ({ data, onClose, fetchList }) => {
             <CustomAutoComplete
               label='Countries'
               value={values.countries}
-              onChange={(_, value) => setFieldValue('countries', value.map(i => i.value))}
+              onChange={(_, value) => setFieldValue('countries', value)}
               options={countries}
               multiple
             />
@@ -228,7 +270,7 @@ export const PortfolioForm = ({ data, onClose, fetchList }) => {
             <FormControl fullWidth error={Boolean(errors.thumbnail)}>
               <FormLabel sx={{ mb: 1 }}>Image Field</FormLabel>
               <ImageUploader
-                value={values.singlePageHeroImage}
+                value={values.imagefield}
                 onFileSelect={(file) => setFieldValue('imagefield', file)}
                 onDelete={() => setFieldValue('imagefield', null)}
               />
@@ -248,7 +290,7 @@ export const PortfolioForm = ({ data, onClose, fetchList }) => {
             <FormControl fullWidth error={Boolean(errors.thumbnail)}>
               <FormLabel sx={{ mb: 1 }}>Thumbnail</FormLabel>
               <ImageUploader
-                value={values.thumbnail}
+                value={values.thumbnailImage}
                 onFileSelect={(file) => setFieldValue('thumbnailImage', file)} // onFileSelect(file)}
                 onDelete={() => setFieldValue('thumbnailImage', null)}
               />

@@ -14,10 +14,10 @@ export const getPortfolioListAsync = async (queryParams) => {
   }
 };
 
-export const getPortfolioAsync = async (slug) => {
+export const getPortfolioAsync = async (id) => {
   try {
-    const res = await api.get(`/portfolios?slug=${slug}`);
-    return { success: true, data: res.data.data[0], totalRecords: res.data.meta.total };
+    const res = await api.get(`/portfolios/${id}`);
+    return { success: true, data: res.data.data };
   } catch (error) {
     toast.error(error.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
@@ -26,7 +26,7 @@ export const getPortfolioAsync = async (slug) => {
 
 export const createPortfolioAsync = async (data) => {
   try {
-    const { slug, id, created_by, user_id, updated_at, video_url, ...rest } = data;
+    const { video_url, ...rest } = data;
 
     const campaignResponse = await api.post(`/portfolios`, {
       ...rest,
@@ -41,11 +41,11 @@ export const createPortfolioAsync = async (data) => {
   }
 };
 
-export const updatePortfolioAsync = async (data) => {
+export const updatePortfolioAsync = async (id, data) => {
   try {
-    const { id, slug, user_id, created_by, created_at, updated_at, ...rest } = data;
+    const { video_url, ...rest } = data;
 
-    const res = await api.patch(`/portfolio/update/${id}`, {
+    const res = await api.patch(`/portfolios/${id}`, {
       ...rest,
     });
     toast.success(res.data.message);

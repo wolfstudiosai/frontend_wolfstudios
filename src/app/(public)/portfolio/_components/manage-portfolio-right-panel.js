@@ -122,7 +122,7 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, view
       {sidebarView === 'QUICK' ? (
         <PortfolioQuickView data={data} />
       ) : (
-        <PortfolioForm data={data} onClose={onClose} fetchList={fetchList} />
+        <PortfolioForm id={data?.id} onClose={onClose} fetchList={fetchList} />
       )}
     </DrawerContainer>
   );

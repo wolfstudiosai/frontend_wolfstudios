@@ -9,7 +9,8 @@ export const CustomAutoComplete = ({ value, label, size, multiple, placeholder, 
             <Autocomplete
                 multiple={multiple}
                 options={options}
-                getOptionLabel={(option) => option.label}
+                getOptionLabel={(option) => option.label || ''}
+                value={value}
                 onChange={onChange}
                 renderTags={(value, getTagProps) =>
                     value.map((option, index) => {
@@ -20,7 +21,7 @@ export const CustomAutoComplete = ({ value, label, size, multiple, placeholder, 
                                 key={key}
                                 size="small"
                                 color="inherit"
-                                label={option.label}
+                                label={option?.label}
                                 {...rest}
                                 sx={{ borderRadius: '20px' }}
                             />
