@@ -1,7 +1,7 @@
+import { Box, FormLabel, IconButton, Stack } from '@mui/material';
 import React from 'react';
 import { deleteFileAsync } from '/src/app/(public)/portfolio/_lib/portfolio.actions';
 import { isSupabaseUrl, isVideoContent } from '/src/utils/helper';
-import { Box, FormLabel, IconButton, Stack } from '@mui/material';
 
 import { Iconify } from '../iconify/iconify';
 import { MediaUploader } from './media-uploader';
@@ -16,6 +16,7 @@ export const MediaUploaderTrigger = ({
   onDelete,
   hideImageUploader,
   hideVideoUploader,
+  folderName
 }) => {
   const handleRemoveFile = async (item) => {
     if (isSupabaseUrl(item)) {
@@ -144,6 +145,7 @@ export const MediaUploaderTrigger = ({
         multiple
         hideImageUploader={hideImageUploader}
         hideVideoUploader={hideVideoUploader}
+        folderName={folderName}
       />
     </React.Fragment>
   );

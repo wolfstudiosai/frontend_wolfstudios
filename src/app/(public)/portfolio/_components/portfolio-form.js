@@ -1,6 +1,6 @@
 'use client';
 
-import { FormControl, FormLabel, InputAdornment } from '@mui/material';
+import { Button, FormControl, FormLabel, InputAdornment, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import React from 'react';
 import { getCountryListAsync, getStateListAsync } from '/src/actions/common';
@@ -13,14 +13,17 @@ import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-ifr
 import { ImageUploader } from '/src/components/uploaders/image-uploader';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
+import { useFormik } from 'formik';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
-import { getPortfolioCategoryListAsync } from '../_lib/portfolio.actions';
+import { createPortfolioAsync, getPortfolioCategoryListAsync, updatePortfolioAsync } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
+import { formConstants } from '/src/app/constants/form-constants';
+import { imageUploader } from '/src/utils/upload-file';
 
-export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
-  const [values, setValues] = React.useState(data || defaultPortfolio);
-
+export const PortfolioForm = ({ data, onClose, fetchList }) => {
+  console.log(data);
   // *********************States*********************************
+  const [loading, setLoading] = React.useState(false);
   const [mediaPreview, setMediaPreview] = React.useState(null);
   const [openVerticalUploadDialog, setOpenVerticalUploadDialog] = React.useState(false);
   const [openHorizontalUploadDialog, setOpenHorizontalUploadDialog] = React.useState(false);
@@ -29,91 +32,108 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
   const [portfolioCategories, setPortfolioCategories] = React.useState([]);
   const [partners, setPartners] = React.useState([]);
 
-  // *****************Use Effects*******************************
+  // ***************** Formik *******************************
+
+  const { values, errors, handleChange, handleSubmit, setValues, setFieldValue, resetForm } =
+    useFormik({
+      initialValues: defaultPortfolio(data),
+      validate: (values) => {
+        const errors = {};
+        if (!values.projectTitle) {
+          errors.projectTitle = formConstants.required;
+        }
+
+        return errors;
+      },
+      onSubmit: async (values) => {
+        setLoading(true);
+        try {
+          const imageFields = ['singlePageHeroImage', 'thumbnailImage', 'imagefield'];
+
+          // Step 1: Collect image files and their metadata
+          for (const field of imageFields) {
+            const file = values[field];
+            if (file instanceof File) {
+              const res = await imageUploader([{
+                file,
+                fileName: file.name.split('.').slice(0, -1).join('.'),
+                fileType: file.type.split('/')[1],
+              }], 'portfolios');
+
+              values[field] = res;
+            }
+          }
+
+          console.log(values);
+
+          const res = data ? await updatePortfolioAsync(values) : await createPortfolioAsync(values);
+          if (res.success) {
+            onClose?.();
+            resetForm();
+            fetchList();
+          } else {
+            console.error('Operation failed:', res.message);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        } finally {
+          setLoading(false);
+        }
+      },
+    });
+
+  // *****************Use Effects****************************
+
+  // React.useEffect(() => {
+  //   return () => {
+  //     setValues(defaultPortfolio);
+  //   };
+  // }, []);
+
+  // React.useEffect(() => {
+  //   if (data) {
+  //     setValues(data);
+  //   }
+  // }, [data]);
 
   React.useEffect(() => {
-    return () => {
-      setValues(defaultPortfolio);
-    };
+    const fetchPrerequisitesData = async () => {
+      try {
+        const countryResponse = await getCountryListAsync({ page: 1, rowsPerPage: 100 });
+        if (countryResponse?.success) {
+          setCountries(countryResponse.data.map((item) => ({ value: item.id, label: item.Name })));
+        }
+        const stateResponse = await getStateListAsync({ page: 1, rowsPerPage: 100 });
+        if (stateResponse?.success) {
+          setStates(stateResponse.data.map((item) => ({ value: item.id, label: item.Name })));
+        }
+        const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 100 });
+        if (categoryResponse?.success) {
+          setPortfolioCategories(categoryResponse.data.map((item) => ({ value: item.id, label: item.Name })));
+        }
+        const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 100 });
+        if (partnerResponse?.success) {
+          setPartners(partnerResponse.data.map((item) => ({ value: item.id, label: item.Name })));
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchPrerequisitesData();
   }, []);
-
-  React.useEffect(() => {
-    if (data) {
-      setValues(data);
-    }
-  }, [data]);
-
-  React.useEffect(() => {
-    const fetchCountries = async () => {
-      try {
-        const res = await getCountryListAsync({ page: 1, rowsPerPage: 100 });
-        if (res?.success) {
-          setCountries(res.data.map((item) => ({ value: item.id, label: item.Name })));
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    fetchCountries();
-  }, []);
-
-  React.useEffect(() => {
-    const fetchStates = async () => {
-      try {
-        const res = await getStateListAsync({ page: 1, rowsPerPage: 100 });
-        if (res?.success) {
-          setStates(res.data.map((item) => ({ value: item.id, label: item.Name })));
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    fetchStates();
-  }, []);
-
-  React.useEffect(() => {
-    const fetchPortfolioCategories = async () => {
-      try {
-        const res = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 100 });
-        if (res?.success) {
-          setPortfolioCategories(res.data.map((item) => ({ value: item.id, label: item.Name })));
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    fetchPortfolioCategories();
-  }, [])
-
-  React.useEffect(() => {
-    const fetchPartners = async () => {
-      try {
-        const res = await getPartnerListAsync({ page: 1, rowsPerPage: 100 });
-        if (res?.success) {
-          setPartners(res.data.map((item) => ({ value: item.id, label: item.Name })));
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    fetchPartners();
-  }, [])
 
   return (
     <>
       {/* <PageLoader loading={loading} error={null}> */}
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12 }}>
             <CustomTextField
               name="projectTitle"
               label="Project Title"
               value={values.projectTitle}
-              onChange={onChange}
+              onChange={handleChange}
             />
             <ErrorMessage error={errors.projectTitle} />
           </Grid>
@@ -167,7 +187,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
               name="video_url"
               label="Video URL"
               value={values.video_url}
-              onChange={onChange}
+              onChange={handleChange}
               slotProps={{
                 input: {
                   endAdornment: (
@@ -188,7 +208,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
               name="hero_image"
               label="Hero Image"
               value={values.hero_image}
-              onChange={onChange}
+              onChange={handleChange}
               slotProps={{
                 input: {
                   endAdornment: (
@@ -239,7 +259,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
               name="shortDescription"
               label="Short Description"
               value={values.shortDescription}
-              onChange={onChange}
+              onChange={handleChange}
               multiline
               rows={2}
             />
@@ -249,7 +269,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
               name="fullDescription"
               label="Full Description"
               value={values.full_description}
-              onChange={onChange}
+              onChange={handleChange}
               multiline
               rows={4}
             />
@@ -259,11 +279,12 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
             <MediaUploaderTrigger
               open={openVerticalUploadDialog}
               onClose={() => setOpenVerticalUploadDialog(false)}
-              onSave={(urls) => setFieldValue('vertical_gallery_images', urls)}
-              value={values?.vertical_gallery_images}
+              onSave={(urls) => setFieldValue('verticalImageGallery', urls)}
+              value={values?.verticalImageGallery}
               label={'Vertical Gallery Images'}
               onAdd={() => setOpenVerticalUploadDialog(true)}
-              onDelete={(filteredUrls) => setFieldValue('vertical_gallery_images', filteredUrls)}
+              onDelete={(filteredUrls) => setFieldValue('verticalImageGallery', filteredUrls)}
+              folderName='portfolios'
             />
           </Grid>
 
@@ -271,12 +292,21 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
             <MediaUploaderTrigger
               open={openHorizontalUploadDialog}
               onClose={() => setOpenHorizontalUploadDialog(false)}
-              onSave={(urls) => setFieldValue('horizontal_gallery_images', urls)}
-              value={values?.horizontal_gallery_images}
+              onSave={(urls) => setFieldValue('horizontalImageGallery', urls)}
+              value={values?.horizontalImageGallery}
               label={'Horizontal Gallery Images'}
               onAdd={() => setOpenHorizontalUploadDialog(true)}
-              onDelete={(filteredUrls) => setFieldValue('horizontal_gallery_images', filteredUrls)}
+              onDelete={(filteredUrls) => setFieldValue('horizontalImageGallery', filteredUrls)}
+              folderName='portfolios'
             />
+          </Grid>
+
+          <Grid size={{ xs: 12 }}>
+            <Stack direction="row" justifyContent="flex-end">
+              <Button size="small" variant="contained" color="primary" disabled={loading} type="submit">
+                Save
+              </Button>
+            </Stack>
           </Grid>
         </Grid>
       </form>

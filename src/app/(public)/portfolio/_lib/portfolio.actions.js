@@ -2,7 +2,6 @@ import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
 import { getSearchQuery } from '/src/utils/helper';
-import { uploadFileAsync } from '/src/utils/upload-file';
 
 export const getPortfolioListAsync = async (queryParams) => {
   try {
@@ -25,14 +24,9 @@ export const getPortfolioAsync = async (slug) => {
   }
 };
 
-export const createPortfolioAsync = async (file, data) => {
+export const createPortfolioAsync = async (data) => {
   try {
-    const { slug, id, created_by, user_id, updated_at, video_url, hero_image, field_image, thumbnail, vertical_gallery_images, horizontal_gallery_images, ...rest } = data;
-    let thumbnailImage = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      thumbnailImage = uploadResponse[0].path;
-    }
+    const { slug, id, created_by, user_id, updated_at, video_url, ...rest } = data;
 
     const campaignResponse = await api.post(`/portfolios`, {
       ...rest,
@@ -47,17 +41,12 @@ export const createPortfolioAsync = async (file, data) => {
   }
 };
 
-export const updatePortfolioAsync = async (file, data) => {
+export const updatePortfolioAsync = async (data) => {
   try {
     const { id, slug, user_id, created_by, created_at, updated_at, ...rest } = data;
-    let thumbnailPath = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      thumbnailPath = uploadResponse[0].path;
-    }
+
     const res = await api.patch(`/portfolio/update/${id}`, {
       ...rest,
-      thumbnail: thumbnailPath ? thumbnailPath : data.thumbnail,
     });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };

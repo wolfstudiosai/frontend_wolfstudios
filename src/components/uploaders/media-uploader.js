@@ -1,6 +1,3 @@
-import React from 'react';
-import { api } from '/src/utils/api';
-import { isVideoContent, pxToRem } from '/src/utils/helper';
 import {
   Box,
   Button,
@@ -16,8 +13,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import React from 'react';
+import { isVideoContent, pxToRem } from '/src/utils/helper';
 
 import { Iconify } from '../iconify/iconify';
+import { imageUploader } from '/src/utils/upload-file';
 
 export const MediaUploader = ({
   open,
@@ -26,6 +26,7 @@ export const MediaUploader = ({
   multiple = true,
   hideImageUploader = false,
   hideVideoUploader = false,
+  folderName = "content-HQ"
 }) => {
 
   const [tab, setTab] = React.useState(hideImageUploader ? 1 : 0);
@@ -88,22 +89,35 @@ export const MediaUploader = ({
   const handleSave = async () => {
     setUploading(true);
     try {
-      const uploadedPaths = [];
+      let uploadedPaths = [];
       if (files.length > 0) {
         const formData = new FormData();
         files.forEach((file) => {
           formData.append('files', file);
         });
-        const res = await api.post('/file/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        if (res?.data?.success && res?.data?.data?.length > 0) {
-          res?.data?.data?.forEach((item) => {
-            uploadedPaths.push(item?.path);
-          });
+
+        // File upload in the server
+        for (const file of files) {
+          if (file instanceof File) {
+            const res = await imageUploader([{
+              file,
+              fileName: file.name.split('.').slice(0, -1).join('.'),
+              fileType: file.type.split('/')[1],
+            }], folderName);
+
+            uploadedPaths = [...uploadedPaths, ...res];
+          }
         }
+        // const res = await api.post('/file/upload', formData, {
+        //   headers: {
+        //     'Content-Type': 'multipart/form-data',
+        //   },
+        // });
+        // if (res?.data?.success && res?.data?.data?.length > 0) {
+        //   res?.data?.data?.forEach((item) => {
+        //     uploadedPaths.push(item?.path);
+        //   });
+        // }
       }
       onSave([...uploadedPaths, ...urls, ...videoUrls]);
       handleClose();
