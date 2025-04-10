@@ -33,3 +33,128 @@ export const defaultPartner = {
     total_audience: 0,
     sourced_from: '',
 };
+
+export const defaultPartner1 = {
+        name: "",
+        email: "",
+        currentStatus: [],
+        journeyStep: "",
+        profileStatus: [],
+        notes: "",
+
+        instagram: {
+            url: '',
+            following: 0
+        },
+
+        tiktok: {
+            url: '',
+            following: 0
+        },
+
+        youtube: {
+            url: '',
+            following: 0
+        },
+
+        hourlyRate: '',
+        bookingLink: '',
+        ageBracket: [],
+
+        snapchat: {
+            url: '',
+            following: 0
+        },
+
+        linkedinConnections: 0,
+        X:{
+            url: '',
+            following: 0
+        },
+
+        facebook: {
+            url: '',
+            following: 0
+        },
+
+        website: '',
+        medium: '',
+        soundcloud: '',
+        spotify: '',
+        opentoGifting: '',
+        occupation: '',
+        client: '',
+        linkedin: '',
+        mailingAddress: '',
+        phone: '',
+
+        pinterest: {
+            url: '',
+            following: 0
+        },
+        podcast: '',
+        refusalReason: "",
+        twitch: '',
+        revoAmazonOrderConfirmationNumber: '',
+        amazonReviewLink: '',
+        amazonReviewCupper: '',
+        amazonReviewThePill: '',
+        amazonStorefront: '',
+        deliverables: '',
+        googleDriveFiles: '',
+        revoIGPost: '',
+        partnerIGRate: '',
+        partnerTTRate: '',
+        partnerYTRate: '',
+        amountPaid: '',
+        totalContributedEngagementByContent: '',
+        totalAudience: '',
+        platformDeliverables: [],
+        platforms: [],
+        previousCollabExpense: '',
+        revoOffer: '',
+        remainingCredits: 0,
+        ttPost: '',
+        totalROI: '',
+        ugcPaymentStatus: '',
+        ugcRetainerAmount: 0,
+        ugcTikTokLink: '',
+        revoUGCArmyTTUsernamePW: '',
+        whatsApp: '',
+        ytPost: '',
+        partnerPostViews: 0,
+        sourcedFrom: [],
+        estimatedTaxes: '',
+        fbaXLevanta: 0,
+        shippingFBAFeeGiftedPartners: '',
+        levantaAffiliateFee: '',
+        paypalFee: '',
+        shippingExpense: '',
+        amazonReferralFee: '',
+        amazonOrderTotal: '',
+        amazonTax: '',
+        amazonKickback: '',
+        monthSourced: '',
+        secondPaymentDate: '',
+        clientStatus: '',
+        linktree: '',
+        partnerUGCRate: '',
+        partner360Rate: '',
+        revoCounteroffer: '',
+        opentoWhitelisting: '',
+        conversionsBundleCupper: 0,
+        conversionsMassageGun: 0,
+        conversionsCupper: 0,
+        conversionsOils: 0,
+        conversionsWalkingPad: 0,
+        amazonReviewWalkingPadPro: '',
+        amazonReviewWalkingPadStandard: '',
+        amazonReviewOil: '',
+        amazonReviewSoothingCream: '',
+        amazonReviewBeautyWand: '',
+        contracts: [],
+        paymentLink: '',
+        totalExpense: '0',
+        totalProductCOGExpense: '0',
+        affiliatePlatform: []
+}
