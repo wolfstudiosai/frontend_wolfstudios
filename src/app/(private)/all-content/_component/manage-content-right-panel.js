@@ -9,7 +9,7 @@ import React, { useRef, useState } from 'react';
 import useAuth from '/src/hooks/useAuth';
 import { ContentForm } from './content-form';
 import { ContentQuickView } from './content-quick-view';
-import { defaultContent } from '../_lib/all-content.types';
+import { defaultContent1 } from '../_lib/all-content.types';
 import { useFormik } from 'formik';
 import { formConstants } from '/src/app/constants/form-constants';
 import { updateContentAsync, deleteContentAsync,createContentAsync  } from '../_lib/all-content.actions';
@@ -26,7 +26,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
   React.useEffect(() => {
     if (isAdd) {
       // Reset to default content when adding new
-      setValues(defaultContent);
+      setValues(defaultContent1);
       setSidebarView('EDIT');
     } else if (data?.id) {
       // Load existing data when available
@@ -37,11 +37,11 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
   
     const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
       useFormik({
-        initialValues: defaultContent,
+        initialValues: defaultContent1,
         validate: (values) => {
           const errors = {};
-          if (!values.title) {
-            errors.title = formConstants.required;
+          if (!values.name) {
+            errors.name = formConstants.required;
           }
           // if (!values.campaign) {
           //   errors.campaign = formConstants.required;

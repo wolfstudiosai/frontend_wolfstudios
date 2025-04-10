@@ -15,10 +15,10 @@ import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-t
 
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getProductionCategoryListAsync } from '../_lib/production.action';
-import { defaultProduction1 } from '../_lib/production.types';
+import { defaultProduction } from '../_lib/production.types';
 
 export const ProductionForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
-    const [values, setValues] = React.useState(data || defaultProduction1);
+    const [values, setValues] = React.useState(data || defaultProduction);
 
     const status =[
         { value: 'Planning', label: 'Planning' },
@@ -62,7 +62,7 @@ export const ProductionForm = ({ data, onSubmit, onChange, errors, onSetFile, on
     
       React.useEffect(() => {
         return () => {
-          setValues(defaultProduction1);
+          setValues(defaultProduction);
         };
       }, []);
     

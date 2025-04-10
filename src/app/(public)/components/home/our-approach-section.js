@@ -360,7 +360,7 @@ const Card = ({ card, fetchList }) => {
                 marginRight: 'auto'
               }}
             >
-              Lorem Ipsum
+              {card.ByStatesPortfolios?.map((state) => state?.ByStates?.Name).join(', ')}
             </Typography>
             <Typography
               sx={{
@@ -395,7 +395,7 @@ const Card = ({ card, fetchList }) => {
                 marginRight: 'auto'
               }}
             >
-              Lorem Ipsum
+              {card.ByCountryPortfolios?.map((country) => country?.ByCountry?.Name).join(', ')}
             </Typography>
             <Typography
               sx={{

@@ -11,7 +11,7 @@ import { useFormik } from 'formik';
 import useAuth from '/src/hooks/useAuth';
 
 import { createPartnerAsync, deletePartnerAsync, getPartnerAsync, updatePartnerAsync } from '../_lib/partner.actions';
-import { defaultPartner } from '../_lib/partner.types';
+import { defaultPartner1 } from '../_lib/partner.types';
 import { PartnerForm } from './partner-form';
 import { PartnerQuickView } from './partner-quickview';
 
@@ -25,7 +25,7 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
 
   const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
     useFormik({
-      initialValues: defaultPartner,
+      initialValues: defaultPartner1,
       validate: (values) => {
         const errors = {};
         if (!values.name) {
@@ -38,6 +38,8 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
         return errors;
       },
       onSubmit: async (values) => {
+        console.log(values, 'values');
+        debugger
         setLoading(true);
         try {
           const res = isUpdate ? await updatePartnerAsync(file, values) : await createPartnerAsync(file, values);
@@ -131,7 +133,7 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
       setSidebarView('EDIT');
     }
     return () => {
-      setValues(defaultPartner);
+      setValues(defaultPartner1);
     };
   }, []);
 

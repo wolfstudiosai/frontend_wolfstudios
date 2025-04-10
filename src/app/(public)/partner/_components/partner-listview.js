@@ -9,17 +9,19 @@ import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete
 import { Iconify } from '/src/components/iconify/iconify';
 
 import {
-  createSpaceAsync,
-  deleteSpaceAsync,
-  getSpaceListAsync,
-  updateSpaceAsync,
-} from '../_lib/space.actions';
-import { defaultSpace } from '../_lib/space.types';
-import { ManageSpaceRightPanel } from './manage-space-right-panel';
+  createPartnerAsync,
+  deletePartnerAsync,
+  getPartnerListAsync,
+  updatePartnerAsync,
+} from '../_lib/partner.actions';
+import { defaultPartner } from '../_lib/partner.types';
+import { ManagePartnerRightPanel } from './manage-partner-right-panel';
 import { dateFormatter } from '/src/utils/date-formatter';
+import PageLoader from '/src/components/loaders/PageLoader';
 
-export const SpaceListView = ({data, fetchList1, totalRecords1, loading1}) => {
-    // table columns
+export const PartnerListView = () => {
+
+     // table columns
       const columns = [
         {
           field: 'actions',
@@ -33,55 +35,50 @@ export const SpaceListView = ({data, fetchList1, totalRecords1, loading1}) => {
           ),
         },
         { field: 'Name', headerName: 'Name', width: 280, editable: true },
-        {
-          field: 'category',
-          headerName: 'Category',
-          width: 150,
-          editable: true,
-          valueGetter: (value, row) =>
-            row.ByTagsSpaces.map((item) => item.ByTags.Name).join(', '),
-        },
-        {
-          field: 'Features',
-          headerName: 'Features',
-          width: 150,
-          editable: true,
-          valueGetter: (value, row) => row.Features.map((item) => item).join(', '),
-        },
-        { field: 'Type', headerName: 'Type', width: 100, editable: true },
-        { field: 'VideoLink', headerName: 'Video URL', width: 200, editable: true },
         // {
-        //   field: 'Date',
-        //   headerName: 'Date',
+        //   field: 'proposed',
+        //   headerName: 'Proposed',
         //   width: 150,
         //   editable: true,
-        //   valueGetter: (value, row) => dateFormatter(value),
+        //   valueGetter: (value, row) =>
+        //   row.ByCampaignsProposedPartners.ByCampaigns.map((item) => item.Name).join(', '),
         // },
-        { field: 'StartingRatehr', headerName: 'Starting Rate hourly', width: 150, editable: true },
-        { field: 'SquareFootage', headerName: 'Square Footage', width: 150, editable: true },
-        { field: 'AvailableHours', headerName: 'Available Hours', width: 150, editable: true },
-        { field: 'MinimumHourlyBooking', headerName: 'Minimum Hourly Booking', width: 150, editable: true },
+        { field: 'AgeBracket', headerName: 'Age Bracket', width: 200, editable: true },
         {
           field: 'city',
           headerName: 'City',
           width: 150,
           editable: true,
-          valueGetter: (value, row) => row.ByCitySpaces.map((item) => item.ByCities?.Name).join(', '),
+          valueGetter: (value, row) => row.ByCityPartnerHQ?.map((item) => item.ByCities?.Name).join(', '),
         },
         {
           field: 'state',
           headerName: 'State',
           width: 150,
           editable: true,
-          valueGetter: (value, row) => row.ByStatesSpaces.map((item) => item.ByStates?.Name).join(', '),
+          valueGetter: (value, row) => row.ByStatesPartnerHQ?.map((item) => item.ByStates?.Name).join(', '),
         },
         {
           field: 'country',
           headerName: 'Country',
           width: 150,
           editable: true,
-          valueGetter: (value, row) => row.ByCountrySpaces.map((item) => item.ByCountry?.Name).join(', '),
+          valueGetter: (value, row) => row.ByCountryPartnerHQ?.map((item) => item.ByCountry?.Name).join(', '),
         },
+        // {
+        //   field: 'state',
+        //   headerName: 'State',
+        //   width: 150,
+        //   editable: true,
+        //   valueGetter: (value, row) => row.ByStatesPortfolios.map((item) => item.ByStates.Name).join(', '),
+        // },
+        // {
+        //   field: 'partner_hq',
+        //   headerName: 'Partner HQ',
+        //   width: 150,
+        //   editable: true,
+        //   valueGetter: (value, row) => row.PartnerHQPortfolios.map((item) => item.PartnerHQ.Name).join(', '),
+        // },
         // { field: 'user_id', headerName: 'User ID', width: 150, editable: true },
         {
           field: 'created_at',
@@ -109,7 +106,7 @@ export const SpaceListView = ({data, fetchList1, totalRecords1, loading1}) => {
       async function fetchList() {
         try {
           setLoading(true);
-          const response = await getSpaceListAsync({
+          const response = await getPartnerListAsync({
             page: pagination.pageNo,
             rowsPerPage: pagination.limit,
           });
@@ -134,10 +131,10 @@ export const SpaceListView = ({data, fetchList1, totalRecords1, loading1}) => {
       const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
         if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
         if (newRow.id) {
-          await updateSpaceAsync(null, newRow);
+          await updatePartnerAsync(null, newRow);
         } else {
           const { id, ...rest } = newRow;
-          await createSpaceAsync(null, rest);
+          await createPartnerAsync(null, rest);
           fetchList();
         }
         return newRow;
@@ -161,7 +158,7 @@ export const SpaceListView = ({data, fetchList1, totalRecords1, loading1}) => {
       const visibleColumns = columns.filter((col) => filteredValue.includes(col.field));
     
       const handleAddNewItem = () => {
-        setRecords([defaultSpace, ...records]);
+        setRecords([defaultPartner, ...records]);
       };
     
       const handleDelete = async (password) => {
@@ -169,7 +166,7 @@ export const SpaceListView = ({data, fetchList1, totalRecords1, loading1}) => {
         selectedRows.forEach((row) => {
           idsToDelete.push(row.id);
         });
-        const response = await deleteSpaceAsync(idsToDelete);
+        const response = await deletePartnerAsync(idsToDelete);
         if (response.success) {
           fetchList();
         }
@@ -188,6 +185,7 @@ export const SpaceListView = ({data, fetchList1, totalRecords1, loading1}) => {
 
     return (
         <PageContainer>
+         <PageLoader loading={loading}>
               <Card>
                 <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
                   <Box>
@@ -211,13 +209,13 @@ export const SpaceListView = ({data, fetchList1, totalRecords1, loading1}) => {
                   />
                 </Box>
               </Card>
-              <ManageSpaceRightPanel
+              <ManagePartnerRightPanel
                 open={openDetails ? true : false}
                 onClose={() => setOpenDetails(null)}
                 data={openDetails}
                 fetchList={fetchList}
               />
-              {/* </PageLoader> */}
+          </PageLoader>
         </PageContainer>
     )
 };

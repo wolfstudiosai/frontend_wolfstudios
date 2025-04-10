@@ -39,6 +39,8 @@ export const ManageProductionRightPanel = ({ open, onClose, fetchList, data, wid
           return errors;
         },
         onSubmit: async (values) => {
+          console.log(values, 'values');
+          
           setLoading(true);
           try {
             const res = isUpdate ? await updateProductionAsync(file, values) : await createProductionAsync(file, values);
