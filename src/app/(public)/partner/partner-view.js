@@ -9,6 +9,7 @@ import PageLoader from '/src/components/loaders/PageLoader';
 
 import { ManagePartnerRightPanel } from './_components/manage-partner-right-panel';
 import { PartnerGridView } from './_components/partner-gridview';
+import { PartnerListView } from './_components/partner-listview';
 import { getPartnerListAsync } from './_lib/partner.actions';
 import { defaultPartner } from './_lib/partner.types';
 
@@ -115,7 +116,7 @@ export const PartnerView = () => {
         />
 
         {filters.VIEW === 'list' ? (
-          <Box>List view comming soon</Box>
+          <PartnerListView />
         ) : (
           <Box>
             <PartnerGridView data={data || [defaultPartner]} fetchList={refreshListView} loading={loading} />

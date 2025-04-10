@@ -25,7 +25,7 @@ export const getContent = async (id) => {
   }
 };
 
-export const createContentAsync = async (data) => {
+export const createContentAsync = async (file, data) => {
   try {
     const { ...rest } = data;
     // let res = await api.post(`/record/add-record`, rest);

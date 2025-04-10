@@ -155,7 +155,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
               />
               <ErrorMessage error={errors.name} />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <CustomTextField
                 name="startingRatehr"
                 label='Starting Rate/hr'
@@ -163,7 +163,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 name="bookingLink"
                 label='Booking Link'
@@ -171,7 +171,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <CustomAutoComplete
                 label='Type'
                 value={values.type}
@@ -180,7 +180,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 multiple
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <CustomAutoComplete
                 label='Space Style'
                 value={values.spaceStyle}
@@ -189,7 +189,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 multiple
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <CustomAutoComplete
                 label='Props'
                 value={values.props}
@@ -198,7 +198,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 multiple
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <CustomAutoComplete
                 label='Theme'
                 value={values.theme}
@@ -207,7 +207,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 multiple
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <CustomAutoComplete
                 label='Available Lighting'
                 value={values.availableLighting}
@@ -216,7 +216,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 multiple
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <CustomAutoComplete
                 label='Add Ons'
                 value={values.adOns}
@@ -225,7 +225,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 multiple
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <CustomTextField
                 label='CycWall'
                 name="cycWall"
@@ -233,7 +233,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Backdrop System'
                 name="backdropSystem"
@@ -241,7 +241,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <CustomAutoComplete
                 label='Features'
                 value={values.features}
@@ -250,7 +250,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 multiple
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Minimum Hourly Booking'
                 name="minimumHourlyBooking"
@@ -258,7 +258,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Intro'
                 name="intro"
@@ -266,7 +266,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='About this Space'
                 name="aboutThisSpace"
@@ -274,7 +274,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='See the Space'
                 name="seeTheSpace"
@@ -282,7 +282,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Add to Project'
                 name="addToProject"
@@ -290,7 +290,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Recent Creators Who Booked Here'
                 name="recentCreatorsWhoBookedHere"
@@ -298,7 +298,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Phone Number'
                 name="phoneNumber"
@@ -306,7 +306,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Attendee Limit'
                 name="attendeeLimit"
@@ -314,7 +314,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Color Tone'
                 name="colorTone"
@@ -322,7 +322,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Parking Instructions'
                 name="parkingInstructions"
@@ -330,7 +330,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Lighting Information'
                 name="lightingInformation"
@@ -338,7 +338,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Sound Information'
                 name="soundInformation"
@@ -346,7 +346,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Space Access'
                 name="spaceAccess"
@@ -354,7 +354,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Host Rules'
                 name="hostRules"
@@ -362,7 +362,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Electrical'
                 name="electrical"
@@ -370,7 +370,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Permit Details'
                 name="permitDetails"
@@ -378,7 +378,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Bedrooms'
                 name="bedrooms"
@@ -386,7 +386,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Bathrooms'
                 name="bathrooms"
@@ -394,7 +394,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Square Footage'
                 name="squareFootage"
@@ -402,7 +402,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
                 label='Available Hours'
                 name="availableHours"
@@ -410,7 +410,7 @@ export const SpaceForm = ({ data, onSubmit, onChange, errors, onSetFile, onDelet
                 onChange={onChange}
               />
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <CustomDatePicker
                 label={'Date Listed'}
                 error={errors.date}

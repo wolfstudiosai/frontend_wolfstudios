@@ -378,7 +378,7 @@ export const PortfolioCard1 = ({ item, fetchList, sx, infoSx }) => {
                 textDecoration: 'underline',
                 fontWeight: 500,
               }
-            }}>Lorem</Typography>
+            }}>{item.ByCountrySpaces?.map((country) => country?.ByCountry?.Name).join(', ')}</Typography>
             </Box>
           </Stack>
       </Box>

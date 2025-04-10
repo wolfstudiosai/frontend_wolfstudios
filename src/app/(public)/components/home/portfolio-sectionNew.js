@@ -250,7 +250,7 @@ const Card = ({ card, fetchList }) => {
             marginBottom={1.2}
             sx={{ width: '100%' }}
           >
-            {['Lorem Ipsum', card.designation, card.designation].map((text, index) => (
+            {[card.designation, card.designation].map((text, index) => (
               <Typography
                 key={index}
                 sx={{
@@ -265,7 +265,7 @@ const Card = ({ card, fetchList }) => {
                   maxWidth: index === 0 ? '40%' : '30%',
                 }}
               >
-                {text}
+                {card.ByCountryPortfolios?.map((country) => state?.ByCountry?.Name).join(', ')}
               </Typography>
             ))}
           </Stack>
@@ -277,7 +277,7 @@ const Card = ({ card, fetchList }) => {
             alignItems="center"
             sx={{ width: '100%' }}
           >
-            {['Lorem Ipsum', card.designation, card.designation].map((text, index) => (
+            {[card.designation, card.designation].map((text, index) => (
               <Typography
                 key={index}
                 sx={{
@@ -292,7 +292,7 @@ const Card = ({ card, fetchList }) => {
                   maxWidth: index === 0 ? '40%' : '30%',
                 }}
               >
-                {text}
+                {card.ByStatesPortfolios?.map((state) => state?.ByStates?.Name).join(', ')}
               </Typography>
             ))}
           </Stack>

@@ -363,7 +363,7 @@ const Card = ({ card, fetchList }) => {
                   marginRight: 'auto'
                 }}
               >
-                Lorem Ipsum
+                {card.ByStatesPartnerHQ?.map((state) => state?.ByStates?.Name).join(', ')}
               </Typography>
               <Typography
                 sx={{
@@ -398,7 +398,7 @@ const Card = ({ card, fetchList }) => {
                   marginRight: 'auto'
                 }}
               >
-                Lorem Ipsum
+                {card.ByCityPartnerHQ?.map((country) => country?.ByCity?.Name).join(', ')}
               </Typography>
               <Typography
                 sx={{
