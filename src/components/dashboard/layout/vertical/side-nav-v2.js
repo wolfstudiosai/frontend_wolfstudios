@@ -4,21 +4,21 @@ import { Collapse, Divider, ListItemIcon, ListItemText, MenuItem, MenuList } fro
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useColorScheme } from '@mui/material/styles';
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
+import { navColorStyles } from './styles';
 import { Iconify } from '/src/components/iconify/iconify';
+import useAuth from '/src/hooks/useAuth';
 import { dashboardFavItems, privateRoutes } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
-import useAuth from '/src/hooks/useAuth';
-import Link from 'next/link';
-import { navColorStyles } from './styles';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
   light: { blend_in: 'dark', discrete: 'dark', evident: 'light' },
 };
 
-export function SideNavV2 ({ color = 'evident', items = [], open, isFeaturedCardVisible }) {
+export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardVisible }) {
   const pathname = usePathname();
   const { userInfo } = useAuth();
   const { colorScheme = 'light' } = useColorScheme();
@@ -52,7 +52,7 @@ export function SideNavV2 ({ color = 'evident', items = [], open, isFeaturedCard
 
             <ListItemText
               primary={item.title}
-              sx={{ 
+              sx={{
                 color: 'text.primary',
                 ...(!item.href && { fontWeight: 800 }) // Header style for items without links
               }}

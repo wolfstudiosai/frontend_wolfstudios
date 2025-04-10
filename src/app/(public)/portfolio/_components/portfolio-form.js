@@ -1,6 +1,6 @@
 'use client';
 
-import { FormControl, FormLabel, InputAdornment } from '@mui/material';
+import { Button, FormControl, FormLabel, InputAdornment, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import React from 'react';
 import { getCountryListAsync, getStateListAsync } from '/src/actions/common';
@@ -13,14 +13,17 @@ import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-ifr
 import { ImageUploader } from '/src/components/uploaders/image-uploader';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
+import { useFormik } from 'formik';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
-import { getPortfolioCategoryListAsync } from '../_lib/portfolio.actions';
+import { createPortfolioAsync, getPortfolioAsync, getPortfolioCategoryListAsync, updatePortfolioAsync } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
+import { formConstants } from '/src/app/constants/form-constants';
+import { imageUploader } from '/src/utils/upload-file';
 
-export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
-  const [values, setValues] = React.useState(data || defaultPortfolio);
+export const PortfolioForm = ({ id, onClose, fetchList }) => {
 
   // *********************States*********************************
+  const [loading, setLoading] = React.useState(false);
   const [mediaPreview, setMediaPreview] = React.useState(null);
   const [openVerticalUploadDialog, setOpenVerticalUploadDialog] = React.useState(false);
   const [openHorizontalUploadDialog, setOpenHorizontalUploadDialog] = React.useState(false);
@@ -28,92 +31,151 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
   const [states, setStates] = React.useState([]);
   const [portfolioCategories, setPortfolioCategories] = React.useState([]);
   const [partners, setPartners] = React.useState([]);
+  const [data, setData] = React.useState(null);
 
-  // *****************Use Effects*******************************
+  // ***************** Formik *******************************
 
-  React.useEffect(() => {
-    return () => {
-      setValues(defaultPortfolio);
-    };
-  }, []);
+  const { values, errors, handleChange, handleSubmit, setValues, setFieldValue, resetForm } =
+    useFormik({
+      initialValues: defaultPortfolio(),
+      validate: (values) => {
+        const errors = {};
+        if (!values.projectTitle) {
+          errors.projectTitle = formConstants.required;
+        }
+
+        return errors;
+      },
+      onSubmit: async (values) => {
+        setLoading(true);
+        try {
+          const finalData = {
+            ...values,
+          }
+
+          const imageFields = ['singlePageHeroImage', 'thumbnailImage', 'imagefield'];
+
+          // Collect image files and their metadata
+          for (const field of imageFields) {
+            const value = values[field];
+            if (value instanceof File) {
+              const res = await imageUploader([{
+                file: value,
+                fileName: value.name.split('.').slice(0, -1).join('.'),
+                fileType: value.type.split('/')[1],
+              }], 'portfolios');
+
+              finalData[field] = res;
+            } else if (typeof value === 'string') {
+              finalData[field] = [value];
+            }
+          }
+
+          const arrayFields = ['portfolioCategories', 'states', 'countries', "partnerHQ"];
+          for (const field of arrayFields) {
+            const value = values[field];
+            if (value.length > 0) {
+              const arrOfStr = value.map((item) => item.value);
+              finalData[field] = arrOfStr;
+            }
+          }
+
+          console.log(finalData);
+
+          const res = data ? await updatePortfolioAsync(finalData) : await createPortfolioAsync(finalData);
+          if (res.success) {
+            onClose?.();
+            resetForm();
+            fetchList();
+          } else {
+            console.error('Operation failed:', res.message);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        } finally {
+          setLoading(false);
+        }
+      },
+    });
+
+  // *****************Use Effects****************************
+
+  // React.useEffect(() => {
+  //   return () => {
+  //     setValues(defaultPortfolio);
+  //   };
+  // }, []);
 
   React.useEffect(() => {
     if (data) {
-      setValues(data);
+      setValues(defaultPortfolio(data));
     }
-  }, [data]);
+  }, [data, setValues]);
 
   React.useEffect(() => {
-    const fetchCountries = async () => {
+    const fetchSinglePortfolios = async () => {
       try {
-        const res = await getCountryListAsync({ page: 1, rowsPerPage: 100 });
+        const res = await getPortfolioAsync(id);
         if (res?.success) {
-          setCountries(res.data.map((item) => ({ value: item.id, label: item.Name })));
+          setData(res.data);
         }
       } catch (err) {
         console.error(err);
       }
     }
 
-    fetchCountries();
-  }, []);
+    if (id) {
+      fetchSinglePortfolios();
+    }
+  }, [id])
 
   React.useEffect(() => {
-    const fetchStates = async () => {
+    const fetchPrerequisitesData = async () => {
       try {
-        const res = await getStateListAsync({ page: 1, rowsPerPage: 100 });
-        if (res?.success) {
-          setStates(res.data.map((item) => ({ value: item.id, label: item.Name })));
+        const countryResponse = await getCountryListAsync({ page: 1, rowsPerPage: 100 });
+        if (countryResponse?.success) {
+          const countryOptions = countryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          setCountries(countryOptions);
+          // if (data) {
+          //   const preSelectedOptionsLabel = data?.ByCountryPortfolios?.map((item) => item?.ByCountry?.Name)?.filter(Boolean);
+          //   const preSelected = countryOptions.filter((item) => preSelectedOptionsLabel.includes(item.label));
+          //   setFieldValue("countries", preSelected);
+          // }
+        }
+        const stateResponse = await getStateListAsync({ page: 1, rowsPerPage: 100 });
+        if (stateResponse?.success) {
+          const stateOptions = stateResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          setStates(stateOptions);
+        }
+        const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 100 });
+        if (categoryResponse?.success) {
+          const categoryOptions = categoryResponse.data.map((item) => ({ value: item.id, label: item.Name }))
+          setPortfolioCategories(categoryOptions);
+        }
+        const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 100 });
+        if (partnerResponse?.success) {
+          const partnerOptions = partnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          setPartners(partnerOptions);
         }
       } catch (err) {
         console.error(err);
       }
     }
 
-    fetchStates();
-  }, []);
-
-  React.useEffect(() => {
-    const fetchPortfolioCategories = async () => {
-      try {
-        const res = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 100 });
-        if (res?.success) {
-          setPortfolioCategories(res.data.map((item) => ({ value: item.id, label: item.Name })));
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    fetchPortfolioCategories();
-  }, [])
-
-  React.useEffect(() => {
-    const fetchPartners = async () => {
-      try {
-        const res = await getPartnerListAsync({ page: 1, rowsPerPage: 100 });
-        if (res?.success) {
-          setPartners(res.data.map((item) => ({ value: item.id, label: item.Name })));
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    fetchPartners();
-  }, [])
+    fetchPrerequisitesData();
+  }, [data, setFieldValue]);
 
   return (
     <>
       {/* <PageLoader loading={loading} error={null}> */}
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12 }}>
             <CustomTextField
               name="projectTitle"
               label="Project Title"
               value={values.projectTitle}
-              onChange={onChange}
+              onChange={handleChange}
             />
             <ErrorMessage error={errors.projectTitle} />
           </Grid>
@@ -121,7 +183,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
             <CustomAutoComplete
               label='Categories'
               value={values.portfolioCategories}
-              onChange={(_, value) => setFieldValue('portfolioCategories', value.map(i => i.value))}
+              onChange={(_, value) => setFieldValue('portfolioCategories', value)}
               options={portfolioCategories}
               multiple
             />
@@ -130,7 +192,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
             <CustomAutoComplete
               label='Partners'
               value={values.partnerHQ}
-              onChange={(_, value) => setFieldValue('partnerHQ', value.map(i => i.value))}
+              onChange={(_, value) => setFieldValue('partnerHQ', value)}
               options={partners}
               multiple
             />
@@ -139,7 +201,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
             <CustomAutoComplete
               label='States'
               value={values.states}
-              onChange={(_, value) => setFieldValue('states', value.map(i => i.value))}
+              onChange={(_, value) => setFieldValue('states', value)}
               options={states}
               multiple
             />
@@ -148,9 +210,18 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
             <CustomAutoComplete
               label='Countries'
               value={values.countries}
-              onChange={(_, value) => setFieldValue('countries', value.map(i => i.value))}
+              onChange={(_, value) => setFieldValue('countries', value)}
               options={countries}
               multiple
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomDatePicker
+              label={'Date'}
+              error={errors.date}
+              value={values.date}
+              format="MMMM YYYY"
+              onChange={(value) => setFieldValue('date', value)}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
@@ -158,7 +229,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
               name="video_url"
               label="Video URL"
               value={values.video_url}
-              onChange={onChange}
+              onChange={handleChange}
               slotProps={{
                 input: {
                   endAdornment: (
@@ -174,12 +245,12 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
               }}
             />
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
               name="hero_image"
               label="Hero Image"
               value={values.hero_image}
-              onChange={onChange}
+              onChange={handleChange}
               slotProps={{
                 input: {
                   endAdornment: (
@@ -194,23 +265,34 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
                 },
               }}
             />
+          </Grid> */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <FormControl fullWidth error={Boolean(errors.thumbnail)}>
+              <FormLabel sx={{ mb: 1 }}>Image Field</FormLabel>
+              <ImageUploader
+                value={values.imagefield}
+                onFileSelect={(file) => setFieldValue('imagefield', file)}
+                onDelete={() => setFieldValue('imagefield', null)}
+              />
+            </FormControl>
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <CustomDatePicker
-              label={'Date'}
-              error={errors.date}
-              value={values.date}
-              format="MMMM YYYY"
-              onChange={(value) => setFieldValue('date', value)}
-            />
+          <Grid size={{ xs: 12, md: 4 }}>
+            <FormControl fullWidth error={Boolean(errors.thumbnail)}>
+              <FormLabel sx={{ mb: 1 }}>Hero Image</FormLabel>
+              <ImageUploader
+                value={values.singlePageHeroImage}
+                onFileSelect={(file) => setFieldValue('singlePageHeroImage', file)}
+                onDelete={() => setFieldValue('singlePageHeroImage', null)}
+              />
+            </FormControl>
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <FormControl fullWidth error={Boolean(errors.thumbnail)}>
               <FormLabel sx={{ mb: 1 }}>Thumbnail</FormLabel>
               <ImageUploader
-                value={values.thumbnail}
-                onFileSelect={(file) => onSetFile(file)}
-                onDelete={onDeleteThumbnail}
+                value={values.thumbnailImage}
+                onFileSelect={(file) => setFieldValue('thumbnailImage', file)} // onFileSelect(file)}
+                onDelete={() => setFieldValue('thumbnailImage', null)}
               />
             </FormControl>
           </Grid>
@@ -219,7 +301,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
               name="shortDescription"
               label="Short Description"
               value={values.shortDescription}
-              onChange={onChange}
+              onChange={handleChange}
               multiline
               rows={2}
             />
@@ -229,7 +311,7 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
               name="fullDescription"
               label="Full Description"
               value={values.full_description}
-              onChange={onChange}
+              onChange={handleChange}
               multiline
               rows={4}
             />
@@ -239,11 +321,12 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
             <MediaUploaderTrigger
               open={openVerticalUploadDialog}
               onClose={() => setOpenVerticalUploadDialog(false)}
-              onSave={(urls) => setFieldValue('vertical_gallery_images', urls)}
-              value={values?.vertical_gallery_images}
+              onSave={(urls) => setFieldValue('verticalImageGallery', urls)}
+              value={values?.verticalImageGallery}
               label={'Vertical Gallery Images'}
               onAdd={() => setOpenVerticalUploadDialog(true)}
-              onDelete={(filteredUrls) => setFieldValue('vertical_gallery_images', filteredUrls)}
+              onDelete={(filteredUrls) => setFieldValue('verticalImageGallery', filteredUrls)}
+              folderName='portfolios'
             />
           </Grid>
 
@@ -251,12 +334,21 @@ export const PortfolioForm = ({ data, onSubmit, onChange, errors, onSetFile, onD
             <MediaUploaderTrigger
               open={openHorizontalUploadDialog}
               onClose={() => setOpenHorizontalUploadDialog(false)}
-              onSave={(urls) => setFieldValue('horizontal_gallery_images', urls)}
-              value={values?.horizontal_gallery_images}
+              onSave={(urls) => setFieldValue('horizontalImageGallery', urls)}
+              value={values?.horizontalImageGallery}
               label={'Horizontal Gallery Images'}
               onAdd={() => setOpenHorizontalUploadDialog(true)}
-              onDelete={(filteredUrls) => setFieldValue('horizontal_gallery_images', filteredUrls)}
+              onDelete={(filteredUrls) => setFieldValue('horizontalImageGallery', filteredUrls)}
+              folderName='portfolios'
             />
+          </Grid>
+
+          <Grid size={{ xs: 12 }}>
+            <Stack direction="row" justifyContent="flex-end">
+              <Button size="small" variant="contained" color="primary" disabled={loading} type="submit">
+                Save
+              </Button>
+            </Stack>
           </Grid>
         </Grid>
       </form>

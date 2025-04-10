@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
-import { getFilenameFromUrl } from '/src/utils/get-filename-from-url';
 import { Close, Visibility } from '@mui/icons-material';
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
+import React from 'react';
+import { getFilenameFromUrl } from '/src/utils/get-filename-from-url';
 
 import { Iconify } from '../iconify/iconify';
 
@@ -39,13 +39,13 @@ export const ImageUploader = ({ value, onFileSelect, onDelete, disabled = false 
       if (typeof value === 'string' && value) {
         const fileName = getFilenameFromUrl(value);
         setSelectedFileInfo({ name: fileName, size: 0 });
-        setPreviewUrl(`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${value}`);
+        setPreviewUrl(`${value}`); // `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${value}`
       } else if (value instanceof File) {
         const imageUrl = URL.createObjectURL(value);
         setPreviewUrl(imageUrl);
       }
     }
-  }, [value]);
+  }, [value, previewUrl]);
   return (
     <Box
       sx={{

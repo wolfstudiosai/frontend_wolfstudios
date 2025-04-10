@@ -2,7 +2,6 @@ import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
 import { getSearchQuery } from '/src/utils/helper';
-import { uploadFileAsync } from '/src/utils/upload-file';
 
 export const getPortfolioListAsync = async (queryParams) => {
   try {
@@ -15,24 +14,19 @@ export const getPortfolioListAsync = async (queryParams) => {
   }
 };
 
-export const getPortfolioAsync = async (slug) => {
+export const getPortfolioAsync = async (id) => {
   try {
-    const res = await api.get(`/portfolios?slug=${slug}`);
-    return { success: true, data: res.data.data[0], totalRecords: res.data.meta.total };
+    const res = await api.get(`/portfolios/${id}`);
+    return { success: true, data: res.data.data };
   } catch (error) {
     toast.error(error.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
 
-export const createPortfolioAsync = async (file, data) => {
+export const createPortfolioAsync = async (data) => {
   try {
-    const { slug, id, created_by, user_id, updated_at, video_url, hero_image, field_image, thumbnail, vertical_gallery_images, horizontal_gallery_images, ...rest } = data;
-    let thumbnailImage = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      thumbnailImage = uploadResponse[0].path;
-    }
+    const { video_url, ...rest } = data;
 
     const campaignResponse = await api.post(`/portfolios`, {
       ...rest,
@@ -47,17 +41,12 @@ export const createPortfolioAsync = async (file, data) => {
   }
 };
 
-export const updatePortfolioAsync = async (file, data) => {
+export const updatePortfolioAsync = async (id, data) => {
   try {
-    const { id, slug, user_id, created_by, created_at, updated_at, ...rest } = data;
-    let thumbnailPath = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      thumbnailPath = uploadResponse[0].path;
-    }
-    const res = await api.patch(`/portfolio/update/${id}`, {
+    const { video_url, ...rest } = data;
+
+    const res = await api.patch(`/portfolios/${id}`, {
       ...rest,
-      thumbnail: thumbnailPath ? thumbnailPath : data.thumbnail,
     });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };

@@ -290,26 +290,34 @@ export const dashboardFavItems = [
     icon: 'material-symbols-light:chat-outline-rounded',
     items: [
       {
-        key: 'dms',
-        title: 'DMs',
-        icon: 'eva:message-circle-outline',
-        href: paths.private.dms,
+        key: 'chat2',
+        title: 'Workspace 1',
+        icon: 'fluent:chat-12-regular',
+        href: 'chat2',
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
-      {
-        key: 'activity',
-        title: 'Activity',
-        icon: 'mdi:bell-notification-outline',
-        href: paths.private.activity,
-        allowedRoles: ['admin', 'user', 'super_admin'],
-      },
-      {
-        key: 'channel',
-        title: 'Channel',
-        icon: 'uil:channel',
-        href: paths.private.channel,
-        allowedRoles: ['admin', 'user', 'super_admin'],
-      },
+      // {
+      //   key: 'dms',
+      //   title: 'DMs',
+      //   icon: 'eva:message-circle-outline',
+      //   href: paths.private.dms,
+      //   allowedRoles: ['admin', 'user', 'super_admin'],
+      // },
+      // {
+      //   key: 'activity',
+      //   title: 'Activity',
+      //   icon: 'mdi:bell-notification-outline',
+      //   href: paths.private.activity,
+      //   allowedRoles: ['admin', 'user', 'super_admin'],
+      // },
+
+      // {
+      //   key: 'channel',
+      //   title: 'Channel',
+      //   icon: 'uil:channel',
+      //   href: paths.private.channel,
+      //   allowedRoles: ['admin', 'user', 'super_admin'],
+      // },
     ],
   },
   {

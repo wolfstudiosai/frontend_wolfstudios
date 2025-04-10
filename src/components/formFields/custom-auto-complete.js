@@ -9,21 +9,24 @@ export const CustomAutoComplete = ({ value, label, size, multiple, placeholder, 
             <Autocomplete
                 multiple={multiple}
                 options={options}
-                getOptionLabel={(option) => option.label}
+                getOptionLabel={(option) => option.label || ''}
+                value={value}
                 onChange={onChange}
                 renderTags={(value, getTagProps) =>
-                    value.map((option, index) => (
-                        <Chip
-                            size='small'
-                            color='inherit'
-                            key={index}
-                            label={option.label}
-                            {...getTagProps({ index })}
-                            sx={{
-                                borderRadius: '20px'
-                            }}
-                        />
-                    ))
+                    value.map((option, index) => {
+                        const tagProps = getTagProps({ index });
+                        const { key, ...rest } = tagProps;
+                        return (
+                            <Chip
+                                key={key}
+                                size="small"
+                                color="inherit"
+                                label={option?.label}
+                                {...rest}
+                                sx={{ borderRadius: '20px' }}
+                            />
+                        );
+                    })
                 }
                 renderInput={(params) => (
                     <TextField
