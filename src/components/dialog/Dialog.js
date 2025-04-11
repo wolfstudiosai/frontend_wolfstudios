@@ -74,13 +74,13 @@ export const Dialog = ({
             sx={sx}
         >
             <DialogTitle
-                sx={(theme) => ({
-                    background: theme.palette.primary.main,
-                    color: "#fff",
-                })}
+            // sx={(theme) => ({
+            //     background: theme.palette.primary.main,
+            //     color: "#fff",
+            // })}
             >
                 <Box display="flex" justifyContent="space-between" alignItems="center">
-                    <Typography variant="h5" fontWeight="bold">
+                    <Typography variant="h6" fontWeight="medium">
                         {title}
                     </Typography>
                     <Box display="flex" justifyContent="flex-end" gap={2} alignItems="center">
