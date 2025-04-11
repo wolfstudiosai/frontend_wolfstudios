@@ -1,4 +1,4 @@
-import { Box, IconButton, Stack, TextField, Typography } from '@mui/material';
+import { Box, Divider, IconButton, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
@@ -150,9 +150,22 @@ const renderField = (section, field, label, type = 'text') => {
   return (
     <Typography variant="body2">
       <strong>{label}:</strong> {type === 'link' ? (
-        <Link href={value} target="_blank" rel="noopener noreferrer">
+        <Link href={value} passHref legacyBehavior>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          title={value}
+          style={{
+            display: 'block',
+            width: '200px',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
           {value}
-        </Link>
+        </a>
+      </Link>
       ) : type === 'chips' ? (
         value.split(', ').map((tag, index) => (
           <CustomChip
@@ -306,70 +319,89 @@ const renderField = (section, field, label, type = 'text') => {
 
       {/* Social Media Stats */}
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-        {data?.Instagram && data?.Instagram !== 'Not Found' && data?.Instagram !== 'Not Provided' && (
+      {[
+        data?.Instagram && data?.Instagram !== 'Not Found' && data?.Instagram !== 'Not Provided' && (
           <SocialIconWithText
             icon="hugeicons:instagram"
             url={data?.Instagram}
             text={`${data?.InstagramFollowing?.toLocaleString()}`}
             value={`$${data?.PartnerIGRate}`}
           />
-        )}
-        {data?.Tiktok && data?.Tiktok !== 'Not Found' && data?.Tiktok !== 'Not Provided' && (
+        ),
+        data?.Tiktok && data?.Tiktok !== 'Not Found' && data?.Tiktok !== 'Not Provided' && (
           <SocialIconWithText
             icon="hugeicons:tiktok"
             url={data?.Tiktok}
             text={`${data?.TiktokFollowing?.toLocaleString()}`}
             value={`$${data?.PartnerTTRate}`}
           />
-        )}
-        {data?.Youtube && data?.Youtube !== 'Not Found' && data?.Youtube !== 'Not Provided' && (
+        ),
+        data?.Youtube && data?.Youtube !== 'Not Found' && data?.Youtube !== 'Not Provided' && (
           <SocialIconWithText
             icon="hugeicons:youtube"
             url={data?.Youtube}
             text={`${data?.YoutubeFollowing?.toLocaleString()}`}
             value={`$${data?.PartnerYTRate}`}
           />
-        )}
-        {data?.X && data?.X !== 'Not Found' && data?.X !== 'Not Provided' && (
+        ),
+        data?.X && data?.X !== 'Not Found' && data?.X !== 'Not Provided' && (
           <SocialIconWithText
             icon="hugeicons:new-twitter-ellipse"
             url={data?.X}
             text={`${data?.XFollowing?.toLocaleString()}`}
             value={'N/A'}
           />
-        )}
-        {data?.Facebook && data?.Facebook !== 'Not Found' && data?.Facebook !== 'Not Provided' && (
+        ),
+        data?.Facebook && data?.Facebook !== 'Not Found' && data?.Facebook !== 'Not Provided' && (
           <SocialIconWithText
             icon="mingcute:facebook-line"
             url={data?.Facebook}
             text={`${data?.FacebookFollowing?.toLocaleString()}`}
             value={'N/A'}
           />
-        )}
-        {data?.Pinterest && data?.Pinterest !== 'Not Found' && data?.Pinterest !== 'Not Provided' && (
+        ),
+        data?.Pinterest && data?.Pinterest !== 'Not Found' && data?.Pinterest !== 'Not Provided' && (
           <SocialIconWithText
             icon="hugeicons:pinterest"
             url={data?.Pinterest}
             text={`${data?.PinterestFollowing?.toLocaleString()}`}
             value={'N/A'}
           />
-        )}
-        {data?.Snapchat && data?.Snapchat !== 'Not Found' && data?.Snapchat !== 'Not Provided' && (
+        ),
+        data?.Snapchat && data?.Snapchat !== 'Not Found' && data?.Snapchat !== 'Not Provided' && (
           <SocialIconWithText
             icon="hhugeicons:snapchat"
             url={data?.Snapchat}
             text={`${data?.SnapchatFollowing?.toLocaleString()}`}
             value={'N/A'}
           />
-        )}
-        {data?.Linkedin && data?.Linkedin !== 'Not Found' && data?.Linkedin !== 'Not Provided' && (
+        ),
+        data?.Linkedin && data?.Linkedin !== 'Not Found' && data?.Linkedin !== 'Not Provided' && (
           <SocialIconWithText
             icon="circum:linkedin"
             url={data?.Linkedin}
             text={`${data?.LinkedinConnection?.toLocaleString()}`}
             value={'N/A'}
           />
-        )}
+        )
+       ].filter(Boolean)
+       .map((component, index, array) => (
+         <Box key={component.key} sx={{ display: 'flex', alignItems: 'center' }}>
+           {component}
+           {index < array.length - 1 && (
+             <Divider
+               orientation="vertical"
+               flexItem
+               sx={{
+                 borderColor: 'grey.400',
+                 mx: 1.2,
+                 borderRightWidth: 2,
+                 visibility: 'visible !important'
+               }}
+             />
+           )}
+         </Box>
+       ))}
       </Box>
       {/* All other Info */}
       <Grid container spacing={2}>

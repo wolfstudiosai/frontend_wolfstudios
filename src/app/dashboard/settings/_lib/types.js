@@ -10,6 +10,19 @@ export const defaultProfile = {
     status: "ACTIVE",
 }
 
+export const defaultProfileNew = {
+    id: "",
+    contactNumber: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    profileImage: "",
+    role: "",
+    status: "",
+    username: ""
+}
+
+
 export const defaultResetPassword = {
     oldPassword: "",
     newPassword: "",

@@ -11,24 +11,40 @@ export const getProfileData = async () => {
     }
 };
 
-export const updateProfileData = async (data) => {
-    let formData = new FormData();
-    formData.append("first_name", data.first_name);
-    formData.append("last_name", data.last_name);
-    formData.append("email", data.email);
-    formData.append("profile_pic", data.profile_pic);
-    formData.append("contact_number", data.contact_number);
-    formData.append("status", data.status);
-    formData.append("role", data.role);
+export const getProfileDataById = async (userID) => {
+    try {
+        const res = await api.get(`/users/${userID}`);
+        return { success: true, data: res.data.data };
+    } catch (error) {
+        console.error("Error fetching profile data:", error);
+        return { success: false, error: error.response ? error.response.data : "An unknown error occurred" };
+    }
+};
+
+export const updateProfileData = async (data, userID) => {
+    const requestBody = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        profileImage: data.profileImage,
+        contactNumber: data.contactNumber,
+        status: data.status,
+        role: data.role
+    };
 
     try {
-        const res = await api.patch(`/user/update-profile`, formData);
+        const res = await api.patch(`/users/${userID}`, requestBody);
         toast.success(res.data.message);
         return { success: true, data: res.data.data };
     } catch (error) {
         console.error("Error updating profile data:", error);
-        toast.error(error.response.data.message);
-        return { success: false, error: error.response ? error.response.data : "An unknown error occurred" };
+        toast.error(error.response?.data?.message || "Update failed");
+        return { 
+            success: false, 
+            error: error.response?.data || { 
+                message: "An unknown error occurred" 
+            } 
+        };
     }
 };
 
