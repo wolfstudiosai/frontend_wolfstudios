@@ -5,13 +5,13 @@ export const Topbar = () => {
     return (
         <Box
             sx={{
-                borderBottom: "1px solid #e0e0e0",
+                borderBottom: "1px solid",
+                borderColor: "divider",
                 px: 2,
                 py: 1,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                backgroundColor: "#fff",
             }}
         >
             {/* Left Section */}
