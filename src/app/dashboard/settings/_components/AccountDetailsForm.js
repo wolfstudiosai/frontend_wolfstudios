@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { defaultProfile } from '/src/app/dashboard/settings/_lib/types';
+import { defaultProfileNew } from '/src/app/dashboard/settings/_lib/types';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { IconButton, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -22,7 +22,7 @@ import * as Yup from 'yup';
 import PageLoader from '/src/components/loaders/PageLoader';
 import ProfileUploader from '/src/components/uploaders/profile-uploader';
 
-import { getProfileData, updateProfileData } from '../_lib/actions';
+import { getProfileData, getProfileDataById, updateProfileData } from '../_lib/actions';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
@@ -32,10 +32,12 @@ const validationSchema = Yup.object().shape({
 export function AccountDetailsForm() {
   const [loading, setLoading] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
+  let authData = localStorage.getItem('auth');
+  const userId = JSON.parse(authData).id;  
 
   const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
     useFormik({
-      initialValues: defaultProfile,
+      initialValues: defaultProfileNew,
       validate: (values) => {
         const errors = {};
 
@@ -43,7 +45,7 @@ export function AccountDetailsForm() {
       },
       onSubmit: async (values) => {
         setLoading(true);
-        await updateProfileData(values);
+        await updateProfileData(values, userId);
         setLoading(false);
         setIsEditing(false);
       },
@@ -51,8 +53,7 @@ export function AccountDetailsForm() {
   async function fetchProfileData() {
     setLoading(true);
     try {
-      const response = await getProfileData();
-
+      const response = await getProfileDataById(userId);
       setValues(response.data);
     } catch (error) {
       console.error('Error fetching profile data:', error);
@@ -89,40 +90,51 @@ export function AccountDetailsForm() {
               <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                 <ProfileUploader
                   disabled={!isEditing}
-                  value={values.profile_pic}
-                  onFileSelect={(file) => setFieldValue('profile_pic', file)}
+                  value={values.profileImage}
+                  onFileSelect={(file) => setFieldValue('profileImage', file)}
                 />
               </Stack>
               <Stack spacing={2}>
                 <Grid container spacing={2}>
                   <Grid size={12}>
-                    <FormControl fullWidth error={Boolean(errors.first_name)}>
+                    <FormControl fullWidth error={Boolean(errors.firstName)}>
                       <InputLabel>First Name</InputLabel>
                       {isEditing ? (
-                        <OutlinedInput name="first_name" value={values.first_name} onChange={handleChange} />
+                        <OutlinedInput name="firstName" value={values.firstName} onChange={handleChange} />
                       ) : (
-                        <Typography color="text.secondary">{values.first_name || 'N/A'}</Typography>
+                        <Typography color="text.secondary">{values.firstName || 'N/A'}</Typography>
                       )}
                     </FormControl>
                   </Grid>
                   <Grid size={12}>
-                    <FormControl fullWidth error={Boolean(errors.email)}>
+                    <FormControl fullWidth error={Boolean(errors.lastName)}>
                       <InputLabel>Last Name</InputLabel>
                       {isEditing ? (
-                        <OutlinedInput name="last_name" value={values.last_name} onChange={handleChange} />
+                        <OutlinedInput name="lastName" value={values.lastName} onChange={handleChange} />
                       ) : (
-                        <Typography color="text.secondary">{values.last_name || 'N/A'}</Typography>
+                        <Typography color="text.secondary">{values.lastName || 'N/A'}</Typography>
                       )}
                     </FormControl>
                   </Grid>
 
                   <Grid size={12}>
-                    <FormControl fullWidth error={Boolean(errors.email)}>
+                    <FormControl fullWidth error={Boolean(errors.contactNumber)}>
                       <InputLabel>Contact No.</InputLabel>
                       {isEditing ? (
-                        <OutlinedInput name="contact_no" value={values.contact_no} onChange={handleChange} />
+                        <OutlinedInput name="contactNumber" value={values.contactNumber} onChange={handleChange} />
                       ) : (
-                        <Typography color="text.secondary">{values.contact_no || 'N/A'}</Typography>
+                        <Typography color="text.secondary">{values.contactNumber || 'N/A'}</Typography>
+                      )}
+                    </FormControl>
+                  </Grid>
+
+                  <Grid size={12}>
+                    <FormControl fullWidth error={Boolean(errors.username)}>
+                      <InputLabel>Username</InputLabel>
+                      {isEditing ? (
+                        <OutlinedInput name="username" value={values.username} onChange={handleChange} disabled />
+                      ) : (
+                        <Typography color="text.secondary">{values.username || 'N/A'}</Typography>
                       )}
                     </FormControl>
                   </Grid>
@@ -139,7 +151,7 @@ export function AccountDetailsForm() {
                   </Grid>
 
                   <Grid size={12}>
-                    <FormControl fullWidth error={Boolean(errors.email)}>
+                    <FormControl fullWidth error={Boolean(errors.role)}>
                       <InputLabel>Role</InputLabel>
                       {isEditing ? (
                         <OutlinedInput name="role" value={values.role} onChange={handleChange} disabled />
