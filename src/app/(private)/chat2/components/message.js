@@ -1,7 +1,11 @@
-import { Avatar, ButtonGroup, IconButton, Link, Stack, Typography } from "@mui/material";
+import { Avatar, Button, ButtonGroup, Chip, IconButton, Link, Stack, Typography } from "@mui/material";
+import { useContext } from "react";
 import { Iconify } from "/src/components/iconify/iconify";
+import { ChatContext } from "/src/contexts/chat";
 
-export const Message = () => {
+export const Message = ({ isReplied = true }) => {
+    const { handleReplies } = useContext(ChatContext);
+
     return (
         <Stack
             direction='row'
@@ -43,13 +47,11 @@ export const Message = () => {
 
                 {/* Reactions */}
                 <Stack direction="row" alignItems='center' spacing={0.5}>
-                    <IconButton size="small">
-                        <Iconify icon="mdi:favourite" sx={{ color: 'red' }} />
-                    </IconButton>
+                    <Chip label="❤️ 1" color="inherit" size="small" />
                     <IconButton size="small">
                         <Iconify icon="material-symbols:add-reaction-outline" />
                     </IconButton>
-                    <Link href="#" color="primary">Show 10 more replies</Link>
+                    {isReplied && <Button variant="text" onClick={() => handleReplies('msg_id')} color="primary">Show 10 more replies</Button>}
                 </Stack>
             </Stack>
 

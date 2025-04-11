@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Avatar, Stack } from "@mui/material";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
@@ -12,8 +12,22 @@ import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { devNull } from "os";
 import { useState } from "react";
-import { CountChip, ScrollableContent } from "./custom-component";
+import { CountChip, MemberInfo, MemberItem, MemberName, MemberRole, ScrollableContent } from "./custom-component";
 import { Iconify } from "/src/components/iconify/iconify";
+
+
+// Members data
+const members = [
+    { name: "Daniel Anderson", role: "Design", avatar: "/placeholder.svg?height=40&width=40" },
+    {
+        name: "Andrew Miller",
+        role: "Management",
+        avatar: "/placeholder.svg?height=40&width=40",
+        title: "Product owner",
+    },
+    { name: "William Johnson", role: "Design", avatar: "/placeholder.svg?height=40&width=40", title: "UX/UI designer" },
+    { name: "Emily Davis", role: "Development", avatar: "/placeholder.svg?height=40&width=40", title: "Frontend dev" },
+]
 
 // Update the SidebarHeader to be sticky
 const SidebarHeader = styled(Box)(({ theme }) => ({
@@ -69,14 +83,14 @@ const TagChip = styled(Chip)(({ theme }) => ({
     backgroundColor: "#e0c3fc",
     color: "#8e44ad",
     marginLeft: theme.spacing(1),
-}))
+}));
 
 export const LeftSidebar = () => {
 
     const [openSections, setOpenSections] = useState({
         favorites: true,
         channels: true,
-        website: true,
+        directMessages: true,
     })
 
     const handleToggle = (section) => {
@@ -229,44 +243,6 @@ export const LeftSidebar = () => {
                             }
 
                             <ListItem disablePadding>
-                                <StyledListItemButton onClick={() => handleToggle("website")}>
-                                    <StyledListItemIcon>
-                                        <Iconify icon="mdi:web" />
-                                    </StyledListItemIcon>
-                                    <StyledListItemText primary="Website" />
-                                    {openSections.website ? <Iconify icon="mdi:chevron-up" /> : <Iconify icon="mdi:chevron-down" />}
-                                </StyledListItemButton>
-                            </ListItem>
-
-                            <Collapse in={openSections.website} timeout="auto" unmountOnExit>
-                                <List dense disablePadding sx={{
-                                    paddingLeft: '40px',
-                                    paddingTop: 0,
-                                    paddingBottom: 0,
-                                }}>
-                                    {
-                                        [{ label: "v3.0", icon: "mdi:chevron-right" }, { label: "Wireframe", icon: "mdi:chevron-right" }, { label: "Design", icon: "mdi:chevron-right" }].map((item, index) => (
-                                            <ListItem key={index} disablePadding>
-                                                <ListItemButton sx={{
-                                                    padding: "2px 8px 2px 0",
-                                                    margin: "0 8px 0 0",
-                                                    // "&.Mui-selected": {
-                                                    //     backgroundColor: "#e9e9e9",
-                                                    // }
-                                                }}
-                                                >
-                                                    <StyledListItemIcon>
-                                                        <Iconify icon={item.icon} />
-                                                    </StyledListItemIcon>
-                                                    <StyledListItemText primary={item.label} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                        ))
-                                    }
-                                </List>
-                            </Collapse>
-
-                            <ListItem disablePadding>
                                 <StyledListItemButton>
                                     <StyledListItemIcon>
                                         <Iconify icon="mdi:pound" />
@@ -292,6 +268,29 @@ export const LeftSidebar = () => {
                                     <StyledListItemText primary="Events" />
                                 </StyledListItemButton>
                             </ListItem>
+                        </List>
+                    </Collapse>
+
+                    <SectionHeader>
+                        <SectionTitle>Direct Messages</SectionTitle>
+                        <Box display="flex">
+                            <IconButton size="small" onClick={() => handleToggle("directMessages")}>
+                                {openSections.directMessages ? <Iconify icon="mdi:chevron-up" /> : <Iconify icon="mdi:chevron-down" />}
+                            </IconButton>
+                        </Box>
+                    </SectionHeader>
+
+                    <Collapse in={openSections.directMessages} timeout="auto" unmountOnExit>
+                        <List disablePadding sx={{ pl: 1.8 }}>
+                            {members.map((member, index) => (
+                                <MemberItem key={index}>
+                                    <Avatar src={member.avatar} alt={member.name} sx={{ width: 36, height: 36 }} />
+                                    <MemberInfo>
+                                        <MemberName>{member.name}</MemberName>
+                                        {member.title && <MemberRole>{member.title}</MemberRole>}
+                                    </MemberInfo>
+                                </MemberItem>
+                            ))}
                         </List>
                     </Collapse>
                 </ScrollableContent>
