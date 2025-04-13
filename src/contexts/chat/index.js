@@ -23,6 +23,7 @@ export const ChatContextProvider = ({ children }) => {
     const [activeProfile, setActiveProfile] = useState(null);
     const [messages, setMessages] = useState([]);
     const [replies, setReplies] = useState(null);
+    const [selectedUser, setSelectedUser] = useState(null);
 
     const findUser = (id) => {
         if (id === loggedInUser.userId) return loggedInUser;
@@ -98,6 +99,14 @@ export const ChatContextProvider = ({ children }) => {
         };
     }
 
+    const handleSelectedUser = (user) => {
+        if (user) {
+            setSelectedUser(user);
+        } else {
+            setSelectedUser(null)
+        }
+    }
+
     const contextValue = {
         userData,
         activeConversation,
@@ -114,7 +123,9 @@ export const ChatContextProvider = ({ children }) => {
         handleActiveProfile,
         messages,
         replies,
-        handleReplies
+        handleReplies,
+        selectedUser,
+        handleSelectedUser
     };
 
     // useEffect(() => {
