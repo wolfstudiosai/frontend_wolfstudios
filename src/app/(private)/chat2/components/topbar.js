@@ -1,7 +1,10 @@
-import { Box, Breadcrumbs, IconButton, Link, Stack } from "@mui/material";
+import { Avatar, Box, Breadcrumbs, IconButton, Link, Stack, Typography } from "@mui/material";
+import { useContext } from "react";
 import { Iconify } from "/src/components/iconify/iconify";
+import { ChatContext } from "/src/contexts/chat";
 
 export const Topbar = () => {
+    const { selectedUser } = useContext(ChatContext);
     return (
         <Box
             sx={{
@@ -16,34 +19,45 @@ export const Topbar = () => {
         >
             {/* Left Section */}
             <Stack direction="row" spacing={1} alignItems="center">
-                <Iconify icon="mdi:pound" fontSize={18} color="text.primary" />
-                <Breadcrumbs aria-label="breadcrumb">
-                    <Link
-                        href="/"
-                        color="text.primary"
-                        underline="none"
-                        sx={{ fontWeight: 'medium', '&:hover': { textDecoration: 'none' } }}
-                    >
-                        Website
-                    </Link>
-                    <Link
-                        href="/material-ui/getting-started/installation/"
-                        color="text.primary"
-                        underline="none"
-                        sx={{ fontWeight: 'medium', '&:hover': { textDecoration: 'none' } }}
-                    >
-                        v3.0
-                    </Link>
-                    <Link
-                        href="/material-ui/react-breadcrumbs/"
-                        color="text.primary"
-                        underline="none"
-                        aria-current="page"
-                        sx={{ fontWeight: 'medium', '&:hover': { textDecoration: 'none' } }}
-                    >
-                        UI-kit design
-                    </Link>
-                </Breadcrumbs>
+                {
+                    selectedUser ? (
+                        <Stack direction="row" alignItems="center" gap={1}>
+                            <Avatar src={selectedUser.profile_pic} alt={selectedUser.name} />
+                            <Typography sx={{ fontWeight: 'medium' }}>{selectedUser.name}</Typography>
+                        </Stack>
+                    ) : (
+                        <>
+                            <Iconify icon="mdi:pound" fontSize={18} color="text.primary" />
+                            <Breadcrumbs aria-label="breadcrumb">
+                                <Link
+                                    href="/"
+                                    color="text.primary"
+                                    underline="none"
+                                    sx={{ fontWeight: 'medium', '&:hover': { textDecoration: 'none' } }}
+                                >
+                                    Website
+                                </Link>
+                                <Link
+                                    href="/material-ui/getting-started/installation/"
+                                    color="text.primary"
+                                    underline="none"
+                                    sx={{ fontWeight: 'medium', '&:hover': { textDecoration: 'none' } }}
+                                >
+                                    v3.0
+                                </Link>
+                                <Link
+                                    href="/material-ui/react-breadcrumbs/"
+                                    color="text.primary"
+                                    underline="none"
+                                    aria-current="page"
+                                    sx={{ fontWeight: 'medium', '&:hover': { textDecoration: 'none' } }}
+                                >
+                                    UI-kit design
+                                </Link>
+                            </Breadcrumbs>
+                        </>
+                    )
+                }
             </Stack>
 
             {/* Right Section */}

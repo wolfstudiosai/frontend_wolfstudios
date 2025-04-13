@@ -11,9 +11,10 @@ import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { devNull } from "os";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CreateChannelDialog } from "./create-channel-dialog";
 import { CountChip, MemberInfo, MemberItem, MemberName, MemberRole, ScrollableContent } from "./custom-component";
+import { UserListPopover } from "./user-list-popover";
 import { Iconify } from "/src/components/iconify/iconify";
 
 
@@ -88,6 +89,9 @@ const TagChip = styled(Chip)(({ theme }) => ({
 
 export const LeftSidebar = () => {
     const [openCreateChannelDialog, setOpenCreateChannelDialog] = useState(false);
+    const [openUserList, setOpenUserList] = useState(false);
+
+    const anchorRef = useRef(null);
 
     const [openSections, setOpenSections] = useState({
         favorites: true,
@@ -277,6 +281,9 @@ export const LeftSidebar = () => {
                         <SectionHeader>
                             <SectionTitle>Direct Messages</SectionTitle>
                             <Box display="flex">
+                                <IconButton size="small" ref={anchorRef} onClick={() => setOpenUserList(true)}>
+                                    <Iconify icon="mdi:plus" />
+                                </IconButton>
                                 <IconButton size="small" onClick={() => handleToggle("directMessages")}>
                                     {openSections.directMessages ? <Iconify icon="mdi:chevron-up" /> : <Iconify icon="mdi:chevron-down" />}
                                 </IconButton>
@@ -307,6 +314,7 @@ export const LeftSidebar = () => {
                     />
                 )
             }
+            <UserListPopover open={openUserList} onClose={() => setOpenUserList(false)} anchorRef={anchorRef} title="Direct Messages" />
         </>
     )
 }
