@@ -222,7 +222,7 @@ const StaticGridView = ({ partners, isSecondHorizontal }) => {
         }}>
           <Box sx={{ 
             display: 'inline-flex', 
-            gap: { xs: 0.5, md: 0.7 },
+            gap: { xs: 0.1, md: 0.2 },
             width: 'auto',
             minWidth: '100%',
             alignItems: 'flex-start'
