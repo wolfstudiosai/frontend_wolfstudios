@@ -2,7 +2,7 @@
 
 import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
 import { useEffect, useState } from "react"
-
+import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
 import { FadeIn } from "/src/components/animation/fade-in"
 
 export const HeroSection = () => {
@@ -11,6 +11,22 @@ export const HeroSection = () => {
 
   const [boxSize, setBoxSize] = useState(isMobile ? 100 : 50)
   const [boxHeight, setBoxHeight] = useState(isMobile ? 100 : 60)
+  const [portfolios, setPortfolios] = useState([]);
+  const [videoPortfolios, setVideoPortfolios] = useState([]);
+
+  const fetchPortfolios = async () => {
+    const response = await getPortfolioListAsync({
+      page: 1,
+      rowsPerPage: 20,
+    });
+    if (response?.success) {
+        setPortfolios((prev) => [...prev, ...response.data]);
+
+        const all = [...portfolios, ...response.data]
+        const videos = all.filter((item) => item.VideoLink).slice(0, 2)
+        setVideoPortfolios(videos)
+    }
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +53,10 @@ export const HeroSection = () => {
     setBoxHeight(isMobile ? 100 : 60)
   }, [isMobile])
 
+  useEffect(() => {
+    fetchPortfolios();
+  }, [])
+
   return (
     <>
       {/* Main Video Section */}
@@ -62,6 +82,9 @@ export const HeroSection = () => {
           }}
         >
           <source src="/videos/hero_bg.mp4" type="video/mp4" />
+          {/* {videoPortfolios.length > 0 && videoPortfolios[0]?.VideoLink && (
+          <source src={videoPortfolios[0]?.VideoLink} type="video/mp4" />
+          )} */}
         </video>
 
         {/* Gradient Overlay */}
@@ -192,6 +215,9 @@ export const HeroSection = () => {
             }}
           >
             <source src="/videos/hero_bg.mp4" type="video/mp4" />
+            {/* {videoPortfolios.length > 0 && videoPortfolios[1]?.VideoLink && (
+            <source src={videoPortfolios[1]?.VideoLink} type="video/mp4" />
+            )} */}
           </video>
         </Box>
       </Stack >
