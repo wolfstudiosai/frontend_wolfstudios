@@ -1,18 +1,17 @@
 'use client';
 
+import * as React from 'react';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
-import * as React from 'react';
-import { FeatureCards } from '/src/app/(public)/top-cards';
-import { ThinerFooter } from '/src/components/navbar/thinner-footer';
-import { pxToRem } from '/src/utils/helper';
 
+import { useSettings } from '/src/hooks/use-settings';
 import useAuth from '/src/hooks/useAuth';
+import { ThinerFooter } from '/src/components/navbar/thinner-footer';
 
 import { MainNavV2 } from './main-nav-v2';
 import { SideNavV2 } from './side-nav-v2';
-// import { MiniNavbar } from './test-nav';
-import { useSettings } from '/src/hooks/use-settings';
+import { FeatureCards } from '/src/app/(public)/top-cards';
+import { pxToRem } from '/src/utils/helper';
 
 export function VerticalLayout({ children }) {
   const { settings } = useSettings();
@@ -41,10 +40,11 @@ export function VerticalLayout({ children }) {
           body: {
             '--MainNav-height': '56px',
             '--MainNav-zIndex': 1000,
-            '--SideNav-width': openSidebar ? pxToRem(250) : pxToRem(0), //pxToRem(70) | '0px'
+            '--SideNav-width': openSidebar ? pxToRem(250) : pxToRem(70),
             '--SideNav-zIndex': 1100,
             '--MobileNav-width': '320px',
             '--MobileNav-zIndex': 1100,
+            // transition: '--SideNav-width 0.3s ease',
           },
         }}
       />
@@ -78,28 +78,11 @@ export function VerticalLayout({ children }) {
             display: isFeaturedCardVisible ? 'flex' : 'block',
             flex: '1 1 auto',
             flexDirection: 'column',
-            pl: { lg: isLogin && openSidebar ? pxToRem(270) : pxToRem(0) }, //pxToRem(84) | '0px'
+            pl: { lg: isLogin ? (openSidebar ? pxToRem(270) : pxToRem(84)) : pxToRem(0) },
           }}
         >
-          {/* {isLogin && (
-            openSidebar ? (
-              <SideNavV2
-                color={settings.navColor}
-                open={openSidebar}
-                isFeaturedCardVisible={isFeaturedCardVisible}
-              />
-            ) : (
-              <MiniSideNav color={settings.navColor} isFeaturedCardVisible={isFeaturedCardVisible} />
-              // <MiniNavbar />
-            )
-          )} */}
-          {isLogin && openSidebar && (
-            // <MiniNav color={settings.navColor} open={openSidebar} isFeaturedCardVisible={isFeaturedCardVisible} />
-            <SideNavV2
-              color={settings.navColor}
-              open={openSidebar}
-              isFeaturedCardVisible={isFeaturedCardVisible}
-            />
+          {isLogin && (
+            <SideNavV2 color={settings.navColor} open={openSidebar} isFeaturedCardVisible={isFeaturedCardVisible} />
           )}
           <Box
             component="main"
