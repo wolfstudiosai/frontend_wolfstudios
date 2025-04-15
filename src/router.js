@@ -490,7 +490,6 @@ export const dashboardFavItemsV2 = [
     key: 'overview',
     title: 'Dashboard ',
     icon: 'material-symbols-light:chat-outline-rounded',
-    href: paths.private.overview,
     items: [
       {
         key: 'notifications',
