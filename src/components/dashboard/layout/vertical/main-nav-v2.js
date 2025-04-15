@@ -40,6 +40,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const [routes, setRoutes] = React.useState(publicRoutes);
   const [chatOpen, setChatOpen] = React.useState(false);
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
+  const [isAdmin, setIsAdmin] = React.useState(false);
   const router = useRouter();
 
   const { isLogin } = useAuth();
@@ -85,11 +86,20 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
         (item) =>
           (isLogin && item.key !== "portfolio") ||
           (!isLogin && item.key !== "content")
-      ),
+      ).map((item) => {
+        const auth = localStorage.getItem('auth');
+        if (auth) {
+          const data = JSON.parse(auth);
+          setIsAdmin(data.role === 'ADMIN' || data.role === 'SUPER_ADMIN');
+        }        
+        const requiresAdmin = ['campaign', 'production', 'content'].includes(item.key);
+        const disabled = requiresAdmin ? !isAdmin || !isLogin : false;
+        return { ...item, disabled };
+      }),
     }));
     setRoutes(updatedRoutes);
 
-  }, [isLogin]);
+  }, [isLogin, isAdmin]);
 
   return (
     <React.Fragment>
@@ -159,6 +169,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                       item={item}
                       title={item.title}
                       icon={item.icon}
+                      disabled={item.disabled}
                     />
                   ))
                 )}
@@ -299,12 +310,15 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
         {...(hasPopover
           ? {
             onClick: (event) => {
-              event.preventDefault();
+              if (disabled) {
+                event.preventDefault();
+                return;
+              }
             },
             role: 'button',
           }
           : {
-            ...(href
+            ...(href && !disabled
               ? {
                 component: external ? 'a' : RouterLink,
                 href,
@@ -326,8 +340,7 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
           textDecoration: 'none',
           whiteSpace: 'nowrap',
           ...(disabled && {
-            bgcolor: 'var(--mui-palette-action-disabledBackground)',
-            color: 'var(--mui-action-disabled)',
+            color: 'var(--mui-palette-neutral-400)',
             cursor: 'not-allowed',
           }),
           ...(active && { color: 'text.primary' }),

@@ -282,6 +282,247 @@ export const privateRoutes = [
   },
 ];
 
+// dashboard routes
+export const privateRoutesV2 = [
+  {
+    key: 'analytics',
+    title: 'Analytics',
+    icon: 'solar:hashtag-line-duotone',
+    items: [
+      {
+        key: 'by-platform',
+        title: 'By Platform',
+        href: '/analytics/by-platform',
+        icon: 'material-symbols-light:analytics-outline-rounded',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'by-partner',
+        title: 'By Partner',
+        href: '/analytics/by-partner',
+        icon: 'fluent:arrow-growth-20-regular',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
+  {
+    key: 'reporting',
+    title: 'Reporting',
+    icon: 'arcticons:partnerkaart',
+    items: [
+      {
+        key: 'by-partner',
+        title: 'By Partner',
+        href: '/reporting/by-partner',
+        icon: 'fluent:approvals-app-20-regular',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'by-product',
+        title: 'By Product',
+        href: '/reporting/by-product',
+        icon: 'fluent:approvals-app-20-regular',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'by-campaign',
+        title: 'By Campaign',
+        href: '/reporting/by-campaign',
+        icon: 'fluent:approvals-app-20-regular',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'by-production',
+        title: 'By Production',
+        href: '/reporting/by-production',
+        icon: 'fluent:approvals-app-20-regular',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
+  {
+    key: 'partner_hq',
+    title: 'Partner HQ',
+    icon: 'iconoir:at-sign',
+    items: [
+      {
+        key: 'contracts',
+        title: 'Contracts',
+        href: '/partner-hq/contracts',
+        icon: 'fluent:approvals-app-20-regular',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'waiting_area',
+        title: 'Waiting Area',
+        href: '/partner-hq/waiting-area',
+        icon: 'hugeicons:clock-04',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
+  {
+    key: 'production_hq',
+    title: 'Production HQ',
+    icon: 'fa6-solid:dollar-sign',
+    items: [
+      {
+        key: 'project-drop',
+        title: 'Project Drop',
+        href: 'production_hq/project-drop',
+        icon: 'lsicon:list-outline',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'revisions',
+        title: 'Revisions',
+        href: '/project-drop/revisions',
+        icon: 'iconamoon:discover-light',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'creative-requests',
+        title: 'Creative Requests',
+        href: '/project-drop/creative-requests',
+        icon: 'fluent:approvals-app-20-regular',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      }
+    ],
+  },
+  {
+    key: 'content-hQ',
+    title: 'Content HQ',
+    icon: 'nimbus:marketing',
+    items: [
+      {
+        key: 'new-content',
+        title: 'New Content',
+        href: '/content-hQ/new-content',
+        icon: 'formkit:group',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'discovery',
+        title: 'Discovery',
+        href: '/content-hq/discovery',
+        icon: 'fluent:approvals-app-20-regular',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+        items: [
+          {
+            key: 'by-partner',
+            title: 'By Partner',
+            href: '/content-hQ/discovery/by-partner',
+            icon: 'formkit:group',
+            allowedRoles: ['admin', 'user', 'super_admin'],
+          },
+          {
+            key: 'by-product',
+            title: 'By Product',
+            href: '/content-hQ/discovery/by-product',
+            icon: 'formkit:group',
+            allowedRoles: ['admin', 'user', 'super_admin'],
+          },
+          {
+            key: 'by-campaign',
+            title: 'By Campaign',
+            href: '/content-hQ/discovery/by-campaign',
+            icon: 'formkit:group',
+            allowedRoles: ['admin', 'user', 'super_admin'],
+          },
+          {
+            key: 'by-production',
+            title: 'By Production',
+            href: '/content-hQ/discovery/by-production',
+            icon: 'formkit:group',
+            allowedRoles: ['admin', 'user', 'super_admin'],
+          },
+        ]
+      },
+    ],
+  },
+  {
+    key: 'campaign-hq',
+    title: 'Campaign HQ',
+    icon: 'ph:archive-light',
+    items: [
+      {
+        key: 'by-client',
+        title: 'By Client',
+        href: 'campaign-hq/by-client',
+        icon: 'tabler:point',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'by-product',
+        title: 'By Product',
+        href: 'campaign-hq/by-product',
+        icon: 'tabler:point',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      }
+    ],
+  },
+  {
+    key: 'portfolio',
+    title: 'Portfolio',
+    href: paths.public.portfolio,
+    icon: 'fluent:approvals-app-20-regular',
+    allowedRoles: ['admin', 'user', 'super_admin'],
+  },
+  {
+    key: 'admin-panel',
+    title: 'Admin Panel',
+    icon: 'ph:archive-light',
+    items: [
+      {
+        key: 'users',
+        title: 'User Management',
+        href: paths.private.user,
+        icon: 'tabler:point',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
+];
+
+// dashboard fav items
+export const dashboardFavItemsV2 = [
+  {
+    key: 'overview',
+    title: 'Dashboard ',
+    icon: 'material-symbols-light:chat-outline-rounded',
+    href: paths.private.overview,
+    items: [
+      {
+        key: 'notifications',
+        title: 'Notifications',
+        icon: 'nimbus:marketing',
+        href: '/notifications',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
+  {
+    key: 'favorites',
+    title: 'Favorites',
+    icon: 'iconamoon:heart-light',
+    items: [
+      {
+        key: 'bev',
+        title: 'BEV ',
+        icon: 'nimbus:marketing',
+        href: '/favorites/bev',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
+  {
+    key: 'chat',
+    title: 'Inbox',
+    icon: 'fluent:chat-12-regular',
+    href: '/dms',
+  },
+];
+
 // dashboard fav items
 export const dashboardFavItems = [
   {
