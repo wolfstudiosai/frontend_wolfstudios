@@ -1,116 +1,87 @@
 'use client';
 
-import { Collapse, Divider, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
-import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
+import {
+    Box,
+    IconButton,
+    Stack
+} from "@mui/material";
 import { useColorScheme } from '@mui/material/styles';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import * as React from 'react';
+import { useRef, useState } from "react";
+import { ChildrenItemPopover } from "./children-item-popover";
 import { navColorStyles } from './styles';
-import { Iconify } from '/src/components/iconify/iconify';
-import { dashboardFavItems, privateRoutes } from '/src/router';
-import { pxToRem } from '/src/utils/helper';
+import { Iconify } from "/src/components/iconify/iconify";
+
+const navItems = [
+    {
+        icon: 'material-symbols:home-outline-rounded',
+        label: "Dashboard",
+        children: ["Overview", "Stats", "Reports"],
+    },
+    {
+        icon: 'material-symbols:home-outline-rounded',
+        label: "Sync",
+    },
+    {
+        icon: 'material-symbols:home-outline-rounded',
+        label: "Projects",
+        children: ["List", "Create", "Manage"],
+    },
+    {
+        icon: 'material-symbols:home-outline-rounded',
+        label: "New",
+    },
+];
 
 export function MiniSideNav({ color = 'evident', isFeaturedCardVisible }) {
-    const pathname = usePathname();
     const { colorScheme = 'light' } = useColorScheme();
     const styles = navColorStyles[colorScheme][color];
-    const [openMenus, setOpenMenus] = React.useState({});
+    const [openUserList, setOpenUserList] = useState(false);
 
-    const toggleMenuItem = (key) => {
-        setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
-    };
-
-    const renderMenuItems = (items, level = 0) => {
-        return items.map((item) => {
-            const isActive = item.href && pathname === item.href;
-            const hasChildren = item.items && item.items.length > 0;
-            const isExpanded = openMenus[item.key] || false;
-
-            return (
-                <React.Fragment key={item.key}>
-                    <MenuItem
-                        component={!hasChildren && item.href ? Link : undefined}
-                        href={!hasChildren && item.href ? item.href : undefined}
-                        onClick={() => hasChildren && toggleMenuItem(item.key)}
-                        sx={{ mb: hasChildren && 1 }}
-                        selected={isActive}
-                    >
-                        <ListItemIcon>
-                            <Iconify icon={item.icon} width={15} height={15} color="text.primary" />
-                        </ListItemIcon>
-
-                        <ListItemText
-                            primary={item.title}
-                            sx={{
-                                color: 'text.primary',
-                                ...(!item.href && { fontWeight: 800 }) // Header style for items without links
-                            }}
-                        />
-                        {hasChildren && (
-                            <Iconify
-                                icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
-                                width={10}
-                                height={10}
-                                color="text.secondary"
-                            />
-                        )}
-                        {!hasChildren && item.count && (
-                            <Chip label={item.count} size="small" fontSize={10} color="text.primary" sx={{ borderRadius: 1 }} />
-                        )}
-                    </MenuItem>
-
-                    {hasChildren && (
-                        <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                            <MenuList sx={{ pl: level + 2 }}>{renderMenuItems(item.items, level + 1)}</MenuList>
-                        </Collapse>
-                    )}
-                </React.Fragment>
-            );
-        });
-    };
+    const anchorRef = useRef(null);
 
     return (
-        <Box
-            sx={{
-                ...styles,
-                bgcolor: 'text-primary',
-                color: 'var(--SideNav-color)',
-                display: { xs: 'none', lg: 'flex' },
-                flexDirection: 'column',
-                left: 10,
-                position: 'fixed',
-                top: isFeaturedCardVisible ? 118 : 50,
-                width: 'var(--SideNav-width)',
-                zIndex: 'var(--SideNav-zIndex)',
-                transition: 'width 0.3s ease',
-                borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-                marginBottom: '10px',
-                border: '1px solid var(--mui-palette-background-level2)',
-                height: isFeaturedCardVisible ? 'calc(100vh - 160px)' : 'calc(100vh - 93px)',
-                paddingRight: pxToRem(5),
-                overflowY: 'auto',
-                '&::-webkit-scrollbar': {
-                    width: '0px',
-                },
-                background: 'transparent'
-            }}
-        >
-            <Box sx={{ mb: -1.3 }}>
-                <MenuList>
-                    <MenuItem component={Link} href="/drafts">
-                        <ListItemIcon>
-                            <Iconify icon="material-symbols-light:draft-outline" width={20} height={20} color="text.primary" />
-                        </ListItemIcon>
-                        <ListItemText sx={{ color: 'text.primary' }}>Drafts</ListItemText>
-                        <Chip label={12} size="small" fontSize={10} color="text.primary" sx={{ borderRadius: 1 }} />
-                    </MenuItem>
-                </MenuList>
+        <>
+            <Box
+                sx={{
+                    ...styles,
+                    // color: 'var(--SideNav-color)',
+                    display: { xs: 'none', lg: 'flex' },
+                    flexDirection: 'column',
+                    left: 10,
+                    position: 'fixed',
+                    top: isFeaturedCardVisible ? 118 : 50,
+                    width: 'var(--SideNav-width)',
+                    zIndex: 'var(--SideNav-zIndex)',
+                    transition: 'width 0.3s ease',
+                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                    marginBottom: '10px',
+                    border: '1px solid var(--mui-palette-background-level2)',
+                    height: isFeaturedCardVisible ? 'calc(100vh - 160px)' : 'calc(100vh - 93px)',
+                    overflowY: 'auto',
+                    '&::-webkit-scrollbar': {
+                        width: '0px',
+                    },
+                    py: 1.5,
+                    background: 'transparent'
+                }}
+            >
+                <Stack direction="column" alignItems="center" justifyContent="center" gap={1.5} sx={{ width: '100%' }}>
+                    <IconButton size="small" ref={anchorRef} onClick={() => setOpenUserList(true)} sx={{ border: '1px solid var(--mui-palette-background-level2)', width: '42px', height: '42px' }}>
+                        <Iconify icon="mdi:plus" sx={{ width: '30px', height: '30px' }} />
+                    </IconButton>
+                    <IconButton size="small" ref={anchorRef} onClick={() => setOpenUserList(true)} sx={{ border: '1px solid var(--mui-palette-background-level2)', width: '42px', height: '42px' }}>
+                        <Iconify icon="mdi:plus" sx={{ width: '30px', height: '30px' }} />
+                    </IconButton>
+                    <IconButton size="small" ref={anchorRef} onClick={() => setOpenUserList(true)} sx={{ border: '1px solid var(--mui-palette-background-level2)', width: '42px', height: '42px' }}>
+                        <Iconify icon="mdi:plus" sx={{ width: '30px', height: '30px' }} />
+                    </IconButton>
+                </Stack>
             </Box>
-            <MenuList>{renderMenuItems(dashboardFavItems)}</MenuList>
-            <Divider />
-            <MenuList>{renderMenuItems(privateRoutes)}</MenuList>
-        </Box>
+            <ChildrenItemPopover open={openUserList} onClose={() => setOpenUserList(false)} anchorRef={anchorRef} title="Direct Messages" />
+        </>
     );
 }
+
+
+
+// backgroundColor: 'var(--mui-palette-background-level2)',

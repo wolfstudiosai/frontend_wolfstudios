@@ -109,7 +109,7 @@ export const PortfolioSectionNew = () => {
               }}
               sx={{
                 '& .swiper-wrapper': {
-                   gap: '6px'
+                   gap: '1.8px'
                 },
                 '& .swiper-slide': {
                   width: 'auto !important',
@@ -265,7 +265,7 @@ const Card = ({ card, fetchList }) => {
                   maxWidth: index === 0 ? '40%' : '30%',
                 }}
               >
-                {card.ByCountryPortfolios?.map((country) => state?.ByCountry?.Name).join(', ')}
+                {card?.ByCountryPortfolios?.map((country) => country?.ByCountry?.Name).join(', ')}
               </Typography>
             ))}
           </Stack>

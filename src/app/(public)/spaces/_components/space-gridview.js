@@ -39,7 +39,7 @@ export const SpaceGridView = ({ data, colums, fetchList, loading, handlePaginati
                           ))}
                 </SliderWrapper>
                 <PageLoader loading={loading} error={null}>
-                    <Grid container spacing={1} columns={{ xs: 36 }} sx={{ mt: 2 }}>
+                    <Grid container spacing={0} columns={{ xs: 36 }} sx={{ mt: 2 }}>
                           {data.map((space, index) => (
                             <Grid item size={{ xs: 12, md: colums }} key={index}>
                               <SpaceCard item={space} fetchList={fetchList} />
