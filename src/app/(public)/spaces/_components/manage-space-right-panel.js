@@ -8,6 +8,7 @@ import {createSpaceAsync, deleteSpaceAsync, getSpaceAsync, updateSpaceAsync} fro
 import { defaultSpace1 } from '../_lib/space.types';
 import { SpaceForm } from './space-form';
 import { SpaceQuickView } from './space-quickview';
+import { SpaceQuickViewV2 } from './space-quickviewV2';
 import { formConstants } from '/src/app/constants/form-constants';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
@@ -147,7 +148,8 @@ export const ManageSpaceRightPanel = ({ open, onClose, fetchList, data, width, v
     return (
         <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
             {sidebarView === 'QUICK' ? (
-              <SpaceQuickView data={values} />
+              // <SpaceQuickView data={values} />
+              <SpaceQuickViewV2 data={values} />
               ) : (
                 <SpaceForm
                   data={values}

@@ -66,7 +66,6 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
 
   //mobile nav 
   const toggleMobileNav = () => {
-    console.log('mobileNavOpen', mobileNavOpen);
     setMobileNavOpen(!mobileNavOpen);
   };
 
