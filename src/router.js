@@ -1,5 +1,8 @@
 import { paths } from './paths';
 
+const user = JSON.parse(localStorage.getItem('auth'));
+const workspaces = user?.workspaces || [];
+
 // public header routes
 export const publicRoutes = [
   {
@@ -285,17 +288,24 @@ export const privateRoutes = [
 // dashboard fav items
 export const dashboardFavItems = [
   {
-    key: 'contact',
-    title: 'Contact',
+    key: 'workspaces',
+    title: 'Workspaces',
     icon: 'material-symbols-light:chat-outline-rounded',
     items: [
-      {
-        key: 'chat2',
-        title: 'Workspace 1',
+      ...workspaces.map((workspace) => ({
+        key: workspace.slug,
+        title: workspace.name,
         icon: 'fluent:chat-12-regular',
-        href: 'chat2',
+        href: `/workspace/${workspace.slug}`,
         allowedRoles: ['admin', 'user', 'super_admin'],
-      },
+      })),
+      // {
+      //   key: 'chat2',
+      //   title: 'Workspace 1',
+      //   icon: 'fluent:chat-12-regular',
+      //   href: 'chat2',
+      //   allowedRoles: ['admin', 'user', 'super_admin'],
+      // },
       // {
       //   key: 'dms',
       //   title: 'DMs',
