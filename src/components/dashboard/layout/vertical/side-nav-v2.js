@@ -1,12 +1,12 @@
 'use client';
 
+import * as React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Collapse, Divider, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useColorScheme } from '@mui/material/styles';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import * as React from 'react';
 
 import { Iconify } from '/src/components/iconify/iconify';
 
@@ -14,7 +14,7 @@ import { navColorStyles } from './styles';
 import { dashboardFavItemsV2, privateRoutesV2 } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
 
-export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardVisible }) {
+export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
   const pathname = usePathname();
   const { colorScheme = 'light' } = useColorScheme();
   const styles = navColorStyles[colorScheme][color];
@@ -31,29 +31,36 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
       const isExpanded = openMenus[item.key] || false;
 
       const MenuButton = () => (
-        <Box
-          sx={{
-            position: 'relative',
-            '&:hover .sub-menu': open ? {} : { display: 'block' },
-          }}
-        >
+        <Box>
           <MenuItem
             component={item.href ? Link : 'div'}
             href={item.href || undefined}
             onClick={(e) => {
-              if (hasChildren && open) {
+              if (hasChildren) {
                 e.preventDefault();
                 toggleMenuItem(item.key);
               }
             }}
             sx={{
-              justifyContent: open ? 'flex-start' : 'center',
+              justifyContent: 'flex-start',
               minWidth: 0,
             }}
             selected={isActive}
           >
-            <ListItemIcon sx={{ justifyContent: open ? 'flex-start' : 'center' }}>
-              <Iconify icon={item.icon} width={20} height={20} color="text.primary" />
+            <ListItemIcon
+              sx={{
+                justifyContent: 'flex-start',
+                ...(!open && {
+                  border: '1px solid var(--mui-palette-divider)',
+                  boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+                  borderRadius: 1,
+                  p: 0.5,
+                  backgroundColor: 'background.paper',
+                }),
+              }}
+              title={open ? '' : item.title}
+            >
+              <Iconify icon={item.icon} width={open ? 20 : 24} height={open ? 20 : 24} color="text.primary" />
             </ListItemIcon>
 
             {open && (
@@ -65,7 +72,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
                 }}
               />
             )}
-            {open && hasChildren && (
+            {hasChildren && open && (
               <Iconify
                 icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
                 width={10}
@@ -85,7 +92,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
             )}
           </MenuItem>
 
-          {hasChildren && !open && (
+          {hasChildren && (
             <Box
               className="sub-menu"
               sx={{
@@ -124,9 +131,9 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
       return (
         <React.Fragment key={item.key}>
           <MenuButton />
-          {hasChildren && open && (
+          {hasChildren && (
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-              <MenuList sx={{ pl: level + 2 }}>{renderMenuItems(item.items, level + 1)}</MenuList>
+              <MenuList sx={{ pl: open ? level + 2 : 0 }}>{renderMenuItems(item.items, level + 1)}</MenuList>
             </Collapse>
           )}
         </React.Fragment>
@@ -165,5 +172,5 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
       <Divider />
       <MenuList>{renderMenuItems(privateRoutesV2)}</MenuList>
     </Box>
-  );  
+  );
 }

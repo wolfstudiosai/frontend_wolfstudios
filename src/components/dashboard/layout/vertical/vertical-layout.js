@@ -40,7 +40,7 @@ export function VerticalLayout({ children }) {
           body: {
             '--MainNav-height': '56px',
             '--MainNav-zIndex': 1000,
-            '--SideNav-width': openSidebar ? pxToRem(250) : pxToRem(70),
+            '--SideNav-width': openSidebar ? pxToRem(250) : pxToRem(50),
             '--SideNav-zIndex': 1100,
             '--MobileNav-width': '320px',
             '--MobileNav-zIndex': 1100,
@@ -78,7 +78,7 @@ export function VerticalLayout({ children }) {
             display: isFeaturedCardVisible ? 'flex' : 'block',
             flex: '1 1 auto',
             flexDirection: 'column',
-            pl: { lg: isLogin ? (openSidebar ? pxToRem(270) : pxToRem(84)) : pxToRem(0) },
+            pl: { lg: isLogin ? (openSidebar ? pxToRem(270) : pxToRem(70)) : pxToRem(0) },
           }}
         >
           {isLogin && (
