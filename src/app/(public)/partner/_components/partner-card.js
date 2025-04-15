@@ -224,7 +224,7 @@ export const PartnerCardOld = ({ item, fetchList }) => {
       <ManagePartnerRightPanel
         view="QUICK"
         fetchList={fetchList}
-        width={'50vw'}
+        width='70%'
         open={openPartnerRightPanel ? true : false}
         data={openPartnerRightPanel}
         onClose={() => setOpenPartnerRightPanel(false)}
@@ -479,7 +479,6 @@ export const PartnerCard = ({ item, fetchList }) => {
       <ManagePartnerRightPanel
         view="QUICK"
         fetchList={fetchList}
-        width={"50vw"}
         open={openPartnerRightPanel ? true : false}
         data={openPartnerRightPanel}
         onClose={() => setOpenPartnerRightPanel(false)}

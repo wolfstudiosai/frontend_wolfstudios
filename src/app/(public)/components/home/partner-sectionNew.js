@@ -428,7 +428,6 @@ const Card = ({ card, fetchList }) => {
       <ManagePartnerRightPanel
         view="QUICK"
         fetchList={fetchList}
-        width={'50vw'}
         open={openPartnerRightPanel ? true : false}
         data={openPartnerRightPanel}
         onClose={() => setOpenPartnerRightPanel(false)}
