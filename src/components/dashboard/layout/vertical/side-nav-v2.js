@@ -1,31 +1,24 @@
 'use client';
 
+import * as React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Collapse, Divider, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useColorScheme } from '@mui/material/styles';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import * as React from 'react';
-import { navColorStyles } from './styles';
-import { Iconify } from '/src/components/iconify/iconify';
-import useAuth from '/src/hooks/useAuth';
-import { dashboardFavItems, privateRoutes, dashboardFavItemsV2, privateRoutesV2 } from '/src/router';
-import { pxToRem } from '/src/utils/helper';
 
-const logoColors = {
-  dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
-  light: { blend_in: 'dark', discrete: 'dark', evident: 'light' },
-};
+import { Iconify } from '/src/components/iconify/iconify';
+
+import { navColorStyles } from './styles';
+import { dashboardFavItemsV2, privateRoutesV2 } from '/src/router';
+import { pxToRem } from '/src/utils/helper';
 
 export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardVisible }) {
   const pathname = usePathname();
-  const { userInfo } = useAuth();
   const { colorScheme = 'light' } = useColorScheme();
   const styles = navColorStyles[colorScheme][color];
-  const logoColor = logoColors[colorScheme][color];
   const [openMenus, setOpenMenus] = React.useState({});
-  const router = useRouter();
 
   const toggleMenuItem = (key) => {
     setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -36,7 +29,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
       const isActive = item.href && pathname === item.href;
       const hasChildren = item.items && item.items.length > 0;
       const isExpanded = openMenus[item.key] || false;
-  
+
       // Make parent item clickable AND expandable
       const MenuButton = ({ children }) => (
         <MenuItem
@@ -54,7 +47,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
           <ListItemIcon>
             <Iconify icon={item.icon} width={15} height={15} color="text.primary" />
           </ListItemIcon>
-  
+
           <ListItemText
             primary={item.title}
             sx={{
@@ -62,7 +55,7 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
               ...(hasChildren && { fontWeight: 800 }),
             }}
           />
-  
+
           {hasChildren && (
             <Iconify
               icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
@@ -71,13 +64,13 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
               color="text.secondary"
             />
           )}
-  
+
           {!hasChildren && item.count && (
             <Chip label={item.count} size="small" fontSize={10} color="text.primary" sx={{ borderRadius: 1 }} />
           )}
         </MenuItem>
       );
-  
+
       return (
         <React.Fragment key={item.key}>
           <MenuButton />
@@ -116,24 +109,11 @@ export function SideNavV2({ color = 'evident', items = [], open, isFeaturedCardV
           '&::-webkit-scrollbar': {
             width: '0px',
           },
-          background: 'transparent'
+          background: 'transparent',
         }}
       >
-        {/* <Box sx={{ mb: -1.3 }}>
-          <MenuList>
-            <MenuItem component={Link} href="/drafts">
-              <ListItemIcon>
-                <Iconify icon="material-symbols-light:draft-outline" width={20} height={20} color="text.primary" />
-              </ListItemIcon>
-              <ListItemText sx={{ color: 'text.primary' }}>Drafts</ListItemText>
-              <Chip label={12} size="small" fontSize={10} color="text.primary" sx={{ borderRadius: 1 }} />
-            </MenuItem>
-          </MenuList>
-        </Box> */}
-        {/* <MenuList>{renderMenuItems(dashboardFavItems)}</MenuList> */}
         <MenuList>{renderMenuItems(dashboardFavItemsV2)}</MenuList>
         <Divider />
-        {/* <MenuList>{renderMenuItems(privateRoutes)}</MenuList> */}
         <MenuList>{renderMenuItems(privateRoutesV2)}</MenuList>
       </Box>
     )
