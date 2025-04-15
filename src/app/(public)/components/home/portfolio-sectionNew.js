@@ -2,16 +2,16 @@
 
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { FadeIn } from '/src/components/animation/fade-in';
-import { Iconify } from '/src/components/iconify/iconify';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { ManagePortfolioRightPanel } from '../../portfolio/_components/manage-portfolio-right-panel';
-import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
+import { ManagePortfolioRightPanel } from '../../portfolio/_components/manage-portfolio-right-panel';
+import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
+import { FadeIn } from '/src/components/animation/fade-in';
+import { Iconify } from '/src/components/iconify/iconify';
+import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
 export const PortfolioSectionNew = () => {
   const [portfolios, setPortfolios] = useState([]);
@@ -24,7 +24,7 @@ export const PortfolioSectionNew = () => {
       rowsPerPage: 20,
     });
     if (response?.success) {
-        setPortfolios((prev) => [...prev, ...response.data]);
+      setPortfolios((prev) => [...prev, ...response.data]);
     }
   }
 
@@ -34,12 +34,12 @@ export const PortfolioSectionNew = () => {
 
   return (
     <Box
-    sx={{
-      pt: 1,
-      px: { xs: 2, md: 4 },
-      mb: '10px'
-    }}
-  >
+      sx={{
+        pt: 1,
+        px: { xs: 2, md: 4 },
+        mb: '10px'
+      }}
+    >
       <Grid container spacing={2} alignItems="flex-start">
         <Grid
           item
@@ -53,39 +53,39 @@ export const PortfolioSectionNew = () => {
             justifyContent: 'flex-start',
             height: '100%',
           }}
-          >
-            <FadeIn>
-                 <Stack direction="row" alignItems="center">
-                    <Typography
-                      variant="h4"
-                      fontWeight="bold"
-                      sx={{
-                        fontSize: '2.2rem',
-                        letterSpacing: '0.5px',
-                        textTransform: 'uppercase',
-                        color: 'text.primary',
-                      }}
-                    >
-                      Portfolios
-                    </Typography>
-                    <Button
-                      variant="text"
-                      onClick={() => router.push('/portfolio')}
-                      endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
-                      sx={{ margin: 0, padding: 0 }}
-                      >
-                    </Button>
-                  </Stack>
-                    <Typography fontSize={18} sx={{ mt: 1, mb: 4 }}>
-                      Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
-                      visuals that captivate audiences, evoke emotion, and leave a lasting impact.
-                    </Typography>
-            </FadeIn>
+        >
+          <FadeIn>
+            <Stack direction="row" alignItems="center">
+              <Typography
+                variant="h4"
+                fontWeight="bold"
+                sx={{
+                  fontSize: '2.2rem',
+                  letterSpacing: '0.5px',
+                  textTransform: 'uppercase',
+                  color: 'text.primary',
+                }}
+              >
+                Portfolios
+              </Typography>
+              <Button
+                variant="text"
+                onClick={() => router.push('/portfolio')}
+                endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
+                sx={{ margin: 0, padding: 0 }}
+              >
+              </Button>
+            </Stack>
+            <Typography fontSize={18} sx={{ mt: 1, mb: 4 }}>
+              Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
+              visuals that captivate audiences, evoke emotion, and leave a lasting impact.
+            </Typography>
+          </FadeIn>
         </Grid>
         <Grid size={{
-              md: 9,
-              xs: 12,
-            }}>
+          md: 9,
+          xs: 12,
+        }}>
           <Stack spacing={2} sx={{ px: 3, pt: 1 }}>
             <SliderWrapper
               modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
@@ -109,7 +109,7 @@ export const PortfolioSectionNew = () => {
               }}
               sx={{
                 '& .swiper-wrapper': {
-                   gap: '1.8px'
+                  gap: '1.8px'
                 },
                 '& .swiper-slide': {
                   width: 'auto !important',
@@ -152,44 +152,44 @@ const Card = ({ card, fetchList }) => {
         onClick={() => setOpenPortfolioRightPanel(card)}
       >
         {/* Background Image or Video */}
-          {card.VideoLink? (
-            <Box
-              component="video"
-              sx={{
-                position: 'absolute',
-                left: 0,
-                top: 0,
-                right: 0,
-                bottom: 0,
-                zIndex: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                }}
-                autoPlay
-                loop
-                muted
-              >
-                <source src={card.VideoLink[0]} type="video/mp4" />
-                  Your browser does not support the video tag.
-            </Box>
-                ) : (
-            <Box
-              className="image"
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                zIndex: 0,
-                backgroundImage: `url(${card.ThumbnailImage[0]})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                transition: 'transform 300ms ease',
-              }}
-            />
-          )}
+        {card.VideoLink ? (
+          <Box
+            component="video"
+            sx={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+            autoPlay
+            loop
+            muted
+          >
+            <source src={card.VideoLink[0]} type="video/mp4" />
+            Your browser does not support the video tag.
+          </Box>
+        ) : (
+          <Box
+            className="image"
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 0,
+              backgroundImage: `url(${card.ThumbnailImage[0]})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              transition: 'transform 300ms ease',
+            }}
+          />
+        )}
 
         {/* Gradient Overlay */}
         <Box
@@ -241,12 +241,12 @@ const Card = ({ card, fetchList }) => {
               marginBottom: '7px',
             }}
           />
-          
-          <Stack 
-            spacing={0.5} 
-            direction="row" 
-            justifyContent="space-between" 
-            alignItems="center" 
+
+          <Stack
+            spacing={0.5}
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
             marginBottom={1.2}
             sx={{ width: '100%' }}
           >
@@ -265,15 +265,15 @@ const Card = ({ card, fetchList }) => {
                   maxWidth: index === 0 ? '40%' : '30%',
                 }}
               >
-                {card.ByCountryPortfolios?.map((country) => state?.ByCountry?.Name).join(', ')}
+                {card.ByCountryPortfolios?.map((country) => country?.ByCountry?.Name).join(', ')}
               </Typography>
             ))}
           </Stack>
 
-          <Stack 
-            spacing={0.5} 
-            direction="row" 
-            justifyContent="space-between" 
+          <Stack
+            spacing={0.5}
+            direction="row"
+            justifyContent="space-between"
             alignItems="center"
             sx={{ width: '100%' }}
           >
@@ -315,7 +315,7 @@ const HorizontalScrollCarousel = ({ direction, fetchList }) => {
   const { scrollYProgress } = useScroll({ target: targetRef });
 
   const totalWidth = useMemo(() => 12 * 350, []);
-  
+
   const x = useTransform(
     scrollYProgress,
     [0, 1],

@@ -43,7 +43,7 @@ export const defaultPortfolio = (data) => {
       value: item?.PartnerHQ?.id,
       label: item?.PartnerHQ?.Name
     })) || [],
-    video_url: data?.VideoLink || '',
+    videoLink: data?.VideoLink || '',
     singlePageHeroImage: data?.SinglePageHeroImage?.[0] || [],
     imagefield: data?.Imagefield?.[0] || [],
     thumbnailImage: data?.ThumbnailImage?.[0] || [],

@@ -518,7 +518,7 @@ export const dashboardFavItemsV2 = [
     key: 'chat',
     title: 'Inbox',
     icon: 'fluent:chat-12-regular',
-    href: '/dms',
+    href: '/chat2',
   },
 ];
 
