@@ -10,7 +10,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { devNull } from "os";
 import { useRef, useState } from "react";
 import { CreateChannelDialog } from "./create-channel-dialog";
 import { CountChip, MemberInfo, MemberItem, MemberName, MemberRole, ScrollableContent } from "./custom-component";
@@ -133,7 +132,7 @@ export const LeftSidebar = () => {
                                         label: 'Drafts',
                                         icon: 'mdi:file-document-outline',
                                         count: 0,
-                                        tag: devNull
+                                        tag: null
                                     },
                                     {
                                         label: 'Saved items',

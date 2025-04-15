@@ -10,8 +10,8 @@ import { pxToRem } from '/src/utils/helper';
 import useAuth from '/src/hooks/useAuth';
 
 import { MainNavV2 } from './main-nav-v2';
-// import { MiniSideNav } from './mini-side-nav';
 import { SideNavV2 } from './side-nav-v2';
+// import { MiniNavbar } from './test-nav';
 import { useSettings } from '/src/hooks/use-settings';
 
 export function VerticalLayout({ children }) {
@@ -41,7 +41,7 @@ export function VerticalLayout({ children }) {
           body: {
             '--MainNav-height': '56px',
             '--MainNav-zIndex': 1000,
-            '--SideNav-width': openSidebar ? pxToRem(250) : 0, //pxToRem(70)
+            '--SideNav-width': openSidebar ? pxToRem(250) : pxToRem(0), //pxToRem(70) | '0px'
             '--SideNav-zIndex': 1100,
             '--MobileNav-width': '320px',
             '--MobileNav-zIndex': 1100,
@@ -78,20 +78,19 @@ export function VerticalLayout({ children }) {
             display: isFeaturedCardVisible ? 'flex' : 'block',
             flex: '1 1 auto',
             flexDirection: 'column',
-            pl: { lg: isLogin && openSidebar ? pxToRem(270) : '0px' }, //pxToRem(84)
+            pl: { lg: isLogin && openSidebar ? pxToRem(270) : pxToRem(0) }, //pxToRem(84) | '0px'
           }}
         >
           {/* {isLogin && (
             openSidebar ? (
-              // <MiniNav color={settings.navColor} open={openSidebar} isFeaturedCardVisible={isFeaturedCardVisible} />
               <SideNavV2
                 color={settings.navColor}
                 open={openSidebar}
                 isFeaturedCardVisible={isFeaturedCardVisible}
               />
             ) : (
-              // <MiniSideNav color={settings.navColor} isFeaturedCardVisible={isFeaturedCardVisible} />
-              <MiniNavbar />
+              <MiniSideNav color={settings.navColor} isFeaturedCardVisible={isFeaturedCardVisible} />
+              // <MiniNavbar />
             )
           )} */}
           {isLogin && openSidebar && (
