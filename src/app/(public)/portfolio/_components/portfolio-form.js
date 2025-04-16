@@ -246,27 +246,6 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
               }}
             />
           </Grid>
-          {/* <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField
-              name="hero_image"
-              label="Hero Image"
-              value={values.hero_image}
-              onChange={handleChange}
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end" title="Preview Image">
-                      <Iconify
-                        style={{ cursor: 'pointer' }}
-                        icon="lucide:view"
-                        onClick={() => setMediaPreview(values.hero_image)}
-                      />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
-          </Grid> */}
           <Grid size={{ xs: 12, md: 4 }}>
             <FormControl fullWidth error={Boolean(errors.imagefield)}>
               <FormLabel sx={{ mb: 1 }}>Image Field</FormLabel>
@@ -311,7 +290,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
             <CustomTextField
               name="fullDescription"
               label="Full Description"
-              value={values.full_description}
+              value={values.fullDescription}
               onChange={handleChange}
               multiline
               rows={4}
