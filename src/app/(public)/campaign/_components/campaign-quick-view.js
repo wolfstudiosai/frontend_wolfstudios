@@ -13,7 +13,6 @@ import { isVideoContent, pxToRem } from '/src/utils/helper';
 export const CampaignQuickView = ({ data }) => {
   const theme = useTheme();
   const mediaArr = [...(data?.ImageInspirationGallery || []), ...(data?.VideoInspirationGallery || [])];
-  console.log(data, 'data...');
 
   return (
     <Box sx={{ position: 'relative' }}>
