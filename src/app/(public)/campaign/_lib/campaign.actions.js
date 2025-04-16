@@ -14,6 +14,7 @@ export const getCampaignGroupListAsync = async (queryParams) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
+
 export const getCampaignListAsync = async (queryParams) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
@@ -25,37 +26,32 @@ export const getCampaignListAsync = async (queryParams) => {
   }
 };
 
-export const getCampaignAsync = async (slug) => {
+export const getCampaignAsync = async (id) => {
   try {
-    const res = await api.get(`/campaign?slug=${slug}`);
-    return { success: true, data: res.data.data[0], totalRecords: res.data.meta.total };
+    const res = await api.get(`/campaign-HQ/${id}`);
+    return { success: true, data: res.data.data };
   } catch (error) {
     toast.error(error.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
 
-export const createCampaignAsync = async (file, data) => {
+export const createCampaignAsync = async (data) => {
   try {
-    const { slug, id, created_by, user_id, updated_at, campaign_group_name, ...rest } = data;
-    let campaign_image = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      campaign_image = uploadResponse[0].path;
-    }
-    const campaignResponse = await api.post(`/campaign/add-campaign`, {
-      ...rest,
-      campaign_image,
+
+    const response = await api.post(`/campaign-HQ`, {
+      ...data,
     });
 
-    toast.success(campaignResponse.data.message);
-    return { success: true, data: campaignResponse.data.data };
+    toast.success(response.data.message);
+    return { success: true, data: response.data.data };
   } catch (error) {
     const errorMessage = error.response?.data?.message || error.message || 'An unknown error occurred';
     toast.error(errorMessage);
     return { success: false, error: errorMessage };
   }
 };
+
 export const createCampaignGroupAsync = async (data) => {
   try {
     const { created_at, updated_at, campaigns, ...rest } = data;
@@ -70,18 +66,10 @@ export const createCampaignGroupAsync = async (data) => {
   }
 };
 
-export const updateCampaignAsync = async (file, data) => {
+export const updateCampaignAsync = async (id, data) => {
   try {
-    const { id, slug, user_id, created_by, created_at, updated_at, campaign_group_name, campaign_group, ...rest } =
-      data;
-    let thumbnailPath = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      thumbnailPath = uploadResponse.length > 0 ? uploadResponse[0].path : '';
-    }
-    const res = await api.patch(`/campaign/update/${id}`, {
-      ...rest,
-      campaign_image: thumbnailPath ? thumbnailPath : data.campaign_image,
+    const res = await api.patch(`/campaign-HQ/${id}`, {
+      ...data
     });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };

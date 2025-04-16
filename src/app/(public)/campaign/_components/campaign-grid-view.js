@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import Grid from '@mui/material/Grid2';
+import React from 'react';
 
 import { SettingsContext } from '/src/contexts/settings';
 
