@@ -1,10 +1,8 @@
 "use client"
 
-import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
+import { Avatar, Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
 import { useEffect, useState } from "react"
-
 import { FadeIn } from "/src/components/animation/fade-in"
-
 export const HeroSection = () => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
@@ -62,6 +60,7 @@ export const HeroSection = () => {
           }}
         >
           <source src="/videos/hero_bg.mp4" type="video/mp4" />
+          {/* <source src="/assets/hero_bg_second_v2.mp4" type="video/mp4" /> */}
         </video>
 
         {/* Gradient Overlay */}
@@ -192,6 +191,7 @@ export const HeroSection = () => {
             }}
           >
             <source src="/videos/hero_bg.mp4" type="video/mp4" />
+            {/* <source src="/videos/hero_bg_second_v2.mp4" type="video/mp4" /> */}
           </video>
         </Box>
       </Stack >
