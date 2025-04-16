@@ -10,6 +10,7 @@ import {
 } from './axios-api.helpers';
 
 export const apiBaseurl = process.env['NEXT_PUBLIC_BACKEND_API'] || 'https://api.wolfstudios.ai/api';
+export const chatApiBaseurl = process.env['NEXT_PUBLIC_CHAT_API'] || 'https://chat.wolfstudios.ai/api';
 
 export const api = axios.create({
   baseURL: `${apiBaseurl}`,
@@ -24,6 +25,25 @@ api.interceptors.request.use(
       // if (!isTokenValid) {
       //   clearUserSessionFromLocalStore();
       // }
+      config.headers['Authorization'] = `Bearer ${token}`;
+    } else {
+      localStorage.clear();
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export const chatApi = axios.create({
+  baseURL: `${chatApiBaseurl}`,
+});
+chatApi.interceptors.request.use(
+  (config) => {
+    const token = getAuthTokenFromLocalStore();
+
+    if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     } else {
       localStorage.clear();

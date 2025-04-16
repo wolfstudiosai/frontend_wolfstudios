@@ -59,16 +59,15 @@ export const AuthProvider = (props) => {
       });
       const token = res.data.data.accessToken;
 
-      console.log(res.data);
-
       const userData = {
         id: res.data.data.id,
         token: token,
         name: res.data.data.name,
         email: res.data.data.email,
-        contact_number: res.data.data.contact_number,
-        profile_pic: res.data.data.profile_pic,
+        contact_number: res.data.data.contactNumber,
+        profile_pic: res.data.data.profileImage,
         role: res.data.data.role,
+        workspaces: res.data.data?.WorkspaceMembers?.map((member) => member?.Workspace),
       };
       localStorage.setItem('auth', JSON.stringify({ ...userData }));
       localStorage.setItem('accessToken', token);
