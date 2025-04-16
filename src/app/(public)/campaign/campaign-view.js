@@ -70,7 +70,7 @@ export const CampaignView = () => {
   return (
     <PageContainer>
       <PageHeader
-        title="Campaign"
+        title="Campaigns"
         values={filters}
         tags={campaignTags}
         filters={campaignFilters}

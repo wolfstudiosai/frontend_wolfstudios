@@ -17,8 +17,7 @@ export const CampaignCard = ({ item, fetchList }) => {
         direction={{ sm: 'column', md: 'row' }}
         sx={{
           height: '265px',
-          borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-          boxShadow: '1px 1px 5px rgba(0, 0, 0, 0.09)',
+           border: '1px solid rgba(0, 0, 0, 0.09)',
           overflow: 'visible',
         }}
       >
