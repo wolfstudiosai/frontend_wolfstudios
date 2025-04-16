@@ -109,11 +109,7 @@ export const PortfolioSectionNew = () => {
               }}
               sx={{
                 '& .swiper-wrapper': {
-<<<<<<< HEAD
-                  gap: '6px'
-=======
-                   gap: '1.8px'
->>>>>>> c41ceb860ffdee4dbc13356fb7bb77ff3213ac7e
+                  gap: '1.8px'
                 },
                 '& .swiper-slide': {
                   width: 'auto !important',
