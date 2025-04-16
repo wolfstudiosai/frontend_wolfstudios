@@ -212,6 +212,7 @@ export const PartnerSectionNew = ({ isSecondHorizontal }) => {
 };
 
 const StaticGridView = ({ partners, isSecondHorizontal }) => {
+  const reversedPartners = [...partners].reverse();
   return (
     <Box sx={{
           overflowX: 'auto',
@@ -227,7 +228,7 @@ const StaticGridView = ({ partners, isSecondHorizontal }) => {
             minWidth: '100%',
             alignItems: 'flex-start'
           }}>
-             {partners.map((partner) => (
+             {partners.map((partner, index) => (
               <Box 
                 key={partner.id}
                 sx={{ 
@@ -239,7 +240,7 @@ const StaticGridView = ({ partners, isSecondHorizontal }) => {
               >
                 <Stack spacing={0.7}>
                   <Card card={partner} fetchList={partners} />
-                  {isSecondHorizontal && <Card card={partner} fetchList={partners} />}
+                  {isSecondHorizontal && <Card card={reversedPartners[index]} fetchList={partners} />}
                 </Stack>
               </Box>
             ))}
@@ -296,7 +297,7 @@ const Card = ({ card, fetchList }) => {
               right: 0,
               bottom: 0,
               zIndex: 0,
-              backgroundImage: `url(${card?.ProfileImage[0]})`,
+              backgroundImage: `url(${card?.ProfileImage?.[0]})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               transition: 'transform 300ms ease',

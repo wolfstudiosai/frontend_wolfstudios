@@ -59,8 +59,8 @@ export const HeroSection = () => {
             objectPosition: "top center",
           }}
         >
-          <source src="/videos/hero_bg.mp4" type="video/mp4" />
-          {/* <source src="/assets/hero_bg_second_v2.mp4" type="video/mp4" /> */}
+          {/* <source src="/videos/hero_bg.mp4" type="video/mp4" /> */}
+          <source src="https://cdn.wolfstudios.ai/homepage/hero_bg_v2.mp4" type="video/mp4" />
         </video>
 
         {/* Gradient Overlay */}
@@ -190,8 +190,8 @@ export const HeroSection = () => {
               objectPosition: "top center",
             }}
           >
-            <source src="/videos/hero_bg.mp4" type="video/mp4" />
-            {/* <source src="/videos/hero_bg_second_v2.mp4" type="video/mp4" /> */}
+            {/* <source src="/videos/hero_bg.mp4" type="video/mp4" /> */}
+            <source src="https://cdn.wolfstudios.ai/homepage/hero_bg_second_v2.mp4" type="video/mp4" />
           </video>
         </Box>
       </Stack >
