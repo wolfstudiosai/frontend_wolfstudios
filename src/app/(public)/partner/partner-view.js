@@ -101,7 +101,7 @@ export const PartnerView = () => {
         observer.unobserve(observerRef.current);
       }
     };
-  }, [data, isFetching, totalRecords]);
+  }, [data, fetchList, isFetching, totalRecords]);
 
   return (
     <PageContainer>

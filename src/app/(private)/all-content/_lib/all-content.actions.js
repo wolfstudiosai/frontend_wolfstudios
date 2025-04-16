@@ -13,6 +13,7 @@ export const getContentList = async (queryParams) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
+
 export const getContent = async (id) => {
   try {
     // const res = await api.get(`/record?id=${id}`);
@@ -47,7 +48,7 @@ export const updateContentAsync = async (data, file = null) => {
       const uploadResponse = await uploadFileAsync(file);
       profile_image = uploadResponse[0].path;
     }
-    const payload = {...data };
+    const payload = { ...data };
     // const res = await api.patch(`/record/update-record/${data.id}`, payload);
     const res = await api.patch(`/content-HQ/${data.id}`, payload);
     toast.success(res.data.message);
@@ -60,7 +61,7 @@ export const updateContentAsync = async (data, file = null) => {
 
 export const deleteContentAsync = async (ids) => {
   try {
-    const res = await api.delete(`/record/delete-records`, {data: { ids: ids }});
+    const res = await api.delete(`/record/delete-records`, { data: { ids: ids } });
     // const res1 = await api.delete(`/content-HQ/${ids}`, {data: { ids: ids }}); //need to update from backend which can take multiple ids
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
@@ -70,7 +71,7 @@ export const deleteContentAsync = async (ids) => {
   }
 };
 
-export const createCommentAsync = async (contentID , data) => {
+export const createCommentAsync = async (contentID, data) => {
   try {
     const payload = {
       comment: data.comment

@@ -1,8 +1,10 @@
 'use client';
 
+import React, { useRef } from 'react';
+import { Box, CircularProgress } from '@mui/material';
+
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
-import React from 'react';
 
 import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignTabView } from './_components/campaign-tab-view';
@@ -12,9 +14,10 @@ import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.
 import { defaultCampaign } from './_lib/campaign.types';
 
 export const CampaignView = () => {
+  const observerRef = useRef(null);
   const [loading, setLoading] = React.useState(false);
   const [isFetching, setIsFetching] = React.useState(false);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [data, setData] = React.useState([]);
   const [filters, setFilters] = React.useState({
@@ -23,10 +26,11 @@ export const CampaignView = () => {
     FILTER: [],
     SORTING: [],
     VIEW: 'grid',
-    ADD: false
+    ADD: false,
   });
 
-  async function fetchList() {
+  const fetchList = React.useCallback(async () => {
+    if (isFetching) return;
     setLoading(true);
 
     try {
@@ -36,7 +40,7 @@ export const CampaignView = () => {
       });
 
       if (response.success) {
-        setData(response.data);
+        setData((prev) => [...prev, ...response.data]);
         setTotalRecords(response.totalRecords);
         setPagination((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }));
       }
@@ -45,7 +49,7 @@ export const CampaignView = () => {
     } finally {
       setLoading(false);
     }
-  }
+  }, [isFetching, pagination]);
 
   const handleFilterChange = (type, value) => {
     setFilters((prev) => ({ ...prev, [type]: value }));
@@ -67,10 +71,32 @@ export const CampaignView = () => {
     fetchList();
   }, []);
 
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetching && data.length < totalRecords) {
+          fetchList();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [data, fetchList, isFetching, totalRecords]);
+
   return (
     <PageContainer>
       <PageHeader
-        title="Campaign"
+        title="Campaigns"
         values={filters}
         tags={campaignTags}
         filters={campaignFilters}
@@ -81,7 +107,12 @@ export const CampaignView = () => {
         totalRecords={totalRecords}
       />
       {filters.VIEW === 'grid' ? (
-        <CampaignGridView loading={loading} data={data} fetchList={refreshListView} />
+        <Box>
+          <CampaignGridView loading={loading} data={data} fetchList={refreshListView} />
+          <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
+            {isFetching && <CircularProgress size="30px" />}
+          </div>
+        </Box>
       ) : (
         <CampaignTabView data={data} />
       )}
