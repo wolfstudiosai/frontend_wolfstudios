@@ -10,9 +10,9 @@ import { isSupabaseUrl } from '/src/utils/helper';
 
 export const CampaignCard = ({ item, fetchList }) => {
   const [openCampaignRightPanel, setOpenCampaignRightPanel] = React.useState(null);
-  const imageSrc = isSupabaseUrl(item.campaign_image)
-    ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.campaign_image}`
-    : item.campaign_image;
+  const imageSrc = isSupabaseUrl(item.CampaignImage[0])
+    ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.CampaignImage[0]}`
+    : item.CampaignImage[0];
 
   return (
     <>
