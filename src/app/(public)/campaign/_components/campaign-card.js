@@ -20,7 +20,7 @@ export const CampaignCard = ({ item, fetchList }) => {
         direction={{ sm: 'column', md: 'row' }}
         sx={{
           height: '265px',
-          border: '1px solid rgba(0, 0, 0, 0.09)',
+          border: '1px solid var(--mui-palette-divider)',
           overflow: 'visible',
         }}
       >
