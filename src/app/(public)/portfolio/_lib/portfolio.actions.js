@@ -26,10 +26,9 @@ export const getPortfolioAsync = async (id) => {
 
 export const createPortfolioAsync = async (data) => {
   try {
-    const { video_url, ...rest } = data;
 
     const campaignResponse = await api.post(`/portfolios`, {
-      ...rest,
+      ...data,
     });
 
     toast.success(campaignResponse.data.message);
@@ -43,10 +42,9 @@ export const createPortfolioAsync = async (data) => {
 
 export const updatePortfolioAsync = async (id, data) => {
   try {
-    const { video_url, ...rest } = data;
 
     const res = await api.patch(`/portfolios/${id}`, {
-      ...rest,
+      ...data,
     });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };

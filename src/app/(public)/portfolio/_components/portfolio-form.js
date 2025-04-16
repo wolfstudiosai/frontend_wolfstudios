@@ -13,6 +13,7 @@ import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-ifr
 import { ImageUploader } from '/src/components/uploaders/image-uploader';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
+import dayjs from "dayjs";
 import { useFormik } from 'formik';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { createPortfolioAsync, getPortfolioAsync, getPortfolioCategoryListAsync, updatePortfolioAsync } from '../_lib/portfolio.actions';
@@ -80,9 +81,15 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
             }
           }
 
+          if (finalData.videoLink.length === 0) {
+            delete finalData.videoLink;
+          }
+          if (finalData.date) {
+            finalData.date = dayjs(finalData.date).format('MMMM YYYY');
+          }
           console.log(finalData);
 
-          const res = data ? await updatePortfolioAsync(finalData) : await createPortfolioAsync(finalData);
+          const res = id ? await updatePortfolioAsync(id, finalData) : await createPortfolioAsync(finalData);
           if (res.success) {
             onClose?.();
             resetForm();
@@ -99,12 +106,6 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
     });
 
   // *****************Use Effects****************************
-
-  // React.useEffect(() => {
-  //   return () => {
-  //     setValues(defaultPortfolio);
-  //   };
-  // }, []);
 
   React.useEffect(() => {
     if (data) {
@@ -226,9 +227,9 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
-              name="video_url"
+              name="videoLink"
               label="Video URL"
-              value={values.video_url}
+              value={values.videoLink}
               onChange={handleChange}
               slotProps={{
                 input: {
@@ -237,7 +238,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
                       <Iconify
                         style={{ cursor: 'pointer' }}
                         icon="lucide:view"
-                        onClick={() => setMediaPreview(values.video_url)}
+                        onClick={() => setMediaPreview(values.videoLink)}
                       />
                     </InputAdornment>
                   ),
@@ -245,29 +246,8 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
               }}
             />
           </Grid>
-          {/* <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField
-              name="hero_image"
-              label="Hero Image"
-              value={values.hero_image}
-              onChange={handleChange}
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end" title="Preview Image">
-                      <Iconify
-                        style={{ cursor: 'pointer' }}
-                        icon="lucide:view"
-                        onClick={() => setMediaPreview(values.hero_image)}
-                      />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
-          </Grid> */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <FormControl fullWidth error={Boolean(errors.thumbnail)}>
+            <FormControl fullWidth error={Boolean(errors.imagefield)}>
               <FormLabel sx={{ mb: 1 }}>Image Field</FormLabel>
               <ImageUploader
                 value={values.imagefield}
@@ -277,7 +257,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
             </FormControl>
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
-            <FormControl fullWidth error={Boolean(errors.thumbnail)}>
+            <FormControl fullWidth error={Boolean(errors.singlePageHeroImage)}>
               <FormLabel sx={{ mb: 1 }}>Hero Image</FormLabel>
               <ImageUploader
                 value={values.singlePageHeroImage}
@@ -287,7 +267,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
             </FormControl>
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
-            <FormControl fullWidth error={Boolean(errors.thumbnail)}>
+            <FormControl fullWidth error={Boolean(errors.thumbnailImage)}>
               <FormLabel sx={{ mb: 1 }}>Thumbnail</FormLabel>
               <ImageUploader
                 value={values.thumbnailImage}
@@ -310,7 +290,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
             <CustomTextField
               name="fullDescription"
               label="Full Description"
-              value={values.full_description}
+              value={values.fullDescription}
               onChange={handleChange}
               multiline
               rows={4}

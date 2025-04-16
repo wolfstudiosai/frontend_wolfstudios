@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Chip, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
 import { CustomChip } from '/src/components/core/custom-chip';
@@ -10,6 +10,9 @@ import { isSupabaseUrl } from '/src/utils/helper';
 
 export const CampaignCard = ({ item, fetchList }) => {
   const [openCampaignRightPanel, setOpenCampaignRightPanel] = React.useState(null);
+  const imageSrc = isSupabaseUrl(item.campaign_image)
+    ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.campaign_image}`
+    : item.campaign_image;
 
   return (
     <>
@@ -17,18 +20,13 @@ export const CampaignCard = ({ item, fetchList }) => {
         direction={{ sm: 'column', md: 'row' }}
         sx={{
           height: '265px',
-          borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-          boxShadow: '1px 1px 5px rgba(0, 0, 0, 0.09)',
+          border: '1px solid var(--mui-palette-divider)',
           overflow: 'visible',
         }}
       >
         <Box
           component="img"
-          src={
-            isSupabaseUrl(item.campaign_image)
-              ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.campaign_image}`
-              : item.campaign_image
-          }
+          src={imageSrc || '/assets/image-placeholder.jpg'}
           alt={item.Name}
           sx={{
             width: { sm: '100%', md: '30rem' },
@@ -43,7 +41,7 @@ export const CampaignCard = ({ item, fetchList }) => {
             <Typography
               variant="caption"
               component="h4"
-              sx={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'secondary.main' }}
+              sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'secondary.main' }}
             >
               {item?.Name}
             </Typography>
@@ -62,8 +60,20 @@ export const CampaignCard = ({ item, fetchList }) => {
                 WebkitBoxOrient: 'vertical',
               }}
             >
-              {item?.CampaignDescription ?? 'No description'}
+              {item?.CampaignDescription || 'No description'}
             </Typography>
+            <Button
+              variant="text"
+              size="small"
+              onClick={() => setOpenCampaignRightPanel(item)}
+              sx={{
+                textDecoration: 'underline',
+                color: 'text.secondary',
+                '&:hover': { color: 'text.primary', background: 'transparent', textDecoration: 'underline' },
+              }}
+            >
+              View details
+            </Button>
           </Box>
           <Stack direction={{ md: 'row', sm: 'column' }} justifyContent="space-between" gap={1}>
             <Stack
@@ -71,7 +81,7 @@ export const CampaignCard = ({ item, fetchList }) => {
               alignItems="center"
               divider={<Iconify icon="pepicons-pencil:line-y" sx={{ color: 'grey.400' }} />}
             >
-              <CustomChip label={item.campaign_status} color="success" size="small" variant="soft" />
+              <CustomChip label={item.campaign_status ?? '-'} color="success" size="small" variant="soft" />
               <CustomChip
                 label={`${dayjs(item.StartDate).isValid() ? dayjs(item.StartDate).format('DD MMM YYYY') : '-/-'} : ${dayjs(item.EndDate).isValid() ? dayjs(item.EndDate).format('DD MMM YYYY') : '-/-'}`}
                 color="success"
@@ -79,9 +89,6 @@ export const CampaignCard = ({ item, fetchList }) => {
                 variant="soft"
               />
             </Stack>
-            <Button variant="outlined" size="small" color="inherit" onClick={() => setOpenCampaignRightPanel(item)}>
-              View details
-            </Button>
           </Stack>
         </Stack>
       </Stack>

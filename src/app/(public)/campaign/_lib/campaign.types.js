@@ -1,34 +1,44 @@
-export const defaultCampaign = {
-  name: '',
-  slug: '',
-  campaign_group_id: '',
-  campaign_group_name: '',
-  guideline: null,
-  campaign_image: null,
-  content_engagement: 0,
-  content_hq: null,
-  note: null,
-  stakeholder: null,
-  campaign_status: 'UPCOMING',
-  campaign_progress: 'NOT_APPROVED',
-  retail_partners: null,
-  proposed_partners: null,
-  live_partners: null,
-  contributed_partners: null,
-  image_gallery: [],
-  video_gallery: [],
-  budget: null,
-  total_expense: null,
-  campaign_ROI: null,
-  start_date: null,
-  end_date: null,
-  description: '',
-  spaces: null,
-  product_expense: null,
+export const defaultCampaign = (data) => {
+  const defaultData = {
+    name: data?.Name || "",
+    client: data?.Client || "",
+    guidelines: data?.Guidelines || "",
+    goals: data?.CampaignGoals?.join(", ") || [],
+    description: data?.CampaignDescription || "",
+    totalContentEngagement: data?.TotalContentEngagement || 0,
+    status: data?.CampaignStatus || "",
+    budget: data?.Budget || 0,
+    totalExpense: data?.TotalExpense || 0,
+    campaignROI: data?.CampaignROI || 0,
+    startDate: data?.StartDate ? new Date(data?.StartDate) : null,
+    endDate: data?.EndDate ? new Date(data?.EndDate) : null,
+    productExpense: data?.ProductExpense || 0,
+    notes: data?.Notes || "",
+    contentHQ: data?.ByCampaignsContentHQ?.map((item) => ({
+      value: item?.ContentHQ?.id,
+      label: item?.ContentHQ?.Name
+    })) || [],
+    stakeholders: data?.ByCampaignsStakeholders?.map((item) => ({
+      value: item?.Stakeholders?.id,
+      label: item?.Stakeholders?.Name
+    })) || [],
+    retailPartners: data?.ByCampaignsRetailPartners?.map((item) => ({
+      value: item?.RetailPartners?.id,
+      label: item?.RetailPartners?.Name
+    })) || [],
+    proposedPartners: data?.ByCampaignsProposedPartners?.map((item) => ({
+      value: item?.ProposedPartners?.id,
+      label: item?.ProposedPartners?.Name
+    })) || [],
+    spaces: data?.ByCampaignsSpaces?.map((item) => ({
+      value: item?.Spaces?.id,
+      label: item?.Spaces?.Name
+    })) || [],
+    imageInspirationGallery: data?.ImageInspirationGallery || [],
+    videoInspirationGallery: data?.VideoInspirationGallery || [],
+    campaignImage: data?.CampaignImage?.[0] || []
+  };
+
+  return defaultData
 };
 
-export const defaultCampaignGroup = {
-  name: '',
-  description: '',
-  campaigns: [],
-};
