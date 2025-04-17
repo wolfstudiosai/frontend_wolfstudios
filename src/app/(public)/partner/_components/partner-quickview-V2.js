@@ -53,11 +53,13 @@ const mediaArr = [
 ];
 
 const socialProfiles = [
-    data.Instagram && { platform: 'Instagram', url: "https://www.instagram.com/skinandkisses/" },
-    data.Tiktok &&    { platform: 'TikTok',    url: "https://www.tiktok.com/@skinandkisses" },
-    data.Youtube &&   { platform: 'YouTube',    url: "https://www.youtube.com/@katressesoriano" },
-    data.X &&         { platform: 'X',          url: "data.Xhttps://x.com/Shannakress83" },
-    data.Facebook &&  { platform: 'Facebook',   url: "https://www.facebook.com/CPWVeinandAestheticCenter" },
+    data.Instagram && { platform: 'Instagram', url: data.Instagram },
+    data.Tiktok &&    { platform: 'TikTok',    url: data.Tiktok },
+    data.Youtube &&   { platform: 'YouTube',    url: data.Youtube },
+    data.X &&         { platform: 'X',          url: data.X, },
+    data.Facebook &&  { platform: 'Facebook',   url: data.Facebook, },
+    data.Pinterest &&  { platform: 'Pinterest',   url: data.Pinterest, },
+    data.LinkedIn &&  { platform: 'LinkedIn',   url: data.LinkedIn, },
 
   ].filter(Boolean);
 
@@ -341,7 +343,7 @@ const renderField = (section, field, label, type = 'text') => {
         breakpoints={{
           0: { slidesPerView: 1 },
           768: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 },
+          1024: { slidesPerView: 5 },
         }}
         pauseOnHover
         // speed={2000}
@@ -524,36 +526,35 @@ export const PartnerSliderCard = ({ item, sx = {} }) => {
 export const PartnerIframes = ({ profiles }) => {
 
   const getEmbedUrl = (url) => {
-        if (url.includes('instagram.com')) {
-          // assume post or profile — you may need to parse out username vs. post ID
-          const postMatch = url.match(/instagram\.com\/p\/([^\/]+)/);
-          if (postMatch) {
-            return `https://www.instagram.com/p/${postMatch[1]}/embed`;
-          }
-        }
-        if (url.includes('tiktok.com')) {
-          // extract video id
-          const vidMatch = url.match(/video\/(\d+)/);
-          if (vidMatch) {
-            return `https://www.tiktok.com/embed/v2/${vidMatch[1]}`;
-          }
-        }
-        if (url.includes('youtube.com') || url.includes('youtu.be')) {
-          // support both long and short URLs
-          const ytMatch = url.match(/(youtu\.be\/|v=)([^&]+)/);
-          if (ytMatch) {
-            return `https://www.youtube.com/embed/${ytMatch[2]}`;
-          }
-        }
-        if (url.includes('twitter.com')) {
-          return `https://twitframe.com/show?url=${encodeURIComponent(url)}`;
-        }
-        if (url.includes('facebook.com')) {
-          return `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(url)}`;
-        }
-        // fallback: just return the original URL
-        return url;
-    };
+    if (url.includes('instagram.com')) {
+      const postMatch = url.match(/instagram\.com\/p\/([^\/]+)/);
+      if (postMatch) {
+        return `https://www.instagram.com/p/${postMatch[1]}/embed`;
+      }
+      // Profile fallback (best effort)
+      const username = url.split('/').filter(Boolean).pop();
+      return `https://www.instagram.com/${username}/embed`;
+    }
+    if (url.includes('tiktok.com')) {
+      const vidMatch = url.match(/video\/(\d+)/);
+      if (vidMatch) {
+        return `https://www.tiktok.com/embed/v2/${vidMatch[1]}`;
+      }
+    }
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      const ytMatch = url.match(/(youtu\.be\/|v=)([^&]+)/);
+      if (ytMatch) {
+        return `https://www.youtube.com/embed/${ytMatch[2]}`;
+      }
+    }
+    if (url.includes('twitter.com')) {
+      return `https://twitframe.com/show?url=${encodeURIComponent(url)}`;
+    }
+    if (url.includes('facebook.com')) {
+      return `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(url)}`;
+    }
+    return url;
+  };
 
     return (
       <Stack
@@ -564,24 +565,55 @@ export const PartnerIframes = ({ profiles }) => {
         {profiles.map(({ platform, url }) => {
           const embedUrl = getEmbedUrl(url);
           return (
-            <Box
-              key={url}
-              component="iframe"
-              src={embedUrl}
-              title={`${platform} preview`}
-              loading="lazy"
-              sx={{
-                width: 232,
-                height: 320,
-                border: '1px solid',
-                borderColor: 'grey.300',
-                borderRadius: 1,
-                flexShrink: 0,
-              }}
-            />
+            <EmbedCard key={url} platform={platform} embedUrl={embedUrl} />
           );
         })}
       </Stack>
     );
   };
-  
+
+export const EmbedCard = ({ platform, embedUrl }) => {
+    const [hasError, setHasError] = useState(false);
+    
+    return (
+      <Box
+        sx={{
+          width: 245,
+          height: 320,
+          border: '1px solid',
+          borderColor: 'grey.300',
+          borderRadius: 1,
+          flexShrink: 0,
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: hasError ? '#f9f9f9' : 'white',
+        }}
+      >
+        {(embedUrl !== 'Not Found' && embedUrl !== 'Not found' && embedUrl !== 'unknown'  && embedUrl !== 'Not Provided') ? (
+          <iframe
+            src={embedUrl}
+            title={`${platform} preview`}
+            loading="lazy"
+            style={{
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              borderRadius: 6,
+            }}
+            onError={() => setHasError(true)}
+          />
+        ) : (
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="center"
+            sx={{ px: 2 }}
+          >
+            This profile is private or unavailable
+          </Typography>
+        )}
+      </Box>
+    );
+  };
