@@ -1,7 +1,7 @@
 'use client';
 
-import Grid from '@mui/material/Grid2';
 import React from 'react';
+import Grid from '@mui/material/Grid2';
 
 import { SettingsContext } from '/src/contexts/settings';
 
@@ -13,9 +13,18 @@ export const CampaignGridView = ({ data, fetchList, loading }) => {
   } = React.useContext(SettingsContext);
 
   return (
-    <Grid  container sx={{ mb: 2, position: 'relative' }} spacing={.5}>
-      {data.map((item, index) => (
-        <Grid key={index} size={{ xs: 12, md: 4 }}>
+    <Grid container sx={{ mb: 2, position: 'relative' }} spacing={0.5} >
+      {data?.map((item, index) => (
+        <Grid
+          key={index}
+          size={{
+            xs: 12,
+            sm: 6,
+            md: 4,
+            lg: 3,
+            xl: 2,
+          }}
+        >
           <CampaignCard item={item} fetchList={fetchList} />
         </Grid>
       ))}
