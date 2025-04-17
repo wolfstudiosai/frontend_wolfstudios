@@ -14,7 +14,7 @@ export const PartnerGridView = ({ data, colums, fetchList, loading, handlePagina
       <PageLoader loading={loading} error={null}>
         <Grid container spacing={0.2}>
           {data?.map((partner, index) => (
-            <Grid key={index} item size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+            <Grid key={index} item size={{ xs: 12, sm: 4, md: 4, lg: 2, xl: 2 }}>
               <PartnerCard item={partner} fetchList={fetchList} />
             </Grid>
           ))}

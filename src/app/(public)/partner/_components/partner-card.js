@@ -251,7 +251,7 @@ export const PartnerCard = ({ item, fetchList }) => {
         overflow: "hidden",
         boxShadow: 2,
         bgcolor: "background.paper",
-        width: { xs: "100%", sm: "350px", md: "380px" },
+        width: { xs: "100%", sm: "350px", md: "380px", lg: "408px" },
         maxWidth: "100%",
       }}
     >
@@ -316,9 +316,11 @@ export const PartnerCard = ({ item, fetchList }) => {
         </Stack>
 
         {/* Profile status chips */}
+        {item?.ProfileStatus.length > 0 &&  
         <Stack direction={"row"} gap={1} sx={{ mb: 1 }}>
           {item?.ProfileStatus && <CustomChip key="item" label={item.ProfileStatus?.at(0)} color={"primary"} />}
         </Stack>
+        }
 
         {/* Add to button */}
         <Box sx={{ mb: 1 }}>
@@ -346,11 +348,11 @@ export const PartnerCard = ({ item, fetchList }) => {
                       key={product?.ByProduct?.Name}
                       label={product?.ByProduct?.Name}
                       variant={"soft"}
-                      fontSize="12px"
+                      fontSize="11px"
                       sx={{ mr: 1, mb: 1 }}
                     />
                   ))
-                : "N/A"}
+                : ""}
             </Box>
           </Stack>
           <Stack direction="row" alignItems="flex-start">
@@ -363,7 +365,7 @@ export const PartnerCard = ({ item, fetchList }) => {
                   key={item?.ByCampaigns?.Name}
                   label={item?.ByCampaigns?.Name}
                   variant={"soft"}
-                  fontSize="12px"
+                  fontSize="11px"
                   sx={{ mr: 1, mb: 1 }}
                 />
               ))}

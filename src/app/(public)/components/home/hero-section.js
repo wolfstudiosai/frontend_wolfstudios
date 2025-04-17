@@ -53,8 +53,9 @@ export const HeroSection = () => {
           playsInline
           style={{
             position: "absolute",
+            top:'-50%',
             width: "100%",
-            height: "100%",
+            height: "200%",
             objectFit: "cover",
             objectPosition: "top center",
           }}
