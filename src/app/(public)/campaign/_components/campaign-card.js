@@ -1,6 +1,6 @@
-import React from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
+import React from 'react';
 
 import { CustomChip } from '/src/components/core/custom-chip';
 import { Iconify } from '/src/components/iconify/iconify';
@@ -17,11 +17,10 @@ export const CampaignCard = ({ item, fetchList }) => {
   return (
     <>
       <Stack
-        direction={{ sm: 'column', md: 'row' }}
+        direction="column"
         sx={{
-          height: '265px',
           border: '1px solid var(--mui-palette-divider)',
-          overflow: 'visible',
+          minHeight: { lg: 600, md: 750, sm: 200, xs: 250 },
         }}
       >
         <Box
@@ -29,14 +28,15 @@ export const CampaignCard = ({ item, fetchList }) => {
           src={imageSrc || '/assets/image-placeholder.jpg'}
           alt={item.Name}
           sx={{
-            width: { sm: '100%', md: '30rem' },
-            height: '100%',
+            width: '100%',
+            height: {lg: 350, md: 400, sm: 300, xs: 300 },
             objectFit: 'cover',
             borderRadius: 'calc(2* var(--mui-shape-borderRadius))',
             padding: 1.5,
+            objectFit: 'cover',
           }}
         />
-        <Stack direction="column" justifyContent="space-between" gap={1} sx={{ p: 2, width: '100%' }}>
+        <Stack direction="column" spacing={4} sx={{ p: 2 }}>
           <Box>
             <Typography
               variant="caption"
