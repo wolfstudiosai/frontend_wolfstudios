@@ -1,36 +1,46 @@
-import { useContext, useRef, useState } from 'react';
 import {
-  Avatar,
+  Box,
   Button,
   ButtonGroup,
   Chip,
   ClickAwayListener,
   IconButton,
-  Link,
   Paper,
+  Popover,
   Popper,
   Stack,
-  Typography,
+  Typography
 } from '@mui/material';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useContext, useRef, useState } from 'react';
 
+import { AvatarWithActiveStatus } from '/src/components/core/avatar-with-active-status';
+import { Iconify } from '/src/components/iconify/iconify';
 import { ChatContext } from '/src/contexts/chat';
 import useAuth from '/src/hooks/useAuth';
-import { Iconify } from '/src/components/iconify/iconify';
 
 dayjs.extend(relativeTime);
 
 const reactionOptions = ['👍', '❤️', '😂', '🎉', '😮'];
 
 export const Message = ({ message }) => {
-  const { setActiveChannelThread, setActiveDirectThread, activeTab, createChannelReaction, removeChannelReaction } =
+  const { setActiveChannelThread, setActiveDirectThread, activeTab, createChannelReaction, removeChannelReaction, handleEditMessage } =
     useContext(ChatContext);
+
+  console.log("message: ", message);
 
   const { userInfo } = useAuth();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const popperRef = useRef(null);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const confirmDialogRef = useRef(null);
+
+  const handleDelete = () => {
+    console.log("delete the message", message?.id);
+    setOpenConfirmDialog(false)
+  };
 
   const toggleReactionBar = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -71,9 +81,9 @@ export const Message = ({ message }) => {
         '&:hover .hover-action': { opacity: 1 },
       }}
     >
-      <Avatar
-        alt={activeTab?.type === 'channel' ? message?.User?.profileImage : message?.Sender?.profileImage}
+      <AvatarWithActiveStatus
         src={activeTab?.type === 'channel' ? message?.User?.profileImage : message?.Sender?.profileImage}
+        alt={activeTab?.type === 'channel' ? message?.User?.profileImage : message?.Sender?.profileImage}
       />
       <Stack direction="column" gap={0.5}>
         <Stack direction="row" alignItems="center" gap={1}>
@@ -147,13 +157,14 @@ export const Message = ({ message }) => {
         {/* <IconButton title="React" onClick={toggleReactionBar}>
           <Iconify icon="material-symbols:add-reaction-outline" />
         </IconButton> */}
-        <IconButton title="Edit">
+        <IconButton title="Edit" onClick={() => handleEditMessage(message || null)}>
           <Iconify icon="material-symbols:edit-outline-rounded" />
         </IconButton>
 
-        <IconButton title="Delete">
+        <IconButton title="Delete" ref={confirmDialogRef} onClick={() => setOpenConfirmDialog(true)}>
           <Iconify icon="material-symbols:delete-outline-rounded" />
         </IconButton>
+
         {/* <IconButton title="Copy">
           <Iconify icon="mingcute:copy-line" />
         </IconButton> */}
@@ -188,6 +199,45 @@ export const Message = ({ message }) => {
           </Paper>
         </ClickAwayListener>
       </Popper>
+
+      {/* Delte confirmation popover */}
+      <Popover
+        open={openConfirmDialog}
+        onClose={() => setOpenConfirmDialog(false)}
+        anchorEl={confirmDialogRef.current}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <Box sx={{ p: 2, width: 300 }}>
+          <Typography variant="subtitle1" gutterBottom>
+            Are you sure want to delete?
+          </Typography>
+
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 2 }}>
+            <Button
+              size='small'
+              variant="outlined"
+              onClick={() => setOpenConfirmDialog(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              size='small'
+              variant="contained"
+              color="error"
+              onClick={handleDelete}
+            >
+              Delete
+            </Button>
+          </Box>
+        </Box>
+      </Popover>
     </Stack>
   );
 };

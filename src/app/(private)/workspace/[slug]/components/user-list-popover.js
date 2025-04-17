@@ -1,7 +1,6 @@
-import { Autocomplete, Avatar, Box, IconButton, Popover, Stack, TextField, Typography } from '@mui/material';
-import { useContext } from 'react';
+import { Autocomplete, Avatar, Box, Button, IconButton, Popover, Stack, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
 import { Iconify } from "/src/components/iconify/iconify";
-import { ChatContext } from "/src/contexts/chat";
 
 const users = [
     {
@@ -17,10 +16,10 @@ const users = [
 ]
 
 export const UserListPopover = ({ open, onClose, anchorRef, title }) => {
-    const { handleSelectedUser } = useContext(ChatContext);
+    const [selectedUser, setSelectedUser] = useState(null);
 
-    const handleChange = (event, newValue) => {
-        handleSelectedUser(newValue);
+    const handleSave = () => {
+        console.log("selected user to save: ", selectedUser);
         onClose();
     }
 
@@ -54,14 +53,14 @@ export const UserListPopover = ({ open, onClose, anchorRef, title }) => {
                     options={users}
                     autoHighlight
                     getOptionLabel={(option) => option.name}
-                    onChange={handleChange}
+                    onChange={(_, newValue) => setSelectedUser(newValue)}
                     renderOption={(props, option) => {
                         const { key, ...optionProps } = props;
                         return (
                             <Box
                                 key={key}
                                 component="li"
-                                sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
+                                sx={{ mb: 1, '& > img': { mr: 2, flexShrink: 0 } }}
                                 {...optionProps}
                             >
                                 <Avatar src={option.profile_pic} alt={option.name} sx={{ width: 30, height: 30, mr: 2 }} />
@@ -83,6 +82,24 @@ export const UserListPopover = ({ open, onClose, anchorRef, title }) => {
                     )}
                     sx={{ mb: 2 }}
                 />
+
+                <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ mt: 2 }}>
+                    <Button
+                        size='small'
+                        variant="outlined"
+                        onClick={onClose}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        size='small'
+                        variant="contained"
+                        onClick={handleSave}
+                        disabled={!selectedUser}
+                    >
+                        Save
+                    </Button>
+                </Stack>
             </Box>
         </Popover>
     );

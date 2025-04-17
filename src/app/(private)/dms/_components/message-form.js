@@ -1,4 +1,3 @@
-import { useContext, useEffect, useRef, useState } from 'react';
 import {
   Avatar,
   Box,
@@ -13,10 +12,11 @@ import {
   Popper,
   Stack,
 } from '@mui/material';
+import { useContext, useEffect, useRef, useState } from 'react';
 
+import { Iconify } from '/src/components/iconify/iconify';
 import { ChatContext } from '/src/contexts/chat';
 import useAuth from '/src/hooks/useAuth';
-import { Iconify } from '/src/components/iconify/iconify';
 
 import { MemberInfo, MemberName } from '../../workspace/[slug]/components/custom-component';
 
@@ -27,14 +27,13 @@ const allUsers = [
 ];
 
 export const MessageForm = ({ sx = {} }) => {
-  const [messageContent, setMessageContent] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [mentionAnchor, setMentionAnchor] = useState(null);
   const [mentionQuery, setMentionQuery] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [cursorPosition, setCursorPosition] = useState(0);
 
-  const { startTyping, stopTyping, createChannelMessage, createDirectMessage, activeTab } = useContext(ChatContext);
+  const { startTyping, stopTyping, createChannelMessage, createDirectMessage, activeTab, messageContent, setMessageContent, messageIdToEdit, handleEditMessage } = useContext(ChatContext);
   const { userInfo } = useAuth();
 
   const attachmentRef = useRef(null);
@@ -60,6 +59,11 @@ export const MessageForm = ({ sx = {} }) => {
     }
     setMessageContent('');
   };
+
+  const handleUpdateMessage = (id) => {
+    console.log("message id to edit", id);
+    handleEditMessage(null);
+  }
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -204,6 +208,13 @@ export const MessageForm = ({ sx = {} }) => {
               <IconButton size="small" sx={{ borderRadius: '50%' }}>
                 <Iconify icon="material-symbols-light:add-reaction-outline" sx={{ color: 'grey.800' }} />
               </IconButton>
+              {
+                messageIdToEdit && (
+                  <IconButton size="small" color='error' title='Cancel edit' sx={{ borderRadius: '50%' }} onClick={() => handleEditMessage(null)}>
+                    <Iconify icon="mingcute:close-line" />
+                  </IconButton>
+                )
+              }
               <IconButton
                 size="small"
                 sx={{
@@ -213,10 +224,11 @@ export const MessageForm = ({ sx = {} }) => {
                     '&:hover': { backgroundColor: 'primary.main' },
                   }),
                 }}
-                onClick={handleSendMessage}
+                onClick={() => messageIdToEdit ? handleUpdateMessage(messageIdToEdit) : handleSendMessage()}
+                disabled={messageContent.length === 0 && selectedFiles.length === 0}
               >
                 <Iconify
-                  icon="mingcute:arrow-up-fill"
+                  icon={messageIdToEdit ? "charm:tick" : "mingcute:arrow-up-fill"}
                   sx={{ color: messageContent.length > 0 || selectedFiles.length > 0 ? '#fff' : 'grey.800' }}
                 />
               </IconButton>

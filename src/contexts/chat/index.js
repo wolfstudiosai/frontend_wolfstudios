@@ -35,6 +35,7 @@ export const ChatProvider = ({ children }) => {
     name: null,
     slug: null,
   });
+  const [messageContent, setMessageContent] = useState('');
   const [channels, setChannels] = useState([]);
   const [directChannels, setDirectChannels] = useState([]);
   const [activeTab, setActiveTab] = useState(null);
@@ -47,6 +48,7 @@ export const ChatProvider = ({ children }) => {
   const [directThreadMessages, setDirectThreadMessages] = useState([]);
   const [typingUsers, setTypingUsers] = useState(new Set());
   const [notifications, setNotifications] = useState({});
+  const [messageIdToEdit, setMessageIdToEdit] = useState(null);
   const socketContext = useSocket();
 
   const findUser = (id) => {
@@ -96,6 +98,17 @@ export const ChatProvider = ({ children }) => {
   const handleAddMessage = () => {
     console.log('add message handler');
   };
+
+  // Set message in the form for edit
+  const handleEditMessage = (message) => {
+    if (message?.id) {
+      setMessageContent(message?.content);
+      setMessageIdToEdit(message?.id);
+    } else {
+      setMessageContent('');
+      setMessageIdToEdit(null)
+    }
+  }
 
   const handleActiveProfile = (userID) => {
     console.log(userID);
@@ -467,6 +480,10 @@ export const ChatProvider = ({ children }) => {
     directThreadMessages,
     createChannelReaction,
     removeChannelReaction,
+    messageContent,
+    setMessageContent,
+    handleEditMessage,
+    messageIdToEdit
   };
 
   return <ChatContext.Provider value={contextValue}>{children}</ChatContext.Provider>;
