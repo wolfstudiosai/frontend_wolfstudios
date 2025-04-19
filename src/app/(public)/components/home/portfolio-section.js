@@ -1,16 +1,18 @@
-"use client";
+'use client';
 
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { ManagePortfolioRightPanel } from '../../portfolio/_components/manage-portfolio-right-panel';
-import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
+import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
+import { SwiperSlide } from 'swiper/react';
+
 import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
-import { A11y, Navigation, Autoplay, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
-import { SwiperSlide } from 'swiper/react';
+
+import { ManagePortfolioRightPanel } from '../../portfolio/_components/manage-portfolio-right-panel';
+import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
 
 export const PortfolioSection = () => {
   const [portfolios, setPortfolios] = useState([]);
@@ -29,7 +31,7 @@ export const PortfolioSection = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchPortfolios();
@@ -40,12 +42,14 @@ export const PortfolioSection = () => {
       <Grid item xs={12}>
         <Stack direction="column" sx={{ px: { xs: 2, md: 4 }, py: 4 }}>
           <FadeIn>
-            <Box sx={{
-              display: 'flex',
-              flexDirection: { xs: 'column', md: 'row' },
-              alignItems: 'flex-start',
-              gap: { xs: 2, md: 4, lg: 8 },
-            }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', md: 'row' },
+                alignItems: 'flex-start',
+                gap: { xs: 2, md: 4, lg: 8 },
+              }}
+            >
               <Stack direction="row" alignItems="center" sx={{ width: '100%' }}>
                 <Stack direction="row">
                   <Typography
@@ -56,8 +60,9 @@ export const PortfolioSection = () => {
                       letterSpacing: '0.5px',
                       textTransform: 'uppercase',
                       color: 'text.primary',
-                      flexGrow: 1
-                    }}>
+                      flexGrow: 1,
+                    }}
+                  >
                     Portfolios
                   </Typography>
                   <Button
@@ -67,7 +72,7 @@ export const PortfolioSection = () => {
                     sx={{
                       margin: 0,
                       padding: 0,
-                      display: { xs: 'none', sm: 'flex' }
+                      display: { xs: 'none', sm: 'flex' },
                     }}
                   ></Button>
                 </Stack>
@@ -79,75 +84,78 @@ export const PortfolioSection = () => {
                   lineHeight: 1,
                   fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem', lg: '40px' },
                   width: '100%',
-                }}>
-                By developing from the idea up, we
+                }}
+              >
+                
               </Typography>
             </Box>
-            <Box sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'flex-start',
-              gap: 4,
-              flexWrap: 'wrap'
-            }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                gap: 4,
+                flexWrap: 'wrap',
+              }}
+            >
               <Typography
                 fontWeight="semibold"
                 sx={{
                   color: 'text.primary',
                   lineHeight: 1,
                   fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem', lg: '40px' },
-                  width: '100%'
-                }}>
-                {"transform concepts into strong creative execution that's driven by both form and function."}
+                  width: '100%',
+                }}
+              >
+                {"By developing from the idea up, we transform concepts into strong creative execution that's driven by both form and function."}
               </Typography>
             </Box>
           </FadeIn>
         </Stack>
       </Grid>
       <Grid item xs={12}>
-         <Stack spacing={2} sx={{ px: 3, pt: 1 }}>
-                    <SliderWrapper
-                      modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
-                      // autoplay={{ delay: 8000, disableOnInteraction: true }}
-                      breakpoints={{
-                        0: {
-                          slidesPerView: 1,
-                          spaceBetween: 16
-                        },
-                        768: {
-                          slidesPerView: 2,
-                          spaceBetween: 20
-                        },
-                        1024: {
-                          slidesPerView: 3,
-                          spaceBetween: 24
-                        },
-                        1440: {
-                          slidesPerView: 4,
-                          spaceBetween: 28
-                        }
-                      }}
-                      sx={{
-                        '& .swiper-wrapper': {
-                          gap: '1.8px'
-                        },
-                        '& .swiper-slide': {
-                          width: 'auto !important',
-                          marginRight: '0 !important',
-                          height: 'auto'
-                        },
-                        mx: { xs: -1.5, md: -2 }
-                      }}
-                    >
-                      {portfolios.map((portfolio) => (
-                        <SwiperSlide key={portfolio.id}>
-                          <FadeIn>
-                            <Card card={portfolio} fetchList={portfolios} />
-                          </FadeIn>
-                        </SwiperSlide>
-                      ))}
-                    </SliderWrapper>
-         </Stack>
+        <Stack spacing={2} sx={{ px: 3, pt: 1 }}>
+          <SliderWrapper
+            modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
+            breakpoints={{
+              0: {
+                slidesPerView: 1,
+                spaceBetween: 16
+              },
+              768: {
+                slidesPerView: 2,
+                spaceBetween: 20
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 24
+              },
+              1440: {
+                slidesPerView: 4,
+                spaceBetween: 28
+              }
+            }}
+            sx={{
+              '& .swiper-wrapper': {
+                gap: '1.8px'
+              },
+              '& .swiper-slide': {
+                width: 'auto !important',
+                marginRight: '0 !important',
+                height: 'auto'
+              },
+              mx: { xs: -1.5, md: -2 }
+            }}
+          >
+            {portfolios.map((portfolio) => (
+              <SwiperSlide key={portfolio.id}>
+                <FadeIn>
+                  <Card card={portfolio} fetchList={portfolios} />
+                </FadeIn>
+              </SwiperSlide>
+            ))}
+          </SliderWrapper>
+        </Stack>
       </Grid>
     </Grid>
   );
@@ -164,8 +172,8 @@ const Card = ({ card, fetchList }) => {
           height: '400px',
           width: { xs: '300px', sm: '280px', md: '260px' },
           overflow: 'hidden',
-          boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
           transition: 'transform 300ms ease',
+          border: '1px solid var(--mui-palette-divider)',
         }}
         onClick={() => setOpenPortfolioRightPanel(card)}
       >
@@ -201,7 +209,7 @@ const Card = ({ card, fetchList }) => {
               right: 0,
               bottom: 0,
               zIndex: 0,
-              backgroundImage: `url(${card.ThumbnailImage[0]})`,
+              backgroundImage: `url(${card.ThumbnailImage?.[0] || '/assets/image-placeholder.jpg'})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               transition: 'transform 300ms ease',
