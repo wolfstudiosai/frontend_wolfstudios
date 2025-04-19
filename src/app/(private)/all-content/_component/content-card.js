@@ -8,7 +8,7 @@ export const ContentCard = ({ content, handleOpenRightPanel }) => {
     <Card
       sx={{
         border: '1px solid var(--mui-palette-divider)',
-        borderRadius: "0",
+        borderRadius: '0',
       }}
       onClick={() => handleOpenRightPanel(content)}
     >
@@ -20,7 +20,13 @@ export const ContentCard = ({ content, handleOpenRightPanel }) => {
       />
       <Stack direction="column" justifyContent="space-between" gap={2} sx={{ p: 2 }}>
         <Stack direction="column" spacing={2}>
-          <Typography variant="h5">{content?.Name}</Typography>
+          <Typography
+            variant="caption"
+            component="h4"
+            sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'secondary.main' }}
+          >
+            {content?.Name}
+          </Typography>
           <Stack direction="row" alignItems="center" gap={1}>
             <Avatar src={content?.ContentHQStakeholder?.at(0)?.Stakeholder?.StakeholderThumbnailImage?.at(0) || '/'} />
             <Box>
