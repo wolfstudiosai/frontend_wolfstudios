@@ -1,14 +1,6 @@
-
 import { darken } from '@mui/material';
-import {
-  california,
-  kepple,
-  nevada,
-  redOrange,
-  royalBlue,
-  shakespeare,
-  stormGrey
-} from './colors';
+
+import { california, kepple, nevada, redOrange, royalBlue, shakespeare, stormGrey } from './colors';
 
 const primaryScheme = {
   dark: {
@@ -35,19 +27,19 @@ const primaryScheme = {
 
 export function colorSchemes() {
   const primary = primaryScheme;
-  const baseDarkColor = "#0B0B0B";
+  const baseDarkColor = '#0B0B0B';
 
   return {
     dark: {
       palette: {
         action: { disabledBackground: 'rgba(0, 0, 0, 0.2)' },
         background: {
-          default: '#1C1C1C',
+          default: 'var(--background-dark-default)',
           defaultChannel: '9 10 11',
-          paper: '#26221F', 
+          paper: 'var(--background-dark-secondary)',
           paperChannel: '18 21 23',
-          level1: darken(baseDarkColor, 0.05), 
-          level2: darken(baseDarkColor, 0.1),  // more dark
+          level1: darken(baseDarkColor, 0.05),
+          level2: darken(baseDarkColor, 0.1),
           level3: darken(baseDarkColor, 0.15),
           secondaryBackground: '#0B0B0B',
         },
@@ -125,9 +117,9 @@ export function colorSchemes() {
       palette: {
         action: { disabledBackground: 'rgba(0, 0, 0, 0.06)' },
         background: {
-          default: 'var(--mui-palette-common-white)',
+          default: 'var(--background-light-default)',
           defaultChannel: '255 255 255',
-          paper: 'var(--mui-palette-common-white)',
+          paper: 'var(--background-light-secondary)',
           paperChannel: '255 255 255',
           level1: 'var(--mui-palette-neutral-50)',
           level2: 'var(--mui-palette-neutral-100)',

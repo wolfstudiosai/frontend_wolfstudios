@@ -259,27 +259,27 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
     <Box
       sx={{
         ...styles,
-        bgcolor: 'text-primary',
-        borderRight: 'var(--SideNav-border)',
-        color: 'var(--SideNav-color)',
+        // bgcolor: '#3e3e',
+        // borderRight: 'var(--SideNav-border)',
+        // color: 'var(--SideNav-color)',
         display: { xs: 'none', lg: 'flex' },
         flexDirection: 'column',
         left: 10,
         position: 'fixed',
-        top: isFeaturedCardVisible ? 118 : 50,
+        top: isFeaturedCardVisible ? 118 : 70,
         width: 'var(--SideNav-width)',
         zIndex: 'var(--SideNav-zIndex)',
         transition: 'width 0.3s ease',
         borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
         marginBottom: '10px',
-        border: '1px solid var(--mui-palette-background-level2)',
-        height: isFeaturedCardVisible ? 'calc(100vh - 160px)' : 'calc(100vh - 93px)',
+        border: '1px solid var(--mui-palette-divider)',
+        height: isFeaturedCardVisible ? 'calc(100vh - 160px)' : 'calc(100vh - 115px)',
         paddingRight: open ? pxToRem(5) : 0,
         overflowY: 'auto',
         '&::-webkit-scrollbar': {
           width: '0px',
         },
-        background: 'transparent',
+        // background: 'transparent',
       }}
     >
       <MenuList>{renderMenuItems(dashboardFavItemsV2)}</MenuList>
