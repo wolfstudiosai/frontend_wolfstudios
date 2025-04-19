@@ -7,16 +7,14 @@ export const ContentCard = ({ content, handleOpenRightPanel }) => {
   return (
     <Card
       sx={{
-        border: '1px solid',
-        borderColor: 'divider',
-        borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-        cursor: 'pointer',
+        border: '1px solid var(--mui-palette-divider)',
+        borderRadius: "0",
       }}
       onClick={() => handleOpenRightPanel(content)}
     >
       <Box
         component="img"
-        src={content?.Image?.at(0) || '/'}
+        src={content?.Image?.at(0) || '/assets/image-placeholder.jpg'}
         alt={content?.Name}
         sx={{ width: '100%', height: '260px', objectFit: 'cover' }}
       />
