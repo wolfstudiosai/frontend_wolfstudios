@@ -44,7 +44,7 @@ export const ContentCard = ({ content, handleOpenRightPanel }) => {
               ))}
           </Stack>
         </Stack>
-        <Stack direction={'row'} gap={2}>
+        <Stack direction={'row'} gap={1}>
           <IconWithText icon="hugeicons:instagram" text={content?.IGTotalViews} />
           <IconWithText icon="hugeicons:youtube" text={content?.YTClubREVOTotalViews} />
           <IconWithText icon="basil:pinterest-outline" text={content?.PinterestTotalViews} />
