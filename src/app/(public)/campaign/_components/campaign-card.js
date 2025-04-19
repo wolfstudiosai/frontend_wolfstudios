@@ -1,6 +1,6 @@
-import React from 'react';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
+import React from 'react';
 
 import { CustomChip } from '/src/components/core/custom-chip';
 import { Iconify } from '/src/components/iconify/iconify';
@@ -21,7 +21,9 @@ export const CampaignCard = ({ item, fetchList }) => {
         sx={{
           border: '1px solid var(--mui-palette-divider)',
           minHeight: { lg: 600, md: 750, sm: 200, xs: 250 },
+          backgroundColor: 'background.paper',
         }}
+        onClick={() => setOpenCampaignRightPanel(item)}
       >
         <Box
           component="img"
@@ -38,7 +40,7 @@ export const CampaignCard = ({ item, fetchList }) => {
         />
         <Stack
           direction="column"
-          justifyContent="space-between" 
+          justifyContent="space-between"
           sx={{
             p: { xs: 1.5, md: 2 },
             width: '100%',
@@ -71,28 +73,15 @@ export const CampaignCard = ({ item, fetchList }) => {
             >
               {item?.CampaignDescription || 'No description'}
             </Typography>
-            <Button
-              variant="text"
-              size="small"
-              onClick={() => setOpenCampaignRightPanel(item)}
-              sx={{
-                textDecoration: 'underline',
-                color: 'text.secondary',
-                '&:hover': { color: 'text.primary', background: 'transparent', textDecoration: 'underline' },
-              }}
-            >
-              View details
-            </Button>
           </Box>
           <Stack
             direction="row"
             alignItems="center"
             divider={<Iconify icon="pepicons-pencil:line-y" sx={{ color: 'grey.400' }} />}
           >
-            <CustomChip label={item.campaign_status ?? '-'} color="success" size="small" variant="soft" />
+            <CustomChip label={item.campaign_status ?? '-'} size="small" variant="soft" />
             <CustomChip
               label={`${dayjs(item.StartDate).isValid() ? dayjs(item.StartDate).format('DD MMM YYYY') : '-/-'} : ${dayjs(item.EndDate).isValid() ? dayjs(item.EndDate).format('DD MMM YYYY') : '-/-'}`}
-              color="success"
               size="small"
               variant="soft"
             />

@@ -30,26 +30,6 @@ export function Sidebar({
 }) {
   const mdUp = useMediaQuery('up', 'md');
 
-  // React.useEffect(() => {
-  //   async function fetchContacts() {
-  //     try {
-  //       const contactsRes = await getUsers({ page: 1, rowsPerPage: 100 });
-  //       const transformedContacts = (contactsRes.data || []).map((user) => ({
-  //         id: user.email,
-  //         name: `${user.first_name} ${user.last_name}`,
-  //         avatar: user.profile_pic || '',
-  //         isActive: user.status === 'ACTIVE',
-  //         lastActivity: dayjs().toDate(),
-  //       }));
-  //       setContacts(transformedContacts);
-  //     } catch (error) {
-  //       console.error('Failed to fetch contacts:', error);
-  //     }
-  //   }
-  //   fetchContacts();
-  // }, []);
-  // console.log("contactssssss",contacts)
-
 
   const content = (
     <SidebarContent

@@ -1,132 +1,49 @@
-import { logger } from '/src/lib/default-logger';
+import { darken } from '@mui/material';
 
-import {
-  california,
-  chateauGreen,
-  kepple,
-  neonBlue,
-  nevada,
-  redOrange,
-  royalBlue,
-  shakespeare,
-  stormGrey,
-  tomatoOrange,
-} from './colors';
+import { california, kepple, nevada, redOrange, royalBlue, shakespeare, stormGrey } from './colors';
 
-const primarySchemes = {
-  chateauGreen: {
-    dark: {
-      ...chateauGreen,
-      light: chateauGreen[300],
-      main: chateauGreen[400],
-      dark: chateauGreen[500],
-      contrastText: 'var(--mui-palette-common-black)',
-      activated: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-activatedOpacity))',
-      hovered: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-hoverOpacity))',
-      selected: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity))',
-    },
-    light: {
-      ...chateauGreen,
-      light: chateauGreen[400],
-      main: chateauGreen[500],
-      dark: chateauGreen[600],
-      contrastText: 'var(--mui-palette-common-white)',
-      activated: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-activatedOpacity))',
-      hovered: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-hoverOpacity))',
-      selected: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity))',
-    },
+const primaryScheme = {
+  dark: {
+    ...royalBlue,
+    light: royalBlue[300],
+    main: royalBlue[400],
+    dark: royalBlue[500],
+    contrastText: 'var(--mui-palette-common-black)',
+    activated: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-activatedOpacity))',
+    hovered: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-hoverOpacity))',
+    selected: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity))',
   },
-  neonBlue: {
-    dark: {
-      ...neonBlue,
-      light: neonBlue[300],
-      main: neonBlue[400],
-      dark: neonBlue[500],
-      contrastText: 'var(--mui-palette-common-black)',
-      activated: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-activatedOpacity))',
-      hovered: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-hoverOpacity))',
-      selected: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity))',
-    },
-    light: {
-      ...neonBlue,
-      light: neonBlue[400],
-      main: neonBlue[500],
-      dark: neonBlue[600],
-      contrastText: 'var(--mui-palette-common-white)',
-      activated: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-activatedOpacity))',
-      hovered: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-hoverOpacity))',
-      selected: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity))',
-    },
-  },
-  royalBlue: {
-    dark: {
-      ...royalBlue,
-      light: royalBlue[300],
-      main: royalBlue[400],
-      dark: royalBlue[500],
-      contrastText: 'var(--mui-palette-common-black)',
-      activated: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-activatedOpacity))',
-      hovered: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-hoverOpacity))',
-      selected: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity))',
-    },
-    light: {
-      ...royalBlue,
-      light: royalBlue[400],
-      main: royalBlue[500],
-      dark: royalBlue[600],
-      contrastText: 'var(--mui-palette-common-white)',
-      activated: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-activatedOpacity))',
-      hovered: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-hoverOpacity))',
-      selected: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity))',
-    },
-  },
-  tomatoOrange: {
-    dark: {
-      ...tomatoOrange,
-      light: tomatoOrange[300],
-      main: tomatoOrange[400],
-      dark: tomatoOrange[500],
-      contrastText: 'var(--mui-palette-common-black)',
-      activated: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-activatedOpacity))',
-      hovered: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-hoverOpacity))',
-      selected: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity))',
-    },
-    light: {
-      ...tomatoOrange,
-      light: tomatoOrange[400],
-      main: tomatoOrange[500],
-      dark: tomatoOrange[600],
-      contrastText: 'var(--mui-palette-common-white)',
-      activated: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-activatedOpacity))',
-      hovered: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-hoverOpacity))',
-      selected: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity))',
-    },
+  light: {
+    ...royalBlue,
+    light: royalBlue[400],
+    main: royalBlue[500],
+    dark: royalBlue[600],
+    contrastText: 'var(--mui-palette-common-white)',
+    activated: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-activatedOpacity))',
+    hovered: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-hoverOpacity))',
+    selected: 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity))',
   },
 };
 
-export function colorSchemes(config) {
-  let primary = primarySchemes[config.primaryColor];
-
-  if (!primary) {
-    logger.warn(`No primary color found for ${config.primaryColor}. Using neonBlue instead.`);
-    primary = primarySchemes.neonBlue;
-  }
+export function colorSchemes() {
+  const primary = primaryScheme;
+  const baseDarkColor = '#0B0B0B';
 
   return {
     dark: {
       palette: {
-        action: { disabledBackground: 'rgba(0, 0, 0, 0.12)' },
+        action: { disabledBackground: 'rgba(0, 0, 0, 0.2)' },
         background: {
-          default: 'var(--mui-palette-neutral-950)',
+          default: 'var(--background-dark-default)',
           defaultChannel: '9 10 11',
-          paper: 'var(--mui-palette-neutral-900)',
+          paper: 'var(--background-dark-secondary)',
           paperChannel: '18 21 23',
-          level1: 'var(--mui-palette-neutral-800)',
-          level2: 'var(--mui-palette-neutral-700)',
-          level3: 'var(--mui-palette-neutral-600)',
-          secondaryBackground: '#32383D',
+          level1: darken(baseDarkColor, 0.05),
+          level2: darken(baseDarkColor, 0.1),
+          level3: darken(baseDarkColor, 0.15),
+          secondaryBackground: '#0B0B0B',
         },
-        common: { black: '#000000', white: '#ffffff' },
+        common: { black: '#f7f7f7', white: '#ffffff' },
         divider: 'var(--mui-palette-neutral-700)',
         dividerChannel: '50 56 62',
         error: {
@@ -200,9 +117,9 @@ export function colorSchemes(config) {
       palette: {
         action: { disabledBackground: 'rgba(0, 0, 0, 0.06)' },
         background: {
-          default: 'var(--mui-palette-common-white)',
+          default: 'var(--background-light-default)',
           defaultChannel: '255 255 255',
-          paper: 'var(--mui-palette-common-white)',
+          paper: 'var(--background-light-secondary)',
           paperChannel: '255 255 255',
           level1: 'var(--mui-palette-neutral-50)',
           level2: 'var(--mui-palette-neutral-100)',

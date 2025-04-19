@@ -26,7 +26,7 @@ export const FooterAnimation = () => {
   }, []);
   return (
     <>
-      <div id="page1" style={{ backgroundColor: 'var(--mui-palette-background-secondaryBackground)' }}>
+      <div id="page1" style={{ backgroundColor: 'var(--mui-palette-background-paper)' }}>
         <h1 className='h1'>
           {letter.map((letter, index) => (
             <span key={index} className='letter a' style={{ color: 'var(--mui-palette-text-primary)' }}>
