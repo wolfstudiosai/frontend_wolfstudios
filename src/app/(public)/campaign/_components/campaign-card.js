@@ -22,6 +22,7 @@ export const CampaignCard = ({ item, fetchList }) => {
           border: '1px solid var(--mui-palette-divider)',
           minHeight: { lg: 600, md: 750, sm: 200, xs: 250 },
         }}
+        onClick={() => setOpenCampaignRightPanel(item)}
       >
         <Box
           component="img"
@@ -71,18 +72,6 @@ export const CampaignCard = ({ item, fetchList }) => {
             >
               {item?.CampaignDescription || 'No description'}
             </Typography>
-            <Button
-              variant="text"
-              size="small"
-              onClick={() => setOpenCampaignRightPanel(item)}
-              sx={{
-                textDecoration: 'underline',
-                color: 'text.secondary',
-                '&:hover': { color: 'text.primary', background: 'transparent', textDecoration: 'underline' },
-              }}
-            >
-              View details
-            </Button>
           </Box>
           <Stack
             direction="row"
