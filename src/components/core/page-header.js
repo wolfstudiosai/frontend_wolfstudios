@@ -48,7 +48,7 @@ export const PageHeader = ({
         position: 'sticky',
         top: openSubNav ? 107 : 43,
         zIndex: 100,
-        backgroundColor: 'background.main',
+        background: "var(--mui-palette-background-default)",
       }}
     >
       <Stack
