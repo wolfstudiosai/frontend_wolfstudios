@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
 import { CustomChip } from '/src/components/core/custom-chip';
@@ -21,6 +21,7 @@ export const CampaignCard = ({ item, fetchList }) => {
         sx={{
           border: '1px solid var(--mui-palette-divider)',
           minHeight: { lg: 600, md: 750, sm: 200, xs: 250 },
+          backgroundColor: 'background.paper',
         }}
         onClick={() => setOpenCampaignRightPanel(item)}
       >
@@ -39,7 +40,7 @@ export const CampaignCard = ({ item, fetchList }) => {
         />
         <Stack
           direction="column"
-          justifyContent="space-between" 
+          justifyContent="space-between"
           sx={{
             p: { xs: 1.5, md: 2 },
             width: '100%',

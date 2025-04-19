@@ -53,12 +53,12 @@ export function SettingsDrawer({ canReset = true, onClose, onUpdate, onReset, op
         </Stack>
       </Stack>
       <Stack spacing={5} sx={{ overflowY: 'auto', p: 3 }}>
-        <OptionsPrimaryColor
+        {/* <OptionsPrimaryColor
           onChange={(value) => {
             handleChange('primaryColor', value);
           }}
           value={values.primaryColor}
-        />
+        /> */}
         <OptionsColorScheme
           onChange={(value) => {
             handleChange('mode', value);
