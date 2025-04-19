@@ -105,6 +105,7 @@ export const PortfolioSection = () => {
                   lineHeight: 1,
                   fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem', lg: '40px' },
                   width: '100%',
+                  mt: 1,
                 }}
               >
                 {"By developing from the idea up, we transform concepts into strong creative execution that's driven by both form and function."}
