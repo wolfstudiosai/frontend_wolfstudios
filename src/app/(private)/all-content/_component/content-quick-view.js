@@ -16,8 +16,8 @@ import dayjs from 'dayjs';
 import { SectionTitle } from '/src/components/core/section-title';
 import { Iconify } from '/src/components/iconify/iconify';
 
-import { handleCopy } from '/src/utils/helper';
 import { createCommentAsync } from '../_lib/all-content.actions';
+import { handleCopy } from '/src/utils/helper';
 
 // Add validation functions
 const isValidUrl = (url) => {
@@ -43,7 +43,7 @@ const fieldConfig = {
     TiktokAccountUsed: 'number',
     TiktokDummyAccountUsed: 'text',
     YoutubeTAccountUsed: 'number',
-    YoutubeClubRevoTotalViews: 'number'
+    YoutubeClubRevoTotalViews: 'number',
   },
   partner: {
     PartnerInstargramLink: 'link',
@@ -57,18 +57,18 @@ const fieldConfig = {
     YoutubePartnerTotallikes: 'number',
     YoutubePartnerTotalcomments: 'number',
     YoutubePartnerTotalSaves: 'number',
-    YoutubePartnerTotalViews: 'number'
-  }
+    YoutubePartnerTotalViews: 'number',
+  },
 };
 
-export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
+export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
   const [comments, setComments] = useState([
     {
       id: 1,
       user: {
         firstName: 'Combina',
         lastName: 'Key',
-        avatar: '', // Add avatar URL if available
+        avatar: '',
       },
       comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit...',
       createdAt: new Date(Date.now() - 120000), // 2 minutes ago
@@ -132,16 +132,16 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
 
   const handleAddComment = async () => {
     if (!newComment.trim() && !selectedFiles.length) return;
-    try{
+    try {
       let contendID = data?.id;
-      const response = await createCommentAsync(contendID,{
+      const response = await createCommentAsync(contendID, {
         comment: newComment,
-        files: selectedFiles // Add this if API accepts files
+        files: selectedFiles, // Add this if API accepts files
       });
-        if (response.success) {
-          window.location.reload();
+      if (response.success) {
+        window.location.reload();
       }
-    }catch (error) {
+    } catch (error) {
       console.error('Error:', error);
     }
     setNewComment('');
@@ -158,48 +158,17 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
     setSelectedFiles((prevFiles) => prevFiles.filter((_, index) => index !== indexToRemove));
   };
 
-  const handleChange1 = (section, field, value) => {
-    // Validate before updating
-    const fieldType = fieldConfig[section][field];
-    let isValid = true;
-
-    if (fieldType === 'number') {
-      isValid = isValidNumber(value);
-    } else if (fieldType === 'link') {
-      isValid = value === '' || isValidUrl(value);
-    }
-
-    if (!isValid) return;
-
-    let updatedData;
-    if (section === 'content') {
-      updatedData = { ...contentInfo, [field]: value };
-      setContentInfo(updatedData);
-    } else {
-      updatedData = { ...partnerInfo, [field]: value };
-      setPartnerInfo(updatedData);
-    }
-
-    // Send updated data to parent using call back function
-    if (onUpdate) {
-      onUpdate({
-        ...contentInfo,
-        ...partnerInfo,
-        [field]: value, // Only updates the changed field
-      });
-    }
-  };
   const handleChange = (section, field, value) => {
     // Always update the state, but track validity
     const fieldType = fieldConfig[section][field];
     let isValid = true;
-  
+
     if (fieldType === 'number') {
       isValid = value === '' || isValidNumber(value);
     } else if (fieldType === 'link') {
       isValid = value === '' || isValidUrl(value);
     }
-  
+
     // Update state regardless of validity
     let updatedData;
     if (section === 'content') {
@@ -209,7 +178,7 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
       updatedData = { ...partnerInfo, [field]: value };
       setPartnerInfo(updatedData);
     }
-  
+
     // Send updated data to parent
     if (onUpdate) {
       onUpdate({
@@ -239,7 +208,7 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
           type={fieldType === 'number' ? 'number' : fieldType === 'link' ? 'url' : 'text'}
           inputProps={{
             ...(fieldType === 'number' && { min: 0 }),
-            ...(fieldType === 'link' && { pattern: 'https?://.*' })
+            ...(fieldType === 'link' && { pattern: 'https?://.*' }),
           }}
           error={
             (fieldType === 'number' && !isValidNumber(value)) ||
@@ -255,13 +224,16 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
 
     return (
       <Typography key={key} variant="body2" sx={{ mb: 1 }}>
-        <strong>{label}:</strong> {
-          fieldType === 'number' && !isNaN(value) 
-            ? Number(value).toLocaleString() 
-            : fieldType === 'link' && value !== '' 
-              ? <a href={value} target="_blank" rel="noopener">{value}</a>
-              : value
-        }
+        <strong>{label}:</strong>{' '}
+        {fieldType === 'number' && !isNaN(value) ? (
+          Number(value).toLocaleString()
+        ) : fieldType === 'link' && value !== '' ? (
+          <a href={value} target="_blank" rel="noopener">
+            {value}
+          </a>
+        ) : (
+          value
+        )}
       </Typography>
     );
   };
@@ -272,12 +244,12 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
         <Stack sx={{ width: '50%' }}>
           <Box
             component="img"
-            src={data?.Image?.at(0) || '/'}
+            src={data?.Image?.at(0) || '/assets/image-placeholder.jpg'}
             alt={data?.Name}
             sx={{ height: '500px', objectFit: 'contain', border: '1px solid', borderColor: 'divider' }}
           />
           <Stack sx={{ mb: 4, pl: 1 }}>
-             {/* {comments.length > 0 && ( */}
+            {/* {comments.length > 0 && ( */}
             {data?.ContentHQComments?.length > 0 && (
               <Timeline
                 sx={{
@@ -289,7 +261,7 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
                   py: 0,
                 }}
               >
-                 {/* {comments.map((comment, index) => ( */}
+                {/* {comments.map((comment, index) => ( */}
                 {data?.ContentHQComments?.map((comment, index) => (
                   <TimelineItem key={index}>
                     <TimelineSeparator>
@@ -425,12 +397,12 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
               <Iconify icon="solar:book-bold" sx={{ color: 'text.secondary' }} />
             </IconButton>
           </Stack>
-          
+
           <Stack direction="row" gap={1} sx={{ mt: 1 }}>
-          <Box sx={{ width: '50%' }}>
-            <SectionTitle title="Content Information" sx={{ px: 2, py: 1, borderRadius: 1, fontSize: '0.9rem' }} />
-            <Box sx={{ ml: 1, mt: 1 }}>
-              {/* {Object.keys(contentInfo).map((key) => (
+            <Box sx={{ width: '50%' }}>
+              <SectionTitle title="Content Information" sx={{ px: 2, py: 1, fontSize: '0.9rem' }} />
+              <Box sx={{ ml: 1, mt: 1 }}>
+                {/* {Object.keys(contentInfo).map((key) => (
                 isEdit === 'EDIT' ? (
                   <TextField
                     key={key}
@@ -448,13 +420,13 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
                   </Typography>
                 )
               ))} */}
-              {Object.keys(contentInfo).map((key) => renderField('content', key))}
+                {Object.keys(contentInfo).map((key) => renderField('content', key))}
+              </Box>
             </Box>
-          </Box>
-          <Box sx={{ width: '50%' }}>
-            <SectionTitle title="Partner Information" sx={{ px: 2, py: 1, borderRadius: 1, fontSize: '0.9rem' }} />
-            <Box sx={{ ml: 1, mt: 1 }}>
-              {/* {Object.keys(partnerInfo).map((key) => (
+            <Box sx={{ width: '50%' }}>
+              <SectionTitle title="Partner Information" sx={{ px: 2, py: 1, fontSize: '0.9rem' }} />
+              <Box sx={{ ml: 1, mt: 1 }}>
+                {/* {Object.keys(partnerInfo).map((key) => (
                 isEdit === 'EDIT' ? (
                   <TextField
                     key={key}
@@ -472,9 +444,9 @@ export const ContentQuickView = ({ data , isEdit, onUpdate }) => {
                   </Typography>
                 )
               ))} */}
-              {Object.keys(partnerInfo).map((key) => renderField('partner', key))}
+                {Object.keys(partnerInfo).map((key) => renderField('partner', key))}
+              </Box>
             </Box>
-          </Box>
           </Stack>
         </Stack>
       </Stack>

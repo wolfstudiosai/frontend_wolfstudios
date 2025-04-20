@@ -1,17 +1,18 @@
 'use client';
 
-import { IconButton } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import React from 'react';
-import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { DrawerContainer } from '/src/components/drawer/drawer';
-import { Iconify } from '/src/components/iconify/iconify';
+import { useRouter } from 'next/navigation';
+import { IconButton, Typography } from '@mui/material';
 
-import useAuth from '/src/hooks/useAuth';
 import { paths } from '/src/paths';
+import useAuth from '/src/hooks/useAuth';
+import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
+import { Iconify } from '/src/components/iconify/iconify';
 
 import { CampaignQuickView } from '../_components/campaign-quick-view';
 import { deleteCampaignAsync } from '../_lib/campaign.actions';
+import { DrawerContainer } from '../../../../components/drawer/drawer'; ///components/drawer/drawer
+
 import { CampaignForm } from './campaign-form';
 
 export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view }) => {
@@ -55,7 +56,11 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
             </IconButton>
           )}
 
-          <DeleteConfirmationPasswordPopover title={`Want to delete ${data?.name}?`} onDelete={(password) => handleDelete(password)} passwordInput />
+          <DeleteConfirmationPasswordPopover
+            title={`Want to delete ${data?.name}?`}
+            onDelete={(password) => handleDelete(password)}
+            passwordInput
+          />
 
           {/* {sidebarView === 'EDIT' && (
             <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>

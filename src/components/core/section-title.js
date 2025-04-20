@@ -4,7 +4,7 @@ export const SectionTitle = ({ title, sx }) => {
   return (
     <Box
       sx={{
-        bgcolor: 'var(--mui-palette-background-level3)',
+        bgcolor: 'var(--mui-palette-background-paper)',
         p: 2,
         fontSize: '18px',
         fontWeight: 500,

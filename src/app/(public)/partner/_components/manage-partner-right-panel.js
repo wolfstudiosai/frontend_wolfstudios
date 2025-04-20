@@ -14,7 +14,6 @@ import { createPartnerAsync, deletePartnerAsync, getPartnerAsync, updatePartnerA
 import { defaultPartner1 } from '../_lib/partner.types';
 import { PartnerForm } from './partner-form';
 import { PartnerQuickView } from './partner-quickview';
-import { PartnerQuickViewV2 } from './partner-quickview-V2';
 
 export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width, view, isAdd }) => {
   const isUpdate = data ? true : false;
@@ -165,10 +164,10 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
         />
         ) : sidebarView === 'QUICK' ? (
           // <PartnerQuickView data={values} isEdit={sidebarView}/>
-          <PartnerQuickViewV2 data={values} isEdit={sidebarView}/>
+          <PartnerQuickView data={values} isEdit={sidebarView}/>
         ) : (
           // <PartnerQuickView data={values} isEdit={sidebarView} onUpdate={setFormData}/>
-          <PartnerQuickViewV2 data={values} isEdit={sidebarView} onUpdate={setFormData}/>
+          <PartnerQuickView data={values} isEdit={sidebarView} onUpdate={setFormData}/>
         )}
     </DrawerContainer>
   );

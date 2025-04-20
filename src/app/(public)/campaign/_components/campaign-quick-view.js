@@ -11,15 +11,15 @@ import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 import { isVideoContent, pxToRem } from '/src/utils/helper';
 
 export const CampaignQuickView = ({ data }) => {
-  const theme = useTheme();
   const mediaArr = [...(data?.ImageInspirationGallery || []), ...(data?.VideoInspirationGallery || [])];
 
   return (
     <Box sx={{ position: 'relative' }}>
       <Box
-        my={2}
+        mb={1}
+        p={2}
         width="100%"
-        sx={{ position: 'sticky', top: 0, left: 0, backgroundColor: theme.palette.background.default, zIndex: 2 }}
+        sx={{ position: 'sticky', top: 0, left: 0, backgroundColor: 'var(--mui-palette-background-paper)', zIndex: 2 }}
       >
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Box>
@@ -34,53 +34,66 @@ export const CampaignQuickView = ({ data }) => {
         </Stack>
       </Box>
 
-      <SliderWrapper
-        modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
-        breakpoints={{
-          0: { slidesPerView: 1 },
-          768: { slidesPerView: 3 },
-          1024: { slidesPerView: 4 },
-        }}
-        pauseOnHover
-        spaceBetween={4}
-      >
-        {mediaArr?.map((item, index) => (
-          <SwiperSlide key={index}>
-            {isVideoContent(item) ? (
-              <Box
-                component="video"
-                src={item}
-                controls
-                autoPlay
-                loop
-                muted
-                playsInline
-                sx={{
-                  height: pxToRem(500),
-                  width: '100%',
-                  objectFit: 'contain',
-                  border: '1px solid var(--mui-palette-divider)',
-                }}
-              />
-            ) : (
-              <Box
-                component="img"
-                src={item || '/assets/image-placeholder.jpg'}
-                sx={{
-                  height: pxToRem(500),
-                  width: '100%',
-                  objectFit: 'contain',
-                  border: '1px solid var(--mui-palette-divider)',
-                }}
-              />
-            )}
-          </SwiperSlide>
-        ))}
-      </SliderWrapper>
+      <Box p={2} backgroundColor="var(--mui-palette-background-paper)">
+        <SliderWrapper
+          modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
+          breakpoints={{
+            0: { slidesPerView: 1 },
+            768: { slidesPerView: 3 },
+            1024: { slidesPerView: 4 },
+          }}
+          pauseOnHover
+          spaceBetween={4}
+        >
+          {mediaArr.length > 0 ? (
+            mediaArr?.map((item, index) => (
+              <SwiperSlide key={index}>
+                {isVideoContent(item) ? (
+                  <Box
+                    component="video"
+                    src={item}
+                    controls
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    sx={{
+                      height: pxToRem(500),
+                      width: '100%',
+                      objectFit: 'contain',
+                      border: '1px solid var(--mui-palette-divider)',
+                    }}
+                  />
+                ) : (
+                  <Box
+                    component="img"
+                    src={item || '/assets/image-placeholder.jpg'}
+                    sx={{
+                      height: pxToRem(500),
+                      width: '100%',
+                      objectFit: 'contain',
+                      border: '1px solid var(--mui-palette-divider)',
+                    }}
+                  />
+                )}
+              </SwiperSlide>
+            ))
+          ) : (
+            <Typography>No media available!</Typography>
+          )}
+        </SliderWrapper>
+      </Box>
 
       {/* add further design from here */}
-      <Grid container spacing={2} mt={4} sx={{ bgcolor: 'var(--mui-palette-background-level1)', p: 2 }}>
-        <Grid size={{ xs: 12, md: 4 }} sx={{ bgcolor: 'white', border: '1px solid var(--mui-palette-divider)', p: 2 }}>
+      <Grid container spacing={2} my={1} sx={{ bgcolor: 'var(--mui-palette-background-paper)', p: 2 }}>
+        <Grid
+          size={{ xs: 12, md: 4 }}
+          sx={{
+            bgcolor: 'var(--mui-palette-background-default)',
+            border: '1px solid var(--mui-palette-divider)',
+            p: 2,
+          }}
+        >
           <Box>
             <Typography variant="h6" fontWeight={600} gutterBottom>
               CAMPAIGN INFO
@@ -101,7 +114,14 @@ export const CampaignQuickView = ({ data }) => {
         </Grid>
 
         {/* RIGHT: Campaign Tips */}
-        <Grid size={{ xs: 12, md: 8 }} sx={{ bgcolor: 'white', border: '1px solid var(--mui-palette-divider)', p: 2 }}>
+        <Grid
+          size={{ xs: 12, md: 8 }}
+          sx={{
+            bgcolor: 'var(--mui-palette-background-default)',
+            border: '1px solid var(--mui-palette-divider)',
+            p: 2,
+          }}
+        >
           <Box>
             <Typography variant="h6" fontWeight={600} gutterBottom>
               CAMPAIGN TIPS
