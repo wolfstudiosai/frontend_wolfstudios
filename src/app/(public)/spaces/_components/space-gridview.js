@@ -69,7 +69,6 @@ export const SpaceCard = ({ item, fetchList, sx, infoSx }) => {
           position: 'relative',
           borderRadius: '0',
           border: 'solid 1px var(--mui-palette-divider)',
-          cursor: 'pointer',
           display: 'flex',
           flexDirection: 'column',
           '&:hover .menu-icon': {

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Box, Card, Divider, IconButton, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
+import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
 import useAuth from '/src/hooks/useAuth';
@@ -133,6 +133,10 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
       amazon: amazonInfo,
     }[section][field];
 
+    if (value === null || value === undefined || value === '') {
+      return null;
+    }
+
     if (isEdit === 'EDIT') {
       return (
         <TextField
@@ -160,7 +164,7 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
     }
 
     return (
-      <Typography variant="body2">
+      <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <strong>{label}:</strong>{' '}
         {type === 'link' ? (
           <Link href={value} passHref legacyBehavior>
@@ -227,13 +231,11 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
 
           {/* Profile Status */}
           <Stack direction={'row'} spacing={0.5}>
-            {/* <CustomChip label={'Live_Campaign'} height="18px" /> */}
-            {data?.ProfileStatus && <CustomChip label={data?.ProfileStatus}  />}
-            {data?.CurrentStatus && <CustomChip label={data?.CurrentStatus}  />}
+            {data?.ProfileStatus && <CustomChip label={data?.ProfileStatus} />}
+            {data?.CurrentStatus && <CustomChip label={data?.CurrentStatus} />}
           </Stack>
         </Stack>
 
-        {/* Total Audience, Hourly Rate, Partner 360 Rate, Occupation */}
         <Stack
           direction="row"
           alignItems="center"
