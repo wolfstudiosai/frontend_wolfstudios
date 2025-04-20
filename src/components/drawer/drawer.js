@@ -34,6 +34,7 @@ export const DrawerContainer = ({ children, open, handleDrawerClose, actionButto
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
+          backgroundColor: 'var(--mui-palette-background-default)',
         }}
       >
         {children}
@@ -46,7 +47,7 @@ export const DrawerContainer = ({ children, open, handleDrawerClose, actionButto
               position: 'sticky',
               bottom: 0,
               left: 0,
-              backgroundColor: 'var(--mui-palette-background-default)',
+              backgroundColor: 'var(--mui-palette-background-paper)',
               py: 1,
               zIndex: 4,
             }}
