@@ -11,7 +11,6 @@ import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 import { isVideoContent, pxToRem } from '/src/utils/helper';
 
 export const CampaignQuickView = ({ data }) => {
-  const theme = useTheme();
   const mediaArr = [...(data?.ImageInspirationGallery || []), ...(data?.VideoInspirationGallery || [])];
 
   return (
