@@ -21,7 +21,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
   const [sidebarView, setSidebarView] = React.useState(view); // QUICK // EDIT
   const [file, setFile] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
-  const [formData, setFormData] = useState(data); // formdata  
+  const [formData, setFormData] = useState(data); 
   
   React.useEffect(() => {
     if (isAdd) {
