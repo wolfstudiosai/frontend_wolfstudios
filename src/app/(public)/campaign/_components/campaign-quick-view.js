@@ -17,7 +17,7 @@ export const CampaignQuickView = ({ data }) => {
   return (
     <Box sx={{ position: 'relative' }}>
       <Box
-        my={1}
+        mb={1}
         p={2}
         width="100%"
         sx={{ position: 'sticky', top: 0, left: 0, backgroundColor: 'var(--mui-palette-background-paper)', zIndex: 2 }}
@@ -86,8 +86,15 @@ export const CampaignQuickView = ({ data }) => {
       </Box>
 
       {/* add further design from here */}
-      <Grid container spacing={2} mt={1} sx={{ bgcolor: 'var(--mui-palette-background-paper)', p: 2 }}>
-        <Grid size={{ xs: 12, md: 4 }} sx={{ bgcolor: 'var(--mui-palette-background-default)', border: '1px solid var(--mui-palette-divider)', p: 2 }}>
+      <Grid container spacing={2} my={1} sx={{ bgcolor: 'var(--mui-palette-background-paper)', p: 2 }}>
+        <Grid
+          size={{ xs: 12, md: 4 }}
+          sx={{
+            bgcolor: 'var(--mui-palette-background-default)',
+            border: '1px solid var(--mui-palette-divider)',
+            p: 2,
+          }}
+        >
           <Box>
             <Typography variant="h6" fontWeight={600} gutterBottom>
               CAMPAIGN INFO
@@ -108,7 +115,14 @@ export const CampaignQuickView = ({ data }) => {
         </Grid>
 
         {/* RIGHT: Campaign Tips */}
-        <Grid size={{ xs: 12, md: 8 }} sx={{ bgcolor: 'var(--mui-palette-background-default)', border: '1px solid var(--mui-palette-divider)', p: 2 }}>
+        <Grid
+          size={{ xs: 12, md: 8 }}
+          sx={{
+            bgcolor: 'var(--mui-palette-background-default)',
+            border: '1px solid var(--mui-palette-divider)',
+            p: 2,
+          }}
+        >
           <Box>
             <Typography variant="h6" fontWeight={600} gutterBottom>
               CAMPAIGN TIPS
