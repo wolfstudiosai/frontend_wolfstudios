@@ -1,3 +1,4 @@
+import { Fragment, useContext, useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -9,26 +10,31 @@ import {
   Popover,
   Popper,
   Stack,
-  Typography
+  Typography,
 } from '@mui/material';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useContext, useRef, useState } from 'react';
 
-import { AvatarWithActiveStatus } from '/src/components/core/avatar-with-active-status';
-import { Iconify } from '/src/components/iconify/iconify';
 import { ChatContext } from '/src/contexts/chat';
 import useAuth from '/src/hooks/useAuth';
+import { AvatarWithActiveStatus } from '/src/components/core/avatar-with-active-status';
+import { Iconify } from '/src/components/iconify/iconify';
 
 dayjs.extend(relativeTime);
 
 const reactionOptions = ['👍', '❤️', '😂', '🎉', '😮'];
 
-export const Message = ({ message }) => {
-  const { setActiveChannelThread, setActiveDirectThread, activeTab, createChannelReaction, removeChannelReaction, handleEditMessage } =
-    useContext(ChatContext);
+export const Message = ({ message, sidebar }) => {
+  const {
+    setActiveChannelThread,
+    setActiveDirectThread,
+    activeTab,
+    createChannelReaction,
+    removeChannelReaction,
+    handleEditMessage,
+  } = useContext(ChatContext);
 
-  console.log("message: ", message);
+  console.log('message: ', message);
 
   const { userInfo } = useAuth();
 
@@ -38,8 +44,8 @@ export const Message = ({ message }) => {
   const confirmDialogRef = useRef(null);
 
   const handleDelete = () => {
-    console.log("delete the message", message?.id);
-    setOpenConfirmDialog(false)
+    console.log('delete the message', message?.id);
+    setOpenConfirmDialog(false);
   };
 
   const toggleReactionBar = (event) => {
@@ -77,13 +83,15 @@ export const Message = ({ message }) => {
       gap={1}
       sx={{
         position: 'relative',
-        p: 2,
         '&:hover .hover-action': { opacity: 1 },
       }}
     >
       <AvatarWithActiveStatus
         src={activeTab?.type === 'channel' ? message?.User?.profileImage : message?.Sender?.profileImage}
         alt={activeTab?.type === 'channel' ? message?.User?.profileImage : message?.Sender?.profileImage}
+        sx={{
+          ...(sidebar && { width: '28px', height: '28px' }),
+        }}
       />
       <Stack direction="column" gap={0.5}>
         <Stack direction="row" alignItems="center" gap={1}>
@@ -97,18 +105,71 @@ export const Message = ({ message }) => {
           </Typography>
         </Stack>
 
-        {/* Message */}
-        {/* <Typography variant="body2">
-          I have already prepared all styles and components according to our standards during the design phase, so the
-          UI kit is 90% complete. All that remains is to add some states to the interactive elements and prepare the
-          Lottie files for animations.{' '}
-          <Link href="#" color="primary">
-            @Emily D.
-          </Link>
-          , please take a look and let me know if you have any questions.
-        </Typography> */}
-
         <Typography variant="body2">{message?.content}</Typography>
+
+        {/* File Attachments */}
+        <Stack direction="row" flexWrap="wrap" gap={1} sx={{ my: 1 }}>
+          {[
+            {
+              url: 'https://cdn.wolfstudios.ai/portfolios/attpPqOYQr5N7dOY8.jpg',
+              type: 'image/jpeg',
+              name: 'image.jpg',
+            },
+            {
+              url: 'https://drive.google.com/open?id=1NTlmVVs46yzyETMjfHg9xPOLAFiZ4CFR',
+              type: 'application/pdf',
+              name: 'sample.pdf',
+            },
+            {
+              url: 'https://yourdomain.com/uploads/sample.pdf',
+              type: 'docx',
+              name: 'Document.docx',
+            },
+          ].map((file, index) => (
+            <Fragment key={index}>
+              {file.type.startsWith('image/') ? (
+                <Box
+                  component="img"
+                  src={file.url}
+                  alt={file.name}
+                  sx={{ maxWidth: sidebar ? '120px' : '280px', borderRadius: 0.5 }}
+                />
+              ) : (
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  gap={2}
+                  sx={{ border: '1px solid', borderColor: 'divider', width: '100%', p: 1, borderRadius: 0.5 }}
+                >
+                  <Stack direction="row" alignItems="center" gap={1}>
+                    <Iconify
+                      icon="bx:file"
+                      sx={{ width: sidebar ? '30px' : '50px', height: sidebar ? '30px' : '50px' }}
+                    />
+                    <Stack>
+                      <Typography variant="h6" color="text.primary" sx={{ fontSize: sidebar ? '14px' : '16px' }}>
+                        {file.name}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {new URL(file.url).hostname}
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                  <IconButton
+                    size="small"
+                    href={file.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{ border: '1px solid', borderColor: 'divider', borderRadius: '50%' }}
+                  >
+                    ↗
+                  </IconButton>
+                </Stack>
+              )}
+            </Fragment>
+          ))}
+        </Stack>
 
         {/* Reactions */}
         <Stack direction="row" alignItems="center" spacing={0.5}>
@@ -151,12 +212,6 @@ export const Message = ({ message }) => {
           transition: 'opacity 0.2s ease-in-out',
         }}
       >
-        {/* <IconButton title="Like">
-          <Iconify icon="solar:like-broken" />
-        </IconButton> */}
-        {/* <IconButton title="React" onClick={toggleReactionBar}>
-          <Iconify icon="material-symbols:add-reaction-outline" />
-        </IconButton> */}
         <IconButton title="Edit" onClick={() => handleEditMessage(message || null)}>
           <Iconify icon="material-symbols:edit-outline-rounded" />
         </IconButton>
@@ -164,22 +219,13 @@ export const Message = ({ message }) => {
         <IconButton title="Delete" ref={confirmDialogRef} onClick={() => setOpenConfirmDialog(true)}>
           <Iconify icon="material-symbols:delete-outline-rounded" />
         </IconButton>
-
-        {/* <IconButton title="Copy">
-          <Iconify icon="mingcute:copy-line" />
-        </IconButton> */}
         <IconButton title="Reply in thread">
           <Iconify icon="mingcute:message-3-fill" />
         </IconButton>
+        {/* Replace sidebar with pin logic */}
         <IconButton title="Pin Message">
-          <Iconify icon="mingcute:pin-line" />
+          <Iconify icon={sidebar ? 'ri:unpin-line' : 'mingcute:pin-line'} />
         </IconButton>
-        {/* <IconButton title="Forward">
-          <Iconify icon="flowbite:forward-outline" />
-        </IconButton> */}
-        {/* <IconButton title="Bookmark">
-          <Iconify icon="material-symbols-light:bookmark-outline" />
-        </IconButton> */}
       </ButtonGroup>
 
       {/* Reaction Popper */}
@@ -220,19 +266,10 @@ export const Message = ({ message }) => {
           </Typography>
 
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 2 }}>
-            <Button
-              size='small'
-              variant="outlined"
-              onClick={() => setOpenConfirmDialog(false)}
-            >
+            <Button size="small" variant="outlined" onClick={() => setOpenConfirmDialog(false)}>
               Cancel
             </Button>
-            <Button
-              size='small'
-              variant="contained"
-              color="error"
-              onClick={handleDelete}
-            >
+            <Button size="small" variant="contained" color="error" onClick={handleDelete}>
               Delete
             </Button>
           </Box>
@@ -241,6 +278,48 @@ export const Message = ({ message }) => {
     </Stack>
   );
 };
+
+{
+  /* <IconButton title="Copy">
+          <Iconify icon="mingcute:copy-line" />
+        </IconButton> */
+}
+{
+  /* <IconButton title="Forward">
+          <Iconify icon="flowbite:forward-outline" />
+        </IconButton> */
+}
+{
+  /* <IconButton title="Bookmark">
+          <Iconify icon="material-symbols-light:bookmark-outline" />
+        </IconButton> */
+}
+
+{
+  /* <IconButton title="Like">
+          <Iconify icon="solar:like-broken" />
+        </IconButton> */
+}
+{
+  /* <IconButton title="React" onClick={toggleReactionBar}>
+          <Iconify icon="material-symbols:add-reaction-outline" />
+        </IconButton> */
+}
+
+{
+  /* Message */
+}
+{
+  /* <Typography variant="body2">
+          I have already prepared all styles and components according to our standards during the design phase, so the
+          UI kit is 90% complete. All that remains is to add some states to the interactive elements and prepare the
+          Lottie files for animations.{' '}
+          <Link href="#" color="primary">
+            @Emily D.
+          </Link>
+          , please take a look and let me know if you have any questions.
+        </Typography> */
+}
 
 {
   /* Figma Link Card */
@@ -258,4 +337,28 @@ export const Message = ({ message }) => {
                             Quick view
                         </Button>
                     </Card> */
+}
+
+{
+  /* <Box
+                  sx={{
+                    p: 1,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    borderRadius: 0.5,
+                    bgcolor: 'background.paper',
+                  }}
+                >
+                  <Typography variant="body2">{file.name}</Typography>
+                  <Button
+                    href={file.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="outlined"
+                    size="small"
+                    sx={{ mt: 1 }}
+                  >
+                    Open File
+                  </Button>
+                </Box> */
 }

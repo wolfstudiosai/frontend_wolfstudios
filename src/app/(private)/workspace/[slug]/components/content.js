@@ -6,6 +6,7 @@ import { ChatContext } from '/src/contexts/chat';
 import { MessageForm } from '../../../dms/_components/message-form';
 import { ScrollableContent } from './custom-component';
 import { Message } from './message';
+import { MessageSkeleton } from './skeleton';
 import { Topbar } from './topbar';
 
 export const Content = () => {
@@ -39,7 +40,7 @@ export const Content = () => {
       sx={{ width: '50%', height: 'calc(100vh - 94px)', borderRight: '1px solid', borderColor: 'divider' }}
     >
       <Topbar />
-      <ScrollableContent id="scrollable-content">
+      <ScrollableContent id="scrollable-content" sx={{ p: 2 }}>
         {activeTab?.type === 'channel'
           ? channelMessages?.map((message) => <Message key={message.id} message={message} />)
           : directMessages?.map((message) => <Message key={message.id} message={message} />)}

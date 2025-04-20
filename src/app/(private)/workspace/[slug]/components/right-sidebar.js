@@ -1,5 +1,6 @@
 'use client';
 
+import { useContext, useState } from 'react';
 import {
   Box,
   Chip,
@@ -11,17 +12,17 @@ import {
   styled,
   Tab,
   Tabs,
-  Typography
+  Typography,
 } from '@mui/material';
 import dayjs from 'dayjs';
-import { useContext, useState } from 'react';
 
-import { AvatarWithActiveStatus } from '/src/components/core/avatar-with-active-status';
-import { Iconify } from '/src/components/iconify/iconify';
 import { ChatContext } from '/src/contexts/chat';
 import useAuth from '/src/hooks/useAuth';
+import { AvatarWithActiveStatus } from '/src/components/core/avatar-with-active-status';
+import { Iconify } from '/src/components/iconify/iconify';
 
 import { MemberInfo, MemberItem, MemberName, ScrollableContent } from './custom-component';
+import PinMessage from './pin-message';
 
 const SectionTitle = styled(Typography)(({ theme }) => ({
   fontWeight: 600,
@@ -188,11 +189,11 @@ export const RightSidebar = () => {
                   {activeTab?.type === 'channel'
                     ? `${activeTabInfo?.createdBy?.firstName} ${activeTabInfo?.createdBy?.lastName}`
                     : (() => {
-                      if (activeTabInfo?.sender?.id === userInfo?.id) {
-                        return `${activeTabInfo?.receiver?.firstName} ${activeTabInfo?.receiver?.lastName}`;
-                      }
-                      return `${activeTabInfo?.sender?.firstName} ${activeTabInfo?.sender?.lastName}`;
-                    })()}
+                        if (activeTabInfo?.sender?.id === userInfo?.id) {
+                          return `${activeTabInfo?.receiver?.firstName} ${activeTabInfo?.receiver?.lastName}`;
+                        }
+                        return `${activeTabInfo?.sender?.firstName} ${activeTabInfo?.sender?.lastName}`;
+                      })()}
                 </InfoValue>
               </InfoItem>
               <InfoItem>
@@ -286,6 +287,7 @@ export const RightSidebar = () => {
             )}
           </>
         )}
+        {tabValue === 1 && <PinMessage />}
       </ScrollableContent>
     </Stack>
   );
