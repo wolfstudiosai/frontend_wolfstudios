@@ -5,17 +5,15 @@ import { useRouter } from 'next/navigation';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { motion, useScroll, useTransform } from 'framer-motion';
-
-import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useRef, useState } from 'react';
 import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
-import { ManagePortfolioRightPanel } from '../../portfolio/_components/manage-portfolio-right-panel';
-import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
+
 import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
+import { ManagePortfolioRightPanel } from '../../portfolio/_components/manage-portfolio-right-panel';
+import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
 
 export const PortfolioSectionNew = () => {
   const [portfolios, setPortfolios] = useState([]);
@@ -41,7 +39,7 @@ export const PortfolioSectionNew = () => {
       sx={{
         pt: 1,
         px: { xs: 2, md: 4 },
-        mb: '10px'
+        mb: '10px',
       }}
     >
       <Grid container spacing={2} alignItems="flex-start">
@@ -77,8 +75,7 @@ export const PortfolioSectionNew = () => {
                 onClick={() => router.push('/portfolio')}
                 endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
                 sx={{ margin: 0, padding: 0 }}
-              >
-              </Button>
+              ></Button>
             </Stack>
             <Typography fontSize={18} sx={{ mt: 1, mb: 4 }}>
               Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
@@ -87,10 +84,12 @@ export const PortfolioSectionNew = () => {
           </FadeIn>
         </Grid>
 
-        <Grid size={{
-          md: 9,
-          xs: 12,
-        }}>
+        <Grid
+          size={{
+            md: 9,
+            xs: 12,
+          }}
+        >
           <Stack spacing={2} sx={{ px: 3, pt: 1 }}>
             <SliderWrapper
               modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
@@ -114,9 +113,7 @@ export const PortfolioSectionNew = () => {
               }}
               sx={{
                 '& .swiper-wrapper': {
-
-                  gap: '1.8px'
-
+                  gap: '0px',
                 },
                 '& .swiper-slide': {
                   width: 'auto !important',
