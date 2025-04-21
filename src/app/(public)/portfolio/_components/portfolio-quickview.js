@@ -53,7 +53,7 @@ export const PortfolioQuickView = ({ data }) => {
         }}
         pauseOnHover
         // speed={2000}
-        spaceBetween={10}
+        spaceBetween={1.8}
       >
         {/* {data?.SinglePageHeroImage?.map((item, index) => ( */}
         {data?.VerticalImageGallery?.map((item, index) => (
@@ -168,7 +168,7 @@ export const PortfolioQuickView = ({ data }) => {
         <Typography variant="subtitle1" fontWeight="bold" mt={3} color="text.secondary">
           Horizontal Gallery
         </Typography>
-        <Grid container spacing={1} sx={{ mt: 2 }} columns={{ xs: 10 }}>
+        <Grid container spacing={0} sx={{ mt: 2 }} columns={{ xs: 10 }}>
           {data.HorizontalImageGallery?.map((item, index) => (
             <Grid item size={{ xs: 2 }} key={index}>
               {isVideoContent(item) ? (

@@ -8,7 +8,7 @@ import { I18nProvider } from '/src/components/core/i18n-provider';
 import { LocalizationProvider } from '/src/components/core/localization-provider';
 import { ThemeProvider } from '/src/components/core/theme-provider/theme-provider';
 import { Toaster } from '/src/components/core/toaster';
-import { VerticalLayout } from '/src/components/dashboard/layout/vertical/vertical-layout';
+import { LayoutView } from '../components/layout/layout-view';
 import { Progressbar } from '/src/components/utils/Progressbar';
 
 import { config } from '/src/config';
@@ -43,7 +43,7 @@ export default async function Layout({ children }) {
                     <ThemeProvider>
                       <Progressbar />
                       <AuthGuard>
-                        <VerticalLayout>{children}</VerticalLayout>
+                        <LayoutView>{children}</LayoutView>
                       </AuthGuard>
                       {/* <SettingsButton /> */}
                       <Toaster position="top-right" />

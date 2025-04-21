@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import Badge from '@mui/material/Badge';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
@@ -8,12 +7,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { ArrowCounterClockwise as ArrowCounterClockwiseIcon } from '@phosphor-icons/react/dist/ssr/ArrowCounterClockwise';
 import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
+import * as React from 'react';
 
 import { OptionsColorScheme } from './options-color-scheme';
-import { OptionsDirection } from './options-direction';
-import { OptionsLayout } from './options-layout';
-import { OptionsNavColor } from './options-nav-color';
-import { OptionsPrimaryColor } from './options-primary-color';
 
 export function SettingsDrawer({ canReset = true, onClose, onUpdate, onReset, open, values = {} }) {
   const handleChange = React.useCallback(
@@ -37,7 +33,7 @@ export function SettingsDrawer({ canReset = true, onClose, onUpdate, onReset, op
       <Stack direction="row" spacing={3} sx={{ alignItems: 'center', justifyContent: 'space-between', px: 3, pt: 2 }}>
         <Typography variant="h6">App settings</Typography>
         <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center' }}>
-          <Badge
+          {/* <Badge
             anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
             color="error"
             sx={{ '& .MuiBadge-badge': { top: 6, right: 6, ...(!canReset && { display: 'none' }) } }}
@@ -46,19 +42,19 @@ export function SettingsDrawer({ canReset = true, onClose, onUpdate, onReset, op
             <IconButton onClick={onReset}>
               <ArrowCounterClockwiseIcon />
             </IconButton>
-          </Badge>
+          </Badge> */}
           <IconButton onClick={onClose}>
             <XIcon />
           </IconButton>
         </Stack>
       </Stack>
       <Stack spacing={5} sx={{ overflowY: 'auto', p: 3 }}>
-        <OptionsPrimaryColor
+        {/* <OptionsPrimaryColor
           onChange={(value) => {
             handleChange('primaryColor', value);
           }}
           value={values.primaryColor}
-        />
+        /> */}
         <OptionsColorScheme
           onChange={(value) => {
             handleChange('mode', value);

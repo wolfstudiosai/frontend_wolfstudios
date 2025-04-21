@@ -114,6 +114,8 @@ export const paths = {
     profile: '/profile',
     content: '/content',
     partner: '/partner',
+    partner_contracts: '/partner/contracts',
+    partner_waiting_area: '/partner/waiting-area',
 
     // knowledge base
     about: '/about',
@@ -124,8 +126,18 @@ export const paths = {
   private: {
     // admin
     overview: '/overview',
+    favorites: '/favorites',
+    favorites_bev: '/favorites/bev',
     performance: '/performance',
     analytics: '/analytics',
+    analytics_by_platform: '/analytics/by-platform',
+    analytics_by_partner: '/analytics/by-partner',
+    reporting:'/reporting',
+    reporting_by_partner:'/reporting/by-partner',
+    reporting_by_product:'/reporting/by-product',
+    reporting_by_campaign:'/reporting/by-campaign',
+    reporting_by_production:'/reporting/by-production',
+    reporting:'/reporting',
     notification: '/notification',
     record: '/records',
     expense: '/expense',
@@ -170,10 +182,21 @@ export const paths = {
     // HQs
     portfolio: '/portfolio',
     campaign: '/campaign',
+    campaign_by_client: '/campaign/by-client',
+    campaign_by_product: '/campaign/by-product',
     profile: '/profile',
     content: '/all-content',
+    content_new_content: '/all-content/new-content',
+    content_discovery: '/all-content/discovery',
+    content_discovery_by_partner: '/all-content/discovery/by-partner',
+    content_discovery_by_product: '/all-content/discovery/by-product',
+    content_discovery_by_campaign: '/all-content/discovery/by-campaign',
+    content_discovery_by_production: '/all-content/discovery/by-production',
     partner: '/partner',
     production: '/production',
+    production_project_drop: '/production/project-drop',
+    production_revisions: '/production/revisions',
+    production_creative_requests: '/production/creative-requests',
     spaces: '/spaces',
 
     // knowledge base

@@ -15,10 +15,11 @@ export const DrawerContainer = ({ children, open, handleDrawerClose, actionButto
         '& .MuiDrawer-paper': {
           mt: 5.5,
           mb: 5,
-          borderRadius: 1,
+          // borderRadius: 1,
           height: '100%',
           maxHeight: 'calc(100vh - 76px)',
           boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px;',
+          backgroundColor: 'var(--mui-palette-background-default)',
         },
         '& .MuiBackdrop-root': {
           background: 'transparent',
@@ -46,7 +47,7 @@ export const DrawerContainer = ({ children, open, handleDrawerClose, actionButto
               position: 'sticky',
               bottom: 0,
               left: 0,
-              backgroundColor: 'var(--mui-palette-background-default)',
+              backgroundColor: 'var(--mui-palette-background-paper)',
               py: 1,
               zIndex: 4,
             }}

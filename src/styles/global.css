@@ -37,6 +37,40 @@
   font-style: normal;
 }
 
+/* For removing portfolio silder box-shadow */
+.MuiCard-root {
+  box-shadow: unset !important;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+:root {
+  --custom-light-level-1: #f4f4f2;
+  --custom-dark-level-1: #181818;
+  --custom-light-level-2: #e8e8e8;
+  --custom-dark-level-2: #121212;
+
+  /* dark mode //f4f4f2*/
+  --background-dark-default: #1c1c1c;
+  --background-dark-secondary: #26221F;
+  /* light mode */
+  --background-light-default: #fff; 
+  --background-light-secondary: #DFDED8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
 /* Remove is recharts is not used */
 .recharts-cartesian-axis-tick-value {
   color: var(--mui-palette-text-secondary);
@@ -153,32 +187,6 @@
   outline: 2px solid var(--mui-palette-primary-main);
 }
 
-/* For removing portfolio silder box-shadow */
-.MuiCard-root{
-  box-shadow: unset !important;
- }
-
-html {
-  height: 100%;
-}
-
-body {
-  height: 100%;
-}
-
-
-:root {
-  --custom-light-level-1: #F4F4F2;
-  --custom-dark-level-1: #181818;
-  --custom-light-level-2: #E8E8E8;
-  --custom-dark-level-2: #121212;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
 /* Footer Animation */
 #page1 {
@@ -193,7 +201,7 @@ body {
 }
 
 .letter {
-  display: inline-block; 
+  display: inline-block;
   font-size: 10rem;
   font-weight: 100;
   color: #fff;
@@ -246,4 +254,3 @@ body {
     bottom: -200px; /* Adjust bottom position for mobile screens */
   }
 }
-

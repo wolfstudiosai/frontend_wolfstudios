@@ -1,8 +1,11 @@
-"use client";
+'use client';
 
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { motion, useScroll, useTransform } from 'framer-motion';
+
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
@@ -12,6 +15,7 @@ import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
 import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
+
 
 export const PortfolioSectionNew = () => {
   const [portfolios, setPortfolios] = useState([]);
@@ -26,7 +30,7 @@ export const PortfolioSectionNew = () => {
     if (response?.success) {
       setPortfolios((prev) => [...prev, ...response.data]);
     }
-  }
+  };
 
   useEffect(() => {
     fetchPortfolios();
@@ -82,6 +86,7 @@ export const PortfolioSectionNew = () => {
             </Typography>
           </FadeIn>
         </Grid>
+
         <Grid size={{
           md: 9,
           xs: 12,
@@ -92,32 +97,34 @@ export const PortfolioSectionNew = () => {
               breakpoints={{
                 0: {
                   slidesPerView: 1,
-                  spaceBetween: 16
+                  spaceBetween: 16,
                 },
                 768: {
                   slidesPerView: 2,
-                  spaceBetween: 20
+                  spaceBetween: 20,
                 },
                 1024: {
                   slidesPerView: 3,
-                  spaceBetween: 24
+                  spaceBetween: 24,
                 },
                 1440: {
                   slidesPerView: 4,
-                  spaceBetween: 28
-                }
+                  spaceBetween: 28,
+                },
               }}
               sx={{
                 '& .swiper-wrapper': {
+
                   gap: '1.8px'
+
                 },
                 '& .swiper-slide': {
                   width: 'auto !important',
                   marginRight: '0 !important',
-                  height: 'auto'
+                  height: 'auto',
                 },
                 // Add negative margin to compensate for container padding
-                mx: { xs: -1.5, md: -2 }
+                mx: { xs: -1.5, md: -2 },
               }}
             >
               {portfolios.map((portfolio) => (
@@ -146,8 +153,8 @@ const Card = ({ card, fetchList }) => {
           height: '400px',
           width: { xs: '300px', sm: '280px', md: '260px' },
           overflow: 'hidden',
-          boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
           transition: 'transform 300ms ease',
+          border: '1px solid var(--mui-palette-divider)',
         }}
         onClick={() => setOpenPortfolioRightPanel(card)}
       >
