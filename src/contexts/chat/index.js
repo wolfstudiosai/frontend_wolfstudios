@@ -276,11 +276,11 @@ export const ChatProvider = ({ children }) => {
   };
 
   const startTyping = () => {
-    socketContext?.startTyping(activeTabInfo?.id);
+    socketContext?.startTyping?.(activeTabInfo?.id);
   };
 
   const stopTyping = () => {
-    socketContext?.stopTyping(activeTabInfo?.id);
+    socketContext?.stopTyping?.(activeTabInfo?.id);
   };
 
   const getDirectMessages = async (id) => {
