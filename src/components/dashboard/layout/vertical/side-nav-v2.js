@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useColorScheme } from '@mui/material/styles';
 
+import useAuth from '/src/hooks/useAuth';
 import { Iconify } from '/src/components/iconify/iconify';
 
 import { navColorStyles } from './styles';
@@ -19,13 +20,31 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
   const { colorScheme = 'light' } = useColorScheme();
   const styles = navColorStyles[colorScheme][color];
   const [openMenus, setOpenMenus] = React.useState({});
+  const { userInfo } = useAuth();
 
   const toggleMenuItem = (key) => {
     setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  const renderMenuItems = (items, level = 0) => {
-    return items.map((item) => {
+  const renderMenuItems = (items, level = 0, workspaces = []) => {
+    const newItems = [...items];
+    if (workspaces?.length > 0) {
+      const workspacesTab = {
+        key: 'workspaces',
+        title: 'Workspaces',
+        icon: 'fluent:chat-12-regular',
+        items: workspaces?.map((workspace) => ({
+          key: workspace.slug,
+          title: workspace.name,
+          icon: 'fluent:chat-12-regular',
+          href: `/workspace/${workspace.slug}`,
+          allowedRoles: ['admin', 'user', 'super_admin'],
+        })),
+      };
+      newItems.push(workspacesTab);
+    }
+
+    return newItems.map((item) => {
       const isActive = item.href && pathname === item.href;
       const hasChildren = item.items && item.items.length > 0;
       const isExpanded = openMenus[item.key] || false;
@@ -168,7 +187,7 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
         background: 'transparent',
       }}
     >
-      <MenuList>{renderMenuItems(dashboardFavItemsV2)}</MenuList>
+      <MenuList>{renderMenuItems(dashboardFavItemsV2, 0, userInfo?.workspaces)}</MenuList>
       <Divider />
       <MenuList>{renderMenuItems(privateRoutesV2)}</MenuList>
     </Box>
