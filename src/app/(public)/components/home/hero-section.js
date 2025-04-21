@@ -164,7 +164,8 @@ export const HeroSection = () => {
               objectPosition: 'top center',
             }}
           >
-            <source src="https://cdn.wolfstudios.ai/homepage/hero_bg_second_v2.mp4" type="video/mp4" />
+            {/* <source src="https://cdn.wolfstudios.ai/homepage/hero_bg_second_v2.mp4" type="video/mp4" /> */}
+            <source src="https://cdn.wolfstudios.ai/homepage/Sexy+Hair+Reel.mp4" type="video/mp4" />
           </video>
         </Box>
       </Stack>

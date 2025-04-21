@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Card, Chip, Stack, Typography, Avatar, Popover, Divider, Button } from '@mui/material';
-import { LocationOn, Add, Mail } from "@mui/icons-material"
+import { Add, Message} from "@mui/icons-material"
 import Grid from '@mui/material/Grid2';
 import Image from 'next/image';
 import React from 'react';
@@ -16,6 +16,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 import { PortfolioSliderItem } from './portfolio-slider-item';
 import { getFancyColor, isVideoContent } from '/src/utils/helper';
+import { motion, AnimatePresence } from "framer-motion"
+import { CustomTextField } from '/src/components/formFields/custom-textfield';
 
 export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
   const slider_data = data.filter((item) => item.featured);
@@ -193,15 +195,17 @@ export const PortfolioCardOld = ({ item, fetchList, sx, infoSx }) => {
 };
 
 export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
+  console.log("item", item);
+  
   const profileData = {
-    name: "Hamed Alshamrani",
+    name: item?.ProjectTitle,
     location: "Riyadh, Saudi Arabia",
-    avatar: "/placeholder.svg?height=100&width=100",
-    status: ["Freelance", "Full-Time"],
+    avatar: item?.ThumbnailImage?.at(0) || item?.Imagefield?.at(0) || "/",
+    status: item?.PortfolioCategoriesPortfolios?.map((category) => category?.PortfolioCategories?.Name),
     stats: {
-      appreciations: "38.7K",
-      followers: "7.5K",
-      projectViews: "625.3K",
+      instagram: "38.7K",
+      tiktok: "725.5K",
+      youtube: "625.3K",
     },
   };
 
@@ -209,6 +213,8 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
   const popoverTimeoutRef = React.useRef(null);
+  const [showModal, setShowModal] = React.useState(false);
+  const [values, setValues] = React.useState([]);
 
   React.useEffect(() => {
     return () => {
@@ -243,7 +249,18 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
     }
   }
 
+  const toggleModal = (e) => {
+    e.stopPropagation();
+    setIsPopoverOpen(false);
+    setShowModal(!showModal)
+  }
+
   const handleMenuOpen = () => {}
+
+  const handleChange = (e) => {
+    console.log(e.target.value,'value');
+    setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+  }
 
   const open = isPopoverOpen && Boolean(anchorEl);
 
@@ -366,6 +383,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
           onClose={() => setOpenPortfolioRightPanel(false)}
         />
       </Card>
+
       <Box
         sx={{
           flex: 0.1,
@@ -455,6 +473,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
           </Box>
         </Stack>
       </Box>
+
       {/* Thumbnail hover Popover */}
       <Popover
         id="state-popover"
@@ -522,12 +541,12 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
           </Typography>
 
           {/* Location */}
-          <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mb: 2 }}>
+          {/* <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mb: 2 }}>
             <LocationOn fontSize="small" sx={{ color: "text.secondary", fontSize: 16 }} />
             <Typography variant="body2" color="text.secondary">
               {profileData.location}
             </Typography>
-          </Stack>
+          </Stack> */}
 
           {/* Status Tags */}
           <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
@@ -564,26 +583,26 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
           >
             <Box sx={{ textAlign: "center", flex: 1 }}>
               <Typography variant="h6" fontWeight={600}>
-                {profileData.stats.appreciations}
+                {profileData.stats.instagram}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Appreciations
+                Instagram
               </Typography>
             </Box>
             <Box sx={{ textAlign: "center", flex: 1 }}>
               <Typography variant="h6" fontWeight={600}>
-                {profileData.stats.followers}
+                {profileData.stats.tiktok}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Followers
+                TikTok
               </Typography>
             </Box>
             <Box sx={{ textAlign: "center", flex: 1 }}>
               <Typography variant="h6" fontWeight={600}>
-                {profileData.stats.projectViews}
+                {profileData.stats.youtube}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Project Views
+                Youtube
               </Typography>
             </Box>
           </Stack>
@@ -606,12 +625,12 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
               },
             }}
           >
-            Follow
+            Start
           </Button>
           <Button
             variant="outlined"
             fullWidth
-            startIcon={<Mail />}
+            startIcon={<Message />}
             sx={{
               bgcolor: "#f5f5f5",
               color: "#1976d2",
@@ -625,11 +644,176 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
                 border: "none",
               },
             }}
+            onClick={toggleModal}
           >
-            Hire
+            Message
           </Button>
         </Box>
       </Popover>
+
+      {/* Slide-up Message Modal */}
+      <AnimatePresence>
+        {showModal && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                zIndex: 1300,
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "flex-end",
+              }}
+              onClick={toggleModal}
+            >
+              {/* Modal Content */}
+              <motion.div
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "100%" }}
+                transition={{
+                  type: "spring",
+                  damping: 25,
+                  stiffness: 300,
+                }}
+                style={{
+                  width: "100%",
+                  maxWidth: "400px",
+                  backgroundColor: "white",
+                  borderTopLeftRadius: "16px",
+                  borderTopRightRadius: "16px",
+                  overflow: "hidden",
+                  padding: 0,
+                  maxHeight: "80vh",
+                  overflowY: "auto",
+                  marginRight: "16px",
+                  marginBottom: "16px",
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Modal Header with close button */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    p: 2,
+                    borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
+                    position: "sticky",
+                    top: 0,
+                    backgroundColor: "white",
+                    zIndex: 1,
+                  }}
+                >
+                  <Stack direction="row" alignItems="center" gap={1}>
+                  {/* Avatar */}
+                  <Avatar
+                    src={profileData.avatar}
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      border: "3px solid white",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                      mb: 0,
+                    }}
+                  />
+                  <Typography variant="h6" fontWeight={600}>
+                  {profileData.name}
+                  </Typography>
+                  </Stack>
+                  <IconButton onClick={toggleModal} size="small">
+                    <Box
+                      sx={{
+                        width: 24,
+                        height: 24,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: "50%",
+                        backgroundColor: "#f0f0f0",
+                      }}
+                    >
+                      ✕
+                    </Box>
+                  </IconButton>
+                </Box>
+
+                {/* Modal Body */}
+                <Box
+                  sx={{
+                    width: "100%",
+                    bgcolor: "background.paper",
+                    overflow: "hidden",
+                    p: 3,
+                    pt: 4,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  {/* Avatar */}
+                  <Avatar
+                    src={profileData.avatar}
+                    sx={{
+                      width: 80,
+                      height: 80,
+                      border: "3px solid white",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                      mb: 2,
+                    }}
+                  />
+
+                  {/* Name */}
+                  <Typography variant="h6" fontWeight={600} sx={{ mb: 0.5, textAlign: "center" }}>
+                    {profileData.name}
+                  </Typography>
+
+                  {/* Divider */}
+                  <Divider sx={{ width: "100%", color:"var(--mui-palette-divider)", mb: 2 }} />
+
+                  {/* Buttons */}
+                  <Stack direction={"row"} justifyContent={"space-between"} width={"100%"} gap={1} alignItems={"center"}>
+                     <CustomTextField
+                        name="message"
+                        label=""
+                        value={values.message}
+                        placeholder="Enter your message"
+                        onChange={handleChange}
+                      />
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      bgcolor: "#f5f5f5",
+                      color: "#1976d2",
+                      border: "none",
+                      py: 1,
+                      borderRadius: 8,
+                      textTransform: "none",
+                      fontWeight: 500,
+                      "&:hover": {
+                        bgcolor: "#e0e0e0",
+                        border: "none",
+                      },
+                    }}
+                  >
+                    Send
+                  </Button>
+                  </Stack>
+                </Box>
+              </motion.div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   )
 }

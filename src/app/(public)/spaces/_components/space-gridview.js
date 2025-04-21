@@ -8,10 +8,10 @@ import Grid from '@mui/material/Grid2';
 import IconButton from '@mui/material/IconButton';
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
-
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { PageLoader } from '/src/components/loaders/PageLoader';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
-
 import { ManageSpaceRightPanel } from './manage-space-right-panel';
 import { SpaceSliderItem } from './space-slider-item';
 import { isVideoContent } from '/src/utils/helper';
@@ -56,7 +56,8 @@ export const SpaceGridView = ({ data, colums, fetchList, loading, handlePaginati
 export const SpaceCard = ({ item, fetchList, sx, infoSx }) => {
   const [openSpaceRightPanel, setOpenSpaceRightPanel] = React.useState(null);
 
-  const handleMenuOpen = () => {};
+  const handleMenuOpen = () => {}
+
   return (
     <>
       <Card
@@ -163,62 +164,6 @@ export const SpaceCard = ({ item, fetchList, sx, infoSx }) => {
                 background: 'var(--mui-palette-divider)',
               }}
             />
-            <Box
-              sx={{
-                flex: 0.1,
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography
-                  variant="body"
-                  color="white"
-                  sx={{
-                    fontSize: '13px',
-                    maxWidth: '60%',
-                    fontWeight: 500,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    color: 'white',
-                    '&:hover': {
-                      textDecoration: 'underline',
-                    },
-                  }}
-                >
-                  {item.ByStatesSpaces?.map((state) => state?.ByStates?.Name).join(', ')}
-                </Typography>
-
-                <Box
-                  sx={{
-                    display: 'flex',
-                    gap: 0.5,
-                    alignItems: 'center',
-                    maxWidth: '40%',
-                    justifyContent: 'flex-end',
-                  }}
-                >
-                  <Typography
-                    variant="body"
-                    color="white"
-                    sx={{
-                      fontSize: '12px',
-                      fontWeight: 400,
-                      whiteSpace: 'nowrap',
-                      color: 'var(--mui-palette-text-primary)',
-                      '&:hover': {
-                        textDecoration: 'underline',
-                        fontWeight: 500,
-                      },
-                    }}
-                  >
-                    {item.ByCountrySpaces?.map((country) => country?.ByCountry?.Name).join(', ')}
-                  </Typography>
-                </Box>
-              </Stack>
-            </Box>
           </Stack>
         </Box>
 
@@ -231,6 +176,71 @@ export const SpaceCard = ({ item, fetchList, sx, infoSx }) => {
           onClose={() => setOpenSpaceRightPanel(false)}
         />
       </Card>
+      <Box
+        sx={{
+          flex: 0.1,
+          p: 1,
+          backgroundColor: "var(--mui-palette-background-default)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              maxWidth: "60%",
+            }}
+          >
+            <Typography
+              variant="body"
+              color="white"
+              sx={{
+                fontSize: "13px",
+                maxWidth: "100%",
+                width: "100%",
+                fontWeight: 500,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                color: "var(--mui-palette-text-primary)",
+                "&:hover": {
+                  textDecoration: "underline",
+                },
+              }}
+            >
+              {item.ByStatesSpaces?.map((state) => state?.ByStates?.Name).join(', ')}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 0.5,
+              alignItems: "center",
+              maxWidth: "40%",
+              justifyContent: "flex-end",
+            }}
+          >
+              {/* Rating */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                <ThumbUpIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                  50
+                </Typography>
+              </Box>
+              {/* Views */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <VisibilityIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                257
+              </Typography>
+            </Box>
+          </Box>
+        </Stack>
+      </Box>
     </>
   );
 };
