@@ -1,8 +1,5 @@
 import { paths } from './paths';
 
-const user = JSON.parse(localStorage.getItem('auth'));
-const workspaces = user?.workspaces || [];
-
 // public header routes
 export const publicRoutes = [
   {
@@ -393,7 +390,7 @@ export const privateRoutesV2 = [
         href: paths.dashboardPublic.production_creative_requests,
         icon: 'material-symbols:lightbulb-outline',
         allowedRoles: ['admin', 'user', 'super_admin'],
-      }
+      },
     ],
   },
   {
@@ -444,7 +441,7 @@ export const privateRoutesV2 = [
             icon: 'material-symbols:factory-outline-rounded',
             allowedRoles: ['admin', 'user', 'super_admin'],
           },
-        ]
+        ],
       },
     ],
   },
@@ -467,7 +464,7 @@ export const privateRoutesV2 = [
         href: paths.dashboardPublic.campaign_by_product,
         icon: 'ph:package-light',
         allowedRoles: ['admin', 'user', 'super_admin'],
-      }
+      },
     ],
   },
   {
@@ -525,59 +522,39 @@ export const dashboardFavItemsV2 = [
       },
     ],
   },
-  {
-    key: 'chat',
-    title: 'Inbox',
-    icon: 'fluent:chat-12-regular',
-    href: '/chat2',
-  },
 ];
 
 // dashboard fav items
 export const dashboardFavItems = [
-  {
-    key: 'workspaces',
-    title: 'Workspaces',
-    icon: 'material-symbols-light:chat-outline-rounded',
-    items: [
-      ...workspaces.map((workspace) => ({
-        key: workspace.slug,
-        title: workspace.name,
-        icon: 'fluent:chat-12-regular',
-        href: `/workspace/${workspace.slug}`,
-        allowedRoles: ['admin', 'user', 'super_admin'],
-      })),
-      // {
-      //   key: 'chat2',
-      //   title: 'Workspace 1',
-      //   icon: 'fluent:chat-12-regular',
-      //   href: 'chat2',
-      //   allowedRoles: ['admin', 'user', 'super_admin'],
-      // },
-      // {
-      //   key: 'dms',
-      //   title: 'DMs',
-      //   icon: 'eva:message-circle-outline',
-      //   href: paths.private.dms,
-      //   allowedRoles: ['admin', 'user', 'super_admin'],
-      // },
-      // {
-      //   key: 'activity',
-      //   title: 'Activity',
-      //   icon: 'mdi:bell-notification-outline',
-      //   href: paths.private.activity,
-      //   allowedRoles: ['admin', 'user', 'super_admin'],
-      // },
+  // {
+  //   key: 'chat2',
+  //   title: 'Workspace 1',
+  //   icon: 'fluent:chat-12-regular',
+  //   href: 'chat2',
+  //   allowedRoles: ['admin', 'user', 'super_admin'],
+  // },
+  // {
+  //   key: 'dms',
+  //   title: 'DMs',
+  //   icon: 'eva:message-circle-outline',
+  //   href: paths.private.dms,
+  //   allowedRoles: ['admin', 'user', 'super_admin'],
+  // },
+  // {
+  //   key: 'activity',
+  //   title: 'Activity',
+  //   icon: 'mdi:bell-notification-outline',
+  //   href: paths.private.activity,
+  //   allowedRoles: ['admin', 'user', 'super_admin'],
+  // },
 
-      // {
-      //   key: 'channel',
-      //   title: 'Channel',
-      //   icon: 'uil:channel',
-      //   href: paths.private.channel,
-      //   allowedRoles: ['admin', 'user', 'super_admin'],
-      // },
-    ],
-  },
+  // {
+  //   key: 'channel',
+  //   title: 'Channel',
+  //   icon: 'uil:channel',
+  //   href: paths.private.channel,
+  //   allowedRoles: ['admin', 'user', 'super_admin'],
+  // },
   {
     key: 'favorite',
     title: 'Favorite',

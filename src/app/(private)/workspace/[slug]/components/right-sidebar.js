@@ -1,8 +1,7 @@
 'use client';
 
-import { act, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import {
-  Avatar,
   Box,
   Chip,
   List,
@@ -19,9 +18,11 @@ import dayjs from 'dayjs';
 
 import { ChatContext } from '/src/contexts/chat';
 import useAuth from '/src/hooks/useAuth';
+import { AvatarWithActiveStatus } from '/src/components/core/avatar-with-active-status';
 import { Iconify } from '/src/components/iconify/iconify';
 
 import { MemberInfo, MemberItem, MemberName, ScrollableContent } from './custom-component';
+import PinMessage from './pin-message';
 
 const SectionTitle = styled(Typography)(({ theme }) => ({
   fontWeight: 600,
@@ -168,9 +169,9 @@ export const RightSidebar = () => {
           }}
         >
           <Tab label="Info" />
-          <Tab label="Pins" />
-          <Tab label="Files" />
-          <Tab label="Links" />
+          {/* <Tab label="Pins" /> */}
+          {/* <Tab label="Files" /> */}
+          {/* <Tab label="Links" /> */}
         </Tabs>
       </Box>
 
@@ -267,11 +268,13 @@ export const RightSidebar = () => {
                 <List disablePadding>
                   {activeTabInfo?.members?.map((member, index) => (
                     <MemberItem key={index}>
-                      <Avatar
+                      <AvatarWithActiveStatus
                         src={member?.User?.profileImage}
                         alt={member?.User?.firstName}
                         sx={{ width: 36, height: 36 }}
+                        status={member?.User?.chatStatus === 'ONLINE'}
                       />
+
                       <MemberInfo>
                         <MemberName>
                           {member?.User?.firstName} {member?.User?.lastName}
@@ -285,6 +288,7 @@ export const RightSidebar = () => {
             )}
           </>
         )}
+        {/* {tabValue === 1 && <PinMessage />} */}
       </ScrollableContent>
     </Stack>
   );

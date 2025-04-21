@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 
 import { useSocket } from '/src/contexts/socket';
+import useAuth from '/src/hooks/useAuth';
 
 import { DEMO_CONVERSATIONS, DEMO_USERS } from '/src/mock_data';
 import { chatApi } from '/src/utils/api';
@@ -20,6 +21,7 @@ const loggedInUser = {
 export const ChatContext = createContext({});
 
 export const ChatProvider = ({ children }) => {
+  const { userInfo } = useAuth();
   const [userData, setUserData] = useState(DEMO_USERS);
   const [activeConversation, setActiveConversation] = useState(
     DEMO_CONVERSATIONS[`u1-${DEMO_USERS[0].userId}`].messages
@@ -34,7 +36,9 @@ export const ChatProvider = ({ children }) => {
     id: null,
     name: null,
     slug: null,
+    members: [],
   });
+  const [messageContent, setMessageContent] = useState('');
   const [channels, setChannels] = useState([]);
   const [directChannels, setDirectChannels] = useState([]);
   const [activeTab, setActiveTab] = useState(null);
@@ -47,6 +51,7 @@ export const ChatProvider = ({ children }) => {
   const [directThreadMessages, setDirectThreadMessages] = useState([]);
   const [typingUsers, setTypingUsers] = useState(new Set());
   const [notifications, setNotifications] = useState({});
+  const [messageIdToEdit, setMessageIdToEdit] = useState(null);
   const socketContext = useSocket();
 
   const findUser = (id) => {
@@ -61,7 +66,6 @@ export const ChatProvider = ({ children }) => {
   };
 
   const handleActiveThread = (messageId) => {
-    console.log(messageId);
     if (!messageId) {
       setActiveThread(null);
       return;
@@ -95,6 +99,17 @@ export const ChatProvider = ({ children }) => {
 
   const handleAddMessage = () => {
     console.log('add message handler');
+  };
+
+  // Set message in the form for edit
+  const handleEditMessage = (message) => {
+    if (message?.id) {
+      setMessageContent(message?.content);
+      setMessageIdToEdit(message?.id);
+    } else {
+      setMessageContent('');
+      setMessageIdToEdit(null);
+    }
   };
 
   const handleActiveProfile = (userID) => {
@@ -135,9 +150,7 @@ export const ChatProvider = ({ children }) => {
 
   const getWorkspace = async (slug) => {
     try {
-      const workspace = JSON.parse(localStorage.getItem('auth'))?.workspaces.find(
-        (workspace) => workspace.slug === slug
-      );
+      const workspace = userInfo?.workspaces.find((workspace) => workspace.slug === slug);
       if (!workspace || !workspace?.id) throw new Error('Workspace not found');
       const response = await chatApi.get(`/workspaces/${workspace.id}`);
       if (response.data && response.data?.success) {
@@ -148,6 +161,9 @@ export const ChatProvider = ({ children }) => {
           id: data?.id,
           name: data?.name,
           slug: data?.slug,
+          members: data?.WorkspaceMembers?.map((member) => member.User)?.filter(
+            (member) => member?.id !== userInfo?.id
+          ),
         });
         setActiveTab({ type: 'channel', id: data?.Channels[0]?.id });
       }
@@ -230,6 +246,43 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
+  const createChannel = async ({ name, type, members }) => {
+    socketContext?.createChannel({
+      name,
+      type,
+      members,
+      workspaceId: workspaceInfo?.id,
+    });
+  };
+
+  const createChannelMessage = async (message) => {
+    socketContext?.sendChannelMessage({ channelId: activeTab.id, message });
+  };
+
+  const createChannelReaction = async (messageId, emoji) => {
+    socketContext?.reactToChannelMessage({ channelId: activeTab.id, messageId, emoji });
+  };
+
+  const removeChannelReaction = async (messageId, emoji) => {
+    socketContext?.removeChannelReaction({ channelId: activeTab.id, messageId, emoji });
+  };
+
+  const deleteChannelMessage = async (messageId) => {
+    socketContext?.deleteChannelMessage({ channelId: activeTab.id, messageId });
+  };
+
+  const editChannelMessage = async (messageId, content) => {
+    socketContext?.editChannelMessage({ channelId: activeTab.id, messageId, content });
+  };
+
+  const startTyping = () => {
+    socketContext?.startTyping(activeTabInfo?.id);
+  };
+
+  const stopTyping = () => {
+    socketContext?.stopTyping(activeTabInfo?.id);
+  };
+
   const getDirectMessages = async (id) => {
     try {
       const response = await chatApi.get(`/direct-messages?directChannelId=${id}`);
@@ -262,28 +315,28 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
-  const createChannelMessage = async (message) => {
-    socketContext?.sendChannelMessage({ channelId: activeTab.id, message });
-  };
-
-  const createChannelReaction = async (messageId, emoji) => {
-    socketContext?.reactToChannelMessage({ channelId: activeTab.id, messageId, emoji });
-  };
-
-  const removeChannelReaction = async (messageId, emoji) => {
-    socketContext?.removeChannelReaction({ channelId: activeTab.id, messageId, emoji });
-  };
-
   const createDirectMessage = async (message) => {
     socketContext?.sendDirectMessage({ directChannelId: activeTab.id, message });
   };
 
-  const startTyping = () => {
-    socketContext?.startTyping(activeTabInfo?.id);
+  const editDirectMessage = async (messageId, content) => {
+    socketContext?.editDirectMessage({ directChannelId: activeTab.id, messageId, content });
   };
 
-  const stopTyping = () => {
-    socketContext?.stopTyping(activeTabInfo?.id);
+  const deleteDirectMessage = async (messageId) => {
+    socketContext?.deleteDirectMessage({ directChannelId: activeTab.id, messageId });
+  };
+
+  const createDirectChannel = async (receiverId) => {
+    socketContext?.createDirectChannel({ receiverId, workspaceId: workspaceInfo?.id });
+  };
+
+  const createDirectMessageReaction = async (messageId, emoji) => {
+    socketContext?.reactToDirectMessage({ directChannelId: activeTab.id, messageId, emoji });
+  };
+
+  const removeDirectMessageReaction = async (messageId, emoji) => {
+    socketContext?.removeDirectMessageReaction({ directChannelId: activeTab.id, messageId, emoji });
   };
 
   useEffect(() => {
@@ -311,6 +364,11 @@ export const ChatProvider = ({ children }) => {
   useEffect(() => {
     if (socketContext?.socket && activeTab) {
       // Define the event handlers
+
+      const handleCreateChannel = (data) => {
+        setChannels((prev) => [...prev, data]);
+      };
+
       const handleChannelMessageSend = (data) => {
         if (data && data?.channelId === activeTab?.id) {
           setChannelMessages((prev) => [...prev, data]);
@@ -377,7 +435,7 @@ export const ChatProvider = ({ children }) => {
             const arr = [...prev];
             const index = arr.findIndex((message) => message.id === data?.messageId);
             if (index !== -1) {
-              arr[index].Reactions = [...arr[index].Reactions, data];
+              arr[index].Reactions = [...(arr[index]?.Reactions || []), data];
             }
             return arr;
           });
@@ -400,7 +458,97 @@ export const ChatProvider = ({ children }) => {
         }
       };
 
+      const handleDeleteChannelMessage = (data) => {
+        if (data && data?.channelId === activeTab?.id) {
+          setChannelMessages((prev) => {
+            const arr = [...prev];
+            const index = arr.findIndex((message) => message.id === data?.messageId);
+            if (index !== -1) {
+              arr[index]['deletedAt'] = new Date();
+            }
+            return arr;
+          });
+        }
+      };
+
+      const handleEditChannelMessage = (data) => {
+        if (data && data?.channelId === activeTab?.id) {
+          setChannelMessages((prev) => {
+            const arr = [...prev];
+            const index = arr.findIndex((message) => message.id === data?.id);
+            if (index !== -1) {
+              arr[index].content = data?.content;
+              arr[index]['editedAt'] = data?.editedAt;
+            }
+            return arr;
+          });
+        }
+      };
+
+      const handleCreateDirectChannel = (data) => {
+        setDirectChannels((prev) => [...prev, data]);
+      };
+
+      const handleCreateDirectMessageReaction = (data) => {
+        playNotificationSound();
+
+        if (data && data?.directChannelId === activeTab?.id) {
+          setDirectMessages((prev) => {
+            const arr = [...prev];
+            const index = arr.findIndex((message) => message.id === data?.messageId);
+            if (index !== -1) {
+              arr[index].Reactions = [...arr[index].Reactions, data];
+            }
+            return arr;
+          });
+        }
+      };
+
+      const handleDeleteDirectMessageReaction = (data) => {
+        if (data && data?.directChannelId === activeTab?.id) {
+          setDirectMessages((prev) => {
+            const arr = [...prev];
+            const index = arr.findIndex((message) => message.id === data?.messageId);
+            if (index !== -1) {
+              const reactionID = arr[index]['Reactions'].findIndex((reaction) => reaction.id === data?.id);
+              if (reactionID !== -1) {
+                arr[index]['Reactions'].splice(reactionID, 1);
+              }
+            }
+            return arr;
+          });
+        }
+      };
+
+      const handleEditDirectMessage = (data) => {
+        if (data && data?.directChannelId === activeTab?.id) {
+          setDirectMessages((prev) => {
+            const arr = [...prev];
+            const index = arr.findIndex((message) => message.id === data?.id);
+            if (index !== -1) {
+              arr[index].content = data?.content;
+              arr[index]['editedAt'] = data?.editedAt;
+            }
+            return arr;
+          });
+        }
+      };
+
+      const handleDeleteDirectMessage = (data) => {
+        if (data && data?.directChannelId === activeTab?.id) {
+          setDirectMessages((prev) => {
+            const arr = [...prev];
+            const index = arr.findIndex((message) => message.id === data?.messageId);
+            if (index !== -1) {
+              arr[index]['deletedAt'] = new Date();
+            }
+            return arr;
+          });
+        }
+      };
+
       // Add event listeners
+      socketContext.socket.on('create-channel-response', handleCreateChannel);
       socketContext.socket.on('send-channel-message-response', handleChannelMessageSend);
       socketContext.socket.on('receive-channel-message', handleChannelMessageReceive);
       socketContext.socket.on('send-direct-message-response', handleDirectMessageSend);
@@ -409,9 +557,17 @@ export const ChatProvider = ({ children }) => {
       socketContext.socket.on('stop-typing-response', handleStopTyping);
       socketContext.socket.on('create-channel-reaction-response', handleCreateChannelReaction);
       socketContext.socket.on('delete-channel-reaction-response', handleDeleteChannelReaction);
+      socketContext.socket.on('delete-channel-message-response', handleDeleteChannelMessage);
+      socketContext.socket.on('edit-channel-message-response', handleEditChannelMessage);
+      socketContext.socket.on('create-direct-channel-response', handleCreateDirectChannel);
+      socketContext.socket.on('create-direct-channel-reaction-response', handleCreateDirectMessageReaction);
+      socketContext.socket.on('delete-direct-channel-reaction-response', handleDeleteDirectMessageReaction);
+      socketContext.socket.on('edit-direct-message-response', handleEditDirectMessage);
+      socketContext.socket.on('delete-direct-message-response', handleDeleteDirectMessage);
 
       // Cleanup function to remove event listeners
       return () => {
+        socketContext.socket.off('create-channel-response', handleCreateChannel);
         socketContext.socket.off('send-channel-message-response', handleChannelMessageSend);
         socketContext.socket.off('receive-channel-message', handleChannelMessageReceive);
         socketContext.socket.off('send-direct-message-response', handleDirectMessageSend);
@@ -420,6 +576,13 @@ export const ChatProvider = ({ children }) => {
         socketContext.socket.off('stop-typing-response', handleStopTyping);
         socketContext.socket.off('create-channel-reaction-response', handleCreateChannelReaction);
         socketContext.socket.off('delete-channel-reaction-response', handleDeleteChannelReaction);
+        socketContext.socket.off('delete-channel-message-response', handleDeleteChannelMessage);
+        socketContext.socket.off('edit-channel-message-response', handleEditChannelMessage);
+        socketContext.socket.off('create-direct-channel-response', handleCreateDirectChannel);
+        socketContext.socket.off('create-direct-channel-reaction-response', handleCreateDirectMessageReaction);
+        socketContext.socket.off('delete-direct-channel-reaction-response', handleDeleteDirectMessageReaction);
+        socketContext.socket.off('edit-direct-message-response', handleEditDirectMessage);
+        socketContext.socket.off('delete-direct-message-response', handleDeleteDirectMessage);
       };
     }
   }, [socketContext?.socket, activeTab]);
@@ -467,6 +630,18 @@ export const ChatProvider = ({ children }) => {
     directThreadMessages,
     createChannelReaction,
     removeChannelReaction,
+    messageContent,
+    setMessageContent,
+    handleEditMessage,
+    messageIdToEdit,
+    createDirectChannel,
+    createDirectMessageReaction,
+    removeDirectMessageReaction,
+    deleteChannelMessage,
+    editChannelMessage,
+    editDirectMessage,
+    deleteDirectMessage,
+    createChannel,
   };
 
   return <ChatContext.Provider value={contextValue}>{children}</ChatContext.Provider>;

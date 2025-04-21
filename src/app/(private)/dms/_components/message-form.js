@@ -27,14 +27,25 @@ const allUsers = [
 ];
 
 export const MessageForm = ({ sx = {} }) => {
-  const [messageContent, setMessageContent] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [mentionAnchor, setMentionAnchor] = useState(null);
   const [mentionQuery, setMentionQuery] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [cursorPosition, setCursorPosition] = useState(0);
 
-  const { startTyping, stopTyping, createChannelMessage, createDirectMessage, activeTab } = useContext(ChatContext);
+  const {
+    startTyping,
+    stopTyping,
+    createChannelMessage,
+    createDirectMessage,
+    activeTab,
+    messageContent,
+    setMessageContent,
+    messageIdToEdit,
+    handleEditMessage,
+    editChannelMessage,
+    editDirectMessage,
+  } = useContext(ChatContext);
   const { userInfo } = useAuth();
 
   const attachmentRef = useRef(null);
@@ -59,6 +70,15 @@ export const MessageForm = ({ sx = {} }) => {
       createDirectMessage(messageContent);
     }
     setMessageContent('');
+  };
+
+  const handleUpdateMessage = (id) => {
+    if (activeTab?.type === 'channel') {
+      editChannelMessage(id, messageContent);
+    } else {
+      editDirectMessage(id, messageContent);
+    }
+    handleEditMessage(null);
   };
 
   const handleInputChange = (e) => {
@@ -112,7 +132,11 @@ export const MessageForm = ({ sx = {} }) => {
   //message should send when enter key is pressed
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      handleSendMessage();
+      if (messageIdToEdit) {
+        handleUpdateMessage(messageIdToEdit);
+      } else {
+        handleSendMessage();
+      }
     }
   };
 
@@ -198,12 +222,23 @@ export const MessageForm = ({ sx = {} }) => {
           }
           endAdornment={
             <InputAdornment position="end" sx={{ display: 'flex', gap: 0.2 }}>
-              <IconButton size="small" sx={{ borderRadius: '50%' }} onClick={() => attachmentRef?.current?.click()}>
+              {/* <IconButton size="small" sx={{ borderRadius: '50%' }} onClick={() => attachmentRef?.current?.click()}>
                 <Iconify icon="mage:attachment" sx={{ color: 'grey.800' }} />
               </IconButton>
               <IconButton size="small" sx={{ borderRadius: '50%' }}>
                 <Iconify icon="material-symbols-light:add-reaction-outline" sx={{ color: 'grey.800' }} />
-              </IconButton>
+              </IconButton> */}
+              {messageIdToEdit && (
+                <IconButton
+                  size="small"
+                  color="error"
+                  title="Cancel edit"
+                  sx={{ borderRadius: '50%' }}
+                  onClick={() => handleEditMessage(null)}
+                >
+                  <Iconify icon="mingcute:close-line" />
+                </IconButton>
+              )}
               <IconButton
                 size="small"
                 sx={{
@@ -213,10 +248,11 @@ export const MessageForm = ({ sx = {} }) => {
                     '&:hover': { backgroundColor: 'primary.main' },
                   }),
                 }}
-                onClick={handleSendMessage}
+                onClick={() => (messageIdToEdit ? handleUpdateMessage(messageIdToEdit) : handleSendMessage())}
+                disabled={messageContent.length === 0 && selectedFiles.length === 0}
               >
                 <Iconify
-                  icon="mingcute:arrow-up-fill"
+                  icon={messageIdToEdit ? 'charm:tick' : 'mingcute:arrow-up-fill'}
                   sx={{ color: messageContent.length > 0 || selectedFiles.length > 0 ? '#fff' : 'grey.800' }}
                 />
               </IconButton>

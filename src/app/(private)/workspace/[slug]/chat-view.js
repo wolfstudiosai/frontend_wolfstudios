@@ -7,6 +7,7 @@ import { Content } from './components/content';
 import { LeftSidebar } from './components/left-sidebar';
 import { RepliesSection } from './components/replies-section';
 import { RightSidebar } from './components/right-sidebar';
+import { ContentSkeleton } from './components/skeleton';
 
 export const ChatView = ({ slug }) => {
   const { getWorkspace, activeTab, activeChannelThread, activeDirectThread } = useContext(ChatContext);
@@ -20,7 +21,7 @@ export const ChatView = ({ slug }) => {
   return (
     <Stack direction="row" sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, width: '100%' }}>
       <LeftSidebar />
-      {<Content />}
+      {activeTab ? <Content /> : <ContentSkeleton />}
       {activeChannelThread || activeDirectThread ? <RepliesSection /> : <RightSidebar />}
     </Stack>
   );

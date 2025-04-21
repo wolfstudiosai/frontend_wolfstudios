@@ -1,7 +1,5 @@
-import { devNull } from 'os';
-
 import { useContext, useRef, useState } from 'react';
-import { Avatar, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Collapse from '@mui/material/Collapse';
@@ -16,24 +14,12 @@ import Typography from '@mui/material/Typography';
 
 import { ChatContext } from '/src/contexts/chat';
 import useAuth from '/src/hooks/useAuth';
+import { AvatarWithActiveStatus } from '/src/components/core/avatar-with-active-status';
 import { Iconify } from '/src/components/iconify/iconify';
 
 import { CreateChannelDialog } from './create-channel-dialog';
 import { CountChip, MemberInfo, MemberItem, MemberName, MemberRole, ScrollableContent } from './custom-component';
 import { UserListPopover } from './user-list-popover';
-
-// Members data
-const members = [
-  { name: 'Daniel Anderson', role: 'Design', avatar: '/placeholder.svg?height=40&width=40' },
-  {
-    name: 'Andrew Miller',
-    role: 'Management',
-    avatar: '/placeholder.svg?height=40&width=40',
-    title: 'Product owner',
-  },
-  { name: 'William Johnson', role: 'Design', avatar: '/placeholder.svg?height=40&width=40', title: 'UX/UI designer' },
-  { name: 'Emily Davis', role: 'Development', avatar: '/placeholder.svg?height=40&width=40', title: 'Frontend dev' },
-];
 
 // Update the SidebarHeader to be sticky
 const SidebarHeader = styled(Box)(({ theme }) => ({
@@ -138,30 +124,6 @@ export const LeftSidebar = () => {
                   count: 0,
                   tag: 'COMING SOON',
                 },
-                // {
-                //   label: 'Drafts',
-                //   icon: 'mdi:file-document-outline',
-                //   count: 0,
-                //   tag: devNull,
-                // },
-                // {
-                //   label: 'Saved items',
-                //   icon: 'mdi:bookmark-outline',
-                //   count: 0,
-                //   tag: null,
-                // },
-                // {
-                //   label: 'Inbox',
-                //   icon: 'mynaui:envelope',
-                //   count: 8,
-                //   tag: null,
-                // },
-                // {
-                //   label: 'Direct messages',
-                //   icon: 'flowbite:message-dots-outline',
-                //   count: 1,
-                //   tag: null,
-                // },
               ].map((item, index) => (
                 <ListItem key={index} disablePadding>
                   <StyledListItemButton>
@@ -304,7 +266,14 @@ export const LeftSidebar = () => {
                       onClick={() => setActiveTab({ type: 'direct', id: channel?.id })}
                       active={channel?.id === activeTab?.id}
                     >
-                      <Avatar src={user?.profileImage} alt={user?.firstName} sx={{ width: 36, height: 36 }} />
+                      {/* Set actual user status */}
+                      <AvatarWithActiveStatus
+                        src={user?.profileImage}
+                        alt={user?.firstName}
+                        status={true}
+                        sx={{ width: 36, height: 36 }}
+                      />
+
                       <MemberInfo>
                         <MemberName>
                           {user?.firstName} {user?.lastName}
