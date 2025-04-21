@@ -222,12 +222,12 @@ export const MessageForm = ({ sx = {} }) => {
           }
           endAdornment={
             <InputAdornment position="end" sx={{ display: 'flex', gap: 0.2 }}>
-              <IconButton size="small" sx={{ borderRadius: '50%' }} onClick={() => attachmentRef?.current?.click()}>
+              {/* <IconButton size="small" sx={{ borderRadius: '50%' }} onClick={() => attachmentRef?.current?.click()}>
                 <Iconify icon="mage:attachment" sx={{ color: 'grey.800' }} />
               </IconButton>
               <IconButton size="small" sx={{ borderRadius: '50%' }}>
                 <Iconify icon="material-symbols-light:add-reaction-outline" sx={{ color: 'grey.800' }} />
-              </IconButton>
+              </IconButton> */}
               {messageIdToEdit && (
                 <IconButton
                   size="small"
