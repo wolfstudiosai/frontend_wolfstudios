@@ -8,7 +8,7 @@ export const getProductionListAsync = async (queryParams) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
     const res = await api.get(`/portfolios${searchQuery}`);
-    const res1 = await api.get(`/production-HQ${searchQuery}`);
+    // const res1 = await api.get(`/production-HQ${searchQuery}`);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     toast.error(error.message);

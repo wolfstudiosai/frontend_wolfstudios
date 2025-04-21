@@ -10,7 +10,7 @@ export default function AllContentGridView({ data, loading, columns }) {
   const [openRightPanel, setOpenRightPanel] = React.useState(null);
   return (
     <PageLoader loading={loading} error={null}>
-      <Grid container spacing={0.5} columns={{ xs: 24 }}>
+      <Grid container spacing={0.2} columns={{ xs: 24 }}>
         {data?.map((content) => (
           <Grid key={content.id} size={{ xs: 12, md: columns }}>
             <ContentCard content={content} handleOpenRightPanel={setOpenRightPanel} />

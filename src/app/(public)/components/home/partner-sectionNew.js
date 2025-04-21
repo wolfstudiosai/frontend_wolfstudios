@@ -229,7 +229,7 @@ const StaticGridView = ({ partners, isSecondHorizontal }) => {
       <Box
         sx={{
           display: 'inline-flex',
-          gap: { xs: 0.1, md: 0.2 },
+          gap: '0px',
           width: 'auto',
           minWidth: '100%',
           alignItems: 'flex-start',
@@ -245,7 +245,7 @@ const StaticGridView = ({ partners, isSecondHorizontal }) => {
               flexShrink: 0,
             }}
           >
-            <Stack spacing={0.7}>
+            <Stack spacing={0}>
               <Card card={partner} fetchList={partners} />
               {isSecondHorizontal && <Card card={reversedPartners[index]} fetchList={partners} />}
             </Stack>
