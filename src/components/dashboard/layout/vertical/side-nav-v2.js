@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Collapse, Divider, ListItemIcon, ListItemText, MenuItem, MenuList, IconButton } from '@mui/material';
+import { Collapse, Divider, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useColorScheme } from '@mui/material/styles';
@@ -26,6 +26,9 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
     setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
+  {
+    /** renderMenuItems which open submenu on click of arrow only submenu will open on arrow click **/
+  }
   const renderMenuItems = (items, level = 0, workspaces = []) => {
     const newItems = [...items];
     if (workspaces?.length > 0) {
@@ -41,128 +44,11 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
           allowedRoles: ['admin', 'user', 'super_admin'],
         })),
       };
+
+      console.log('workspacesTab', workspacesTab);
       newItems.push(workspacesTab);
     }
-
     return newItems.map((item) => {
-      const isActive = item.href && pathname === item.href;
-      const hasChildren = item.items && item.items.length > 0;
-      const isExpanded = openMenus[item.key] || false;
-
-      const MenuButton = () => (
-        <Box>
-          <MenuItem
-            component={item.href ? Link : 'div'}
-            href={item.href || undefined}
-            onClick={(e) => {
-              if (hasChildren) {
-                e.preventDefault();
-                toggleMenuItem(item.key);
-              }
-            }}
-            sx={{
-              justifyContent: 'flex-start',
-              minWidth: 0,
-            }}
-            selected={isActive}
-          >
-            <ListItemIcon
-              sx={{
-                justifyContent: 'flex-start',
-                ...(!open && {
-                  border: '1px solid var(--mui-palette-divider)',
-                  boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
-                  borderRadius: 1,
-                  p: 0.5,
-                  backgroundColor: 'background.paper',
-                }),
-              }}
-              title={open ? '' : item.title}
-            >
-              <Iconify icon={item.icon} width={open ? 20 : 24} height={open ? 20 : 24} color="text.primary" />
-            </ListItemIcon>
-
-            {open && (
-              <ListItemText
-                primary={item.title}
-                sx={{
-                  color: 'text.primary',
-                  ...(hasChildren && { fontWeight: 800 }),
-                }}
-              />
-            )}
-            {hasChildren && open && (
-              <Iconify
-                icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
-                width={10}
-                height={10}
-                color="text.secondary"
-              />
-            )}
-
-            {!open && item.count && (
-              <Chip
-                label={item.count}
-                size="small"
-                fontSize={10}
-                color="text.primary"
-                sx={{ borderRadius: 1, position: 'absolute', top: 8, right: 8 }}
-              />
-            )}
-          </MenuItem>
-
-          {hasChildren && (
-            <Box
-              className="sub-menu"
-              sx={{
-                display: 'none',
-                position: 'absolute',
-                left: '100%',
-                top: 0,
-                width: pxToRem(200),
-                bgcolor: 'var(--mui-palette-background-paper)',
-                boxShadow: 'var(--mui-shadows-8)',
-                borderRadius: 'var(--mui-shape-borderRadius)',
-                zIndex: 1200,
-                p: 1,
-              }}
-            >
-              <MenuList>
-                {item.items.map((subItem) => (
-                  <MenuItem
-                    key={subItem.key}
-                    component={Link}
-                    href={subItem.href}
-                    sx={{ borderRadius: 'var(--mui-shape-borderRadius)' }}
-                  >
-                    <ListItemIcon>
-                      <Iconify icon={subItem.icon} width={20} height={20} color="text.primary" />
-                    </ListItemIcon>
-                    <ListItemText primary={subItem.title} />
-                  </MenuItem>
-                ))}
-              </MenuList>
-            </Box>
-          )}
-        </Box>
-      );
-
-      return (
-        <React.Fragment key={item.key}>
-          <MenuButton />
-          {hasChildren && (
-            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-              <MenuList sx={{ pl: open ? level + 2 : 0 }}>{renderMenuItems(item.items, level + 1)}</MenuList>
-            </Collapse>
-          )}
-        </React.Fragment>
-      );
-    });
-  };
-
-  {/** renderMenuItems which open submenu on click of arrow only submenu will open on arrow click **/}
-  const renderMenuItems = (items, level = 0) => {
-    return items.map((item) => {
       const isActive = item.href && pathname === item.href;
       const hasChildren = item.items && item.items.length > 0;
       const isExpanded = openMenus[item.key] || false;
@@ -194,12 +80,7 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
                 selected={isActive}
               >
                 <ListItemIcon sx={iconStyles} title={open ? '' : item.title}>
-                  <Iconify
-                    icon={item.icon}
-                    width={open ? 20 : 24}
-                    height={open ? 20 : 24}
-                    color="text.primary"
-                  />
+                  <Iconify icon={item.icon} width={open ? 20 : 24} height={open ? 20 : 24} color="text.primary" />
                 </ListItemIcon>
                 {open && <ListItemText primary={item.title} sx={textStyles} />}
                 {!open && item.count && (
@@ -221,12 +102,7 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
               selected={isActive}
             >
               <ListItemIcon sx={iconStyles} title={open ? '' : item.title}>
-                <Iconify
-                  icon={item.icon}
-                  width={open ? 20 : 24}
-                  height={open ? 20 : 24}
-                  color="text.primary"
-                />
+                <Iconify icon={item.icon} width={open ? 20 : 24} height={open ? 20 : 24} color="text.primary" />
               </ListItemIcon>
               {open && <ListItemText primary={item.title} sx={textStyles} />}
               {!open && item.count && (
@@ -243,11 +119,7 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
 
           {/** Arrow toggle **/}
           {hasChildren && open && (
-            <IconButton
-              size="small"
-              onClick={() => toggleMenuItem(item.key)}
-              sx={{ ml: 'auto' }}
-            >
+            <IconButton size="small" onClick={() => toggleMenuItem(item.key)} sx={{ ml: 'auto' }}>
               <Iconify
                 icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
                 width={10}
@@ -265,7 +137,7 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
           {hasChildren && (
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
               <MenuList sx={{ pl: open ? level + 2 : 0 }}>
-                {renderMenuItems(item.items, level + 1)}
+                {renderMenuItems(item.items, level + 1, workspaces)}
               </MenuList>
             </Collapse>
           )}

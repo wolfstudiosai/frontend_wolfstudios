@@ -3,11 +3,12 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Collapse, Divider, ListItemIcon, ListItemText, MenuItem, MenuList, IconButton } from '@mui/material';
+import { Collapse, Divider, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useColorScheme } from '@mui/material/styles';
 
+import useAuth from '/src/hooks/useAuth';
 import { Iconify } from '/src/components/iconify/iconify';
 
 import { navColorStyles } from '../dashboard/layout/vertical/styles';
@@ -20,10 +21,28 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
   const styles = navColorStyles[colorScheme][color];
   const [openMenus, setOpenMenus] = React.useState({});
 
+  const { userInfo } = useAuth();
+
+  const workspacesTab = {
+    key: 'workspaces',
+    title: 'Workspaces',
+    icon: 'fluent:chat-12-regular',
+    items: userInfo?.workspaces?.map((workspace) => ({
+      key: workspace.slug,
+      title: workspace.name,
+      icon: 'fluent:chat-12-regular',
+      href: `/workspace/${workspace.slug}`,
+      allowedRoles: ['admin', 'user', 'super_admin'],
+    })),
+  };
+
   const toggleMenuItem = (key) => {
     setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
   };
-  {/** renderMenuItemsOld which open submenu on click of whole menu **/}
+
+  {
+    /** renderMenuItemsOld which open submenu on click of whole menu **/
+  }
   const renderMenuItemsOld = (items, level = 0) => {
     return items.map((item) => {
       const isActive = item.href && pathname === item.href;
@@ -141,7 +160,9 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
     });
   };
 
-  {/** renderMenuItems which open submenu on click of arrow only submenu will open on arrow click **/}
+  {
+    /** renderMenuItems which open submenu on click of arrow only submenu will open on arrow click **/
+  }
   const renderMenuItems = (items, level = 0) => {
     return items.map((item) => {
       const isActive = item.href && pathname === item.href;
@@ -175,12 +196,7 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
                 selected={isActive}
               >
                 <ListItemIcon sx={iconStyles} title={open ? '' : item.title}>
-                  <Iconify
-                    icon={item.icon}
-                    width={open ? 20 : 24}
-                    height={open ? 20 : 24}
-                    color="text.primary"
-                  />
+                  <Iconify icon={item.icon} width={open ? 20 : 24} height={open ? 20 : 24} color="text.primary" />
                 </ListItemIcon>
                 {open && <ListItemText primary={item.title} sx={textStyles} />}
                 {!open && item.count && (
@@ -202,12 +218,7 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
               selected={isActive}
             >
               <ListItemIcon sx={iconStyles} title={open ? '' : item.title}>
-                <Iconify
-                  icon={item.icon}
-                  width={open ? 20 : 24}
-                  height={open ? 20 : 24}
-                  color="text.primary"
-                />
+                <Iconify icon={item.icon} width={open ? 20 : 24} height={open ? 20 : 24} color="text.primary" />
               </ListItemIcon>
               {open && <ListItemText primary={item.title} sx={textStyles} />}
               {!open && item.count && (
@@ -224,11 +235,7 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
 
           {/** Arrow toggle **/}
           {hasChildren && open && (
-            <IconButton
-              size="small"
-              onClick={() => toggleMenuItem(item.key)}
-              sx={{ ml: 'auto' }}
-            >
+            <IconButton size="small" onClick={() => toggleMenuItem(item.key)} sx={{ ml: 'auto' }}>
               <Iconify
                 icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
                 width={10}
@@ -245,9 +252,7 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
           <MenuButton />
           {hasChildren && (
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-              <MenuList sx={{ pl: open ? level + 2 : 0 }}>
-                {renderMenuItems(item.items, level + 1)}
-              </MenuList>
+              <MenuList sx={{ pl: open ? level + 2 : 0 }}>{renderMenuItems(item.items, level + 1)}</MenuList>
             </Collapse>
           )}
         </React.Fragment>
@@ -282,7 +287,7 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
         // background: 'transparent',
       }}
     >
-      <MenuList>{renderMenuItems(dashboardFavItemsV2)}</MenuList>
+      <MenuList>{renderMenuItems([...dashboardFavItemsV2, workspacesTab])}</MenuList>
       <Divider />
       <MenuList>{renderMenuItems(privateRoutesV2)}</MenuList>
     </Box>
