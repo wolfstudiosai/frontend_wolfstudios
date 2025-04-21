@@ -25,13 +25,14 @@ export const Content = () => {
     }
   }, [channelMessages, directMessages]);
 
-  let usersTyping = Array.from(typingUsers)?.map((userId) => {
-    const firstName =
-      activeTab?.type === 'channel'
-        ? activeTabInfo?.members?.find(({ User }) => User.id === userId)?.User.firstName
-        : activeTabInfo?.sender?.firstName;
-    return firstName;
-  });
+  let usersTyping =
+    Array.from(typingUsers)?.map((userId) => {
+      const firstName =
+        activeTab?.type === 'channel'
+          ? activeTabInfo?.members?.find(({ User }) => User.id === userId)?.User.firstName
+          : activeTabInfo?.sender?.firstName;
+      return firstName;
+    }) || [];
 
   return (
     <Stack

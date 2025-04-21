@@ -169,9 +169,9 @@ export const RightSidebar = () => {
           }}
         >
           <Tab label="Info" />
-          <Tab label="Pins" />
-          <Tab label="Files" />
-          <Tab label="Links" />
+          {/* <Tab label="Pins" /> */}
+          {/* <Tab label="Files" /> */}
+          {/* <Tab label="Links" /> */}
         </Tabs>
       </Box>
 
@@ -272,6 +272,7 @@ export const RightSidebar = () => {
                         src={member?.User?.profileImage}
                         alt={member?.User?.firstName}
                         sx={{ width: 36, height: 36 }}
+                        status={member?.User?.chatStatus === 'ONLINE'}
                       />
 
                       <MemberInfo>
@@ -287,7 +288,7 @@ export const RightSidebar = () => {
             )}
           </>
         )}
-        {tabValue === 1 && <PinMessage />}
+        {/* {tabValue === 1 && <PinMessage />} */}
       </ScrollableContent>
     </Stack>
   );

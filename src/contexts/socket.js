@@ -37,6 +37,11 @@ export const SocketProvider = ({ children }) => {
     return {
       socket: socketRef.current,
       connected,
+
+      createChannel: ({ name, type, members, workspaceId }) => {
+        socketRef.current.emit('create-channel', { name, type, members, workspaceId });
+      },
+
       joinChannel: (channelId) => {
         socketRef.current.emit('join-channel', channelId);
       },
@@ -52,8 +57,11 @@ export const SocketProvider = ({ children }) => {
       deleteChannelMessage: ({ channelId, messageId }) => {
         socketRef.current.emit('delete-channel-message', { channelId, messageId });
       },
-      sendDirectMessage: ({ directChannelId, message }) => {
-        socketRef.current.emit('send-direct-message', { directChannelId, message });
+      reactToChannelMessage: ({ channelId, messageId, emoji }) => {
+        socketRef.current.emit('create-channel-reaction', { channelId, messageId, emoji });
+      },
+      removeChannelReaction: ({ channelId, messageId, emoji }) => {
+        socketRef.current.emit('delete-channel-reaction', { channelId, messageId, emoji });
       },
 
       startTyping: (channelId) => {
@@ -62,11 +70,27 @@ export const SocketProvider = ({ children }) => {
       stopTyping: (channelId) => {
         socketRef.current.emit('stop-typing', { channelId });
       },
-      reactToChannelMessage: ({ channelId, messageId, emoji }) => {
-        socketRef.current.emit('create-channel-reaction', { channelId, messageId, emoji });
+
+      sendDirectMessage: ({ directChannelId, message }) => {
+        socketRef.current.emit('send-direct-message', { directChannelId, message });
       },
-      removeChannelReaction: ({ channelId, messageId, emoji }) => {
-        socketRef.current.emit('delete-channel-reaction', { channelId, messageId, emoji });
+
+      editDirectMessage: ({ directChannelId, messageId, content }) => {
+        socketRef.current.emit('edit-direct-message', { directChannelId, messageId, content });
+      },
+      deleteDirectMessage: ({ directChannelId, messageId }) => {
+        socketRef.current.emit('delete-direct-message', { directChannelId, messageId });
+      },
+
+      createDirectChannel: ({ receiverId, workspaceId }) => {
+        socketRef.current.emit('create-direct-channel', { receiverId, workspaceId });
+      },
+
+      reactToDirectMessage: ({ directChannelId, messageId, emoji }) => {
+        socketRef.current.emit('create-direct-channel-reaction', { directChannelId, messageId, emoji });
+      },
+      removeDirectMessageReaction: ({ directChannelId, messageId, emoji }) => {
+        socketRef.current.emit('delete-direct-channel-reaction', { directChannelId, messageId, emoji });
       },
     };
   }, [connected]); // recalculate once connected

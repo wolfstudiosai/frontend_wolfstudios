@@ -32,9 +32,11 @@ export const Message = ({ message, sidebar }) => {
     createChannelReaction,
     removeChannelReaction,
     handleEditMessage,
+    createDirectMessageReaction,
+    removeDirectMessageReaction,
+    deleteChannelMessage,
+    deleteDirectMessage,
   } = useContext(ChatContext);
-
-  console.log('message: ', message);
 
   const { userInfo } = useAuth();
 
@@ -44,7 +46,11 @@ export const Message = ({ message, sidebar }) => {
   const confirmDialogRef = useRef(null);
 
   const handleDelete = () => {
-    console.log('delete the message', message?.id);
+    if (activeTab?.type === 'channel') {
+      deleteChannelMessage(message?.id);
+    } else {
+      deleteDirectMessage(message?.id);
+    }
     setOpenConfirmDialog(false);
   };
 
@@ -54,11 +60,19 @@ export const Message = ({ message, sidebar }) => {
 
   const handleReactionSelect = (emoji) => {
     setAnchorEl(null);
-    createChannelReaction(message?.id, emoji);
+    if (activeTab?.type === 'channel') {
+      createChannelReaction(message?.id, emoji);
+    } else {
+      createDirectMessageReaction(message?.id, emoji);
+    }
   };
 
   const handleRemoveReaction = (emoji) => {
-    removeChannelReaction(message?.id, emoji);
+    if (activeTab?.type === 'channel') {
+      removeChannelReaction(message?.id, emoji);
+    } else {
+      removeDirectMessageReaction(message?.id, emoji);
+    }
   };
 
   const handleClickAway = () => {
@@ -67,15 +81,22 @@ export const Message = ({ message, sidebar }) => {
 
   const open = Boolean(anchorEl);
 
-  const emojis = message?.Reactions?.reduce((acc, { emoji, userId }) => {
+  const emojis = message?.Reactions?.reduce((acc, { emoji }) => {
     const existingEmoji = acc.find((item) => item.emoji === emoji);
+    const isYou = message?.Reactions?.find(
+      (reaction) => reaction?.userId === userInfo?.id && reaction?.emoji === emoji
+    )?.id;
+
     if (existingEmoji) {
       existingEmoji.count += 1;
     } else {
-      acc.push({ emoji, count: 1, isYou: userId === userInfo?.id });
+      acc.push({ emoji, count: 1, isYou: isYou ? true : false });
     }
     return acc;
   }, []);
+
+  const isYourMessage =
+    activeTab?.type === 'channel' ? message?.User?.id === userInfo?.id : message?.Sender?.id === userInfo?.id;
 
   return (
     <Stack
@@ -92,6 +113,11 @@ export const Message = ({ message, sidebar }) => {
         sx={{
           ...(sidebar && { width: '28px', height: '28px' }),
         }}
+        status={
+          activeTab?.type === 'channel'
+            ? message?.User?.chatStatus === 'ONLINE'
+            : message?.Sender?.chatStatus === 'ONLINE'
+        }
       />
       <Stack direction="column" gap={0.5}>
         <Stack direction="row" alignItems="center" gap={1}>
@@ -105,10 +131,19 @@ export const Message = ({ message, sidebar }) => {
           </Typography>
         </Stack>
 
-        <Typography variant="body2">{message?.content}</Typography>
+        {message?.deletedAt ? (
+          <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+            This message was deleted
+          </Typography>
+        ) : (
+          <Typography variant="body2">
+            {message?.content}
+            {message?.editedAt && <span style={{ fontSize: '12px', color: 'gray' }}> (edited)</span>}
+          </Typography>
+        )}
 
         {/* File Attachments */}
-        <Stack direction="row" flexWrap="wrap" gap={1} sx={{ my: 1 }}>
+        {/* <Stack direction="row" flexWrap="wrap" gap={1} sx={{ my: 1 }}>
           {[
             {
               url: 'https://cdn.wolfstudios.ai/portfolios/attpPqOYQr5N7dOY8.jpg',
@@ -169,18 +204,22 @@ export const Message = ({ message, sidebar }) => {
               )}
             </Fragment>
           ))}
-        </Stack>
+        </Stack> */}
 
         {/* Reactions */}
         <Stack direction="row" alignItems="center" spacing={0.5}>
           {emojis?.length > 0 &&
-            emojis.map(({ emoji, count, isYou }) => (
+            emojis.map((e, i) => (
               <Chip
-                onClick={() => (isYou ? handleRemoveReaction(emoji) : handleReactionSelect(emoji))}
-                key={emoji}
-                label={`${emoji} ${count > 0 ? count : ''}`}
+                label={`${e?.emoji} ${e?.count > 0 ? e?.count : ''}`}
+                key={i}
                 color="inherit"
                 size="small"
+                sx={{
+                  border: e?.isYou ? '0.5px solid var(--mui-palette-primary-main)' : '0.5px solid transparent',
+                  bgcolor: e?.isYou ? '#e0e0ee' : '#eee',
+                }}
+                onClick={() => (e?.isYou ? handleRemoveReaction(e?.emoji) : handleReactionSelect(e?.emoji))}
               />
             ))}
           <IconButton size="small" aria-label="react" onClick={toggleReactionBar} ref={popperRef}>
@@ -201,32 +240,37 @@ export const Message = ({ message, sidebar }) => {
       </Stack>
 
       {/* Hover actions */}
-      <ButtonGroup
-        className="hover-action"
-        sx={{
-          backgroundColor: 'var(--mui-palette-background-level2)',
-          position: 'absolute',
-          top: 0,
-          right: 10,
-          opacity: 0,
-          transition: 'opacity 0.2s ease-in-out',
-        }}
-      >
-        <IconButton title="Edit" onClick={() => handleEditMessage(message || null)}>
-          <Iconify icon="material-symbols:edit-outline-rounded" />
-        </IconButton>
+      {!message?.deletedAt && (
+        <ButtonGroup
+          className="hover-action"
+          sx={{
+            backgroundColor: 'var(--mui-palette-background-level2)',
+            position: 'absolute',
+            top: 0,
+            right: 10,
+            opacity: 0,
+            transition: 'opacity 0.2s ease-in-out',
+          }}
+        >
+          {isYourMessage && (
+            <IconButton title="Edit" onClick={() => handleEditMessage(message || null)}>
+              <Iconify icon="material-symbols:edit-outline-rounded" />
+            </IconButton>
+          )}
 
-        <IconButton title="Delete" ref={confirmDialogRef} onClick={() => setOpenConfirmDialog(true)}>
-          <Iconify icon="material-symbols:delete-outline-rounded" />
-        </IconButton>
-        <IconButton title="Reply in thread">
-          <Iconify icon="mingcute:message-3-fill" />
-        </IconButton>
-        {/* Replace sidebar with pin logic */}
-        <IconButton title="Pin Message">
-          <Iconify icon={sidebar ? 'ri:unpin-line' : 'mingcute:pin-line'} />
-        </IconButton>
-      </ButtonGroup>
+          {isYourMessage && (
+            <IconButton title="Delete" ref={confirmDialogRef} onClick={() => setOpenConfirmDialog(true)}>
+              <Iconify icon="material-symbols:delete-outline-rounded" />
+            </IconButton>
+          )}
+          {/* <IconButton title="Reply in thread">
+            <Iconify icon="mingcute:message-3-fill" />
+          </IconButton>
+          <IconButton title="Pin Message">
+            <Iconify icon={sidebar ? 'ri:unpin-line' : 'mingcute:pin-line'} />
+          </IconButton> */}
+        </ButtonGroup>
+      )}
 
       {/* Reaction Popper */}
       <Popper open={open} anchorEl={anchorEl} placement="top-start">
