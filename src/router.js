@@ -470,7 +470,7 @@ export const privateRoutesV2 = [
   {
     key: 'portfolio',
     title: 'Portfolio',
-    // href: paths.public.portfolio,  
+    href: paths.public.portfolio,  
     icon: 'fluent:approvals-app-20-regular',
     allowedRoles: ['admin', 'user', 'super_admin'],
   },
