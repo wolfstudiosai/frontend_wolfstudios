@@ -1,12 +1,13 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { Box, Chip, Collapse, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
+
 import { Iconify } from '/src/components/iconify/iconify';
 
 // Custom hook for managing collapse state
 export function useMenuCollapse() {
   const [openMenus, setOpenMenus] = React.useState({});
-  
+
   const toggleMenuItem = (key) => {
     setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
   };
@@ -20,13 +21,14 @@ export function getWorkspacesTab(userInfo) {
     key: 'workspaces',
     title: 'Workspaces',
     icon: 'fluent:chat-12-regular',
-    items: userInfo?.workspaces?.map((workspace) => ({
-      key: workspace.slug,
-      title: workspace.name,
-      icon: 'fluent:chat-12-regular',
-      href: `/workspace/${workspace.slug}`,
-      allowedRoles: ['admin', 'user', 'super_admin'],
-    })) || [],
+    items:
+      userInfo?.workspaces?.map((workspace) => ({
+        key: workspace.slug,
+        title: workspace.name,
+        icon: 'fluent:chat-12-regular',
+        href: `/workspace/${workspace.slug}`,
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      })) || [],
   };
 }
 
@@ -40,6 +42,8 @@ export function renderMenuItems({
   isDesktop = false,
   isOpen = true,
 }) {
+  console.log(isDesktop, 'isdesktop......');
+  console.log(isOpen, 'is open......');
   return items.map((item) => {
     const isActive = item.href && pathname === item.href;
     const hasChildren = item.items && item.items.length > 0;
@@ -52,8 +56,8 @@ export function renderMenuItems({
             border: '1px solid var(--mui-palette-divider)',
             boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
             borderRadius: 1,
-            p: .5,
-            ml:.9, 
+            p: 0.5,
+            ml: 0.9,
             backgroundColor: 'background.paper',
           }),
         }
@@ -76,7 +80,7 @@ export function renderMenuItems({
               minWidth: 0,
               flexGrow: 1,
               py: 1,
-              pl: isDesktop ? 0 : level * 2 + 2,
+              pl: isDesktop && !isOpen ? 0 : level + 1,
             }}
             onClick={() => hasChildren && !isDesktop && toggleMenuItem(item.key)}
           >
@@ -134,11 +138,7 @@ export function renderMenuItems({
         )}
 
         {hasChildren && (isDesktop ? isOpen : true) && (
-          <IconButton
-            size="small"
-            onClick={() => toggleMenuItem(item.key)}
-            sx={{ mr: isDesktop ? 'auto' : 1 }}
-          >
+          <IconButton size="small" onClick={() => toggleMenuItem(item.key)} sx={{ mr: isDesktop ? 'auto' : 1 }}>
             <Iconify
               icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
               width={10}
@@ -155,7 +155,7 @@ export function renderMenuItems({
         <MenuButton />
         {hasChildren && (
           <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-            <MenuList sx={{ pl: isDesktop && isOpen ? level + 2 : 2 }}>
+            <MenuList sx={{ pl: isDesktop && isOpen ? level + 2 : 0 }}>
               {renderMenuItems({
                 items: item.items,
                 level: level + 1,
