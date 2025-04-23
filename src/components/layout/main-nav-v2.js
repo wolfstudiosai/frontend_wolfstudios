@@ -1,31 +1,31 @@
 'use client';
 
+import * as React from 'react';
+import RouterLink from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { Button, Popover } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
-import RouterLink from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import * as React from 'react';
 
+import { paths } from '/src/paths';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
+import { SettingsContext } from '/src/contexts/settings';
+import useAuth from '/src/hooks/useAuth';
 import { Dropdown } from '/src/components/core/dropdown/dropdown';
 import { DropdownPopover } from '/src/components/core/dropdown/dropdown-popover';
 import { DropdownTrigger } from '/src/components/core/dropdown/dropdown-trigger';
 import { Logo } from '/src/components/core/logo';
 import { Iconify } from '/src/components/iconify/iconify';
 import { NavSearchV2 } from '/src/components/navbar/nav-search-v2';
-import { SettingsContext } from '/src/contexts/settings';
-import useAuth from '/src/hooks/useAuth';
-import { isNavItemActive } from '/src/lib/is-nav-item-active';
-import { paths } from '/src/paths';
 
 import { ChatSidePanel } from '../dashboard/layout/_components/chat-side-panel';
 import { NotificationPopover } from '../dashboard/layout/_components/notificaiton-popover';
 import { SettingsGear } from '../dashboard/layout/_components/settings-gear';
 import { UserInfoPopover } from '../dashboard/layout/_components/user-info-popover';
-import { MobileSideNav } from "./mobile-side-nav";
+import { MobileSideNav } from './mobile-side-nav';
 import { LoginForm } from '/src/app/auth/_components/LoginForm';
 import { publicRoutes } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
@@ -118,7 +118,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
               alignItems: 'center',
             }}
           >
-            {/* Left Section: Logo and Menu */}
+            {/* Menu icon */}
             <Box
               component="nav"
               sx={{
@@ -438,4 +438,3 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
 
   return element;
 }
-
