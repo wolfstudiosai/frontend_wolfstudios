@@ -11,12 +11,14 @@ export const ScrollableContent = styled(Box)(({ theme }) => ({
 }));
 
 export const CountChip = styled(Chip)(({ theme }) => ({
-  height: 18,
-  fontSize: 11,
+  height: 26,
+  fontSize: 14,
   backgroundColor: '#e9e9e9',
   color: '#666',
-  minWidth: 18,
+  minWidth: 26,
   marginLeft: 'auto',
+  borderRadius: '50%',
+  fontWeight: 600,
 }));
 
 export const MemberItem = styled(ListItem)(({ theme, active }) => ({
@@ -24,6 +26,7 @@ export const MemberItem = styled(ListItem)(({ theme, active }) => ({
   alignItems: 'center',
   cursor: 'pointer',
   paddingLeft: theme.spacing(1),
+  paddingRight: theme.spacing(1),
   backgroundColor: active ? '#eee' : 'transparent',
   borderRadius: active ? 10 : 0,
   '&:hover': {

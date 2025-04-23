@@ -13,10 +13,12 @@ import {
   Popper,
   Stack,
 } from '@mui/material';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 import { ChatContext } from '/src/contexts/chat';
 import useAuth from '/src/hooks/useAuth';
 import { Iconify } from '/src/components/iconify/iconify';
+import EmojiPicker from '/src/components/widgets/emoji-picker';
 
 import { MemberInfo, MemberName } from '../../workspace/[slug]/components/custom-component';
 
@@ -32,6 +34,8 @@ export const MessageForm = ({ sx = {} }) => {
   const [mentionQuery, setMentionQuery] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [cursorPosition, setCursorPosition] = useState(0);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [emojiAnchorEl, setEmojiAnchorEl] = useState(null);
 
   const {
     startTyping,
@@ -87,7 +91,6 @@ export const MessageForm = ({ sx = {} }) => {
     const cursor = e.target.selectionStart;
     setCursorPosition(cursor);
 
-    // Find the last "@" before cursor
     const textUpToCursor = value.slice(0, cursor);
     const atIndex = textUpToCursor.lastIndexOf('@');
 
@@ -113,7 +116,7 @@ export const MessageForm = ({ sx = {} }) => {
     const atIndex = beforeCursor.lastIndexOf('@');
 
     const mentionText = `@${user.name}`;
-    const newCursorPos = atIndex + mentionText.length + 1; // +1 for space
+    const newCursorPos = atIndex + mentionText.length + 1;
 
     const newText = beforeCursor.slice(0, atIndex) + mentionText + ' ' + afterCursor;
     setMessageContent(newText);
@@ -121,7 +124,6 @@ export const MessageForm = ({ sx = {} }) => {
     setMentionQuery('');
     setFilteredUsers([]);
 
-    // Wait for state update, then place cursor
     requestAnimationFrame(() => {
       inputRef.current.focus();
       inputRef.current.setSelectionRange(newCursorPos, newCursorPos);
@@ -129,7 +131,6 @@ export const MessageForm = ({ sx = {} }) => {
     });
   };
 
-  //message should send when enter key is pressed
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       if (messageIdToEdit) {
@@ -140,21 +141,17 @@ export const MessageForm = ({ sx = {} }) => {
     }
   };
 
-  //should have debounce of 1 second
   useEffect(() => {
     let timeoutId;
-    const TYPING_DELAY = 500; // One second delay before showing typing indicator
+    const TYPING_DELAY = 500;
 
     if (messageContent.length === 1) {
       startTyping();
     }
 
     if (messageContent.length > 0) {
-      // Set timeout for start typing
       timeoutId = setTimeout(() => {
         startTyping();
-
-        // Set another timeout to stop typing after 1 second of no changes
         timeoutId = setTimeout(() => {
           stopTyping();
         }, 1000);
@@ -163,17 +160,15 @@ export const MessageForm = ({ sx = {} }) => {
       stopTyping();
     }
 
-    // Cleanup timeout on unmount or when messageContent changes
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
     };
-  }, [messageContent]); // Keep dependencies minimal
+  }, [messageContent]);
 
   return (
     <Stack sx={{ ...sx }}>
-      {/* -- FILE PREVIEW (Same as before) -- */}
       {selectedFiles.length > 0 && (
         <>
           <Stack direction="row" gap={0.6} sx={{ flexWrap: 'wrap', p: 1 }}>
@@ -205,7 +200,6 @@ export const MessageForm = ({ sx = {} }) => {
         </>
       )}
 
-      {/* -- INPUT FIELD -- */}
       <FormControl variant="standard" sx={{ width: '100%' }}>
         <Input
           fullWidth
@@ -222,12 +216,17 @@ export const MessageForm = ({ sx = {} }) => {
           }
           endAdornment={
             <InputAdornment position="end" sx={{ display: 'flex', gap: 0.2 }}>
-              {/* <IconButton size="small" sx={{ borderRadius: '50%' }} onClick={() => attachmentRef?.current?.click()}>
-                <Iconify icon="mage:attachment" sx={{ color: 'grey.800' }} />
-              </IconButton>
-              <IconButton size="small" sx={{ borderRadius: '50%' }}>
+              <IconButton
+                size="small"
+                sx={{ borderRadius: '50%' }}
+                aria-label="add reaction"
+                onClick={(e) => {
+                  setEmojiAnchorEl(e.currentTarget);
+                  setShowEmojiPicker((prev) => !prev);
+                }}
+              >
                 <Iconify icon="material-symbols-light:add-reaction-outline" sx={{ color: 'grey.800' }} />
-              </IconButton> */}
+              </IconButton>
               {messageIdToEdit && (
                 <IconButton
                   size="small"
@@ -271,7 +270,6 @@ export const MessageForm = ({ sx = {} }) => {
         multiple
       />
 
-      {/* -- MENTION DROPDOWN -- */}
       <Popper
         open={Boolean(mentionAnchor && filteredUsers.length)}
         anchorEl={mentionAnchor}
@@ -286,12 +284,31 @@ export const MessageForm = ({ sx = {} }) => {
                 <MemberInfo>
                   <MemberName>{user.name}</MemberName>
                 </MemberInfo>
-                {/* <ListItemText primary={`@${user.name}`} /> */}
               </ListItem>
             ))}
           </List>
         </Paper>
       </Popper>
+
+      <EmojiPicker
+        open={showEmojiPicker}
+        anchorEl={emojiAnchorEl}
+        onClose={() => setShowEmojiPicker(false)}
+        onSelectEmoji={(emojiChar) => {
+          const before = messageContent.slice(0, cursorPosition);
+          const after = messageContent.slice(cursorPosition);
+          const updated = before + emojiChar + after;
+
+          setMessageContent(updated);
+
+          requestAnimationFrame(() => {
+            inputRef.current?.focus();
+            const newPos = cursorPosition + emojiChar.length;
+            inputRef.current?.setSelectionRange(newPos, newPos);
+            setCursorPosition(newPos);
+          });
+        }}
+      />
     </Stack>
   );
 };
