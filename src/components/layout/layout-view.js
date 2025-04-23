@@ -9,7 +9,7 @@ import useAuth from '/src/hooks/useAuth';
 import { ThinerFooter } from '/src/components/navbar/thinner-footer';
 
 import { MainNavV2 } from './main-nav-v2';
-import { SideNavV2 } from './side-nav-v2';
+import { DesktopSideNav, SideNavV2 } from './desktop-side-nav';
 import { FeatureCards } from '/src/app/(public)/top-cards';
 import { pxToRem } from '/src/utils/helper';
 
@@ -44,7 +44,6 @@ export function LayoutView({ children }) {
             '--SideNav-zIndex': 1100,
             '--MobileNav-width': '320px',
             '--MobileNav-zIndex': 1100,
-            // transition: '--SideNav-width 0.3s ease',
           },
         }}
       />
@@ -82,13 +81,11 @@ export function LayoutView({ children }) {
           }}
         >
           {isLogin && (
-            <SideNavV2 color={settings.navColor} open={openSidebar} isFeaturedCardVisible={isFeaturedCardVisible} />
+            <DesktopSideNav color={settings.navColor} open={openSidebar} isFeaturedCardVisible={isFeaturedCardVisible} />
           )}
           <Box
             component="main"
             sx={{
-              // '--Content-margin': '1.5rem auto',
-              // '--Content-maxWidth': 'var(--maxWidth-xl)',
               '--Content-paddingY': { xs: pxToRem(2), lg: pxToRem(4) },
               '--Content-paddingX': { xs: pxToRem(4), md: pxToRem(6), lg: pxToRem(8), xl: pxToRem(12) },
               '--Content-padding': 'var(--Content-paddingY) 0',

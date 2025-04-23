@@ -1,0 +1,174 @@
+import * as React from 'react';
+import Link from 'next/link';
+import { Box, Chip, Collapse, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
+
+import { Iconify } from '/src/components/iconify/iconify';
+
+// Custom hook for managing collapse state
+export function useMenuCollapse() {
+  const [openMenus, setOpenMenus] = React.useState({});
+
+  const toggleMenuItem = (key) => {
+    setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  return { openMenus, toggleMenuItem };
+}
+
+// Utility to generate workspaces tab
+export function getWorkspacesTab(userInfo) {
+  return {
+    key: 'workspaces',
+    title: 'Workspaces',
+    icon: 'fluent:chat-12-regular',
+    items:
+      userInfo?.workspaces?.map((workspace) => ({
+        key: workspace.slug,
+        title: workspace.name,
+        icon: 'fluent:chat-12-regular',
+        href: `/workspace/${workspace.slug}`,
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      })) || [],
+  };
+}
+
+// Shared renderMenuItems function
+export function renderMenuItems({
+  items,
+  level = 0,
+  pathname,
+  openMenus,
+  toggleMenuItem,
+  isDesktop = false,
+  isOpen = true,
+}) {
+  console.log(isDesktop, 'isdesktop......');
+  console.log(isOpen, 'is open......');
+  return items.map((item) => {
+    const isActive = item.href && pathname === item.href;
+    const hasChildren = item.items && item.items.length > 0;
+    const isExpanded = openMenus[item.key] || false;
+
+    const iconStyles = isDesktop
+      ? {
+          justifyContent: 'flex-start',
+          ...(!isOpen && {
+            border: '1px solid var(--mui-palette-divider)',
+            boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+            borderRadius: 1,
+            p: 0.5,
+            ml: 0.9,
+            backgroundColor: 'background.paper',
+          }),
+        }
+      : { minWidth: 40 };
+
+    const textStyles = {
+      color: 'text.primary',
+      ...(hasChildren && { fontWeight: isDesktop ? 800 : 700 }),
+    };
+
+    const MenuButton = () => (
+      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', position: 'relative' }}>
+        {item.href ? (
+          <MenuItem
+            component={Link}
+            href={item.href}
+            selected={isActive}
+            sx={{
+              justifyContent: 'flex-start',
+              minWidth: 0,
+              flexGrow: 1,
+              py: 1,
+              pl: isDesktop && !isOpen ? 0 : level + 1,
+            }}
+            onClick={() => hasChildren && !isDesktop && toggleMenuItem(item.key)}
+          >
+            <ListItemIcon sx={iconStyles} title={isDesktop && !isOpen ? item.title : ''}>
+              <Iconify
+                icon={item.icon}
+                width={isDesktop && !isOpen ? 24 : 20}
+                height={isDesktop && !isOpen ? 24 : 20}
+                color="text.primary"
+              />
+            </ListItemIcon>
+            {(isDesktop ? isOpen : true) && <ListItemText primary={item.title} sx={textStyles} />}
+            {isDesktop && !isOpen && item.count && (
+              <Chip
+                label={item.count}
+                size="small"
+                fontSize={10}
+                color="text.primary"
+                sx={{ borderRadius: 1, position: 'absolute', top: 8, right: 8 }}
+              />
+            )}
+          </MenuItem>
+        ) : (
+          <MenuItem
+            component="div"
+            onClick={() => hasChildren && toggleMenuItem(item.key)}
+            sx={{
+              justifyContent: 'flex-start',
+              minWidth: 0,
+              flexGrow: 1,
+              py: 1,
+              pl: isDesktop ? 0 : level * 2 + 2,
+            }}
+            selected={isActive}
+          >
+            <ListItemIcon sx={iconStyles} title={isDesktop && !isOpen ? item.title : ''}>
+              <Iconify
+                icon={item.icon}
+                width={isDesktop && !isOpen ? 24 : 20}
+                height={isDesktop && !isOpen ? 24 : 20}
+                color="text.primary"
+              />
+            </ListItemIcon>
+            {(isDesktop ? isOpen : true) && <ListItemText primary={item.title} sx={textStyles} />}
+            {isDesktop && !isOpen && item.count && (
+              <Chip
+                label={item.count}
+                size="small"
+                fontSize={10}
+                color="text.primary"
+                sx={{ borderRadius: 1, position: 'absolute', top: 8, right: 8 }}
+              />
+            )}
+          </MenuItem>
+        )}
+
+        {hasChildren && (isDesktop ? isOpen : true) && (
+          <IconButton size="small" onClick={() => toggleMenuItem(item.key)} sx={{ mr: isDesktop ? 'auto' : 1 }}>
+            <Iconify
+              icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
+              width={10}
+              height={10}
+              color="text.secondary"
+            />
+          </IconButton>
+        )}
+      </Box>
+    );
+
+    return (
+      <React.Fragment key={item.key}>
+        <MenuButton />
+        {hasChildren && (
+          <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+            <MenuList sx={{ pl: isDesktop && isOpen ? level + 2 : 0 }}>
+              {renderMenuItems({
+                items: item.items,
+                level: level + 1,
+                pathname,
+                openMenus,
+                toggleMenuItem,
+                isDesktop,
+                isOpen,
+              })}
+            </MenuList>
+          </Collapse>
+        )}
+      </React.Fragment>
+    );
+  });
+}

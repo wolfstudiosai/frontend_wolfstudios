@@ -1,40 +1,39 @@
 'use client';
 
-import { Button, Drawer, Popover, useMediaQuery, useTheme } from '@mui/material';
+import * as React from 'react';
+import RouterLink from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { Button, Popover } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
-import RouterLink from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import * as React from 'react';
-import { LoginForm } from '/src/app/auth/_components/LoginForm';
+
+import { paths } from '/src/paths';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
+import { SettingsContext } from '/src/contexts/settings';
+import useAuth from '/src/hooks/useAuth';
 import { Dropdown } from '/src/components/core/dropdown/dropdown';
 import { DropdownPopover } from '/src/components/core/dropdown/dropdown-popover';
 import { DropdownTrigger } from '/src/components/core/dropdown/dropdown-trigger';
 import { Logo } from '/src/components/core/logo';
 import { Iconify } from '/src/components/iconify/iconify';
-import { MobileNav } from '/src/components/navbar/mobile-nav';
 import { NavSearchV2 } from '/src/components/navbar/nav-search-v2';
-import { SettingsContext } from '/src/contexts/settings';
-import { isNavItemActive } from '/src/lib/is-nav-item-active';
-import { publicRoutes } from '/src/router';
-import { pxToRem } from '/src/utils/helper';
 
-import useAuth from '/src/hooks/useAuth';
-import { paths } from '/src/paths';
-
-import CloseIcon from '@mui/icons-material/Close';
-import MenuIcon from '@mui/icons-material/Menu';
 import { ChatSidePanel } from '../dashboard/layout/_components/chat-side-panel';
 import { NotificationPopover } from '../dashboard/layout/_components/notificaiton-popover';
 import { SettingsGear } from '../dashboard/layout/_components/settings-gear';
 import { UserInfoPopover } from '../dashboard/layout/_components/user-info-popover';
+import { MobileSideNav } from './mobile-side-nav';
+import { LoginForm } from '/src/app/auth/_components/LoginForm';
+import { publicRoutes } from '/src/router';
+import { pxToRem } from '/src/utils/helper';
 
 export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
-  const { customSettings: { setOpenSubNav } } = React.useContext(SettingsContext);
+  const {
+    customSettings: { setOpenSubNav },
+  } = React.useContext(SettingsContext);
   const [openNav, setOpenNav] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [routes, setRoutes] = React.useState(publicRoutes);
@@ -64,7 +63,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
     handleCloseAuth();
   };
 
-  //mobile nav 
+  //mobile nav
   const toggleMobileNav = () => {
     setMobileNavOpen(!mobileNavOpen);
   };
@@ -78,26 +77,22 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   };
 
   React.useEffect(() => {
-
     const updatedRoutes = publicRoutes.map((group) => ({
       ...group,
-      items: group.items.filter(
-        (item) =>
-          (isLogin && item.key !== "portfolio") ||
-          (!isLogin && item.key !== "content")
-      ).map((item) => {
-        const auth = localStorage.getItem('auth');
-        if (auth) {
-          const data = JSON.parse(auth);
-          setIsAdmin(data.role === 'ADMIN' || data.role === 'SUPER_ADMIN');
-        }        
-        const requiresAdmin = ['campaign', 'production', 'content'].includes(item.key);
-        const disabled = requiresAdmin ? !isAdmin || !isLogin : false;
-        return { ...item, disabled };
-      }),
+      items: group.items
+        .filter((item) => (isLogin && item.key !== 'portfolio') || (!isLogin && item.key !== 'content'))
+        .map((item) => {
+          const auth = localStorage.getItem('auth');
+          if (auth) {
+            const data = JSON.parse(auth);
+            setIsAdmin(data.role === 'ADMIN' || data.role === 'SUPER_ADMIN');
+          }
+          const requiresAdmin = ['campaign', 'production', 'content'].includes(item.key);
+          const disabled = requiresAdmin ? !isAdmin || !isLogin : false;
+          return { ...item, disabled };
+        }),
     }));
     setRoutes(updatedRoutes);
-
   }, [isLogin, isAdmin]);
 
   return (
@@ -110,7 +105,6 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
           position: 'sticky',
           top: 0,
           zIndex: 'var(--MainNav-zIndex)',
-          // borderBottom: '1px solid var(--mui-palette-divider)',
           backdropFilter: 'blur(10px)',
         }}
       >
@@ -121,10 +115,10 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
-            {/* Left Section: Logo and Menu */}
+            {/* Menu icon */}
             <Box
               component="nav"
               sx={{
@@ -135,16 +129,50 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
             >
               {isLogin && (
                 <Stack direction="row" sx={{ alignItems: 'center' }}>
-                  <IconButton onClick={onToggle}>
-                    <Iconify icon="material-symbols:menu-rounded" color={'var(--mui-palette-neutral-400)'} />
-                  </IconButton>
-
+                  {/* Mobile */}
                   <Box
                     component="button"
-                    onClick={() => onFeatureCardVisible((prev) => {
-                      setOpenSubNav(!prev)
-                      return !prev
-                    })}
+                    onClick={toggleMobileNav}
+                    sx={{
+                      display: {
+                        xs: 'inline-flex',
+                        lg: 'none',
+                        border: 'none',
+                        background: 'transparent',
+                        cursor: 'pointer',
+                      },
+                    }}
+                  >
+                    <Iconify icon="material-symbols:menu-rounded" />
+                  </Box>
+
+                  {/* Desktop */}
+                  <Box
+                    component="button"
+                    color="inherit"
+                    aria-label="open mobile menu"
+                    onClick={onToggle}
+                    sx={{
+                      display: {
+                        xs: 'none',
+                        lg: 'inline-flex',
+                        border: 'none',
+                        background: 'transparent',
+                        cursor: 'pointer',
+                      },
+                    }}
+                  >
+                    <Iconify icon="material-symbols:menu-rounded" />
+                  </Box>
+                  {/* feature card button */}
+                  <Box
+                    component="button"
+                    onClick={() =>
+                      onFeatureCardVisible((prev) => {
+                        setOpenSubNav(!prev);
+                        return !prev;
+                      })
+                    }
                     sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
                   >
                     <Iconify
@@ -155,10 +183,17 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                   </Box>
                 </Stack>
               )}
+              {/* logo */}
               <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
                 <Logo height={40} width={120} />
               </Box>
-              <Stack component="ul" direction="row" spacing={1} sx={{ display: { xs: 'none', md: 'flex' }, listStyle: 'none', m: 0, p: 0 }}>
+              {/* nav items */}
+              <Stack
+                component="ul"
+                direction="row"
+                spacing={1}
+                sx={{ display: { xs: 'none', md: 'flex' }, listStyle: 'none', m: 0, p: 0 }}
+              >
                 {routes.map((section) =>
                   section.items.map((item, index) => (
                     <NavItem
@@ -185,44 +220,34 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                 gap: 2,
               }}
             >
+              {/* Search */}
               <Box
                 sx={{
                   flex: 1,
                   justifyContent: 'flex-end',
                   minWidth: pxToRem(150),
-                  display: { xs: 'none', md: 'flex' }
+                  display: { xs: 'none', md: 'flex' },
                 }}
               >
                 <NavSearchV2 />
               </Box>
-
-              {/* Mobile Nav Menu Button */}
-              <IconButton
-                color="inherit"
-                aria-label="open mobile menu"
-                edge="end"
-                onClick={toggleMobileNav}
-                sx={{ display: { md: 'none' }, color: 'var(--mui-palette-neutral-400)' }}
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 2,
+                  alignItems: 'center',
+                  '@media (max-width: 376px)': {
+                    display: 'none',
+                  },
+                }}
               >
-                {mobileNavOpen ? <CloseIcon /> : <MenuIcon />}
-              </IconButton>
-              <Box sx={{
-                display: 'flex',
-                gap: 2,
-                alignItems: 'center',
-                '@media (max-width: 376px)': {
-                  display: 'none'
-                }
-              }}>
+                {/* Settings */}
                 <SettingsGear />
-                {isLogin &&
-                  <ChatSidePanel
-                    open={chatOpen}
-                    onClose={() => setChatOpen(false)}
-                    onToggle={handleChatToggle}
-                  />
-                }
-                {/* Notifications and User Actions */}
+                {/* Chat sidebar */}
+                {isLogin && (
+                  <ChatSidePanel open={chatOpen} onClose={() => setChatOpen(false)} onToggle={handleChatToggle} />
+                )}
+                {/* Notifications */}
                 {isLogin ? (
                   <React.Fragment>
                     <NotificationPopover />
@@ -238,28 +263,20 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                   </Button>
                 )}
               </Box>
-              {isLogin && (
-              <UserInfoPopover />
-              )}
+              {/* user popover */}
+              {isLogin && <UserInfoPopover />}
             </Stack>
           </Stack>
         </Container>
       </Box>
       {/* Mobile Navigation */}
-      <MobileNavV2
+      <MobileSideNav
         open={mobileNavOpen}
         onClose={toggleMobileNav}
         routes={routes}
         isLogin={isLogin}
         pathname={pathname}
         handleOpenAuth={handleOpenAuth}
-      />
-
-      <MobileNav
-        onClose={() => {
-          setOpenNav(false);
-        }}
-        open={openNav}
       />
       <Popover
         anchorEl={anchorEl}
@@ -304,28 +321,31 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
   const hasPopover = Boolean(item.items);
 
   const element = (
-    <Box component="li" sx={{ userSelect: 'none', ...(active && { borderBottom: '2px solid var(--mui-palette-primary-main)' }) }}>
+    <Box
+      component="li"
+      sx={{ userSelect: 'none', ...(active && { borderBottom: '2px solid var(--mui-palette-primary-main)' }) }}
+    >
       <Box
         {...(hasPopover
           ? {
-            onClick: (event) => {
-              if (disabled) {
-                event.preventDefault();
-                return;
-              }
-            },
-            role: 'button',
-          }
+              onClick: (event) => {
+                if (disabled) {
+                  event.preventDefault();
+                  return;
+                }
+              },
+              role: 'button',
+            }
           : {
-            ...(href && !disabled
-              ? {
-                component: external ? 'a' : RouterLink,
-                href,
-                target: external ? '_blank' : undefined,
-                rel: external ? 'noreferrer' : undefined,
-              }
-              : { role: 'button' }),
-          })}
+              ...(href && !disabled
+                ? {
+                    component: external ? 'a' : RouterLink,
+                    href,
+                    target: external ? '_blank' : undefined,
+                    rel: external ? 'noreferrer' : undefined,
+                  }
+                : { role: 'button' }),
+            })}
         sx={{
           alignItems: 'center',
           borderRadius: 1,
@@ -418,58 +438,3 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
 
   return element;
 }
-
-// Mobile Navigation Component
-const MobileNavV2 = ({ open, onClose, routes, isLogin, pathname, handleOpenAuth }) => {
-  const theme = useTheme();
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
-
-  return (
-    <Drawer
-      variant="temporary"
-      anchor="right"
-      open={open}
-      onClose={onClose}
-      ModalProps={{ keepMounted: true }}
-      sx={{
-        display: { xs: 'block', md: 'none' },
-        '& .MuiDrawer-paper': {
-          width: 280,
-          boxSizing: 'border-box',
-          p: 2,
-          bgcolor: 'var(--mui-palette-background-default)',
-          borderLeft: '1px solid var(--mui-palette-divider)'
-        },
-      }}
-    >
-      <Stack gap={2}>
-        {/* Navigation Items */}
-        {routes.map((section) =>
-          section.items.map((item, index) => (
-            <NavItem
-              key={index}
-              href={item.href}
-              pathname={pathname}
-              item={item}
-              title={item.title}
-              icon={item.icon}
-              mobile
-            />
-          ))
-        )}
-
-        {/* Sign In Option */}
-        {!isLogin && (
-          <Button
-            variant="contained"
-            fullWidth
-            sx={{ backgroundColor: 'var(--mui-palette-warning-700)' }}
-            onClick={handleOpenAuth}
-          >
-            Sign in
-          </Button>
-        )}
-      </Stack>
-    </Drawer>
-  );
-};
