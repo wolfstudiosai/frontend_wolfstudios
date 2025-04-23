@@ -1,7 +1,9 @@
 import { useContext, useEffect } from 'react';
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 
 import { ChatContext } from '/src/contexts/chat';
+import { TypingAnimation } from '/src/components/widgets/typing-animation.js';
+import TypingIndicator from '/src/components/widgets/typing-indicator';
 
 import { MessageForm } from '../../../dms/_components/message-form';
 import { ScrollableContent } from './custom-component';
@@ -45,8 +47,12 @@ export const Content = () => {
         {activeTab?.type === 'channel'
           ? channelMessages?.map((message) => <Message key={message.id} message={message} />)
           : directMessages?.map((message) => <Message key={message.id} message={message} />)}
+        {usersTyping.length > 0 && activeTab?.type === 'channel' && (
+          <TypingIndicator sender={{ name: usersTyping.map((user) => user), profileImage: '' }} />
+        )}
       </ScrollableContent>
-      {usersTyping.length > 0 && <p>{usersTyping.map((user) => `${user}`).join(', ')} is typing ...</p>}
+      {/* when typing in direct message */}
+      <Box sx={{ pl: 7 }}>{usersTyping.length > 0 && activeTab?.type !== 'channel' && <TypingAnimation />}</Box>
       <MessageForm sx={{ p: 2 }} />
     </Stack>
   );
