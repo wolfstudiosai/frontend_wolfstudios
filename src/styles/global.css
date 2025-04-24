@@ -202,7 +202,7 @@ body {
 
 .letter {
   display: inline-block;
-  font-size: 10rem;
+  font-size:10rem;
   font-weight: 100;
   color: #fff;
   font-family: 'Salvalyn, sans-serif';
@@ -215,7 +215,7 @@ body {
 
 .h1 {
   position: absolute;
-  bottom: -357px; /* Initial bottom position */
+  bottom: -357px; 
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
@@ -225,32 +225,88 @@ body {
 }
 
 /* Responsive Styling */
-@media (max-width: 1024px) {
+@media (max-width: 1440px) {
   .letter {
-    font-size: 8rem; /* Smaller font size for medium screens */
+    font-size: 8rem; 
+  }
+
+  .letter:last-child {
+    font-size: 6rem;
   }
 
   .h1 {
-    bottom: -300px; /* Adjust bottom position for medium screens */
+    bottom: -330px;
+  }
+
+  #page1 {
+    height: 180px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .letter {
+    font-size: 5rem;
+  }
+
+  .letter:last-child {
+    font-size: 4.5rem;
+  }
+
+  .h1 {
+    bottom: -270px;
+  }
+
+  #page1 {
+    height: 100px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .letter {
+    font-size: 4rem;
+  }
+
+  .h1 {
+    bottom: -265px;
+  }
+  #page1 {
+    height: 100px;
   }
 }
 
 @media (max-width: 768px) {
   .letter {
-    font-size: 6rem; /* Even smaller font size for tablets */
+    font-size: 3rem;
+  }
+
+  .letter:last-child{
+    font-size: 3rem;
   }
 
   .h1 {
-    bottom: -250px; /* Adjust bottom position for tablet-sized screens */
+    bottom: -220px;
+  }
+
+  #page1 {
+    height: 100px;
   }
 }
 
 @media (max-width: 480px) {
   .letter {
-    font-size: 4rem; /* Further reduce font size for mobile screens */
+    font-size: 2rem;
+  }
+
+  .letter:last-child {
+    font-size: 1.5rem;
   }
 
   .h1 {
-    bottom: -200px; /* Adjust bottom position for mobile screens */
+    bottom: -200px;
+  }
+
+  #page1 {
+    height: 100px;
   }
 }
+

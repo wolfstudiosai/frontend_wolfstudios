@@ -19,7 +19,7 @@ import { DropdownPopover } from '/src/components/core/dropdown/dropdown-popover'
 import { DropdownTrigger } from '/src/components/core/dropdown/dropdown-trigger';
 import { Logo } from '/src/components/core/logo';
 import { Iconify } from '/src/components/iconify/iconify';
-import { NavSearchV2 } from '/src/components/navbar/nav-search-v2';
+import { NavSearch } from '/src/components/navbar/nav-search';
 
 import { ChatSidePanel } from '../dashboard/layout/_components/chat-side-panel';
 import { NotificationPopover } from '../dashboard/layout/_components/notificaiton-popover';
@@ -143,7 +143,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                       },
                     }}
                   >
-                    <Iconify icon="material-symbols:menu-rounded" />
+                    <Iconify icon="material-symbols:menu-rounded" color="text.primary" />
                   </Box>
 
                   {/* Desktop */}
@@ -162,7 +162,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                       },
                     }}
                   >
-                    <Iconify icon="material-symbols:menu-rounded" />
+                    <Iconify icon="material-symbols:menu-rounded" color="text.primary" />
                   </Box>
                   {/* feature card button */}
                   <Box
@@ -226,10 +226,10 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                   flex: 1,
                   justifyContent: 'flex-end',
                   minWidth: pxToRem(150),
-                  display: { xs: 'none', md: 'flex' },
+                  display: { xs: 'none', lg: 'inline-flex' },
                 }}
               >
-                <NavSearchV2 />
+                <NavSearch />
               </Box>
               <Box
                 sx={{

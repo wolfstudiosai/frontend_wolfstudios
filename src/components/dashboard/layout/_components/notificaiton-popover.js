@@ -1,6 +1,4 @@
 import React from 'react';
-import { Iconify } from '/src/components/iconify/iconify';
-import { pxToRem } from '/src/utils/helper';
 import {
   Badge,
   Box,
@@ -14,6 +12,10 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+
+import { Iconify } from '/src/components/iconify/iconify';
+
+import { pxToRem } from '/src/utils/helper';
 
 export const NotificationPopover = () => {
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
@@ -49,7 +51,7 @@ export const NotificationPopover = () => {
         slotProps={{ paper: { sx: { width: '280px' } } }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ p: 2, bgcolor: 'background.default' }}>
           <Typography variant="h6" sx={{ mb: 1 }}>
             Notifications
           </Typography>
@@ -82,7 +84,7 @@ export const NotificationPopover = () => {
           )}
         </Box>
         <Divider />
-        <Box sx={{ p: 1 }}>
+        <Box sx={{ p: 1, bgcolor: 'background.default' }}>
           <MenuItem component="div" onClick={handleMenuClose} sx={{ justifyContent: 'center' }}>
             All notifications
           </MenuItem>

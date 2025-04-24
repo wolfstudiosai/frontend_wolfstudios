@@ -42,8 +42,7 @@ export function renderMenuItems({
   isDesktop = false,
   isOpen = true,
 }) {
-  console.log(isDesktop, 'isdesktop......');
-  console.log(isOpen, 'is open......');
+
   return items.map((item) => {
     const isActive = item.href && pathname === item.href;
     const hasChildren = item.items && item.items.length > 0;

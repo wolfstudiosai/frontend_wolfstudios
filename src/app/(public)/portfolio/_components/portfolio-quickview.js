@@ -71,7 +71,7 @@ export const PortfolioQuickView = ({ data }) => {
                   height: pxToRem(500),
                   width: '100%',
                   objectFit: 'contain',
-                  borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                  // borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
                   border: '1px solid var(--mui-palette-divider)',
                 }}
               />
@@ -83,7 +83,7 @@ export const PortfolioQuickView = ({ data }) => {
                   height: pxToRem(500),
                   width: '100%',
                   objectFit: 'cover',
-                  borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                  // borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
                 }}
               />
             )}
@@ -142,7 +142,7 @@ export const PortfolioQuickView = ({ data }) => {
                     height: pxToRem(300),
                     width: '100%',
                     objectFit: 'contain',
-                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                    // borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
                     border: '1px solid var(--mui-palette-divider)',
                   }}
                 />
@@ -154,7 +154,7 @@ export const PortfolioQuickView = ({ data }) => {
                     height: pxToRem(300),
                     width: '100%',
                     objectFit: 'contain',
-                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                    // borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
                     border: '1px solid var(--mui-palette-divider)',
                   }}
                 />
@@ -184,7 +184,7 @@ export const PortfolioQuickView = ({ data }) => {
                     height: pxToRem(200),
                     width: '100%',
                     objectFit: 'contain',
-                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                    // borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
                     border: '1px solid var(--mui-palette-divider)',
                   }}
                 />
@@ -196,7 +196,7 @@ export const PortfolioQuickView = ({ data }) => {
                     height: '100%',
                     width: pxToRem(200),
                     objectFit: 'contain',
-                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                    // borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
                     border: '1px solid var(--mui-palette-divider)',
                   }}
                 />

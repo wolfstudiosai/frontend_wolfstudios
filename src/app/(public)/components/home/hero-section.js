@@ -14,7 +14,6 @@ export const HeroSection = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Don't apply scroll effects on mobile
       if (isMobile) return;
 
       const scrollPosition = window.scrollY;
@@ -31,7 +30,6 @@ export const HeroSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isMobile]);
 
-  // Update sizes when screen size changes
   useEffect(() => {
     setBoxSize(isMobile ? 100 : 50);
     setBoxHeight(isMobile ? 100 : 60);
@@ -39,7 +37,6 @@ export const HeroSection = () => {
 
   return (
     <>
-      {/* Main Video Section */}
       <Box
         sx={{
           position: 'relative',
@@ -62,7 +59,6 @@ export const HeroSection = () => {
             objectPosition: 'top center',
           }}
         >
-          {/* <source src="/videos/hero_bg.mp4" type="video/mp4" /> */}
           <source src="https://cdn.wolfstudios.ai/homepage/hero_bg_v2.mp4" type="video/mp4" />
         </video>
 
@@ -78,7 +74,7 @@ export const HeroSection = () => {
           sx={{
             position: 'absolute',
             bottom: { xs: '10%', md: '5%' },
-            left: { xs: '5%', md: '2%' },
+            left: { xs: '1%', md: '1%' },
             color: '#fff',
             width: { xs: '90%', md: '90%' },
             maxWidth: '1020px',
@@ -111,30 +107,29 @@ export const HeroSection = () => {
         }}
       >
         {/* Text Content */}
-        <Box
-          sx={{
-            width: { xs: '100%', md: '40%' },
-            minWidth: { xs: '100%', md: '40%' },
-            p: { xs: 3, md: 4 },
-            order: { xs: 2, md: 1 },
-            zIndex: 1,
-          }}
-        >
-          <FadeIn>
-            <Typography variant="h4" fontWeight="bold" sx={{ color: 'text.primary', mb: 2 }}>
+
+        <FadeIn>
+          <Box sx={{p: { xs: .5, md: 2 }}}>
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+              sx={{ color: 'text.primary', mb: { xs: 0, md: 2 } }}
+              textTransform="uppercase"
+              fontSize={{ xs: '1.5rem', sm: '2rem' }}
+            >
               Product Drop
             </Typography>
             <Typography
               fontSize={{ xs: '1rem', md: '1.3rem' }}
               fontWeight={'semibold'}
               sx={{ color: 'text.primary' }}
-              gutterBottom
+              // gutterBottom
             >
               Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
               visuals that captivate audiences, evoke emotion, and leave a lasting impact.
             </Typography>
-          </FadeIn>
-        </Box>
+          </Box>
+        </FadeIn>
 
         {/* Video Container */}
         <Box
@@ -164,7 +159,6 @@ export const HeroSection = () => {
               objectPosition: 'top center',
             }}
           >
-            {/* <source src="https://cdn.wolfstudios.ai/homepage/hero_bg_second_v2.mp4" type="video/mp4" /> */}
             <source src="https://cdn.wolfstudios.ai/homepage/Sexy+Hair+Reel.mp4" type="video/mp4" />
           </video>
         </Box>

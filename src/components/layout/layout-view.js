@@ -6,7 +6,7 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 
 import { useSettings } from '/src/hooks/use-settings';
 import useAuth from '/src/hooks/useAuth';
-import { ThinerFooter } from '/src/components/navbar/thinner-footer';
+import { ThinnerFooter } from '/src/components/navbar/thinner-footer';
 
 import { MainNavV2 } from './main-nav-v2';
 import { DesktopSideNav, SideNavV2 } from './desktop-side-nav';
@@ -77,7 +77,7 @@ export function LayoutView({ children }) {
             display: isFeaturedCardVisible ? 'flex' : 'block',
             flex: '1 1 auto',
             flexDirection: 'column',
-            pl: { lg: isLogin ? (openSidebar ? pxToRem(270) : pxToRem(70)) : pxToRem(0) },
+            pl: { lg: isLogin ? (openSidebar ? pxToRem(260) : pxToRem(60)) : pxToRem(0) },
           }}
         >
           {isLogin && (
@@ -87,7 +87,7 @@ export function LayoutView({ children }) {
             component="main"
             sx={{
               '--Content-paddingY': { xs: pxToRem(2), lg: pxToRem(4) },
-              '--Content-paddingX': { xs: pxToRem(4), md: pxToRem(6), lg: pxToRem(8), xl: pxToRem(12) },
+              '--Content-paddingX': { xs: pxToRem(6), md: pxToRem(8), lg: pxToRem(10), xl: pxToRem(12) },
               '--Content-padding': 'var(--Content-paddingY) 0',
               '--Content-width': '100%',
               display: 'flex',
@@ -95,12 +95,13 @@ export function LayoutView({ children }) {
               flexDirection: 'column',
               minHeight: isFeaturedCardVisible ? 'calc(100vh - 78px)' : 'calc(100vh - 76px)',
               padding: 'var(--Content-paddingY) var(--Content-paddingX)',
+              overflow: 'hidden',
             }}
           >
             {children}
           </Box>
         </Box>
-        <ThinerFooter isFeaturedCardVisible={isFeaturedCardVisible} />
+        <ThinnerFooter isFeaturedCardVisible={isFeaturedCardVisible} />
       </Box>
     </React.Fragment>
   );

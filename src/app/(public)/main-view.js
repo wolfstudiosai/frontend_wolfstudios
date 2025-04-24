@@ -13,17 +13,11 @@ export const MainView = () => {
   return (
     <Box>
       <HeroSection />
-      <PortfolioSection/>
+      <PortfolioSection />
       <ContentSection />
       <PortfolioSectionNew />
       <PartnerSectionNew isSecondHorizontal={true} />
       <FooterAnimation />
-      {/* <OurApproachSection isSecondHorizontal={false} /> */}
-      {/* <PortfolioSection /> */}
-      {/* <JobSection /> */}
-      {/* <CampaignSection /> */}
-      {/* <CampaignSectionOld /> */}
-      {/* <OurApproachSection isSecondHorizontal={true}/> */}
     </Box>
   );
 };

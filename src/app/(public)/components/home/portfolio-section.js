@@ -38,114 +38,81 @@ export const PortfolioSection = () => {
   }, []);
 
   return (
-    <Grid container spacing={2} alignItems="center">
+    <Grid container alignItems="center">
       <Grid item xs={12}>
-        <Stack direction="column" sx={{ px: { xs: 2, md: 4 }, py: 4 }}>
+        <Stack direction="column" >
           <FadeIn>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: { xs: 'column', md: 'row' },
-                alignItems: 'flex-start',
-                gap: { xs: 2, md: 4, lg: 8 },
-              }}
-            >
-              <Stack direction="row" alignItems="center" sx={{ width: '100%' }}>
-                <Stack direction="row">
-                  <Typography
-                    variant="h4"
-                    fontWeight="bold"
-                    sx={{
-                      fontSize: { xs: '1.5rem', sm: '2rem', md: '2.2rem' },
-                      letterSpacing: '0.5px',
-                      textTransform: 'uppercase',
-                      color: 'text.primary',
-                      flexGrow: 1,
-                    }}
-                  >
-                    Portfolios
-                  </Typography>
-                  <Button
-                    variant="text"
-                    onClick={() => router.push('/portfolio')}
-                    endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
-                    sx={{
-                      margin: 0,
-                      padding: 0,
-                      display: { xs: 'none', sm: 'flex' },
-                    }}
-                  ></Button>
-                </Stack>
+            <Box sx={{  py: { xs: 1, md: 2 } }}>
+              <Stack direction="row">
+                <Typography
+                  variant="h4"
+                  fontWeight="bold"
+                  sx={{ color: 'text.primary', mb: { xs: 0, md: 1 } }}
+                  textTransform="uppercase"
+                  fontSize={{ xs: '1.5rem', sm: '2rem', md: '2.2rem' }}
+                >
+                  Portfolios
+                </Typography>
+                <Button
+                  variant="text"
+                  onClick={() => router.push('/portfolio')}
+                  endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
+                  sx={{
+                    margin: 0,
+                    padding: 0,
+                    display: { xs: 'none', sm: 'flex' },
+                  }}
+                ></Button>
               </Stack>
               <Typography
                 fontWeight="semibold"
                 sx={{
                   color: 'text.primary',
                   lineHeight: 1,
-                  fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem', lg: '40px' },
+                  fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' },
                   width: '100%',
                 }}
               >
-                
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-                gap: 4,
-                flexWrap: 'wrap',
-              }}
-            >
-              <Typography
-                fontWeight="semibold"
-                sx={{
-                  color: 'text.primary',
-                  lineHeight: 1,
-                  fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem', lg: '40px' },
-                  width: '100%',
-                  mt: 1,
-                }}
-              >
-                {"By developing from the idea up, we transform concepts into strong creative execution that's driven by both form and function."}
+                {
+                  "By developing from the idea up, we transform concepts into strong creative execution that's driven by both form and function."
+                }
               </Typography>
             </Box>
           </FadeIn>
         </Stack>
       </Grid>
       <Grid item xs={12}>
-        <Stack spacing={2} sx={{ px: 3, pt: 1 }}>
+        <Stack spacing={2} sx={{ px: { xs: 1.5, md: 2 } }}>
           <SliderWrapper
             modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
             breakpoints={{
               0: {
                 slidesPerView: 1,
-                spaceBetween: 16
+                spaceBetween: 16,
               },
               768: {
                 slidesPerView: 2,
-                spaceBetween: 20
+                spaceBetween: 20,
               },
               1024: {
                 slidesPerView: 3,
-                spaceBetween: 24
+                spaceBetween: 24,
               },
               1440: {
                 slidesPerView: 4,
-                spaceBetween: 28
-              }
+                spaceBetween: 28,
+              },
             }}
             sx={{
               '& .swiper-wrapper': {
-                gap: '0px'
+                gap: '0px',
               },
               '& .swiper-slide': {
                 width: 'auto !important',
                 marginRight: '0 !important',
-                height: 'auto'
+                height: 'auto',
               },
-              mx: { xs: -1.5, md: -2 }
+              mx: { xs: -1.5, md: -2 },
             }}
           >
             {portfolios.map((portfolio) => (

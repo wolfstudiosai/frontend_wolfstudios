@@ -23,19 +23,16 @@ import { FadeIn } from '../../../../components/animation/fade-in';
 
 export function ContentSection() {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // 0-600px
-  // const isTablet = useMediaQuery(theme.breakpoints.down("md")) // 0-900px
-  // const isSmallLaptop = useMediaQuery(theme.breakpoints.down("lg")) // 0-1200px
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); 
 
   return (
-    <Stack direction="column" gap={3} sx={{ px: { xs: 2, sm: 3, md: 4 }, py: 4 }}>
+    <Stack direction="column" gap={1}>
       <FadeIn>
         <Box
           sx={{
             display: 'flex',
             flexDirection: { xs: 'column', md: 'row' },
             alignItems: { xs: 'flex-start', md: 'center' },
-            gap: { xs: 2, md: 4 },
             flexWrap: 'wrap',
             display: 'none',
           }}
@@ -65,7 +62,7 @@ export function ContentSection() {
       {/* Main content row - Convert to column on mobile/tablet */}
       <Stack
         direction={{ xs: 'column', lg: 'row' }}
-        gap={2}
+        gap={1}
         sx={{
           '& > *': {
             maxWidth: { md: '100%', lg: 'auto' },
@@ -216,7 +213,7 @@ export function ContentSection() {
               objectFit: 'cover',
               objectPosition: 'center',
               zIndex: 9,
-              borderRadius: { xs: '8px', sm: '8px', md: '8px', lg: '0' },
+              // borderRadius: { xs: '8px', sm: '8px', md: '8px', lg: '0' },
             }}
           />
           <Stack
