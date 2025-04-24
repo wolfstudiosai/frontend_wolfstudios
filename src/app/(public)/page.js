@@ -10,7 +10,6 @@ export default function Page() {
   return (
     <PageContainer>
       <MainView />
-      {/* <PortfolioView /> */}
     </PageContainer>
   );
 }

@@ -87,7 +87,7 @@ export function LayoutView({ children }) {
             component="main"
             sx={{
               '--Content-paddingY': { xs: pxToRem(2), lg: pxToRem(4) },
-              '--Content-paddingX': { xs: pxToRem(4), md: pxToRem(6), lg: pxToRem(8), xl: pxToRem(12) },
+              '--Content-paddingX': { xs: pxToRem(6), md: pxToRem(8), lg: pxToRem(10), xl: pxToRem(12) },
               '--Content-padding': 'var(--Content-paddingY) 0',
               '--Content-width': '100%',
               display: 'flex',
@@ -95,6 +95,7 @@ export function LayoutView({ children }) {
               flexDirection: 'column',
               minHeight: isFeaturedCardVisible ? 'calc(100vh - 78px)' : 'calc(100vh - 76px)',
               padding: 'var(--Content-paddingY) var(--Content-paddingX)',
+              overflow: 'hidden',
             }}
           >
             {children}

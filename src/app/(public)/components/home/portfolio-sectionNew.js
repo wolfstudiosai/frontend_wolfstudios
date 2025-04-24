@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
@@ -35,13 +34,7 @@ export const PortfolioSectionNew = () => {
   }, []);
 
   return (
-    <Box
-      sx={{
-        pt: 1,
-        px: { xs: 2, md: 4 },
-        mb: '10px',
-      }}
-    >
+    <Box>
       <Grid container spacing={2} alignItems="flex-start">
         <Grid
           item
@@ -67,10 +60,9 @@ export const PortfolioSectionNew = () => {
                 variant="text"
                 onClick={() => router.push('/portfolio')}
                 endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
-                sx={{ margin: 0, padding: 0 }}
               ></Button>
             </Stack>
-            <Typography fontSize={18} sx={{ mt: 1, mb: 4 }}>
+            <Typography fontSize={18}>
               Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
               visuals that captivate audiences, evoke emotion, and leave a lasting impact.
             </Typography>
@@ -83,7 +75,7 @@ export const PortfolioSectionNew = () => {
             xs: 12,
           }}
         >
-          <Stack spacing={2} sx={{ px: 3, pt: 1 }}>
+          <Stack spacing={2}>
             <SliderWrapper
               modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
               breakpoints={{
@@ -113,8 +105,6 @@ export const PortfolioSectionNew = () => {
                   marginRight: '0 !important',
                   height: 'auto',
                 },
-                // Add negative margin to compensate for container padding
-                mx: { xs: -1.5, md: -2 },
               }}
             >
               {portfolios.map((portfolio) => (
@@ -244,7 +234,7 @@ const Card = ({ card, fetchList }) => {
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            marginBottom={1.2}
+            // marginBottom={1.2}
             sx={{ width: '100%' }}
           >
             {[card.designation, card.designation].map((text, index) => (
@@ -304,45 +294,5 @@ const Card = ({ card, fetchList }) => {
         onClose={() => setOpenPortfolioRightPanel(false)}
       />
     </>
-  );
-};
-
-const HorizontalScrollCarousel = ({ direction, fetchList }) => {
-  const targetRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: targetRef });
-
-  const totalWidth = useMemo(() => 12 * 350, []);
-
-  const x = useTransform(
-    scrollYProgress,
-    [0, 1],
-    direction === 'left' ? [0, -totalWidth + window.innerWidth] : [-totalWidth + window.innerWidth, 0]
-  );
-
-  return (
-    <Box
-      ref={targetRef}
-      sx={{
-        position: 'relative',
-        height: '450px',
-        overflow: 'hidden',
-      }}
-    >
-      <Box
-        sx={{
-          position: 'sticky',
-          top: 0,
-          display: 'flex',
-          alignItems: 'center',
-          overflow: 'hidden',
-        }}
-      >
-        <motion.div style={{ x, display: 'flex', gap: 2 }}>
-          {fetchList.map((card) => (
-            <Card card={card} key={card.id} fetchList={fetchList} />
-          ))}
-        </motion.div>
-      </Box>
-    </Box>
   );
 };

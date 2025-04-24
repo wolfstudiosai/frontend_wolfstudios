@@ -38,16 +38,15 @@ export const PortfolioSection = () => {
   }, []);
 
   return (
-    <Grid container spacing={2} alignItems="center">
+    <Grid container alignItems="center">
       <Grid item xs={12}>
-        <Stack direction="column" sx={{ px: { xs: 2, md: 4 }, py: 4 }}>
+        <Stack direction="column" sx={{ py: 2 }}>
           <FadeIn>
             <Box
               sx={{
                 display: 'flex',
                 flexDirection: { xs: 'column', md: 'row' },
                 alignItems: 'flex-start',
-                gap: { xs: 2, md: 4, lg: 8 },
               }}
             >
               <Stack direction="row" alignItems="center" sx={{ width: '100%' }}>
@@ -55,7 +54,7 @@ export const PortfolioSection = () => {
                   <Typography
                     variant="h4"
                     fontWeight="bold"
-                    sx={{ color: 'text.primary', mb: 2 }}
+                    sx={{ color: 'text.primary', mb: 1 }}
                     textTransform="uppercase"
                   >
                     Portfolios
@@ -110,7 +109,7 @@ export const PortfolioSection = () => {
         </Stack>
       </Grid>
       <Grid item xs={12}>
-        <Stack spacing={2} sx={{ px: 3, pt: 1 }}>
+        <Stack spacing={2} sx={{ px: { xs: 2, md: 2 }}}>
           <SliderWrapper
             modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
             breakpoints={{

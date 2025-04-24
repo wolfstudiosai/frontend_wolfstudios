@@ -1,120 +1,15 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { motion, useScroll, useTransform } from 'framer-motion';
 
 import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
 
 import { ManagePartnerRightPanel } from '../../partner/_components/manage-partner-right-panel';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
-
-const cards = [
-  {
-    video:
-      'https://player.vimeo.com/progressive_redirect/playback/1008919226/rendition/1080p/file.mp4?loc=external&signature=bf4233dc5593395173302057f4757f83ccb3c307dd4c49f373ecf1e8f5d31ffb',
-    name: 'Partner 0',
-    designation: 'Partner',
-    title: 'Hello these is Approach data',
-    subtext: 'Sub-text-1',
-    subtext2: 'Sub-text2',
-    id: 0,
-  },
-  {
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/67170dd5c7259b4b76267d1f_DSC00747.jpg',
-    name: 'Partner 1',
-    designation: 'Partner',
-    title: 'Hello these is Approach data',
-    subtext: 'Sub-text-1',
-    subtext2: 'Sub-text2',
-    id: 1,
-  },
-  {
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671a166f1260d41c15c305c7_670f57d45ad541aa5f58e9a3_67040092fc0406aea44cf646_DSC08662-p-800.jpeg',
-    name: 'Partner 2',
-    designation: 'Partner',
-    title: 'Hello these is Approach data',
-    subtext: 'Sub-text-1',
-    subtext2: 'Sub-text2',
-    id: 2,
-  },
-  {
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671a2d4f4cbbc6d3e7c13aa5_DSC02474s.jpg',
-    name: 'Partner 3',
-    designation: 'Brand',
-    title: 'Hello these is Approach data',
-    subtext: 'Sub-text-1',
-    subtext2: 'Sub-text2',
-    id: 3,
-  },
-  {
-    video:
-      'https://player.vimeo.com/progressive_redirect/playback/1008947433/rendition/1080p/file.mp4?loc=external&signature=395c363decf2b9c5efa59010005a9ccc97b2524fab8fcba75bd44be7e72e16f7',
-    name: 'Partner 4',
-    designation: 'Brand',
-    title: 'Hello these is Approach data',
-    subtext: 'Sub-text-1',
-    subtext2: 'Sub-text2',
-    id: 4,
-  },
-  {
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66fceb82b74027628836d005_66f6664e6c10316b602127e7_DSC09046-2.jpeg',
-    name: 'Partner 5',
-    designation: 'Brand',
-    title: 'Hello these is Approach data',
-    subtext: 'Sub-text-1',
-    subtext2: 'Sub-text2',
-    id: 5,
-  },
-  {
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57c9c01ea91918071feb_6703d1ed7f9d241965a153a0_DSC01595.jpeg',
-    name: 'Partner 6',
-    designation: 'REVO',
-    title: 'Hello these is Approach data',
-    subtext: 'Sub-text-1',
-    subtext2: 'Sub-text2',
-    id: 6,
-  },
-  {
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57c56327d6ab7a4dda60_66f299235cc7eab712895f06_lionne-clothing-1-3.jpeg',
-    name: 'Partner 7',
-    designation: 'REVO',
-    title: 'Hello these is Approach data',
-    subtext: 'Sub-text-1',
-    subtext2: 'Sub-text2',
-    id: 7,
-  },
-  {
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57c86d0ccf9681860f77_6703d3b1fe77e516449280d0_DSC04763.jpeg',
-    name: 'Partner 8',
-    designation: 'Partner',
-    title: 'Hello these is Approach data',
-    subtext: 'Sub-text-1',
-    subtext2: 'Sub-text2',
-    id: 8,
-  },
-  {
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f583f44ad14ad0578c0ab_6703bd5e85f0e12fe49449bd_46703916_2133951916920088_8689628144514105344_n.jpeg',
-    name: 'Partner 9',
-    designation: 'Partner',
-    title: 'Hello these is Approach data',
-    subtext: 'Sub-text-1',
-    subtext2: 'Sub-text2',
-    id: 9,
-  },
-  {
-    url: 'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57c8854570b8ec5928e6_6703d621641412d73234724e_46451760_2128888390759774_5360902273910177792_n.jpeg',
-    name: 'Partner 10',
-    designation: 'Partner',
-    title: 'Hello these is Approach data',
-    subtext: 'Sub-text-1',
-    subtext2: 'Sub-text2',
-    id: 10,
-  },
-];
 
 export const PartnerSectionNew = ({ isSecondHorizontal }) => {
   const [partners, setPartners] = useState([]);
@@ -140,16 +35,15 @@ export const PartnerSectionNew = ({ isSecondHorizontal }) => {
   }, []);
 
   return (
-    <Grid container spacing={2} alignItems="center">
+    <Grid container alignItems="center">
       <Grid xs={12}>
-        <Stack direction="column" sx={{ px: { xs: 2, md: 4 }, py: 4 }}>
+        <Stack direction="column">
           <FadeIn>
             <Box
               sx={{
                 display: 'flex',
                 flexDirection: { xs: 'column', md: 'row' },
                 alignItems: 'flex-start',
-                gap: { xs: 2, md: 4, lg: 8 },
               }}
             >
               <Stack direction="row" alignItems="center" sx={{ width: '100%' }}>
@@ -162,7 +56,7 @@ export const PartnerSectionNew = ({ isSecondHorizontal }) => {
                       letterSpacing: '0.5px',
                       textTransform: 'uppercase',
                       color: 'text.primary',
-                      flexGrow: 1,
+                      // flexGrow: 1,
                     }}
                   >
                     Partners
@@ -185,7 +79,6 @@ export const PartnerSectionNew = ({ isSecondHorizontal }) => {
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'flex-start',
-                gap: 4,
                 flexWrap: 'wrap',
               }}
             >
@@ -221,7 +114,6 @@ const StaticGridView = ({ partners, isSecondHorizontal }) => {
       sx={{
         overflowX: 'auto',
         whiteSpace: 'nowrap',
-        px: 2,
         py: 2,
         '&::-webkit-scrollbar': { display: 'none' },
       }}
@@ -445,44 +337,5 @@ const Card = ({ card, fetchList }) => {
         onClose={() => setOpenPartnerRightPanel(false)}
       />
     </>
-  );
-};
-
-const HorizontalScrollCarousel = ({ direction, fetchList }) => {
-  const targetRef = React.useRef(null);
-  const { scrollYProgress } = useScroll({ target: targetRef });
-
-  const totalWidth = React.useMemo(() => cards.length * 350, []);
-  const x = useTransform(
-    scrollYProgress,
-    [0, 1],
-    direction === 'left' ? [0, -totalWidth + window.innerWidth] : [-totalWidth + window.innerWidth, 0]
-  );
-
-  return (
-    <Box
-      ref={targetRef}
-      sx={{
-        position: 'relative',
-        height: '44px',
-        overflow: 'hidden',
-      }}
-    >
-      <Box
-        sx={{
-          position: 'sticky',
-          top: 0,
-          display: 'flex',
-          alignItems: 'center',
-          overflow: 'hidden',
-        }}
-      >
-        <motion.div style={{ x, display: 'flex', gap: 1 }}>
-          {cards.map((card) => (
-            <Card card={card} key={card.id} fetchList={fetchList} />
-          ))}
-        </motion.div>
-      </Box>
-    </Box>
   );
 };
