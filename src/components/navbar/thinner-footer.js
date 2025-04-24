@@ -1,22 +1,11 @@
-import { Box, Container, Stack, Typography } from '@mui/material';
-import Link from 'next/link';
 import React from 'react';
+import Link from 'next/link';
+import { Box, Container, Stack, Typography } from '@mui/material';
+
 import { footerRoutes } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
 
-export const ThinerFooter = () => {
-  const links = [
-    { href: '/blog', label: 'Blog' },
-    { href: '/learn', label: 'Learn' },
-    { href: '/about', label: 'About' },
-    { href: '/services', label: 'Services' },
-    { href: '/help', label: 'Help Docs' },
-    { href: '/privacy', label: 'Privacy Policy' },
-    { href: '/cookies', label: 'Cookie Policy' },
-    { href: '/contact', label: 'Contact Us' },
-    { href: '/join', label: 'Join' },
-  ];
-
+export const ThinnerFooter = () => {
   return (
     <React.Fragment>
       <Box
@@ -33,22 +22,25 @@ export const ThinerFooter = () => {
           borderRadius: 0,
           backdropFilter: 'blur(10px)',
           padding: 0,
-          // mt: 4,
         }}
       >
         <Container maxWidth="xxl" sx={{ py: pxToRem(2) }}>
           <Stack
-            direction="row"
-            spacing={2}
+            direction={{ xs: 'column', md: 'row' }}
             sx={{
               justifyContent: 'space-between',
               alignItems: 'center',
-              flexWrap: 'wrap',
-              gap: 2,
             }}
           >
             {/* Links Section */}
-            <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
+            <Stack
+              direction="row"
+              spacing={{ xs: 0.5, md: 2 }}
+              alignItems="center"
+              flexWrap="wrap"
+              width={'100%'}
+              justifyContent={{ sm: 'center', md: 'flex-start' }}
+            >
               {footerRoutes.map((link, index) => (
                 <React.Fragment key={index}>
                   <Link href={link.href} passHref style={{ textDecoration: 'none' }}>
@@ -73,7 +65,7 @@ export const ThinerFooter = () => {
                       sx={{
                         height: pxToRem(12),
                         borderLeft: '1px solid',
-                        borderColor: 'neutral.300',
+                        borderColor: 'text.secondary',
                         mx: 1,
                       }}
                     />
@@ -87,8 +79,8 @@ export const ThinerFooter = () => {
               sx={{
                 fontSize: '0.875rem',
                 color: 'text.secondary',
-                textAlign: { xs: 'center', sm: 'left' },
-                width: { xs: '100%', sm: 'auto' },
+                textAlign: { sm: 'center', md: 'right' },
+                width: '100%',
               }}
             >
               ©{new Date().getFullYear()} Wolf Studios Ai. All rights reserved.

@@ -6,7 +6,7 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 
 import { useSettings } from '/src/hooks/use-settings';
 import useAuth from '/src/hooks/useAuth';
-import { ThinerFooter } from '/src/components/navbar/thinner-footer';
+import { ThinnerFooter } from '/src/components/navbar/thinner-footer';
 
 import { MainNavV2 } from './main-nav-v2';
 import { DesktopSideNav, SideNavV2 } from './desktop-side-nav';
@@ -100,7 +100,7 @@ export function LayoutView({ children }) {
             {children}
           </Box>
         </Box>
-        <ThinerFooter isFeaturedCardVisible={isFeaturedCardVisible} />
+        <ThinnerFooter isFeaturedCardVisible={isFeaturedCardVisible} />
       </Box>
     </React.Fragment>
   );
