@@ -20,7 +20,7 @@ export const ProductionGridView = ({ data, colums, fetchList, loading, handlePag
   const slider_data = data.filter((item) => item.featured);
   return (
     <Box>
-      <Box sx={{ mt: 2 }}>
+      <Box>
         <SliderWrapper
           modules={[Navigation, SwiperPagination, Scrollbar, A11y, Autoplay]}
           autoplay={{ delay: 4000, disableOnInteraction: true }}

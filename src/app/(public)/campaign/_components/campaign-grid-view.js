@@ -13,7 +13,7 @@ export const CampaignGridView = ({ data, fetchList, loading }) => {
   } = React.useContext(SettingsContext);
 
   return (
-    <Grid container sx={{ mb: 2, position: 'relative' }} spacing={0.5} >
+    <Grid container sx={{ my: 1, position: 'relative' }} spacing={0.5} >
       {data?.map((item, index) => (
         <Grid
           key={index}
