@@ -143,7 +143,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                       },
                     }}
                   >
-                    <Iconify icon="material-symbols:menu-rounded" />
+                    <Iconify icon="material-symbols:menu-rounded" color="text.primary"/>
                   </Box>
 
                   {/* Desktop */}
@@ -162,7 +162,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                       },
                     }}
                   >
-                    <Iconify icon="material-symbols:menu-rounded" />
+                    <Iconify icon="material-symbols:menu-rounded" color="text.primary"/>
                   </Box>
                   {/* feature card button */}
                   <Box
