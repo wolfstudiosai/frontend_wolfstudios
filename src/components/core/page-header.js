@@ -46,8 +46,8 @@ export const PageHeader = ({
       sx={{
         width: '100%',
         position: 'sticky',
-        top: openSubNav ? 107 : 43,
-        zIndex: 100,
+        top: openSubNav ? 5 : 5,
+        // zIndex: 100,
         background: "var(--mui-palette-background-default)",
       }}
     >

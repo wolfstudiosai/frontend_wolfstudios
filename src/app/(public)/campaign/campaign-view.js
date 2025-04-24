@@ -95,6 +95,7 @@ export const CampaignView = () => {
 
   return (
     <PageContainer>
+      <Box>
       <PageHeader
         title="Campaigns"
         values={filters}
@@ -124,6 +125,7 @@ export const CampaignView = () => {
         open={filters.ADD}
         onClose={() => setFilters((prev) => ({ ...prev, ADD: false }))}
       />
+      </Box>
     </PageContainer>
   );
 };
