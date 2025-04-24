@@ -1,10 +1,12 @@
 'use client';
 
-import * as React from 'react';
-import { usePathname } from 'next/navigation';
 import { Box, Divider, Drawer, MenuList } from '@mui/material';
+import { usePathname } from 'next/navigation';
 
+import { Logo } from '/src/components/core/logo';
+import { MobileSearch } from '/src/components/navbar/mobile-search';
 import useAuth from '/src/hooks/useAuth';
+
 import { dashboardFavItemsV2, privateRoutesV2 } from '/src/router';
 import { getWorkspacesTab, renderMenuItems, useMenuCollapse } from '/src/utils/nav-utils';
 
@@ -21,16 +23,20 @@ export function MobileSideNav({ open, onClose }) {
       anchor="left"
       open={open}
       onClose={onClose}
-      ModalProps={{ keepMounted: true }}
+      ModalProps={{
+        keepMounted: true,
+        BackdropProps: {
+          sx: {
+            backgroundColor: 'transparent',
+          },
+        },
+      }}
       sx={{
         display: { xs: 'block', lg: 'none' },
         '& .MuiDrawer-paper': {
-          width: 280,
-          boxSizing: 'border-box',
+          width: 250,
           p: 2,
           bgcolor: 'background.default',
-          borderRight: '1px solid',
-          borderColor: 'divider',
         },
       }}
     >
@@ -45,6 +51,8 @@ export function MobileSideNav({ open, onClose }) {
           },
         }}
       >
+        <Logo height={40} width={120} />
+        <MobileSearch isMobile={false}/>
         <MenuList>
           {renderMenuItems({
             items: [...dashboardFavItemsV2, workspacesTab],

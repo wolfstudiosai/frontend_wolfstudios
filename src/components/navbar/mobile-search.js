@@ -1,24 +1,39 @@
-import { Iconify } from '/src/components/iconify/iconify';
-import { pxToRem } from '/src/utils/helper';
-import { InputBase, styled } from '@mui/material';
 import { useState } from 'react';
+import { InputBase, styled } from '@mui/material';
 
-export const NavSearchV2 = ({ isMobile = false }) => {
+import { Iconify } from '/src/components/iconify/iconify';
+
+import { pxToRem } from '/src/utils/helper';
+
+export const MobileSearch = ({ isMobile = false }) => {
   const [isInput, setIsInput] = useState(false);
   const [recentSearches] = useState(['All', 'Users', 'Projects', 'Campaigns', 'Documents']);
   const [suggestedSearches] = useState([
-    { table: 'Users', items: Array(5).fill({ name: 'John Doe', status: 'Active', img: 'https://picsum.photos/300/200?random=3' }) },
-    { table: 'Projects', items: Array(3).fill({ name: 'Project X', status: 'In Progress', img: 'https://picsum.photos/300/200?random=1' }) },
-    { table: 'Campaigns', items: Array(4).fill({ name: 'Summer Sale', status: 'Completed', img: 'https://picsum.photos/300/200?random=2' }) },
+    {
+      table: 'Users',
+      items: Array(5).fill({ name: 'John Doe', status: 'Active', img: 'https://picsum.photos/300/200?random=3' }),
+    },
+    {
+      table: 'Projects',
+      items: Array(3).fill({ name: 'Project X', status: 'In Progress', img: 'https://picsum.photos/300/200?random=1' }),
+    },
+    {
+      table: 'Campaigns',
+      items: Array(4).fill({ name: 'Summer Sale', status: 'Completed', img: 'https://picsum.photos/300/200?random=2' }),
+    },
   ]);
   return (
-    <SearchWrapper sx={{ display: isMobile ? 'block' : { xs: 'none', md: 'block' } }}>
+    <SearchWrapper>
       <Search>
         <SearchIconWrapper>
           <Iconify icon="jam:search" color={'var(--mui-palette-neutral-400)'} />
         </SearchIconWrapper>
-        <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} onInput={() => setIsInput(true)}
-          onBlur={() => setTimeout(() => setIsInput(false), 100)}/>
+        <StyledInputBase
+          placeholder="Search…"
+          inputProps={{ 'aria-label': 'search' }}
+          onInput={() => setIsInput(true)}
+          onBlur={() => setTimeout(() => setIsInput(false), 100)}
+        />
       </Search>
       {/* Recent Searches Dropdown */}
       {isInput && (
@@ -45,9 +60,7 @@ export const NavSearchV2 = ({ isMobile = false }) => {
                   <ResultItem key={itemIndex}>
                     <ProfileImage src={item.img} alt={item.name} />
                     <ItemName>{item.name}</ItemName>
-                    <StatusBadge status={item.status.toLowerCase()}>
-                      {item.status}
-                    </StatusBadge>
+                    <StatusBadge status={item.status.toLowerCase()}>{item.status}</StatusBadge>
                   </ResultItem>
                 ))}
                 <ScrollArrow>→</ScrollArrow>
@@ -62,12 +75,8 @@ export const NavSearchV2 = ({ isMobile = false }) => {
 
 const SearchWrapper = styled('div')(({ theme }) => ({
   position: 'relative',
-  width: pxToRem(120),
+  width: "100%",
   transition: 'width 0.1s ease',
-  //   transformOrigin: 'left',
-  '&:focus-within': {
-    width: '100%',
-  },
 }));
 
 const Search = styled('div')(({ theme }) => ({
@@ -130,7 +139,7 @@ const FilterChip = styled('button')(({ theme }) => ({
   cursor: 'pointer',
   fontSize: pxToRem(12),
   transition: 'all 0.2s ease',
-  
+
   '&:hover': {
     background: 'var(--mui-palette-primary-light)',
     borderColor: 'var(--mui-palette-primary-main)',
@@ -161,7 +170,7 @@ const ScrollableRow = styled('div')(({ theme }) => ({
   overflowX: 'auto',
   paddingBottom: theme.spacing(1),
   position: 'relative',
-  
+
   '&::-webkit-scrollbar': {
     height: '6px',
   },
@@ -193,14 +202,18 @@ const StatusBadge = styled('span')(({ theme, status }) => ({
   fontSize: pxToRem(10),
   padding: theme.spacing(0.25, 1),
   borderRadius: '12px',
-  background: 
-    status === 'active' ? 'var(--mui-palette-success-light)' :
-    status === 'completed' ? 'var(--mui-palette-success-main)' :
-    'var(--mui-palette-neutral-200)',
-  color: 
-    status === 'active' ? 'var(--mui-palette-success-dark)' :
-    status === 'completed' ? 'var(--mui-palette-common-white)' :
-    'var(--mui-palette-neutral-700)',
+  background:
+    status === 'active'
+      ? 'var(--mui-palette-success-light)'
+      : status === 'completed'
+        ? 'var(--mui-palette-success-main)'
+        : 'var(--mui-palette-neutral-200)',
+  color:
+    status === 'active'
+      ? 'var(--mui-palette-success-dark)'
+      : status === 'completed'
+        ? 'var(--mui-palette-common-white)'
+        : 'var(--mui-palette-neutral-700)',
 }));
 
 const ScrollArrow = styled('button')(({ theme }) => ({

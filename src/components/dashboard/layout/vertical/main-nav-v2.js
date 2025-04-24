@@ -1,5 +1,7 @@
 'use client';
 
+import CloseIcon from '@mui/icons-material/Close';
+import MenuIcon from '@mui/icons-material/Menu';
 import { Button, Drawer, Popover, useMediaQuery, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -10,31 +12,31 @@ import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/Caret
 import RouterLink from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
-import { LoginForm } from '/src/app/auth/_components/LoginForm';
+
 import { Dropdown } from '/src/components/core/dropdown/dropdown';
 import { DropdownPopover } from '/src/components/core/dropdown/dropdown-popover';
 import { DropdownTrigger } from '/src/components/core/dropdown/dropdown-trigger';
 import { Logo } from '/src/components/core/logo';
 import { Iconify } from '/src/components/iconify/iconify';
 import { MobileNav } from '/src/components/navbar/mobile-nav';
-import { NavSearchV2 } from '/src/components/navbar/nav-search-v2';
 import { SettingsContext } from '/src/contexts/settings';
-import { isNavItemActive } from '/src/lib/is-nav-item-active';
-import { publicRoutes } from '/src/router';
-import { pxToRem } from '/src/utils/helper';
-
 import useAuth from '/src/hooks/useAuth';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import { paths } from '/src/paths';
 
-import CloseIcon from '@mui/icons-material/Close';
-import MenuIcon from '@mui/icons-material/Menu';
+import { DesktopSearch } from '../../../navbar/desktop-search';
 import { ChatSidePanel } from '../_components/chat-side-panel';
 import { NotificationPopover } from '../_components/notificaiton-popover';
 import { SettingsGear } from '../_components/settings-gear';
 import { UserInfoPopover } from '../_components/user-info-popover';
+import { LoginForm } from '/src/app/auth/_components/LoginForm';
+import { publicRoutes } from '/src/router';
+import { pxToRem } from '/src/utils/helper';
 
 export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
-  const { customSettings: { setOpenSubNav } } = React.useContext(SettingsContext);
+  const {
+    customSettings: { setOpenSubNav },
+  } = React.useContext(SettingsContext);
   const [openNav, setOpenNav] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [routes, setRoutes] = React.useState(publicRoutes);
@@ -64,7 +66,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
     handleCloseAuth();
   };
 
-  //mobile nav 
+  //mobile nav
   const toggleMobileNav = () => {
     setMobileNavOpen(!mobileNavOpen);
   };
@@ -78,26 +80,22 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   };
 
   React.useEffect(() => {
-
     const updatedRoutes = publicRoutes.map((group) => ({
       ...group,
-      items: group.items.filter(
-        (item) =>
-          (isLogin && item.key !== "portfolio") ||
-          (!isLogin && item.key !== "content")
-      ).map((item) => {
-        const auth = localStorage.getItem('auth');
-        if (auth) {
-          const data = JSON.parse(auth);
-          setIsAdmin(data.role === 'ADMIN' || data.role === 'SUPER_ADMIN');
-        }        
-        const requiresAdmin = ['campaign', 'production', 'content'].includes(item.key);
-        const disabled = requiresAdmin ? !isAdmin || !isLogin : false;
-        return { ...item, disabled };
-      }),
+      items: group.items
+        .filter((item) => (isLogin && item.key !== 'portfolio') || (!isLogin && item.key !== 'content'))
+        .map((item) => {
+          const auth = localStorage.getItem('auth');
+          if (auth) {
+            const data = JSON.parse(auth);
+            setIsAdmin(data.role === 'ADMIN' || data.role === 'SUPER_ADMIN');
+          }
+          const requiresAdmin = ['campaign', 'production', 'content'].includes(item.key);
+          const disabled = requiresAdmin ? !isAdmin || !isLogin : false;
+          return { ...item, disabled };
+        }),
     }));
     setRoutes(updatedRoutes);
-
   }, [isLogin, isAdmin]);
 
   return (
@@ -121,7 +119,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             {/* Left Section: Logo and Menu */}
@@ -141,10 +139,12 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
 
                   <Box
                     component="button"
-                    onClick={() => onFeatureCardVisible((prev) => {
-                      setOpenSubNav(!prev)
-                      return !prev
-                    })}
+                    onClick={() =>
+                      onFeatureCardVisible((prev) => {
+                        setOpenSubNav(!prev);
+                        return !prev;
+                      })
+                    }
                     sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
                   >
                     <Iconify
@@ -158,7 +158,12 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
               <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
                 <Logo height={40} width={120} />
               </Box>
-              <Stack component="ul" direction="row" spacing={1} sx={{ display: { xs: 'none', md: 'flex' }, listStyle: 'none', m: 0, p: 0 }}>
+              <Stack
+                component="ul"
+                direction="row"
+                spacing={1}
+                sx={{ display: { xs: 'none', md: 'flex' }, listStyle: 'none', m: 0, p: 0 }}
+              >
                 {routes.map((section) =>
                   section.items.map((item, index) => (
                     <NavItem
@@ -190,10 +195,10 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                   flex: 1,
                   justifyContent: 'flex-end',
                   minWidth: pxToRem(150),
-                  display: { xs: 'none', md: 'flex' }
+                  display: { xs: 'none', md: 'flex' },
                 }}
               >
-                <NavSearchV2 />
+                <DesktopSearch />
               </Box>
 
               {/* Mobile Nav Menu Button */}
@@ -206,22 +211,20 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
               >
                 {mobileNavOpen ? <CloseIcon /> : <MenuIcon />}
               </IconButton>
-              <Box sx={{
-                display: 'flex',
-                gap: 2,
-                alignItems: 'center',
-                '@media (max-width: 376px)': {
-                  display: 'none'
-                }
-              }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 2,
+                  alignItems: 'center',
+                  '@media (max-width: 376px)': {
+                    display: 'none',
+                  },
+                }}
+              >
                 <SettingsGear />
-                {isLogin &&
-                  <ChatSidePanel
-                    open={chatOpen}
-                    onClose={() => setChatOpen(false)}
-                    onToggle={handleChatToggle}
-                  />
-                }
+                {isLogin && (
+                  <ChatSidePanel open={chatOpen} onClose={() => setChatOpen(false)} onToggle={handleChatToggle} />
+                )}
                 {/* Notifications and User Actions */}
                 {isLogin ? (
                   <React.Fragment>
@@ -238,9 +241,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                   </Button>
                 )}
               </Box>
-              {isLogin && (
-              <UserInfoPopover />
-              )}
+              {isLogin && <UserInfoPopover />}
             </Stack>
           </Stack>
         </Container>
@@ -254,7 +255,6 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
         pathname={pathname}
         handleOpenAuth={handleOpenAuth}
       />
-
       <MobileNav
         onClose={() => {
           setOpenNav(false);
@@ -304,28 +304,31 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
   const hasPopover = Boolean(item.items);
 
   const element = (
-    <Box component="li" sx={{ userSelect: 'none', ...(active && { borderBottom: '2px solid var(--mui-palette-primary-main)' }) }}>
+    <Box
+      component="li"
+      sx={{ userSelect: 'none', ...(active && { borderBottom: '2px solid var(--mui-palette-primary-main)' }) }}
+    >
       <Box
         {...(hasPopover
           ? {
-            onClick: (event) => {
-              if (disabled) {
-                event.preventDefault();
-                return;
-              }
-            },
-            role: 'button',
-          }
+              onClick: (event) => {
+                if (disabled) {
+                  event.preventDefault();
+                  return;
+                }
+              },
+              role: 'button',
+            }
           : {
-            ...(href && !disabled
-              ? {
-                component: external ? 'a' : RouterLink,
-                href,
-                target: external ? '_blank' : undefined,
-                rel: external ? 'noreferrer' : undefined,
-              }
-              : { role: 'button' }),
-          })}
+              ...(href && !disabled
+                ? {
+                    component: external ? 'a' : RouterLink,
+                    href,
+                    target: external ? '_blank' : undefined,
+                    rel: external ? 'noreferrer' : undefined,
+                  }
+                : { role: 'button' }),
+            })}
         sx={{
           alignItems: 'center',
           borderRadius: 1,
@@ -438,7 +441,7 @@ const MobileNavV2 = ({ open, onClose, routes, isLogin, pathname, handleOpenAuth 
           boxSizing: 'border-box',
           p: 2,
           bgcolor: 'var(--mui-palette-background-default)',
-          borderLeft: '1px solid var(--mui-palette-divider)'
+          borderLeft: '1px solid var(--mui-palette-divider)',
         },
       }}
     >
