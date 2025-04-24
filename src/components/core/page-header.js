@@ -47,7 +47,7 @@ export const PageHeader = ({
         width: '100%',
         position: 'sticky',
         top: openSubNav ? 5 : 5,
-        zIndex: 100,
+        // zIndex: 100,
         background: "var(--mui-palette-background-default)",
       }}
     >
