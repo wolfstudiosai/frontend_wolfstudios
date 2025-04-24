@@ -5,7 +5,7 @@ import { Iconify } from '/src/components/iconify/iconify';
 
 import { pxToRem } from '/src/utils/helper';
 
-export const MobileSearch = ({ isMobile = false }) => {
+export const NavSearch = ({ isMobile = false }) => {
   const [isInput, setIsInput] = useState(false);
   const [recentSearches] = useState(['All', 'Users', 'Projects', 'Campaigns', 'Documents']);
   const [suggestedSearches] = useState([
@@ -22,8 +22,9 @@ export const MobileSearch = ({ isMobile = false }) => {
       items: Array(4).fill({ name: 'Summer Sale', status: 'Completed', img: 'https://picsum.photos/300/200?random=2' }),
     },
   ]);
+
   return (
-    <SearchWrapper>
+    <SearchWrapper isMobile={isMobile}>
       <Search>
         <SearchIconWrapper>
           <Iconify icon="jam:search" color={'var(--mui-palette-neutral-400)'} />
@@ -73,10 +74,14 @@ export const MobileSearch = ({ isMobile = false }) => {
   );
 };
 
-const SearchWrapper = styled('div')(({ theme }) => ({
+const SearchWrapper = styled('div')(({ theme, isMobile }) => ({
   position: 'relative',
-  width: "100%",
-  transition: 'width 0.1s ease',
+  width: isMobile ? '100%' : pxToRem(120),
+  transition: isMobile ? 'none' : 'width 0.1s ease',
+//   display: { xs: 'none', lg: 'block' },
+  '&:focus-within': {
+    width: isMobile ? '100%' : '100%',
+  },
 }));
 
 const Search = styled('div')(({ theme }) => ({
@@ -117,7 +122,7 @@ const DropdownContainer = styled('div')(({ theme }) => ({
   right: 0,
   backgroundColor: 'var(--mui-palette-background-default)',
   borderRadius: '4px',
-  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+  boxShadow: 'none', // Removed drop shadow as per previous requirement
   marginTop: theme.spacing(0.5),
   zIndex: 9999,
   maxHeight: '60vh',
@@ -139,7 +144,6 @@ const FilterChip = styled('button')(({ theme }) => ({
   cursor: 'pointer',
   fontSize: pxToRem(12),
   transition: 'all 0.2s ease',
-
   '&:hover': {
     background: 'var(--mui-palette-primary-light)',
     borderColor: 'var(--mui-palette-primary-main)',
@@ -170,7 +174,6 @@ const ScrollableRow = styled('div')(({ theme }) => ({
   overflowX: 'auto',
   paddingBottom: theme.spacing(1),
   position: 'relative',
-
   '&::-webkit-scrollbar': {
     height: '6px',
   },

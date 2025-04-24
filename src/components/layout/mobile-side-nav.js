@@ -4,7 +4,7 @@ import { Box, Divider, Drawer, MenuList } from '@mui/material';
 import { usePathname } from 'next/navigation';
 
 import { Logo } from '/src/components/core/logo';
-import { MobileSearch } from '/src/components/navbar/mobile-search';
+import { NavSearch } from '/src/components/navbar/nav-search';
 import useAuth from '/src/hooks/useAuth';
 
 import { dashboardFavItemsV2, privateRoutesV2 } from '/src/router';
@@ -52,7 +52,7 @@ export function MobileSideNav({ open, onClose }) {
         }}
       >
         <Logo height={40} width={120} />
-        <MobileSearch isMobile={false}/>
+        <NavSearch isMobile={true}/>
         <MenuList>
           {renderMenuItems({
             items: [...dashboardFavItemsV2, workspacesTab],

@@ -1,30 +1,30 @@
 'use client';
 
+import * as React from 'react';
+import RouterLink from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { Button, Popover } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
-import RouterLink from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import * as React from 'react';
 
+import { paths } from '/src/paths';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
+import { SettingsContext } from '/src/contexts/settings';
+import useAuth from '/src/hooks/useAuth';
 import { Dropdown } from '/src/components/core/dropdown/dropdown';
 import { DropdownPopover } from '/src/components/core/dropdown/dropdown-popover';
 import { DropdownTrigger } from '/src/components/core/dropdown/dropdown-trigger';
 import { Logo } from '/src/components/core/logo';
 import { Iconify } from '/src/components/iconify/iconify';
-import { SettingsContext } from '/src/contexts/settings';
-import useAuth from '/src/hooks/useAuth';
-import { isNavItemActive } from '/src/lib/is-nav-item-active';
-import { paths } from '/src/paths';
+import { NavSearch } from '/src/components/navbar/nav-search';
 
 import { ChatSidePanel } from '../dashboard/layout/_components/chat-side-panel';
 import { NotificationPopover } from '../dashboard/layout/_components/notificaiton-popover';
 import { SettingsGear } from '../dashboard/layout/_components/settings-gear';
 import { UserInfoPopover } from '../dashboard/layout/_components/user-info-popover';
-import { DesktopSearch } from '../navbar/desktop-search';
 import { MobileSideNav } from './mobile-side-nav';
 import { LoginForm } from '/src/app/auth/_components/LoginForm';
 import { publicRoutes } from '/src/router';
@@ -226,10 +226,10 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                   flex: 1,
                   justifyContent: 'flex-end',
                   minWidth: pxToRem(150),
-                  display: { xs: 'none', md: 'flex' },
+                  display: { xs: 'none', lg: 'inline-flex' },
                 }}
               >
-                <DesktopSearch />
+                <NavSearch />
               </Box>
               <Box
                 sx={{
