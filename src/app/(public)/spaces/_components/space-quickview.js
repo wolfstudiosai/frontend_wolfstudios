@@ -142,7 +142,7 @@ export const SpaceQuickView = ({ data }) => {
                     height: pxToRem(300),
                     width: '100%',
                     objectFit: 'contain',
-                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                    // borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
                     border: '1px solid var(--mui-palette-divider)',
                   }}
                 />
@@ -154,7 +154,7 @@ export const SpaceQuickView = ({ data }) => {
                     height: pxToRem(300),
                     width: '100%',
                     objectFit: 'contain',
-                    borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                    // borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
                     border: '1px solid var(--mui-palette-divider)',
                   }}
                 />
