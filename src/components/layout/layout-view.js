@@ -77,7 +77,7 @@ export function LayoutView({ children }) {
             display: isFeaturedCardVisible ? 'flex' : 'block',
             flex: '1 1 auto',
             flexDirection: 'column',
-            pl: { lg: isLogin ? (openSidebar ? pxToRem(270) : pxToRem(70)) : pxToRem(0) },
+            pl: { lg: isLogin ? (openSidebar ? pxToRem(260) : pxToRem(60)) : pxToRem(0) },
           }}
         >
           {isLogin && (

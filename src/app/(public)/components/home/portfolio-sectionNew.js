@@ -54,22 +54,15 @@ export const PortfolioSectionNew = () => {
             flexDirection: 'column',
             justifyContent: 'flex-start',
             height: '100%',
+            textTransform: 'uppercase',
           }}
         >
           <FadeIn>
             <Stack direction="row" alignItems="center">
-              <Typography
-                variant="h4"
-                fontWeight="bold"
-                sx={{
-                  fontSize: '2.2rem',
-                  letterSpacing: '0.5px',
-                  textTransform: 'uppercase',
-                  color: 'text.primary',
-                }}
-              >
+              <Typography variant="h4" fontWeight="bold" sx={{ color: 'text.primary', mb: 2 }}>
                 Portfolios
               </Typography>
+
               <Button
                 variant="text"
                 onClick={() => router.push('/portfolio')}

@@ -121,7 +121,7 @@ export const HeroSection = () => {
           }}
         >
           <FadeIn>
-            <Typography variant="h4" fontWeight="bold" sx={{ color: 'text.primary', mb: 2 }}>
+            <Typography variant="h4" fontWeight="bold" sx={{ color: 'text.primary', mb: 2 }} textTransform= 'uppercase'>
               Product Drop
             </Typography>
             <Typography

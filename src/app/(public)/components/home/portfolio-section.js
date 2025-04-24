@@ -55,13 +55,8 @@ export const PortfolioSection = () => {
                   <Typography
                     variant="h4"
                     fontWeight="bold"
-                    sx={{
-                      fontSize: { xs: '1.5rem', sm: '2rem', md: '2.2rem' },
-                      letterSpacing: '0.5px',
-                      textTransform: 'uppercase',
-                      color: 'text.primary',
-                      flexGrow: 1,
-                    }}
+                    sx={{ color: 'text.primary', mb: 2 }}
+                    textTransform="uppercase"
                   >
                     Portfolios
                   </Typography>
@@ -85,9 +80,7 @@ export const PortfolioSection = () => {
                   fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem', lg: '40px' },
                   width: '100%',
                 }}
-              >
-                
-              </Typography>
+              ></Typography>
             </Box>
             <Box
               sx={{
@@ -108,7 +101,9 @@ export const PortfolioSection = () => {
                   mt: 1,
                 }}
               >
-                {"By developing from the idea up, we transform concepts into strong creative execution that's driven by both form and function."}
+                {
+                  "By developing from the idea up, we transform concepts into strong creative execution that's driven by both form and function."
+                }
               </Typography>
             </Box>
           </FadeIn>
@@ -121,31 +116,31 @@ export const PortfolioSection = () => {
             breakpoints={{
               0: {
                 slidesPerView: 1,
-                spaceBetween: 16
+                spaceBetween: 16,
               },
               768: {
                 slidesPerView: 2,
-                spaceBetween: 20
+                spaceBetween: 20,
               },
               1024: {
                 slidesPerView: 3,
-                spaceBetween: 24
+                spaceBetween: 24,
               },
               1440: {
                 slidesPerView: 4,
-                spaceBetween: 28
-              }
+                spaceBetween: 28,
+              },
             }}
             sx={{
               '& .swiper-wrapper': {
-                gap: '0px'
+                gap: '0px',
               },
               '& .swiper-slide': {
                 width: 'auto !important',
                 marginRight: '0 !important',
-                height: 'auto'
+                height: 'auto',
               },
-              mx: { xs: -1.5, md: -2 }
+              mx: { xs: -1.5, md: -2 },
             }}
           >
             {portfolios.map((portfolio) => (
