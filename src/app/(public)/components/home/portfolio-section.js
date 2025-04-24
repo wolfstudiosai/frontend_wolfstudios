@@ -40,64 +40,37 @@ export const PortfolioSection = () => {
   return (
     <Grid container alignItems="center">
       <Grid item xs={12}>
-        <Stack direction="column" sx={{ py: 2 }}>
+        <Stack direction="column" >
           <FadeIn>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: { xs: 'column', md: 'row' },
-                alignItems: 'flex-start',
-              }}
-            >
-              <Stack direction="row" alignItems="center" sx={{ width: '100%' }}>
-                <Stack direction="row">
-                  <Typography
-                    variant="h4"
-                    fontWeight="bold"
-                    sx={{ color: 'text.primary', mb: 1 }}
-                    textTransform="uppercase"
-                  >
-                    Portfolios
-                  </Typography>
-                  <Button
-                    variant="text"
-                    onClick={() => router.push('/portfolio')}
-                    endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
-                    sx={{
-                      margin: 0,
-                      padding: 0,
-                      display: { xs: 'none', sm: 'flex' },
-                    }}
-                  ></Button>
-                </Stack>
+            <Box sx={{  py: { xs: 1, md: 2 } }}>
+              <Stack direction="row">
+                <Typography
+                  variant="h4"
+                  fontWeight="bold"
+                  sx={{ color: 'text.primary', mb: { xs: 0, md: 1 } }}
+                  textTransform="uppercase"
+                  fontSize={{ xs: '1.5rem', sm: '2rem', md: '2.2rem' }}
+                >
+                  Portfolios
+                </Typography>
+                <Button
+                  variant="text"
+                  onClick={() => router.push('/portfolio')}
+                  endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
+                  sx={{
+                    margin: 0,
+                    padding: 0,
+                    display: { xs: 'none', sm: 'flex' },
+                  }}
+                ></Button>
               </Stack>
               <Typography
                 fontWeight="semibold"
                 sx={{
                   color: 'text.primary',
                   lineHeight: 1,
-                  fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem', lg: '40px' },
+                  fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' },
                   width: '100%',
-                }}
-              ></Typography>
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-                gap: 4,
-                flexWrap: 'wrap',
-              }}
-            >
-              <Typography
-                fontWeight="semibold"
-                sx={{
-                  color: 'text.primary',
-                  lineHeight: 1,
-                  fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem', lg: '40px' },
-                  width: '100%',
-                  mt: 1,
                 }}
               >
                 {
@@ -109,7 +82,7 @@ export const PortfolioSection = () => {
         </Stack>
       </Grid>
       <Grid item xs={12}>
-        <Stack spacing={2} sx={{ px: { xs: 2, md: 2 }}}>
+        <Stack spacing={2} sx={{ px: { xs: 1.5, md: 2 } }}>
           <SliderWrapper
             modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
             breakpoints={{

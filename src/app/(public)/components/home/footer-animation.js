@@ -1,8 +1,9 @@
 'use client';
 
+import { useEffect } from 'react';
+import { Typography } from '@mui/material';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useEffect } from 'react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,23 +18,22 @@ export const FooterAnimation = () => {
       stagger: 0.1,
       scrollTrigger: {
         trigger: '#page1',
-        start: 'top 80%',
+        start: 'top top',
         end: 'bottom 20%',
-        toggleActions: 'restart pause reverse pause',
         markers: false,
       },
     });
   }, []);
   return (
     <>
-      <div id="page1" style={{ backgroundColor: 'var(--mui-palette-background-paper)' }}>
-        <h1 className="h1">
+      <div id="page1" style={{ backgroundColor: 'var(--mui-palette-background-paper)', zIndex: 100 }}>
+        <Typography className="h1">
           {letter.map((letter, index) => (
             <span key={index} className="letter a" style={{ color: 'var(--mui-palette-text-primary)' }}>
               {letter === ' ' ? '\u00A0' : letter}
             </span>
           ))}
-        </h1>
+        </Typography>
       </div>
     </>
   );

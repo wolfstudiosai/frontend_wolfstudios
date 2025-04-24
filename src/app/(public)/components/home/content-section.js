@@ -213,7 +213,7 @@ export function ContentSection() {
               objectFit: 'cover',
               objectPosition: 'center',
               zIndex: 9,
-              borderRadius: { xs: '8px', sm: '8px', md: '8px', lg: '0' },
+              // borderRadius: { xs: '8px', sm: '8px', md: '8px', lg: '0' },
             }}
           />
           <Stack

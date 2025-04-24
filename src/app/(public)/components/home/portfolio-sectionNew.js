@@ -1,9 +1,9 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
@@ -35,37 +35,42 @@ export const PortfolioSectionNew = () => {
 
   return (
     <Box>
-      <Grid container spacing={2} alignItems="flex-start">
+      <Grid container alignItems="flex-start">
         <Grid
           item
           size={{
             md: 3,
             xs: 12,
           }}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            height: '100%',
-            textTransform: 'uppercase',
-          }}
         >
           <FadeIn>
-            <Stack direction="row" alignItems="center">
-              <Typography variant="h4" fontWeight="bold" sx={{ color: 'text.primary', mb: 2 }}>
-                Portfolios
+            <Box sx={{ px: { xs: 0, md: 0 }, py: { xs: 1, md: 2 } }}>
+              <Stack direction="row">
+                <Typography
+                  variant="h4"
+                  fontWeight="bold"
+                  sx={{ color: 'text.primary', mb: { xs: 0, md: 1 } }}
+                  textTransform="uppercase"
+                  fontSize={{ xs: '1.5rem', sm: '2rem', md: '2.2rem' }}
+                >
+                  Portfolios
+                </Typography>
+                <Button
+                  variant="text"
+                  onClick={() => router.push('/portfolio')}
+                  endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
+                  sx={{
+                    margin: 0,
+                    padding: 0,
+                    display: { xs: 'none', sm: 'flex' },
+                  }}
+                ></Button>
+              </Stack>
+              <Typography fontSize={18}>
+                Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft
+                compelling visuals that captivate audiences, evoke emotion, and leave a lasting impact.
               </Typography>
-
-              <Button
-                variant="text"
-                onClick={() => router.push('/portfolio')}
-                endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
-              ></Button>
-            </Stack>
-            <Typography fontSize={18}>
-              Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
-              visuals that captivate audiences, evoke emotion, and leave a lasting impact.
-            </Typography>
+            </Box>
           </FadeIn>
         </Grid>
 
