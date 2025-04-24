@@ -28,7 +28,11 @@ export const DrawerContainer = ({ children, open, handleDrawerClose, actionButto
     >
       <Box
         sx={{
-          width: { md: width, xs: '10vw' },
+          width: {
+            xs: '94vw',
+            // sm: '90vw',
+            md: typeof width === 'string' ? width : '70vw',
+          },
           height: '100%',
           p: 2,
           position: 'relative',

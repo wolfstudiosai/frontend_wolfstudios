@@ -61,12 +61,6 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
             onDelete={(password) => handleDelete(password)}
             passwordInput
           />
-
-          {/* {sidebarView === 'EDIT' && (
-            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
-              Save
-            </Button>
-          )} */}
         </>
       )}
     </>
