@@ -272,7 +272,7 @@ export const LeftSidebar = () => {
                       <AvatarWithActiveStatus
                         src={user?.profileImage}
                         alt={user?.firstName}
-                        status={true}
+                        status={user?.chatStatus === 'ONLINE'}
                         sx={{ width: 36, height: 36 }}
                       />
 
@@ -285,7 +285,7 @@ export const LeftSidebar = () => {
                           {lastMessage?.content}
                         </MemberRole>
                       </MemberInfo>
-                      <CountChip label={channel?.DirectMessages?.length} size="small" />
+                      {/* <CountChip label={channel?.DirectMessages?.length} size="small" /> */}
                     </MemberItem>
                   );
                 })}

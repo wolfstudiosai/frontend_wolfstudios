@@ -24,7 +24,7 @@ dayjs.extend(relativeTime);
 
 const reactionOptions = ['👍', '❤️', '😂', '🎉', '😮'];
 
-export const Message = ({ message, sidebar }) => {
+export const Message = ({ message, sidebar, pinnedTab = false }) => {
   const {
     setActiveChannelThread,
     setActiveDirectThread,
@@ -36,6 +36,8 @@ export const Message = ({ message, sidebar }) => {
     removeDirectMessageReaction,
     deleteChannelMessage,
     deleteDirectMessage,
+    pinChannelMessage,
+    pinDirectMessage,
   } = useContext(ChatContext);
 
   const { userInfo } = useAuth();
@@ -207,40 +209,44 @@ export const Message = ({ message, sidebar }) => {
         </Stack> */}
 
         {/* Reactions */}
-        <Stack direction="row" alignItems="center" spacing={0.5}>
-          {emojis?.length > 0 &&
-            emojis.map((e, i) => (
-              <Chip
-                label={`${e?.emoji} ${e?.count > 0 ? e?.count : ''}`}
-                key={i}
-                color="inherit"
-                size="small"
-                sx={{
-                  border: e?.isYou ? '0.5px solid var(--mui-palette-primary-main)' : '0.5px solid transparent',
-                  bgcolor: e?.isYou ? '#e0e0ee' : '#eee',
-                }}
-                onClick={() => (e?.isYou ? handleRemoveReaction(e?.emoji) : handleReactionSelect(e?.emoji))}
-              />
-            ))}
-          <IconButton size="small" aria-label="react" onClick={toggleReactionBar} ref={popperRef}>
-            <Iconify icon="material-symbols:add-reaction-outline" />
-          </IconButton>
-          {message?.isThread && (
-            <Button
-              variant="text"
-              onClick={() =>
-                activeTab?.type === 'channel' ? setActiveChannelThread(message?.id) : setActiveDirectThread(message?.id)
-              }
-              color="primary"
-            >
-              Show {message?.Replies?.length} more repl{message?.Replies?.length > 1 ? 'ies' : 'y'}
-            </Button>
-          )}
-        </Stack>
+        {!pinnedTab && (
+          <Stack direction="row" alignItems="center" spacing={0.5}>
+            {emojis?.length > 0 &&
+              emojis.map((e, i) => (
+                <Chip
+                  label={`${e?.emoji} ${e?.count > 0 ? e?.count : ''}`}
+                  key={i}
+                  color="inherit"
+                  size="small"
+                  sx={{
+                    border: e?.isYou ? '0.5px solid var(--mui-palette-primary-main)' : '0.5px solid transparent',
+                    bgcolor: e?.isYou ? '#e0e0ee' : '#eee',
+                  }}
+                  onClick={() => (e?.isYou ? handleRemoveReaction(e?.emoji) : handleReactionSelect(e?.emoji))}
+                />
+              ))}
+            <IconButton size="small" aria-label="react" onClick={toggleReactionBar} ref={popperRef}>
+              <Iconify icon="material-symbols:add-reaction-outline" />
+            </IconButton>
+            {message?.isThread && (
+              <Button
+                variant="text"
+                onClick={() =>
+                  activeTab?.type === 'channel'
+                    ? setActiveChannelThread(message?.id)
+                    : setActiveDirectThread(message?.id)
+                }
+                color="primary"
+              >
+                Show {message?.Replies?.length} more repl{message?.Replies?.length > 1 ? 'ies' : 'y'}
+              </Button>
+            )}
+          </Stack>
+        )}
       </Stack>
 
       {/* Hover actions */}
-      {!message?.deletedAt && (
+      {!message?.deletedAt && !pinnedTab && (
         <ButtonGroup
           className="hover-action"
           sx={{
@@ -265,30 +271,41 @@ export const Message = ({ message, sidebar }) => {
           )}
           {/* <IconButton title="Reply in thread">
             <Iconify icon="mingcute:message-3-fill" />
-          </IconButton>
-          <IconButton title="Pin Message">
-            <Iconify icon={sidebar ? 'ri:unpin-line' : 'mingcute:pin-line'} />
           </IconButton> */}
+          <IconButton
+            title="Pin Message"
+            onClick={() => {
+              if (activeTab?.type === 'channel') {
+                pinChannelMessage(message?.id, !message?.isPinned);
+              } else {
+                pinDirectMessage(message?.id, !message?.isPinned);
+              }
+            }}
+          >
+            <Iconify icon={message?.isPinned ? 'ri:unpin-line' : 'mingcute:pin-line'} />
+          </IconButton>
         </ButtonGroup>
       )}
 
       {/* Reaction Popper */}
-      <Popper open={open} anchorEl={anchorEl} placement="top-start">
-        <ClickAwayListener onClickAway={handleClickAway}>
-          <Paper sx={{ p: 1, display: 'flex', gap: 1, borderRadius: 2 }}>
-            {reactionOptions.map((emoji) => (
-              <Button
-                key={emoji}
-                onClick={() => handleReactionSelect(emoji)}
-                size="small"
-                sx={{ minWidth: '30px', fontSize: '1.2rem' }}
-              >
-                {emoji}
-              </Button>
-            ))}
-          </Paper>
-        </ClickAwayListener>
-      </Popper>
+      {!pinnedTab && (
+        <Popper open={open} anchorEl={anchorEl} placement="top-start">
+          <ClickAwayListener onClickAway={handleClickAway}>
+            <Paper sx={{ p: 1, display: 'flex', gap: 1, borderRadius: 2 }}>
+              {reactionOptions.map((emoji) => (
+                <Button
+                  key={emoji}
+                  onClick={() => handleReactionSelect(emoji)}
+                  size="small"
+                  sx={{ minWidth: '30px', fontSize: '1.2rem' }}
+                >
+                  {emoji}
+                </Button>
+              ))}
+            </Paper>
+          </ClickAwayListener>
+        </Popper>
+      )}
 
       {/* Delte confirmation popover */}
       <Popover

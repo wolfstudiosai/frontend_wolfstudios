@@ -11,11 +11,11 @@ export const ScrollableContent = styled(Box)(({ theme }) => ({
 }));
 
 export const CountChip = styled(Chip)(({ theme }) => ({
-  height: 26,
-  fontSize: 14,
+  height: 22,
+  fontSize: 12,
   backgroundColor: '#e9e9e9',
   color: '#666',
-  minWidth: 26,
+  minWidth: 22,
   marginLeft: 'auto',
   borderRadius: '50%',
   fontWeight: 600,

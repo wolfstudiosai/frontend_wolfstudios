@@ -64,6 +64,10 @@ export const SocketProvider = ({ children }) => {
         socketRef.current.emit('delete-channel-reaction', { channelId, messageId, emoji });
       },
 
+      pinChannelMessage: ({ channelId, messageId, isPinned }) => {
+        socketRef.current.emit('pin-channel-message', { channelId, messageId, isPinned });
+      },
+
       startTyping: (channelId) => {
         socketRef.current.emit('start-typing', { channelId });
       },
@@ -91,6 +95,9 @@ export const SocketProvider = ({ children }) => {
       },
       removeDirectMessageReaction: ({ directChannelId, messageId, emoji }) => {
         socketRef.current.emit('delete-direct-channel-reaction', { directChannelId, messageId, emoji });
+      },
+      pinDirectMessage: ({ directChannelId, messageId, isPinned }) => {
+        socketRef.current.emit('pin-direct-message', { directChannelId, messageId, isPinned });
       },
     };
   }, [connected]); // recalculate once connected

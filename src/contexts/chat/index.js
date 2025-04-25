@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import { useSocket } from '/src/contexts/socket';
 import useAuth from '/src/hooks/useAuth';
@@ -44,7 +45,9 @@ export const ChatProvider = ({ children }) => {
   const [activeTab, setActiveTab] = useState(null);
   const [activeTabInfo, setActiveTabInfo] = useState(null);
   const [channelMessages, setChannelMessages] = useState([]);
+  const [channelPinnedMessages, setChannelPinnedMessages] = useState([]);
   const [directMessages, setDirectMessages] = useState([]);
+  const [directPinnedMessages, setDirectPinnedMessages] = useState([]);
   const [activeChannelThread, setActiveChannelThread] = useState(null);
   const [channelThreadMessages, setChannelThreadMessages] = useState([]);
   const [activeDirectThread, setActiveDirectThread] = useState(null);
@@ -150,6 +153,7 @@ export const ChatProvider = ({ children }) => {
 
   const getWorkspace = async (slug) => {
     try {
+      if (!slug) return;
       const workspace = userInfo?.workspaces.find((workspace) => workspace.slug === slug);
       if (!workspace || !workspace?.id) throw new Error('Workspace not found');
       const response = await chatApi.get(`/workspaces/${workspace.id}`);
@@ -185,6 +189,9 @@ export const ChatProvider = ({ children }) => {
           createdBy: data?.Owner,
           members: data?.ChannelMembers,
         });
+        if (data?.Messages) {
+          setChannelPinnedMessages(data?.Messages);
+        }
         if (socketContext?.connected) {
           socketContext.joinChannel(id);
         }
@@ -237,6 +244,9 @@ export const ChatProvider = ({ children }) => {
           receiver: data?.Receiver,
           createdAt: data?.createdAt,
         });
+        if (data?.DirectMessages) {
+          setDirectPinnedMessages(data?.DirectMessages);
+        }
         if (socketContext?.connected) {
           socketContext.joinDirectChannel(id);
         }
@@ -273,6 +283,10 @@ export const ChatProvider = ({ children }) => {
 
   const editChannelMessage = async (messageId, content) => {
     socketContext?.editChannelMessage({ channelId: activeTab.id, messageId, content });
+  };
+
+  const pinChannelMessage = async (messageId, isPinned) => {
+    socketContext?.pinChannelMessage({ channelId: activeTab.id, messageId, isPinned });
   };
 
   const startTyping = () => {
@@ -337,6 +351,10 @@ export const ChatProvider = ({ children }) => {
 
   const removeDirectMessageReaction = async (messageId, emoji) => {
     socketContext?.removeDirectMessageReaction({ directChannelId: activeTab.id, messageId, emoji });
+  };
+
+  const pinDirectMessage = async (messageId, isPinned) => {
+    socketContext?.pinDirectMessage({ directChannelId: activeTab.id, messageId, isPinned });
   };
 
   useEffect(() => {
@@ -547,6 +565,56 @@ export const ChatProvider = ({ children }) => {
         }
       };
 
+      const handlePinChannelMessage = (data) => {
+        if (data && data?.channelId === activeTab?.id) {
+          if (data?.isPinned) toast.info('A new message has been pinned');
+
+          setChannelMessages((prev) => {
+            const arr = [...prev];
+            const index = arr.findIndex((message) => message.id === data?.messageId);
+            if (index !== -1) {
+              arr[index]['isPinned'] = data?.isPinned;
+            }
+            return arr;
+          });
+          setChannelPinnedMessages((prv) => {
+            const arr = [...prv];
+            const index = arr.findIndex((message) => message.id === data?.messageId);
+            if (index === -1) {
+              arr.push(data?.message);
+            } else {
+              arr.splice(index, 1);
+            }
+            return arr;
+          });
+        }
+      };
+
+      const handlePinDirectMessage = (data) => {
+        if (data && data?.directChannelId === activeTab?.id) {
+          if (data?.isPinned) toast.info('A new message has been pinned');
+
+          setDirectMessages((prev) => {
+            const arr = [...prev];
+            const index = arr.findIndex((message) => message.id === data?.messageId);
+            if (index !== -1) {
+              arr[index]['isPinned'] = data?.isPinned;
+            }
+            return arr;
+          });
+          setDirectPinnedMessages((prv) => {
+            const arr = [...prv];
+            const index = arr.findIndex((message) => message.id === data?.messageId);
+            if (index === -1) {
+              arr.push(data?.message);
+            } else {
+              arr.splice(index, 1);
+            }
+            return arr;
+          });
+        }
+      };
+
       // Add event listeners
       socketContext.socket.on('create-channel-response', handleCreateChannel);
       socketContext.socket.on('send-channel-message-response', handleChannelMessageSend);
@@ -564,6 +632,8 @@ export const ChatProvider = ({ children }) => {
       socketContext.socket.on('delete-direct-channel-reaction-response', handleDeleteDirectMessageReaction);
       socketContext.socket.on('edit-direct-message-response', handleEditDirectMessage);
       socketContext.socket.on('delete-direct-message-response', handleDeleteDirectMessage);
+      socketContext.socket.on('pin-channel-message-response', handlePinChannelMessage);
+      socketContext.socket.on('pin-direct-message-response', handlePinDirectMessage);
 
       // Cleanup function to remove event listeners
       return () => {
@@ -583,6 +653,8 @@ export const ChatProvider = ({ children }) => {
         socketContext.socket.off('delete-direct-channel-reaction-response', handleDeleteDirectMessageReaction);
         socketContext.socket.off('edit-direct-message-response', handleEditDirectMessage);
         socketContext.socket.off('delete-direct-message-response', handleDeleteDirectMessage);
+        socketContext.socket.off('pin-channel-message-response', handlePinChannelMessage);
+        socketContext.socket.off('pin-direct-message-response', handlePinDirectMessage);
       };
     }
   }, [socketContext?.socket, activeTab]);
@@ -642,6 +714,10 @@ export const ChatProvider = ({ children }) => {
     editDirectMessage,
     deleteDirectMessage,
     createChannel,
+    channelPinnedMessages,
+    directPinnedMessages,
+    pinChannelMessage,
+    pinDirectMessage,
   };
 
   return <ChatContext.Provider value={contextValue}>{children}</ChatContext.Provider>;
