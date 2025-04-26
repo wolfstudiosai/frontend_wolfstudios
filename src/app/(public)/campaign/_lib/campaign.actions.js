@@ -37,8 +37,8 @@ export const getCampaignAsync = async (id) => {
 };
 
 export const createCampaignAsync = async (data) => {
+  console.log(data, 'inside create campaign async');
   try {
-
     const response = await api.post(`/campaign-HQ`, {
       ...data,
     });
@@ -69,7 +69,7 @@ export const createCampaignGroupAsync = async (data) => {
 export const updateCampaignAsync = async (id, data) => {
   try {
     const res = await api.patch(`/campaign-HQ/${id}`, {
-      ...data
+      ...data,
     });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
