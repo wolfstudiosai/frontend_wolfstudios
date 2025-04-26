@@ -57,8 +57,9 @@ export const DeleteConfirmationPasswordPopover = ({ title, onDelete, passwordInp
   
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
               <Button 
-                variant="outlined" 
+                variant="text" 
                 onClick={() => setOpen(false)}
+                size='small'
               >
                 Cancel
               </Button>
@@ -67,6 +68,7 @@ export const DeleteConfirmationPasswordPopover = ({ title, onDelete, passwordInp
                 color="error"
                 onClick={handleConfirm}
                 disabled={passwordInput && !password}
+                size='small'
               >
                 Delete
               </Button>

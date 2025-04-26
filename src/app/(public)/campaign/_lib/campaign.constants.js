@@ -38,17 +38,11 @@ export const campaignSorting = [
 ];
 
 export const campaignProgressStatus = [
-  { label: 'Gather Rates', value: 'GATHER_RATES' },
-  { label: 'Review Rates', value: 'REVIEW_RATES' },
-  { label: 'Approved For Campaign', value: 'APPROVED_FOR_CAMPAIGN' },
-  { label: 'In Negotiation', value: 'IN_NEGOTIATION' },
-  { label: 'Awaiting Shipment', value: 'AWAITING_SHIPMENT' },
-  { label: 'Awaiting Deliverables', value: 'AWAITING_DELIVERABLES' },
-  { label: 'Content Review', value: 'CONTENT_REVIEW' },
-  { label: 'Awaiting Partner Post', value: 'AWAITING_PARTNER_POST' },
-  { label: 'Approved For Payment', value: 'APPROVED_FOR_PAYMENT' },
-  { label: 'Complete', value: 'COMPLETE' },
-  { label: 'Not Approved', value: 'NOT_APPROVED' },
-  { label: 'All Partners', value: 'ALL_PARTNERS' },
+  { label: 'Active', value: 'Active' },
+  { label: 'Upcoming', value: 'Upcoming' },
+  { label: 'Pause', value: 'Paused' },
+  { label: 'Needs Case Study', value: 'Needs Case Study' },
+  { label: 'Needs Partners', value: 'Needs Partners' },
+  { label: 'Onboarding Partners', value: 'Onboarding Partners' },
+  { label: 'Others', value: '' },
 ];
-

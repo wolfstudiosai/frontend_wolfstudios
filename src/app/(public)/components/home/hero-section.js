@@ -107,7 +107,6 @@ export const HeroSection = () => {
         }}
       >
         {/* Text Content */}
-
         <FadeIn>
           <Box sx={{p: { xs: .5, md: 2 }}}>
             <Typography
@@ -122,8 +121,7 @@ export const HeroSection = () => {
             <Typography
               fontSize={{ xs: '1rem', md: '1.3rem' }}
               fontWeight={'semibold'}
-              sx={{ color: 'text.primary' }}
-              // gutterBottom
+              sx={{ color: 'text.primary', width: { xs: '100%', md: '50%' } }}
             >
               Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
               visuals that captivate audiences, evoke emotion, and leave a lasting impact.

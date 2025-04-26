@@ -41,7 +41,7 @@ export const ProductionGridView = ({ data, colums, fetchList, loading, handlePag
         </SliderWrapper>
       </Box>
       <PageLoader loading={loading} error={null}>
-        <Grid container spacing={0} columns={{ xs: 36 }} sx={{ mt: 2 }}>
+        <Grid container spacing={.5} columns={{ xs: 36 }} >
           {data.map((production, index) => (
             <Grid item size={{ xs: 12, md: colums }} key={index}>
               <ProductionCard item={production} fetchList={fetchList} />

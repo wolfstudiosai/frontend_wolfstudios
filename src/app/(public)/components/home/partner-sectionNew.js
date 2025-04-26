@@ -103,6 +103,7 @@ const StaticGridView = ({ partners, isSecondHorizontal }) => {
           width: 'auto',
           minWidth: '100%',
           alignItems: 'flex-start',
+          gap: { md: 0.5 },
         }}
       >
         {partners.map((partner, index) => (
@@ -115,7 +116,7 @@ const StaticGridView = ({ partners, isSecondHorizontal }) => {
               flexShrink: 0,
             }}
           >
-            <Stack spacing={0}>
+            <Stack spacing={0.5}>
               <Card card={partner} fetchList={partners} />
               {isSecondHorizontal && <Card card={reversedPartners[index]} fetchList={partners} />}
             </Stack>

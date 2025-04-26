@@ -1,13 +1,13 @@
 'use client';
 
-import { Box, Chip, IconButton, Slider, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import React from 'react';
-import { pxToRem } from '/src/utils/helper';
+import { Box, Chip, IconButton, Slider, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 
 import { SettingsContext } from '/src/contexts/settings';
 import useAuth from '/src/hooks/useAuth';
 
 import { Iconify } from '../iconify/iconify';
+import { pxToRem } from '/src/utils/helper';
 
 export const PageHeader = ({
   title,
@@ -46,9 +46,8 @@ export const PageHeader = ({
       sx={{
         width: '100%',
         position: 'sticky',
-        top: openSubNav ? 5 : 5,
-        // zIndex: 100,
-        background: "var(--mui-palette-background-default)",
+        top: 0,
+        background: 'var(--mui-palette-background-default)',
       }}
     >
       <Stack
@@ -146,7 +145,21 @@ export const PageHeader = ({
                 </Typography>
               ))}
 
-              <Stack direction="row" spacing={0.5} sx={{ width: '100%', flexWrap: 'wrap' }}>
+              <Stack
+                direction="row"
+                spacing={0.5}
+                sx={{
+                  width: '100%',
+                  overflowX: 'auto',
+                  overflowY: 'hidden',
+                  flexWrap: 'nowrap',
+                  whiteSpace: 'nowrap',
+                  py: 0.5,
+                  '::-webkit-scrollbar': {
+                    display: 'none',
+                  },
+                }}
+              >
                 {(currentSection === 'TAG' ? tags : currentSection === 'FILTER' ? filters : sorting).map((item) => (
                   <Chip
                     key={item.value}
@@ -161,6 +174,7 @@ export const PageHeader = ({
                       height: '22px',
                       padding: '6px',
                       cursor: 'pointer',
+                      flexShrink: 0, // prevents shrinking in horizontal scroll
                     }}
                   />
                 ))}
