@@ -24,10 +24,10 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
   const [sidebarView, setSidebarView] = React.useState(view); // QUICK / EDIT
 
   const handleDelete = async (password) => {
-    const response = await deleteCampaignAsync([data.id]);
+    const response = await deleteCampaignAsync(data.id);
     if (response.success) {
       // fetchList();
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
@@ -67,7 +67,11 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
   );
 
   return (
-    <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
+    <DrawerContainer
+      open={open}
+      handleDrawerClose={onClose}
+      actionButtons={(sidebarView === 'QUICK' || isUpdate) ? actionButtons : null}
+    >
       {sidebarView === 'QUICK' ? (
         <CampaignQuickView data={data} />
       ) : (

@@ -192,7 +192,7 @@ export const CampaignForm = ({ id, onClose, fetchList }) => {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} pb={2}>
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} />
             <ErrorMessage error={errors.name} />
