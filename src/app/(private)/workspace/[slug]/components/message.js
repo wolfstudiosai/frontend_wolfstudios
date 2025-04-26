@@ -24,7 +24,7 @@ dayjs.extend(relativeTime);
 
 const reactionOptions = ['👍', '❤️', '😂', '🎉', '😮'];
 
-export const Message = ({ message, sidebar, pinnedTab = false }) => {
+export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false }) => {
   const {
     setActiveChannelThread,
     setActiveDirectThread,
@@ -269,21 +269,31 @@ export const Message = ({ message, sidebar, pinnedTab = false }) => {
               <Iconify icon="material-symbols:delete-outline-rounded" />
             </IconButton>
           )}
-          {/* <IconButton title="Reply in thread">
-            <Iconify icon="mingcute:message-3-fill" />
-          </IconButton> */}
-          <IconButton
-            title="Pin Message"
-            onClick={() => {
-              if (activeTab?.type === 'channel') {
-                pinChannelMessage(message?.id, !message?.isPinned);
-              } else {
-                pinDirectMessage(message?.id, !message?.isPinned);
-              }
-            }}
-          >
-            <Iconify icon={message?.isPinned ? 'ri:unpin-line' : 'mingcute:pin-line'} />
-          </IconButton>
+          {!threadTab && (
+            <IconButton
+              title="Reply in thread"
+              onClick={() => {
+                if (activeTab?.type === 'channel') setActiveChannelThread(message?.id);
+                else setActiveDirectThread(message?.id);
+              }}
+            >
+              <Iconify icon="mingcute:message-3-fill" />
+            </IconButton>
+          )}
+          {!threadTab && (
+            <IconButton
+              title="Pin Message"
+              onClick={() => {
+                if (activeTab?.type === 'channel') {
+                  pinChannelMessage(message?.id, !message?.isPinned);
+                } else {
+                  pinDirectMessage(message?.id, !message?.isPinned);
+                }
+              }}
+            >
+              <Iconify icon={message?.isPinned ? 'ri:unpin-line' : 'mingcute:pin-line'} />
+            </IconButton>
+          )}
         </ButtonGroup>
       )}
 

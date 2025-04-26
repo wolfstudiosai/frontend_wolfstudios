@@ -285,7 +285,11 @@ export const LeftSidebar = () => {
                           {lastMessage?.content}
                         </MemberRole>
                       </MemberInfo>
-                      {/* <CountChip label={channel?.DirectMessages?.length} size="small" /> */}
+                      {notifications?.[channel.id] ? (
+                        <CountChip label={notifications?.[channel.id]} size="small" />
+                      ) : (
+                        <></>
+                      )}
                     </MemberItem>
                   );
                 })}

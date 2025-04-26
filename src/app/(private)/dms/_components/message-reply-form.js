@@ -28,7 +28,7 @@ const allUsers = [
   { id: 3, name: 'Mustafa Jawed', profile_pic: '' },
 ];
 
-export const MessageForm = ({ sx = {} }) => {
+export const MessageReplyForm = ({ sx = {} }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [mentionAnchor, setMentionAnchor] = useState(null);
   const [mentionQuery, setMentionQuery] = useState('');
@@ -49,6 +49,8 @@ export const MessageForm = ({ sx = {} }) => {
     handleEditMessage,
     editChannelMessage,
     editDirectMessage,
+    activeChannelThread,
+    activeDirectThread,
   } = useContext(ChatContext);
   const { userInfo } = useAuth();
 
@@ -69,9 +71,9 @@ export const MessageForm = ({ sx = {} }) => {
     if (!messageContent.trim()) return;
 
     if (activeTab?.type === 'channel') {
-      createChannelMessage(messageContent);
+      createChannelMessage(messageContent, activeChannelThread);
     } else {
-      createDirectMessage(messageContent);
+      createDirectMessage(messageContent, activeDirectThread);
     }
 
     setMessageContent('');
