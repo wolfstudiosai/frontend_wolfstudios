@@ -267,9 +267,9 @@ export const CampaignForm = ({ id, onClose, fetchList }) => {
               value={values.status}
               onChange={(value) => setFieldValue('status', value)}
               options={[
-                { value: 'UPCOMING', label: 'Upcomming' },
+                { value: 'UPCOMING', label: 'Upcoming' },
                 { value: 'ACTIVE', label: 'Active' },
-                { value: 'PAUSED', label: 'Pause' },
+                { value: 'PAUSED', label: 'Paused' },
                 { value: 'NEEDS_CASE_STUDY', label: 'Needs Case Study' },
                 { value: 'NEEDS_PARTNERS', label: 'Needs Partners' },
                 { value: 'ONBOARDING_PARTNERS', label: 'Onboarding Partners' },

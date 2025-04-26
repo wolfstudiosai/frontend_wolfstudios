@@ -1,22 +1,24 @@
 import React from 'react';
-import { CustomSelect } from '/src/components/formFields/custom-select';
-import { isSupabaseUrl } from '/src/utils/helper';
 import { Box, Chip, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
+
+import { CustomSelect } from '/src/components/formFields/custom-select';
 
 import { updateCampaignAsync } from '../_lib/campaign.actions';
 import { campaignProgressStatus } from '../_lib/campaign.constants';
 import { ManageCampaignRightPanel } from './manage-campaign-right-panel';
+import { isSupabaseUrl } from '/src/utils/helper';
 
 export const CampaignTabCard = ({ campaign, fetchList }) => {
   const [openCampaignRightPanel, setOpenCampaignRightPanel] = React.useState(null);
-  const [campaignProgress, setCampaignProgress] = React.useState(campaign.campaign_progress || '');
+  const [campaignProgress, setCampaignProgress] = React.useState('');
+  console.log(campaignProgress, 'campaignProgress....');
 
   async function updateCampaign() {
     try {
-      const res = await updateCampaignAsync(null, {
+      const res = await updateCampaignAsync(campaign?.id, {
         ...campaign,
-        campaign_progress: campaignProgress,
+        status: campaignProgress,
       });
 
       if (res.success) {
@@ -28,10 +30,14 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
   }
 
   React.useEffect(() => {
-    if (campaign.campaign_progress !== campaignProgress) {
+    if (campaign.status !== campaignProgress && campaignProgress) {
       updateCampaign();
     }
   }, [campaignProgress]);
+
+  const imageSrc = isSupabaseUrl(campaign.CampaignImage[0])
+    ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${campaign.CampaignImage[0]}`
+    : campaign.CampaignImage[0];
 
   return (
     <>
@@ -40,7 +46,7 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
         spacing={1}
         p={1}
         sx={{
-          borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+          // borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
           border: '1px solid var(--mui-palette-divider)',
           boxShadow: '1px 1px 5px rgba(0, 0, 0, 0.05)',
         }}
@@ -48,47 +54,41 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
         {/* Campaign Image */}
         <Box
           component="img"
-          src={
-            isSupabaseUrl(campaign.campaign_image)
-              ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${campaign.campaign_image}`
-              : campaign.campaign_image
-          }
+          src={imageSrc || '/assets/image-placeholder.jpg'}
           sx={{
             height: '200px',
             width: '100%',
             objectFit: 'contain',
-            borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
             border: '1px solid var(--mui-palette-divider)',
             cursor: 'pointer',
           }}
           onClick={() => setOpenCampaignRightPanel(campaign)}
         />
-        <Box>
-          <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
-            Current Status
-          </Typography>
-          <Chip label={campaign.campaign_progress} size="small" sx={{ fontSize: '10px' }} />
-        </Box>
+
         <Box>
           <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
             Stakeholder
           </Typography>
-          <Typography sx={{ fontSize: '14px' }} color="text.secodary">
-            {campaign.stakeholder || '-'}
-          </Typography>
+          <Stack direction="row" flexWrap="wrap">
+            <Typography sx={{ fontSize: '14px' }} color="text.secondary">
+              {campaign.ByCampaignsStakeholders?.map((item) => item?.Stakeholders?.Name)
+                .filter(Boolean)
+                .join(', ') || '-'}
+            </Typography>
+          </Stack>
         </Box>
         <Box>
           <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
             Campaign Status
           </Typography>
-          <Chip label={campaign.campaign_status} size="small" sx={{ fontSize: '10px' }} />
+          <Chip label={campaign.CampaignStatus} size="small" sx={{ fontSize: '10px' }} />
         </Box>
         <Box>
           <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
             Start Date
           </Typography>
           <Typography sx={{ fontSize: '14px' }} color="text.secodary">
-            {campaign.start_date ? dayjs(campaign.start_date).format('DD MMM YYYY') : '-'}
+            {campaign.StartDate ? dayjs(campaign.StartDate).format('DD MMM YYYY') : '-'}
           </Typography>
         </Box>
         <Box>
@@ -96,7 +96,7 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
             End Date
           </Typography>
           <Typography sx={{ fontSize: '14px' }} color="text.secodary">
-            {campaign.start_date ? dayjs(campaign.end_data).format('DD MMM YYYY') : '-'}
+            {campaign.EndData ? dayjs(campaign.EndData).format('DD MMM YYYY') : '-'}
           </Typography>
         </Box>
         <Box>
@@ -104,7 +104,7 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
             Budget
           </Typography>
           <Typography sx={{ fontSize: '14px' }} color="text.secodary">
-            {campaign.budget || '-'}
+            {campaign.Budget || '-'}
           </Typography>
         </Box>
         <Box>
@@ -112,7 +112,7 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
             Total Expense
           </Typography>
           <Typography sx={{ fontSize: '14px' }} color="text.secodary">
-            {campaign.total_expense || '-'}
+            {campaign.TotalExpense || '-'}
           </Typography>
         </Box>
         <Box>
@@ -120,7 +120,7 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
             Campaign ROI
           </Typography>
           <Typography sx={{ fontSize: '14px' }} color="text.secodary">
-            {campaign.campaign_ROI || '-'}
+            {campaign.CampaignROI || '-'}
           </Typography>
         </Box>
         <Box>
@@ -130,7 +130,7 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
           <CustomSelect
             value={campaignProgress}
             onChange={(value) => setCampaignProgress(value)}
-            name="campaign_status"
+            name="status"
             options={campaignProgressStatus}
           />
         </Box>

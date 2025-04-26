@@ -115,7 +115,7 @@ export const CampaignView = () => {
           </div>
         </Box>
       ) : (
-        <CampaignTabView data={data} />
+        <CampaignTabView data={data}  fetchList={refreshListView}/>
       )}
       <ManageCampaignRightPanel
         view="EDIT"
