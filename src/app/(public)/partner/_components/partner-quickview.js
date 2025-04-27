@@ -54,13 +54,13 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
   ];
 
   const socialProfiles = [
-    data.Instagram && { platform: 'Instagram', url: data.Instagram },
-    data.Tiktok && { platform: 'TikTok', url: data.Tiktok },
-    data.Youtube && { platform: 'YouTube', url: data.Youtube },
-    data.X && { platform: 'X', url: data.X },
-    data.Facebook && { platform: 'Facebook', url: data.Facebook },
-    data.Pinterest && { platform: 'Pinterest', url: data.Pinterest },
-    data.LinkedIn && { platform: 'LinkedIn', url: data.LinkedIn },
+    data?.Instagram && { platform: 'Instagram', url: data.Instagram },
+    data?.Tiktok && { platform: 'TikTok', url: data.Tiktok },
+    data?.Youtube && { platform: 'YouTube', url: data.Youtube },
+    data?.X && { platform: 'X', url: data.X },
+    data?.Facebook && { platform: 'Facebook', url: data.Facebook },
+    data?.Pinterest && { platform: 'Pinterest', url: data.Pinterest },
+    data?.LinkedIn && { platform: 'LinkedIn', url: data.LinkedIn },
   ].filter(Boolean);
 
   const [personalInfo, setPersonalInfo] = useState({
@@ -525,7 +525,7 @@ export const PartnerSliderCard = ({ item, sx = {} }) => {
 
 export const PartnerIframes = ({ profiles }) => {
   const getEmbedUrl = (url) => {
-    if (url.includes('instagram.com')) {
+    if (url && url?.includes('instagram.com')) {
       const postMatch = url.match(/instagram\.com\/p\/([^\/]+)/);
       if (postMatch) {
         return `https://www.instagram.com/p/${postMatch[1]}/embed`;
@@ -534,22 +534,22 @@ export const PartnerIframes = ({ profiles }) => {
       const username = url.split('/').filter(Boolean).pop();
       return `https://www.instagram.com/${username}/embed`;
     }
-    if (url.includes('tiktok.com')) {
+    if (url && url?.includes('tiktok.com')) {
       const vidMatch = url.match(/video\/(\d+)/);
       if (vidMatch) {
         return `https://www.tiktok.com/embed/v2/${vidMatch[1]}`;
       }
     }
-    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+    if ((url && url?.includes('youtube.com')) || url?.includes('youtu.be')) {
       const ytMatch = url.match(/(youtu\.be\/|v=)([^&]+)/);
       if (ytMatch) {
         return `https://www.youtube.com/embed/${ytMatch[2]}`;
       }
     }
-    if (url.includes('twitter.com')) {
+    if (url && url?.includes('twitter.com')) {
       return `https://twitframe.com/show?url=${encodeURIComponent(url)}`;
     }
-    if (url.includes('facebook.com')) {
+    if (url && url?.includes('facebook.com')) {
       return `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(url)}`;
     }
     return url;
@@ -558,7 +558,7 @@ export const PartnerIframes = ({ profiles }) => {
   return (
     <Stack direction="row" spacing={2} sx={{ overflowX: 'auto', py: 2, px: 1 }}>
       {profiles.map(({ platform, url }) => {
-        const embedUrl = getEmbedUrl(url);
+        const embedUrl = getEmbedUrl(url || '');
         return <EmbedCard key={url} platform={platform} embedUrl={embedUrl} />;
       })}
     </Stack>

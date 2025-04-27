@@ -25,18 +25,12 @@ export const getPartnerAsync = async (slug) => {
   }
 };
 
-export const createPartnerAsync = async (file, data) => {
+export const createPartnerAsync = async (data) => {
   try {
     const { id, created_by, user_id, updated_at, ...rest } = data;
-    let profile_image = '';
     const partnerResponse = await api.post('/partner-HQ', {
       ...rest,
-      profile_image,
     });
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      profile_image = uploadResponse[0].path;
-    }
     toast.success(partnerResponse.data.message);
     return { success: true, data: partnerResponse.data.data };
   } catch (error) {
@@ -46,17 +40,11 @@ export const createPartnerAsync = async (file, data) => {
   }
 };
 
-export const updatePartnerAsyncOld = async (file, data) => {
+export const updatePartnerAsyncOld = async (data) => {
   try {
     const { id, user_id, created_by, created_at, updated_at, ...rest } = data;
-    let profile_image = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      profile_image = uploadResponse[0].path;
-    }
     const res = await api.patch(`/partner/update/${id}`, {
       ...rest,
-      profile_image: profile_image ? profile_image : data.thumbnail,
     });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
