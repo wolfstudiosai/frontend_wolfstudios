@@ -1,147 +1,95 @@
-export const defaultContent = {
-    // General Information
-    id: '',
-    title: '',
-    campaign: '',
-    product: '',
-    stakeholder: '',
-    posting_quality: 'Medium',
-    google_drive_files: '',
-    playbook_link: '',
-    uppromote_conversion: 0,
-    asset_status: 'Inactive',
-    month_uploaded: null,
-    creator_status: 'Inactive',
-    profile: '',
-    posting_status: 'NOT_POSTED',
-    partner_hq: '',
-    portfolio: '',
-    contributed_engagement: 0,
-    by_tags: '',
-    by_city: '',
-    AI_internet_search: '',
+export const defaultContent = (data) => {
+  const defaultData = {
+    name: data?.name || '',
+    revoPinterest: data?.revoPinterest || '',
+    pinAccountsUsed: data?.pinAccountsUsed || '',
+    postQuality: data?.postQuality?.join(', ') || [],
+    googleDriveFiles: data?.googleDriveFiles || '',
+    playbookLink: data?.playbookLink || '',
+    upPromoteConversion: data?.upPromoteConversion || 0,
+    assetStatus: data?.assetStatus || '',
+    monthUploaded: data?.monthUploaded ? new Date(data?.monthUploaded) : null,
+    revoInstagram: data?.revoInstagram || '',
+    creatorStatus: data?.creatorStatus || '',
+    
+    partner_IGLink: data?.partner?.IGLink || '',
+    partner_TikTokLink: data?.partner?.TikTokLink || '',
+    partner_TTShares: data?.partner?.TTShares || 0,
+    partner_TTSaves: data?.partner?.TTSaves || 0,
+    partner_TTViews: data?.partner?.TTViews || 0,
+    partner_TTLikes: data?.partner?.TTLikes || 0,
+    partner_TTComments: data?.partner?.TTComments || 0,
+    partner_YTLink: data?.partner?.YTLink || '',
 
-    // Pinterest
-    REVO_pinterest: 'not-posted',
-    pin_accounts_used: '',
-    pinterest_PIN_click: 0,
-    pinterest_view: 0,
+    ig_SocialSetsUsed: data?.IG?.SocialSetsUsed || '',
+    ig_TotalComments: data?.IG?.TotalComments || 0,
+    ig_TotalLikes: data?.IG?.TotalLikes || 0,
+    ig_TotalShares: data?.IG?.TotalShares || 0,
+    ig_TotalViews: data?.IG?.TotalViews || 0,
 
-    // Instagram
-    REVO_instagram: 'not-posted',
-    IG_like: 0,
-    IG_comment: 0,
-    IG_share: 0,
-    IG_view: 0,
-    IG_social_sets_used: '',
-    partner_IG_link: '',
+    yt_ClubREVOTotalViews: data?.YT?.ClubREVOTotalViews || 0,
+    yt_PartnerTotalSaves: data?.YT?.PartnerTotalSaves || 0,
+    yt_PartnerTotalViews: data?.YT?.PartnerTotalViews || 0,
+    yt_PartnerTotalComments: data?.YT?.PartnerTotalComments || 0,
+    yt_PartnerTotalLikes: data?.YT?.PartnerTotalLikes || 0,
+    yt_REVOMADICTotalShares: data?.YT?.REVOMADICTotalShares || 0,
+    yt_REVOMADICTotalViews: data?.YT?.REVOMADICTotalViews || 0,
+    yt_REVOMADICTotalLikes: data?.YT?.REVOMADICTotalLikes || 0,
+    yt_REVOMADICTotalComments: data?.YT?.REVOMADICTotalComments || 0,
+    yt_ClubREVOTotalLikes: data?.YT?.ClubREVOTotalLikes || 0,
+    yt_AccountsUsed: data?.YT?.AccountsUsed || '',
 
-    // Twitter
-    REVO_twitter: 'not-posted',
+    pinterest_TotalPinClicks: data?.Pinterest?.TotalPinClicks || 0,
+    pinterest_TotalViews: data?.Pinterest?.TotalViews || 0,
 
-    // TikTok
-    REVO_tiktok: 'not-posted',
-    REVO_TT_view: 0,
-    tiktok_accounts_used: '',
-    partner_tiktok_link: '',
-    partner_TT_like: 0,
-    partner_TT_comment: '',
-    partner_TT_comments: 0,
-    partner_TT_share: 0,
-    partner_TT_view: 0,
-    partner_TT_save: 0,
-    TT_dummy_account_used: '',
+    revo_Twitter: data?.REVO?.Twitter || '',
+    revo_TTViews: data?.REVO?.TTViews || 0,
+    revo_TikTok: data?.REVO?.TikTok || '',
+    revo_Youtube: data?.REVO?.Youtube || '',
+    revo_ClubRevoYoutube: data?.REVO?.ClubRevoYoutube || '',
 
-    // YouTube
-    YT_account_used: 'not-posted',
-    partner_YT_link: '',
-    partner_YT_like: 0,
-    partner_YT_comment: 0,
-    partner_YT_view: 0,
-    partner_YT_save: 0,
-    REVO_clubrevo_youtube: 'not-posted',
-    REVO_youtube: 'not-posted',
-    YT_clubrevo_like: 0,
-    YT_clubrevo_view: 0,
-    YT_REVOMADIC_like: 0,
-    YT_REVOMADIC_comment: 0,
-    YT_REVOMADIC_share: 0,
-    YT_REVOMADIC_view: 0,
+    tikTokAccountsused: data?.tikTokAccountsused || '',
+    TTDummyAccountsUsed: data?.TTDummyAccountsUsed?.join(', ') || '',
 
-    // other
-    facilities_contributed_content: '',
-    image: '',
-    video: '',
-};
-export const defaultContent1 = {
-    // General Information
-    id: '',
-    name: '',
-    pinAccountsUsed: '',
-    postQuality: [],
-    googleDriveFiles: '',
-    playbookLink: '',
-    upPromoteConversion: '',
-    assetStatus: '',
-    monthUploaded: 0,
-    revoInstagram: '',
-    creatorStatus: null,
-    partner :{
-    IGLink:'',
-    TikTokLink: '',
-    TTShares:'',
-    TTSaves:'',
-    TTViews:'',
-    TTLikes:'',
-    TTComments:'',
-    YTLink:'',
-    },
+    postingStatus: data?.postingStatus || '',
+    totalContributedEngagement: data?.totalContributedEngagement || '',
 
-    IG:{
-        SocialSetsUsed:'',
-        TotalComments:'',
-        TotalLikes:'',
-        TotalShares:'',
-        TotalViews:'',
-    },
+    campaigns:
+      data?.campaigns?.map((item) => ({
+        value: item?.Spaces?.id,
+        label: item?.Spaces?.Name,
+      })) || [],
+    cities:
+      data?.campaigns?.map((item) => ({
+        value: item?.Spaces?.id,
+        label: item?.Spaces?.Name,
+      })) || [],
+    products:
+      data?.campaigns?.map((item) => ({
+        value: item?.Spaces?.id,
+        label: item?.Spaces?.Name,
+      })) || [],
+    tags:
+      data?.campaigns?.map((item) => ({
+        value: item?.Spaces?.id,
+        label: item?.Spaces?.Name,
+      })) || [],
+    stakeholders:
+      data?.campaigns?.map((item) => ({
+        value: item?.Spaces?.id,
+        label: item?.Spaces?.Name,
+      })) || [],
+    partners:
+      data?.campaigns?.map((item) => ({
+        value: item?.Spaces?.id,
+        label: item?.Spaces?.Name,
+      })) || [],
+    retailPartners:
+      data?.campaigns?.map((item) => ({
+        value: item?.Spaces?.id,
+        label: item?.Spaces?.Name,
+      })) || [],
+  };
 
-    YT:{
-        ClubREVOTotalViews: 0,
-        PartnerTotalSaves: 0,
-        PartnerTotalViews: 0,
-        PartnerTotalComments: 0,
-        PartnerTotalLikes: 0,
-        REVOMADICTotalShares: 0,
-        REVOMADICTotalViews: 0,
-        REVOMADICTotalLikes: 0,
-        REVOMADICTotalComments: 0,
-        ClubREVOTotalLikes: 0,
-        AccountsUsed: '',
-    },
-
-    Pinterest:{
-    TotalPinClicks: 0,
-    TotalViews: 0,
-    },
-
-    REVO:{
-    Twitter: '',
-    TTViews: 0,
-    TikTok:'',
-    Youtube: '',
-    ClubRevoYoutube: '',
-    },
-    tikTokAccountsused: '',
-    TTDummyAccountsUsed: [],
-    postingStatus: '',
-    totalContributedEngagement: '',
-
-    //relations
-    campaigns: [],
-    cities:[],
-    products:[],
-    tags:[],
-    stakeholders:[],
-    partners:[],
-    retailPartners:[],
+  return defaultData;
 };

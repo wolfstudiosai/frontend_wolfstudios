@@ -14,7 +14,7 @@ import { EditableDataTable } from '/src/components/data-table/editable-data-tabl
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 
 import { createContentAsync, deleteContentAsync, updateContentAsync } from '../_lib/all-content.actions';
-import { defaultContent } from '../_lib/all-content.types';
+import { defaultContent } from '../_lib/all-content.types.old';
 
 // table columns
 const columns = [

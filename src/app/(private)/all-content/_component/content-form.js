@@ -2,18 +2,26 @@
 
 import { InputAdornment } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { useFormik } from 'formik';
 
+import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
+import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
 import { Iconify } from '/src/components/iconify/iconify';
+
+import { defaultContent } from '../_lib/all-content.types';
 
 export const ContentForm = ({ id, onClose, fetchList }) => {
   // ********************* Formik *******************************
 
   const { values, errors, handleChange, handleSubmit, setFieldValue, resetForm, setValues } = useFormik({
-    initialValues: defaultCampaign(),
+    initialValues: defaultContent(),
     validate: (values) => {
       const errors = {};
+      if (!values.name) {
+        errors.name = formConstants.required;
+      }
       if (!values.revoPinterest) {
         errors.revoPinterest = formConstants.required;
       }
@@ -100,55 +108,125 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
     },
   });
 
-  // *****************Use Effects*******************************
-
-  // React.useEffect(() => {
-  //   return () => {
-  //     setValues(defaultContent1);
-  //   };
-  // }, []);
-
-  // React.useEffect(() => {
-  //   if (data) {
-  //     setValues(data);
-  //   }
-  // }, [data]);
-
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit}>
       <Grid container spacing={2}>
         {/* General Information Section */}
         <Grid size={{ xs: 12 }}>
-          <CustomTextField name="name" label="Name" values={data.name || ''} onChange={onChange} />
+          <CustomTextField name="name" label="Name" values={values.name || ''} onChange={handleChange} />
           <ErrorMessage error={errors.name} />
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="postQuality"
-            label="Post Quality"
-            values={data.postQuality?.join(', ') || ''}
-            onChange={(e) => handleArrayChange('postQuality', e.target.value)}
+            name="revoPinterest"
+            label="Revo Pinterest"
+            values={values.revoPinterest}
+            onChange={handleChange}
           />
-          
         </Grid>
-
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="pinAccountsUsed"
-            label="Pin Accounts Used"
-            values={data.pinAccountsUsed || ''}
-            onChange={onChange}
+            label="Revo Pinterest"
+            values={values.pinAccountsUsed}
+            onChange={handleChange}
           />
         </Grid>
-
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="postQuality"
+            label="Post Quality"
+            values={values.postQuality}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="googleDriveFiles"
+            label="Google Drive Files"
+            values={values.googleDriveFiles}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="playbookLink"
+            label="Playbook Link"
+            values={values.playbookLink}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="upPromoteConversion"
+            label="Up Promote Conversion"
+            values={values.upPromoteConversion}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomSelect
+            name="assetStatus"
+            label="Asset Status"
+            value={values.assetStatus}
+            onChange={(value) => setFieldValue('assetStatus', value)}
+            options={[
+              { value: 'Approved', label: 'Approved' },
+              { value: 'Pending', label: 'Pending' },
+              { value: 'Rejected', label: 'Rejected' },
+            ]}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomDatePicker
+            label="Start Date"
+            error={errors.startDate}
+            value={values.startDate}
+            format="YYYY-MM-DD"
+            onChange={(value) => setFieldValue('startDate', value)}
+          />
+          <ErrorMessage error={errors.startDate} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomSelect
+            name="revoInstagram"
+            label="Revo Instagram"
+            value={values.revoInstagram}
+            onChange={(value) => setFieldValue('revoInstagram', value)}
+            options={[
+              { value: 'Posted', label: 'Posted' },
+              { value: 'Not Posted', label: 'Not Posted' },
+            ]}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomSelect
+            name="creatorStatus"
+            label="Creator Status"
+            value={values.creatorStatus}
+            onChange={(value) => setFieldValue('creatorStatus', value)}
+            options={[
+              { value: 'Contract Fulfilled', label: 'Contract Fulfilled' },
+              { value: 'Contract Not Fulfilled', label: 'Contract Not Fulfilled' },
+            ]}
+          />
+        </Grid>
         {/* Partner Section */}
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="partner.IGLink"
+            name="partner_IGLink"
             label="Partner IG Link"
-            values={data.partner?.IGLink || ''}
-            onChange={onChange}
+            values={values.partner_IGLink}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partner_IGLink"
+            label="Partner IG Link"
+            values={values.partner_IGLink}
+            onChange={handleChange}
           />
         </Grid>
 
@@ -156,8 +234,8 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
           <CustomTextField
             name="partner.TikTokLink"
             label="Partner TikTok Link"
-            values={data.partner?.TikTokLink || ''}
-            onChange={onChange}
+            values={values.partner?.TikTokLink || ''}
+            onChange={handleChange}
           />
         </Grid>
 
@@ -165,8 +243,8 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
           <CustomTextField
             name="partner.YTLink"
             label="Partner YouTube Link"
-            values={data.partner?.YTLink || ''}
-            onChange={onChange}
+            values={values.partner?.YTLink || ''}
+            onChange={handleChange}
           />
         </Grid>
 
@@ -176,8 +254,8 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             name="IG.TotalLikes"
             label="IG Total Likes"
             type="number"
-            values={data.IG?.TotalLikes || 0}
-            onChange={onChange}
+            values={values.IG?.TotalLikes || 0}
+            onChange={handleChange}
           />
         </Grid>
 
@@ -186,8 +264,8 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             name="IG.TotalComments"
             label="IG Total Comments"
             type="number"
-            values={data.IG?.TotalComments || 0}
-            onChange={onChange}
+            values={values.IG?.TotalComments || 0}
+            onChange={handleChange}
           />
         </Grid>
 
@@ -196,8 +274,8 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             name="IG.TotalShares"
             label="IG Total Shares"
             type="number"
-            values={data.IG?.TotalShares || 0}
-            onChange={onChange}
+            values={values.IG?.TotalShares || 0}
+            onChange={handleChange}
           />
         </Grid>
 
@@ -206,8 +284,8 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             name="IG.TotalViews"
             label="IG Total Views"
             type="number"
-            values={data.IG?.TotalViews || 0}
-            onChange={onChange}
+            values={values.IG?.TotalViews || 0}
+            onChange={handleChange}
           />
         </Grid>
 
@@ -216,8 +294,8 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
           <CustomTextField
             name="YT.AccountsUsed"
             label="YT Accounts Used"
-            values={data.YT?.AccountsUsed || ''}
-            onChange={onChange}
+            values={values.YT?.AccountsUsed || ''}
+            onChange={handleChange}
           />
         </Grid>
 
@@ -226,8 +304,8 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             name="YT.ClubREVOTotalViews"
             label="YT ClubREVO Views"
             type="number"
-            values={data.YT?.ClubREVOTotalViews || 0}
-            onChange={onChange}
+            values={values.YT?.ClubREVOTotalViews || 0}
+            onChange={handleChange}
           />
         </Grid>
 
@@ -236,8 +314,8 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             name="YT.PartnerTotalLikes"
             label="YT Partner Likes"
             type="number"
-            values={data.YT?.PartnerTotalLikes || 0}
-            onChange={onChange}
+            values={values.YT?.PartnerTotalLikes || 0}
+            onChange={handleChange}
           />
         </Grid>
 
@@ -247,8 +325,8 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             name="Pinterest.TotalPinClicks"
             label="Pinterest Clicks"
             type="number"
-            values={data.Pinterest?.TotalPinClicks || 0}
-            onChange={onChange}
+            values={values.Pinterest?.TotalPinClicks || 0}
+            onChange={handleChange}
           />
         </Grid>
 
@@ -257,8 +335,8 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             name="Pinterest.TotalViews"
             label="Pinterest Views"
             type="number"
-            values={data.Pinterest?.TotalViews || 0}
-            onChange={onChange}
+            values={values.Pinterest?.TotalViews || 0}
+            onChange={handleChange}
           />
         </Grid>
 
@@ -268,8 +346,8 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             name="REVO.Twitter"
             label="REVO Twitter"
             select
-            values={data.REVO?.Twitter || 'not-posted'}
-            onChange={onChange}
+            values={values.REVO?.Twitter || 'not-posted'}
+            onChange={handleChange}
           >
             <option value="not-posted">Not Posted</option>
             <option value="posted">Posted</option>
@@ -281,8 +359,8 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             name="REVO.TikTok"
             label="REVO TikTok"
             select
-            values={data.REVO?.TikTok || 'not-posted'}
-            onChange={onChange}
+            values={values.REVO?.TikTok || 'not-posted'}
+            onChange={handleChange}
           >
             <option value="not-posted">Not Posted</option>
             <option value="posted">Posted</option>
@@ -294,7 +372,7 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
           <CustomTextField
             name="campaigns"
             label="Campaigns"
-            values={data.campaigns?.join(', ') || ''}
+            values={values.campaigns?.join(', ') || ''}
             onChange={(e) => handleArrayChange('campaigns', e.target.value)}
           />
         </Grid>
@@ -303,7 +381,7 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
           <CustomTextField
             name="tags"
             label="Tags"
-            values={data.tags?.join(', ') || ''}
+            values={values.tags?.join(', ') || ''}
             onChange={(e) => handleArrayChange('tags', e.target.value)}
           />
         </Grid>
@@ -312,7 +390,7 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
           <CustomTextField
             name="retailPartners"
             label="Retail Partners"
-            values={data.retailPartners?.join(', ') || ''}
+            values={values.retailPartners?.join(', ') || ''}
             onChange={(e) => handleArrayChange('retailPartners', e.target.value)}
           />
         </Grid>
@@ -322,15 +400,15 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
           <CustomTextField
             name="googleDriveFiles"
             label="Google Drive Files"
-            values={data.googleDriveFiles || ''}
-            onChange={onChange}
+            values={values.googleDriveFiles || ''}
+            onChange={handleChange}
             slotProps={{
               input: {
                 endAdornment: (
                   <InputAdornment position="end">
                     <Iconify
                       icon="lucide:link"
-                      onClick={() => window.open(data.googleDriveFiles, '_blank')}
+                      onClick={() => window.open(values.googleDriveFiles, '_blank')}
                       style={{ cursor: 'pointer' }}
                     />
                   </InputAdornment>
@@ -344,15 +422,15 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
           <CustomTextField
             name="playbookLink"
             label="Playbook Link"
-            values={data.playbookLink || ''}
-            onChange={onChange}
+            values={values.playbookLink || ''}
+            onChange={handleChange}
             slotProps={{
               input: {
                 endAdornment: (
                   <InputAdornment position="end">
                     <Iconify
                       icon="lucide:link"
-                      onClick={() => window.open(data.playbookLink, '_blank')}
+                      onClick={() => window.open(values.playbookLink, '_blank')}
                       style={{ cursor: 'pointer' }}
                     />
                   </InputAdornment>
