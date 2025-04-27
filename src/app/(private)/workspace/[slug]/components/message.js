@@ -145,24 +145,8 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
         )}
 
         {/* File Attachments */}
-        {/* <Stack direction="row" flexWrap="wrap" gap={1} sx={{ my: 1 }}>
-          {[
-            {
-              url: 'https://cdn.wolfstudios.ai/portfolios/attpPqOYQr5N7dOY8.jpg',
-              type: 'image/jpeg',
-              name: 'image.jpg',
-            },
-            {
-              url: 'https://drive.google.com/open?id=1NTlmVVs46yzyETMjfHg9xPOLAFiZ4CFR',
-              type: 'application/pdf',
-              name: 'sample.pdf',
-            },
-            {
-              url: 'https://yourdomain.com/uploads/sample.pdf',
-              type: 'docx',
-              name: 'Document.docx',
-            },
-          ].map((file, index) => (
+        <Stack direction="row" flexWrap="wrap" gap={1} sx={{ my: 1 }}>
+          {message?.Attachments?.map((file, index) => (
             <Fragment key={index}>
               {file.type.startsWith('image/') ? (
                 <Box
@@ -206,7 +190,7 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
               )}
             </Fragment>
           ))}
-        </Stack> */}
+        </Stack>
 
         {/* Reactions */}
         {!pinnedTab && (

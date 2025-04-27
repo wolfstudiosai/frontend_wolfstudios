@@ -48,8 +48,8 @@ export const SocketProvider = ({ children }) => {
       joinDirectChannel: (channelId) => {
         socketRef.current.emit('join-direct-channel', channelId);
       },
-      sendChannelMessage: ({ channelId, message, replyId }) => {
-        socketRef.current.emit('send-channel-message', { channelId, message, replyId });
+      sendChannelMessage: ({ channelId, message, replyId, attachments }) => {
+        socketRef.current.emit('send-channel-message', { channelId, message, replyId, attachments });
       },
       editChannelMessage: ({ channelId, messageId, content }) => {
         socketRef.current.emit('edit-channel-message', { channelId, messageId, content });

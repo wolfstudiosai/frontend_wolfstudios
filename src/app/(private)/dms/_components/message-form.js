@@ -19,6 +19,8 @@ import { ChatContext } from '/src/contexts/chat';
 import useAuth from '/src/hooks/useAuth';
 import { Iconify } from '/src/components/iconify/iconify';
 import EmojiPicker from '/src/components/widgets/emoji-picker';
+import { imageUploader, getImageType } from '/src/utils/upload-file';
+
 
 import { MemberInfo, MemberName } from '../../workspace/[slug]/components/custom-component';
 
@@ -29,6 +31,7 @@ const allUsers = [
 ];
 
 export const MessageForm = ({ sx = {} }) => {
+  const [loader, setLoader] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [mentionAnchor, setMentionAnchor] = useState(null);
   const [mentionQuery, setMentionQuery] = useState('');
@@ -63,18 +66,44 @@ export const MessageForm = ({ sx = {} }) => {
 
   const handleRemoveFile = (indexToRemove) => {
     setSelectedFiles((prevFiles) => prevFiles.filter((_, index) => index !== indexToRemove));
+    attachmentRef.current.value = null;
   };
 
-  const handleSendMessage = () => {
-    if (!messageContent.trim()) return;
+  const handleSendMessage = async () => {
+    try {
+      setLoader(true);
+      if (!messageContent.trim()) return;
 
-    if (activeTab?.type === 'channel') {
-      createChannelMessage(messageContent);
-    } else {
-      createDirectMessage(messageContent);
+      if (activeTab?.type === 'channel') {
+        const attachments = []
+        if (selectedFiles?.length > 0) {
+          const res = await imageUploader(selectedFiles.map((f) => ({
+            file: f,
+            fileName: f.name.split('.').slice(0, -1).join('.'),
+            fileType: f.type.split('/')[1],
+          })), 'chat');
+
+          attachments.push(...res.map((item) => ({
+            url: item,
+            type: getImageType(item?.split('/chat/')?.join('')?.split('.')?.at(-1))
+          })));
+          setSelectedFiles([]);
+        }
+        createChannelMessage(messageContent, undefined, attachments);
+      } else {
+        createDirectMessage(messageContent);
+      }
+
+      setMessageContent('');
+    }
+    catch (err) {
+      console.log(err);
+    }
+    finally {
+      setLoader(false);
     }
 
-    setMessageContent('');
+
   };
 
   const handleUpdateMessage = (id) => {
@@ -133,7 +162,7 @@ export const MessageForm = ({ sx = {} }) => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !loader) {
       if (messageIdToEdit) {
         handleUpdateMessage(messageIdToEdit);
       } else {
@@ -167,6 +196,8 @@ export const MessageForm = ({ sx = {} }) => {
       }
     };
   }, [messageContent]);
+
+
 
   return (
     <Stack sx={{ ...sx }}>
@@ -203,6 +234,7 @@ export const MessageForm = ({ sx = {} }) => {
 
       <FormControl variant="standard" sx={{ width: '100%' }}>
         <Input
+          disabled={loader}
           fullWidth
           placeholder="Type a message..."
           value={messageContent}
@@ -217,6 +249,9 @@ export const MessageForm = ({ sx = {} }) => {
           }
           endAdornment={
             <InputAdornment position="end" sx={{ display: 'flex', gap: 0.2 }}>
+              <IconButton size="small" sx={{ borderRadius: '50%' }} onClick={() => attachmentRef?.current?.click()}>
+                <Iconify icon="mage:attachment" sx={{ color: 'grey.800' }} />
+              </IconButton>
               <IconButton
                 size="small"
                 sx={{ borderRadius: '50%' }}
@@ -271,7 +306,7 @@ export const MessageForm = ({ sx = {} }) => {
         multiple
       />
 
-      <Popper
+      {/* <Popper
         open={Boolean(mentionAnchor && filteredUsers.length)}
         anchorEl={mentionAnchor}
         placement="top-start"
@@ -289,7 +324,7 @@ export const MessageForm = ({ sx = {} }) => {
             ))}
           </List>
         </Paper>
-      </Popper>
+      </Popper> */}
 
       <EmojiPicker
         open={showEmojiPicker}

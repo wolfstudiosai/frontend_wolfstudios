@@ -281,8 +281,8 @@ export const ChatProvider = ({ children }) => {
     });
   };
 
-  const createChannelMessage = async (message, replyId) => {
-    socketContext?.sendChannelMessage({ channelId: activeTab.id, message, replyId });
+  const createChannelMessage = async (message, replyId, attachments) => {
+    socketContext?.sendChannelMessage({ channelId: activeTab.id, message, replyId, attachments });
   };
 
   const createChannelReaction = async (messageId, emoji) => {
