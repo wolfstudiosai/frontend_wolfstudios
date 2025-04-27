@@ -19,8 +19,6 @@ import { ChatContext } from '/src/contexts/chat';
 import useAuth from '/src/hooks/useAuth';
 import { Iconify } from '/src/components/iconify/iconify';
 import EmojiPicker from '/src/components/widgets/emoji-picker';
-import { imageUploader, getImageType } from '/src/utils/upload-file';
-
 
 import { MemberInfo, MemberName } from '../../workspace/[slug]/components/custom-component';
 
@@ -30,8 +28,7 @@ const allUsers = [
   { id: 3, name: 'Mustafa Jawed', profile_pic: '' },
 ];
 
-export const MessageForm = ({ sx = {} }) => {
-  const [loader, setLoader] = useState(false);
+export const MessageReplyForm = ({ sx = {} }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [mentionAnchor, setMentionAnchor] = useState(null);
   const [mentionQuery, setMentionQuery] = useState('');
@@ -46,12 +43,14 @@ export const MessageForm = ({ sx = {} }) => {
     createChannelMessage,
     createDirectMessage,
     activeTab,
-    messageContent,
-    setMessageContent,
-    messageIdToEdit,
-    handleEditMessage,
+    messageReplyContent,
+    setMessageReplyContent,
+    replyMessageIdToEdit,
+    handleEditReplyMessage,
     editChannelMessage,
     editDirectMessage,
+    activeChannelThread,
+    activeDirectThread,
   } = useContext(ChatContext);
   const { userInfo } = useAuth();
 
@@ -66,58 +65,32 @@ export const MessageForm = ({ sx = {} }) => {
 
   const handleRemoveFile = (indexToRemove) => {
     setSelectedFiles((prevFiles) => prevFiles.filter((_, index) => index !== indexToRemove));
-    attachmentRef.current.value = null;
   };
 
-  const handleSendMessage = async () => {
-    try {
-      setLoader(true);
-      if (!messageContent.trim()) return;
+  const handleSendMessage = () => {
+    if (!messageReplyContent.trim()) return;
 
-      if (activeTab?.type === 'channel') {
-        const attachments = []
-        if (selectedFiles?.length > 0) {
-          const res = await imageUploader(selectedFiles.map((f) => ({
-            file: f,
-            fileName: f.name.split('.').slice(0, -1).join('.'),
-            fileType: f.type.split('/')[1],
-          })), 'chat');
-
-          attachments.push(...res.map((item) => ({
-            url: item,
-            type: getImageType(item?.split('/chat/')?.join('')?.split('.')?.at(-1))
-          })));
-          setSelectedFiles([]);
-        }
-        createChannelMessage(messageContent, undefined, attachments);
-      } else {
-        createDirectMessage(messageContent);
-      }
-
-      setMessageContent('');
-    }
-    catch (err) {
-      console.log(err);
-    }
-    finally {
-      setLoader(false);
+    if (activeTab?.type === 'channel') {
+      createChannelMessage(messageReplyContent, activeChannelThread);
+    } else {
+      createDirectMessage(messageReplyContent, activeDirectThread);
     }
 
-
+    setMessageReplyContent('');
   };
 
   const handleUpdateMessage = (id) => {
     if (activeTab?.type === 'channel') {
-      editChannelMessage(id, messageContent);
+      editChannelMessage(id, messageReplyContent);
     } else {
-      editDirectMessage(id, messageContent);
+      editDirectMessage(id, messageReplyContent);
     }
-    handleEditMessage(null);
+    handleEditReplyMessage(null);
   };
 
   const handleInputChange = (e) => {
     const value = e.target.value;
-    setMessageContent(value);
+    setMessageReplyContent(value);
     // const cursor = e.target.selectionStart;
     // setCursorPosition(cursor);
 
@@ -141,15 +114,15 @@ export const MessageForm = ({ sx = {} }) => {
   };
 
   const handleMentionSelect = (user) => {
-    const beforeCursor = messageContent.slice(0, cursorPosition);
-    const afterCursor = messageContent.slice(cursorPosition);
+    const beforeCursor = messageReplyContent.slice(0, cursorPosition);
+    const afterCursor = messageReplyContent.slice(cursorPosition);
     const atIndex = beforeCursor.lastIndexOf('@');
 
     const mentionText = `@${user.name}`;
     const newCursorPos = atIndex + mentionText.length + 1;
 
     const newText = beforeCursor.slice(0, atIndex) + mentionText + ' ' + afterCursor;
-    setMessageContent(newText);
+    setMessageReplyContent(newText);
     setMentionAnchor(null);
     setMentionQuery('');
     setFilteredUsers([]);
@@ -162,9 +135,9 @@ export const MessageForm = ({ sx = {} }) => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !loader) {
-      if (messageIdToEdit) {
-        handleUpdateMessage(messageIdToEdit);
+    if (e.key === 'Enter') {
+      if (replyMessageIdToEdit) {
+        handleUpdateMessage(replyMessageIdToEdit);
       } else {
         handleSendMessage();
       }
@@ -175,11 +148,11 @@ export const MessageForm = ({ sx = {} }) => {
     let timeoutId;
     const TYPING_DELAY = 500;
 
-    if (messageContent.length === 1) {
+    if (messageReplyContent.length === 1) {
       startTyping();
     }
 
-    if (messageContent.length > 0) {
+    if (messageReplyContent.length > 0) {
       timeoutId = setTimeout(() => {
         startTyping();
         timeoutId = setTimeout(() => {
@@ -195,9 +168,7 @@ export const MessageForm = ({ sx = {} }) => {
         clearTimeout(timeoutId);
       }
     };
-  }, [messageContent]);
-
-
+  }, [messageReplyContent]);
 
   return (
     <Stack sx={{ ...sx }}>
@@ -234,10 +205,9 @@ export const MessageForm = ({ sx = {} }) => {
 
       <FormControl variant="standard" sx={{ width: '100%' }}>
         <Input
-          disabled={loader}
           fullWidth
           placeholder="Type a message..."
-          value={messageContent}
+          value={messageReplyContent}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           inputRef={inputRef}
@@ -249,9 +219,6 @@ export const MessageForm = ({ sx = {} }) => {
           }
           endAdornment={
             <InputAdornment position="end" sx={{ display: 'flex', gap: 0.2 }}>
-              <IconButton size="small" sx={{ borderRadius: '50%' }} onClick={() => attachmentRef?.current?.click()}>
-                <Iconify icon="mage:attachment" sx={{ color: 'grey.800' }} />
-              </IconButton>
               <IconButton
                 size="small"
                 sx={{ borderRadius: '50%' }}
@@ -263,13 +230,13 @@ export const MessageForm = ({ sx = {} }) => {
               >
                 <Iconify icon="material-symbols-light:add-reaction-outline" sx={{ color: 'grey.800' }} />
               </IconButton>
-              {messageIdToEdit && (
+              {replyMessageIdToEdit && (
                 <IconButton
                   size="small"
                   color="error"
                   title="Cancel edit"
                   sx={{ borderRadius: '50%' }}
-                  onClick={() => handleEditMessage(null)}
+                  onClick={() => handleEditReplyMessage(null)}
                 >
                   <Iconify icon="mingcute:close-line" />
                 </IconButton>
@@ -278,17 +245,17 @@ export const MessageForm = ({ sx = {} }) => {
                 size="small"
                 sx={{
                   borderRadius: '50%',
-                  ...((messageContent.length > 0 || selectedFiles.length > 0) && {
+                  ...((messageReplyContent.length > 0 || selectedFiles.length > 0) && {
                     backgroundColor: 'primary.main',
                     '&:hover': { backgroundColor: 'primary.main' },
                   }),
                 }}
-                onClick={() => (messageIdToEdit ? handleUpdateMessage(messageIdToEdit) : handleSendMessage())}
-                disabled={messageContent.length === 0 && selectedFiles.length === 0}
+                onClick={() => (replyMessageIdToEdit ? handleUpdateMessage(replyMessageIdToEdit) : handleSendMessage())}
+                disabled={messageReplyContent.length === 0 && selectedFiles.length === 0}
               >
                 <Iconify
-                  icon={messageIdToEdit ? 'charm:tick' : 'mingcute:arrow-up-fill'}
-                  sx={{ color: messageContent.length > 0 || selectedFiles.length > 0 ? '#fff' : 'grey.800' }}
+                  icon={replyMessageIdToEdit ? 'charm:tick' : 'mingcute:arrow-up-fill'}
+                  sx={{ color: messageReplyContent.length > 0 || selectedFiles.length > 0 ? '#fff' : 'grey.800' }}
                 />
               </IconButton>
             </InputAdornment>
@@ -306,7 +273,7 @@ export const MessageForm = ({ sx = {} }) => {
         multiple
       />
 
-      {/* <Popper
+      <Popper
         open={Boolean(mentionAnchor && filteredUsers.length)}
         anchorEl={mentionAnchor}
         placement="top-start"
@@ -324,18 +291,18 @@ export const MessageForm = ({ sx = {} }) => {
             ))}
           </List>
         </Paper>
-      </Popper> */}
+      </Popper>
 
       <EmojiPicker
         open={showEmojiPicker}
         anchorEl={emojiAnchorEl}
         onClose={() => setShowEmojiPicker(false)}
         onSelectEmoji={(emojiChar) => {
-          const before = messageContent.slice(0, cursorPosition);
-          const after = messageContent.slice(cursorPosition);
+          const before = messageReplyContent.slice(0, cursorPosition);
+          const after = messageReplyContent.slice(cursorPosition);
           const updated = before + emojiChar + after;
 
-          setMessageContent(updated);
+          setMessageReplyContent(updated);
 
           requestAnimationFrame(() => {
             inputRef.current?.focus();

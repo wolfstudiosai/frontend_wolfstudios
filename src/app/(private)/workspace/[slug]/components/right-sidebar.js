@@ -105,28 +105,28 @@ export const RightSidebar = () => {
   };
 
   // Activity data - true for active, false for inactive
-  const activityData = [
-    false,
-    true,
-    true,
-    false,
-    false,
-    true,
-    false,
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ];
+  // const activityData = [
+  //   false,
+  //   true,
+  //   true,
+  //   false,
+  //   false,
+  //   true,
+  //   false,
+  //   true,
+  //   false,
+  //   false,
+  //   false,
+  //   false,
+  //   false,
+  //   false,
+  //   false,
+  //   false,
+  //   false,
+  //   false,
+  //   false,
+  //   false,
+  // ];
 
   return (
     <>
@@ -172,7 +172,7 @@ export const RightSidebar = () => {
             }}
           >
             <Tab label="Info" />
-            {/* <Tab label="Pins" /> */}
+            <Tab label="Pins" />
             {/* <Tab label="Files" /> */}
             {/* <Tab label="Links" /> */}
           </Tabs>
@@ -192,11 +192,11 @@ export const RightSidebar = () => {
                     {activeTab?.type === 'channel'
                       ? `${activeTabInfo?.createdBy?.firstName} ${activeTabInfo?.createdBy?.lastName}`
                       : (() => {
-                          if (activeTabInfo?.sender?.id === userInfo?.id) {
-                            return `${activeTabInfo?.receiver?.firstName} ${activeTabInfo?.receiver?.lastName}`;
-                          }
-                          return `${activeTabInfo?.sender?.firstName} ${activeTabInfo?.sender?.lastName}`;
-                        })()}
+                        if (activeTabInfo?.sender?.id === userInfo?.id) {
+                          return `${activeTabInfo?.receiver?.firstName} ${activeTabInfo?.receiver?.lastName}`;
+                        }
+                        return `${activeTabInfo?.sender?.firstName} ${activeTabInfo?.sender?.lastName}`;
+                      })()}
                   </InfoValue>
                 </InfoItem>
                 <InfoItem>
@@ -263,14 +263,14 @@ export const RightSidebar = () => {
                       </Typography>
                     </SectionTitle>
                     <Stack direction="row">
-                      <Iconify
+                      {/* <Iconify
                         icon="mdi:plus"
                         width="20"
-                        style={{ marginRight: '8px' }}
+                        style={{ marginRight: '8px', cursor: 'pointer' }}
                         onClick={() => setOpenAddMemberDialog(true)}
-                      />
-                      <Iconify icon="mdi:view-grid-outline" width="20" style={{ marginRight: '8px' }} />
-                      <Iconify icon="mdi:format-list-bulleted" width="20" />
+                      /> */}
+                      {/* <Iconify icon="mdi:view-grid-outline" width="20" style={{ marginRight: '8px' }} /> */}
+                      {/* <Iconify icon="mdi:format-list-bulleted" width="20" /> */}
                     </Stack>
                   </Stack>
                   <List disablePadding>
@@ -296,7 +296,7 @@ export const RightSidebar = () => {
               )}
             </>
           )}
-          {/* {tabValue === 1 && <PinMessage />} */}
+          {tabValue === 1 && <PinMessage />}
         </ScrollableContent>
       </Stack>
       {openAddMemberDialog && (

@@ -18,11 +18,12 @@ export const ChatView = ({ slug }) => {
     }
   }, [slug]);
 
+
   return (
     <Stack direction="row" sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, width: '100%' }}>
       <LeftSidebar />
       {activeTab ? <Content /> : <ContentSkeleton />}
-      {activeChannelThread || activeDirectThread ? <RepliesSection /> : <RightSidebar />}
+      {activeChannelThread !== null || activeDirectThread !== null ? <RepliesSection /> : <RightSidebar />}
     </Stack>
   );
 };
