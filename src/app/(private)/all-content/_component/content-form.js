@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Grid from '@mui/material/Grid2';
-import { useFormik } from 'formik';
 
 import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
@@ -10,7 +9,6 @@ import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
 
-import { defaultContent } from '../_lib/all-content.types';
 import {
   getCityListAsync,
   getProductListAsync,
@@ -20,9 +18,8 @@ import {
 } from '../../../../lib/common.actions';
 import { getCampaignListAsync } from '../../../(public)/campaign/_lib/campaign.actions';
 import { getPartnerListAsync } from '../../../(public)/partner/_lib/partner.actions';
-import { formConstants } from '/src/app/constants/form-constants';
 
-export const ContentForm = ({ id, onClose, fetchList }) => {
+export const ContentForm = ({ formikProps }) => {
   const [loading, setLoading] = React.useState(false);
   const [autocompleteFocus, setAutocompleteFocus] = React.useState({
     currentItem: '',
@@ -38,62 +35,7 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
     retailPartners: [],
   });
   // ********************* Formik *******************************
-
-  const { values, errors, handleChange, handleSubmit, setFieldValue, resetForm, setValues } = useFormik({
-    initialValues: defaultContent(),
-    validate: (values) => {
-      const errors = {};
-      if (!values.name) {
-        errors.name = formConstants.required;
-      }
-      if (!values.revoPinterest) {
-        errors.revoPinterest = formConstants.required;
-      }
-      if (!values.revoPinterest) {
-        errors.revoPinterest = formConstants.required;
-      }
-      if (!values.pinAccountsUsed) {
-        errors.pinAccountsUsed = formConstants.required;
-      }
-      if (!values.googleDriveFiles) {
-        errors.googleDriveFiles = formConstants.required;
-      }
-      if (!values.playbookLink) {
-        errors.playbookLink = formConstants.required;
-      }
-      if (!values.upPromoteConversion) {
-        errors.upPromoteConversion = formConstants.required;
-      }
-      if (!values.monthUploaded) {
-        errors.monthUploaded = formConstants.required;
-      }
-      if (!values.revoInstagram) {
-        errors.revoInstagram = formConstants.required;
-      }
-      if (!values.creatorStatus) {
-        errors.creatorStatus = formConstants.required;
-      }
-
-      return errors;
-    },
-    onSubmit: async (values) => {
-      setLoading(true);
-      try {
-        const res = id ? await updateCampaignAsync(id, finalData) : await createCampaignAsync(finalData);
-        if (res.success) {
-          onClose?.();
-          resetForm();
-          fetchList();
-        } else {
-          console.error('Operation failed:', res.message);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      } finally {
-        setLoading(false);
-      }
-    },
-  });
+  const { values, errors, handleChange, setFieldValue, handleSubmit } = formikProps;
 
   // --------------- Fetch Prerequisites Data -------------------
   const fetchFunctionsMap = {
@@ -156,6 +98,7 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             values={values.revoPinterest}
             onChange={handleChange}
           />
+          <ErrorMessage error={errors.revoPinterest} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -164,6 +107,7 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             values={values.pinAccountsUsed}
             onChange={handleChange}
           />
+          <ErrorMessage error={errors.pinAccountsUsed} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -172,6 +116,7 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             values={values.postQuality}
             onChange={handleChange}
           />
+          <ErrorMessage error={errors.postQuality} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -180,6 +125,7 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             values={values.googleDriveFiles}
             onChange={handleChange}
           />
+          <ErrorMessage error={errors.googleDriveFiles} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -188,6 +134,7 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             values={values.playbookLink}
             onChange={handleChange}
           />
+          <ErrorMessage error={errors.playbookLink} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -196,6 +143,7 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
             values={values.upPromoteConversion}
             onChange={handleChange}
           />
+          <ErrorMessage error={errors.upPromoteConversion} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomSelect
@@ -212,13 +160,13 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomDatePicker
-            label="Start Date"
-            error={errors.startDate}
-            value={values.startDate}
+            label="Month Uploaded"
+            error={errors.monthUploaded}
+            value={values.monthUploaded}
             format="YYYY-MM-DD"
-            onChange={(value) => setFieldValue('startDate', value)}
+            onChange={(value) => setFieldValue('monthUploaded', value)}
           />
-          <ErrorMessage error={errors.startDate} />
+          <ErrorMessage error={errors.monthUploaded} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomSelect
@@ -231,6 +179,7 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
               { value: 'Not Posted', label: 'Not Posted' },
             ]}
           />
+          <ErrorMessage error={errors.revoInstagram} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomSelect
@@ -243,6 +192,7 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
               { value: 'Contract Not Fulfilled', label: 'Contract Not Fulfilled' },
             ]}
           />
+          <ErrorMessage error={errors.creatorStatus} />
         </Grid>
         {/* Partner Section */}
         <Grid size={{ xs: 12, md: 4 }}>
