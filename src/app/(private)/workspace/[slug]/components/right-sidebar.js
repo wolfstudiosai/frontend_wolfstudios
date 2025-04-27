@@ -192,11 +192,11 @@ export const RightSidebar = () => {
                     {activeTab?.type === 'channel'
                       ? `${activeTabInfo?.createdBy?.firstName} ${activeTabInfo?.createdBy?.lastName}`
                       : (() => {
-                          if (activeTabInfo?.sender?.id === userInfo?.id) {
-                            return `${activeTabInfo?.receiver?.firstName} ${activeTabInfo?.receiver?.lastName}`;
-                          }
-                          return `${activeTabInfo?.sender?.firstName} ${activeTabInfo?.sender?.lastName}`;
-                        })()}
+                        if (activeTabInfo?.sender?.id === userInfo?.id) {
+                          return `${activeTabInfo?.receiver?.firstName} ${activeTabInfo?.receiver?.lastName}`;
+                        }
+                        return `${activeTabInfo?.sender?.firstName} ${activeTabInfo?.sender?.lastName}`;
+                      })()}
                   </InfoValue>
                 </InfoItem>
                 <InfoItem>
@@ -263,12 +263,12 @@ export const RightSidebar = () => {
                       </Typography>
                     </SectionTitle>
                     <Stack direction="row">
-                      <Iconify
+                      {/* <Iconify
                         icon="mdi:plus"
                         width="20"
                         style={{ marginRight: '8px', cursor: 'pointer' }}
                         onClick={() => setOpenAddMemberDialog(true)}
-                      />
+                      /> */}
                       {/* <Iconify icon="mdi:view-grid-outline" width="20" style={{ marginRight: '8px' }} /> */}
                       {/* <Iconify icon="mdi:format-list-bulleted" width="20" /> */}
                     </Stack>

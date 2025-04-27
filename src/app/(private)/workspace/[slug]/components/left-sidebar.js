@@ -113,9 +113,9 @@ export const LeftSidebar = () => {
             <Typography variant="h6" fontWeight={600}>
               {workspaceInfo.name}
             </Typography>
-            <IconButton size="small" title="Add member" onClick={() => setOpenAddMemberDialog(true)}>
+            {/* <IconButton size="small" title="Add member" onClick={() => setOpenAddMemberDialog(true)}>
               <Iconify icon="mdi:plus" />
-            </IconButton>
+            </IconButton> */}
           </SidebarHeader>
           <ScrollableContent>
             <List dense disablePadding>
