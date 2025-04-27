@@ -1,18 +1,42 @@
 'use client';
 
-import { InputAdornment } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useFormik } from 'formik';
+import React from 'react';
 
+import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
 import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
-import { Iconify } from '/src/components/iconify/iconify';
 
+import { getCampaignListAsync } from '../../../(public)/campaign/_lib/campaign.actions';
+import { getPartnerListAsync } from '../../../(public)/partner/_lib/partner.actions';
+import {
+  getCityListAsync,
+  getProductListAsync,
+  getRetailPartnerListAsync,
+  getStakeHolderListAsync,
+  getTagListAsync,
+} from '../../../../lib/common.actions';
 import { defaultContent } from '../_lib/all-content.types';
+import { formConstants } from '/src/app/constants/form-constants';
 
 export const ContentForm = ({ id, onClose, fetchList }) => {
+  const [loading, setLoading] = React.useState(false);
+  const [autocompleteFocus, setAutocompleteFocus] = React.useState({
+    currentItem: '',
+    prevItems: [],
+  });
+  const [autoCompleteOptions, setAutoCompleteOptions] = React.useState({
+    campaigns: [],
+    cities: [],
+    products: [],
+    tags: [],
+    stakeholders: [],
+    partners: [],
+    retailPartners: [],
+  });
   // ********************* Formik *******************************
 
   const { values, errors, handleChange, handleSubmit, setFieldValue, resetForm, setValues } = useFormik({
@@ -55,43 +79,6 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const finalData = {
-          ...values,
-        };
-
-        const imageFields = ['campaignImage'];
-        for (const field of imageFields) {
-          const value = values[field];
-          if (value instanceof File) {
-            const res = await imageUploader(
-              [
-                {
-                  file: value,
-                  fileName: value.name.split('.').slice(0, -1).join('.'),
-                  fileType: value.type.split('/')[1],
-                },
-              ],
-              'campaigns'
-            );
-
-            finalData[field] = res;
-          } else if (typeof value === 'string') {
-            finalData[field] = [value];
-          }
-        }
-
-        const arrayFields = ['contentHQ', 'stakeholders', 'retailPartners', 'proposedPartners', 'spaces'];
-        for (const field of arrayFields) {
-          const value = values[field];
-          if (value.length > 0) {
-            const arrOfStr = value.map((item) => item.value);
-            finalData[field] = arrOfStr;
-          }
-        }
-
-        if (finalData.goals && typeof finalData.goals === 'string') {
-          finalData.goals = finalData.goals.split(',').map((item) => item.trim());
-        }
         const res = id ? await updateCampaignAsync(id, finalData) : await createCampaignAsync(finalData);
         if (res.success) {
           onClose?.();
@@ -108,9 +95,105 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
     },
   });
 
+  // --------------- Fetch Prerequisites Data -------------------
+  React.useEffect(() => {
+    const fetchPrerequisitesData = async () => {
+      try {
+        if (autocompleteFocus?.currentItem === 'campaigns' && !autocompleteFocus?.prevItems.includes('campaigns')) {
+          const campaignResponse = await getCampaignListAsync({ page: 1, rowsPerPage: 100 });
+          if (campaignResponse?.success) {
+            const options = campaignResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+            setAutoCompleteOptions((prevState) => ({ ...prevState, campaigns: options }));
+            setAutocompleteFocus((prevState) => ({
+              currentItem: '',
+              prevItems: [...prevState.prevItems, 'campaigns'],
+            }));
+          }
+        }
+        if (autocompleteFocus?.currentItem === 'cities' && !autocompleteFocus?.prevItems.includes('cities')) {
+          const citiesResponse = await getCityListAsync({ page: 1, rowsPerPage: 100 });
+          if (citiesResponse?.success) {
+            const options = citiesResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+            setAutoCompleteOptions((prevState) => ({ ...prevState, cities: options }));
+            setAutocompleteFocus((prevState) => ({
+              currentItem: '',
+              prevItems: [...prevState.prevItems, 'cities'],
+            }));
+          }
+        }
+
+        if (autocompleteFocus?.currentItem === 'products' && !autocompleteFocus?.prevItems.includes('products')) {
+          const productResponse = await getProductListAsync({ page: 1, rowsPerPage: 100 });
+          if (productResponse?.success) {
+            const options = productResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+            setAutoCompleteOptions((prevState) => ({ ...prevState, products: options }));
+            setAutocompleteFocus((prevState) => ({
+              currentItem: '',
+              prevItems: [...prevState.prevItems, 'products'],
+            }));
+          }
+        }
+        if (autocompleteFocus?.currentItem === 'tags' && !autocompleteFocus?.prevItems.includes('tags')) {
+          const tagResponse = await getTagListAsync({ page: 1, rowsPerPage: 100 });
+          if (tagResponse?.success) {
+            const options = tagResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+            setAutoCompleteOptions((prevState) => ({ ...prevState, tags: options }));
+            setAutocompleteFocus((prevState) => ({
+              currentItem: '',
+              prevItems: [...prevState.prevItems, 'tags'],
+            }));
+          }
+        }
+        if (
+          autocompleteFocus?.currentItem === 'stakeholders' &&
+          !autocompleteFocus?.prevItems.includes('stakeholders')
+        ) {
+          const stakeholderResponse = await getStakeHolderListAsync({ page: 1, rowsPerPage: 100 });
+          if (stakeholderResponse?.success) {
+            const options = stakeholderResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+            setAutoCompleteOptions((prevState) => ({ ...prevState, stakeholders: options }));
+            setAutocompleteFocus((prevState) => ({
+              currentItem: '',
+              prevItems: [...prevState.prevItems, 'stakeholders'],
+            }));
+          }
+        }
+        if (autocompleteFocus?.currentItem === 'partners' && !autocompleteFocus?.prevItems.includes('partners')) {
+          const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 100 });
+          if (partnerResponse?.success) {
+            const options = partnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+            setAutoCompleteOptions((prevState) => ({ ...prevState, partners: options }));
+            setAutocompleteFocus((prevState) => ({
+              currentItem: '',
+              prevItems: [...prevState.prevItems, 'partners'],
+            }));
+          }
+        }
+        if (
+          autocompleteFocus?.currentItem === 'retailPartners' &&
+          !autocompleteFocus?.prevItems.includes('retailPartners')
+        ) {
+          const retailPartnerResponse = await getRetailPartnerListAsync({ page: 1, rowsPerPage: 100 });
+          if (retailPartnerResponse?.success) {
+            const options = retailPartnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+            setAutoCompleteOptions((prevState) => ({ ...prevState, retailPartners: options }));
+            setAutocompleteFocus((prevState) => ({
+              currentItem: '',
+              prevItems: [...prevState.prevItems, 'retailPartners'],
+            }));
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchPrerequisitesData();
+  }, [autocompleteFocus]);
+
   return (
     <form onSubmit={handleSubmit}>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{ py: 2 }}>
         {/* General Information Section */}
         <Grid size={{ xs: 12 }}>
           <CustomTextField name="name" label="Name" values={values.name || ''} onChange={handleChange} />
@@ -223,68 +306,98 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="partner_IGLink"
-            label="Partner IG Link"
-            values={values.partner_IGLink}
-            onChange={handleChange}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="partner.TikTokLink"
+            name="partner_TikTokLink"
             label="Partner TikTok Link"
-            values={values.partner?.TikTokLink || ''}
+            values={values.partner_TikTokLink}
             onChange={handleChange}
           />
         </Grid>
-
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="partner.YTLink"
-            label="Partner YouTube Link"
-            values={values.partner?.YTLink || ''}
+            name="partner_TTShares"
+            label="Partner TT Shares"
+            values={values.partner_TTShares}
             onChange={handleChange}
           />
         </Grid>
-
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partner_TTSaves"
+            label="Partner TT Saves"
+            values={values.partner_TTSaves}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partner_TTViews"
+            label="Partner TT Views"
+            values={values.partner_TTViews}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partner_TTLikes"
+            label="Partner TT Likes"
+            values={values.partner_TTLikes}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partner_TTComments"
+            label="Partner TT Comments"
+            values={values.partner_TTComments}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partner_YTLink"
+            label="Partner YT Link"
+            values={values.partner_YTLink}
+            onChange={handleChange}
+          />
+        </Grid>
         {/* Instagram Metrics */}
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="IG.TotalLikes"
-            label="IG Total Likes"
-            type="number"
-            values={values.IG?.TotalLikes || 0}
+            name="ig_SocialSetsUsed"
+            label="IG Social Sets Used"
+            values={values.ig_SocialSetsUsed}
             onChange={handleChange}
           />
         </Grid>
-
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="IG.TotalComments"
+            name="ig_TotalComments"
             label="IG Total Comments"
-            type="number"
-            values={values.IG?.TotalComments || 0}
+            values={values.ig_TotalComments}
             onChange={handleChange}
           />
         </Grid>
-
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="IG.TotalShares"
+            name="ig_TotalLikes"
+            label="IG Total Likes"
+            values={values.ig_TotalLikes}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="ig_TotalShares"
             label="IG Total Shares"
-            type="number"
-            values={values.IG?.TotalShares || 0}
+            values={values.ig_TotalShares}
             onChange={handleChange}
           />
         </Grid>
-
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="IG.TotalViews"
+            name="ig_TotalViews"
             label="IG Total Views"
-            type="number"
-            values={values.IG?.TotalViews || 0}
+            values={values.ig_TotalViews}
             onChange={handleChange}
           />
         </Grid>
@@ -292,50 +405,111 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
         {/* YouTube Section */}
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="YT.AccountsUsed"
-            label="YT Accounts Used"
-            values={values.YT?.AccountsUsed || ''}
-            onChange={handleChange}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="YT.ClubREVOTotalViews"
+            name="yt_ClubREVOTotalViews"
             label="YT ClubREVO Views"
-            type="number"
-            values={values.YT?.ClubREVOTotalViews || 0}
+            values={values.yt_ClubREVOTotalViews}
             onChange={handleChange}
           />
         </Grid>
-
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="YT.PartnerTotalLikes"
-            label="YT Partner Likes"
-            type="number"
-            values={values.YT?.PartnerTotalLikes || 0}
+            name="yt_PartnerTotalSaves"
+            label="YT Partner Saves"
+            values={values.yt_PartnerTotalSaves}
             onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="yt_PartnerTotalViews"
+            label="YT Partner Views"
+            values={values.yt_PartnerTotalViews}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="yt_PartnerTotalComments"
+            label="YT Partner Comments"
+            values={values.yt_PartnerTotalComments}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="yt_PartnerTotalLikes"
+            label="YT Partner Likes"
+            values={values.yt_PartnerTotalLikes}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="yt_REVOMADICTotalShares"
+            label="YT REVO MADIC Shares"
+            values={values.yt_REVOMADICTotalShares}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="yt_REVOMADICTotalViews"
+            label="YT REVO MADIC Views"
+            values={values.yt_REVOMADICTotalViews}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="yt_REVOMADICTotalViews"
+            label="YT REVO MADIC Views"
+            values={values.yt_REVOMADICTotalLikes}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="yt_REVOMADICTotalComments"
+            label="YT REVO MADIC Comments"
+            values={values.yt_REVOMADICTotalComments}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="yt_REVOMADICTotalComments"
+            label="YT REVO MADIC Comments"
+            values={values.yt_ClubREVOTotalLikes}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomSelect
+            name="yt_AccountsUsed"
+            label="Revo Instagram"
+            value={values.yt_AccountsUsed}
+            onChange={(value) => setFieldValue('yt_AccountsUsed', value)}
+            options={[
+              { value: 'Posted', label: 'Posted' },
+              { value: 'Not Posted', label: 'Not Posted' },
+            ]}
           />
         </Grid>
 
         {/* Pinterest Section */}
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="Pinterest.TotalPinClicks"
+            name="pinterest_TotalPinClicks"
             label="Pinterest Clicks"
-            type="number"
-            values={values.Pinterest?.TotalPinClicks || 0}
+            values={values.pinterest_TotalPinClicks}
             onChange={handleChange}
           />
         </Grid>
-
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="Pinterest.TotalViews"
+            name="pinterest_TotalViews"
             label="Pinterest Views"
-            type="number"
-            values={values.Pinterest?.TotalViews || 0}
+            values={values.pinterest_TotalViews}
             onChange={handleChange}
           />
         </Grid>
@@ -343,100 +517,153 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
         {/* REVO Section */}
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="REVO.Twitter"
+            name="revo_Twitter"
             label="REVO Twitter"
-            select
-            values={values.REVO?.Twitter || 'not-posted'}
+            values={values.revo_Twitter}
             onChange={handleChange}
-          >
-            <option value="not-posted">Not Posted</option>
-            <option value="posted">Posted</option>
-          </CustomTextField>
+          />
         </Grid>
-
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="REVO.TikTok"
-            label="REVO TikTok"
-            select
-            values={values.REVO?.TikTok || 'not-posted'}
+            name="revo_TTViews"
+            label="REVO TT Views"
+            values={values.revo_TTViews}
             onChange={handleChange}
-          >
-            <option value="not-posted">Not Posted</option>
-            <option value="posted">Posted</option>
-          </CustomTextField>
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField name="revo_TikTok" label="REVO TikTok" values={values.revo_TikTok} onChange={handleChange} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revo_Youtube"
+            label="REVO Youtube"
+            values={values.revo_Youtube}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revo_Youtube"
+            label="REVO Youtube"
+            values={values.revo_ClubRevoYoutube}
+            onChange={handleChange}
+          />
         </Grid>
 
         {/* Relations Section */}
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="campaigns"
+            name="tikTokAccountsused"
+            label="TikTok Accounts Used"
+            values={values.tikTokAccountsused}
+            onChange={handleChange}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="TTDummyAccountsUsed"
+            label="TT Dummy Accounts Used"
+            values={values.TTDummyAccountsUsed}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomSelect
+            name="postingStatus"
+            label="Asset Status"
+            value={values.postingStatus}
+            onChange={(value) => setFieldValue('postingStatus', value)}
+            options={[
+              { value: 'Posted', label: 'Posted' },
+              { value: 'Not Posted', label: 'Not Posted' },
+            ]}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="totalContributedEngagement"
+            label="Total Contributed Engagement"
+            values={values.totalContributedEngagement}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomAutoComplete
             label="Campaigns"
-            values={values.campaigns?.join(', ') || ''}
-            onChange={(e) => handleArrayChange('campaigns', e.target.value)}
+            name="campaigns"
+            value={values.campaigns}
+            onChange={(_, value) => setFieldValue('campaigns', value)}
+            options={autoCompleteOptions?.campaigns}
+            multiple
+            onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
           />
         </Grid>
-
         <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="tags"
+          <CustomAutoComplete
+            label="Cities"
+            name="cities"
+            value={values.cities}
+            onChange={(_, value) => setFieldValue('cities', value)}
+            options={autoCompleteOptions?.cities}
+            multiple
+            onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomAutoComplete
+            label="Products"
+            name="products"
+            value={values.products}
+            onChange={(_, value) => setFieldValue('products', value)}
+            options={autoCompleteOptions?.products}
+            multiple
+            onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomAutoComplete
             label="Tags"
-            values={values.tags?.join(', ') || ''}
-            onChange={(e) => handleArrayChange('tags', e.target.value)}
+            name="tags"
+            value={values.tags}
+            onChange={(_, value) => setFieldValue('tags', value)}
+            options={autoCompleteOptions?.tags}
+            multiple
+            onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
           />
         </Grid>
-
         <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="retailPartners"
+          <CustomAutoComplete
+            label="Stakeholders"
+            name="stakeholders"
+            value={values.stakeholders}
+            onChange={(_, value) => setFieldValue('stakeholders', value)}
+            options={autoCompleteOptions?.stakeholders}
+            multiple
+            onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomAutoComplete
+            label="Partners"
+            name="partners"
+            value={values.partners}
+            onChange={(_, value) => setFieldValue('partners', value)}
+            options={autoCompleteOptions?.partners}
+            multiple
+            onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomAutoComplete
             label="Retail Partners"
-            values={values.retailPartners?.join(', ') || ''}
-            onChange={(e) => handleArrayChange('retailPartners', e.target.value)}
-          />
-        </Grid>
-
-        {/* File Links */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="googleDriveFiles"
-            label="Google Drive Files"
-            values={values.googleDriveFiles || ''}
-            onChange={handleChange}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Iconify
-                      icon="lucide:link"
-                      onClick={() => window.open(values.googleDriveFiles, '_blank')}
-                      style={{ cursor: 'pointer' }}
-                    />
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="playbookLink"
-            label="Playbook Link"
-            values={values.playbookLink || ''}
-            onChange={handleChange}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Iconify
-                      icon="lucide:link"
-                      onClick={() => window.open(values.playbookLink, '_blank')}
-                      style={{ cursor: 'pointer' }}
-                    />
-                  </InputAdornment>
-                ),
-              },
-            }}
+            name="retailPartners"
+            value={values.retailPartners}
+            onChange={(_, value) => setFieldValue('retailPartners', value)}
+            options={autoCompleteOptions?.retailPartners}
+            multiple
+            onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
           />
         </Grid>
       </Grid>
