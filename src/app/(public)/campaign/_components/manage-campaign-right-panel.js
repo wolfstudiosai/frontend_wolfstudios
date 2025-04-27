@@ -24,7 +24,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
   const [sidebarView, setSidebarView] = React.useState(view); // QUICK / EDIT
 
   const handleDelete = async (password) => {
-    const response = await deleteCampaignAsync(data.id);
+    const response = await deleteCampaignAsync(data.id, password);
     if (response.success) {
       // fetchList();
       // window.location.reload();
