@@ -72,8 +72,8 @@ export const SocketProvider = ({ children }) => {
       stopTyping: (channelId) => {
         socketRef.current.emit('stop-typing', { channelId });
       },
-      sendDirectMessage: ({ directChannelId, message, replyId }) => {
-        socketRef.current.emit('send-direct-message', { directChannelId, message, replyId });
+      sendDirectMessage: ({ directChannelId, message, replyId, attachments }) => {
+        socketRef.current.emit('send-direct-message', { directChannelId, message, replyId, attachments });
       },
       editDirectMessage: ({ directChannelId, messageId, content, replyId }) => {
         socketRef.current.emit('edit-direct-message', { directChannelId, messageId, content, replyId });

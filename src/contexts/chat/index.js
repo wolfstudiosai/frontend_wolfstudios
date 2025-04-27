@@ -346,8 +346,8 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
-  const createDirectMessage = async (message, replyId) => {
-    socketContext?.sendDirectMessage({ directChannelId: activeTab.id, message, replyId });
+  const createDirectMessage = async (message, replyId, attachments) => {
+    socketContext?.sendDirectMessage({ directChannelId: activeTab.id, message, replyId, attachments });
   };
 
   const editDirectMessage = async (messageId, content) => {

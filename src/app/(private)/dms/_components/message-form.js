@@ -73,25 +73,25 @@ export const MessageForm = ({ sx = {} }) => {
     try {
       setLoader(true);
       if (!messageContent.trim()) return;
+      const attachments = []
+      if (selectedFiles?.length > 0) {
+        const res = await imageUploader(selectedFiles.map((f) => ({
+          file: f,
+          fileName: f.name.split('.').slice(0, -1).join('.'),
+          fileType: f.type.split('/')[1],
+        })), 'chat');
 
+        attachments.push(...res.map((item) => ({
+          url: item,
+          type: getImageType(item?.split('/chat/')?.join('')?.split('.')?.at(-1))
+        })));
+        setSelectedFiles([]);
+      }
       if (activeTab?.type === 'channel') {
-        const attachments = []
-        if (selectedFiles?.length > 0) {
-          const res = await imageUploader(selectedFiles.map((f) => ({
-            file: f,
-            fileName: f.name.split('.').slice(0, -1).join('.'),
-            fileType: f.type.split('/')[1],
-          })), 'chat');
 
-          attachments.push(...res.map((item) => ({
-            url: item,
-            type: getImageType(item?.split('/chat/')?.join('')?.split('.')?.at(-1))
-          })));
-          setSelectedFiles([]);
-        }
         createChannelMessage(messageContent, undefined, attachments);
       } else {
-        createDirectMessage(messageContent);
+        createDirectMessage(messageContent, undefined, attachments);
       }
 
       setMessageContent('');
@@ -249,9 +249,9 @@ export const MessageForm = ({ sx = {} }) => {
           }
           endAdornment={
             <InputAdornment position="end" sx={{ display: 'flex', gap: 0.2 }}>
-              <IconButton size="small" sx={{ borderRadius: '50%' }} onClick={() => attachmentRef?.current?.click()}>
+              {!messageIdToEdit && (<IconButton size="small" sx={{ borderRadius: '50%' }} onClick={() => attachmentRef?.current?.click()}>
                 <Iconify icon="mage:attachment" sx={{ color: 'grey.800' }} />
-              </IconButton>
+              </IconButton>)}
               <IconButton
                 size="small"
                 sx={{ borderRadius: '50%' }}
