@@ -171,7 +171,7 @@ export const paths = {
     partners_by_campaign: '/partners-by-campaign',
     needs_offer_approval: '/needs-offer-approval',
     partner_private: '/partner-private',
-    chat: '/chat',
+    chat: '/workspace/chill-space',
 
     // contact
     dms: '/dms',

@@ -17,6 +17,7 @@ import useAuth from '/src/hooks/useAuth';
 import { AvatarWithActiveStatus } from '/src/components/core/avatar-with-active-status';
 import { Iconify } from '/src/components/iconify/iconify';
 
+import { AddMemberToWorkspace } from './add-member-to-workspace';
 import { CreateChannelDialog } from './create-channel-dialog';
 import { CountChip, MemberInfo, MemberItem, MemberName, MemberRole, ScrollableContent } from './custom-component';
 import { UserListPopover } from './user-list-popover';
@@ -82,6 +83,7 @@ export const LeftSidebar = () => {
   const { notifications, workspaceInfo, channels, directChannels, setActiveTab, activeTab } = useContext(ChatContext);
   const { userInfo } = useAuth();
   const [openCreateChannelDialog, setOpenCreateChannelDialog] = useState(false);
+  const [openAddMemberDialog, setOpenAddMemberDialog] = useState(false);
   const [openUserList, setOpenUserList] = useState(false);
 
   const anchorRef = useRef(null);
@@ -111,9 +113,9 @@ export const LeftSidebar = () => {
             <Typography variant="h6" fontWeight={600}>
               {workspaceInfo.name}
             </Typography>
-            {/* <IconButton size="small">
-              <Iconify icon="mdi:magnify" />
-            </IconButton> */}
+            <IconButton size="small" title="Add member" onClick={() => setOpenAddMemberDialog(true)}>
+              <Iconify icon="mdi:plus" />
+            </IconButton>
           </SidebarHeader>
           <ScrollableContent>
             <List dense disablePadding>
@@ -283,6 +285,7 @@ export const LeftSidebar = () => {
                           {lastMessage?.content}
                         </MemberRole>
                       </MemberInfo>
+                      <CountChip label={channel?.DirectMessages?.length} size="small" />
                     </MemberItem>
                   );
                 })}
@@ -293,6 +296,9 @@ export const LeftSidebar = () => {
       </Stack>
       {openCreateChannelDialog && (
         <CreateChannelDialog open={openCreateChannelDialog} onClose={() => setOpenCreateChannelDialog(false)} />
+      )}
+      {openAddMemberDialog && (
+        <AddMemberToWorkspace open={openAddMemberDialog} onClose={() => setOpenAddMemberDialog(false)} />
       )}
       <UserListPopover
         open={openUserList}
