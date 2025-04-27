@@ -1,8 +1,8 @@
 'use client';
 
+import React from 'react';
 import Grid from '@mui/material/Grid2';
 import { useFormik } from 'formik';
-import React from 'react';
 
 import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
@@ -10,8 +10,7 @@ import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
 
-import { getCampaignListAsync } from '../../../(public)/campaign/_lib/campaign.actions';
-import { getPartnerListAsync } from '../../../(public)/partner/_lib/partner.actions';
+import { defaultContent } from '../_lib/all-content.types';
 import {
   getCityListAsync,
   getProductListAsync,
@@ -19,7 +18,8 @@ import {
   getStakeHolderListAsync,
   getTagListAsync,
 } from '../../../../lib/common.actions';
-import { defaultContent } from '../_lib/all-content.types';
+import { getCampaignListAsync } from '../../../(public)/campaign/_lib/campaign.actions';
+import { getPartnerListAsync } from '../../../(public)/partner/_lib/partner.actions';
 import { formConstants } from '/src/app/constants/form-constants';
 
 export const ContentForm = ({ id, onClose, fetchList }) => {
@@ -96,99 +96,48 @@ export const ContentForm = ({ id, onClose, fetchList }) => {
   });
 
   // --------------- Fetch Prerequisites Data -------------------
+  const fetchFunctionsMap = {
+    campaigns: getCampaignListAsync,
+    cities: getCityListAsync,
+    products: getProductListAsync,
+    tags: getTagListAsync,
+    stakeholders: getStakeHolderListAsync,
+    partners: getPartnerListAsync,
+    retailPartners: getRetailPartnerListAsync,
+  };
   React.useEffect(() => {
-    const fetchPrerequisitesData = async () => {
-      try {
-        if (autocompleteFocus?.currentItem === 'campaigns' && !autocompleteFocus?.prevItems.includes('campaigns')) {
-          const campaignResponse = await getCampaignListAsync({ page: 1, rowsPerPage: 100 });
-          if (campaignResponse?.success) {
-            const options = campaignResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-            setAutoCompleteOptions((prevState) => ({ ...prevState, campaigns: options }));
-            setAutocompleteFocus((prevState) => ({
-              currentItem: '',
-              prevItems: [...prevState.prevItems, 'campaigns'],
-            }));
-          }
-        }
-        if (autocompleteFocus?.currentItem === 'cities' && !autocompleteFocus?.prevItems.includes('cities')) {
-          const citiesResponse = await getCityListAsync({ page: 1, rowsPerPage: 100 });
-          if (citiesResponse?.success) {
-            const options = citiesResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-            setAutoCompleteOptions((prevState) => ({ ...prevState, cities: options }));
-            setAutocompleteFocus((prevState) => ({
-              currentItem: '',
-              prevItems: [...prevState.prevItems, 'cities'],
-            }));
-          }
-        }
+    const fetchData = async () => {
+      if (!autocompleteFocus?.currentItem) return;
+      const { currentItem, prevItems } = autocompleteFocus;
 
-        if (autocompleteFocus?.currentItem === 'products' && !autocompleteFocus?.prevItems.includes('products')) {
-          const productResponse = await getProductListAsync({ page: 1, rowsPerPage: 100 });
-          if (productResponse?.success) {
-            const options = productResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-            setAutoCompleteOptions((prevState) => ({ ...prevState, products: options }));
-            setAutocompleteFocus((prevState) => ({
-              currentItem: '',
-              prevItems: [...prevState.prevItems, 'products'],
-            }));
-          }
+      if (prevItems.includes(currentItem)) return;
+      const fetchFunction = fetchFunctionsMap[currentItem];
+      if (!fetchFunction) return;
+
+      try {
+        const response = await fetchFunction({ page: 1, rowsPerPage: 100 });
+        if (response?.success) {
+          const options = response.data.map((item) => ({
+            value: item.id,
+            label: item.Name,
+          }));
+
+          setAutoCompleteOptions((prevState) => ({
+            ...prevState,
+            [currentItem]: options,
+          }));
+
+          setAutocompleteFocus((prevState) => ({
+            currentItem: '',
+            prevItems: [...prevState.prevItems, currentItem],
+          }));
         }
-        if (autocompleteFocus?.currentItem === 'tags' && !autocompleteFocus?.prevItems.includes('tags')) {
-          const tagResponse = await getTagListAsync({ page: 1, rowsPerPage: 100 });
-          if (tagResponse?.success) {
-            const options = tagResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-            setAutoCompleteOptions((prevState) => ({ ...prevState, tags: options }));
-            setAutocompleteFocus((prevState) => ({
-              currentItem: '',
-              prevItems: [...prevState.prevItems, 'tags'],
-            }));
-          }
-        }
-        if (
-          autocompleteFocus?.currentItem === 'stakeholders' &&
-          !autocompleteFocus?.prevItems.includes('stakeholders')
-        ) {
-          const stakeholderResponse = await getStakeHolderListAsync({ page: 1, rowsPerPage: 100 });
-          if (stakeholderResponse?.success) {
-            const options = stakeholderResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-            setAutoCompleteOptions((prevState) => ({ ...prevState, stakeholders: options }));
-            setAutocompleteFocus((prevState) => ({
-              currentItem: '',
-              prevItems: [...prevState.prevItems, 'stakeholders'],
-            }));
-          }
-        }
-        if (autocompleteFocus?.currentItem === 'partners' && !autocompleteFocus?.prevItems.includes('partners')) {
-          const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 100 });
-          if (partnerResponse?.success) {
-            const options = partnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-            setAutoCompleteOptions((prevState) => ({ ...prevState, partners: options }));
-            setAutocompleteFocus((prevState) => ({
-              currentItem: '',
-              prevItems: [...prevState.prevItems, 'partners'],
-            }));
-          }
-        }
-        if (
-          autocompleteFocus?.currentItem === 'retailPartners' &&
-          !autocompleteFocus?.prevItems.includes('retailPartners')
-        ) {
-          const retailPartnerResponse = await getRetailPartnerListAsync({ page: 1, rowsPerPage: 100 });
-          if (retailPartnerResponse?.success) {
-            const options = retailPartnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-            setAutoCompleteOptions((prevState) => ({ ...prevState, retailPartners: options }));
-            setAutocompleteFocus((prevState) => ({
-              currentItem: '',
-              prevItems: [...prevState.prevItems, 'retailPartners'],
-            }));
-          }
-        }
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error(error);
       }
     };
 
-    fetchPrerequisitesData();
+    fetchData();
   }, [autocompleteFocus]);
 
   return (
