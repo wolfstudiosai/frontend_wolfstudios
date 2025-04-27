@@ -43,10 +43,10 @@ export const MessageReplyForm = ({ sx = {} }) => {
     createChannelMessage,
     createDirectMessage,
     activeTab,
-    messageContent,
-    setMessageContent,
-    messageIdToEdit,
-    handleEditMessage,
+    messageReplyContent,
+    setMessageReplyContent,
+    replyMessageIdToEdit,
+    handleEditReplyMessage,
     editChannelMessage,
     editDirectMessage,
     activeChannelThread,
@@ -68,61 +68,61 @@ export const MessageReplyForm = ({ sx = {} }) => {
   };
 
   const handleSendMessage = () => {
-    if (!messageContent.trim()) return;
+    if (!messageReplyContent.trim()) return;
 
     if (activeTab?.type === 'channel') {
-      createChannelMessage(messageContent, activeChannelThread);
+      createChannelMessage(messageReplyContent, activeChannelThread);
     } else {
-      createDirectMessage(messageContent, activeDirectThread);
+      createDirectMessage(messageReplyContent, activeDirectThread);
     }
 
-    setMessageContent('');
+    setMessageReplyContent('');
   };
 
   const handleUpdateMessage = (id) => {
     if (activeTab?.type === 'channel') {
-      editChannelMessage(id, messageContent);
+      editChannelMessage(id, messageReplyContent);
     } else {
-      editDirectMessage(id, messageContent);
+      editDirectMessage(id, messageReplyContent);
     }
-    handleEditMessage(null);
+    handleEditReplyMessage(null);
   };
 
   const handleInputChange = (e) => {
     const value = e.target.value;
-    setMessageContent(value);
-    const cursor = e.target.selectionStart;
-    setCursorPosition(cursor);
+    setMessageReplyContent(value);
+    // const cursor = e.target.selectionStart;
+    // setCursorPosition(cursor);
 
-    const textUpToCursor = value.slice(0, cursor);
-    const atIndex = textUpToCursor.lastIndexOf('@');
+    // const textUpToCursor = value.slice(0, cursor);
+    // const atIndex = textUpToCursor.lastIndexOf('@');
 
-    if (atIndex >= 0) {
-      const query = textUpToCursor.slice(atIndex + 1);
-      if (/^[\w]*$/.test(query)) {
-        setMentionQuery(query);
-        const anchorEl = inputRef.current;
-        setMentionAnchor(anchorEl);
-        setFilteredUsers(allUsers.filter((user) => user.name.toLowerCase().includes(query.toLowerCase())));
-        return;
-      }
-    }
+    // if (atIndex >= 0) {
+    //   const query = textUpToCursor.slice(atIndex + 1);
+    //   if (/^[\w]*$/.test(query)) {
+    //     setMentionQuery(query);
+    //     const anchorEl = inputRef.current;
+    //     setMentionAnchor(anchorEl);
+    //     setFilteredUsers(allUsers.filter((user) => user.name.toLowerCase().includes(query.toLowerCase())));
+    //     return;
+    //   }
+    // }
 
-    setMentionAnchor(null);
-    setMentionQuery('');
-    setFilteredUsers([]);
+    // setMentionAnchor(null);
+    // setMentionQuery('');
+    // setFilteredUsers([]);
   };
 
   const handleMentionSelect = (user) => {
-    const beforeCursor = messageContent.slice(0, cursorPosition);
-    const afterCursor = messageContent.slice(cursorPosition);
+    const beforeCursor = messageReplyContent.slice(0, cursorPosition);
+    const afterCursor = messageReplyContent.slice(cursorPosition);
     const atIndex = beforeCursor.lastIndexOf('@');
 
     const mentionText = `@${user.name}`;
     const newCursorPos = atIndex + mentionText.length + 1;
 
     const newText = beforeCursor.slice(0, atIndex) + mentionText + ' ' + afterCursor;
-    setMessageContent(newText);
+    setMessageReplyContent(newText);
     setMentionAnchor(null);
     setMentionQuery('');
     setFilteredUsers([]);
@@ -136,8 +136,8 @@ export const MessageReplyForm = ({ sx = {} }) => {
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      if (messageIdToEdit) {
-        handleUpdateMessage(messageIdToEdit);
+      if (replyMessageIdToEdit) {
+        handleUpdateMessage(replyMessageIdToEdit);
       } else {
         handleSendMessage();
       }
@@ -148,11 +148,11 @@ export const MessageReplyForm = ({ sx = {} }) => {
     let timeoutId;
     const TYPING_DELAY = 500;
 
-    if (messageContent.length === 1) {
+    if (messageReplyContent.length === 1) {
       startTyping();
     }
 
-    if (messageContent.length > 0) {
+    if (messageReplyContent.length > 0) {
       timeoutId = setTimeout(() => {
         startTyping();
         timeoutId = setTimeout(() => {
@@ -168,7 +168,7 @@ export const MessageReplyForm = ({ sx = {} }) => {
         clearTimeout(timeoutId);
       }
     };
-  }, [messageContent]);
+  }, [messageReplyContent]);
 
   return (
     <Stack sx={{ ...sx }}>
@@ -207,7 +207,7 @@ export const MessageReplyForm = ({ sx = {} }) => {
         <Input
           fullWidth
           placeholder="Type a message..."
-          value={messageContent}
+          value={messageReplyContent}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           inputRef={inputRef}
@@ -230,13 +230,13 @@ export const MessageReplyForm = ({ sx = {} }) => {
               >
                 <Iconify icon="material-symbols-light:add-reaction-outline" sx={{ color: 'grey.800' }} />
               </IconButton>
-              {messageIdToEdit && (
+              {replyMessageIdToEdit && (
                 <IconButton
                   size="small"
                   color="error"
                   title="Cancel edit"
                   sx={{ borderRadius: '50%' }}
-                  onClick={() => handleEditMessage(null)}
+                  onClick={() => handleEditReplyMessage(null)}
                 >
                   <Iconify icon="mingcute:close-line" />
                 </IconButton>
@@ -245,17 +245,17 @@ export const MessageReplyForm = ({ sx = {} }) => {
                 size="small"
                 sx={{
                   borderRadius: '50%',
-                  ...((messageContent.length > 0 || selectedFiles.length > 0) && {
+                  ...((messageReplyContent.length > 0 || selectedFiles.length > 0) && {
                     backgroundColor: 'primary.main',
                     '&:hover': { backgroundColor: 'primary.main' },
                   }),
                 }}
-                onClick={() => (messageIdToEdit ? handleUpdateMessage(messageIdToEdit) : handleSendMessage())}
-                disabled={messageContent.length === 0 && selectedFiles.length === 0}
+                onClick={() => (replyMessageIdToEdit ? handleUpdateMessage(replyMessageIdToEdit) : handleSendMessage())}
+                disabled={messageReplyContent.length === 0 && selectedFiles.length === 0}
               >
                 <Iconify
-                  icon={messageIdToEdit ? 'charm:tick' : 'mingcute:arrow-up-fill'}
-                  sx={{ color: messageContent.length > 0 || selectedFiles.length > 0 ? '#fff' : 'grey.800' }}
+                  icon={replyMessageIdToEdit ? 'charm:tick' : 'mingcute:arrow-up-fill'}
+                  sx={{ color: messageReplyContent.length > 0 || selectedFiles.length > 0 ? '#fff' : 'grey.800' }}
                 />
               </IconButton>
             </InputAdornment>
@@ -298,11 +298,11 @@ export const MessageReplyForm = ({ sx = {} }) => {
         anchorEl={emojiAnchorEl}
         onClose={() => setShowEmojiPicker(false)}
         onSelectEmoji={(emojiChar) => {
-          const before = messageContent.slice(0, cursorPosition);
-          const after = messageContent.slice(cursorPosition);
+          const before = messageReplyContent.slice(0, cursorPosition);
+          const after = messageReplyContent.slice(cursorPosition);
           const updated = before + emojiChar + after;
 
-          setMessageContent(updated);
+          setMessageReplyContent(updated);
 
           requestAnimationFrame(() => {
             inputRef.current?.focus();

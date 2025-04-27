@@ -89,26 +89,26 @@ export const MessageForm = ({ sx = {} }) => {
   const handleInputChange = (e) => {
     const value = e.target.value;
     setMessageContent(value);
-    const cursor = e.target.selectionStart;
-    setCursorPosition(cursor);
+    // const cursor = e.target.selectionStart;
+    // setCursorPosition(cursor);
 
-    const textUpToCursor = value.slice(0, cursor);
-    const atIndex = textUpToCursor.lastIndexOf('@');
+    // const textUpToCursor = value.slice(0, cursor);
+    // const atIndex = textUpToCursor.lastIndexOf('@');
 
-    if (atIndex >= 0) {
-      const query = textUpToCursor.slice(atIndex + 1);
-      if (/^[\w]*$/.test(query)) {
-        setMentionQuery(query);
-        const anchorEl = inputRef.current;
-        setMentionAnchor(anchorEl);
-        setFilteredUsers(allUsers.filter((user) => user.name.toLowerCase().includes(query.toLowerCase())));
-        return;
-      }
-    }
+    // if (atIndex >= 0) {
+    //   const query = textUpToCursor.slice(atIndex + 1);
+    //   if (/^[\w]*$/.test(query)) {
+    //     setMentionQuery(query);
+    //     const anchorEl = inputRef.current;
+    //     setMentionAnchor(anchorEl);
+    //     setFilteredUsers(allUsers.filter((user) => user.name.toLowerCase().includes(query.toLowerCase())));
+    //     return;
+    //   }
+    // }
 
-    setMentionAnchor(null);
-    setMentionQuery('');
-    setFilteredUsers([]);
+    // setMentionAnchor(null);
+    // setMentionQuery('');
+    // setFilteredUsers([]);
   };
 
   const handleMentionSelect = (user) => {

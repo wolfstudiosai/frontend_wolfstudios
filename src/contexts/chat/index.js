@@ -41,6 +41,8 @@ export const ChatProvider = ({ children }) => {
     members: [],
   });
   const [messageContent, setMessageContent] = useState('');
+  const [messageReplyContent, setMessageReplyContent] = useState('');
+
   const [channels, setChannels] = useState([]);
   const [directChannels, setDirectChannels] = useState([]);
   const [activeTab, setActiveTab] = useState(null);
@@ -56,6 +58,7 @@ export const ChatProvider = ({ children }) => {
   const [typingUsers, setTypingUsers] = useState(new Set());
   const [notifications, setNotifications] = useState({});
   const [messageIdToEdit, setMessageIdToEdit] = useState(null);
+  const [replyMessageIdToEdit, setReplyMessageIdToEdit] = useState(null);
   const socketContext = useSocket();
 
   const findUser = (id) => {
@@ -113,6 +116,16 @@ export const ChatProvider = ({ children }) => {
     } else {
       setMessageContent('');
       setMessageIdToEdit(null);
+    }
+  };
+
+  const handleEditReplyMessage = (message) => {
+    if (message?.id) {
+      setMessageReplyContent(message?.content);
+      setReplyMessageIdToEdit(message?.id);
+    } else {
+      setMessageReplyContent('');
+      setReplyMessageIdToEdit(null);
     }
   };
 
@@ -906,6 +919,11 @@ export const ChatProvider = ({ children }) => {
     setMessageContent,
     handleEditMessage,
     messageIdToEdit,
+    messageReplyContent,
+    setMessageReplyContent,
+    handleEditMessage,
+    replyMessageIdToEdit,
+    handleEditReplyMessage,
     createDirectChannel,
     createDirectMessageReaction,
     removeDirectMessageReaction,
