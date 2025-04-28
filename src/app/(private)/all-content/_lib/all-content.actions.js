@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
@@ -16,10 +17,9 @@ export const getContentList = async (queryParams) => {
 
 export const getContentAsync = async (id) => {
   try {
-    // const res = await api.get(`/record?id=${id}`);
     const res = await api.get(`/content-HQ/${id}`);
     if (!res.data.success) return;
-    return { success: true, data: res.data.data[0] };
+    return { success: true, data: res.data.data };
   } catch (error) {
     toast.error(error.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
@@ -37,9 +37,7 @@ export const createContentAsync = async (data) => {
     playbookLink: data.playbookLink || '',
     upPromoteConversion: Number(data.upPromoteConversion) || 0,
     assetStatus: data.assetStatus || '',
-    monthUploaded: data.monthUploaded
-      ? data.monthUploaded.toLocaleString('en-US', { month: 'short', year: 'numeric' })
-      : '',
+    monthUploaded: data.monthUploaded ? dayjs(data.monthUploaded).format('YYYY-MM-DD') : '',
     revoInstagram: data.revoInstagram || '',
     creatorStatus: data.creatorStatus || '',
     partner: {
@@ -112,7 +110,7 @@ export const createContentAsync = async (data) => {
   }
 };
 
-export const updateContentAsync = async (data, file = null) => {
+export const updateContentAsync = async (data) => {
   try {
     debugger;
     if (file) {

@@ -1,16 +1,17 @@
 'use client';
 
+import React from 'react';
+import { CircularProgress } from '@mui/material';
+
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
-import { sliderToGridColsCoverter } from '/src/utils/helper';
-import React from 'react';
-import AllContentGridView from './_component/all-content-grid-view';
 
-import { CircularProgress } from '@mui/material';
+import AllContentGridView from './_component/all-content-grid-view';
 import AllContentListView from './_component/all-content-list-view';
 import { ManageContentRightPanel } from './_component/manage-content-right-panel';
 import { getContentList } from './_lib/all-content.actions';
 import { defaultContent } from './_lib/all-content.types.old';
+import { sliderToGridColsCoverter } from '/src/utils/helper';
 
 export const AllContentView = () => {
   const observerRef = React.useRef(null);
@@ -53,14 +54,14 @@ export const AllContentView = () => {
   }
 
   const handleFilterChange = (type, value) => {
-    if (type === 'ADD') {
-      setSelectedContent(value ? defaultContent : null);
-    }
+    // if (type === 'ADD') {
+    //   setSelectedContent(value ? defaultContent : null);
+    // }
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
   const handleContentCreated = () => {
-    setFilters(prev => ({ ...prev, ADD: false }));
+    setFilters((prev) => ({ ...prev, ADD: false }));
     refreshListView();
   };
 
@@ -130,14 +131,13 @@ export const AllContentView = () => {
         />
       )}
       <ManageContentRightPanel
-        view="QUICK"
+        view="EDIT"
         width="70%"
         showAdd={false}
         data={defaultContent}
         fetchList={refreshListView}
         open={filters.ADD}
         onClose={handleContentCreated}
-        isAdd = {filters.ADD && !data?.id}
       />
     </PageContainer>
   );
