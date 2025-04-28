@@ -13,90 +13,19 @@ import { ErrorMessage } from '/src/components/formFields/error-message';
 import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-iframe-dialog';
 import { ImageUploader } from '/src/components/uploaders/image-uploader';
 
-import { createPartnerAsync, updatePartnerAsync } from '../_lib/partner.actions';
-import { defaultPartner1 } from '../_lib/partner.types';
-import { formConstants } from '/src/app/constants/form-constants';
+import { ageBracket, profileStatus, status } from '../_lib/partner.constants';
 
-const status = [
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-  { value: 'pending', label: 'Pending' },
-  { value: 'suspended', label: 'Suspended' },
-];
-
-const profileStatus = [
-  { value: 'Complete', label: 'Complete' },
-  { value: 'Approved', label: 'Approved' },
-];
-
-const ageBracket = [
-  { value: '18-25', label: '18-25' },
-  { value: '25-30', label: '25-30' },
-  { value: '30-40', label: '30-40' },
-];
-
-export const PartnerForm = ({ id, onClose, fetchList }) => {
+export const PartnerForm = ({ handleChange, values, errors, setFieldValue, onSubmit }) => {
   // *********************States*********************************
   const [mediaPreview, setMediaPreview] = React.useState(null);
   const [openVerticalUploadDialog, setOpenVerticalUploadDialog] = React.useState(false);
   const [openHorizontalUploadDialog, setOpenHorizontalUploadDialog] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-
-  const { values, errors, handleChange, handleSubmit, setFieldValue } = useFormik({
-    initialValues: defaultPartner1,
-    validate: (values) => {
-      const errors = {};
-      if (!values.name) {
-        errors.name = formConstants.required;
-      }
-      if (!values.email) {
-        errors.email = formConstants.required;
-      }
-
-      return errors;
-    },
-    onSubmit: async (values) => {
-      console.log(values, 'values');
-      setLoading(true);
-      try {
-        const finalData = { ...values };
-        const fieldToConvert = [
-          'platformDeliverables',
-          'affiliatePlatform',
-          'ageBracket',
-          'contracts',
-          'currentStatus',
-          'platforms',
-          'profileStatus',
-          'sourcedFrom',
-        ];
-        for (const field of fieldToConvert) {
-          const value = values[field];
-          if (value.length > 0) {
-            const arrOfStr = value.map((item) => item.value);
-            finalData[field] = arrOfStr;
-          }
-        }
-        const res = id ? await updatePartnerAsync(finalData) : await createPartnerAsync(finalData);
-        if (res.success) {
-          onClose?.();
-          fetchList();
-        } else {
-          console.error('Operation failed:', res.message);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      } finally {
-        setLoading(false);
-      }
-    },
-  });
 
   // *****************Use Effects*******************************
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <Grid container spacing={2} sx={{ pb: 5 }}>
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} />
@@ -506,17 +435,6 @@ export const PartnerForm = ({ id, onClose, fetchList }) => {
               ]}
               multiple
             />
-            {/* <CustomSelect
-              label="Platforms"
-              value={values.platforms}
-              onChange={(value) => setFieldValue('platforms', value)}
-              name="platforms"
-              options={[
-                { value: 'ACTIVE', label: 'Active' },
-                { value: 'INACTIVE', label: 'Inactive' },
-                { value: 'NOT_STARTED', label: 'Not started' },
-              ]}
-            /> */}
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
@@ -613,16 +531,6 @@ export const PartnerForm = ({ id, onClose, fetchList }) => {
               ]}
               multiple
             />
-            {/* <CustomSelect
-              label="Sourced From"
-              value={values.sourcedFrom}
-              onChange={(value) => setFieldValue('sourcedFrom', value)}
-              name="sourcedFrom"
-              options={[
-                { value: 'Instagram', label: 'Instagram' },
-                { value: 'Referral', label: 'Referral' },
-              ]}
-            /> */}
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
@@ -912,12 +820,39 @@ export const PartnerForm = ({ id, onClose, fetchList }) => {
               multiple
             />
           </Grid>
-          <Grid size={{ xs: 12 }}>
-            <Stack direction="row" justifyContent="flex-end">
-              <Button size="small" variant="contained" color="primary" disabled={loading} type="submit">
-                Save
-              </Button>
-            </Stack>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <FormControl fullWidth error={Boolean(errors.profileImage)}>
+              <FormLabel sx={{ mb: 1 }}>Profile Image</FormLabel>
+              <ImageUploader
+                value={values.profileImage}
+                onFileSelect={(file) => setFieldValue('profileImage', file)}
+                onDelete={() => setFieldValue('profileImage', null)}
+              />
+            </FormControl>
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <FormControl fullWidth error={Boolean(errors.mediaKit)}>
+              <FormLabel sx={{ mb: 1 }}>Media kit</FormLabel>
+              <ImageUploader
+                label="Upload Media Kit"
+                value={values.mediaKit}
+                onFileSelect={(file) => setFieldValue('mediaKit', file)}
+                onDelete={() => setFieldValue('mediaKit', null)}
+                accept="application/pdf"
+              />
+            </FormControl>
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <FormControl fullWidth error={Boolean(errors.receipts)}>
+              <FormLabel sx={{ mb: 1 }}>Receipts</FormLabel>
+              <ImageUploader
+                label="Upload Receipts"
+                value={values.receipts}
+                onFileSelect={(file) => setFieldValue('receipts', file)}
+                onDelete={() => setFieldValue('receipts', null)}
+                accept="application/pdf"
+              />
+            </FormControl>
           </Grid>
         </Grid>
       </form>

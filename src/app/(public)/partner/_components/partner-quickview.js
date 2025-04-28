@@ -93,6 +93,8 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
     Note: data?.Notes || 'N/A',
     Podcast: data?.Podcast || 'N/A',
     RefusalReason: data?.RefusalReason || 'N/A',
+    Receipts: data?.Receipts?.length > 0 ? data?.Receipts : 'N/A',
+    MediaKit: data?.MediaKit?.length > 0 ? data?.MediaKit : 'N/A',
   });
 
   const [amazonInfo, setAmazonInfo] = useState({
@@ -167,22 +169,43 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
       <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <strong>{label}:</strong>{' '}
         {type === 'link' ? (
-          <Link href={value} passHref legacyBehavior>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              title={value}
-              style={{
-                display: 'block',
-                width: '200px',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
-            >
-              {value}
-            </a>
-          </Link>
+          Array.isArray(value) ? (
+            value.map((link, index) => (
+              <Link key={index} href={link} passHref legacyBehavior>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={link}
+                  style={{
+                    display: 'block',
+                    width: '200px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {link}
+                </a>
+              </Link>
+            ))
+          ) : (
+            <Link href={value} passHref legacyBehavior>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                title={value}
+                style={{
+                  display: 'block',
+                  width: '200px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {value}
+              </a>
+            </Link>
+          )
         ) : type === 'chips' ? (
           value
             .split(', ')
@@ -229,10 +252,12 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
             </IconButton>
           </Stack>
 
-          {/* Profile Status */}
+          {/* Status */}
           <Stack direction={'row'} spacing={0.5}>
-            {data?.ProfileStatus && <CustomChip label={data?.ProfileStatus} />}
-            {data?.CurrentStatus && <CustomChip label={data?.CurrentStatus} />}
+            {data?.ProfileStatus?.length > 0 &&
+              data?.ProfileStatus?.map((status, index) => <CustomChip key={index} label={status} />)}
+            {data?.CurrentStatus?.length > 0 &&
+              data?.CurrentStatus?.map((status, index) => <CustomChip key={index} label={status} />)}
           </Stack>
         </Stack>
 
@@ -340,7 +365,7 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
       <Divider sx={{ my: 0 }} />
 
       {/* Image Slider */}
-      <SliderWrapper
+      {/* <SliderWrapper
         modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
         // autoplay={{ delay: 4000, disableOnInteraction: true }}
         breakpoints={{
@@ -352,7 +377,6 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
         // speed={2000}
         spaceBetween={2}
       >
-        {/* {data?.PartnerGallery?.map((item, index) => ( */}
         {mediaArr?.map((item, index) => (
           <SwiperSlide key={index}>
             <PartnerSliderCard
@@ -364,10 +388,36 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
             />
           </SwiperSlide>
         ))}
-      </SliderWrapper>
+      </SliderWrapper> */}
 
       {/* Social Media iFrame */}
       <Stack direction="row" spacing={1}>
+        <Box
+          sx={{
+            width: 245,
+            height: 320,
+            border: '1px solid',
+            borderColor: 'grey.300',
+            flexShrink: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            my: 2,
+          }}
+        >
+          <Box
+            component="img"
+            src={data?.ProfileImage?.at(0) ?? '/assets/image-placeholder.jpg'}
+            alt={data?.Name}
+            sx={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              borderBottom: '1px solid var(--mui-palette-divider)',
+            }}
+            onClick={() => setOpenPartnerRightPanel(item)}
+          />
+        </Box>
         {socialProfiles.length > 0 && <PartnerIframes profiles={socialProfiles} />}
       </Stack>
 
@@ -415,6 +465,8 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
                 {renderField('other', 'Note', 'Note')}
                 {renderField('other', 'Podcast', 'Podcast')}
                 {renderField('other', 'RefusalReason', 'Refusal Reason')}
+                {renderField('other', 'Receipts', 'Receipts', 'link')}
+                {renderField('other', 'MediaKit', 'Media Kit', 'link')}
               </Stack>
             </Grid>
 

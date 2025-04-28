@@ -1,13 +1,20 @@
 'use client';
 
+import React from 'react';
 import { Close, Visibility } from '@mui/icons-material';
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
-import React from 'react';
-import { getFilenameFromUrl } from '/src/utils/get-filename-from-url';
 
 import { Iconify } from '../iconify/iconify';
+import { getFilenameFromUrl } from '/src/utils/get-filename-from-url';
 
-export const ImageUploader = ({ value, onFileSelect, onDelete, disabled = false }) => {
+export const ImageUploader = ({
+  value,
+  onFileSelect,
+  onDelete,
+  disabled = false,
+  accept = 'image/*',
+  label = 'Upload Image',
+}) => {
   const [previewUrl, setPreviewUrl] = React.useState(null);
   const [fileInfo, setSelectedFileInfo] = React.useState({ name: '', size: 0 });
 
@@ -78,9 +85,9 @@ export const ImageUploader = ({ value, onFileSelect, onDelete, disabled = false 
         >
           <Stack direction="row" gap={1}>
             <Iconify icon="akar-icons:cloud-upload" width={24} height={24} />
-            <Typography>Upload Image</Typography>
+            <Typography>{label}</Typography>
           </Stack>
-          <input type="file" accept="image/*" onChange={handleImageChange} hidden />
+          <input type="file" accept={accept} onChange={handleImageChange} hidden />
         </Button>
       ) : (
         <Box
