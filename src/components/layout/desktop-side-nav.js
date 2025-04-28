@@ -46,7 +46,7 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
     >
       <MenuList>
         {renderMenuItems({
-          items: [...dashboardFavItemsV2, workspacesTab],
+          items: dashboardFavItemsV2,
           pathname,
           openMenus,
           toggleMenuItem,

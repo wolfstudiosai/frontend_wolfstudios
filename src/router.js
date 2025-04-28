@@ -522,6 +522,21 @@ export const dashboardFavItemsV2 = [
       },
     ],
   },
+  {
+    key: 'chat',
+    title: 'Chat',
+    icon: 'fluent:chat-16-regular',
+    href: paths.private.chat,
+    // items: [
+    //   {
+    //     key: 'bev',
+    //     title: 'BEV ',
+    //     icon: 'tabler:map',
+    //     href: paths.private.favorites_bev,
+    //     allowedRoles: ['admin', 'user', 'super_admin'],
+    //   },
+    // ],
+  },
 ];
 
 // dashboard fav items

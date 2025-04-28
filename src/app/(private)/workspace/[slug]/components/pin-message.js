@@ -7,8 +7,7 @@ import { Message } from './message';
 import { MessageSkeleton } from './skeleton';
 
 const PinMessage = () => {
-  const { channelMessages } = useContext(ChatContext);
-  //   Set actual loading logic
+  const { channelPinnedMessages, directPinnedMessages, activeTab } = useContext(ChatContext);
   const loading = false;
 
   if (loading) {
@@ -23,10 +22,13 @@ const PinMessage = () => {
 
   return (
     <Stack direction="column" gap={2} sx={{ py: 2 }}>
-      {/* Map the pinned messages */}
-      {channelMessages?.map((message) => (
-        <Message key={message.id} message={message} sidebar={true} />
-      ))}
+      {activeTab?.type === 'channel'
+        ? channelPinnedMessages?.map((message) => (
+            <Message key={message.id} message={message} sidebar={true} pinnedTab />
+          ))
+        : directPinnedMessages?.map((message) => (
+            <Message key={message.id} message={message} sidebar={true} pinnedTab />
+          ))}
     </Stack>
   );
 };

@@ -50,3 +50,67 @@ export const imageUploader = async (imagesMeta, folder) => {
     }
   }
 }
+
+export const getImageType = (type) => {
+  switch (type) {
+    case 'jpeg':
+    case 'jpg':
+      return 'image/jpeg';
+    case 'png':
+      return 'image/png';
+    case 'gif':
+      return 'image/gif';
+    case 'webp':
+      return 'image/webp';
+    case 'svg':
+      return 'image/svg+xml';
+    case 'bmp':
+      return 'image/bmp';
+    case 'ico':
+      return 'image/x-icon';
+    case 'tiff':
+      return 'image/tiff';
+    case 'heic':
+      return 'image/heic';
+    case 'raw':
+      return 'image/raw';
+    case 'avif':
+      return 'image/avif';
+    case 'jfif':
+      return 'image/jpeg';
+    case 'indd':
+      return 'application/x-indesign';
+    case 'ai':
+      return 'application/postscript';
+    case 'eps':
+      return 'application/postscript';
+    case 'psd':
+      return 'application/photoshop';
+    case 'pdf':
+      return 'application/pdf';
+    case 'docx':
+      return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    case 'doc':
+      return 'application/msword';
+    case 'pptx':
+      return 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+    case 'ppt':
+      return 'application/vnd.ms-powerpoint';
+    case 'xlsx':
+      return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    case 'xls':
+      return 'application/vnd.ms-excel';
+    case 'csv':
+      return 'text/csv';
+    case 'txt':
+      return 'text/plain';
+    case 'zip':
+      return 'application/zip';
+    case 'rar':
+      return 'application/x-rar-compressed';
+    case 'tar':
+      return 'application/x-tar';
+    default:
+      return 'application/octet-stream';
+  }
+}
