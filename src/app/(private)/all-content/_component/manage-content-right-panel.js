@@ -1,28 +1,35 @@
 'use client';
 
-import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';  
+import React, { useState } from 'react';
+import { Button, IconButton } from '@mui/material';
+import { useFormik } from 'formik';
+
+import useAuth from '/src/hooks/useAuth';
+import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import { Iconify } from '/src/components/iconify/iconify';
-import { Box, Button, IconButton, Popover, TextField, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
-import React, { useRef, useState } from 'react';
-import useAuth from '/src/hooks/useAuth';
+
+import {
+  createContentAsync,
+  deleteContentAsync,
+  getContentAsync,
+  updateContentAsync,
+} from '../_lib/all-content.actions';
+import { defaultContent } from '../_lib/all-content.types';
+import { defaultContent1 } from '../_lib/all-content.types.old';
 import { ContentForm } from './content-form';
 import { ContentQuickView } from './content-quick-view';
-import { defaultContent1 } from '../_lib/all-content.types';
-import { useFormik } from 'formik';
 import { formConstants } from '/src/app/constants/form-constants';
-import { updateContentAsync, deleteContentAsync,createContentAsync  } from '../_lib/all-content.actions';
 
 export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width, view, isAdd }) => {
   const isUpdate = data?.id ? true : false;
-  const router = useRouter();
   const { isLogin } = useAuth();
   const [sidebarView, setSidebarView] = React.useState(view); // QUICK // EDIT
   const [file, setFile] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
-  const [formData, setFormData] = useState(data); 
-  
+  const [formData, setFormData] = useState(data);
+  console.log(data?.id, 'data.id....');
+  console.log(sidebarView, 'sidebarView.....');
   React.useEffect(() => {
     if (isAdd) {
       // Reset to default content when adding new
@@ -32,43 +39,68 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
       // Load existing data when available
       setValues(data);
       setSidebarView('QUICK');
-    }
+    }j
   }, [isAdd, data]);
-  
-    const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
-      useFormik({
-        initialValues: defaultContent1,
-        validate: (values) => {
-          const errors = {};
-          if (!values.name) {
-            errors.name = formConstants.required;
-          }
-          // if (!values.campaign) {
-          //   errors.campaign = formConstants.required;
-          // }
-          // if (!values.product) {
-          //   errors.product = formConstants.required;
-          // }
-          return errors;
-        },
-        onSubmit: async (values) => {
-          setLoading(true);
-          try {
-            const res = isUpdate ? await updateContentAsync(file, values) : await createContentAsync(file, values);
-            if (res.success) {
-              onClose?.();
-              fetchList();
-            } else {
-              console.error('Operation failed:', res.message);
-            }
-          } catch (error) {
-            console.error('Error:', error);
-          } finally {
-            setLoading(false);
-          }
-        },
-      });
 
+  const { values, errors, handleChange, setFieldValue, resetForm, setValues, handleSubmit } = useFormik({
+    initialValues: defaultContent(),
+    validate: (values) => {
+      const errors = {};
+      if (!values.name) {
+        errors.name = formConstants.required;
+      }
+      if (!values.revoPinterest) {
+        errors.revoPinterest = formConstants.required;
+      }
+      if (!values.revoPinterest) {
+        errors.revoPinterest = formConstants.required;
+      }
+      if (!values.pinAccountsUsed) {
+        errors.pinAccountsUsed = formConstants.required;
+      }
+      if (!values.postQuality) {
+        errors.postQuality = formConstants.required;
+      }
+      if (!values.googleDriveFiles) {
+        errors.googleDriveFiles = formConstants.required;
+      }
+      if (!values.playbookLink) {
+        errors.playbookLink = formConstants.required;
+      }
+      if (!values.upPromoteConversion) {
+        errors.upPromoteConversion = formConstants.required;
+      }
+      if (!values.monthUploaded) {
+        errors.monthUploaded = formConstants.required;
+      }
+      if (!values.revoInstagram) {
+        errors.revoInstagram = formConstants.required;
+      }
+      if (!values.creatorStatus) {
+        errors.creatorStatus = formConstants.required;
+      }
+
+      return errors;
+    },
+    onSubmit: async (values) => {
+      setLoading(true);
+      try {
+        console.log(values, 'content value values...');
+        const res = await createContentAsync(values);
+        if (res.success) {
+          onClose?.();
+          resetForm();
+          fetchList();
+        } else {
+          console.error('Operation failed:', res.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
   const handleDelete = async (password) => {
     const response = await deleteContentAsync([data.id]);
     if (response.success) {
@@ -78,7 +110,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
   };
 
   const handleDataUpdate = async () => {
-    try{
+    try {
       setLoading(true);
       let currentID = data?.id;
       const updatedFormData = { ...formData, id: currentID };
@@ -86,13 +118,41 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
       if (response.success) {
         window.location.reload();
       }
-    }catch(error){
+    } catch (error) {
       setLoading(false);
       console.error('Error:', error);
-    }finally{
+    } finally {
       setLoading(false);
     }
-  }
+  };
+
+  // --------------- Fetch campaign during update -------------------
+  React.useEffect(() => {
+    const fetSingleData = async () => {
+      try {
+        const res = await getContentAsync(data?.id);
+        if (res?.success) {
+          setValues(res.data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (data?.id && sidebarView === 'EDIT') {
+      fetSingleData();
+    }
+  }, [data?.id]);
+
+  // --------------- Set values during update -------------------
+  React.useEffect(() => {
+    if (data) {
+      setValues(defaultContent(data));
+    }
+  }, [data, setValues]);
+
+  console.log(errors, 'errors');
+  console.log(values, 'values...');
 
   // *****************Action Buttons*******************************
   const actionButtons = (
@@ -100,28 +160,37 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
       {isLogin && (
         <>
           {sidebarView === 'EDIT' && isUpdate ? (
-             <Button size="small" variant="outlined" onClick={() => setSidebarView('QUICK')} title="Cancel">
-             Cancel
-           </Button>
+            <Button size="small" variant="outlined" onClick={() => setSidebarView('QUICK')} title="Cancel">
+              Cancel
+            </Button>
+          ) : (
             // <IconButton onClick={() => setSidebarView('QUICK')} title="Edit">
             //   <Iconify icon="solar:eye-broken" />
             // </IconButton>
-          ) : (
             isUpdate && (
               <IconButton onClick={() => setSidebarView('EDIT')} title="Quick">
                 <Iconify icon="mynaui:edit-one" />
               </IconButton>
             )
           )}
-          {sidebarView === 'EDIT' && !isAdd && (
-            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleDataUpdate}>
+          {sidebarView === 'EDIT' && (
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
               Save
             </Button>
           )}
-          {isAdd && (
-            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>Create</Button>
+          {/* {isAdd && (
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+              Create
+            </Button>
+          )} */}
+          {sidebarView === 'QUICK' && (
+            <DeleteConfirmationPasswordPopover
+              title={`Want to delete ${data?.name}?`}
+              onDelete={(password) => handleDelete(password)}
+              passwordInput
+              disabled={!isUpdate || sidebarView === 'EDIT'}
+            />
           )}
-          <DeleteConfirmationPasswordPopover title={`Want to delete ${data?.name}?`}  onDelete={(password) => handleDelete(password)}  passwordInput disabled={!isUpdate || sidebarView === 'EDIT'} />
         </>
       )}
     </>
@@ -129,19 +198,10 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-        {isAdd ? (
-        // Show ContentForm for add new content
-        <ContentForm
-          data={values}
-          errors={errors}
-          onSubmit={handleSubmit}
-          onChange={handleChange}
-          setFieldValue={setFieldValue}
-        />
-      ) : sidebarView === 'QUICK' ? (
-        <ContentQuickView data={data} isEdit={false} />
+      {sidebarView === 'EDIT' ? (
+        <ContentForm formikProps={{ values, errors, handleChange, setFieldValue, handleSubmit }} />
       ) : (
-        <ContentQuickView data={data} isEdit={sidebarView} onUpdate={setFormData} />
+        <ContentQuickView data={data} isEdit={false} />
       )}
     </DrawerContainer>
   );

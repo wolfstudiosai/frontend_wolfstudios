@@ -16,6 +16,7 @@ import { DrawerContainer } from '../../../../components/drawer/drawer'; ///compo
 import { CampaignForm } from './campaign-form';
 
 export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view }) => {
+  console.log(data, 'data from campaign right panel....');
   const isUpdate = data?.id ? true : false;
   const router = useRouter();
   const { isLogin } = useAuth();
@@ -24,7 +25,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
   const [sidebarView, setSidebarView] = React.useState(view); // QUICK / EDIT
 
   const handleDelete = async (password) => {
-    const response = await deleteCampaignAsync(data.id);
+    const response = await deleteCampaignAsync(data.id, password);
     if (response.success) {
       // fetchList();
       // window.location.reload();
@@ -70,7 +71,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
     <DrawerContainer
       open={open}
       handleDrawerClose={onClose}
-      actionButtons={(sidebarView === 'QUICK' || isUpdate) ? actionButtons : null}
+      actionButtons={sidebarView === 'QUICK' || isUpdate ? actionButtons : null}
     >
       {sidebarView === 'QUICK' ? (
         <CampaignQuickView data={data} />
