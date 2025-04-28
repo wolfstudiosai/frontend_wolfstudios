@@ -10,7 +10,7 @@ import { CircularProgress } from '@mui/material';
 import AllContentListView from './_component/all-content-list-view';
 import { ManageContentRightPanel } from './_component/manage-content-right-panel';
 import { getContentList } from './_lib/all-content.actions';
-import { defaultContent } from './_lib/all-content.types';
+import { defaultContent } from './_lib/all-content.types.old';
 
 export const AllContentView = () => {
   const observerRef = React.useRef(null);

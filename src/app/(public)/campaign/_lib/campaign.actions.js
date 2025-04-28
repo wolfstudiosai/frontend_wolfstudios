@@ -38,10 +38,9 @@ export const getCampaignAsync = async (id) => {
 
 export const createCampaignAsync = async (data) => {
   console.log(data, 'inside create campaign async');
+  const payload = {};
   try {
-    const response = await api.post(`/campaign-HQ`, {
-      ...data,
-    });
+    const response = await api.post(`/campaign-HQ`, payload);
 
     toast.success(response.data.message);
     return { success: true, data: response.data.data };
@@ -109,9 +108,14 @@ export const updateCampaignGroupAsync = async (data) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
-export const deleteCampaignAsync = async (id) => {
+export const deleteCampaignAsync = async (id, password) => {
   try {
-    const res = await api.delete(`/campaign-HQ/${id}`);
+    const res = await api.delete(`/campaign-HQ/${id}`, {
+      headers: {
+        password: password,
+      },
+    });
+
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {

@@ -79,7 +79,7 @@ export function renderMenuItems({
               minWidth: 0,
               flexGrow: 1,
               py: 1,
-              // pl: isDesktop && !isOpen ? 0 : level + 1,
+              pl: isDesktop && !isOpen ? 0 : level + 1,
             }}
             onClick={() => hasChildren && !isDesktop && toggleMenuItem(item.key)}
           >
@@ -154,7 +154,7 @@ export function renderMenuItems({
         <MenuButton />
         {hasChildren && (
           <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-            <MenuList sx={{ pl: isDesktop && isOpen ? level + 2 : 0 }}>
+            <MenuList >
               {renderMenuItems({
                 items: item.items,
                 level: level + 1,

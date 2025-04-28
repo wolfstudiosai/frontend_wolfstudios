@@ -1,17 +1,13 @@
 'use client';
 
-import React from 'react';
-import { FormControl, FormLabel, InputAdornment } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { getCountryListAsync, getStateListAsync } from '/src/actions/common';
+import React from 'react';
+import { getCountryListAsync, getStateListAsync } from '../../../../lib/common.actions';
 import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
-import { Iconify } from '/src/components/iconify/iconify';
 import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-iframe-dialog';
-import { ImageUploader } from '/src/components/uploaders/image-uploader';
-import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getProductionCategoryListAsync } from '../_lib/production.action';

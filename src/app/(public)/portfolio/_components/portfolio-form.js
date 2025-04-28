@@ -1,9 +1,11 @@
 'use client';
 
+import React from 'react';
 import { Button, FormControl, FormLabel, InputAdornment, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import React from 'react';
-import { getCountryListAsync, getStateListAsync } from '/src/actions/common';
+import dayjs from 'dayjs';
+import { useFormik } from 'formik';
+
 import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
@@ -13,16 +15,19 @@ import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-ifr
 import { ImageUploader } from '/src/components/uploaders/image-uploader';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
-import dayjs from "dayjs";
-import { useFormik } from 'formik';
-import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
-import { createPortfolioAsync, getPortfolioAsync, getPortfolioCategoryListAsync, updatePortfolioAsync } from '../_lib/portfolio.actions';
+import {
+  createPortfolioAsync,
+  getPortfolioAsync,
+  getPortfolioCategoryListAsync,
+  updatePortfolioAsync,
+} from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
+import { getCountryListAsync, getStateListAsync } from '../../../../lib/common.actions';
+import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { formConstants } from '/src/app/constants/form-constants';
 import { imageUploader } from '/src/utils/upload-file';
 
 export const PortfolioForm = ({ id, onClose, fetchList }) => {
-
   // *********************States*********************************
   const [loading, setLoading] = React.useState(false);
   const [mediaPreview, setMediaPreview] = React.useState(null);
@@ -36,74 +41,78 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
 
   // ***************** Formik *******************************
 
-  const { values, errors, handleChange, handleSubmit, setValues, setFieldValue, resetForm } =
-    useFormik({
-      initialValues: defaultPortfolio(),
-      validate: (values) => {
-        const errors = {};
-        if (!values.projectTitle) {
-          errors.projectTitle = formConstants.required;
+  const { values, errors, handleChange, handleSubmit, setValues, setFieldValue, resetForm } = useFormik({
+    initialValues: defaultPortfolio(),
+    validate: (values) => {
+      const errors = {};
+      if (!values.projectTitle) {
+        errors.projectTitle = formConstants.required;
+      }
+
+      return errors;
+    },
+    onSubmit: async (values) => {
+      setLoading(true);
+      try {
+        const finalData = {
+          ...values,
+        };
+
+        const imageFields = ['singlePageHeroImage', 'thumbnailImage', 'imagefield'];
+
+        // Collect image files and their metadata
+        for (const field of imageFields) {
+          const value = values[field];
+          if (value instanceof File) {
+            const res = await imageUploader(
+              [
+                {
+                  file: value,
+                  fileName: value.name.split('.').slice(0, -1).join('.'),
+                  fileType: value.type.split('/')[1],
+                },
+              ],
+              'portfolios'
+            );
+
+            finalData[field] = res;
+          } else if (typeof value === 'string') {
+            finalData[field] = [value];
+          }
         }
 
-        return errors;
-      },
-      onSubmit: async (values) => {
-        setLoading(true);
-        try {
-          const finalData = {
-            ...values,
+        const arrayFields = ['portfolioCategories', 'states', 'countries', 'partnerHQ'];
+        for (const field of arrayFields) {
+          const value = values[field];
+          if (value.length > 0) {
+            const arrOfStr = value.map((item) => item.value);
+            finalData[field] = arrOfStr;
           }
-
-          const imageFields = ['singlePageHeroImage', 'thumbnailImage', 'imagefield'];
-
-          // Collect image files and their metadata
-          for (const field of imageFields) {
-            const value = values[field];
-            if (value instanceof File) {
-              const res = await imageUploader([{
-                file: value,
-                fileName: value.name.split('.').slice(0, -1).join('.'),
-                fileType: value.type.split('/')[1],
-              }], 'portfolios');
-
-              finalData[field] = res;
-            } else if (typeof value === 'string') {
-              finalData[field] = [value];
-            }
-          }
-
-          const arrayFields = ['portfolioCategories', 'states', 'countries', "partnerHQ"];
-          for (const field of arrayFields) {
-            const value = values[field];
-            if (value.length > 0) {
-              const arrOfStr = value.map((item) => item.value);
-              finalData[field] = arrOfStr;
-            }
-          }
-
-          if (finalData.videoLink.length === 0) {
-            delete finalData.videoLink;
-          }
-          if (finalData.date) {
-            finalData.date = dayjs(finalData.date).format('MMMM YYYY');
-          }
-          console.log(finalData);
-
-          const res = id ? await updatePortfolioAsync(id, finalData) : await createPortfolioAsync(finalData);
-          if (res.success) {
-            onClose?.();
-            resetForm();
-            fetchList();
-          } else {
-            console.error('Operation failed:', res.message);
-          }
-        } catch (error) {
-          console.error('Error:', error);
-        } finally {
-          setLoading(false);
         }
-      },
-    });
+
+        if (finalData.videoLink.length === 0) {
+          delete finalData.videoLink;
+        }
+        if (finalData.date) {
+          finalData.date = dayjs(finalData.date).format('MMMM YYYY');
+        }
+        console.log(finalData);
+
+        const res = id ? await updatePortfolioAsync(id, finalData) : await createPortfolioAsync(finalData);
+        if (res.success) {
+          onClose?.();
+          resetForm();
+          fetchList();
+        } else {
+          console.error('Operation failed:', res.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
 
   // *****************Use Effects****************************
 
@@ -123,12 +132,12 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
       } catch (err) {
         console.error(err);
       }
-    }
+    };
 
     if (id) {
       fetchSinglePortfolios();
     }
-  }, [id])
+  }, [id]);
 
   React.useEffect(() => {
     const fetchPrerequisitesData = async () => {
@@ -150,7 +159,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
         }
         const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 100 });
         if (categoryResponse?.success) {
-          const categoryOptions = categoryResponse.data.map((item) => ({ value: item.id, label: item.Name }))
+          const categoryOptions = categoryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
           setPortfolioCategories(categoryOptions);
         }
         const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 100 });
@@ -161,7 +170,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
       } catch (err) {
         console.error(err);
       }
-    }
+    };
 
     fetchPrerequisitesData();
   }, [data, setFieldValue]);
@@ -182,7 +191,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoComplete
-              label='Categories'
+              label="Categories"
               value={values.portfolioCategories}
               onChange={(_, value) => setFieldValue('portfolioCategories', value)}
               options={portfolioCategories}
@@ -191,7 +200,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoComplete
-              label='Partners'
+              label="Partners"
               value={values.partnerHQ}
               onChange={(_, value) => setFieldValue('partnerHQ', value)}
               options={partners}
@@ -200,7 +209,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoComplete
-              label='States'
+              label="States"
               value={values.states}
               onChange={(_, value) => setFieldValue('states', value)}
               options={states}
@@ -209,7 +218,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoComplete
-              label='Countries'
+              label="Countries"
               value={values.countries}
               onChange={(_, value) => setFieldValue('countries', value)}
               options={countries}
@@ -306,7 +315,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
               label={'Vertical Gallery Images'}
               onAdd={() => setOpenVerticalUploadDialog(true)}
               onDelete={(filteredUrls) => setFieldValue('verticalImageGallery', filteredUrls)}
-              folderName='portfolios'
+              folderName="portfolios"
             />
           </Grid>
 
@@ -319,7 +328,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
               label={'Horizontal Gallery Images'}
               onAdd={() => setOpenHorizontalUploadDialog(true)}
               onDelete={(filteredUrls) => setFieldValue('horizontalImageGallery', filteredUrls)}
-              folderName='portfolios'
+              folderName="portfolios"
             />
           </Grid>
 

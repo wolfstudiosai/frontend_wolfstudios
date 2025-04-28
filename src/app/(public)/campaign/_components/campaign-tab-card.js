@@ -12,7 +12,6 @@ import { isSupabaseUrl } from '/src/utils/helper';
 export const CampaignTabCard = ({ campaign, fetchList }) => {
   const [openCampaignRightPanel, setOpenCampaignRightPanel] = React.useState(null);
   const [campaignProgress, setCampaignProgress] = React.useState('');
-  console.log(campaignProgress, 'campaignProgress....');
 
   async function updateCampaign() {
     try {
