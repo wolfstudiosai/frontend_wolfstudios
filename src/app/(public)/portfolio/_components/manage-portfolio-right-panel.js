@@ -1,16 +1,17 @@
 'use client';
 
-import { FormControlLabel, IconButton, Switch } from '@mui/material';
 import React from 'react';
+import { FormControlLabel, IconButton, Switch } from '@mui/material';
 
+import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import { Iconify } from '/src/components/iconify/iconify';
-import useAuth from '/src/hooks/useAuth';
 
 import { deletePortfolioAsync, updatePortfolioAsync } from '../_lib/portfolio.actions';
 import { PortfolioForm } from './portfolio-form';
 import { PortfolioQuickView } from './portfolio-quickview';
+
 // import { api } from '/src/utils/api';
 
 export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, view }) => {
@@ -64,29 +65,27 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, view
             )
           )}
 
-          {
-            data !== null && (
-              <>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      size="small"
-                      checked={data?.featured}
-                      onChange={() => handleFeatured(!data?.featured)}
-                      color="primary"
-                    />
-                  }
-                  label="Featured"
-                />
+          {data !== null && (
+            <>
+              <FormControlLabel
+                control={
+                  <Switch
+                    size="small"
+                    checked={data?.featured}
+                    onChange={() => handleFeatured(!data?.featured)}
+                    color="primary"
+                  />
+                }
+                label="Featured"
+              />
 
-                <DeleteConfirmationPasswordPopover
-                  title={`Want to delete ${data?.project_title}?`}
-                  onDelete={(password) => handleDelete(password)}
-                  passwordInput
-                />
-              </>
-            )
-          }
+              <DeleteConfirmationPasswordPopover
+                title={`Want to delete ${data?.project_title}?`}
+                onDelete={(password) => handleDelete(password)}
+                passwordInput
+              />
+            </>
+          )}
 
           {/* {sidebarView === 'EDIT' && (
             <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
