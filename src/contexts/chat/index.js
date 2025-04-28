@@ -1,10 +1,12 @@
 import { createContext, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import { useSocket } from '/src/contexts/socket';
 import useAuth from '/src/hooks/useAuth';
 
 import { DEMO_CONVERSATIONS, DEMO_USERS } from '/src/mock_data';
 import { chatApi } from '/src/utils/api';
+import { ElectricScooterSharp } from '@mui/icons-material';
 
 const loggedInUser = {
   userId: 'u1',
@@ -39,12 +41,16 @@ export const ChatProvider = ({ children }) => {
     members: [],
   });
   const [messageContent, setMessageContent] = useState('');
+  const [messageReplyContent, setMessageReplyContent] = useState('');
+
   const [channels, setChannels] = useState([]);
   const [directChannels, setDirectChannels] = useState([]);
   const [activeTab, setActiveTab] = useState(null);
   const [activeTabInfo, setActiveTabInfo] = useState(null);
   const [channelMessages, setChannelMessages] = useState([]);
+  const [channelPinnedMessages, setChannelPinnedMessages] = useState([]);
   const [directMessages, setDirectMessages] = useState([]);
+  const [directPinnedMessages, setDirectPinnedMessages] = useState([]);
   const [activeChannelThread, setActiveChannelThread] = useState(null);
   const [channelThreadMessages, setChannelThreadMessages] = useState([]);
   const [activeDirectThread, setActiveDirectThread] = useState(null);
@@ -52,6 +58,7 @@ export const ChatProvider = ({ children }) => {
   const [typingUsers, setTypingUsers] = useState(new Set());
   const [notifications, setNotifications] = useState({});
   const [messageIdToEdit, setMessageIdToEdit] = useState(null);
+  const [replyMessageIdToEdit, setReplyMessageIdToEdit] = useState(null);
   const socketContext = useSocket();
 
   const findUser = (id) => {
@@ -112,6 +119,16 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
+  const handleEditReplyMessage = (message) => {
+    if (message?.id) {
+      setMessageReplyContent(message?.content);
+      setReplyMessageIdToEdit(message?.id);
+    } else {
+      setMessageReplyContent('');
+      setReplyMessageIdToEdit(null);
+    }
+  };
+
   const handleActiveProfile = (userID) => {
     console.log(userID);
     if (userID) {
@@ -150,6 +167,7 @@ export const ChatProvider = ({ children }) => {
 
   const getWorkspace = async (slug) => {
     try {
+      if (!slug) return;
       const workspace = userInfo?.workspaces.find((workspace) => workspace.slug === slug);
       if (!workspace || !workspace?.id) throw new Error('Workspace not found');
       const response = await chatApi.get(`/workspaces/${workspace.id}`);
@@ -177,6 +195,7 @@ export const ChatProvider = ({ children }) => {
       const response = await chatApi.get(`/channels/${id}`);
       if (response.data && response.data?.success) {
         const data = response.data.data;
+
         setActiveTabInfo({
           id: data?.id,
           name: data?.name,
@@ -185,6 +204,9 @@ export const ChatProvider = ({ children }) => {
           createdBy: data?.Owner,
           members: data?.ChannelMembers,
         });
+        if (data?.Messages) {
+          setChannelPinnedMessages(data?.Messages);
+        }
         if (socketContext?.connected) {
           socketContext.joinChannel(id);
         }
@@ -231,12 +253,16 @@ export const ChatProvider = ({ children }) => {
       const response = await chatApi.get(`/direct-channels/${id}`);
       if (response.data && response.data?.success) {
         const data = response.data.data;
+
         setActiveTabInfo({
           id: data?.id,
           sender: data?.Sender,
           receiver: data?.Receiver,
           createdAt: data?.createdAt,
         });
+        if (data?.DirectMessages) {
+          setDirectPinnedMessages(data?.DirectMessages);
+        }
         if (socketContext?.connected) {
           socketContext.joinDirectChannel(id);
         }
@@ -255,16 +281,16 @@ export const ChatProvider = ({ children }) => {
     });
   };
 
-  const createChannelMessage = async (message) => {
-    socketContext?.sendChannelMessage({ channelId: activeTab.id, message });
+  const createChannelMessage = async (message, replyId, attachments) => {
+    socketContext?.sendChannelMessage({ channelId: activeTab.id, message, replyId, attachments });
   };
 
   const createChannelReaction = async (messageId, emoji) => {
-    socketContext?.reactToChannelMessage({ channelId: activeTab.id, messageId, emoji });
+    socketContext?.reactToChannelMessage({ channelId: activeTab.id, messageId, emoji, replyId: activeChannelThread });
   };
 
   const removeChannelReaction = async (messageId, emoji) => {
-    socketContext?.removeChannelReaction({ channelId: activeTab.id, messageId, emoji });
+    socketContext?.removeChannelReaction({ channelId: activeTab.id, messageId, emoji, replyId: activeChannelThread });
   };
 
   const deleteChannelMessage = async (messageId) => {
@@ -274,6 +300,11 @@ export const ChatProvider = ({ children }) => {
   const editChannelMessage = async (messageId, content) => {
     socketContext?.editChannelMessage({ channelId: activeTab.id, messageId, content });
   };
+
+  const pinChannelMessage = async (messageId, isPinned) => {
+    socketContext?.pinChannelMessage({ channelId: activeTab.id, messageId, isPinned });
+  };
+
 
   const startTyping = () => {
     socketContext?.startTyping?.(activeTabInfo?.id);
@@ -315,16 +346,16 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
-  const createDirectMessage = async (message) => {
-    socketContext?.sendDirectMessage({ directChannelId: activeTab.id, message });
+  const createDirectMessage = async (message, replyId, attachments) => {
+    socketContext?.sendDirectMessage({ directChannelId: activeTab.id, message, replyId, attachments });
   };
 
   const editDirectMessage = async (messageId, content) => {
-    socketContext?.editDirectMessage({ directChannelId: activeTab.id, messageId, content });
+    socketContext?.editDirectMessage({ directChannelId: activeTab.id, messageId, content, replyId: activeDirectThread });
   };
 
   const deleteDirectMessage = async (messageId) => {
-    socketContext?.deleteDirectMessage({ directChannelId: activeTab.id, messageId });
+    socketContext?.deleteDirectMessage({ directChannelId: activeTab.id, messageId, replyId: activeDirectThread });
   };
 
   const createDirectChannel = async (receiverId) => {
@@ -332,22 +363,29 @@ export const ChatProvider = ({ children }) => {
   };
 
   const createDirectMessageReaction = async (messageId, emoji) => {
-    socketContext?.reactToDirectMessage({ directChannelId: activeTab.id, messageId, emoji });
+    socketContext?.reactToDirectMessage({ directChannelId: activeTab.id, messageId, emoji, replyId: activeDirectThread });
   };
 
   const removeDirectMessageReaction = async (messageId, emoji) => {
-    socketContext?.removeDirectMessageReaction({ directChannelId: activeTab.id, messageId, emoji });
+    socketContext?.removeDirectMessageReaction({ directChannelId: activeTab.id, messageId, emoji, replyId: activeDirectThread });
+  };
+
+  const pinDirectMessage = async (messageId, isPinned) => {
+    socketContext?.pinDirectMessage({ directChannelId: activeTab.id, messageId, isPinned });
   };
 
   useEffect(() => {
     if (activeTab?.type === 'channel') {
-      setDirectMessages([]);
       Promise.all([getChannel(activeTab.id), getChannelMessages(activeTab.id)]);
     }
     if (activeTab?.type === 'direct') {
-      setChannelMessages([]);
       Promise.all([getDirectChannel(activeTab.id), getDirectMessages(activeTab.id)]);
     }
+    setChannelMessages([]);
+    setActiveDirectThread(null);
+    setDirectMessages([]);
+    setActiveChannelThread(null);
+
   }, [activeTab]);
 
   useEffect(() => {
@@ -371,15 +409,48 @@ export const ChatProvider = ({ children }) => {
 
       const handleChannelMessageSend = (data) => {
         if (data && data?.channelId === activeTab?.id) {
-          setChannelMessages((prev) => [...prev, data]);
+          if (data?.replyId) {
+            setChannelMessages((prev) => {
+              const arr = [...prev];
+              const index = arr.findIndex((message) => message.id === data?.replyId);
+              if (index !== -1) {
+                arr[index]['isThread'] = true;
+                arr[index]['Replies'] = [...(arr[index]?.['Replies'] || []), { id: data?.id }];
+              }
+              return arr;
+            });
+
+            if (data?.replyId === activeChannelThread) setChannelThreadMessages((prev) => [...prev, data]);
+          }
+          else {
+            setChannelMessages((prev) => [...prev, data]);
+          }
         }
       };
 
       const handleChannelMessageReceive = (data) => {
         playNotificationSound();
-
         if (data && data?.channelId === activeTab?.id) {
-          setChannelMessages((prev) => [...prev, data]);
+
+          if (data?.replyId) {
+            setChannelMessages((prev) => {
+              const arr = [...prev];
+              const index = arr.findIndex((message) => message.id === data?.replyId);
+              if (index !== -1) {
+                arr[index]['isThread'] = true;
+                arr[index]['Replies'] = [...(arr[index]?.['Replies'] || []), { id: data?.id }];
+              }
+              return arr;
+            });
+
+            if (data?.replyId === activeChannelThread) setChannelThreadMessages((prev) => [...prev, data]);
+          }
+          else {
+            setChannelMessages((prev) => [...prev, data]);
+          }
+
+
+
         } else {
           setNotifications((prev) => ({
             ...prev,
@@ -388,22 +459,171 @@ export const ChatProvider = ({ children }) => {
         }
       };
 
+      const handleCreateChannelReaction = (data) => {
+        playNotificationSound();
+
+        if (data && data?.channelId === activeTab?.id) {
+          if (data?.replyId) {
+            if (data?.replyId === activeChannelThread) {
+              setChannelThreadMessages((prev) => {
+                const arr = [...prev];
+                const index = arr.findIndex((message) => message.id === data?.messageId);
+                if (index !== -1) {
+                  arr[index].Reactions = [...(arr[index]?.Reactions || []), data];
+                }
+                return arr;
+              });
+            }
+          }
+          else {
+            setChannelMessages((prev) => {
+              const arr = [...prev];
+              const index = arr.findIndex((message) => message.id === data?.messageId);
+              if (index !== -1) {
+                arr[index].Reactions = [...(arr[index]?.Reactions || []), data];
+              }
+              return arr;
+            });
+          }
+
+        }
+      };
+
+      const handleDeleteChannelReaction = (data) => {
+        if (data && data?.channelId === activeTab?.id) {
+          if (data?.replyId) {
+            if (data?.replyId === activeChannelThread) {
+              setChannelThreadMessages((prev) => {
+                const arr = [...prev];
+                const index = arr.findIndex((message) => message.id === data?.messageId);
+                if (index !== -1) {
+                  const reactionID = arr[index]['Reactions'].findIndex((reaction) => reaction.id === data?.id);
+                  if (reactionID !== -1) {
+                    arr[index]['Reactions'].splice(reactionID, 1);
+                  }
+                }
+                return arr;
+              });
+            }
+          }
+          else {
+            setChannelMessages((prev) => {
+              const arr = [...prev];
+              const index = arr.findIndex((message) => message.id === data?.messageId);
+              if (index !== -1) {
+                const reactionID = arr[index]['Reactions'].findIndex((reaction) => reaction.id === data?.id);
+                if (reactionID !== -1) {
+                  arr[index]['Reactions'].splice(reactionID, 1);
+                }
+              }
+              return arr;
+            });
+          }
+        }
+      };
+
+      const handleDeleteChannelMessage = (data) => {
+        if (data && data?.channelId === activeTab?.id) {
+          if (data?.replyId) {
+            if (data?.replyId === activeChannelThread) {
+              setChannelThreadMessages((prev) => {
+                const arr = [...prev];
+                const index = arr.findIndex((message) => message.id === data?.messageId);
+                if (index !== -1) {
+                  arr[index]['deletedAt'] = new Date();
+                }
+                return arr;
+              });
+            }
+          }
+          else {
+            setChannelMessages((prev) => {
+              const arr = [...prev];
+              const index = arr.findIndex((message) => message.id === data?.messageId);
+              if (index !== -1) {
+                arr[index]['deletedAt'] = new Date();
+              }
+              return arr;
+            });
+          }
+        }
+      };
+
+      const handleEditChannelMessage = (data) => {
+        if (data && data?.channelId === activeTab?.id) {
+          if (data?.replyId) {
+            if (data?.replyId === activeChannelThread) {
+              setChannelThreadMessages((prev) => {
+                const arr = [...prev];
+                const index = arr.findIndex((message) => message.id === data?.id);
+                if (index !== -1) {
+                  arr[index].content = data?.content;
+                  arr[index]['editedAt'] = data?.editedAt;
+                }
+                return arr;
+              });
+            }
+          }
+          else {
+            setChannelMessages((prev) => {
+              const arr = [...prev];
+              const index = arr.findIndex((message) => message.id === data?.id);
+              if (index !== -1) {
+                arr[index].content = data?.content;
+                arr[index]['editedAt'] = data?.editedAt;
+              }
+              return arr;
+            });
+          }
+        }
+      };
+
       const handleDirectMessageSend = (data) => {
         if (data && data?.directChannelId === activeTab?.id) {
-          setDirectMessages((prev) => [...prev, data]);
+          if (data?.replyId) {
+            setDirectMessages((prev) => {
+              const arr = [...prev];
+              const index = arr.findIndex((message) => message.id === data?.replyId);
+              if (index !== -1) {
+                arr[index]['isThread'] = true;
+                arr[index]['Replies'] = [...(arr[index]?.['Replies'] || []), { id: data?.id }];
+              }
+              return arr;
+            });
+
+            if (data?.replyId === activeDirectThread) setDirectThreadMessages((prev) => [...prev, data]);
+          }
+          else {
+            setDirectMessages((prev) => [...prev, data]);
+          }
         }
       };
 
       const handleDirectMessageReceive = (data) => {
         playNotificationSound();
         if (data && data?.directChannelId === activeTab?.id) {
-          setDirectMessages((prev) => [...prev, data]);
+
+          if (data?.replyId) {
+            setDirectMessages((prev) => {
+              const arr = [...prev];
+              const index = arr.findIndex((message) => message.id === data?.replyId);
+              if (index !== -1) {
+                arr[index]['isThread'] = true;
+                arr[index]['Replies'] = [...(arr[index]?.['Replies'] || []), { id: data?.id }];
+              }
+              return arr;
+            });
+
+            if (data?.replyId === activeDirectThread) setDirectThreadMessages((prev) => [...prev, data]);
+          }
+          else {
+            setDirectMessages((prev) => [...prev, data]);
+          }
         } else {
           setNotifications((prev) => ({
             ...prev,
             [data?.directChannelId]: (prev[data?.directChannelId] || 0) + 1,
           }));
-          playNotificationSound();
         }
       };
 
@@ -427,64 +647,6 @@ export const ChatProvider = ({ children }) => {
         }
       };
 
-      const handleCreateChannelReaction = (data) => {
-        playNotificationSound();
-
-        if (data && data?.channelId === activeTab?.id) {
-          setChannelMessages((prev) => {
-            const arr = [...prev];
-            const index = arr.findIndex((message) => message.id === data?.messageId);
-            if (index !== -1) {
-              arr[index].Reactions = [...(arr[index]?.Reactions || []), data];
-            }
-            return arr;
-          });
-        }
-      };
-
-      const handleDeleteChannelReaction = (data) => {
-        if (data && data?.channelId === activeTab?.id) {
-          setChannelMessages((prev) => {
-            const arr = [...prev];
-            const index = arr.findIndex((message) => message.id === data?.messageId);
-            if (index !== -1) {
-              const reactionID = arr[index]['Reactions'].findIndex((reaction) => reaction.id === data?.id);
-              if (reactionID !== -1) {
-                arr[index]['Reactions'].splice(reactionID, 1);
-              }
-            }
-            return arr;
-          });
-        }
-      };
-
-      const handleDeleteChannelMessage = (data) => {
-        if (data && data?.channelId === activeTab?.id) {
-          setChannelMessages((prev) => {
-            const arr = [...prev];
-            const index = arr.findIndex((message) => message.id === data?.messageId);
-            if (index !== -1) {
-              arr[index]['deletedAt'] = new Date();
-            }
-            return arr;
-          });
-        }
-      };
-
-      const handleEditChannelMessage = (data) => {
-        if (data && data?.channelId === activeTab?.id) {
-          setChannelMessages((prev) => {
-            const arr = [...prev];
-            const index = arr.findIndex((message) => message.id === data?.id);
-            if (index !== -1) {
-              arr[index].content = data?.content;
-              arr[index]['editedAt'] = data?.editedAt;
-            }
-            return arr;
-          });
-        }
-      };
-
       const handleCreateDirectChannel = (data) => {
         setDirectChannels((prev) => [...prev, data]);
       };
@@ -493,59 +655,178 @@ export const ChatProvider = ({ children }) => {
         playNotificationSound();
 
         if (data && data?.directChannelId === activeTab?.id) {
-          setDirectMessages((prev) => {
-            const arr = [...prev];
-            const index = arr.findIndex((message) => message.id === data?.messageId);
-            if (index !== -1) {
-              arr[index].Reactions = [...arr[index].Reactions, data];
+
+          if (data?.replyId) {
+            if (data?.replyId === activeDirectThread) {
+              setDirectThreadMessages((prev) => {
+                const arr = [...prev];
+                const index = arr.findIndex((message) => message.id === data?.messageId);
+                if (index !== -1) {
+                  arr[index].Reactions = [...(arr[index]?.Reactions || []), data];
+                }
+                return arr;
+              });
             }
-            return arr;
-          });
+          }
+          else {
+            setDirectMessages((prev) => {
+              const arr = [...prev];
+              const index = arr.findIndex((message) => message.id === data?.messageId);
+              if (index !== -1) {
+                arr[index].Reactions = [...(arr[index]?.Reactions || []), data];
+              }
+              return arr;
+            });
+          }
+
+
         }
       };
 
       const handleDeleteDirectMessageReaction = (data) => {
         if (data && data?.directChannelId === activeTab?.id) {
-          setDirectMessages((prev) => {
-            const arr = [...prev];
-            const index = arr.findIndex((message) => message.id === data?.messageId);
-            if (index !== -1) {
-              const reactionID = arr[index]['Reactions'].findIndex((reaction) => reaction.id === data?.id);
-              if (reactionID !== -1) {
-                arr[index]['Reactions'].splice(reactionID, 1);
-              }
+          if (data?.replyId) {
+            if (data?.replyId === activeDirectThread) {
+              setDirectThreadMessages((prev) => {
+                const arr = [...prev];
+                const index = arr.findIndex((message) => message.id === data?.messageId);
+                if (index !== -1) {
+                  const reactionID = arr[index]['Reactions'].findIndex((reaction) => reaction.id === data?.id);
+                  if (reactionID !== -1) {
+                    arr[index]['Reactions'].splice(reactionID, 1);
+                  }
+                }
+                return arr;
+              });
             }
-            return arr;
-          });
+          }
+          else {
+            setDirectMessages((prev) => {
+              const arr = [...prev];
+              const index = arr.findIndex((message) => message.id === data?.messageId);
+              if (index !== -1) {
+                const reactionID = arr[index]['Reactions'].findIndex((reaction) => reaction.id === data?.id);
+                if (reactionID !== -1) {
+                  arr[index]['Reactions'].splice(reactionID, 1);
+                }
+              }
+              return arr;
+            });
+          }
         }
       };
 
       const handleEditDirectMessage = (data) => {
         if (data && data?.directChannelId === activeTab?.id) {
-          setDirectMessages((prev) => {
+
+          if (data?.replyId) {
+            if (data?.replyId === activeDirectThread) {
+              setDirectThreadMessages((prev) => {
+                const arr = [...prev];
+                const index = arr.findIndex((message) => message.id === data?.id);
+                if (index !== -1) {
+                  arr[index].content = data?.content;
+                  arr[index]['editedAt'] = data?.editedAt;
+                }
+                return arr;
+              });
+            }
+          }
+          else {
+            setDirectMessages((prev) => {
+              const arr = [...prev];
+              const index = arr.findIndex((message) => message.id === data?.id);
+              if (index !== -1) {
+                arr[index].content = data?.content;
+                arr[index]['editedAt'] = data?.editedAt;
+              }
+              return arr;
+            });
+          }
+
+
+        }
+      };
+
+      const handleDeleteDirectMessage = (data) => {
+        if (data && data?.directChannelId === activeTab?.id) {
+          if (data?.replyId) {
+            if (data?.replyId === activeDirectThread) {
+              setDirectThreadMessages((prev) => {
+                const arr = [...prev];
+                const index = arr.findIndex((message) => message.id === data?.messageId);
+                if (index !== -1) {
+                  arr[index]['deletedAt'] = new Date();
+                }
+                return arr;
+              });
+            }
+          }
+          else {
+            setDirectMessages((prev) => {
+              const arr = [...prev];
+              const index = arr.findIndex((message) => message.id === data?.messageId);
+              if (index !== -1) {
+                arr[index]['deletedAt'] = new Date();
+              }
+              return arr;
+            });
+          }
+
+
+        }
+      };
+
+      const handlePinChannelMessage = (data) => {
+        if (data && data?.channelId === activeTab?.id) {
+          if (data?.isPinned) toast.info('A new message has been pinned');
+
+          setChannelMessages((prev) => {
             const arr = [...prev];
-            const index = arr.findIndex((message) => message.id === data?.id);
+            const index = arr.findIndex((message) => message.id === data?.messageId);
             if (index !== -1) {
-              arr[index].content = data?.content;
-              arr[index]['editedAt'] = data?.editedAt;
+              arr[index]['isPinned'] = data?.isPinned;
+            }
+            return arr;
+          });
+          setChannelPinnedMessages((prv) => {
+            const arr = [...prv];
+            const index = arr.findIndex((message) => message.id === data?.messageId);
+            if (index === -1) {
+              arr.push(data?.message);
+            } else {
+              arr.splice(index, 1);
             }
             return arr;
           });
         }
       };
 
-      const handleDeleteDirectMessage = (data) => {
+      const handlePinDirectMessage = (data) => {
         if (data && data?.directChannelId === activeTab?.id) {
+          if (data?.isPinned) toast.info('A new message has been pinned');
+
           setDirectMessages((prev) => {
             const arr = [...prev];
             const index = arr.findIndex((message) => message.id === data?.messageId);
             if (index !== -1) {
-              arr[index]['deletedAt'] = new Date();
+              arr[index]['isPinned'] = data?.isPinned;
+            }
+            return arr;
+          });
+          setDirectPinnedMessages((prv) => {
+            const arr = [...prv];
+            const index = arr.findIndex((message) => message.id === data?.messageId);
+            if (index === -1) {
+              arr.push(data?.message);
+            } else {
+              arr.splice(index, 1);
             }
             return arr;
           });
         }
       };
+
 
       // Add event listeners
       socketContext.socket.on('create-channel-response', handleCreateChannel);
@@ -564,6 +845,8 @@ export const ChatProvider = ({ children }) => {
       socketContext.socket.on('delete-direct-channel-reaction-response', handleDeleteDirectMessageReaction);
       socketContext.socket.on('edit-direct-message-response', handleEditDirectMessage);
       socketContext.socket.on('delete-direct-message-response', handleDeleteDirectMessage);
+      socketContext.socket.on('pin-channel-message-response', handlePinChannelMessage);
+      socketContext.socket.on('pin-direct-message-response', handlePinDirectMessage);
 
       // Cleanup function to remove event listeners
       return () => {
@@ -583,9 +866,11 @@ export const ChatProvider = ({ children }) => {
         socketContext.socket.off('delete-direct-channel-reaction-response', handleDeleteDirectMessageReaction);
         socketContext.socket.off('edit-direct-message-response', handleEditDirectMessage);
         socketContext.socket.off('delete-direct-message-response', handleDeleteDirectMessage);
+        socketContext.socket.off('pin-channel-message-response', handlePinChannelMessage);
+        socketContext.socket.off('pin-direct-message-response', handlePinDirectMessage);
       };
     }
-  }, [socketContext?.socket, activeTab]);
+  }, [socketContext?.socket, activeTab, activeChannelThread, activeDirectThread]);
 
   const contextValue = {
     userData,
@@ -634,6 +919,11 @@ export const ChatProvider = ({ children }) => {
     setMessageContent,
     handleEditMessage,
     messageIdToEdit,
+    messageReplyContent,
+    setMessageReplyContent,
+    handleEditMessage,
+    replyMessageIdToEdit,
+    handleEditReplyMessage,
     createDirectChannel,
     createDirectMessageReaction,
     removeDirectMessageReaction,
@@ -642,6 +932,10 @@ export const ChatProvider = ({ children }) => {
     editDirectMessage,
     deleteDirectMessage,
     createChannel,
+    channelPinnedMessages,
+    directPinnedMessages,
+    pinChannelMessage,
+    pinDirectMessage,
   };
 
   return <ChatContext.Provider value={contextValue}>{children}</ChatContext.Provider>;
