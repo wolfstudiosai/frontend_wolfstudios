@@ -6,7 +6,7 @@ import { IconWithText } from '/src/components/utils/icon-text';
 import { ManageContentRightPanel } from './manage-content-right-panel';
 import React from 'react';
 
-export const ContentCard = ({ content }) => {
+export const ContentCard = ({ content, fetchList }) => {
   const [openRightPanel, setOpenRightPanel] = React.useState(null);
   return (
     <>
@@ -61,6 +61,7 @@ export const ContentCard = ({ content }) => {
       <ManageContentRightPanel
         view={'QUICK'}
         width="70%"
+        fetchList={fetchList}
         open={openRightPanel ? true : false}
         data={openRightPanel}
         onClose={() => setOpenRightPanel(false)}

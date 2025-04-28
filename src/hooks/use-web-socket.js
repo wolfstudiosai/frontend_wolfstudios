@@ -14,7 +14,6 @@ const useWebSocket = (userId) => {
         socket.onmessage = (event) => {
             try {
                 const message = JSON.parse(event.data);
-                console.log("Received message:", message);
 
                 // Ensure messages state updates properly
                 setMessages((prevMessages) => [...prevMessages, message]);

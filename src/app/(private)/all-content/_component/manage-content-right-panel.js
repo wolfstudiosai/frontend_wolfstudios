@@ -24,9 +24,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }
   const isUpdate = data?.id ? true : false;
   const { isLogin } = useAuth();
   const [sidebarView, setSidebarView] = React.useState(view); // QUICK // EDIT
-  const [file, setFile] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
-  const [formData, setFormData] = useState(data);
 
   const { values, errors, handleChange, setFieldValue, resetForm, setValues, handleSubmit } = useFormik({
     initialValues: defaultContent(),
@@ -93,26 +91,26 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }
     const response = await deleteContentAsync([data.id]);
     if (response.success) {
       fetchList();
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
-  const handleDataUpdate = async () => {
-    try {
-      setLoading(true);
-      let currentID = data?.id;
-      const updatedFormData = { ...formData, id: currentID };
-      const response = await updateContentAsync(updatedFormData, file);
-      if (response.success) {
-        window.location.reload();
-      }
-    } catch (error) {
-      setLoading(false);
-      console.error('Error:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const handleDataUpdate = async () => {
+  //   try {
+  //     setLoading(true);
+  //     let currentID = data?.id;
+  //     const updatedFormData = { ...formData, id: currentID };
+  //     const response = await updateContentAsync(updatedFormData, file);
+  //     if (response.success) {
+  //       window.location.reload();
+  //     }
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.error('Error:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   // --------------- Fetch campaign during update -------------------
   React.useEffect(() => {

@@ -20,7 +20,6 @@ export const AllContentView = () => {
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [data, setData] = React.useState([]);
-  const [selectedContent, setSelectedContent] = React.useState(null);
   const [filters, setFilters] = React.useState({
     COL: 4,
     TAG: [],
@@ -41,7 +40,7 @@ export const AllContentView = () => {
       });
 
       if (response.success) {
-        setData(response.data);
+        setData((prev) => [...prev, ...response.data]);
         setTotalRecords(response.totalRecords);
         setPagination((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }));
       }
@@ -54,9 +53,6 @@ export const AllContentView = () => {
   }
 
   const handleFilterChange = (type, value) => {
-    // if (type === 'ADD') {
-    //   setSelectedContent(value ? defaultContent : null);
-    // }
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
@@ -115,7 +111,7 @@ export const AllContentView = () => {
       />
       {filters.VIEW === 'grid' ? (
         <>
-          <AllContentGridView data={data} loading={loading} columns={sliderToGridColsCoverter(filters.COL)} />
+          <AllContentGridView data={data} loading={loading} columns={sliderToGridColsCoverter(filters.COL)} fetchList={refreshListView} />
           <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
             {isFetching && <CircularProgress size="30px" />}
           </div>
