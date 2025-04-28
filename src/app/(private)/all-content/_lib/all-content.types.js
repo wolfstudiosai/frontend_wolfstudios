@@ -61,8 +61,8 @@ export const defaultContent = (data) => {
       })) || [],
     cities:
       data?.ByCityContent?.map((item) => ({
-        value: item?.ContentHQ?.id,
-        label: item?.ContentHQ?.Name,
+        value: item?.ByCity?.id,
+        label: item?.ByCity?.Name,
       })) || [],
     products:
       data?.ByProductContentHQ?.map((item) => ({
@@ -71,8 +71,8 @@ export const defaultContent = (data) => {
       })) || [],
     tags:
       data?.ByTagsContent?.map((item) => ({
-        value: item?.ContentHQ?.id,
-        label: item?.ContentHQ?.Name,
+        value: item?.ByTags?.id,
+        label: item?.ByTags?.Name,
       })) || [],
     stakeholders:
       data?.ContentHQStakeholder?.map((item) => ({
