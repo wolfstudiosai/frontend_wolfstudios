@@ -90,8 +90,8 @@ export const defaultContent = (data) => {
         label: item?.FacilitiesContributedContent?.Name,
       })) || [],
 
-      images: data?.images || [],
-      videos: data?.videos || [],
+      image: data?.Image || [],
+      video: data?.Video || [],
   };
 
   return defaultData;

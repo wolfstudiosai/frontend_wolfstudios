@@ -85,6 +85,8 @@ export const ContentForm = ({ formikProps }) => {
     fetchData();
   }, [autocompleteFocus]);
 
+  console.log(values, 'values....');
+
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={2} sx={{ py: 2 }}>
@@ -573,18 +575,18 @@ export const ContentForm = ({ formikProps }) => {
 
         {/* media uploader */}
         <Grid size={{ xs: 12 }}>
-          <VideoLinkField name="videos" label="Videos" value={values.videos} setFieldValue={setFieldValue} />
+          <VideoLinkField name="video" label="Videos" value={values.video} setFieldValue={setFieldValue} />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
           <MediaUploaderTrigger
             open={openImageUploadDialog}
             onClose={() => setOpenImageUploadDialog(false)}
-            onSave={(urls) => setFieldValue('images', urls)}
-            value={values?.images}
-            label="Images"
+            onSave={(urls) => setFieldValue('image', urls)}
+            value={values?.image}
+            label="Image"
             onAdd={() => setOpenImageUploadDialog(true)}
-            onDelete={(filteredUrls) => setFieldValue('images', filteredUrls)}
-            folderName="campaigns"
+            onDelete={(filteredUrls) => setFieldValue('image', filteredUrls)}
+            folderName="content-HQ"
           />
         </Grid>
       </Grid>

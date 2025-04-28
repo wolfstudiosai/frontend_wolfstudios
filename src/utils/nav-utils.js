@@ -111,7 +111,7 @@ export function renderMenuItems({
               minWidth: 0,
               flexGrow: 1,
               py: 1,
-              // pl: isDesktop ? 0 : level * 2 + 2,
+              pl: isDesktop ? 0 : level * 2 + 2,
             }}
             selected={isActive}
           >
