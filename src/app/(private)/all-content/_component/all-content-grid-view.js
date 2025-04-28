@@ -19,7 +19,7 @@ export default function AllContentGridView({ data, loading, columns }) {
             lg: 3,
             xl: 2,
           }}>
-            <ContentCard content={content} handleOpenRightPanel={setOpenRightPanel} />
+            <ContentCard content={content}  />
           </Grid>
         ))}
       </Grid>

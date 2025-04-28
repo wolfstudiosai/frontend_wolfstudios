@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button, IconButton } from '@mui/material';
 import { useFormik } from 'formik';
 
@@ -10,23 +9,27 @@ import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import { Iconify } from '/src/components/iconify/iconify';
 
-import { createContentAsync, deleteContentAsync, updateContentAsync } from '../_lib/all-content.actions';
+import {
+  createContentAsync,
+  deleteContentAsync,
+  getContentAsync,
+  updateContentAsync,
+} from '../_lib/all-content.actions';
 import { defaultContent } from '../_lib/all-content.types';
 import { defaultContent1 } from '../_lib/all-content.types.old';
-import { createCampaignAsync } from '../../../(public)/campaign/_lib/campaign.actions';
 import { ContentForm } from './content-form';
 import { ContentQuickView } from './content-quick-view';
 import { formConstants } from '/src/app/constants/form-constants';
 
 export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width, view, isAdd }) => {
   const isUpdate = data?.id ? true : false;
-  const router = useRouter();
   const { isLogin } = useAuth();
   const [sidebarView, setSidebarView] = React.useState(view); // QUICK // EDIT
   const [file, setFile] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [formData, setFormData] = useState(data);
-
+  console.log(data?.id, 'data.id....');
+  console.log(sidebarView, 'sidebarView.....');
   React.useEffect(() => {
     if (isAdd) {
       // Reset to default content when adding new
@@ -36,7 +39,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
       // Load existing data when available
       setValues(data);
       setSidebarView('QUICK');
-    }
+    }j
   }, [isAdd, data]);
 
   const { values, errors, handleChange, setFieldValue, resetForm, setValues, handleSubmit } = useFormik({
@@ -122,6 +125,31 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
       setLoading(false);
     }
   };
+
+  // --------------- Fetch campaign during update -------------------
+  React.useEffect(() => {
+    const fetSingleData = async () => {
+      try {
+        const res = await getContentAsync(data?.id);
+        if (res?.success) {
+          setValues(res.data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (data?.id && sidebarView === 'EDIT') {
+      fetSingleData();
+    }
+  }, [data?.id]);
+
+  // --------------- Set values during update -------------------
+  React.useEffect(() => {
+    if (data) {
+      setValues(defaultContent(data));
+    }
+  }, [data, setValues]);
 
   console.log(errors, 'errors');
   console.log(values, 'values...');

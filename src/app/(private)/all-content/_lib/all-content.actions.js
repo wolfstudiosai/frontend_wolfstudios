@@ -14,7 +14,7 @@ export const getContentList = async (queryParams) => {
   }
 };
 
-export const getContent = async (id) => {
+export const getContentAsync = async (id) => {
   try {
     // const res = await api.get(`/record?id=${id}`);
     const res = await api.get(`/content-HQ/${id}`);
