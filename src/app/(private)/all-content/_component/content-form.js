@@ -8,6 +8,8 @@ import { CustomDatePicker } from '/src/components/formFields/custom-date-picker'
 import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
+import { VideoLinkField } from '/src/components/formFields/video-link-field';
+import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
 import {
   getCityListAsync,
@@ -34,6 +36,7 @@ export const ContentForm = ({ formikProps }) => {
     partners: [],
     retailPartners: [],
   });
+  const [openImageUploadDialog, setOpenImageUploadDialog] = React.useState(false);
   // ********************* Formik *******************************
   const { values, errors, handleChange, setFieldValue, handleSubmit, setValues } = formikProps;
 
@@ -82,8 +85,6 @@ export const ContentForm = ({ formikProps }) => {
     fetchData();
   }, [autocompleteFocus]);
 
-  console.log(values, 'values from content form....');
-
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={2} sx={{ py: 2 }}>
@@ -105,7 +106,7 @@ export const ContentForm = ({ formikProps }) => {
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="pinAccountsUsed"
-            label="Revo Pinterest"
+            label="Pin Accounts Used"
             value={values.pinAccountsUsed}
             onChange={handleChange}
           />
@@ -390,7 +391,7 @@ export const ContentForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        
+
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomSelect
             name="yt_AccountsUsed"
@@ -567,6 +568,23 @@ export const ContentForm = ({ formikProps }) => {
             options={autoCompleteOptions?.retailPartners}
             multiple
             onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
+          />
+        </Grid>
+
+        {/* media uploader */}
+        <Grid size={{ xs: 12 }}>
+          <VideoLinkField name="videos" label="Videos" value={values.videos} setFieldValue={setFieldValue} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <MediaUploaderTrigger
+            open={openImageUploadDialog}
+            onClose={() => setOpenImageUploadDialog(false)}
+            onSave={(urls) => setFieldValue('images', urls)}
+            value={values?.images}
+            label="Images"
+            onAdd={() => setOpenImageUploadDialog(true)}
+            onDelete={(filteredUrls) => setFieldValue('images', filteredUrls)}
+            folderName="campaigns"
           />
         </Grid>
       </Grid>

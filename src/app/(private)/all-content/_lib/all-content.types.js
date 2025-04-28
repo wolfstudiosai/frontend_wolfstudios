@@ -89,6 +89,9 @@ export const defaultContent = (data) => {
         value: item?.FacilitiesContributedContent?.id,
         label: item?.FacilitiesContributedContent?.Name,
       })) || [],
+
+      images: data?.images || [],
+      videos: data?.videos || [],
   };
 
   return defaultData;

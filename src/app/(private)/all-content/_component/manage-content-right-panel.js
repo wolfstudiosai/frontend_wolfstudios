@@ -1,13 +1,13 @@
 'use client';
 
+import React, { useState } from 'react';
 import { Button, IconButton } from '@mui/material';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
 
+import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import { Iconify } from '/src/components/iconify/iconify';
-import useAuth from '/src/hooks/useAuth';
 
 import {
   createContentAsync,
@@ -74,7 +74,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const res = isUpdate ? await updateContentAsync(values) : await createContentAsync(values);
+        const res = isUpdate ? await updateContentAsync({ id: data?.id, ...values }) : await createContentAsync(values);
         if (res.success) {
           onClose?.();
           resetForm();
@@ -145,9 +145,9 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }
       {isLogin && (
         <>
           {sidebarView === 'EDIT' && isUpdate ? (
-            <Button size="small" variant="outlined" onClick={() => setSidebarView('QUICK')} title="Cancel">
-              Cancel
-            </Button>
+            <IconButton onClick={() => setSidebarView('QUICK')} title="Edit">
+              <Iconify icon="solar:eye-broken" />
+            </IconButton>
           ) : (
             isUpdate && (
               <IconButton onClick={() => setSidebarView('EDIT')} title="Quick">
