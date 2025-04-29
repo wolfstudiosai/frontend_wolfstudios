@@ -144,6 +144,6 @@ const contentPayload = (data) => ({
   stakeholders: data.stakeholders ? data.stakeholders.map((item) => item.value).filter(Boolean) : [],
   partners: data.partners ? data.partners.map((item) => item.value).filter(Boolean) : [],
   retailPartners: data.retailPartners ? data.retailPartners.map((item) => item.value).filter(Boolean) : [],
-  image: data?.Image,
-  video: data?.Video,
+  image: data?.image,
+  video: data?.video,
 });
