@@ -4,14 +4,25 @@ import { api } from '/src/utils/api';
 import { getSearchQuery } from '/src/utils/helper';
 import { uploadFileAsync } from '/src/utils/upload-file';
 
-export const getCampaignGroupListAsync = async (queryParams) => {
+export const getCampaignGroupListAsync = async (queryParams = {}) => {
   try {
-    const searchQuery = getSearchQuery(queryParams);
+    let searchQuery = '';
+    if (Object.keys(queryParams).length > 0) {
+      searchQuery = getSearchQuery(queryParams);
+    }
+
     const res = await api.get(`/campaign-HQ${searchQuery}`);
-    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
+    return {
+      success: true,
+      data: res.data.data.data,
+      totalRecords: res.data.data.count,
+    };
   } catch (error) {
     toast.error(error.message);
-    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+    return {
+      success: false,
+      error: error.response ? error.response.data : 'An unknown error occurred',
+    };
   }
 };
 

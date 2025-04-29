@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
 import { FormControl, FormLabel } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import React from 'react';
 
 import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
@@ -14,9 +14,7 @@ import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-ifr
 import { ImageUploader } from '/src/components/uploaders/image-uploader';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
-import { getCampaignAsync } from '../_lib/campaign.actions';
-import { defaultCampaign } from '../_lib/campaign.types';
-import { getRetailPartnerListAsync, getStakeholderListAsync } from '../../../../lib/common.actions';
+import { getRetailPartnerListAsync, getStakeHolderListAsync } from '../../../../lib/common.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getContentList } from '/src/app/(private)/all-content/_lib/all-content.actions';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
@@ -45,7 +43,7 @@ export const CampaignForm = ({ handleChange, values, errors, setFieldValue, onSu
           const options = contentResponse.data.map((item) => ({ value: item.id, label: item.Name }));
           setContentOptions(options);
         }
-        const stakeholderResponse = await getStakeholderListAsync({ page: 1, rowsPerPage: 100 });
+        const stakeholderResponse = await getStakeHolderListAsync({ page: 1, rowsPerPage: 100 });
         if (stakeholderResponse?.success) {
           const options = stakeholderResponse.data.map((item) => ({ value: item.id, label: item.Name }));
           setStakeholderOptions(options);

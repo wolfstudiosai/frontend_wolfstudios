@@ -29,7 +29,7 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
   }
 
   React.useEffect(() => {
-    if (campaign.status !== campaignProgress && campaignProgress) {
+    if (campaign.CampaignStatus !== campaignProgress && campaignProgress) {
       updateCampaign();
     }
   }, [campaignProgress]);
@@ -127,7 +127,7 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
             Change Status
           </Typography>
           <CustomSelect
-            value={campaignProgress}
+            value={campaign?.CampaignStatus}
             onChange={(value) => setCampaignProgress(value)}
             name="status"
             options={campaignProgressStatus}
