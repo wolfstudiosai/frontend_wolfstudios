@@ -245,16 +245,16 @@ export const CampaignForm = ({ handleChange, values, errors, setFieldValue, onSu
             <CustomTextField name="goals" label="Goals" value={values.goals} onChange={handleChange} />
           </Grid>
           <Grid size={{ xs: 12 }}>
-            <CustomTextField
-              name="notes"
-              label="Notes (Use commas to separate notes)"
-              value={values.notes}
-              onChange={handleChange}
-            />
+            <CustomTextField name="notes" label="Notes " value={values.notes} onChange={handleChange} />
             <ErrorMessage error={errors.notes} />
           </Grid>
           <Grid size={{ xs: 12 }}>
-            <CustomTextField name="guidelines" label="Guidelines" value={values.guidelines} onChange={handleChange} />
+            <CustomTextField
+              name="guidelines"
+              label="Guidelines (Use commas to separate notes)"
+              value={values.guidelines}
+              onChange={handleChange}
+            />
             <ErrorMessage error={errors.guidelines} />
           </Grid>
           <Grid size={{ xs: 12 }}>

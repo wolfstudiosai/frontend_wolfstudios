@@ -2,10 +2,9 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, IconButton, Typography } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import { useFormik } from 'formik';
 
-import { paths } from '/src/paths';
 import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { Iconify } from '/src/components/iconify/iconify';
@@ -66,7 +65,6 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
       return errors;
     },
     onSubmit: async (values) => {
-      console.log(values, 'inside onsubmit');
       setLoading(true);
       try {
         const finalData = {
@@ -122,12 +120,9 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
     },
   });
 
-  const handleDelete = async (password) => {
-    const response = await deleteCampaignAsync(data.id, password);
-    if (response.success) {
-      // fetchList();
-      // window.location.reload();
-    }
+  const handleDelete = async () => {
+    fetchList();
+    onClose?.();
   };
 
   // *****************Use Effects**********************************
@@ -174,10 +169,18 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
           )}
 
           {sidebarView === 'QUICK' && (
+            // <DeleteConfirmationPasswordPopover
+            //   title={`Want to delete ${data?.name}?`}
+            //   onDelete={(password) => handleDelete(password)}
+            //   passwordInput
+            //   moduleName="campaign"
+            // />
             <DeleteConfirmationPasswordPopover
-              title={`Want to delete ${data?.name}?`}
-              onDelete={(password) => handleDelete(password)}
+              id={data?.id}
+              title="Are you sure you want to delete?"
+              deleteFn={deleteCampaignAsync}
               passwordInput
+              onDelete={handleDelete}
             />
           )}
         </>

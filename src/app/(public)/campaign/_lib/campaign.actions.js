@@ -65,7 +65,7 @@ export const createCampaignGroupAsync = async (data) => {
 };
 
 export const updateCampaignAsync = async (id, data) => {
-  const {id: campaign_id, ...rest} = data; 
+  const { id: campaign_id, ...rest } = data;
   try {
     const res = await api.patch(`/campaign-HQ/${id}`, rest);
     toast.success(res.data.message);
@@ -109,8 +109,9 @@ export const updateCampaignGroupAsync = async (data) => {
 export const deleteCampaignAsync = async (id, password) => {
   try {
     const res = await api.delete(`/campaign-HQ/${id}`, {
+      data: null,
       headers: {
-        password: password,
+        Password: password,
       },
     });
 
