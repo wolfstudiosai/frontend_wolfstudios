@@ -129,7 +129,7 @@ export const PartnerView = () => {
         <ManagePartnerRightPanel
           view="EDIT"
           width="60vw"
-          data={null}
+          data={defaultPartner}
           fetchList={refreshListView}
           open={filters.ADD}
           onClose={handleContentCreated}

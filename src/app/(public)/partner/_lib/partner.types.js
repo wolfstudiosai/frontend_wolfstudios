@@ -1,139 +1,17 @@
-import { ageBracket, profileStatus, status } from './partner.constants';
-
-// export const defaultPartner = (data) => {
-//   const formattedValue = {
-//     name: '',
-//     email: '',
-//     currentStatus: [],
-//     journeyStep: '',
-//     profileStatus: [],
-//     notes: '',
-//     instagram: {
-//       url: '',
-//       following: 0,
-//     },
-//     tiktok: {
-//       url: '',
-//       following: 0,
-//     },
-//     youtube: {
-//       url: '',
-//       following: 0,
-//     },
-//     hourlyRate: '',
-//     bookingLink: '',
-//     ageBracket: [],
-//     snapchat: {
-//       url: '',
-//       following: 0,
-//     },
-//     linkedinConnections: 0,
-//     X: {
-//       url: '',
-//       following: 0,
-//     },
-//     facebook: {
-//       url: '',
-//       following: 0,
-//     },
-//     website: '',
-//     medium: '',
-//     soundcloud: '',
-//     spotify: '',
-//     opentoGifting: '',
-//     occupation: '',
-//     client: '',
-//     linkedin: '',
-//     mailingAddress: '',
-//     phone: '',
-//     pinterest: {
-//       url: '',
-//       following: 0,
-//     },
-//     podcast: '',
-//     refusalReason: '',
-//     twitch: '',
-//     revoAmazonOrderConfirmationNumber: '',
-//     amazonReviewLink: '',
-//     amazonReviewCupper: '',
-//     amazonReviewThePill: '',
-//     amazonStorefront: '',
-//     deliverables: '',
-//     googleDriveFiles: '',
-//     revoIGPost: '',
-//     partnerIGRate: '',
-//     partnerTTRate: '',
-//     partnerYTRate: '',
-//     amountPaid: '',
-//     totalContributedEngagementByContent: '0',
-//     totalAudience: '',
-//     platformDeliverables: [],
-//     platforms: [],
-//     previousCollabExpense: '',
-//     revoOffer: '',
-//     remainingCredits: 0,
-//     ttPost: '',
-//     totalROI: '',
-//     ugcPaymentStatus: '',
-//     ugcRetainerAmount: 0,
-//     ugcTikTokLink: '',
-//     revoUGCArmyTTUsernamePW: '',
-//     whatsApp: '',
-//     ytPost: '',
-//     partnerPostViews: 0,
-//     sourcedFrom: [],
-//     estimatedTaxes: '',
-//     fbaXLevanta: 0,
-//     shippingFBAFeeGiftedPartners: '',
-//     levantaAffiliateFee: '',
-//     paypalFee: '',
-//     shippingExpense: '',
-//     amazonReferralFee: '',
-//     amazonOrderTotal: '',
-//     amazonTax: '',
-//     amazonKickback: '',
-//     monthSourced: '',
-//     secondPaymentDate: '',
-//     clientStatus: '',
-//     linktree: '',
-//     partnerUGCRate: '',
-//     partner360Rate: '',
-//     revoCounteroffer: '',
-//     opentoWhitelisting: '',
-//     conversionsBundleCupper: 0,
-//     conversionsMassageGun: 0,
-//     conversionsCupper: 0,
-//     conversionsOils: 0,
-//     conversionsWalkingPad: 0,
-//     amazonReviewWalkingPadPro: '',
-//     amazonReviewWalkingPadStandard: '',
-//     amazonReviewOil: '',
-//     amazonReviewSoothingCream: '',
-//     amazonReviewBeautyWand: '',
-//     contracts: [],
-//     paymentLink: '',
-//     totalExpense: '0',
-//     totalProductCOGExpense: '0',
-//     affiliatePlatform: [],
-//     profileImage: [],
-//     mediaKit: [],
-//     receipts: [],
-//   };
-
-//   return formattedValue;
-// };
+import { profileStatus, status } from './partner.constants';
 
 export const defaultPartner = (data) => {
   const formattedValue = {
+    id: data?.id || null,
     name: data?.Name || '',
     email: data?.Email || '',
     currentStatus:
-      data?.CurrentStatus.length > 0
+      data?.CurrentStatus?.length > 0
         ? status.filter((i) => data.CurrentStatus.includes(i.value) || data.CurrentStatus.includes(i.label))
         : [],
     journeyStep: data?.JourneyStep || '',
     profileStatus:
-      data?.ProfileStatus.length > 0
+      data?.ProfileStatus?.length > 0
         ? profileStatus.filter((i) => data.ProfileStatus.includes(i.value) || data.ProfileStatus.includes(i.label))
         : [],
     notes: data?.Notes || '',
@@ -151,7 +29,7 @@ export const defaultPartner = (data) => {
     },
     hourlyRate: data?.HourlyRate || '',
     bookingLink: data?.BookingLink || '',
-    ageBracket: data?.AgeBracket.length > 0 ? data?.AgeBracket.map((i) => ({ label: i, value: i })) : [],
+    ageBracket: data?.AgeBracket?.length > 0 ? data?.AgeBracket.map((i) => ({ label: i, value: i })) : [],
     snapchat: {
       url: data?.Snapchat || '',
       following: data?.SnapchatFollowing || 0,
@@ -197,8 +75,8 @@ export const defaultPartner = (data) => {
     totalContributedEngagementByContent: data?.TotalContributedEngagementbyContent || '0',
     totalAudience: data?.TotalAudience || '',
     platformDeliverables:
-      data?.PlatformDeliverables.length > 0 ? data?.PlatformDeliverables.map((i) => ({ label: i, value: i })) : [],
-    platforms: data?.Platforms.length > 0 ? data?.Platforms.map((i) => ({ label: i, value: i })) : [],
+      data?.PlatformDeliverables?.length > 0 ? data?.PlatformDeliverables.map((i) => ({ label: i, value: i })) : [],
+    platforms: data?.Platforms?.length > 0 ? data?.Platforms.map((i) => ({ label: i, value: i })) : [],
     previousCollabExpense: data?.PreviousCollabExpense || '',
     revoOffer: data?.REVOsOffer || '',
     remainingCredits: data?.RemainingCredits || 0,
@@ -211,7 +89,7 @@ export const defaultPartner = (data) => {
     whatsApp: data?.WhatsApp || '',
     ytPost: data?.YTPost || '',
     partnerPostViews: data?.PartnerPostViews || 0,
-    sourcedFrom: data?.SourcedFrom.length > 0 ? data?.SourcedFrom.map((i) => ({ label: i, value: i })) : [],
+    sourcedFrom: data?.SourcedFrom?.length > 0 ? data?.SourcedFrom.map((i) => ({ label: i, value: i })) : [],
     estimatedTaxes: data?.EstimatedTaxes || '',
     fbaXLevanta: data?.FBAxLevanta || 0,
     shippingFBAFeeGiftedPartners: data?.ShippingFBAFeeGiftedPartners || '',
@@ -240,12 +118,12 @@ export const defaultPartner = (data) => {
     amazonReviewOil: data?.AmazonReviewOil || '',
     amazonReviewSoothingCream: data?.AmazonReviewSoothingCream || '',
     amazonReviewBeautyWand: data?.AmazonReviewBeautyWand || '',
-    contracts: data?.Contracts.length > 0 ? data?.Contracts.map((i) => ({ label: i, value: i })) : [],
+    contracts: data?.Contracts?.length > 0 ? data?.Contracts.map((i) => ({ label: i, value: i })) : [],
     paymentLink: data?.PaymentLink || '',
     totalExpense: data?.TotalExpense || '0',
     totalProductCOGExpense: data?.TotalProductCOGExpense || '0',
     affiliatePlatform:
-      data?.AffiliatePlatform.length > 0 ? data?.AffiliatePlatform.map((i) => ({ label: i, value: i })) : [],
+      data?.AffiliatePlatform?.length > 0 ? data?.AffiliatePlatform.map((i) => ({ label: i, value: i })) : [],
     profileImage: data?.ProfileImage || [],
     mediaKit: data?.MediaKit || [],
     receipts: data?.Receipts || [],
@@ -253,17 +131,3 @@ export const defaultPartner = (data) => {
 
   return formattedValue;
 };
-
-const currentStatus = [
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-  { value: 'pending', label: 'Pending' },
-  { value: 'suspended', label: 'Suspended' },
-];
-
-const secondArray = ['active', 'suspended'];
-
-const outputArray = [
-  { value: 'active', label: 'Active' },
-  { value: 'suspended', label: 'Suspended' },
-];

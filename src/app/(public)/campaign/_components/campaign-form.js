@@ -1,9 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Button, FormControl, FormLabel, Stack } from '@mui/material';
+import { FormControl, FormLabel } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useFormik } from 'formik';
 
 import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
@@ -15,18 +14,15 @@ import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-ifr
 import { ImageUploader } from '/src/components/uploaders/image-uploader';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
-import { createCampaignAsync, getCampaignAsync, updateCampaignAsync } from '../_lib/campaign.actions';
+import { getCampaignAsync } from '../_lib/campaign.actions';
 import { defaultCampaign } from '../_lib/campaign.types';
 import { getRetailPartnerListAsync, getStakeholderListAsync } from '../../../../lib/common.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getContentList } from '/src/app/(private)/all-content/_lib/all-content.actions';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
-import { formConstants } from '/src/app/constants/form-constants';
-import { imageUploader } from '/src/utils/upload-file';
 
-export const CampaignForm = ({ id, onClose, fetchList }) => {
+export const CampaignForm = ({ handleChange, values, errors, setFieldValue, onSubmit }) => {
   // *********************States*********************************
-  const [loading, setLoading] = React.useState(false);
   const [mediaPreview, setMediaPreview] = React.useState(null);
   const [contentOptions, setContentOptions] = React.useState([]);
   const [stakeholderOptions, setStakeholderOptions] = React.useState([]);
@@ -37,93 +33,6 @@ export const CampaignForm = ({ id, onClose, fetchList }) => {
   const [data, setData] = React.useState(null);
 
   // ********************* Formik *******************************
-
-  const { values, errors, handleChange, handleSubmit, setFieldValue, resetForm, setValues } = useFormik({
-    initialValues: defaultCampaign(),
-    validate: (values) => {
-      const errors = {};
-      if (!values.name) {
-        errors.name = formConstants.required;
-      }
-      if (!values.client) {
-        errors.client = formConstants.required;
-      }
-      if (!values.guidelines) {
-        errors.guidelines = formConstants.required;
-      }
-      if (!values.description) {
-        errors.description = formConstants.required;
-      }
-      if (!values.status) {
-        errors.status = formConstants.required;
-      }
-      if (!values.startDate) {
-        errors.startDate = formConstants.required;
-      }
-      if (!values.endDate) {
-        errors.endDate = formConstants.required;
-      }
-      if (!values.notes) {
-        errors.notes = formConstants.required;
-      }
-
-      return errors;
-    },
-    onSubmit: async (values) => {
-      setLoading(true);
-      try {
-        const finalData = {
-          ...values,
-        };
-
-        const imageFields = ['campaignImage'];
-        for (const field of imageFields) {
-          const value = values[field];
-          if (value instanceof File) {
-            const res = await imageUploader(
-              [
-                {
-                  file: value,
-                  fileName: value.name.split('.').slice(0, -1).join('.'),
-                  fileType: value.type.split('/')[1],
-                },
-              ],
-              'campaigns'
-            );
-
-            finalData[field] = res;
-          } else if (typeof value === 'string') {
-            finalData[field] = [value];
-          }
-        }
-
-        const arrayFields = ['contentHQ', 'stakeholders', 'retailPartners', 'proposedPartners', 'spaces'];
-        for (const field of arrayFields) {
-          const value = values[field];
-          if (value.length > 0) {
-            const arrOfStr = value.map((item) => item.value);
-            finalData[field] = arrOfStr;
-          }
-        }
-
-        if (finalData.goals && typeof finalData.goals === 'string') {
-          finalData.goals = finalData.goals.split(',').map((item) => item.trim());
-        }
-        const res = id ? await updateCampaignAsync(id, finalData) : await createCampaignAsync(finalData);
-        if (res.success) {
-          onClose?.();
-          resetForm();
-          fetchList();
-        } else {
-          console.error('Operation failed:', res.message);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      } finally {
-        setLoading(false);
-      }
-    },
-  });
 
   // ******************** Use Effects****************************
 
@@ -164,34 +73,34 @@ export const CampaignForm = ({ id, onClose, fetchList }) => {
     fetchPrerequisitesData();
   }, []);
 
-  // --------------- Fetch campaign during update -------------------
-  React.useEffect(() => {
-    const fetchSingleCampaign = async () => {
-      try {
-        const res = await getCampaignAsync(id);
-        if (res?.success) {
-          setData(res.data);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  // // --------------- Fetch campaign during update -------------------
+  // React.useEffect(() => {
+  //   const fetchSingleCampaign = async () => {
+  //     try {
+  //       const res = await getCampaignAsync(id);
+  //       if (res?.success) {
+  //         setData(res.data);
+  //       }
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
 
-    if (id) {
-      fetchSingleCampaign();
-    }
-  }, [id]);
+  //   if (id) {
+  //     fetchSingleCampaign();
+  //   }
+  // }, [values.id]);
 
-  // --------------- Set values during update -------------------
-  React.useEffect(() => {
-    if (data) {
-      setValues(defaultCampaign(data));
-    }
-  }, [data, setValues]);
+  // // --------------- Set values during update -------------------
+  // React.useEffect(() => {
+  //   if (data) {
+  //     setValues(defaultCampaign(data));
+  //   }
+  // }, [data, setValues]);
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <Grid container spacing={2} pb={2}>
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} />
@@ -379,13 +288,13 @@ export const CampaignForm = ({ id, onClose, fetchList }) => {
               folderName="campaigns"
             />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          {/* <Grid size={{ xs: 12 }}>
             <Stack direction="row" justifyContent="flex-end">
               <Button size="small" variant="contained" color="primary" disabled={loading} type="submit">
                 Save
               </Button>
             </Stack>
-          </Grid>
+          </Grid> */}
         </Grid>
       </form>
 

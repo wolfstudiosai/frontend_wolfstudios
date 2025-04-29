@@ -17,9 +17,8 @@ import { formConstants } from '/src/app/constants/form-constants';
 import { imageUploader } from '/src/utils/upload-file';
 
 export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width, view, isAdd }) => {
-  const isUpdate = data ? true : false;
+  const isUpdate = data?.id ? true : false;
   const { isLogin } = useAuth();
-  const [formData, setFormData] = useState(data); // formdata
   const [sidebarView, setSidebarView] = React.useState(view); //QUICK/ EDIT
   const [loading, setLoading] = React.useState(false);
 
@@ -30,16 +29,6 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
     if (response.success) {
       fetchList();
       onClose?.();
-    }
-  };
-
-  const handleDataUpdate = async () => {
-    let currentID = data?.id;
-    const updatedFormData = { ...formData, id: currentID };
-    const response = await updatePartnerAsync(updatedFormData);
-    if (response.success) {
-      fetchList();
-      window.location.reload();
     }
   };
 
@@ -81,26 +70,7 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
             finalData[field] = [value];
           }
         }
-        const fieldToConvert = [
-          'platformDeliverables',
-          'affiliatePlatform',
-          'ageBracket',
-          'contracts',
-          'currentStatus',
-          'platforms',
-          'profileStatus',
-          'sourcedFrom',
-        ];
-        for (const field of fieldToConvert) {
-          const value = values[field];
-          if (value.length > 0) {
-            const arrOfStr = value.map((item) => item.value);
-            finalData[field] = arrOfStr;
-          }
-        }
-        console.log('final data: ', finalData);
-        const res =
-          sidebarView === 'EDIT' ? await updatePartnerAsync(data.id, finalData) : await createPartnerAsync(finalData);
+        const res = isUpdate ? await updatePartnerAsync(finalData) : await createPartnerAsync(finalData);
         if (res.success) {
           resetForm();
           setSidebarView('QUICK');
@@ -143,27 +113,20 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
     <>
       {isLogin && (
         <>
-          {sidebarView === 'QUICK' && !isAdd ? (
-            <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
-              <Iconify icon="mynaui:edit-one" />
+          {sidebarView === 'EDIT' && isUpdate ? (
+            <IconButton onClick={() => setSidebarView('QUICK')} title="Edit">
+              <Iconify icon="solar:eye-broken" />
             </IconButton>
           ) : (
-            data !== null && (
-              <Button size="small" variant="outlined" onClick={() => setSidebarView('QUICK')} title="Cancel">
-                Cancel
-              </Button>
+            isUpdate && (
+              <IconButton onClick={() => setSidebarView('EDIT')} title="Quick">
+                <Iconify icon="mynaui:edit-one" />
+              </IconButton>
             )
           )}
-
-          {/* {sidebarView === 'EDIT' && !isAdd && (
-            // <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
-            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleDataUpdate}>
-              Save
-            </Button>
-          )} */}
-          {(isAdd || sidebarView === 'EDIT') && (
+          {sidebarView === 'EDIT' && (
             <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
-              {sidebarView === 'EDIT' ? 'Save' : 'Add'}
+              Save
             </Button>
           )}
           {sidebarView === 'QUICK' && (
@@ -194,21 +157,3 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
     </DrawerContainer>
   );
 };
-
-// {
-//   isAdd ? (
-//     <PartnerForm
-//       handleChange={handleChange}
-//       values={values}
-//       errors={errors}
-//       setFieldValue={setFieldValue}
-//       onSubmit={handleSubmit}
-//     />
-//   ) : sidebarView === 'QUICK' ? (
-//     // <PartnerQuickView data={values} isEdit={sidebarView}/>
-//     <PartnerQuickView data={data} isEdit={sidebarView} />
-//   ) : (
-//     // <PartnerQuickView data={values} isEdit={sidebarView} onUpdate={setFormData}/>
-//     <PartnerQuickView data={data} isEdit={sidebarView} onUpdate={setFormData} />
-//   );
-// }

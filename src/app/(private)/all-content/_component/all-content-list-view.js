@@ -159,11 +159,6 @@ export default function AllContentListView({ setPagination, totalRecords, data, 
     return newRow;
   }, []);
 
-  const handleRowSelection = (newRowSelectionModel) => {
-    const selectedData = newRowSelectionModel.map((id) => data.find((row) => row.id === id));
-    setSelectedRows(selectedData);
-  };
-
   const handleProcessRowUpdateError = React.useCallback((error) => {
     console.log({ children: error.message, severity: 'error' });
   }, []);
@@ -229,8 +224,6 @@ export default function AllContentListView({ setPagination, totalRecords, data, 
             rowCount={totalRecords}
             pageSizeOptions={[10, 25, 50, 100]}
             onPageChange={handlePaginationModelChange}
-            // checkboxSelection={true}
-            // onRowSelectionModelChange={handleRowSelection}
           />
         </Box>
       </Card>

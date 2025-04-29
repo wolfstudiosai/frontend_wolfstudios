@@ -2,7 +2,6 @@
 
 import { FormControl, FormLabel } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import React from 'react';
 
 import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
@@ -14,11 +13,6 @@ import { ImageUploader } from '/src/components/uploaders/image-uploader';
 import { ageBracket, profileStatus, status } from '../_lib/partner.constants';
 
 export const PartnerForm = ({ handleChange, values, errors, setFieldValue, onSubmit }) => {
-  // *********************States*********************************
-  const [mediaPreview, setMediaPreview] = React.useState(null);
-  const [openVerticalUploadDialog, setOpenVerticalUploadDialog] = React.useState(false);
-  const [openHorizontalUploadDialog, setOpenHorizontalUploadDialog] = React.useState(false);
-
   // *****************Use Effects*******************************
 
   return (
