@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import { CircularProgress } from '@mui/material';
+import React from 'react';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
@@ -10,7 +10,7 @@ import AllContentGridView from './_component/all-content-grid-view';
 import AllContentListView from './_component/all-content-list-view';
 import { ManageContentRightPanel } from './_component/manage-content-right-panel';
 import { getContentList } from './_lib/all-content.actions';
-import { defaultContent } from './_lib/all-content.types.old';
+import { defaultContent } from './_lib/all-content.types';
 import { sliderToGridColsCoverter } from '/src/utils/helper';
 
 export const AllContentView = () => {

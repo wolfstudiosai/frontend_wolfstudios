@@ -85,8 +85,6 @@ export const ContentForm = ({ formikProps }) => {
     fetchData();
   }, [autocompleteFocus]);
 
-  console.log(values, 'values....');
-
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={2} sx={{ py: 2 }}>
