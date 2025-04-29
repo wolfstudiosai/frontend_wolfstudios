@@ -79,7 +79,6 @@ export const createCommentAsync = async (contentID, data) => {
 };
 
 const contentPayload = (data) => ({
-  // ...(data.id && { id: data.id }),
   name: data.name || '',
   revoPinterest: data.revoPinterest || '',
   pinAccountsUsed: data.pinAccountsUsed || '',

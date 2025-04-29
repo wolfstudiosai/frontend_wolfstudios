@@ -374,14 +374,14 @@ export const ContentForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
+        {/* <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="yt_REVOMADICTotalViews"
             label="YT REVO MADIC Views"
             value={values.yt_REVOMADICTotalLikes}
             onChange={handleChange}
           />
-        </Grid>
+        </Grid> */}
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="yt_REVOMADICTotalComments"

@@ -1,16 +1,14 @@
 'use client';
 
-import React from 'react';
-import { Button, FormControl, FormLabel, Stack } from '@mui/material';
+import { FormControl, FormLabel } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useFormik } from 'formik';
+import React from 'react';
 
 import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
 import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
-import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-iframe-dialog';
 import { ImageUploader } from '/src/components/uploaders/image-uploader';
 
 import { ageBracket, profileStatus, status } from '../_lib/partner.constants';
