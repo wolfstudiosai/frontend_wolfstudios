@@ -1,7 +1,7 @@
 'use client';
 
-import { CircularProgress } from '@mui/material';
 import React from 'react';
+import { CircularProgress } from '@mui/material';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
@@ -20,6 +20,7 @@ export const AllContentView = () => {
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [data, setData] = React.useState([]);
+  console.log(data, 'data.....');
   const [filters, setFilters] = React.useState({
     COL: 4,
     TAG: [],
@@ -111,7 +112,12 @@ export const AllContentView = () => {
       />
       {filters.VIEW === 'grid' ? (
         <>
-          <AllContentGridView data={data} loading={loading} columns={sliderToGridColsCoverter(filters.COL)} fetchList={refreshListView} />
+          <AllContentGridView
+            data={data}
+            loading={loading}
+            columns={sliderToGridColsCoverter(filters.COL)}
+            fetchList={refreshListView}
+          />
           <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
             {isFetching && <CircularProgress size="30px" />}
           </div>

@@ -1,5 +1,6 @@
 export const defaultContent = (data) => {
   const defaultData = {
+    id: data?.id || null,
     name: data?.Name || '',
     revoPinterest: data?.REVOPinterest || '',
     pinAccountsUsed: data?.PINAccountsUsed || '',
