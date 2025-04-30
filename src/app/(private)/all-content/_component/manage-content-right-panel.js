@@ -87,30 +87,10 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }
       }
     },
   });
-  const handleDelete = async (password) => {
-    const response = await deleteContentAsync([data.id]);
-    if (response.success) {
-      fetchList();
-      // window.location.reload();
-    }
+  const handleDelete = async () => {
+    fetchList();
+    onClose?.();
   };
-
-  // const handleDataUpdate = async () => {
-  //   try {
-  //     setLoading(true);
-  //     let currentID = data?.id;
-  //     const updatedFormData = { ...formData, id: currentID };
-  //     const response = await updateContentAsync(updatedFormData, file);
-  //     if (response.success) {
-  //       window.location.reload();
-  //     }
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.error('Error:', error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   // --------------- Fetch campaign during update -------------------
   React.useEffect(() => {
@@ -161,10 +141,11 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }
 
           {sidebarView === 'QUICK' && (
             <DeleteConfirmationPasswordPopover
-              title={`Want to delete ${data?.name}?`}
-              onDelete={(password) => handleDelete(password)}
+              id={data?.id}
+              title="Are you sure you want to delete?"
+              deleteFn={deleteContentAsync}
               passwordInput
-              disabled={!isUpdate || sidebarView === 'EDIT'}
+              onDelete={handleDelete}
             />
           )}
         </>

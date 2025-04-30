@@ -53,9 +53,15 @@ export const updateContentAsync = async (data) => {
   }
 };
 
-export const deleteContentAsync = async (ids) => {
+export const deleteContentAsync = async (id, password) => {
   try {
-    const res = await api.delete(`/record/delete-records`, { data: { ids: ids } });
+    const res = await api.delete(`/content-HQ/${id}`, {
+      data: null,
+      headers: {
+        Password: password,
+      },
+    });
+
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {

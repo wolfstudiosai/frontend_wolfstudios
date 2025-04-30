@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import { Button, IconButton } from '@mui/material';
 import { useFormik } from 'formik';
+import React, { useEffect } from 'react';
 
-import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import { Iconify } from '/src/components/iconify/iconify';
+import useAuth from '/src/hooks/useAuth';
 
 import { createPartnerAsync, deletePartnerAsync, getPartnerAsync, updatePartnerAsync } from '../_lib/partner.actions';
 import { defaultPartner } from '../_lib/partner.types';
@@ -25,11 +25,8 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
   // *********************States*********************************
 
   const handleDelete = async () => {
-    const response = await deletePartnerAsync([data.id]);
-    if (response.success) {
-      fetchList();
-      onClose?.();
-    }
+    fetchList();
+    onClose?.();
   };
 
   const { values, errors, handleChange, handleSubmit, setFieldValue, setValues, resetForm } = useFormik({
@@ -131,9 +128,11 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
           )}
           {sidebarView === 'QUICK' && (
             <DeleteConfirmationPasswordPopover
-              title={`Want to delete ${data?.name}?`}
-              onDelete={(password) => handleDelete(password)}
+              id={data?.id}
+              title="Are you sure you want to delete?"
+              deleteFn={deletePartnerAsync}
               passwordInput
+              onDelete={handleDelete}
             />
           )}
         </>

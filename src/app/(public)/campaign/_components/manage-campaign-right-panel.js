@@ -1,15 +1,14 @@
 'use client';
 
+import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Button, IconButton } from '@mui/material';
 import { useFormik } from 'formik';
-import { useRouter } from 'next/navigation';
-import React from 'react';
 
+import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { Iconify } from '/src/components/iconify/iconify';
-import useAuth from '/src/hooks/useAuth';
 
-import { DrawerContainer } from '../../../../components/drawer/drawer'; ///components/drawer/drawer
 import { CampaignQuickView } from '../_components/campaign-quick-view';
 import {
   createCampaignAsync,
@@ -18,6 +17,7 @@ import {
   updateCampaignAsync,
 } from '../_lib/campaign.actions';
 import { defaultCampaign } from '../_lib/campaign.types';
+import { DrawerContainer } from '../../../../components/drawer/drawer'; ///components/drawer/drawer
 
 import { CampaignForm } from './campaign-form';
 import { formConstants } from '/src/app/constants/form-constants';
@@ -170,12 +170,6 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
           )}
 
           {sidebarView === 'QUICK' && (
-            // <DeleteConfirmationPasswordPopover
-            //   title={`Want to delete ${data?.name}?`}
-            //   onDelete={(password) => handleDelete(password)}
-            //   passwordInput
-            //   moduleName="campaign"
-            // />
             <DeleteConfirmationPasswordPopover
               id={data?.id}
               title="Are you sure you want to delete?"
