@@ -16,31 +16,15 @@ import {
   updateContentAsync,
 } from '../_lib/all-content.actions';
 import { defaultContent } from '../_lib/all-content.types';
-import { defaultContent1 } from '../_lib/all-content.types.old';
 import { ContentForm } from './content-form';
 import { ContentQuickView } from './content-quick-view';
 import { formConstants } from '/src/app/constants/form-constants';
 
-export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width, view, isAdd }) => {
+export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }) => {
   const isUpdate = data?.id ? true : false;
   const { isLogin } = useAuth();
   const [sidebarView, setSidebarView] = React.useState(view); // QUICK // EDIT
-  const [file, setFile] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
-  const [formData, setFormData] = useState(data);
-  console.log(data?.id, 'data.id....');
-  console.log(sidebarView, 'sidebarView.....');
-  React.useEffect(() => {
-    if (isAdd) {
-      // Reset to default content when adding new
-      setValues(defaultContent1);
-      setSidebarView('EDIT');
-    } else if (data?.id) {
-      // Load existing data when available
-      setValues(data);
-      setSidebarView('QUICK');
-    }j
-  }, [isAdd, data]);
 
   const { values, errors, handleChange, setFieldValue, resetForm, setValues, handleSubmit } = useFormik({
     initialValues: defaultContent(),
@@ -70,6 +54,9 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
       if (!values.upPromoteConversion) {
         errors.upPromoteConversion = formConstants.required;
       }
+      if (!values.assetStatus) {
+        errors.assetStatus = formConstants.required;
+      }
       if (!values.monthUploaded) {
         errors.monthUploaded = formConstants.required;
       }
@@ -85,8 +72,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        console.log(values, 'content value values...');
-        const res = await createContentAsync(values);
+        const res = isUpdate ? await updateContentAsync({ id: data?.id, ...values }) : await createContentAsync(values);
         if (res.success) {
           onClose?.();
           resetForm();
@@ -101,29 +87,9 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
       }
     },
   });
-  const handleDelete = async (password) => {
-    const response = await deleteContentAsync([data.id]);
-    if (response.success) {
-      fetchList();
-      window.location.reload();
-    }
-  };
-
-  const handleDataUpdate = async () => {
-    try {
-      setLoading(true);
-      let currentID = data?.id;
-      const updatedFormData = { ...formData, id: currentID };
-      const response = await updateContentAsync(updatedFormData, file);
-      if (response.success) {
-        window.location.reload();
-      }
-    } catch (error) {
-      setLoading(false);
-      console.error('Error:', error);
-    } finally {
-      setLoading(false);
-    }
+  const handleDelete = async () => {
+    fetchList();
+    onClose?.();
   };
 
   // --------------- Fetch campaign during update -------------------
@@ -132,7 +98,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
       try {
         const res = await getContentAsync(data?.id);
         if (res?.success) {
-          setValues(res.data);
+          setValues(defaultContent(res?.data));
         }
       } catch (err) {
         console.error(err);
@@ -142,7 +108,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
     if (data?.id && sidebarView === 'EDIT') {
       fetSingleData();
     }
-  }, [data?.id]);
+  }, [data?.id, setValues, sidebarView]);
 
   // --------------- Set values during update -------------------
   React.useEffect(() => {
@@ -151,22 +117,16 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
     }
   }, [data, setValues]);
 
-  console.log(errors, 'errors');
-  console.log(values, 'values...');
-
   // *****************Action Buttons*******************************
   const actionButtons = (
     <>
       {isLogin && (
         <>
           {sidebarView === 'EDIT' && isUpdate ? (
-            <Button size="small" variant="outlined" onClick={() => setSidebarView('QUICK')} title="Cancel">
-              Cancel
-            </Button>
+            <IconButton onClick={() => setSidebarView('QUICK')} title="Edit">
+              <Iconify icon="solar:eye-broken" />
+            </IconButton>
           ) : (
-            // <IconButton onClick={() => setSidebarView('QUICK')} title="Edit">
-            //   <Iconify icon="solar:eye-broken" />
-            // </IconButton>
             isUpdate && (
               <IconButton onClick={() => setSidebarView('EDIT')} title="Quick">
                 <Iconify icon="mynaui:edit-one" />
@@ -178,17 +138,14 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
               Save
             </Button>
           )}
-          {/* {isAdd && (
-            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
-              Create
-            </Button>
-          )} */}
+
           {sidebarView === 'QUICK' && (
             <DeleteConfirmationPasswordPopover
-              title={`Want to delete ${data?.name}?`}
-              onDelete={(password) => handleDelete(password)}
+              id={data?.id}
+              title="Are you sure you want to delete?"
+              deleteFn={deleteContentAsync}
               passwordInput
-              disabled={!isUpdate || sidebarView === 'EDIT'}
+              onDelete={handleDelete}
             />
           )}
         </>
@@ -199,7 +156,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, width,
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
       {sidebarView === 'EDIT' ? (
-        <ContentForm formikProps={{ values, errors, handleChange, setFieldValue, handleSubmit }} />
+        <ContentForm formikProps={{ values, setValues, errors, handleChange, setFieldValue, handleSubmit }} />
       ) : (
         <ContentQuickView data={data} isEdit={false} />
       )}

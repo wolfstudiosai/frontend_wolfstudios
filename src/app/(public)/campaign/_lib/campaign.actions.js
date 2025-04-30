@@ -4,14 +4,25 @@ import { api } from '/src/utils/api';
 import { getSearchQuery } from '/src/utils/helper';
 import { uploadFileAsync } from '/src/utils/upload-file';
 
-export const getCampaignGroupListAsync = async (queryParams) => {
+export const getCampaignGroupListAsync = async (queryParams = {}) => {
   try {
-    const searchQuery = getSearchQuery(queryParams);
+    let searchQuery = '';
+    if (Object.keys(queryParams).length > 0) {
+      searchQuery = getSearchQuery(queryParams);
+    }
+
     const res = await api.get(`/campaign-HQ${searchQuery}`);
-    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
+    return {
+      success: true,
+      data: res.data.data.data,
+      totalRecords: res.data.data.count,
+    };
   } catch (error) {
     toast.error(error.message);
-    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+    return {
+      success: false,
+      error: error.response ? error.response.data : 'An unknown error occurred',
+    };
   }
 };
 
@@ -37,10 +48,9 @@ export const getCampaignAsync = async (id) => {
 };
 
 export const createCampaignAsync = async (data) => {
-  console.log(data, 'inside create campaign async');
   const payload = {};
   try {
-    const response = await api.post(`/campaign-HQ`, payload);
+    const response = await api.post(`/campaign-HQ`, data);
 
     toast.success(response.data.message);
     return { success: true, data: response.data.data };
@@ -66,10 +76,9 @@ export const createCampaignGroupAsync = async (data) => {
 };
 
 export const updateCampaignAsync = async (id, data) => {
+  const { id: campaign_id, ...rest } = data;
   try {
-    const res = await api.patch(`/campaign-HQ/${id}`, {
-      ...data,
-    });
+    const res = await api.patch(`/campaign-HQ/${id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
@@ -111,8 +120,9 @@ export const updateCampaignGroupAsync = async (data) => {
 export const deleteCampaignAsync = async (id, password) => {
   try {
     const res = await api.delete(`/campaign-HQ/${id}`, {
+      data: null,
       headers: {
-        password: password,
+        Password: password,
       },
     });
 

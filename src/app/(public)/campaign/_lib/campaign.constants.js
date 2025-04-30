@@ -38,11 +38,11 @@ export const campaignSorting = [
 ];
 
 export const campaignProgressStatus = [
-  { label: 'Active', value: 'Active' },
-  { label: 'Upcoming', value: 'Upcoming' },
-  { label: 'Pause', value: 'Paused' },
-  { label: 'Needs Case Study', value: 'Needs Case Study' },
-  { label: 'Needs Partners', value: 'Needs Partners' },
-  { label: 'Onboarding Partners', value: 'Onboarding Partners' },
+  { value: 'UPCOMING', label: 'Upcoming' },
+  { value: 'ACTIVE', label: 'Active' },
+  { value: 'PAUSED', label: 'Paused' },
+  { value: 'NEEDS_CASE_STUDY', label: 'Needs Case Study' },
+  { value: 'NEEDS_PARTNERS', label: 'Needs Partners' },
+  { value: 'ONBOARDING_PARTNERS', label: 'Onboarding Partners' },
   { label: 'Others', value: '' },
 ];

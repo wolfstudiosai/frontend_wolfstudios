@@ -6,14 +6,28 @@ import { TabContainer } from '/src/components/tabs/tab-container';
 
 import { CampaignTabCard } from '../_components/campaign-tab-card';
 import { campaignProgressStatus } from '../_lib/campaign.constants';
+import { getCampaignGroupListAsync } from '../_lib/campaign.actions';
 
-export const CampaignTabView = ({ data, fetchList, loading }) => {
+export const CampaignTabView = ({ fetchList, loading }) => {
   const [selectedTab, setSelectedTab] = React.useState(campaignProgressStatus[0].value);
   const [filteredData, setFilteredData] = React.useState([]);
+  const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
     setFilteredData(data.filter((item) => item.CampaignStatus === selectedTab));
   }, [data, selectedTab]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const response = await getCampaignGroupListAsync();
+
+      if (response.success) {
+        setData(response.data);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>

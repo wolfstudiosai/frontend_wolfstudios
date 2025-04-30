@@ -15,28 +15,20 @@ export const getPartnerListAsync = async (queryParams) => {
   }
 };
 
-export const getPartnerAsync = async (slug) => {
+export const getPartnerAsync = async (id) => {
   try {
-    const res = await api.get(`/partner-HQ?slug=${slug}`);
-    return { success: true, data: res.data.data[0], totalRecords: res.data.data.count };
+    const res = await api.get(`/partner-HQ/${id}`);
+    return { success: true, data: res.data.data };
   } catch (error) {
     toast.error(error.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
 
-export const createPartnerAsync = async (file, data) => {
+export const createPartnerAsync = async (data) => {
   try {
-    const { id, created_by, user_id, updated_at, ...rest } = data;
-    let profile_image = '';
-    const partnerResponse = await api.post('/partner-HQ', {
-      ...rest,
-      profile_image,
-    });
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      profile_image = uploadResponse[0].path;
-    }
+    const {id, ...rest} = partnerPayload(data);
+    const partnerResponse = await api.post('/partner-HQ', rest);
     toast.success(partnerResponse.data.message);
     return { success: true, data: partnerResponse.data.data };
   } catch (error) {
@@ -46,18 +38,10 @@ export const createPartnerAsync = async (file, data) => {
   }
 };
 
-export const updatePartnerAsyncOld = async (file, data) => {
+export const updatePartnerAsync = async (data) => {
   try {
-    const { id, user_id, created_by, created_at, updated_at, ...rest } = data;
-    let profile_image = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      profile_image = uploadResponse[0].path;
-    }
-    const res = await api.patch(`/partner/update/${id}`, {
-      ...rest,
-      profile_image: profile_image ? profile_image : data.thumbnail,
-    });
+    const {id, ...rest} = partnerPayload(data);
+    const res = await api.patch(`/partner-HQ/${id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
@@ -66,32 +50,15 @@ export const updatePartnerAsyncOld = async (file, data) => {
   }
 };
 
-export const updatePartnerAsync = async (data, file = null) => {
-  debugger;
+export const deletePartnerAsync = async (id, password) => {
   try {
-    const { id, user_id, created_by, created_at, updated_at, ...rest } = data;
-    let profile_image = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      profile_image = uploadResponse[0].path;
-    }
-    const res = await api.patch(`/partner-HQ/${id}`, {
-      ...rest,
-      profile_image: profile_image ? profile_image : data.thumbnail,
+    const res = await api.delete(`/partner-HQ/${id}`, {
+      data: null,
+      headers: {
+        Password: password,
+      },
     });
-    toast.success(res.data.message);
-    return { success: true, data: res.data.data };
-  } catch (error) {
-    toast.error(error.response.data.message);
-    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
-  }
-};
 
-export const deletePartnerAsync = async (ids) => {
-  try {
-    const res = await api.delete('/partner/delete', {
-      data: { ids: ids },
-    });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
@@ -111,4 +78,19 @@ export const deleteFileAsync = async (paths) => {
     toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
+};
+
+const partnerPayload = (data) => {
+  const { created_by, user_id, updated_at, ...rest } = data;
+  return {
+    ...rest,
+    platformDeliverables: rest.platformDeliverables.map((i) => i.value),
+    affiliatePlatform: rest.affiliatePlatform.map((i) => i.value),
+    ageBracket: rest.ageBracket.map((i) => i.value),
+    contracts: rest.contracts.map((i) => i.value),
+    currentStatus: rest.currentStatus.map((i) => i.value),
+    platforms: rest.platforms.url,
+    profileStatus: rest.profileStatus.url,
+    sourcedFrom: rest.sourcedFrom.url,
+  };
 };

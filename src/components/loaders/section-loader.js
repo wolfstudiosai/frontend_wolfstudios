@@ -1,7 +1,6 @@
 import { Box, CircularProgress, Typography } from '@mui/material';
 
 export const SectionLoader = ({ loading, height, children }) => {
-  console.log(loading, 'loading form section....');
   if (loading) {
     return (
       <Box

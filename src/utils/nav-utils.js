@@ -79,7 +79,7 @@ export function renderMenuItems({
               minWidth: 0,
               flexGrow: 1,
               py: 1,
-              pl: isDesktop && !isOpen ? 0 : level + 1,
+              pl: isDesktop && !isOpen ? 0 : level === 0 ? 0 : level + 1,
             }}
             onClick={() => hasChildren && !isDesktop && toggleMenuItem(item.key)}
           >
@@ -111,7 +111,7 @@ export function renderMenuItems({
               minWidth: 0,
               flexGrow: 1,
               py: 1,
-              // pl: isDesktop ? 0 : level * 2 + 2,
+              pl: 0,
             }}
             selected={isActive}
           >

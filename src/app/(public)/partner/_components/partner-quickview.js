@@ -54,13 +54,13 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
   ];
 
   const socialProfiles = [
-    data.Instagram && { platform: 'Instagram', url: data.Instagram },
-    data.Tiktok && { platform: 'TikTok', url: data.Tiktok },
-    data.Youtube && { platform: 'YouTube', url: data.Youtube },
-    data.X && { platform: 'X', url: data.X },
-    data.Facebook && { platform: 'Facebook', url: data.Facebook },
-    data.Pinterest && { platform: 'Pinterest', url: data.Pinterest },
-    data.LinkedIn && { platform: 'LinkedIn', url: data.LinkedIn },
+    data?.Instagram && { platform: 'Instagram', url: data.Instagram },
+    data?.Tiktok && { platform: 'TikTok', url: data.Tiktok },
+    data?.Youtube && { platform: 'YouTube', url: data.Youtube },
+    data?.X && { platform: 'X', url: data.X },
+    data?.Facebook && { platform: 'Facebook', url: data.Facebook },
+    data?.Pinterest && { platform: 'Pinterest', url: data.Pinterest },
+    data?.LinkedIn && { platform: 'LinkedIn', url: data.LinkedIn },
   ].filter(Boolean);
 
   const [personalInfo, setPersonalInfo] = useState({
@@ -93,6 +93,8 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
     Note: data?.Notes || 'N/A',
     Podcast: data?.Podcast || 'N/A',
     RefusalReason: data?.RefusalReason || 'N/A',
+    Receipts: data?.Receipts?.length > 0 ? data?.Receipts : 'N/A',
+    MediaKit: data?.MediaKit?.length > 0 ? data?.MediaKit : 'N/A',
   });
 
   const [amazonInfo, setAmazonInfo] = useState({
@@ -167,22 +169,43 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
       <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <strong>{label}:</strong>{' '}
         {type === 'link' ? (
-          <Link href={value} passHref legacyBehavior>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              title={value}
-              style={{
-                display: 'block',
-                width: '200px',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
-            >
-              {value}
-            </a>
-          </Link>
+          Array.isArray(value) ? (
+            value.map((link, index) => (
+              <Link key={index} href={link} passHref legacyBehavior>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={link}
+                  style={{
+                    display: 'block',
+                    width: '200px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {link}
+                </a>
+              </Link>
+            ))
+          ) : (
+            <Link href={value} passHref legacyBehavior>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                title={value}
+                style={{
+                  display: 'block',
+                  width: '200px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {value}
+              </a>
+            </Link>
+          )
         ) : type === 'chips' ? (
           value
             .split(', ')
@@ -229,10 +252,12 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
             </IconButton>
           </Stack>
 
-          {/* Profile Status */}
+          {/* Status */}
           <Stack direction={'row'} spacing={0.5}>
-            {data?.ProfileStatus && <CustomChip label={data?.ProfileStatus} />}
-            {data?.CurrentStatus && <CustomChip label={data?.CurrentStatus} />}
+            {data?.ProfileStatus?.length > 0 &&
+              data?.ProfileStatus?.map((status, index) => <CustomChip key={index} label={status} />)}
+            {data?.CurrentStatus?.length > 0 &&
+              data?.CurrentStatus?.map((status, index) => <CustomChip key={index} label={status} />)}
           </Stack>
         </Stack>
 
@@ -340,7 +365,7 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
       <Divider sx={{ my: 0 }} />
 
       {/* Image Slider */}
-      <SliderWrapper
+      {/* <SliderWrapper
         modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
         // autoplay={{ delay: 4000, disableOnInteraction: true }}
         breakpoints={{
@@ -352,7 +377,6 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
         // speed={2000}
         spaceBetween={2}
       >
-        {/* {data?.PartnerGallery?.map((item, index) => ( */}
         {mediaArr?.map((item, index) => (
           <SwiperSlide key={index}>
             <PartnerSliderCard
@@ -364,10 +388,36 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
             />
           </SwiperSlide>
         ))}
-      </SliderWrapper>
+      </SliderWrapper> */}
 
       {/* Social Media iFrame */}
       <Stack direction="row" spacing={1}>
+        <Box
+          sx={{
+            width: 245,
+            height: 320,
+            border: '1px solid',
+            borderColor: 'grey.300',
+            flexShrink: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            my: 2,
+          }}
+        >
+          <Box
+            component="img"
+            src={data?.ProfileImage?.at(0) ?? '/assets/image-placeholder.jpg'}
+            alt={data?.Name}
+            sx={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              borderBottom: '1px solid var(--mui-palette-divider)',
+            }}
+            onClick={() => setOpenPartnerRightPanel(item)}
+          />
+        </Box>
         {socialProfiles.length > 0 && <PartnerIframes profiles={socialProfiles} />}
       </Stack>
 
@@ -415,6 +465,8 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
                 {renderField('other', 'Note', 'Note')}
                 {renderField('other', 'Podcast', 'Podcast')}
                 {renderField('other', 'RefusalReason', 'Refusal Reason')}
+                {renderField('other', 'Receipts', 'Receipts', 'link')}
+                {renderField('other', 'MediaKit', 'Media Kit', 'link')}
               </Stack>
             </Grid>
 
@@ -525,7 +577,7 @@ export const PartnerSliderCard = ({ item, sx = {} }) => {
 
 export const PartnerIframes = ({ profiles }) => {
   const getEmbedUrl = (url) => {
-    if (url.includes('instagram.com')) {
+    if (url && url?.includes('instagram.com')) {
       const postMatch = url.match(/instagram\.com\/p\/([^\/]+)/);
       if (postMatch) {
         return `https://www.instagram.com/p/${postMatch[1]}/embed`;
@@ -534,22 +586,22 @@ export const PartnerIframes = ({ profiles }) => {
       const username = url.split('/').filter(Boolean).pop();
       return `https://www.instagram.com/${username}/embed`;
     }
-    if (url.includes('tiktok.com')) {
+    if (url && url?.includes('tiktok.com')) {
       const vidMatch = url.match(/video\/(\d+)/);
       if (vidMatch) {
         return `https://www.tiktok.com/embed/v2/${vidMatch[1]}`;
       }
     }
-    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+    if ((url && url?.includes('youtube.com')) || url?.includes('youtu.be')) {
       const ytMatch = url.match(/(youtu\.be\/|v=)([^&]+)/);
       if (ytMatch) {
         return `https://www.youtube.com/embed/${ytMatch[2]}`;
       }
     }
-    if (url.includes('twitter.com')) {
+    if (url && url?.includes('twitter.com')) {
       return `https://twitframe.com/show?url=${encodeURIComponent(url)}`;
     }
-    if (url.includes('facebook.com')) {
+    if (url && url?.includes('facebook.com')) {
       return `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(url)}`;
     }
     return url;
@@ -558,7 +610,7 @@ export const PartnerIframes = ({ profiles }) => {
   return (
     <Stack direction="row" spacing={2} sx={{ overflowX: 'auto', py: 2, px: 1 }}>
       {profiles.map(({ platform, url }) => {
-        const embedUrl = getEmbedUrl(url);
+        const embedUrl = getEmbedUrl(url || '');
         return <EmbedCard key={url} platform={platform} embedUrl={embedUrl} />;
       })}
     </Stack>

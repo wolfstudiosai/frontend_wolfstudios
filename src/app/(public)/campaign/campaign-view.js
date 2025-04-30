@@ -56,6 +56,7 @@ export const CampaignView = () => {
   };
 
   const refreshListView = async () => {
+    console.log('campaign tab view...');
     const response = await getCampaignGroupListAsync({
       page: 1,
       rowsPerPage: 10,
@@ -96,35 +97,35 @@ export const CampaignView = () => {
   return (
     <PageContainer>
       <Box>
-      <PageHeader
-        title="Campaigns"
-        values={filters}
-        tags={campaignTags}
-        filters={campaignFilters}
-        sorting={campaignSorting}
-        onFilterChange={handleFilterChange}
-        showFilters={false}
-        showColSlider={false}
-        totalRecords={totalRecords}
-      />
-      {filters.VIEW === 'grid' ? (
-        <Box>
-          <CampaignGridView loading={loading} data={data} fetchList={refreshListView} />
-          <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
-            {isFetching && <CircularProgress size="30px" />}
-          </div>
-        </Box>
-      ) : (
-        <CampaignTabView data={data}  fetchList={refreshListView}/>
-      )}
-      <ManageCampaignRightPanel
-        view="EDIT"
-        width="70%"
-        data={defaultCampaign}
-        fetchList={refreshListView}
-        open={filters.ADD}
-        onClose={() => setFilters((prev) => ({ ...prev, ADD: false }))}
-      />
+        <PageHeader
+          title="Campaigns"
+          values={filters}
+          tags={campaignTags}
+          filters={campaignFilters}
+          sorting={campaignSorting}
+          onFilterChange={handleFilterChange}
+          showFilters={false}
+          showColSlider={false}
+          totalRecords={totalRecords}
+        />
+        {filters.VIEW === 'grid' ? (
+          <Box>
+            <CampaignGridView loading={loading} data={data} fetchList={refreshListView} />
+            <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
+              {isFetching && <CircularProgress size="30px" />}
+            </div>
+          </Box>
+        ) : (
+          <CampaignTabView data={data} fetchList={refreshListView} />
+        )}
+        <ManageCampaignRightPanel
+          view="EDIT"
+          width="70%"
+          data={defaultCampaign}
+          fetchList={refreshListView}
+          open={filters.ADD}
+          onClose={() => setFilters((prev) => ({ ...prev, ADD: false }))}
+        />
       </Box>
     </PageContainer>
   );

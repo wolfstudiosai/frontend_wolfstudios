@@ -8,6 +8,8 @@ import { CustomDatePicker } from '/src/components/formFields/custom-date-picker'
 import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
+import { VideoLinkField } from '/src/components/formFields/video-link-field';
+import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
 import {
   getCityListAsync,
@@ -34,8 +36,9 @@ export const ContentForm = ({ formikProps }) => {
     partners: [],
     retailPartners: [],
   });
+  const [openImageUploadDialog, setOpenImageUploadDialog] = React.useState(false);
   // ********************* Formik *******************************
-  const { values, errors, handleChange, setFieldValue, handleSubmit } = formikProps;
+  const { values, errors, handleChange, setFieldValue, handleSubmit, setValues } = formikProps;
 
   // --------------- Fetch Prerequisites Data -------------------
   const fetchFunctionsMap = {
@@ -87,7 +90,7 @@ export const ContentForm = ({ formikProps }) => {
       <Grid container spacing={2} sx={{ py: 2 }}>
         {/* General Information Section */}
         <Grid size={{ xs: 12 }}>
-          <CustomTextField name="name" label="Name" values={values.name || ''} onChange={handleChange} />
+          <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} />
           <ErrorMessage error={errors.name} />
         </Grid>
 
@@ -95,7 +98,7 @@ export const ContentForm = ({ formikProps }) => {
           <CustomTextField
             name="revoPinterest"
             label="Revo Pinterest"
-            values={values.revoPinterest}
+            value={values.revoPinterest}
             onChange={handleChange}
           />
           <ErrorMessage error={errors.revoPinterest} />
@@ -103,26 +106,21 @@ export const ContentForm = ({ formikProps }) => {
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="pinAccountsUsed"
-            label="Revo Pinterest"
-            values={values.pinAccountsUsed}
+            label="Pin Accounts Used"
+            value={values.pinAccountsUsed}
             onChange={handleChange}
           />
           <ErrorMessage error={errors.pinAccountsUsed} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="postQuality"
-            label="Post Quality"
-            values={values.postQuality}
-            onChange={handleChange}
-          />
+          <CustomTextField name="postQuality" label="Post Quality" value={values.postQuality} onChange={handleChange} />
           <ErrorMessage error={errors.postQuality} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="googleDriveFiles"
             label="Google Drive Files"
-            values={values.googleDriveFiles}
+            value={values.googleDriveFiles}
             onChange={handleChange}
           />
           <ErrorMessage error={errors.googleDriveFiles} />
@@ -131,7 +129,7 @@ export const ContentForm = ({ formikProps }) => {
           <CustomTextField
             name="playbookLink"
             label="Playbook Link"
-            values={values.playbookLink}
+            value={values.playbookLink}
             onChange={handleChange}
           />
           <ErrorMessage error={errors.playbookLink} />
@@ -139,8 +137,9 @@ export const ContentForm = ({ formikProps }) => {
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="upPromoteConversion"
+            type="number"
             label="Up Promote Conversion"
-            values={values.upPromoteConversion}
+            value={values.upPromoteConversion}
             onChange={handleChange}
           />
           <ErrorMessage error={errors.upPromoteConversion} />
@@ -157,6 +156,7 @@ export const ContentForm = ({ formikProps }) => {
               { value: 'Rejected', label: 'Rejected' },
             ]}
           />
+          <ErrorMessage error={errors.assetStatus} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomDatePicker
@@ -199,7 +199,7 @@ export const ContentForm = ({ formikProps }) => {
           <CustomTextField
             name="partner_IGLink"
             label="Partner IG Link"
-            values={values.partner_IGLink}
+            value={values.partner_IGLink}
             onChange={handleChange}
           />
         </Grid>
@@ -207,47 +207,52 @@ export const ContentForm = ({ formikProps }) => {
           <CustomTextField
             name="partner_TikTokLink"
             label="Partner TikTok Link"
-            values={values.partner_TikTokLink}
+            value={values.partner_TikTokLink}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="partner_TTShares"
+            type="number"
             label="Partner TT Shares"
-            values={values.partner_TTShares}
+            value={values.partner_TTShares}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="partner_TTSaves"
+            type="number"
             label="Partner TT Saves"
-            values={values.partner_TTSaves}
+            value={values.partner_TTSaves}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="partner_TTViews"
+            type="number"
             label="Partner TT Views"
-            values={values.partner_TTViews}
+            value={values.partner_TTViews}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="partner_TTLikes"
+            type="number"
             label="Partner TT Likes"
-            values={values.partner_TTLikes}
+            value={values.partner_TTLikes}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="partner_TTComments"
+            type="number"
             label="Partner TT Comments"
-            values={values.partner_TTComments}
+            value={values.partner_TTComments}
             onChange={handleChange}
           />
         </Grid>
@@ -255,7 +260,7 @@ export const ContentForm = ({ formikProps }) => {
           <CustomTextField
             name="partner_YTLink"
             label="Partner YT Link"
-            values={values.partner_YTLink}
+            value={values.partner_YTLink}
             onChange={handleChange}
           />
         </Grid>
@@ -264,39 +269,43 @@ export const ContentForm = ({ formikProps }) => {
           <CustomTextField
             name="ig_SocialSetsUsed"
             label="IG Social Sets Used"
-            values={values.ig_SocialSetsUsed}
+            value={values.ig_SocialSetsUsed}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="ig_TotalComments"
+            type="number"
             label="IG Total Comments"
-            values={values.ig_TotalComments}
+            value={values.ig_TotalComments}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="ig_TotalLikes"
+            type="number"
             label="IG Total Likes"
-            values={values.ig_TotalLikes}
+            value={values.ig_TotalLikes}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="ig_TotalShares"
+            type="number"
             label="IG Total Shares"
-            values={values.ig_TotalShares}
+            value={values.ig_TotalShares}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="ig_TotalViews"
+            type="number"
             label="IG Total Views"
-            values={values.ig_TotalViews}
+            value={values.ig_TotalViews}
             onChange={handleChange}
           />
         </Grid>
@@ -305,83 +314,84 @@ export const ContentForm = ({ formikProps }) => {
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="yt_ClubREVOTotalViews"
+            type="number"
             label="YT ClubREVO Views"
-            values={values.yt_ClubREVOTotalViews}
+            value={values.yt_ClubREVOTotalViews}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="yt_PartnerTotalSaves"
+            type="number"
             label="YT Partner Saves"
-            values={values.yt_PartnerTotalSaves}
+            value={values.yt_PartnerTotalSaves}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="yt_PartnerTotalViews"
+            type="number"
             label="YT Partner Views"
-            values={values.yt_PartnerTotalViews}
+            value={values.yt_PartnerTotalViews}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="yt_PartnerTotalComments"
+            type="number"
             label="YT Partner Comments"
-            values={values.yt_PartnerTotalComments}
+            value={values.yt_PartnerTotalComments}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="yt_PartnerTotalLikes"
+            type="number"
             label="YT Partner Likes"
-            values={values.yt_PartnerTotalLikes}
+            value={values.yt_PartnerTotalLikes}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="yt_REVOMADICTotalShares"
+            type="number"
             label="YT REVO MADIC Shares"
-            values={values.yt_REVOMADICTotalShares}
+            value={values.yt_REVOMADICTotalShares}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="yt_REVOMADICTotalViews"
+            type="number"
             label="YT REVO MADIC Views"
-            values={values.yt_REVOMADICTotalViews}
+            value={values.yt_REVOMADICTotalViews}
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
+        {/* <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="yt_REVOMADICTotalViews"
             label="YT REVO MADIC Views"
-            values={values.yt_REVOMADICTotalLikes}
+            value={values.yt_REVOMADICTotalLikes}
             onChange={handleChange}
           />
-        </Grid>
+        </Grid> */}
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="yt_REVOMADICTotalComments"
+            type="number"
             label="YT REVO MADIC Comments"
-            values={values.yt_REVOMADICTotalComments}
+            value={values.yt_REVOMADICTotalComments}
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="yt_REVOMADICTotalComments"
-            label="YT REVO MADIC Comments"
-            values={values.yt_ClubREVOTotalLikes}
-            onChange={handleChange}
-          />
-        </Grid>
+
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomSelect
             name="yt_AccountsUsed"
@@ -399,16 +409,18 @@ export const ContentForm = ({ formikProps }) => {
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="pinterest_TotalPinClicks"
+            type="number"
             label="Pinterest Clicks"
-            values={values.pinterest_TotalPinClicks}
+            value={values.pinterest_TotalPinClicks}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="pinterest_TotalViews"
+            type="number"
             label="Pinterest Views"
-            values={values.pinterest_TotalViews}
+            value={values.pinterest_TotalViews}
             onChange={handleChange}
           />
         </Grid>
@@ -418,34 +430,27 @@ export const ContentForm = ({ formikProps }) => {
           <CustomTextField
             name="revo_Twitter"
             label="REVO Twitter"
-            values={values.revo_Twitter}
+            value={values.revo_Twitter}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="revo_TTViews"
+            type="number"
             label="REVO TT Views"
-            values={values.revo_TTViews}
+            value={values.revo_TTViews}
             onChange={handleChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField name="revo_TikTok" label="REVO TikTok" values={values.revo_TikTok} onChange={handleChange} />
+          <CustomTextField name="revo_TikTok" label="REVO TikTok" value={values.revo_TikTok} onChange={handleChange} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="revo_Youtube"
             label="REVO Youtube"
-            values={values.revo_Youtube}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="revo_Youtube"
-            label="REVO Youtube"
-            values={values.revo_ClubRevoYoutube}
+            value={values.revo_Youtube}
             onChange={handleChange}
           />
         </Grid>
@@ -455,7 +460,7 @@ export const ContentForm = ({ formikProps }) => {
           <CustomTextField
             name="tikTokAccountsused"
             label="TikTok Accounts Used"
-            values={values.tikTokAccountsused}
+            value={values.tikTokAccountsused}
             onChange={handleChange}
           />
         </Grid>
@@ -464,7 +469,7 @@ export const ContentForm = ({ formikProps }) => {
           <CustomTextField
             name="TTDummyAccountsUsed"
             label="TT Dummy Accounts Used"
-            values={values.TTDummyAccountsUsed}
+            value={values.TTDummyAccountsUsed}
             onChange={handleChange}
           />
         </Grid>
@@ -484,7 +489,7 @@ export const ContentForm = ({ formikProps }) => {
           <CustomTextField
             name="totalContributedEngagement"
             label="Total Contributed Engagement"
-            values={values.totalContributedEngagement}
+            value={values.totalContributedEngagement}
             onChange={handleChange}
           />
         </Grid>
@@ -563,6 +568,23 @@ export const ContentForm = ({ formikProps }) => {
             options={autoCompleteOptions?.retailPartners}
             multiple
             onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
+          />
+        </Grid>
+
+        {/* media uploader */}
+        <Grid size={{ xs: 12 }}>
+          <VideoLinkField name="video" label="Videos" value={values.video} setFieldValue={setFieldValue} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <MediaUploaderTrigger
+            open={openImageUploadDialog}
+            onClose={() => setOpenImageUploadDialog(false)}
+            onSave={(urls) => setFieldValue('image', urls)}
+            value={values?.image}
+            label="Image"
+            onAdd={() => setOpenImageUploadDialog(true)}
+            onDelete={(filteredUrls) => setFieldValue('image', filteredUrls)}
+            folderName="content-HQ"
           />
         </Grid>
       </Grid>
