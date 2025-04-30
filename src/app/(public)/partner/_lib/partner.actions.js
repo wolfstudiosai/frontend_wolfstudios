@@ -50,11 +50,15 @@ export const updatePartnerAsync = async (data) => {
   }
 };
 
-export const deletePartnerAsync = async (ids) => {
+export const deletePartnerAsync = async (id, password) => {
   try {
-    const res = await api.delete('/partner/delete', {
-      data: { ids: ids },
+    const res = await api.delete(`/partner-HQ/${id}`, {
+      data: null,
+      headers: {
+        Password: password,
+      },
     });
+
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
