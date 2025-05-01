@@ -4,9 +4,9 @@ import { Box, Stack } from '@mui/material';
 import { ChatContext } from '/src/contexts/chat';
 import { TypingAnimation } from '/src/components/widgets/typing-animation.js';
 
-import { MessageForm } from '../../../dms/_components/message-form';
 import { ScrollableContent } from './custom-component';
 import { Message } from './message';
+import { MessageForm } from './message-form';
 import { MessageSkeleton } from './skeleton';
 import { Topbar } from './topbar';
 

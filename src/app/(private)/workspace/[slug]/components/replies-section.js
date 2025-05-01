@@ -4,9 +4,10 @@ import { IconButton, Stack, Typography } from '@mui/material';
 import { ChatContext } from '/src/contexts/chat';
 import { Iconify } from '/src/components/iconify/iconify';
 
-import { MessageReplyForm } from '../../../dms/_components/message-reply-form';
 import { ScrollableContent } from './custom-component';
 import { Message } from './message';
+// import { MessageReplyForm } from '/src/app/(private)/dms/_components/message-reply-form';
+import { MessageReplyForm } from './message-reply-form';
 
 export const RepliesSection = () => {
   const { setActiveChannelThread, setActiveDirectThread, channelThreadMessages, directThreadMessages, activeTab } =
@@ -25,7 +26,6 @@ export const RepliesSection = () => {
     }
   }, [channelThreadMessages, directThreadMessages]);
 
-
   return (
     <Stack direction="column" sx={{ width: '25%', height: 'calc(100vh - 94px)', overfolow: 'hidden' }}>
       <Stack
@@ -42,10 +42,14 @@ export const RepliesSection = () => {
           <Iconify icon="mingcute:close-fill" />
         </IconButton>
       </Stack>
-      <ScrollableContent style={{ padding: '1rem' }} id='scrollable-reply-content'>
+      <ScrollableContent style={{ padding: '1rem' }} id="scrollable-reply-content">
         {activeTab?.type === 'channel'
-          ? channelThreadMessages?.map((message) => <Message key={message.id} message={message} threadTab />)
-          : directThreadMessages?.map((message) => <Message key={message.id} message={message} threadTab />)}
+          ? channelThreadMessages?.map((message) => (
+              <Message key={message.id} message={message} threadTab mode="reply" />
+            ))
+          : directThreadMessages?.map((message) => (
+              <Message key={message.id} message={message} threadTab mode="reply" />
+            ))}
       </ScrollableContent>
       <MessageReplyForm sx={{ p: 2 }} />
     </Stack>

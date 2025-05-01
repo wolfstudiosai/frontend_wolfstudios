@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
+import { ElectricScooterSharp } from '@mui/icons-material';
 import { toast } from 'sonner';
 
 import { useSocket } from '/src/contexts/socket';
@@ -6,7 +7,6 @@ import useAuth from '/src/hooks/useAuth';
 
 import { DEMO_CONVERSATIONS, DEMO_USERS } from '/src/mock_data';
 import { chatApi } from '/src/utils/api';
-import { ElectricScooterSharp } from '@mui/icons-material';
 
 const loggedInUser = {
   userId: 'u1',
@@ -109,13 +109,23 @@ export const ChatProvider = ({ children }) => {
   };
 
   // Set message in the form for edit
-  const handleEditMessage = (message) => {
+  const handleEditMessage = (message, mode) => {
     if (message?.id) {
-      setMessageContent(message?.content);
-      setMessageIdToEdit(message?.id);
+      if (mode === 'reply') {
+        setMessageReplyContent(message?.content);
+        setReplyMessageIdToEdit(message?.id);
+      } else {
+        setMessageContent(message?.content);
+        setMessageIdToEdit(message?.id);
+      }
     } else {
-      setMessageContent('');
-      setMessageIdToEdit(null);
+      if (mode === 'reply') {
+        setMessageReplyContent('');
+        setReplyMessageIdToEdit(null);
+      } else {
+        setMessageContent('');
+        setMessageIdToEdit(null);
+      }
     }
   };
 
@@ -305,7 +315,6 @@ export const ChatProvider = ({ children }) => {
     socketContext?.pinChannelMessage({ channelId: activeTab.id, messageId, isPinned });
   };
 
-
   const startTyping = () => {
     socketContext?.startTyping?.(activeTabInfo?.id);
   };
@@ -351,7 +360,12 @@ export const ChatProvider = ({ children }) => {
   };
 
   const editDirectMessage = async (messageId, content) => {
-    socketContext?.editDirectMessage({ directChannelId: activeTab.id, messageId, content, replyId: activeDirectThread });
+    socketContext?.editDirectMessage({
+      directChannelId: activeTab.id,
+      messageId,
+      content,
+      replyId: activeDirectThread,
+    });
   };
 
   const deleteDirectMessage = async (messageId) => {
@@ -363,11 +377,21 @@ export const ChatProvider = ({ children }) => {
   };
 
   const createDirectMessageReaction = async (messageId, emoji) => {
-    socketContext?.reactToDirectMessage({ directChannelId: activeTab.id, messageId, emoji, replyId: activeDirectThread });
+    socketContext?.reactToDirectMessage({
+      directChannelId: activeTab.id,
+      messageId,
+      emoji,
+      replyId: activeDirectThread,
+    });
   };
 
   const removeDirectMessageReaction = async (messageId, emoji) => {
-    socketContext?.removeDirectMessageReaction({ directChannelId: activeTab.id, messageId, emoji, replyId: activeDirectThread });
+    socketContext?.removeDirectMessageReaction({
+      directChannelId: activeTab.id,
+      messageId,
+      emoji,
+      replyId: activeDirectThread,
+    });
   };
 
   const pinDirectMessage = async (messageId, isPinned) => {
@@ -385,7 +409,6 @@ export const ChatProvider = ({ children }) => {
     setActiveDirectThread(null);
     setDirectMessages([]);
     setActiveChannelThread(null);
-
   }, [activeTab]);
 
   useEffect(() => {
@@ -421,8 +444,7 @@ export const ChatProvider = ({ children }) => {
             });
 
             if (data?.replyId === activeChannelThread) setChannelThreadMessages((prev) => [...prev, data]);
-          }
-          else {
+          } else {
             setChannelMessages((prev) => [...prev, data]);
           }
         }
@@ -431,7 +453,6 @@ export const ChatProvider = ({ children }) => {
       const handleChannelMessageReceive = (data) => {
         playNotificationSound();
         if (data && data?.channelId === activeTab?.id) {
-
           if (data?.replyId) {
             setChannelMessages((prev) => {
               const arr = [...prev];
@@ -444,13 +465,9 @@ export const ChatProvider = ({ children }) => {
             });
 
             if (data?.replyId === activeChannelThread) setChannelThreadMessages((prev) => [...prev, data]);
-          }
-          else {
+          } else {
             setChannelMessages((prev) => [...prev, data]);
           }
-
-
-
         } else {
           setNotifications((prev) => ({
             ...prev,
@@ -474,8 +491,7 @@ export const ChatProvider = ({ children }) => {
                 return arr;
               });
             }
-          }
-          else {
+          } else {
             setChannelMessages((prev) => {
               const arr = [...prev];
               const index = arr.findIndex((message) => message.id === data?.messageId);
@@ -485,7 +501,6 @@ export const ChatProvider = ({ children }) => {
               return arr;
             });
           }
-
         }
       };
 
@@ -505,8 +520,7 @@ export const ChatProvider = ({ children }) => {
                 return arr;
               });
             }
-          }
-          else {
+          } else {
             setChannelMessages((prev) => {
               const arr = [...prev];
               const index = arr.findIndex((message) => message.id === data?.messageId);
@@ -535,8 +549,7 @@ export const ChatProvider = ({ children }) => {
                 return arr;
               });
             }
-          }
-          else {
+          } else {
             setChannelMessages((prev) => {
               const arr = [...prev];
               const index = arr.findIndex((message) => message.id === data?.messageId);
@@ -563,8 +576,7 @@ export const ChatProvider = ({ children }) => {
                 return arr;
               });
             }
-          }
-          else {
+          } else {
             setChannelMessages((prev) => {
               const arr = [...prev];
               const index = arr.findIndex((message) => message.id === data?.id);
@@ -592,8 +604,7 @@ export const ChatProvider = ({ children }) => {
             });
 
             if (data?.replyId === activeDirectThread) setDirectThreadMessages((prev) => [...prev, data]);
-          }
-          else {
+          } else {
             setDirectMessages((prev) => [...prev, data]);
           }
         }
@@ -602,7 +613,6 @@ export const ChatProvider = ({ children }) => {
       const handleDirectMessageReceive = (data) => {
         playNotificationSound();
         if (data && data?.directChannelId === activeTab?.id) {
-
           if (data?.replyId) {
             setDirectMessages((prev) => {
               const arr = [...prev];
@@ -615,8 +625,7 @@ export const ChatProvider = ({ children }) => {
             });
 
             if (data?.replyId === activeDirectThread) setDirectThreadMessages((prev) => [...prev, data]);
-          }
-          else {
+          } else {
             setDirectMessages((prev) => [...prev, data]);
           }
         } else {
@@ -655,7 +664,6 @@ export const ChatProvider = ({ children }) => {
         playNotificationSound();
 
         if (data && data?.directChannelId === activeTab?.id) {
-
           if (data?.replyId) {
             if (data?.replyId === activeDirectThread) {
               setDirectThreadMessages((prev) => {
@@ -667,8 +675,7 @@ export const ChatProvider = ({ children }) => {
                 return arr;
               });
             }
-          }
-          else {
+          } else {
             setDirectMessages((prev) => {
               const arr = [...prev];
               const index = arr.findIndex((message) => message.id === data?.messageId);
@@ -678,8 +685,6 @@ export const ChatProvider = ({ children }) => {
               return arr;
             });
           }
-
-
         }
       };
 
@@ -699,8 +704,7 @@ export const ChatProvider = ({ children }) => {
                 return arr;
               });
             }
-          }
-          else {
+          } else {
             setDirectMessages((prev) => {
               const arr = [...prev];
               const index = arr.findIndex((message) => message.id === data?.messageId);
@@ -718,7 +722,6 @@ export const ChatProvider = ({ children }) => {
 
       const handleEditDirectMessage = (data) => {
         if (data && data?.directChannelId === activeTab?.id) {
-
           if (data?.replyId) {
             if (data?.replyId === activeDirectThread) {
               setDirectThreadMessages((prev) => {
@@ -731,8 +734,7 @@ export const ChatProvider = ({ children }) => {
                 return arr;
               });
             }
-          }
-          else {
+          } else {
             setDirectMessages((prev) => {
               const arr = [...prev];
               const index = arr.findIndex((message) => message.id === data?.id);
@@ -743,8 +745,6 @@ export const ChatProvider = ({ children }) => {
               return arr;
             });
           }
-
-
         }
       };
 
@@ -761,8 +761,7 @@ export const ChatProvider = ({ children }) => {
                 return arr;
               });
             }
-          }
-          else {
+          } else {
             setDirectMessages((prev) => {
               const arr = [...prev];
               const index = arr.findIndex((message) => message.id === data?.messageId);
@@ -772,8 +771,6 @@ export const ChatProvider = ({ children }) => {
               return arr;
             });
           }
-
-
         }
       };
 
@@ -826,7 +823,6 @@ export const ChatProvider = ({ children }) => {
           });
         }
       };
-
 
       // Add event listeners
       socketContext.socket.on('create-channel-response', handleCreateChannel);

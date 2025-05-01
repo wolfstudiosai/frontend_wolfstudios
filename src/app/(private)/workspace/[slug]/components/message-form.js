@@ -20,14 +20,8 @@ import useAuth from '/src/hooks/useAuth';
 import { Iconify } from '/src/components/iconify/iconify';
 import EmojiPicker from '/src/components/widgets/emoji-picker';
 
-import { MemberInfo, MemberName } from '../../workspace/[slug]/components/custom-component';
+import { AttachmentView } from './attachment-view';
 import { getImageType, imageUploader } from '/src/utils/upload-file';
-
-const allUsers = [
-  { id: 1, name: 'John Doe', profile_pic: '' },
-  { id: 2, name: 'Combina Key', profile_pic: '' },
-  { id: 3, name: 'Mustafa Jawed', profile_pic: '' },
-];
 
 export const MessageForm = ({ sx = {} }) => {
   const [loader, setLoader] = useState(false);
@@ -71,7 +65,7 @@ export const MessageForm = ({ sx = {} }) => {
   const handleSendMessage = async () => {
     try {
       setLoader(true);
-      if (!messageContent.trim()) return;
+      if (!messageContent.trim() && selectedFiles.length === 0) return;
       const attachments = [];
       if (selectedFiles?.length > 0) {
         const res = await imageUploader(
@@ -184,34 +178,7 @@ export const MessageForm = ({ sx = {} }) => {
   return (
     <Stack sx={{ ...sx }}>
       {selectedFiles.length > 0 && (
-        <>
-          <Stack direction="row" gap={0.6} sx={{ flexWrap: 'wrap', p: 1 }}>
-            {selectedFiles.map((file, index) => (
-              <Box key={index} sx={{ width: '120px', height: '120px', position: 'relative' }}>
-                <Box
-                  component="img"
-                  src={URL.createObjectURL(file)}
-                  sx={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 0.5 }}
-                />
-                <IconButton
-                  size="small"
-                  sx={{
-                    position: 'absolute',
-                    top: 3,
-                    right: 3,
-                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                    borderRadius: '50%',
-                    '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.8)' },
-                  }}
-                  onClick={() => handleRemoveFile(index)}
-                >
-                  <Iconify icon="mingcute:close-fill" sx={{ color: '#fff', width: '16px', height: '16px' }} />
-                </IconButton>
-              </Box>
-            ))}
-          </Stack>
-          <Divider sx={{ borderStyle: 'dashed', my: 1 }} />
-        </>
+        <AttachmentView selectedFiles={selectedFiles} handleRemoveFile={handleRemoveFile} loader={loader} />
       )}
 
       <FormControl variant="standard" sx={{ width: '100%' }}>
@@ -291,6 +258,7 @@ export const MessageForm = ({ sx = {} }) => {
         id="file-upload"
         onChange={handleFileSelect}
         multiple
+        accept=".jpg,.png,.pdf,.docx,.mp4,.mp3"
       />
 
       <EmojiPicker
@@ -315,46 +283,3 @@ export const MessageForm = ({ sx = {} }) => {
     </Stack>
   );
 };
-
-{
-  /* <Popper
-        open={Boolean(mentionAnchor && filteredUsers.length)}
-        anchorEl={mentionAnchor}
-        placement="top-start"
-        sx={{ zIndex: 9999 }}
-      >
-        <Paper sx={{ mt: 1, maxHeight: 200, overflow: 'auto', width: 200 }}>
-          <List dense>
-            {filteredUsers.map((user) => (
-              <ListItem button key={user.id} onClick={() => handleMentionSelect(user)}>
-                <Avatar src={user.profile_pic} alt={user.name} sx={{ width: 26, height: 26 }} />
-                <MemberInfo>
-                  <MemberName>{user.name}</MemberName>
-                </MemberInfo>
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
-      </Popper> */
-}
-
-// const cursor = e.target.selectionStart;
-// setCursorPosition(cursor);
-
-// const textUpToCursor = value.slice(0, cursor);
-// const atIndex = textUpToCursor.lastIndexOf('@');
-
-// if (atIndex >= 0) {
-//   const query = textUpToCursor.slice(atIndex + 1);
-//   if (/^[\w]*$/.test(query)) {
-//     setMentionQuery(query);
-//     const anchorEl = inputRef.current;
-//     setMentionAnchor(anchorEl);
-//     setFilteredUsers(allUsers.filter((user) => user.name.toLowerCase().includes(query.toLowerCase())));
-//     return;
-//   }
-// }
-
-// setMentionAnchor(null);
-// setMentionQuery('');
-// setFilteredUsers([]);

@@ -24,7 +24,7 @@ dayjs.extend(relativeTime);
 
 const reactionOptions = ['👍', '❤️', '😂', '🎉', '😮'];
 
-export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false }) => {
+export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false, mode = 'normal' }) => {
   const {
     setActiveChannelThread,
     setActiveDirectThread,
@@ -243,7 +243,7 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
           }}
         >
           {isYourMessage && (
-            <IconButton title="Edit" onClick={() => handleEditMessage(message || null)}>
+            <IconButton title="Edit" onClick={() => handleEditMessage(message || null, mode)}>
               <Iconify icon="material-symbols:edit-outline-rounded" />
             </IconButton>
           )}
