@@ -18,10 +18,10 @@ import { User as UserIcon } from '@phosphor-icons/react/dist/ssr/User';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import PageLoader from '/src/components/loaders/PageLoader';
 import ProfileUploader from '/src/components/uploaders/profile-uploader';
 
-import { getProfileData, getProfileDataById, updateProfileData } from '../_lib/actions';
+import { getProfileDataById, updateProfileData } from '../_lib/actions';
+import useAuth from '../../../../hooks/useAuth';
 import { defaultProfileNew } from '/src/app/dashboard/settings/_lib/types';
 
 const validationSchema = Yup.object().shape({
@@ -32,6 +32,7 @@ const validationSchema = Yup.object().shape({
 export function AccountDetailsForm() {
   const [loading, setLoading] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
+  const { updateUserInfo } = useAuth();
   let authData = localStorage.getItem('auth');
   const userId = JSON.parse(authData).id;
 
@@ -45,7 +46,15 @@ export function AccountDetailsForm() {
       },
       onSubmit: async (values) => {
         setLoading(true);
-        await updateProfileData(values, userId);
+        const res = await updateProfileData(values, userId);
+        if (res?.success) {
+          const data = res.data;
+          updateUserInfo({
+            name: ` ${data.firstName} ${data.lastName}`,
+            contact_number: data.contactNumber,
+            profile_pic: data.profileImage,
+          });
+        }
         setLoading(false);
         setIsEditing(false);
       },
@@ -63,7 +72,6 @@ export function AccountDetailsForm() {
     }
   }
 
-  console.log(values);
   React.useEffect(() => {
     fetchProfileData();
   }, []);
