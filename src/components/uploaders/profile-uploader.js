@@ -17,7 +17,7 @@ export default function ProfileUploader({ value, onFileSelect, onDelete, disable
 
   React.useEffect(() => {
     if (typeof value === 'string' && value) {
-      setPreviewUrl(`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${value}`);
+      setPreviewUrl(`${value}`);
     } else if (value instanceof File) {
       const imageUrl = URL.createObjectURL(value);
       setPreviewUrl(imageUrl);
