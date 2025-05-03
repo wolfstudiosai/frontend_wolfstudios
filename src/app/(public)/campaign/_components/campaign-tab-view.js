@@ -26,6 +26,7 @@ export const CampaignTabView = ({ fetchList, loading }) => {
         Object.entries(obj).map(([key, count]) => ({
           label: `${key.replace(/_/g, ' ')} (${count})`,
           value: key,
+          count
         }))
       );
 
@@ -37,23 +38,23 @@ export const CampaignTabView = ({ fetchList, loading }) => {
   }, []);
 
   // Fetch campaign data when selected tab or pagination changes
-const fetchCampaigns = async () => {
-      setIsFetching(true);
-      const res = await getCampaignGroupListAsync({
-        status: selectedStatus,
-        page: pagination.pageNo,
-        rowsPerPage: pagination.limit,
-      });
+  const fetchCampaigns = async () => {
+    setIsFetching(true);
+    const res = await getCampaignGroupListAsync({
+      status: selectedStatus,
+      page: pagination.pageNo,
+      rowsPerPage: pagination.limit,
+    });
 
-      if (res.success) {
-        setCampaigns(prev =>
-          pagination.pageNo === 1 ? res.data : [...prev, ...res.data]
-        );
-        setTotalRecords(res.totalRecords);
-      }
+    if (res.success) {
+      setCampaigns(prev =>
+        pagination.pageNo === 1 ? res.data : [...prev, ...res.data]
+      );
+      setTotalRecords(res.totalRecords);
+    }
 
-      setIsFetching(false);
-    };
+    setIsFetching(false);
+  };
 
   React.useEffect(() => {
     if (!selectedStatus) return;
@@ -72,16 +73,16 @@ const fetchCampaigns = async () => {
     }
   };
 
+
   // Set up Intersection Observer
   React.useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !isFetching && campaigns.length < totalRecords) {
           setPagination(prev => ({ ...prev, pageNo: prev.pageNo + 1 }));
-          fetchCampaigns();
         }
       },
-      { threshold: 1.0, rootMargin: '100px' }
+      { rootMargin: '100px' }
     );
 
     const el = observerRef.current;
@@ -90,7 +91,7 @@ const fetchCampaigns = async () => {
     return () => {
       if (el) observer.unobserve(el);
     };
-  }, [campaigns.length, totalRecords, isFetching]);
+  }, [totalRecords, isFetching]);
 
   return (
     <>
@@ -104,11 +105,8 @@ const fetchCampaigns = async () => {
         <SectionLoader loading={loading} height="300px">
           <Grid container spacing={0.5} mt={1}>
             {campaigns.map(campaign => (
-              <Grid
-                key={campaign.id}
-                size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}
-              >
-                <CampaignTabCard campaign={campaign} fetchList={fetchList} />
+              <Grid key={campaign.id} size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
+                <CampaignTabCard campaign={campaign} campaigns={campaigns} setCampaigns={setCampaigns} statusTabs={statusTabs} setStatusTabs={setStatusTabs} fetchList={fetchList} />
               </Grid>
             ))}
           </Grid>

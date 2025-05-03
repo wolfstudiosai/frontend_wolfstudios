@@ -9,10 +9,12 @@ import { campaignProgressStatus } from '../_lib/campaign.constants';
 import { ManageCampaignRightPanel } from './manage-campaign-right-panel';
 import { isSupabaseUrl } from '/src/utils/helper';
 
-export const CampaignTabCard = ({ campaign, fetchList }) => {
+export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, statusTabs, setStatusTabs }) => {
   const [openCampaignRightPanel, setOpenCampaignRightPanel] = React.useState(null);
+  const [prevCampaignProgress, setPrevCampaignProgress] = React.useState(campaign.CampaignStatus);
   const [campaignProgress, setCampaignProgress] = React.useState('');
 
+  console.log(campaignProgress);
   async function updateCampaign() {
     try {
       const res = await updateCampaignAsync(campaign?.id, {
@@ -21,12 +23,28 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
       });
 
       if (res.success) {
-        fetchList();
+        // fetchList();
+        setStatusTabs(statusTabs.map(tab => {
+          if (tab.value === prevCampaignProgress) {
+            const count = tab.count - 1;
+            return { ...tab, count, label: `${tab.value} (${count})` };
+          }
+          if (tab.value === campaignProgress) {
+            const count = tab.count + 1;
+            return { ...tab, count, label: `${tab.value} (${count})` };
+          }
+          return tab;
+        }));
+
+        setCampaigns(campaigns.filter(c => c.id !== campaign.id));
+
       }
     } catch (e) {
       // console.log( e)
     }
   }
+
+  console.log(statusTabs)
 
   React.useEffect(() => {
     if (campaign.CampaignStatus !== campaignProgress && campaignProgress) {
