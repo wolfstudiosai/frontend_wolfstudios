@@ -10,6 +10,7 @@ import {
   Popover,
   Popper,
   Stack,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import dayjs from 'dayjs';
@@ -197,17 +198,18 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
           <Stack direction="row" alignItems="center" spacing={0.5}>
             {emojis?.length > 0 &&
               emojis.map((e, i) => (
-                <Chip
-                  label={`${e?.emoji} ${e?.count > 0 ? e?.count : ''}`}
-                  key={i}
-                  color="inherit"
-                  size="small"
-                  sx={{
-                    border: e?.isYou ? '0.5px solid var(--mui-palette-primary-main)' : '0.5px solid transparent',
-                    bgcolor: e?.isYou ? '#e0e0ee' : '#eee',
-                  }}
-                  onClick={() => (e?.isYou ? handleRemoveReaction(e?.emoji) : handleReactionSelect(e?.emoji))}
-                />
+                <Tooltip key={i} title="Combina key">
+                  <Chip
+                    label={`${e?.emoji} ${e?.count > 0 ? e?.count : ''}`}
+                    color="inherit"
+                    size="small"
+                    sx={{
+                      border: e?.isYou ? '0.5px solid var(--mui-palette-primary-main)' : '0.5px solid transparent',
+                      bgcolor: e?.isYou ? '#e0e0ee' : '#eee',
+                    }}
+                    onClick={() => (e?.isYou ? handleRemoveReaction(e?.emoji) : handleReactionSelect(e?.emoji))}
+                  />
+                </Tooltip>
               ))}
             <IconButton size="small" aria-label="react" onClick={toggleReactionBar} ref={popperRef}>
               <Iconify icon="material-symbols:add-reaction-outline" />
