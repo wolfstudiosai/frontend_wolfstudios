@@ -1,15 +1,14 @@
 import React from 'react';
 import RouterLink from 'next/link';
-import { Avatar, Badge, Box, Divider, List, ListItemIcon, MenuItem, Popover, Typography } from '@mui/material';
+import { Avatar, Box, Divider, List, ListItemIcon, MenuItem, Popover, Typography } from '@mui/material';
 
 import { paths } from '/src/paths';
 import useAuth from '/src/hooks/useAuth';
 import { Iconify } from '/src/components/iconify/iconify';
 
 export const UserInfoPopover = () => {
-  const { userInfo } = useAuth();
+  const { userInfo, logout } = useAuth();
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
-  const { logout } = useAuth();
 
   return (
     <>
@@ -19,26 +18,7 @@ export const UserInfoPopover = () => {
         ref={menuAnchorEl}
         sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
       >
-        {/* <Badge
-          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          color="success"
-          sx={{
-            '& .MuiBadge-dot': {
-              border: '2px solid var(--MainNav-background)',
-              borderRadius: '50%',
-              bottom: '6px',
-              height: '12px',
-              right: '6px',
-              width: '12px',
-            },
-          }}
-          variant="dot"
-        > */}
-        <Avatar
-          sx={{ width: 34, height: 34 }}
-          src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${userInfo.profile_pic}`}
-        />
-        {/* </Badge> */}
+        <Avatar sx={{ width: 34, height: 34 }} src={userInfo.profile_pic} />
       </Box>
       <Popover
         anchorEl={menuAnchorEl}

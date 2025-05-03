@@ -19,9 +19,11 @@ export const INITIAL_AUTH_STATE = {
 
 export const AuthContext = createContext({
   userInfo: INITIAL_AUTH_STATE,
+  // loading: false,
   isLogin: false,
   login: () => {},
   logout: () => {},
+  updateUserInfo: () => {},
 });
 
 export const isValidToken = (token) => {
@@ -101,14 +103,25 @@ export const AuthProvider = (props) => {
     // router.push(paths.home);
   };
 
+  const updateUserInfo = (updatedFields) => {
+    const updatedUser = {
+      ...userInfo,
+      ...updatedFields,
+    };
+
+    setUserInfo(updatedUser);
+    localStorage.setItem('auth', JSON.stringify(updatedUser));
+  };
+
   return (
     <AuthContext.Provider
       value={{
-        loading,
         userInfo,
+        // loading,
         isLogin: isValidToken(userInfo.token),
         login: handleLogin,
         logout: handleLogout,
+        updateUserInfo,
       }}
     >
       {props.children}
