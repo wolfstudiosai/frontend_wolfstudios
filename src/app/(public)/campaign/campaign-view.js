@@ -56,6 +56,7 @@ export const CampaignView = () => {
   };
 
   const refreshListView = async () => {
+    console.log('campaign tab view...');
     const response = await getCampaignGroupListAsync({
       page: 1,
       rowsPerPage: 10,

@@ -62,18 +62,6 @@ export const CampaignTabView = ({ fetchList, loading }) => {
     fetchCampaigns();
   }, [selectedStatus, pagination.pageNo]);
 
-  // Reset pagination and data when tab changes
-  const handleTabChange = (_, index) => {
-    const status = statusTabs[index]?.value;
-    if (status !== selectedStatus) {
-      setSelectedStatus(status);
-      setPagination({ pageNo: 1, limit: 10 });
-      setCampaigns([]);
-      setTotalRecords(0);
-    }
-  };
-
-
   // Set up Intersection Observer
   React.useEffect(() => {
     const observer = new IntersectionObserver(
@@ -93,6 +81,18 @@ export const CampaignTabView = ({ fetchList, loading }) => {
     };
   }, [totalRecords, isFetching]);
 
+  // Reset pagination and data when tab changes
+  const handleTabChange = (_, index) => {
+    const status = statusTabs[index]?.value;
+    if (status !== selectedStatus) {
+      setSelectedStatus(status);
+      setPagination({ pageNo: 1, limit: 10 });
+      setCampaigns([]);
+      setTotalRecords(0);
+    }
+  };
+
+
   return (
     <>
       <TabContainer
@@ -102,17 +102,23 @@ export const CampaignTabView = ({ fetchList, loading }) => {
       />
 
       <Box>
-        <SectionLoader loading={loading} height="300px">
-          <Grid container spacing={0.5} mt={1}>
-            {campaigns.map(campaign => (
-              <Grid key={campaign.id} size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
-                <CampaignTabCard campaign={campaign} campaigns={campaigns} setCampaigns={setCampaigns} statusTabs={statusTabs} setStatusTabs={setStatusTabs} fetchList={fetchList} />
-              </Grid>
-            ))}
-          </Grid>
+        <SectionLoader loading={loading} height="350px">
+          {campaigns?.length > 0 &&
+            <Grid container spacing={0.5} mt={1}>
+              {campaigns?.map(campaign => (
+                <Grid key={campaign.id} size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
+                  <CampaignTabCard campaign={campaign} campaigns={campaigns} setCampaigns={setCampaigns} statusTabs={statusTabs} setStatusTabs={setStatusTabs} fetchList={fetchList} />
+                </Grid>
+              ))}
+            </Grid>
+          }
+
+          {!isFetching && campaigns?.length === 0 && <Box sx={{ textAlign: 'center', py: 4 }}>
+            No campaigns found.
+          </Box>}
         </SectionLoader>
 
-        <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
+        <div ref={observerRef} style={{ height: 10, textAlign: 'center', mt: 1 }}>
           {isFetching && <CircularProgress size={30} />}
         </div>
       </Box>

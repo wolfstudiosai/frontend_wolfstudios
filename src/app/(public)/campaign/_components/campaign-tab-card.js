@@ -14,7 +14,6 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
   const [prevCampaignProgress, setPrevCampaignProgress] = React.useState(campaign.CampaignStatus);
   const [campaignProgress, setCampaignProgress] = React.useState('');
 
-  console.log(campaignProgress);
   async function updateCampaign() {
     try {
       const res = await updateCampaignAsync(campaign?.id, {
@@ -24,17 +23,32 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
 
       if (res.success) {
         // fetchList();
-        setStatusTabs(statusTabs.map(tab => {
+        const isCampaignStatusExist = statusTabs.some(tab => tab.value === campaignProgress);
+
+        const modifiedTabs = statusTabs.map(tab => {
           if (tab.value === prevCampaignProgress) {
             const count = tab.count - 1;
-            return { ...tab, count, label: `${tab.value} (${count})` };
+            return { ...tab, count, label: `${tab.value.replace(/_/g, ' ')} (${count})` };
           }
           if (tab.value === campaignProgress) {
             const count = tab.count + 1;
-            return { ...tab, count, label: `${tab.value} (${count})` };
+            return { ...tab, count, label: `${tab.value.replace(/_/g, ' ')} (${count})` };
           }
           return tab;
-        }));
+        });
+
+        const updatedStatusTabs = isCampaignStatusExist
+          ? modifiedTabs
+          : [
+            ...modifiedTabs,
+            {
+              value: campaignProgress,
+              count: 1,
+              label: `${campaignProgress.replace(/_/g, ' ')} (1)`,
+            },
+          ];
+
+        setStatusTabs(updatedStatusTabs);
 
         setCampaigns(campaigns.filter(c => c.id !== campaign.id));
 
@@ -43,8 +57,6 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
       // console.log( e)
     }
   }
-
-  console.log(statusTabs)
 
   React.useEffect(() => {
     if (campaign.CampaignStatus !== campaignProgress && campaignProgress) {
