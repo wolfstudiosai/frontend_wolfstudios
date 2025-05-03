@@ -4,6 +4,23 @@ import { api } from '/src/utils/api';
 import { getSearchQuery } from '/src/utils/helper';
 import { uploadFileAsync } from '/src/utils/upload-file';
 
+
+export const getCampainStatusListAsync = async () =>{
+  try {
+    const res = await api.get(`/campaign-HQ?groupBy=status`);
+    return {
+      success: true,
+      data: res.data.data.data,
+    };
+  } catch (error) {
+    toast.error(error.message);
+    return {
+      success: false,
+      error: error.response ? error.response.data : 'An unknown error occurred'
+    };
+  }
+};
+
 export const getCampaignGroupListAsync = async (queryParams = {}) => {
   try {
     let searchQuery = '';
@@ -12,6 +29,7 @@ export const getCampaignGroupListAsync = async (queryParams = {}) => {
     }
 
     const res = await api.get(`/campaign-HQ${searchQuery}`);
+    
     return {
       success: true,
       data: res.data.data.data,

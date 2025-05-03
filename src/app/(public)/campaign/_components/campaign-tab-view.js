@@ -1,62 +1,123 @@
 import React from 'react';
 import Grid from '@mui/material/Grid2';
+import { Box, CircularProgress } from '@mui/material';
 
 import { SectionLoader } from '/src/components/loaders/section-loader';
 import { TabContainer } from '/src/components/tabs/tab-container';
-
 import { CampaignTabCard } from '../_components/campaign-tab-card';
-import { campaignProgressStatus } from '../_lib/campaign.constants';
-import { getCampaignGroupListAsync } from '../_lib/campaign.actions';
+import { getCampaignGroupListAsync, getCampainStatusListAsync } from '../_lib/campaign.actions';
 
 export const CampaignTabView = ({ fetchList, loading }) => {
-  const [selectedTab, setSelectedTab] = React.useState(campaignProgressStatus[0].value);
-  const [filteredData, setFilteredData] = React.useState([]);
-  const [data, setData] = React.useState([]);
+  const [statusTabs, setStatusTabs] = React.useState([]);
+  const [selectedStatus, setSelectedStatus] = React.useState('');
+  const [campaigns, setCampaigns] = React.useState([]);
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
+  const [totalRecords, setTotalRecords] = React.useState(0);
+  const [isFetching, setIsFetching] = React.useState(false);
+  const observerRef = React.useRef(null);
 
+  // Fetch campaign status tabs on mount
   React.useEffect(() => {
-    setFilteredData(data.filter((item) => item.CampaignStatus === selectedTab));
-  }, [data, selectedTab]);
+    const fetchStatusTabs = async () => {
+      const res = await getCampainStatusListAsync();
+      if (!res.success) return;
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      const response = await getCampaignGroupListAsync();
+      const tabs = res.data.flatMap(obj =>
+        Object.entries(obj).map(([key, count]) => ({
+          label: `${key.replace(/_/g, ' ')} (${count})`,
+          value: key,
+        }))
+      );
 
-      if (response.success) {
-        setData(response.data);
-      }
+      setStatusTabs(tabs);
+      setSelectedStatus(tabs[0]?.value || '');
     };
 
-    fetchData();
+    fetchStatusTabs();
   }, []);
+
+  // Fetch campaign data when selected tab or pagination changes
+const fetchCampaigns = async () => {
+      setIsFetching(true);
+      const res = await getCampaignGroupListAsync({
+        status: selectedStatus,
+        page: pagination.pageNo,
+        rowsPerPage: pagination.limit,
+      });
+
+      if (res.success) {
+        setCampaigns(prev =>
+          pagination.pageNo === 1 ? res.data : [...prev, ...res.data]
+        );
+        setTotalRecords(res.totalRecords);
+      }
+
+      setIsFetching(false);
+    };
+
+  React.useEffect(() => {
+    if (!selectedStatus) return;
+
+    fetchCampaigns();
+  }, [selectedStatus, pagination.pageNo]);
+
+  // Reset pagination and data when tab changes
+  const handleTabChange = (_, index) => {
+    const status = statusTabs[index]?.value;
+    if (status !== selectedStatus) {
+      setSelectedStatus(status);
+      setPagination({ pageNo: 1, limit: 10 });
+      setCampaigns([]);
+      setTotalRecords(0);
+    }
+  };
+
+  // Set up Intersection Observer
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetching && campaigns.length < totalRecords) {
+          setPagination(prev => ({ ...prev, pageNo: prev.pageNo + 1 }));
+          fetchCampaigns();
+        }
+      },
+      { threshold: 1.0, rootMargin: '100px' }
+    );
+
+    const el = observerRef.current;
+    if (el) observer.observe(el);
+
+    return () => {
+      if (el) observer.unobserve(el);
+    };
+  }, [campaigns.length, totalRecords, isFetching]);
 
   return (
     <>
       <TabContainer
-        tabs={campaignProgressStatus.map(
-          (tab) => `${tab.label} (${data.filter((item) => item.CampaignStatus === tab.value).length})`
-        )}
-        value={campaignProgressStatus.findIndex((tab) => tab.value === selectedTab)}
-        onTabChange={(e, value) => setSelectedTab(campaignProgressStatus[value].value)}
+        tabs={statusTabs.map(t => t.label)}
+        value={statusTabs.findIndex(t => t.value === selectedStatus)}
+        onTabChange={handleTabChange}
       />
 
-      <SectionLoader loading={loading} height={'300px'}>
-        <Grid container spacing={0.5} mt={1}>
-          {filteredData.map((item) => (
-            <Grid
-              key={item.id}
-              size={{
-                xs: 12,
-                sm: 6,
-                md: 4,
-                lg: 3,
-                xl: 2,
-              }}
-            >
-              <CampaignTabCard campaign={item} fetchList={fetchList} />
-            </Grid>
-          ))}
-        </Grid>
-      </SectionLoader>
+      <Box>
+        <SectionLoader loading={loading} height="300px">
+          <Grid container spacing={0.5} mt={1}>
+            {campaigns.map(campaign => (
+              <Grid
+                key={campaign.id}
+                size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}
+              >
+                <CampaignTabCard campaign={campaign} fetchList={fetchList} />
+              </Grid>
+            ))}
+          </Grid>
+        </SectionLoader>
+
+        <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
+          {isFetching && <CircularProgress size={30} />}
+        </div>
+      </Box>
     </>
   );
 };
