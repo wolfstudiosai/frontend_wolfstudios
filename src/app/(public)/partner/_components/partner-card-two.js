@@ -58,9 +58,9 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
 
           <Stack
             direction="row"
-            spacing={{ xs: 1, sm: 1.5, md: 2 }}
+            spacing={2}
             sx={{ my: 1.5, height: '32px' }}
-            justifyContent={{ xs: 'space-between', sm: 'center' }}
+            justifyContent="center"
           >
             {partner?.Email && (
               <IconWithoutText icon="mage:email" value={partner?.Email} type={'email'} sx={{ color: '#4267B2' }} />
@@ -98,7 +98,7 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
                 Credits
               </Typography>
               <Typography variant="h6">
-                {partner?.RemainingCredits ? '$' + formatCompactNumber(partner.RemainingCredits) : '-'}
+                {partner?.RemainingCredits ? formatCompactNumber(partner.RemainingCredits) : '-'}
               </Typography>
             </Grid>
           </Grid>
