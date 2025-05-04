@@ -12,7 +12,8 @@ export const IconWithText = ({ icon, text, sx = {} }) => {
 };
 
 export const IconWithoutText = ({ icon, value, type, sx = {} }) => {
-  const handleNavigate = () => {
+  const handleNavigate = (e) => {
+    e.stopPropagation();
     if (value && type === 'url') {
       window.open(value, '_blank');
     } else if (value && type === 'email') {
