@@ -11,6 +11,7 @@ import { ThinnerFooter } from '/src/components/navbar/thinner-footer';
 import { MainNavV2 } from './main-nav-v2';
 import { DesktopSideNav, SideNavV2 } from './desktop-side-nav';
 import { FeatureCards } from '/src/app/(public)/top-cards';
+import { NotificationCards } from '/src/app/(public)/notification-card';
 import { pxToRem } from '/src/utils/helper';
 
 export function LayoutView({ children }) {
@@ -69,7 +70,8 @@ export function LayoutView({ children }) {
               zIndex: 100,
             }}
           >
-            {isFeaturedCardVisible ? <FeatureCards /> : <Box />}
+            {/* {isFeaturedCardVisible ? <FeatureCards /> : <Box />} */}
+            {isFeaturedCardVisible ? <NotificationCards /> : <Box />}
           </Box>
         )}
         <Box
