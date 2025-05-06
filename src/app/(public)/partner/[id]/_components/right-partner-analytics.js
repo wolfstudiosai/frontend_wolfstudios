@@ -17,10 +17,6 @@ export const RightPartnerAnalytics = ({ partner }) => {
         partner?.LinkedIn && { platform: 'LinkedIn', url: partner.LinkedIn },
     ].filter(Boolean);
 
-    console.log(partner.InstagramFollowers);
-    console.log(partner.LinkedInConnections);
-    console.log(partner.TiktokFollowers);
-    console.log(partner.YoutubeSubscribers);
     const items = [
         { label: 'Facebook', value: partner?.FacebookFollowing },
         { label: 'Instagram', value: partner?.InstagramFollowing },
@@ -54,7 +50,7 @@ export const RightPartnerAnalytics = ({ partner }) => {
                 }}
             >
                 {items.map((item, index) => (
-                    <Box key={index} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <Box key={index} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
                         <Typography variant="body2" color="text.secondary">
                             {item.label}
                         </Typography>
@@ -64,8 +60,6 @@ export const RightPartnerAnalytics = ({ partner }) => {
                     </Box>
                 ))}
             </Box>
-
-
 
             <ConversionRate />
             <DemographicOverview />

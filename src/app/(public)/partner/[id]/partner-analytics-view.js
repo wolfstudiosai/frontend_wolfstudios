@@ -38,7 +38,6 @@ export default function PartnerAnalyticsView() {
         fetchPartner();
     }, []);
 
-    console.log(partner);
 
     return (
         <PageLoader loading={loading}>
