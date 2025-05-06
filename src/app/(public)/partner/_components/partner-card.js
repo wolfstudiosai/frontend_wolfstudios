@@ -18,6 +18,9 @@ export const PartnerCard = ({ item, fetchList }) => {
   const handleCloseAddToPopover = () => {
     setAnchorEl(null);
   };
+
+  console.log('item', item);
+
   return (
     <Box
       sx={{
@@ -52,17 +55,20 @@ export const PartnerCard = ({ item, fetchList }) => {
         />
       </Box>
 
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 1.5 }}>
         {/* Username and stats */}
-        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+        <Stack direction="row" spacing={0.5} justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
           <Typography
             sx={{
               fontSize: { xs: '16px', sm: '18px', md: '20px' },
               fontWeight: 700,
               color: 'text.primary',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
             }}
           >
-            {item?.Name}
+            {item?.Name ? item?.Name : 'N/A'}
           </Typography>
           <Stack direction="row" spacing={1} alignItems="center">
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
@@ -74,6 +80,16 @@ export const PartnerCard = ({ item, fetchList }) => {
             </Typography>
           </Stack>
         </Stack>
+
+        {/* <Stack direction="row" spacing={1} justifyContent="space-between" alignItems="center">
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Audience: {formatCompactNumber(item?.TotalAudience)}
+          </Typography>
+          <Divider orientation="vertical" flexItem />
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Rate: {'$' + formatCompactNumber(item?.HourlyRate)} h
+          </Typography>
+        </Stack> */}
 
         {/* Contact icons */}
         <Stack
@@ -90,11 +106,11 @@ export const PartnerCard = ({ item, fetchList }) => {
         </Stack>
 
         {/* Profile status chips */}
-        {item?.ProfileStatus.length > 0 && (
+        {/* {item?.ProfileStatus.length > 0 && (
           <Stack direction={'row'} gap={1} sx={{ mb: 1 }}>
             {item?.ProfileStatus && <CustomChip key="item" label={item.ProfileStatus?.at(0)} variant="soft" />}
           </Stack>
-        )}
+        )} */}
 
         {/* Add to button */}
         <Box sx={{ mb: 1 }}>
@@ -110,7 +126,7 @@ export const PartnerCard = ({ item, fetchList }) => {
         </Box>
 
         {/* Products, Proposed, Contributed */}
-        <Stack spacing={1} sx={{ mt: 1 }}>
+        {/* <Stack spacing={1} sx={{ mt: 1 }}>
           {item?.ByProductPartnerHQ?.length > 0 && (
             <Stack direction="row" alignItems="flex-start">
               <Typography fontSize={{ xs: '13px', sm: '14px' }} fontWeight={500} minWidth={{ xs: '80px', sm: '90px' }}>
@@ -159,11 +175,11 @@ export const PartnerCard = ({ item, fetchList }) => {
               </Box>
             </Stack>
           )}
-        </Stack>
+        </Stack> */}
 
         {/* Social Media Stats */}
-        <Divider sx={{ my: 2 }} />
-        <Stack direction="row" flexWrap="wrap">
+        {/* <Divider sx={{ my: 2 }} /> */}
+        {/* <Stack direction="row" flexWrap="wrap">
           {[
             item?.Instagram && (
               <SocialInfo
@@ -233,7 +249,7 @@ export const PartnerCard = ({ item, fetchList }) => {
                 )}
               </Box>
             ))}
-        </Stack>
+        </Stack> */}
       </Box>
 
       {/* Popover for "Add to" button */}
