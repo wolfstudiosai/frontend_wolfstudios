@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { Box,CircularProgress } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
@@ -55,9 +55,9 @@ export const PartnerView = () => {
 
   const handleFilterChange = (type, value) => {
     if (type === 'ADD') {
-          setSelectedContent(value ? defaultPartner : null);
-        }
-        setFilters((prev) => ({ ...prev, [type]: value }));
+      setSelectedContent(value ? defaultPartner : null);
+    }
+    setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
   const handleContentCreated = () => {
@@ -80,7 +80,7 @@ export const PartnerView = () => {
   React.useEffect(() => {
     fetchList();
   }, []);
-
+  console.log(data);
   React.useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -121,7 +121,7 @@ export const PartnerView = () => {
           <Box>
             <PartnerGridView data={data || [defaultPartner]} fetchList={refreshListView} loading={loading} />
             <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
-                 {isFetching && <CircularProgress size="30px" />}
+              {isFetching && <CircularProgress size="30px" />}
             </div>
           </Box>
         )}
@@ -133,7 +133,7 @@ export const PartnerView = () => {
           fetchList={refreshListView}
           open={filters.ADD}
           onClose={handleContentCreated}
-          isAdd = {filters.ADD && !data?.id}
+          isAdd={filters.ADD && !data?.id}
         />
       </PageLoader>
     </PageContainer>

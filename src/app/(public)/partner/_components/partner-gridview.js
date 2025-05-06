@@ -1,13 +1,14 @@
 'use client';
 
+import React from 'react';
 import { Box, Popover, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import React from 'react';
 
 import { Iconify } from '/src/components/iconify/iconify';
 import { PageLoader } from '/src/components/loaders/PageLoader';
 
 import { PartnerCard } from './partner-card';
+import { PartnerCardTwo } from './partner-card-two';
 
 export const PartnerGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
   return (
@@ -16,7 +17,8 @@ export const PartnerGridView = ({ data, colums, fetchList, loading, handlePagina
         <Grid container spacing={0.5}>
           {data?.map((partner, index) => (
             <Grid key={index} item size={{ xs: 12, sm: 4, md: 4, lg: 2, xl: 2 }}>
-              <PartnerCard item={partner} fetchList={fetchList} />
+              <PartnerCardTwo partner={partner} fetchList={fetchList} />
+              {/* <PartnerCard item={partner} fetchList={fetchList} /> */}
             </Grid>
           ))}
         </Grid>
