@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Avatar, Box, Card, Grid, CardContent, Divider, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Card, CardContent, Divider, Grid, Stack, Typography } from '@mui/material';
 
 import { IconWithoutText } from '/src/components/utils/icon-text';
 
@@ -29,10 +29,12 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 2 }}>
           <Avatar
             src={partner.ProfileImage[0]}
+            variant="square"
             sx={{
               width: 120,
               height: 120,
               border: '4px solid white',
+              borderRadius: '8px',
               boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
             }}
           />
@@ -56,12 +58,7 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
             {partner?.Occupation ? partner.Occupation : 'N/A'}
           </Typography>
 
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{ my: 1.5, height: '32px' }}
-            justifyContent="center"
-          >
+          <Stack direction="row" spacing={2} sx={{ my: 1.5, height: '32px' }} justifyContent="center">
             {partner?.Email && (
               <IconWithoutText icon="mage:email" value={partner?.Email} type={'email'} sx={{ color: '#4267B2' }} />
             )}
