@@ -15,10 +15,12 @@ import { PartnerForm } from './partner-form';
 import { PartnerQuickView } from './partner-quickview';
 import { formConstants } from '/src/app/constants/form-constants';
 import { imageUploader } from '/src/utils/upload-file';
+import { useRouter } from 'next/navigation';
 
 export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width, view, isAdd }) => {
   const isUpdate = data?.id ? true : false;
   const { isLogin } = useAuth();
+  const router = useRouter();
   const [sidebarView, setSidebarView] = React.useState(view); //QUICK/ EDIT
   const [loading, setLoading] = React.useState(false);
 
@@ -126,6 +128,9 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
               Save
             </Button>
           )}
+          <IconButton onClick={() => router.push(`/partner/${data?.id}`)} title="Analytics">
+            <Iconify icon="mdi:analytics" />
+          </IconButton>
           {sidebarView === 'QUICK' && (
             <DeleteConfirmationPasswordPopover
               id={data?.id}
