@@ -4,8 +4,8 @@ import React from 'react';
 import { Card } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
-import { LeftPartnerAnalytics } from './_components/left-partner-analytics';
 import { RightPartnerAnalytics } from './_components/right-partner-analytics';
+import { LeftPartnerAnalytics } from './_components/left-partner-analytics';
 import { useParams } from 'next/navigation';
 import { getPartnerAsync } from '../_lib/partner.actions';
 import PageLoader from '/src/components/loaders/PageLoader'
@@ -37,6 +37,8 @@ export default function PartnerAnalyticsView() {
     React.useEffect(() => {
         fetchPartner();
     }, []);
+
+    console.log(partner);
 
 
     return (

@@ -1,10 +1,12 @@
-import { Box, Card, Grid2, Stack, Typography } from '@mui/material';
+import { Box, Grid2, Stack } from '@mui/material';
 import { PartnerIframes } from '../../_components/partner-quickview';
-import { formatCompactNumber } from '/src/utils/helper';
-import { SalesVolume } from '../../../../(private)/campaign-analytics/_components/sales-volume';
-import { SegmentationByGender } from '../../../../(private)/campaign-analytics/_components/segmentation-by-gender';
-import { ConversionRate } from '../../../../(private)/campaign-analytics/_components/conversion-rate';
-import { DemographicOverview } from '../../../../(private)/campaign-analytics/_components/demographic-overview';
+import SocialMediaStates from './social-media-states';
+import CampaignDetails from './campign-details';
+import FinancialInfo from './financial-info';
+import AmazonInfo from './amazon-info';
+import ConversionInfo from './conversion-info';
+import AdditionalInfo from './additonal-info';
+
 
 export const RightPartnerAnalytics = ({ partner }) => {
     const socialProfiles = [
@@ -17,17 +19,6 @@ export const RightPartnerAnalytics = ({ partner }) => {
         partner?.LinkedIn && { platform: 'LinkedIn', url: partner.LinkedIn },
     ].filter(Boolean);
 
-    const items = [
-        { label: 'Facebook', value: partner?.FacebookFollowing },
-        { label: 'Instagram', value: partner?.InstagramFollowing },
-        { label: 'Linkedin', value: partner?.LinkedInConnections },
-        { label: 'Tiktok', value: partner?.TiktokFollowers },
-        { label: 'Youtube', value: partner?.YoutubeFollowing },
-        { label: 'Tiktok', value: partner?.TiktokFollowing },
-        { label: 'Pinterest', value: partner?.PinterestFollowing },
-        { label: 'Snapchat', value: partner?.SnapchatFollowing },
-        { label: 'Post Views', value: partner?.PartnerPostViews },
-    ];
 
     return (
         <Box>
@@ -35,44 +26,57 @@ export const RightPartnerAnalytics = ({ partner }) => {
                 {socialProfiles.length > 0 && <PartnerIframes profiles={socialProfiles} />}
             </Stack>
 
-            <Box
-                sx={{
-                    display: 'grid',
-                    gap: 2,
-                    width: '100%',
-                    my: 5,
-                    gridTemplateColumns: {
-                        xs: 'repeat(3, 1fr)',
-                        sm: 'repeat(5, 1fr)',
-                        md: 'repeat(7, 1fr)',
-                        lg: 'repeat(9, 1fr)',
-                    },
-                }}
-            >
-                {items.map((item, index) => (
-                    <Box key={index} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                        <Typography variant="body2" color="text.secondary">
-                            {item.label}
-                        </Typography>
-                        <Typography variant="h6">
-                            {item.value ? formatCompactNumber(item.value) : '-'}
-                        </Typography>
-                    </Box>
-                ))}
-            </Box>
+            {/* <Box sx={{ mt: 4 }}>
+                <Typography variant="h6" gutterBottom>
+                    Followers Details
+                </Typography>
+                <Box
+                    sx={{
+                        display: 'grid',
+                        gap: 2,
+                        width: '100%',
+                        mb: 5,
+                        gridTemplateColumns: {
+                            xs: 'repeat(3, 1fr)',
+                            sm: 'repeat(5, 1fr)',
+                            md: 'repeat(7, 1fr)',
+                            lg: 'repeat(9, 1fr)',
+                        },
+                    }}
+                >
+                    {items.map((item, index) => (
+                        <Box key={index} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                            <Typography variant="body2" color="text.secondary">
+                                {item.label}
+                            </Typography>
+                            <Typography variant="h6">
+                                {item.value ? formatCompactNumber(item.value) : '-'}
+                            </Typography>
+                        </Box>
+                    ))}
+                </Box>
+            </Box> */}
 
-            <ConversionRate />
-            <DemographicOverview />
-            <Card sx={{ padding: { xs: 1, md: 2 }, mt: 2 }}>
-                <Grid2 container spacing={4}>
-                    <Grid2 item size={{ xs: 12, md: 8 }}>
-                        <SalesVolume />
-                    </Grid2>
-                    <Grid2 item size={{ xs: 12, md: 4 }}>
-                        <SegmentationByGender />
-                    </Grid2>
-                </Grid2>
-            </Card>
+            <Grid2 container spacing={2} sx={{ py: 5 }}>
+                {/* Social Media Stats */}
+                <SocialMediaStates partner={partner} />
+
+                {/* Campaign Details */}
+                <CampaignDetails partner={partner} />
+
+                {/* Financial */}
+                <FinancialInfo partner={partner} />
+
+                {/* Amazon Information */}
+                <AmazonInfo partner={partner} />
+
+                {/* Conversions */}
+                <ConversionInfo partner={partner} />
+
+                {/* Additional Information */}
+                <AdditionalInfo partner={partner} />
+
+            </Grid2>
         </Box>
     );
 };
