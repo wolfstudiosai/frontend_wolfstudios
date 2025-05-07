@@ -288,7 +288,7 @@ export const privateRoutesV2 = [
     key: 'analytics',
     title: 'Analytics',
     icon: 'material-symbols-light:overview-outline-rounded',
-    // href: paths.private.analytics,
+    href: paths.private.analytics,
     items: [
       {
         key: 'by-platform',
@@ -310,7 +310,7 @@ export const privateRoutesV2 = [
     key: 'reporting',
     title: 'Reporting',
     icon: 'material-symbols:bar-chart-rounded',
-    // href: paths.private.reporting,
+    href: paths.private.reporting,
     items: [
       {
         key: 'by-partner',
@@ -346,7 +346,7 @@ export const privateRoutesV2 = [
     key: 'partner_hq',
     title: 'Partner HQ',
     icon: 'arcticons:partnerkaart',
-    // href: paths.public.partner,
+    href: paths.public.partner,
     items: [
       {
         key: 'contracts',
@@ -368,7 +368,7 @@ export const privateRoutesV2 = [
     key: 'production_hq',
     title: 'Production HQ',
     icon: 'iconoir:at-sign',
-    // href: paths.dashboardPublic.production,
+    href: paths.dashboardPublic.production,
     items: [
       {
         key: 'project-drop',
@@ -397,7 +397,7 @@ export const privateRoutesV2 = [
     key: 'content-hq',
     title: 'Content HQ',
     icon: 'fa6-solid:dollar-sign',
-    // href: paths.dashboardPublic.content,
+    href: paths.dashboardPublic.content,
     items: [
       {
         key: 'new-content',
@@ -449,7 +449,7 @@ export const privateRoutesV2 = [
     key: 'campaign-hq',
     title: 'Campaign HQ',
     icon: 'nimbus:marketing',
-    // href: paths.dashboardPublic.campaign,
+    href: paths.dashboardPublic.campaign,
     items: [
       {
         key: 'by-client',
@@ -470,7 +470,7 @@ export const privateRoutesV2 = [
   {
     key: 'portfolio',
     title: 'Portfolio',
-    href: paths.public.portfolio,  
+    href: paths.public.portfolio,
     icon: 'fluent:approvals-app-20-regular',
     allowedRoles: ['admin', 'user', 'super_admin'],
   },
@@ -496,7 +496,7 @@ export const dashboardFavItemsV2 = [
     key: 'overview',
     title: 'Dashboard ',
     icon: 'material-symbols:space-dashboard-outline',
-    // href: paths.private.overview,
+    href: paths.private.overview,
     items: [
       {
         key: 'notifications',
@@ -511,7 +511,7 @@ export const dashboardFavItemsV2 = [
     key: 'favorites',
     title: 'Favorites',
     icon: 'iconamoon:heart-light',
-    // href: paths.private.favorites,
+    href: paths.private.favorites,
     items: [
       {
         key: 'bev',
