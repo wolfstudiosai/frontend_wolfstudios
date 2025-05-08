@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default function AmazonInfo({ partner }) {
     return (
         <Grid2 item size={{ xs: 12, md: 6 }}>
-            <Card sx={{ height: "100%", borderRadius: 0, bgcolor: '#fff', border: '1px solid var(--mui-palette-divider)', }}>
+            <Card sx={{ height: "100%", borderRadius: 0, bgcolor: 'background.default', border: '1px solid var(--mui-palette-divider)', }}>
                 <CardHeader title="Amazon Information" subheader="Amazon-related metrics and details" />
                 <CardContent>
                     <Stack spacing={3}>

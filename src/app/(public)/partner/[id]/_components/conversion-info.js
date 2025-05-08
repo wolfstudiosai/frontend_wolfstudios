@@ -7,7 +7,7 @@ export default function ConversionInfo({ partner }) {
                 sx={{
                     height: "100%",
                     borderRadius: 0,
-                    bgcolor: "#fff",
+                    bgcolor: "background.default",
                     border: "1px solid var(--mui-palette-divider)",
                 }}
             >
@@ -29,8 +29,8 @@ export default function ConversionInfo({ partner }) {
                             <Box
                                 key={index}
                                 sx={{
-                                    flex: "1 1 calc(20% - 16px)", // 5 per row with 16px total gap
-                                    minWidth: "160px", // fallback for small screens
+                                    flex: "1 1 calc(20% - 16px)",
+                                    minWidth: "160px",
                                     maxWidth: "100%",
                                 }}
                             >
@@ -45,6 +45,8 @@ export default function ConversionInfo({ partner }) {
                                         flexDirection: "column",
                                         justifyContent: "center",
                                         minHeight: 120,
+                                        border: "1px solid var(--mui-palette-divider)",
+                                        bgcolor: "background.default"
                                     }}
                                 >
                                     <Typography variant="subtitle2" gutterBottom>

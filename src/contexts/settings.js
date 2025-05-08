@@ -12,14 +12,17 @@ export const SettingsContext = React.createContext({
   },
   customSettings: {
     openSubNav: false, // Set a default value here
-    setOpenSubNav: () => {}, // Provide a default noop function
+    setOpenSubNav: () => { }, // Provide a default noop function
   },
+  isFeaturedCardVisible: false,
+  setIsFeaturedCardVisible: () => { },
 });
 
 export function SettingsProvider({ children, settings: initialSettings }) {
   const { isLogin } = useAuth();
   const [state, setState] = React.useState(initialSettings);
   const [openSubNav, setOpenSubNav] = React.useState(isLogin ? true : false);
+  const [isFeaturedCardVisible, setIsFeaturedCardVisible] = React.useState(false);
 
   React.useEffect(() => {
     setState(initialSettings);
@@ -36,6 +39,8 @@ export function SettingsProvider({ children, settings: initialSettings }) {
           openSubNav,
           setOpenSubNav,
         },
+        isFeaturedCardVisible,
+        setIsFeaturedCardVisible,
       }}
     >
       {children}
