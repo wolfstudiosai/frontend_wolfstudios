@@ -480,7 +480,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
         open={open}
         anchorEl={anchorEl}
         anchorOrigin={{
-          vertical: 'bottom',
+          vertical: 'top',
           horizontal: 'left',
         }}
         transformOrigin={{
