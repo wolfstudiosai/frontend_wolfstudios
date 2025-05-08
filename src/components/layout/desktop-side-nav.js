@@ -1,16 +1,17 @@
 'use client';
 
 import * as React from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Box, Divider, MenuList } from '@mui/material';
 import { useColorScheme } from '@mui/material/styles';
 
+import { useSettings } from '/src/hooks/use-settings';
 import useAuth from '/src/hooks/useAuth';
+
 import { navColorStyles } from '../dashboard/layout/vertical/styles';
 import { dashboardFavItemsV2, privateRoutesV2 } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
 import { getWorkspacesTab, renderMenuItems } from '/src/utils/nav-utils';
-import { useSettings } from '/src/hooks/use-settings';
 
 export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible }) {
   const pathname = usePathname();
@@ -18,6 +19,9 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
   const styles = navColorStyles[colorScheme][color];
   const { userInfo } = useAuth();
   const { openMenus, toggleMenuItem } = useSettings();
+  const router = useRouter();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [popoverItem, setPopoverItem] = React.useState(null);
   // const { openMenus, toggleMenuItem } = useMenuCollapse();
 
   const workspacesTab = getWorkspacesTab(userInfo);
@@ -54,6 +58,11 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
           toggleMenuItem,
           isDesktop: true,
           isOpen: open,
+          router,
+          anchorEl,
+          setAnchorEl,
+          popoverItem,
+          setPopoverItem,
         })}
       </MenuList>
       <Divider />
@@ -65,6 +74,11 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
           toggleMenuItem,
           isDesktop: true,
           isOpen: open,
+          router,
+          anchorEl,
+          setAnchorEl,
+          popoverItem,
+          setPopoverItem,
         })}
       </MenuList>
     </Box>
