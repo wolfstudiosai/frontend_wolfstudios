@@ -80,7 +80,6 @@ export const PartnerView = () => {
   React.useEffect(() => {
     fetchList();
   }, []);
-  console.log(data);
   React.useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {

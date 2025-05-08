@@ -9,11 +9,13 @@ import useAuth from '/src/hooks/useAuth';
 
 import { dashboardFavItemsV2, privateRoutesV2 } from '/src/router';
 import { getWorkspacesTab, renderMenuItems, useMenuCollapse } from '/src/utils/nav-utils';
+import { useSettings } from '/src/hooks/use-settings';
 
 export function MobileSideNav({ open, onClose }) {
   const pathname = usePathname();
   const { userInfo } = useAuth();
-  const { openMenus, toggleMenuItem } = useMenuCollapse();
+  const { openMenus, toggleMenuItem } = useSettings();
+  // const { openMenus, toggleMenuItem } = useMenuCollapse();
 
   const workspacesTab = getWorkspacesTab(userInfo);
 
@@ -52,7 +54,7 @@ export function MobileSideNav({ open, onClose }) {
         }}
       >
         <Logo height={40} width={120} />
-        <NavSearch isMobile={true}/>
+        <NavSearch isMobile={true} />
         <MenuList>
           {renderMenuItems({
             items: [...dashboardFavItemsV2, workspacesTab],

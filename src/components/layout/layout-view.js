@@ -13,10 +13,12 @@ import { DesktopSideNav, SideNavV2 } from './desktop-side-nav';
 import { FeatureCards } from '/src/app/(public)/top-cards';
 import { NotificationCards } from '/src/app/(public)/notification-card';
 import { pxToRem } from '/src/utils/helper';
+import { useMenuCollapse } from '/src/utils/nav-utils';
 
 export function LayoutView({ children }) {
-  const { settings } = useSettings();
+  const { settings, toggleMenuItem, isFeaturedCardVisible, setIsFeaturedCardVisible } = useSettings();
   const { isLogin } = useAuth();
+  // const { openMenus, toggleMenuItem } = useMenuCollapse();
   const [openSidebar, setOpenSidebar] = React.useState(() => {
     if (typeof window !== 'undefined') {
       const savedState = localStorage.getItem('sidebarState');
@@ -24,7 +26,7 @@ export function LayoutView({ children }) {
     }
     return true;
   });
-  const [isFeaturedCardVisible, setIsFeaturedCardVisible] = React.useState(false);
+  // const [isFeaturedCardVisible, setIsFeaturedCardVisible] = React.useState(false);
 
   const handleSidebarToggle = () => {
     setOpenSidebar((prev) => {
@@ -32,6 +34,7 @@ export function LayoutView({ children }) {
       localStorage.setItem('sidebarState', newState);
       return newState;
     });
+    toggleMenuItem();
   };
 
   return (
