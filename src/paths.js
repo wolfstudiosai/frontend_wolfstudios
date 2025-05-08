@@ -129,6 +129,7 @@ export const paths = {
     favorites: '/favorites',
     favorites_bev: '/favorites/bev',
     performance: '/performance',
+    admin_panel: '/admin-panel',
     analytics: '/analytics',
     analytics_by_platform: '/analytics/by-platform',
     analytics_by_partner: '/analytics/by-partner',
