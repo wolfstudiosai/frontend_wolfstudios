@@ -6,7 +6,7 @@ import { paths } from './paths';
 
 export const config = {
   site: {
-    name: 'The Wolf Studios LA',
+    name: 'Wolf Studios LA',
     description: '',
     language: 'en',
     themeColor: '#090a0b',

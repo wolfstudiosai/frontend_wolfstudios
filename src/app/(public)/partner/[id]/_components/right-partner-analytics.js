@@ -13,7 +13,7 @@ export const RightPartnerAnalytics = ({ partner }) => {
     const socialProfiles = [
         partner?.Instagram && { platform: 'Instagram', url: partner.Instagram },
         partner?.Tiktok && { platform: 'TikTok', url: partner.Tiktok },
-        partner?.Youtube && { platform: 'YouTube', url: partner.Youtube },
+        // partner?.Youtube && { platform: 'YouTube', url: partner.Youtube },
         partner?.X && { platform: 'X', url: partner.X },
         partner?.Facebook && { platform: 'Facebook', url: partner.Facebook },
         partner?.Pinterest && { platform: 'Pinterest', url: partner.Pinterest },

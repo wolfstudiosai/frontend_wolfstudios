@@ -48,19 +48,20 @@ export function renderMenuItems({
   }, [])
 
 
-  const handleItemClick = (item) => {
-    if (isDesktop) {
-      if (item.items) {
-        setOpenSubmenuId(item.key)
-      }
-    } else {
-      router.push(item.href)
+  const handleClickMenu = (event, item) => {
+    if (isOpen && item.href) {
+      router.push(item.href);
+    } else if (!isOpen && item.items?.length > 0) {
+      setAnchorEl(event.currentTarget);
+      setOpenSubmenuId(item.key)
+    } else if (!isOpen && !item?.items?.length) {
+      router.push(item.href);
     }
-  }
+  };
 
   // Function to open submenu
   const openSubmenu = (event, itemId) => {
-    if (!isDesktop) return
+    // if (!isDesktop) return
 
     // Clear any existing timeout
     if (hoverTimeoutRef.current) {
@@ -125,7 +126,7 @@ export function renderMenuItems({
               sx={{ display: 'flex', alignItems: 'center', width: '100%', position: 'relative' }}>
               <MenuItem
                 selected={isActive}
-                onClick={() => handleItemClick(item)}
+                onClick={(e) => handleClickMenu(e, item)}
                 onMouseEnter={(e) => openSubmenu(e, item.key)}
                 onMouseLeave={() => closeSubmenu()}
                 onMouseOver={() => cancelCloseSubmenu()}
@@ -145,9 +146,7 @@ export function renderMenuItems({
                     color="text.primary"
                   />
                 </ListItemIcon>
-                {(isDesktop ? isOpen : true) && (
-                  <ListItemText primary={item.title} sx={textStyles} />
-                )}
+                {(isDesktop ? isOpen : true) && <ListItemText primary={item.title} sx={textStyles} />}
                 {isDesktop && !isOpen && item.count && (
                   <Chip
                     label={item.count}
@@ -158,17 +157,9 @@ export function renderMenuItems({
               </MenuItem>
 
               {hasChildren && (isDesktop ? isOpen : true) && (
-                <IconButton
-                  size="small"
-                  onClick={() => toggleMenuItem(item.key)}
-                  sx={{ mr: isDesktop ? 'auto' : 1 }}
-                >
+                <IconButton size="small" onClick={() => toggleMenuItem(item.key)} sx={{ mr: isDesktop ? 'auto' : 1 }}>
                   <Iconify
-                    icon={
-                      isExpanded
-                        ? 'icon-park-solid:up-one'
-                        : 'prime:sort-down-fill'
-                    }
+                    icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
                     width={10}
                     height={10}
                     color="text.secondary"
@@ -188,6 +179,9 @@ export function renderMenuItems({
                     toggleMenuItem,
                     isDesktop,
                     isOpen,
+                    router,
+                    anchorEl,
+                    setAnchorEl,
                   })}
                 </MenuList>
               </Collapse>
@@ -250,7 +244,6 @@ export function renderMenuItems({
   );
 }
 
-
 // Popover menu item
 const PopoverMenuItem = ({ item, onClick }) => {
   return (
@@ -278,4 +271,4 @@ const PopoverMenuItem = ({ item, onClick }) => {
       </Typography>
     </Box>
   );
-}
+};

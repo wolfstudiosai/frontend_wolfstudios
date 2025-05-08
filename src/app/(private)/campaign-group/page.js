@@ -24,7 +24,7 @@ import PageLoader from '/src/components/loaders/PageLoader';
 
 import { ManageCampaignGroupDialog } from './manage-campaign-group-dialog';
 import { getCampaignGroupListAsync } from '/src/app/(public)/campaign/_lib/campaign.actions';
-import { defaultCampaignGroup } from '/src/app/(public)/campaign/_lib/campaign.types';
+// import { defaultCampaignGroup } from '/src/app/(public)/campaign/_lib/campaign.types';
 import { deleteCampaignGroupAsync } from '/src/app/dashboard/partner/_lib/campaign.actions';
 import { getSpeficiLengthString } from '/src/utils/helper';
 
@@ -142,9 +142,9 @@ export default function Page({ searchParams }) {
             <Typography variant="h4">Campaign Group</Typography>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button startIcon={<PlusIcon />} variant="contained" onClick={() => handleOpenModal(defaultCampaignGroup)}>
+            {/* <Button startIcon={<PlusIcon />} variant="contained" onClick={() => handleOpenModal(defaultCampaignGroup)}>
               Add
-            </Button>
+            </Button> */}
           </Box>
         </Stack>
         <PageLoader loading={loading} error={null}>
