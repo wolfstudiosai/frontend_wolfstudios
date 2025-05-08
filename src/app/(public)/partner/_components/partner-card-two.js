@@ -16,12 +16,13 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
       <Card
         elevation={0}
         sx={{
-          borderRadius: 0,
-          border: '1px solid',
-          borderColor: 'divider',
+          border: '1px solid var(--mui-palette-divider)',
           overflow: 'hidden',
-          cursor: 'pointer',
-          backgroundColor: '#fff',
+          boxShadow: 2,
+          borderRadius: 0,
+          bgcolor: 'background.paper',
+          width: { xs: '100%', sm: '350px', md: '380px', lg: '408px' },
+          maxWidth: '100%',
         }}
         onClick={() => setOpenPartnerRightPanel(partner)}
       >

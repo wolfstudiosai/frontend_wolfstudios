@@ -14,7 +14,7 @@ import { FeatureCards } from '/src/app/(public)/top-cards';
 import { pxToRem } from '/src/utils/helper';
 
 export function LayoutView({ children }) {
-  const { settings } = useSettings();
+  const { settings, isFeaturedCardVisible, setIsFeaturedCardVisible } = useSettings();
   const { isLogin } = useAuth();
   const [openSidebar, setOpenSidebar] = React.useState(() => {
     if (typeof window !== 'undefined') {
@@ -23,7 +23,7 @@ export function LayoutView({ children }) {
     }
     return true;
   });
-  const [isFeaturedCardVisible, setIsFeaturedCardVisible] = React.useState(false);
+  // const [isFeaturedCardVisible, setIsFeaturedCardVisible] = React.useState(false);
 
   const handleSidebarToggle = () => {
     setOpenSidebar((prev) => {

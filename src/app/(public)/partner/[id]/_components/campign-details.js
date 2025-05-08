@@ -4,16 +4,16 @@ import { Iconify } from '/src/components/iconify/iconify';
 export default function CampaignDetails({ partner }) {
     return (
         <Grid2 item size={{ xs: 12, md: 6 }}>
-            <Card sx={{ height: "100%", borderRadius: 0, bgcolor: '#fff', border: '1px solid var(--mui-palette-divider)', }}>
+            <Card sx={{ height: "100%", borderRadius: 0, bgcolor: 'background.default', border: '1px solid var(--mui-palette-divider)', }}>
                 <CardHeader title="Campaign Details" subheader="Proposed campaigns and products" />
                 <CardContent>
-                    <Stack spacing={3}>
+                    <Stack spacing={1.5}>
                         <Box>
-                            <Typography variant="subtitle2" gutterBottom>
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Proposed Campaigns
                             </Typography>
                             {partner?.ByCampaignsProposedPartners?.length > 0 ? (
-                                <Stack spacing={1}>
+                                <Stack spacing={0.5}>
                                     {partner?.ByCampaignsProposedPartners?.map((campaign, index) => (
                                         <Box key={index} display="flex" alignItems="center" gap={1}>
                                             <Iconify icon="mdi:calendar-blank-outline" />
@@ -30,11 +30,11 @@ export default function CampaignDetails({ partner }) {
                         </Box>
 
                         <Box>
-                            <Typography variant="subtitle2" gutterBottom>
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Products
                             </Typography>
                             {partner?.ByProductPartnerHQ?.length > 0 ? (
-                                <Stack spacing={1}>
+                                <Stack spacing={0.5}>
                                     {partner?.ByProductPartnerHQ?.map((product, index) => (
                                         <Box key={index} display="flex" alignItems="center" gap={1}>
                                             <Iconify icon="mdi:shopping-outline" />
@@ -50,8 +50,8 @@ export default function CampaignDetails({ partner }) {
                         </Box>
 
                         <Box>
-                            <Typography variant="subtitle2" gutterBottom>
-                                Campign Month
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
+                                Campaign Month
                             </Typography>
                             <Typography variant="body2">
                                 {partner?.CampaignMonth.length > 0 ? partner?.CampaignMonth?.map((month, index) => (
@@ -64,7 +64,7 @@ export default function CampaignDetails({ partner }) {
                         </Box>
 
                         <Box>
-                            <Typography variant="subtitle2" gutterBottom>
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Tags
                             </Typography>
                             <Box display="flex" flexWrap="wrap" gap={1}>

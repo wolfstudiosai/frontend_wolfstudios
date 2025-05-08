@@ -16,7 +16,7 @@ export default function SocialMediaStates({ partner }) {
 
     return (
         <Grid2 item size={{ xs: 12, md: 6 }}>
-            <Card sx={{ height: "100%", borderRadius: 0, bgcolor: '#fff', border: '1px solid var(--mui-palette-divider)', }}>
+            <Card sx={{ height: "100%", borderRadius: 0, bgcolor: 'background.default', border: '1px solid var(--mui-palette-divider)', }}>
                 <CardHeader title="Social Media" subheader="Audience and platform statistics" />
                 <CardContent>
                     <Stack spacing={3}>

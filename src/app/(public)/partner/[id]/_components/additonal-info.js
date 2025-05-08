@@ -5,12 +5,12 @@ import Link from 'next/link';
 export default function AdditionalInfo({ partner }) {
     return (
         <Grid2 item size={{ xs: 12, md: 6 }}>
-            <Card sx={{ height: "100%", borderRadius: 0, bgcolor: '#fff', border: '1px solid var(--mui-palette-divider)', }}>
+            <Card sx={{ height: "100%", borderRadius: 0, bgcolor: 'background.default', border: '1px solid var(--mui-palette-divider)', }}>
                 <CardHeader title="Additional Information" />
                 <CardContent>
-                    <Stack spacing={1}>
+                    <Stack spacing={0.5}>
                         <Box display='flex' justifyContent='space-between'>
-                            <Typography variant="subtitle2" gutterBottom>
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Medium
                             </Typography>
                             {partner?.Medium ? (
@@ -23,7 +23,7 @@ export default function AdditionalInfo({ partner }) {
                         </Box>
 
                         <Box display='flex' justifyContent='space-between'>
-                            <Typography variant="subtitle2" gutterBottom>
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Linktree
                             </Typography>
                             {partner?.Linktree ? (
@@ -36,7 +36,7 @@ export default function AdditionalInfo({ partner }) {
                         </Box>
 
                         <Box display='flex' justifyContent='space-between'>
-                            <Typography variant="subtitle2" gutterBottom>
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Snapchat
                             </Typography>
                             {partner?.Snapchat ? (
@@ -49,7 +49,7 @@ export default function AdditionalInfo({ partner }) {
                         </Box>
 
                         <Box display='flex' justifyContent='space-between'>
-                            <Typography variant="subtitle2" gutterBottom>
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Google Drive Files
                             </Typography>
                             {partner?.GoogleDriveFiles ? (
@@ -62,7 +62,7 @@ export default function AdditionalInfo({ partner }) {
                         </Box>
 
                         <Box display='flex' justifyContent='space-between'>
-                            <Typography variant="subtitle2" gutterBottom>
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Booking Link
                             </Typography>
                             {partner?.BookingLink ? (
@@ -75,14 +75,14 @@ export default function AdditionalInfo({ partner }) {
                         </Box>
 
                         <Box display='flex' justifyContent='space-between'>
-                            <Typography variant="subtitle2" gutterBottom>
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Notes
                             </Typography>
                             <Typography variant="body2">{partner?.Notes || "N/A"}</Typography>
                         </Box>
 
                         <Box display='flex' justifyContent='space-between'>
-                            <Typography variant="subtitle2" gutterBottom>
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Stakeholders
                             </Typography>
                             <Box display="flex" flexWrap="wrap" gap={1}>
@@ -99,14 +99,14 @@ export default function AdditionalInfo({ partner }) {
                         </Box>
 
                         <Box display='flex' justifyContent='space-between'>
-                            <Typography variant="subtitle2" gutterBottom>
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Deliverables
                             </Typography>
                             <Typography variant="body2">{partner?.Deliverables || "N/A"}</Typography>
                         </Box>
 
                         <Box display='flex' justifyContent='space-between'>
-                            <Typography variant="subtitle2" gutterBottom>
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Location
                             </Typography>
                             <Box display="flex" flexWrap="wrap" gap={1}>
@@ -129,14 +129,14 @@ export default function AdditionalInfo({ partner }) {
                         </Box>
 
                         <Box display='flex' justifyContent='space-between'>
-                            <Typography variant="subtitle2" gutterBottom>
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Mailing Address
                             </Typography>
                             <Typography variant="body2">{partner?.MailingAddress || "N/A"}</Typography>
                         </Box>
 
                         <Box display='flex' justifyContent='space-between'>
-                            <Typography variant="subtitle2" gutterBottom>
+                            <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Journey Step
                             </Typography>
                             <Typography variant="body2">{partner?.JourneyStep || "N/A"}</Typography>

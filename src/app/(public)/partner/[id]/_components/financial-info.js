@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 export default function FinancialInfo({ partner }) {
     return (
         <Grid2 item size={{ xs: 12, md: 6 }}>
-            <Card sx={{ height: "100%", borderRadius: 0, bgcolor: '#fff', border: '1px solid var(--mui-palette-divider)', }}>
+            <Card sx={{ height: "100%", borderRadius: 0, bgcolor: 'background.default', border: '1px solid var(--mui-palette-divider)', }}>
                 <CardHeader title="Financial" subheader="Rates and payment information" />
                 <CardContent>
                     <Stack spacing={3}>
@@ -149,7 +149,7 @@ export default function FinancialInfo({ partner }) {
                                         Total Product COG Expense
                                     </Typography>
                                     <Typography variant="body2" fontWeight="bold">
-                                        ${partner?.TotalProductCOGExpense ? formatCompactNumber(partner?.TotalProductCOGExpense) : '0'}
+                                        {partner?.TotalProductCOGExpense ? formatCompactNumber(partner?.TotalProductCOGExpense) : '0'}
                                     </Typography>
                                 </Box>
                             </Stack>

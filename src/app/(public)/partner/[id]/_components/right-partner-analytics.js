@@ -6,7 +6,8 @@ import FinancialInfo from './financial-info';
 import AmazonInfo from './amazon-info';
 import ConversionInfo from './conversion-info';
 import AdditionalInfo from './additonal-info';
-
+import SocialMediaGraph from './social-media-graph';
+import FinancialPerformanceChart from './financial-performance-chart';
 
 export const RightPartnerAnalytics = ({ partner }) => {
     const socialProfiles = [
@@ -22,9 +23,11 @@ export const RightPartnerAnalytics = ({ partner }) => {
 
     return (
         <Box>
-            <Stack direction="row" spacing={1}>
-                {socialProfiles.length > 0 && <PartnerIframes profiles={socialProfiles} />}
-            </Stack>
+            {socialProfiles.length > 0 && (
+                <Stack direction="row" sx={{ mb: 4 }}>
+                    <PartnerIframes profiles={socialProfiles} />
+                </Stack>
+            )}
 
             {/* <Box sx={{ mt: 4 }}>
                 <Typography variant="h6" gutterBottom>
@@ -57,7 +60,13 @@ export const RightPartnerAnalytics = ({ partner }) => {
                 </Box>
             </Box> */}
 
-            <Grid2 container spacing={2} sx={{ py: 5 }}>
+            <Grid2 container spacing={1}>
+                {/* Social Media Graph */}
+                <SocialMediaGraph partner={partner} />
+
+                {/* Financial Performance Chart */}
+                <FinancialPerformanceChart partner={partner} />
+
                 {/* Social Media Stats */}
                 <SocialMediaStates partner={partner} />
 
