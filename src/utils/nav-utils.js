@@ -1,19 +1,8 @@
-import * as React from 'react';
 import Link from 'next/link';
 import { Box, Chip, Collapse, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Popover, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { Iconify } from '/src/components/iconify/iconify';
-
-// Custom hook for managing collapse state
-// export function useMenuCollapse() {
-//   const [openMenus, setOpenMenus] = React.useState({});
-
-//   const toggleMenuItem = (key) => {
-//     setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
-//   };
-
-//   return { openMenus, toggleMenuItem };
-// }
+import { useState, useRef, useEffect, Fragment } from 'react';
 
 // Utility to generate workspaces tab
 export function getWorkspacesTab(userInfo) {
@@ -33,7 +22,6 @@ export function getWorkspacesTab(userInfo) {
 }
 
 // Shared renderMenuItems function
-
 export function renderMenuItems({
   items,
   level = 0,
@@ -44,30 +32,66 @@ export function renderMenuItems({
   isOpen = true,
 }) {
   const router = useRouter();
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [openSubmenuId, setOpenSubmenuId] = useState(null)
 
-  // Shared popover state
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [popoverItem, setPopoverItem] = React.useState(null);
+  // Ref to store the hover timeout
+  const hoverTimeoutRef = useRef(null)
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
-
-  const handleClose = () => {
-    setAnchorEl(null);
-    setPopoverItem(null);
-    console.log('handleClose');
-  };
-
-  const handleClickMenu = (event, item) => {
-    if (isOpen && item.href) {
-      router.push(item.href);
-    } else if (!isOpen && item.items?.length > 0) {
-      setAnchorEl(event.currentTarget);
-      setPopoverItem(item);
-    } else if (!isOpen && !item?.items?.length) {
-      router.push(item.href);
+  // Clean up on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current)
+      }
     }
-  };
+  }, [])
+
+
+  const handleItemClick = (item) => {
+    if (isDesktop) {
+      if (item.items) {
+        setOpenSubmenuId(item.key)
+      }
+    } else {
+      router.push(item.href)
+    }
+  }
+
+  // Function to open submenu
+  const openSubmenu = (event, itemId) => {
+    if (!isDesktop) return
+
+    // Clear any existing timeout
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+      hoverTimeoutRef.current = null
+    }
+
+    setAnchorEl(event.currentTarget)
+    setOpenSubmenuId(itemId)
+  }
+
+  // Function to close submenu
+  const closeSubmenu = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+    }
+
+    hoverTimeoutRef.current = setTimeout(() => {
+      setAnchorEl(null)
+      setOpenSubmenuId(null)
+      hoverTimeoutRef.current = null
+    }, 100)
+  }
+
+  // Function to cancel submenu closing
+  const cancelCloseSubmenu = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+      hoverTimeoutRef.current = null
+    }
+  }
 
   const iconStyles = isDesktop
     ? {
@@ -96,12 +120,15 @@ export function renderMenuItems({
         const isExpanded = openMenus[item.key] || false;
 
         return (
-          <React.Fragment key={item.key}>
+          <Fragment key={item.key}>
             <Box
               sx={{ display: 'flex', alignItems: 'center', width: '100%', position: 'relative' }}>
               <MenuItem
                 selected={isActive}
-                onClick={(e) => handleClickMenu(e, item)}
+                onClick={() => handleItemClick(item)}
+                onMouseEnter={(e) => openSubmenu(e, item.key)}
+                onMouseLeave={() => closeSubmenu()}
+                onMouseOver={() => cancelCloseSubmenu()}
                 sx={{
                   justifyContent: 'flex-start',
                   minWidth: 0,
@@ -165,47 +192,58 @@ export function renderMenuItems({
                 </MenuList>
               </Collapse>
             )}
-          </React.Fragment>
+          </Fragment>
         );
       })}
 
-      {open && popoverItem && (
-        <Popover
-          id={id}
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-          slotProps={{
-            paper: {
-              sx: {
-                borderRadius: 0,
+      {!isOpen && isDesktop && (
+        items.map(item => {
+          return item.items && <Popover
+            key={item.key}
+            open={openSubmenuId === item.key && Boolean(anchorEl)}
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            onClose={closeSubmenu}
+            onClick={closeSubmenu}
+            disableRestoreFocus
+            sx={{
+              pointerEvents: "none",
+              "& .MuiPaper-root": {
+                pointerEvents: "auto",
                 boxShadow: 3,
-                mt: -5,
-                minWidth: 220,
-                p: 1,
+                mt: 0,
+                ml: 0.5,
+                p: 0.5,
+                minWidth: 200,
+                borderRadius: 0,
                 bgcolor: 'background.paper',
               },
-            },
-          }}
-        >
-          <Box>
-            <PopoverMenuItem
-              item={popoverItem}
-              handleClose={handleClose}
-            />
-            {popoverItem.items.map((child) => (
-              <PopoverMenuItem key={child.key} item={child} handleClose={handleClose} />
-            ))}
-          </Box>
-        </Popover>
+            }}
+            slotProps={{
+              paper: {
+                onMouseEnter: cancelCloseSubmenu,
+                onMouseLeave: closeSubmenu,
+              },
+            }}
+          >
+            <Box>
+              <PopoverMenuItem
+                item={item}
+                onClick={closeSubmenu}
+              />
+              {item.items.map((child) => (
+                <PopoverMenuItem key={child.key} item={child} onClick={closeSubmenu} />
+              ))}
+            </Box>
+          </Popover>
+        })
 
       )}
     </>
@@ -214,12 +252,12 @@ export function renderMenuItems({
 
 
 // Popover menu item
-const PopoverMenuItem = ({ item, handleClose }) => {
+const PopoverMenuItem = ({ item, onClick }) => {
   return (
     <Box
       component={Link}
       href={item.href}
-      onClick={handleClose}
+      onClick={onClick}
       sx={{
         display: 'flex',
         alignItems: 'center',

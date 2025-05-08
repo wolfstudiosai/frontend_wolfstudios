@@ -477,6 +477,7 @@ export const privateRoutesV2 = [
   {
     key: 'admin-panel',
     title: 'Admin Panel',
+    href: paths.private.admin_panel,
     icon: 'material-symbols:admin-panel-settings-outline',
     items: [
       {
