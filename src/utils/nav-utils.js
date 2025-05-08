@@ -1,19 +1,19 @@
-import * as React from 'react';
+import {
+  Box,
+  Chip,
+  Collapse,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  MenuList,
+  Popover,
+  Typography,
+} from '@mui/material';
 import Link from 'next/link';
-import { Box, Chip, Collapse, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Popover, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import * as React from 'react';
+
 import { Iconify } from '/src/components/iconify/iconify';
-
-// Custom hook for managing collapse state
-// export function useMenuCollapse() {
-//   const [openMenus, setOpenMenus] = React.useState({});
-
-//   const toggleMenuItem = (key) => {
-//     setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
-//   };
-
-//   return { openMenus, toggleMenuItem };
-// }
 
 // Utility to generate workspaces tab
 export function getWorkspacesTab(userInfo) {
@@ -33,7 +33,6 @@ export function getWorkspacesTab(userInfo) {
 }
 
 // Shared renderMenuItems function
-
 export function renderMenuItems({
   items,
   level = 0,
@@ -42,13 +41,12 @@ export function renderMenuItems({
   toggleMenuItem,
   isDesktop = false,
   isOpen = true,
+  router,
+  anchorEl,
+  setAnchorEl,
+  popoverItem,
+  setPopoverItem,
 }) {
-  const router = useRouter();
-
-  // Shared popover state
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [popoverItem, setPopoverItem] = React.useState(null);
-
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
@@ -71,16 +69,16 @@ export function renderMenuItems({
 
   const iconStyles = isDesktop
     ? {
-      justifyContent: 'flex-start',
-      ...(!isOpen && {
-        border: '1px solid var(--mui-palette-divider)',
-        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
-        borderRadius: 1,
-        p: 0.5,
-        ml: 0.9,
-        backgroundColor: 'background.paper',
-      }),
-    }
+        justifyContent: 'flex-start',
+        ...(!isOpen && {
+          border: '1px solid var(--mui-palette-divider)',
+          boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+          borderRadius: 1,
+          p: 0.5,
+          ml: 0.9,
+          backgroundColor: 'background.paper',
+        }),
+      }
     : { minWidth: 40 };
 
   const textStyles = {
@@ -97,8 +95,7 @@ export function renderMenuItems({
 
         return (
           <React.Fragment key={item.key}>
-            <Box
-              sx={{ display: 'flex', alignItems: 'center', width: '100%', position: 'relative' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', position: 'relative' }}>
               <MenuItem
                 selected={isActive}
                 onClick={(e) => handleClickMenu(e, item)}
@@ -118,9 +115,7 @@ export function renderMenuItems({
                     color="text.primary"
                   />
                 </ListItemIcon>
-                {(isDesktop ? isOpen : true) && (
-                  <ListItemText primary={item.title} sx={textStyles} />
-                )}
+                {(isDesktop ? isOpen : true) && <ListItemText primary={item.title} sx={textStyles} />}
                 {isDesktop && !isOpen && item.count && (
                   <Chip
                     label={item.count}
@@ -131,17 +126,9 @@ export function renderMenuItems({
               </MenuItem>
 
               {hasChildren && (isDesktop ? isOpen : true) && (
-                <IconButton
-                  size="small"
-                  onClick={() => toggleMenuItem(item.key)}
-                  sx={{ mr: isDesktop ? 'auto' : 1 }}
-                >
+                <IconButton size="small" onClick={() => toggleMenuItem(item.key)} sx={{ mr: isDesktop ? 'auto' : 1 }}>
                   <Iconify
-                    icon={
-                      isExpanded
-                        ? 'icon-park-solid:up-one'
-                        : 'prime:sort-down-fill'
-                    }
+                    icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
                     width={10}
                     height={10}
                     color="text.secondary"
@@ -161,6 +148,11 @@ export function renderMenuItems({
                     toggleMenuItem,
                     isDesktop,
                     isOpen,
+                    router,
+                    anchorEl,
+                    setAnchorEl,
+                    popoverItem,
+                    setPopoverItem,
                   })}
                 </MenuList>
               </Collapse>
@@ -197,21 +189,16 @@ export function renderMenuItems({
           }}
         >
           <Box>
-            <PopoverMenuItem
-              item={popoverItem}
-              handleClose={handleClose}
-            />
+            <PopoverMenuItem item={popoverItem} handleClose={handleClose} />
             {popoverItem.items.map((child) => (
               <PopoverMenuItem key={child.key} item={child} handleClose={handleClose} />
             ))}
           </Box>
         </Popover>
-
       )}
     </>
   );
 }
-
 
 // Popover menu item
 const PopoverMenuItem = ({ item, handleClose }) => {
@@ -240,4 +227,4 @@ const PopoverMenuItem = ({ item, handleClose }) => {
       </Typography>
     </Box>
   );
-}
+};
