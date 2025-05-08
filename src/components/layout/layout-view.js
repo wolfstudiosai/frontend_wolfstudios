@@ -12,10 +12,12 @@ import { MainNavV2 } from './main-nav-v2';
 import { DesktopSideNav, SideNavV2 } from './desktop-side-nav';
 import { FeatureCards } from '/src/app/(public)/top-cards';
 import { pxToRem } from '/src/utils/helper';
+import { useMenuCollapse } from '/src/utils/nav-utils';
 
 export function LayoutView({ children }) {
-  const { settings, isFeaturedCardVisible, setIsFeaturedCardVisible } = useSettings();
+  const { settings, toggleMenuItem, isFeaturedCardVisible, setIsFeaturedCardVisible } = useSettings();
   const { isLogin } = useAuth();
+  // const { openMenus, toggleMenuItem } = useMenuCollapse();
   const [openSidebar, setOpenSidebar] = React.useState(() => {
     if (typeof window !== 'undefined') {
       const savedState = localStorage.getItem('sidebarState');
@@ -31,6 +33,7 @@ export function LayoutView({ children }) {
       localStorage.setItem('sidebarState', newState);
       return newState;
     });
+    toggleMenuItem();
   };
 
   return (

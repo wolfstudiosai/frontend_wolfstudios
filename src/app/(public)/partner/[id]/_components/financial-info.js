@@ -75,7 +75,7 @@ export default function FinancialInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         Amount Paid
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         {partner?.AmountPaid ? formatCompactNumber(partner?.AmountPaid) : '0'}
                                     </Typography>
                                 </Box>
@@ -83,7 +83,7 @@ export default function FinancialInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         Total Expense
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         {partner?.TotalExpense ? formatCompactNumber(partner?.TotalExpense) : '0'}
                                     </Typography>
                                 </Box>
@@ -91,7 +91,7 @@ export default function FinancialInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         Estimated Tax
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         {partner?.EstimatedTax ? formatCompactNumber(partner?.EstimatedTax) : '0'}
                                     </Typography>
                                 </Box>
@@ -99,7 +99,7 @@ export default function FinancialInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         UGC Payment Status
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         {partner?.UGCPaymentStatus ? partner?.UGCPaymentStatus : '-'}
                                     </Typography>
                                 </Box>
@@ -116,7 +116,7 @@ export default function FinancialInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         Total ROI
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         {partner?.TotalROI ? formatCompactNumber(partner?.TotalROI) : '0'}
                                     </Typography>
                                 </Box>
@@ -124,7 +124,7 @@ export default function FinancialInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         Post Views
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         {partner?.PartnerPostViews ? formatCompactNumber(partner?.PartnerPostViews) : '0'}
                                     </Typography>
                                 </Box>
@@ -132,7 +132,7 @@ export default function FinancialInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         Total Engagement
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         {partner?.TotalContributedEngagementbyContent ? formatCompactNumber(partner?.TotalContributedEngagementbyContent) : '0'}
                                     </Typography>
                                 </Box>
@@ -140,7 +140,7 @@ export default function FinancialInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         Total Expense
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         {partner?.TotalExpense ? formatCompactNumber(partner?.TotalExpense) : '0'}
                                     </Typography>
                                 </Box>
@@ -148,7 +148,7 @@ export default function FinancialInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         Total Product COG Expense
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         {partner?.TotalProductCOGExpense ? formatCompactNumber(partner?.TotalProductCOGExpense) : '0'}
                                     </Typography>
                                 </Box>

@@ -5,15 +5,15 @@ import { useRouter } from 'next/navigation';
 import { Iconify } from '/src/components/iconify/iconify';
 
 // Custom hook for managing collapse state
-export function useMenuCollapse() {
-  const [openMenus, setOpenMenus] = React.useState({});
+// export function useMenuCollapse() {
+//   const [openMenus, setOpenMenus] = React.useState({});
 
-  const toggleMenuItem = (key) => {
-    setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
+//   const toggleMenuItem = (key) => {
+//     setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
+//   };
 
-  return { openMenus, toggleMenuItem };
-}
+//   return { openMenus, toggleMenuItem };
+// }
 
 // Utility to generate workspaces tab
 export function getWorkspacesTab(userInfo) {
@@ -55,6 +55,7 @@ export function renderMenuItems({
   const handleClose = () => {
     setAnchorEl(null);
     setPopoverItem(null);
+    console.log('handleClose');
   };
 
   const handleClickMenu = (event, item) => {
@@ -96,27 +97,11 @@ export function renderMenuItems({
 
         return (
           <React.Fragment key={item.key}>
-            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', position: 'relative' }}>
+            <Box
+              sx={{ display: 'flex', alignItems: 'center', width: '100%', position: 'relative' }}>
               <MenuItem
                 selected={isActive}
                 onClick={(e) => handleClickMenu(e, item)}
-                // onMouseEnter={(e) => {
-                //   if (!isOpen && item.items?.length > 0) {
-                //     setAnchorEl(e.currentTarget);
-                //     setPopoverItem(item);
-                //   }
-                // }}
-                // onMouseLeave={(e) => {
-                //   setAnchorEl(null);
-                //   setPopoverItem(null);
-                //   console.log('onMouseLeave');
-                //   // // Optionally delay close to allow time for mouse to enter popover
-                //   // setTimeout(() => {
-                //   //   if (!document.getElementById('simple-popover')?.matches(':hover')) {
-                //   //     handleClose();
-                //   //   }
-                //   // }, 200);
-                // }}
                 sx={{
                   justifyContent: 'flex-start',
                   minWidth: 0,
@@ -203,7 +188,7 @@ export function renderMenuItems({
               sx: {
                 borderRadius: 0,
                 boxShadow: 3,
-                mt: 1,
+                mt: -5,
                 minWidth: 220,
                 p: 1,
                 bgcolor: 'background.paper',

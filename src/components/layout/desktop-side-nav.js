@@ -9,14 +9,16 @@ import useAuth from '/src/hooks/useAuth';
 import { navColorStyles } from '../dashboard/layout/vertical/styles';
 import { dashboardFavItemsV2, privateRoutesV2 } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
-import { getWorkspacesTab, renderMenuItems, useMenuCollapse } from '/src/utils/nav-utils';
+import { getWorkspacesTab, renderMenuItems } from '/src/utils/nav-utils';
+import { useSettings } from '/src/hooks/use-settings';
 
 export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible }) {
   const pathname = usePathname();
   const { colorScheme = 'light' } = useColorScheme();
   const styles = navColorStyles[colorScheme][color];
   const { userInfo } = useAuth();
-  const { openMenus, toggleMenuItem } = useMenuCollapse();
+  const { openMenus, toggleMenuItem } = useSettings();
+  // const { openMenus, toggleMenuItem } = useMenuCollapse();
 
   const workspacesTab = getWorkspacesTab(userInfo);
 

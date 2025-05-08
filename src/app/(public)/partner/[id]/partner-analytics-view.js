@@ -49,7 +49,7 @@ export default function PartnerAnalyticsView() {
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none'
             }}>
-                <Grid item size={{ xs: 12, md: 3 }} sx={{ position: "sticky", top: 0, zIndex: 1 }}>
+                <Grid item size={{ xs: 12, md: 3 }} sx={{ position: { xs: 'static', md: 'sticky' }, top: 0, zIndex: 1 }}>
                     <LeftPartnerAnalytics partner={partner} />
                 </Grid>
                 <Grid item size={{ xs: 12, md: 9 }}>

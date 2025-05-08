@@ -33,7 +33,7 @@ export const LeftPartnerAnalytics = ({ partner }) => {
 
                         <Divider sx={{ width: "100%", mb: 2 }} />
 
-                        <Stack spacing={1}>
+                        <Stack spacing={1} width="100%">
                             <Stack direction="row" spacing={2}>
                                 <Iconify icon="mage:email" />
                                 <Typography variant="body2" color="text.secondary" sx={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>

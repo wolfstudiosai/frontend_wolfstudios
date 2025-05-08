@@ -19,8 +19,6 @@ export const PartnerCard = ({ item, fetchList }) => {
     setAnchorEl(null);
   };
 
-  console.log('item', item);
-
   return (
     <Box
       sx={{
