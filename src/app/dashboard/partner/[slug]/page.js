@@ -1,9 +1,10 @@
+import { ManageCampaignForm } from '../../campaign/_component/manage-campaign-form';
 import { CardTitle } from '/src/components/cardTitle/CardTitle';
 import { PageContainer } from '/src/components/container/PageContainer';
 
 import { config } from '/src/config';
 
-import { ManageCampaignForm } from '../_component/manage-partner-form';
+// import { ManageCampaignForm } from '..//manage-partner-form';
 
 export const metadata = { title: `Create Record | ${config.site.name}` };
 
