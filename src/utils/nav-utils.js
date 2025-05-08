@@ -197,36 +197,47 @@ export function renderMenuItems({
           }}
         >
           <Box>
+            <PopoverMenuItem
+              item={popoverItem}
+              handleClose={handleClose}
+            />
             {popoverItem.items.map((child) => (
-              <Box
-                key={child.key}
-                component={Link}
-                href={child.href}
-                onClick={handleClose}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  px: 2,
-                  py: 1,
-                  borderRadius: 1,
-                  color: 'text.primary',
-                  textDecoration: 'none',
-                  typography: 'body2',
-                  '&:hover': {
-                    bgcolor: 'action.hover',
-                    textDecoration: 'none',
-                  },
-                }}
-              >
-                <Typography variant="body2" noWrap>
-                  {child.title}
-                </Typography>
-              </Box>
+              <PopoverMenuItem key={child.key} item={child} handleClose={handleClose} />
             ))}
           </Box>
         </Popover>
 
       )}
     </>
+  );
+}
+
+
+// Popover menu item
+const PopoverMenuItem = ({ item, handleClose }) => {
+  return (
+    <Box
+      component={Link}
+      href={item.href}
+      onClick={handleClose}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        px: 2,
+        py: 1,
+        borderRadius: 1,
+        color: 'text.primary',
+        textDecoration: 'none',
+        typography: 'body2',
+        '&:hover': {
+          bgcolor: 'action.hover',
+          textDecoration: 'none',
+        },
+      }}
+    >
+      <Typography variant="body2" noWrap>
+        {item.title}
+      </Typography>
+    </Box>
   );
 }
