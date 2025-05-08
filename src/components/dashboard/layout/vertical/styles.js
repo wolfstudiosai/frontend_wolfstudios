@@ -113,7 +113,7 @@ export const navColorStyles = {
       '--Workspaces-expand-color': 'var(--mui-palette-neutral-400)',
     },
     evident: {
-      '--SideNav-background': 'var(--mui-palette-neutral-950)',
+      '--SideNav-background': 'rgba(0,0,0,1)',
       '--SideNav-color': 'var(--mui-palette-common-white)',
       '--SideNav-border': 'none',
       '--NavGroup-title-color': 'var(--mui-palette-neutral-400)',

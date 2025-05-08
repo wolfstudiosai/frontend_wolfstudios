@@ -328,24 +328,24 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
       <Box
         {...(hasPopover
           ? {
-              onClick: (event) => {
-                if (disabled) {
-                  event.preventDefault();
-                  return;
-                }
-              },
-              role: 'button',
-            }
+            onClick: (event) => {
+              if (disabled) {
+                event.preventDefault();
+                return;
+              }
+            },
+            role: 'button',
+          }
           : {
-              ...(href && !disabled
-                ? {
-                    component: external ? 'a' : RouterLink,
-                    href,
-                    target: external ? '_blank' : undefined,
-                    rel: external ? 'noreferrer' : undefined,
-                  }
-                : { role: 'button' }),
-            })}
+            ...(href && !disabled
+              ? {
+                component: external ? 'a' : RouterLink,
+                href,
+                target: external ? '_blank' : undefined,
+                rel: external ? 'noreferrer' : undefined,
+              }
+              : { role: 'button' }),
+          })}
         sx={{
           alignItems: 'center',
           borderRadius: 1,
