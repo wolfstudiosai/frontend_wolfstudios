@@ -48,7 +48,7 @@ export function NotificationCards() {
       id: 5,
       icon: 'mountain',
       title: 'Mountains',
-      description: 'Majestic and beautiful landforms.',
+      description: 'Majestic & beautiful landforms.',
       image: 'https://picsum.photos/300/200?random=11',
       timestamp: '1 week ago',
     },
@@ -113,7 +113,7 @@ export function NotificationCards() {
         gap: 1,
         overflowX: 'auto',
         whiteSpace: 'nowrap',
-        pt: { xs: pxToRem(2), lg: pxToRem(6) },
+        // pt: { xs: pxToRem(2), lg: pxToRem(6) },
         mx: 1.5,
         position: 'sticky',
         top: 45,
@@ -137,7 +137,7 @@ export function NotificationCards() {
         sx={{
             display: "flex",
             alignItems: "center",
-            minWidth: pxToRem(350),
+            minWidth: pxToRem(300),
             width: { xs: "100%", sm: pxToRem(200) },
             flex: "0 0 auto",
             paddingX: 1,
@@ -242,7 +242,7 @@ export function NotificationCards() {
                 onClick={handleClick}
                 edge="end" 
                 size="small"
-                sx={{ p: 0.5 }}
+                sx={{ p: 0.1 }}
                 aria-controls={open ? 'notification-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
