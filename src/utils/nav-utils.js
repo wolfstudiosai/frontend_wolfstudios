@@ -1,8 +1,9 @@
-import Link from 'next/link';
 import { Box, Chip, Collapse, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Popover, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import { Iconify } from '/src/components/iconify/iconify';
-import { useState, useRef, useEffect, Fragment } from 'react';
+import { Fragment } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState, useRef, useEffect } from 'react';
 
 // Utility to generate workspaces tab
 export function getWorkspacesTab(userInfo) {
@@ -21,8 +22,8 @@ export function getWorkspacesTab(userInfo) {
   };
 }
 
-// Shared renderMenuItems function
-export function renderMenuItems({
+// MenuItems Component
+const SidebarMenuItems = ({
   items,
   level = 0,
   pathname,
@@ -30,10 +31,10 @@ export function renderMenuItems({
   toggleMenuItem,
   isDesktop = false,
   isOpen = true,
-}) {
+}) => {
   const router = useRouter();
-  const [anchorEl, setAnchorEl] = useState(null)
-  const [openSubmenuId, setOpenSubmenuId] = useState(null)
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openSubmenuKey, setOpenSubmenuKey] = useState(null)
 
   // Ref to store the hover timeout
   const hoverTimeoutRef = useRef(null)
@@ -41,19 +42,18 @@ export function renderMenuItems({
   // Clean up on unmount
   useEffect(() => {
     return () => {
-      if (hoverTimeoutRef.current) {
+      if (hoverTimeoutRef?.current) {
         clearTimeout(hoverTimeoutRef.current)
       }
     }
   }, [])
 
-
   const handleClickMenu = (event, item) => {
     if (isOpen && item.href) {
-      router.push(item.href);
+      router?.push(item.href);
     } else if (!isOpen && item.items?.length > 0) {
       setAnchorEl(event.currentTarget);
-      setOpenSubmenuId(item.key)
+      setOpenSubmenuKey?.(item.key);
     } else if (!isOpen && !item?.items?.length) {
       router.push(item.href);
     }
@@ -61,38 +61,43 @@ export function renderMenuItems({
 
   // Function to open submenu
   const openSubmenu = (event, itemId) => {
-    // if (!isDesktop) return
+    if (isOpen) return;
 
     // Clear any existing timeout
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current)
-      hoverTimeoutRef.current = null
+    if (hoverTimeoutRef?.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
     }
 
-    setAnchorEl(event.currentTarget)
-    setOpenSubmenuId(itemId)
-  }
+    setAnchorEl(event.currentTarget);
+    setOpenSubmenuKey?.(itemId);
+  };
 
   // Function to close submenu
   const closeSubmenu = () => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current)
+    if (isOpen) return;
+
+    if (hoverTimeoutRef?.current) {
+      clearTimeout(hoverTimeoutRef.current);
     }
 
     hoverTimeoutRef.current = setTimeout(() => {
-      setAnchorEl(null)
-      setOpenSubmenuId(null)
-      hoverTimeoutRef.current = null
-    }, 100)
-  }
+      setAnchorEl(null);
+      setOpenSubmenuKey?.(null);
+      if (hoverTimeoutRef?.current) {
+        hoverTimeoutRef.current = null;
+      }
+    }, 100);
+  };
 
   // Function to cancel submenu closing
   const cancelCloseSubmenu = () => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current)
-      hoverTimeoutRef.current = null
+    if (isOpen) return;
+    if (hoverTimeoutRef?.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
     }
-  }
+  };
 
   const iconStyles = isDesktop
     ? {
@@ -171,18 +176,21 @@ export function renderMenuItems({
             {hasChildren && (
               <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                 <MenuList>
-                  {renderMenuItems({
-                    items: item.items,
-                    level: level + 1,
-                    pathname,
-                    openMenus,
-                    toggleMenuItem,
-                    isDesktop,
-                    isOpen,
-                    router,
-                    anchorEl,
-                    setAnchorEl,
-                  })}
+                  <SidebarMenuItems
+                    items={item.items}
+                    level={level + 1}
+                    pathname={pathname}
+                    openMenus={openMenus}
+                    toggleMenuItem={toggleMenuItem}
+                    isDesktop={isDesktop}
+                    isOpen={isOpen}
+                    router={router}
+                    anchorEl={anchorEl}
+                    setAnchorEl={setAnchorEl}
+                    openSubmenuKey={openSubmenuKey}
+                    setOpenSubmenuKey={setOpenSubmenuKey}
+                    hoverTimeoutRef={hoverTimeoutRef}
+                  />
                 </MenuList>
               </Collapse>
             )}
@@ -192,57 +200,58 @@ export function renderMenuItems({
 
       {!isOpen && isDesktop && (
         items.map(item => {
-          return item.items && <Popover
-            key={item.key}
-            open={openSubmenuId === item.key && Boolean(anchorEl)}
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "left",
-            }}
-            onClose={closeSubmenu}
-            onClick={closeSubmenu}
-            disableRestoreFocus
-            sx={{
-              pointerEvents: "none",
-              "& .MuiPaper-root": {
-                pointerEvents: "auto",
-                boxShadow: 3,
-                mt: 0,
-                ml: 0.5,
-                p: 0.5,
-                minWidth: 200,
-                borderRadius: 0,
-                bgcolor: 'background.paper',
-              },
-            }}
-            slotProps={{
-              paper: {
-                onMouseEnter: cancelCloseSubmenu,
-                onMouseLeave: closeSubmenu,
-              },
-            }}
-          >
-            <Box>
-              <PopoverMenuItem
-                item={item}
-                onClick={closeSubmenu}
-              />
-              {item.items.map((child) => (
-                <PopoverMenuItem key={child.key} item={child} onClick={closeSubmenu} />
-              ))}
-            </Box>
-          </Popover>
+          return item.items && (
+            <Popover
+              key={item.key}
+              open={openSubmenuKey === item.key && Boolean(anchorEl)}
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              onClose={closeSubmenu}
+              onClick={closeSubmenu}
+              disableRestoreFocus
+              sx={{
+                pointerEvents: "none",
+                "& .MuiPaper-root": {
+                  pointerEvents: "auto",
+                  boxShadow: 3,
+                  mt: 0,
+                  ml: 0.5,
+                  p: 0.5,
+                  minWidth: 200,
+                  borderRadius: 0,
+                  bgcolor: 'background.paper',
+                },
+              }}
+              slotProps={{
+                paper: {
+                  onMouseEnter: cancelCloseSubmenu,
+                  onMouseLeave: closeSubmenu,
+                },
+              }}
+            >
+              <Box>
+                <PopoverMenuItem
+                  item={item}
+                  onClick={closeSubmenu}
+                />
+                {item.items.map((child) => (
+                  <PopoverMenuItem key={child.key} item={child} onClick={closeSubmenu} />
+                ))}
+              </Box>
+            </Popover>
+          )
         })
-
       )}
     </>
   );
-}
+};
 
 // Popover menu item
 const PopoverMenuItem = ({ item, onClick }) => {
@@ -272,3 +281,5 @@ const PopoverMenuItem = ({ item, onClick }) => {
     </Box>
   );
 };
+
+export default SidebarMenuItems;

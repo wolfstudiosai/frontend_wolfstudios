@@ -18,7 +18,7 @@ export default function AmazonInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         Amazon Kickback
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         ${partner?.AmazonKickback ? partner?.AmazonKickback : '0'}
                                     </Typography>
                                 </Box>
@@ -27,7 +27,7 @@ export default function AmazonInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         Order Total
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         ${partner?.AmazonOrderTotal ? partner?.AmazonOrderTotal : '0'}
                                     </Typography>
                                 </Box>
@@ -36,7 +36,7 @@ export default function AmazonInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         Referral Fee
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         ${partner?.AmazonReferralFee ? partner?.AmazonReferralFee : '0'}
                                     </Typography>
                                 </Box>
@@ -45,7 +45,7 @@ export default function AmazonInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         Amazon Tax
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         ${partner?.AmazonTax ? partner?.AmazonTax : '0'}
                                     </Typography>
                                 </Box>
@@ -54,7 +54,7 @@ export default function AmazonInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         Shipping FBA Fee
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         ${partner?.ShippingFBAFeeGiftedPartners ? partner?.ShippingFBAFeeGiftedPartners : '0'}
                                     </Typography>
                                 </Box>
@@ -75,7 +75,7 @@ export default function AmazonInfo({ partner }) {
                                             View
                                         </Link>
                                     ) : (
-                                        <Typography variant="body2" fontWeight="bold">
+                                        <Typography variant="body2" fontWeight="500">
                                             -
                                         </Typography>
                                     )}
@@ -89,7 +89,7 @@ export default function AmazonInfo({ partner }) {
                                             View
                                         </Link>
                                     ) : (
-                                        <Typography variant="body2" fontWeight="bold">
+                                        <Typography variant="body2" fontWeight="500">
                                             -
                                         </Typography>
                                     )}
@@ -103,7 +103,7 @@ export default function AmazonInfo({ partner }) {
                                             View
                                         </Link>
                                     ) : (
-                                        <Typography variant="body2" fontWeight="bold">
+                                        <Typography variant="body2" fontWeight="500">
                                             -
                                         </Typography>
                                     )}
@@ -117,7 +117,7 @@ export default function AmazonInfo({ partner }) {
                                             View
                                         </Link>
                                     ) : (
-                                        <Typography variant="body2" fontWeight="bold">
+                                        <Typography variant="body2" fontWeight="500">
                                             -
                                         </Typography>
                                     )}
@@ -131,7 +131,7 @@ export default function AmazonInfo({ partner }) {
                                             View
                                         </Link>
                                     ) : (
-                                        <Typography variant="body2" fontWeight="bold">
+                                        <Typography variant="body2" fontWeight="500">
                                             -
                                         </Typography>
                                     )}
@@ -145,7 +145,7 @@ export default function AmazonInfo({ partner }) {
                                             View
                                         </Link>
                                     ) : (
-                                        <Typography variant="body2" fontWeight="bold">
+                                        <Typography variant="body2" fontWeight="500">
                                             -
                                         </Typography>
                                     )}
@@ -159,7 +159,7 @@ export default function AmazonInfo({ partner }) {
                                             View
                                         </Link>
                                     ) : (
-                                        <Typography variant="body2" fontWeight="bold">
+                                        <Typography variant="body2" fontWeight="500">
                                             -
                                         </Typography>
                                     )}
@@ -173,7 +173,7 @@ export default function AmazonInfo({ partner }) {
                                             View
                                         </Link>
                                     ) : (
-                                        <Typography variant="body2" fontWeight="bold">
+                                        <Typography variant="body2" fontWeight="500">
                                             -
                                         </Typography>
                                     )}
@@ -187,7 +187,7 @@ export default function AmazonInfo({ partner }) {
                                             View
                                         </Link>
                                     ) : (
-                                        <Typography variant="body2" fontWeight="bold">
+                                        <Typography variant="body2" fontWeight="500">
                                             -
                                         </Typography>
                                     )}
@@ -209,7 +209,7 @@ export default function AmazonInfo({ partner }) {
                                             View
                                         </Link>
                                     ) : (
-                                        <Typography variant="body2" fontWeight="bold">
+                                        <Typography variant="body2" fontWeight="500">
                                             -
                                         </Typography>
                                     )}
@@ -225,7 +225,7 @@ export default function AmazonInfo({ partner }) {
                                             View
                                         </Link>
                                     ) : (
-                                        <Typography variant="body2" fontWeight="bold">
+                                        <Typography variant="body2" fontWeight="500">
                                             -
                                         </Typography>
                                     )}
@@ -235,7 +235,7 @@ export default function AmazonInfo({ partner }) {
                                     <Typography variant="body2" color="text.secondary">
                                         REVO Order Confirmation
                                     </Typography>
-                                    <Typography variant="body2" fontWeight="bold">
+                                    <Typography variant="body2" fontWeight="500">
                                         {partner?.REVOAmazonOrderConfirmationNumber ? partner?.REVOAmazonOrderConfirmationNumber : "-"}
                                     </Typography>
                                 </Box>

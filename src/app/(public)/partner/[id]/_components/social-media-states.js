@@ -39,7 +39,7 @@ export default function SocialMediaStates({ partner }) {
                             <Typography variant="body2" color="text.secondary">
                                 Total Audience
                             </Typography>
-                            <Typography variant="h6" fontWeight="bold">
+                            <Typography variant="h6" fontWeight="500">
                                 {partner.TotalAudience ? formatCompactNumber(partner.TotalAudience) : '0'}
                             </Typography>
                         </Box>

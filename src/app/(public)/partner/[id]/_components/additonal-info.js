@@ -6,7 +6,7 @@ export default function AdditionalInfo({ partner }) {
     return (
         <Grid2 item size={{ xs: 12, md: 6 }}>
             <Card sx={{ height: "100%", borderRadius: 0, bgcolor: 'background.default', border: '1px solid var(--mui-palette-divider)', }}>
-                <CardHeader title="Additional Information" />
+                <CardHeader title="Additional Information" subheader="Partner's additional information" />
                 <CardContent>
                     <Stack spacing={0.5}>
                         <Box display='flex' justifyContent='space-between'>
