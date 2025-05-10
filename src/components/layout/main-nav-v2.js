@@ -108,7 +108,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
           backdropFilter: 'blur(10px)',
         }}
       >
-        <Container maxWidth="xxl">
+        <Container sx={{ paddingX: '10px !important' }} maxWidth="xxl">
           <Stack
             direction="row"
             spacing={2}

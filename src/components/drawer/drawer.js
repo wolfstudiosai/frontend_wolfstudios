@@ -1,6 +1,9 @@
 import { Box, Drawer, Stack } from '@mui/material';
+import useAuth from '/src/hooks/useAuth';
 
 export const DrawerContainer = ({ children, open, handleDrawerClose, actionButtons, width = '70vw' }) => {
+  const { isLogin } = useAuth();
+
   const handleStopPropagation = (e) => {
     e.stopPropagation();
     handleDrawerClose();
@@ -42,7 +45,7 @@ export const DrawerContainer = ({ children, open, handleDrawerClose, actionButto
         }}
       >
         {children}
-        {actionButtons && (
+        {isLogin && actionButtons && (
           <Stack
             direction="row"
             alignItems="center"
