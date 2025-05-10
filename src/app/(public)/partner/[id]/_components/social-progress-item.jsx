@@ -14,7 +14,7 @@ const SocialProgressItem = ({ label, icon, value = 0, total = 1, progressColor }
             {label}
           </Typography>
         </Box>
-        <Typography variant="body2" fontWeight="bold">
+        <Typography variant="body2" fontWeight="500">
           {formatCompactNumber(value)}
         </Typography>
       </Box>

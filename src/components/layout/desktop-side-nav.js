@@ -11,7 +11,8 @@ import useAuth from '/src/hooks/useAuth';
 import { navColorStyles } from '../dashboard/layout/vertical/styles';
 import { dashboardFavItemsV2, privateRoutesV2 } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
-import { getWorkspacesTab, renderMenuItems } from '/src/utils/nav-utils';
+import { getWorkspacesTab } from '/src/utils/nav-utils';
+import SidebarMenuItems from '/src/utils/nav-utils';
 
 export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible }) {
   const pathname = usePathname();
@@ -19,10 +20,7 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
   const styles = navColorStyles[colorScheme][color];
   const { userInfo } = useAuth();
   const { openMenus, toggleMenuItem } = useSettings();
-  const router = useRouter();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [popoverItem, setPopoverItem] = React.useState(null);
-  // const { openMenus, toggleMenuItem } = useMenuCollapse();
+
 
   const workspacesTab = getWorkspacesTab(userInfo);
 
@@ -51,7 +49,15 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
       }}
     >
       <MenuList>
-        {renderMenuItems({
+        <SidebarMenuItems
+          items={dashboardFavItemsV2}
+          pathname={pathname}
+          openMenus={openMenus}
+          toggleMenuItem={toggleMenuItem}
+          isDesktop={true}
+          isOpen={open}
+        />
+        {/* {renderMenuItems({
           items: dashboardFavItemsV2,
           pathname,
           openMenus,
@@ -61,13 +67,22 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
           router,
           anchorEl,
           setAnchorEl,
-          popoverItem,
-          setPopoverItem,
-        })}
+          openSubmenuKey,
+          setOpenSubmenuKey,
+          hoverTimeoutRef,
+        })} */}
       </MenuList>
       <Divider />
       <MenuList>
-        {renderMenuItems({
+        <SidebarMenuItems
+          items={privateRoutesV2}
+          pathname={pathname}
+          openMenus={openMenus}
+          toggleMenuItem={toggleMenuItem}
+          isDesktop={true}
+          isOpen={open}
+        />
+        {/* {renderMenuItems({
           items: privateRoutesV2,
           pathname,
           openMenus,
@@ -77,9 +92,10 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
           router,
           anchorEl,
           setAnchorEl,
-          popoverItem,
-          setPopoverItem,
-        })}
+          openSubmenuKey,
+          setOpenSubmenuKey,
+          hoverTimeoutRef,
+        })} */}
       </MenuList>
     </Box>
   );
