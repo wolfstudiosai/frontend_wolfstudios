@@ -56,7 +56,7 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
   const socialProfiles = [
     data?.Instagram && { platform: 'Instagram', url: data.Instagram },
     data?.Tiktok && { platform: 'TikTok', url: data.Tiktok },
-    data?.Youtube && { platform: 'YouTube', url: data.Youtube },
+    // data?.Youtube && { platform: 'YouTube', url: data.Youtube },
     data?.X && { platform: 'X', url: data.X },
     data?.Facebook && { platform: 'Facebook', url: data.Facebook },
     data?.Pinterest && { platform: 'Pinterest', url: data.Pinterest },
