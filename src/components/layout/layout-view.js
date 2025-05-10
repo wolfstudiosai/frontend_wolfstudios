@@ -10,15 +10,12 @@ import { ThinnerFooter } from '/src/components/navbar/thinner-footer';
 
 import { MainNavV2 } from './main-nav-v2';
 import { DesktopSideNav, SideNavV2 } from './desktop-side-nav';
-import { FeatureCards } from '/src/app/(public)/top-cards';
 import { NotificationCards } from '/src/app/(public)/notification-card';
 import { pxToRem } from '/src/utils/helper';
-import { useMenuCollapse } from '/src/utils/nav-utils';
 
 export function LayoutView({ children }) {
   const { settings, toggleMenuItem, isFeaturedCardVisible, setIsFeaturedCardVisible } = useSettings();
   const { isLogin } = useAuth();
-  // const { openMenus, toggleMenuItem } = useMenuCollapse();
   const [openSidebar, setOpenSidebar] = React.useState(() => {
     if (typeof window !== 'undefined') {
       const savedState = localStorage.getItem('sidebarState');
@@ -51,43 +48,31 @@ export function LayoutView({ children }) {
           },
         }}
       />
-      <Box
-        sx={{
-          bgcolor: 'var(--mui-palette-background-default)',
-          display: 'flex',
-          flexDirection: 'column',
-          position: 'relative',
-        }}
-      >
-        <MainNavV2 onToggle={handleSidebarToggle} onFeatureCardVisible={setIsFeaturedCardVisible} />
-        {isLogin && (
-          <Box
-            sx={{
-              backgroundColor: 'var(--mui-palette-background-default)',
-              transform: isFeaturedCardVisible ? 'translateY(100)' : 'translateY(-100%)',
-              opacity: isFeaturedCardVisible ? 1 : 0,
-              transition: 'transform 0.5s ease, opacity 0.5s ease',
-              width: '100%',
-              position: 'sticky',
-              top: 43,
-              zIndex: 100,
-            }}
-          >
-            {/* {isFeaturedCardVisible ? <FeatureCards /> : <Box />} */}
-            {isFeaturedCardVisible ? <NotificationCards /> : <Box />}
-          </Box>
-        )}
-        <Box
-          sx={{
-            display: isFeaturedCardVisible ? 'flex' : 'block',
-            flex: '1 1 auto',
-            flexDirection: 'column',
-            pl: { lg: isLogin ? (openSidebar ? pxToRem(260) : pxToRem(60)) : pxToRem(0) },
-          }}
-        >
+
+      <Box display={isLogin ? 'flex' : 'block'} width="100vw" height="100vh" overflow="hidden">
+        <Box display={isLogin ? 'flex' : 'none'} justifyContent="center" alignItems="center" width='auto' bgcolor="var(--mui-palette-background-default)" sx={{ border: '1px solid var(--mui-palette-divider)', p: { xs: 0, lg: 1 } }}>
+          <DesktopSideNav color={settings.navColor} open={openSidebar} isFeaturedCardVisible={isFeaturedCardVisible} />
+        </Box>
+        <Box sx={{ flex: 1, height: '100%', position: 'relative', overflowX: 'hidden', overflowY: 'auto' }}>
+          <MainNavV2 onToggle={handleSidebarToggle} onFeatureCardVisible={setIsFeaturedCardVisible} />
           {isLogin && (
-            <DesktopSideNav color={settings.navColor} open={openSidebar} isFeaturedCardVisible={isFeaturedCardVisible} />
+            <Box
+              sx={{
+                backgroundColor: 'var(--mui-palette-background-default)',
+                transform: isFeaturedCardVisible ? 'translateY(100)' : 'translateY(-100%)',
+                opacity: isFeaturedCardVisible ? 1 : 0,
+                transition: 'transform 0.5s ease, opacity 0.5s ease',
+                width: '100%',
+                position: 'sticky',
+                top: 43,
+                zIndex: 100,
+              }}
+            >
+              {isFeaturedCardVisible ? <NotificationCards /> : <Box />}
+            </Box>
           )}
+
+
           <Box
             component="main"
             sx={{
@@ -105,8 +90,8 @@ export function LayoutView({ children }) {
           >
             {children}
           </Box>
+          <ThinnerFooter isFeaturedCardVisible={isFeaturedCardVisible} />
         </Box>
-        <ThinnerFooter isFeaturedCardVisible={isFeaturedCardVisible} />
       </Box>
     </React.Fragment>
   );

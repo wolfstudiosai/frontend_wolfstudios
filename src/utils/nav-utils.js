@@ -1,8 +1,10 @@
+'use client'
+
 import { Box, Chip, Collapse, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Popover, Typography } from '@mui/material';
 import { Iconify } from '/src/components/iconify/iconify';
 import { Fragment } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 
 // Utility to generate workspaces tab
@@ -26,13 +28,13 @@ export function getWorkspacesTab(userInfo) {
 const SidebarMenuItems = ({
   items,
   level = 0,
-  pathname,
   openMenus,
   toggleMenuItem,
   isDesktop = false,
   isOpen = true,
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openSubmenuKey, setOpenSubmenuKey] = useState(null)
 
@@ -103,8 +105,8 @@ const SidebarMenuItems = ({
     ? {
       justifyContent: 'flex-start',
       ...(!isOpen && {
-        border: '1px solid var(--mui-palette-divider)',
-        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+        // border: '1px solid var(--mui-palette-divider)',
+        // boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
         borderRadius: 1,
         p: 0.5,
         ml: 0.9,
@@ -140,7 +142,8 @@ const SidebarMenuItems = ({
                   minWidth: 0,
                   flexGrow: 1,
                   py: 1,
-                  pl: isDesktop && !isOpen ? 0 : level === 0 ? 0 : level + 1,
+                  pl: isDesktop && !isOpen ? 0 : 1.5,
+                  ml: level === 0 ? 0 : level + 1,
                 }}
               >
                 <ListItemIcon sx={iconStyles} title={isDesktop && !isOpen ? item.title : ''}>
@@ -184,12 +187,6 @@ const SidebarMenuItems = ({
                     toggleMenuItem={toggleMenuItem}
                     isDesktop={isDesktop}
                     isOpen={isOpen}
-                    router={router}
-                    anchorEl={anchorEl}
-                    setAnchorEl={setAnchorEl}
-                    openSubmenuKey={openSubmenuKey}
-                    setOpenSubmenuKey={setOpenSubmenuKey}
-                    hoverTimeoutRef={hoverTimeoutRef}
                   />
                 </MenuList>
               </Collapse>
@@ -237,10 +234,10 @@ const SidebarMenuItems = ({
               }}
             >
               <Box>
-                <PopoverMenuItem
+                {item.href && <PopoverMenuItem
                   item={item}
                   onClick={closeSubmenu}
-                />
+                />}
                 {item.items.map((child) => (
                   <PopoverMenuItem key={child.key} item={child} onClick={closeSubmenu} />
                 ))}
@@ -255,6 +252,8 @@ const SidebarMenuItems = ({
 
 // Popover menu item
 const PopoverMenuItem = ({ item, onClick }) => {
+  const pathname = usePathname();
+  const isActive = item.href && pathname === item.href;
   return (
     <Box
       component={Link}
@@ -269,6 +268,7 @@ const PopoverMenuItem = ({ item, onClick }) => {
         color: 'text.primary',
         textDecoration: 'none',
         typography: 'body2',
+        bgcolor: isActive ? 'action.hover' : 'transparent',
         '&:hover': {
           bgcolor: 'action.hover',
           textDecoration: 'none',

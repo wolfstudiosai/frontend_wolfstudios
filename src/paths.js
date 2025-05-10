@@ -177,7 +177,11 @@ export const paths = {
     // contact
     dms: '/dms',
     activity: '/activity',
-    channel: 'channel'
+    channel: 'channel',
+
+    // archive
+    archive: '/archive',
+    archive_records: '/records',
   },
   dashboardPublic: {
     // HQs

@@ -489,6 +489,22 @@ export const privateRoutesV2 = [
       },
     ],
   },
+  {
+    key: 'archive',
+    title: 'Archive',
+    // href: paths.private.archive,
+    icon: 'material-symbols:archive-outline',
+    allowedRoles: ['admin', 'user', 'super_admin'],
+    items: [
+      {
+        key: 'records',
+        title: 'Records',
+        href: paths.private.archive_records,
+        icon: 'material-symbols:data-table-outline',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
 ];
 
 // dashboard fav items

@@ -27,16 +27,16 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
         onClick={() => setOpenPartnerRightPanel(partner)}
       >
         {/* Large Profile Image */}
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
           <Avatar
-            src={partner.ProfileImage[0]}
+            src={partner.ProfileImage[0] ? partner.ProfileImage[0] : '/src/assets/images/placeholder.png'}
             variant="square"
+            p={0}
             sx={{
-              width: 120,
-              height: 120,
-              border: '4px solid white',
-              borderRadius: '8px',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+              width: '100%',
+              height: 200,
+              p: 0,
+              borderRadius: 0,
             }}
           />
         </Box>
