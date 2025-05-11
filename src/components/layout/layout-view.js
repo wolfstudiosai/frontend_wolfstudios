@@ -53,7 +53,7 @@ export function LayoutView({ children }) {
         <Box display={isLogin ? 'flex' : 'none'} justifyContent="center" alignItems="center" width='auto' bgcolor="var(--mui-palette-background-default)" sx={{ border: '1px solid var(--mui-palette-divider)', p: { xs: 0, lg: 1 } }}>
           <DesktopSideNav color={settings.navColor} open={openSidebar} isFeaturedCardVisible={isFeaturedCardVisible} />
         </Box>
-        <Box sx={{ flex: 1, height: '100%', position: 'relative', overflowX: 'hidden', overflowY: 'auto' }}>
+        <Box id='scrollable_container' sx={{ flex: 1, height: '100%', position: 'relative', overflowX: 'hidden', overflowY: 'auto' }}>
           <MainNavV2 onToggle={handleSidebarToggle} onFeatureCardVisible={setIsFeaturedCardVisible} />
           {isLogin && (
             <Box

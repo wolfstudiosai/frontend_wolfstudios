@@ -15,10 +15,12 @@ export const HeroSection = () => {
   const [boxHeight, setBoxHeight] = useState(isMobile ? 100 : 60);
 
   useEffect(() => {
+    const scrollableContainer = document.getElementById('scrollable_container');
     const handleScroll = () => {
       if (isMobile) return;
+      if (!scrollableContainer) return;
 
-      const scrollPosition = window.scrollY;
+      const scrollPosition = scrollableContainer.scrollTop;
       const maxScroll = 500;
 
       const newWidth = Math.min(100, Math.max(50, 50 + (scrollPosition / maxScroll) * 50));
@@ -28,8 +30,14 @@ export const HeroSection = () => {
       setBoxHeight(newHeight);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    if (scrollableContainer) {
+      scrollableContainer.addEventListener('scroll', handleScroll);
+    }
+    return () => {
+      if (scrollableContainer) {
+        scrollableContainer.removeEventListener('scroll', handleScroll);
+      }
+    };
   }, [isMobile]);
 
   useEffect(() => {
