@@ -110,7 +110,7 @@ const SidebarMenuItems = ({
         borderRadius: 1,
         p: 0.5,
         ml: 0.9,
-        backgroundColor: 'background.paper',
+        // backgroundColor: 'background.paper',
       }),
     }
     : { minWidth: 40 };

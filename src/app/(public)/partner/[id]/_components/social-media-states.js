@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, CardHeader, Grid2, Stack, Typography, Divider } from '@mui/material';
 import { formatCompactNumber } from '/src/utils/helper';
-import SocialProgressItem from './social-progress-item';
+import ProgressItem from '/src/components/common/progress-item';
 
 export default function SocialMediaStates({ partner }) {
     const items = [
@@ -22,7 +22,7 @@ export default function SocialMediaStates({ partner }) {
                     <Stack spacing={3}>
                         <Box>
                             {items.map((item) => (
-                                <SocialProgressItem
+                                <ProgressItem
                                     key={item.label}
                                     label={item.label}
                                     value={item.value}

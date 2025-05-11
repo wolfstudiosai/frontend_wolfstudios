@@ -4,19 +4,23 @@ import { useEffect, useState } from 'react';
 import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 import { FadeIn } from '/src/components/animation/fade-in';
+import { useSettings } from '/src/hooks/use-settings';
 
 export const HeroSection = () => {
   const theme = useTheme();
+  const { isFeaturedCardVisible } = useSettings();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const [boxSize, setBoxSize] = useState(isMobile ? 100 : 50);
   const [boxHeight, setBoxHeight] = useState(isMobile ? 100 : 60);
 
   useEffect(() => {
+    const scrollableContainer = document.getElementById('scrollable_container');
     const handleScroll = () => {
       if (isMobile) return;
+      if (!scrollableContainer) return;
 
-      const scrollPosition = window.scrollY;
+      const scrollPosition = scrollableContainer.scrollTop;
       const maxScroll = 500;
 
       const newWidth = Math.min(100, Math.max(50, 50 + (scrollPosition / maxScroll) * 50));
@@ -26,8 +30,14 @@ export const HeroSection = () => {
       setBoxHeight(newHeight);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    if (scrollableContainer) {
+      scrollableContainer.addEventListener('scroll', handleScroll);
+    }
+    return () => {
+      if (scrollableContainer) {
+        scrollableContainer.removeEventListener('scroll', handleScroll);
+      }
+    };
   }, [isMobile]);
 
   useEffect(() => {
@@ -41,7 +51,8 @@ export const HeroSection = () => {
         sx={{
           position: 'relative',
           width: '100%',
-          height: { xs: '25rem', sm: '30rem', md: '35rem' },
+          height: isFeaturedCardVisible ? 'calc(100vh - 100px)' : 'calc(100vh - 44px)',
+          // height: { xs: '25rem', sm: '30rem', md: '35rem' },
           overflow: 'hidden',
         }}
       >
@@ -108,7 +119,7 @@ export const HeroSection = () => {
       >
         {/* Text Content */}
         <FadeIn>
-          <Box sx={{p: { xs: .5, md: 2 }}}>
+          <Box sx={{ p: { xs: .5, md: 2 } }}>
             <Typography
               variant="h4"
               fontWeight="bold"

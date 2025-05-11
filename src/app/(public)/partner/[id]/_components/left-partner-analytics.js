@@ -10,7 +10,7 @@ export const LeftPartnerAnalytics = ({ partner }) => {
             <Card elevation={0} sx={{ borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
                 <CardContent sx={{ p: 3 }}>
                     <Box display="flex" flexDirection="column" alignItems="center" textAlign="center">
-                        <Box component={'img'} src={partner?.ProfileImage?.[0] || "/assets/avatar-1.png"} sx={{ borderRadius: 0.5, width: "100%", height: "250px", mb: 2, objectFit: "cover" }} />
+                        <Box component={'img'} src={partner?.ProfileImage?.[0] || "/assets/avatar-1.png"} sx={{ borderRadius: 0.5, width: "100%", mb: 2, objectFit: "cover" }} />
                         <Typography variant="h5" component="h1" gutterBottom fontWeight="bold">
                             {partner?.Name ? partner?.Name : "N/A"}
                         </Typography>

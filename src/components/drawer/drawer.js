@@ -1,9 +1,10 @@
-import { Box, Drawer, Stack } from '@mui/material';
+'use client';
+
 import useAuth from '/src/hooks/useAuth';
+import { Box, Drawer, Stack } from '@mui/material';
 
 export const DrawerContainer = ({ children, open, handleDrawerClose, actionButtons, width = '70vw' }) => {
   const { isLogin } = useAuth();
-
   const handleStopPropagation = (e) => {
     e.stopPropagation();
     handleDrawerClose();

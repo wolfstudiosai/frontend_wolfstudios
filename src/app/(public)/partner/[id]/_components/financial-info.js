@@ -23,7 +23,7 @@ export default function FinancialInfo({ partner }) {
                             </Typography>
                             <Grid2 container spacing={1}>
                                 <Grid2 item xs={6}>
-                                    <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}>
+                                    <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 0 }}>
                                         <Typography variant="caption" color="text.secondary">
                                             Instagram
                                         </Typography>
@@ -33,7 +33,7 @@ export default function FinancialInfo({ partner }) {
                                     </Paper>
                                 </Grid2>
                                 <Grid2 item xs={6}>
-                                    <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}>
+                                    <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 0 }}>
                                         <Typography variant="caption" color="text.secondary">
                                             TikTok
                                         </Typography>
@@ -43,7 +43,7 @@ export default function FinancialInfo({ partner }) {
                                     </Paper>
                                 </Grid2>
                                 <Grid2 item xs={6}>
-                                    <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}>
+                                    <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 0 }}>
                                         <Typography variant="caption" color="text.secondary">
                                             YouTube
                                         </Typography>
@@ -53,7 +53,7 @@ export default function FinancialInfo({ partner }) {
                                     </Paper>
                                 </Grid2>
                                 <Grid2 item xs={6}>
-                                    <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}>
+                                    <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 0 }}>
                                         <Typography variant="caption" color="text.secondary">
                                             UGC
                                         </Typography>

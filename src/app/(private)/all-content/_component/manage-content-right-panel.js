@@ -19,6 +19,7 @@ import { defaultContent } from '../_lib/all-content.types';
 import { ContentForm } from './content-form';
 import { ContentQuickView } from './content-quick-view';
 import { formConstants } from '/src/app/constants/form-constants';
+import Link from 'next/link';
 
 export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }) => {
   const isUpdate = data?.id ? true : false;
@@ -138,6 +139,10 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }
               Save
             </Button>
           )}
+
+          <IconButton sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} as={Link} href={`/all-content/${data?.id}`} title="Analytics">
+            <Iconify icon="mdi:analytics" />
+          </IconButton>
 
           {sidebarView === 'QUICK' && (
             <DeleteConfirmationPasswordPopover
