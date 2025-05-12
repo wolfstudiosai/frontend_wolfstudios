@@ -93,7 +93,7 @@ function TooltipContent({ active, payload }) {
   );
 }
 
-const renderCustomBarLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+export const renderCustomBarLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
   const RADIAN = Math.PI / 180;
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
