@@ -6,7 +6,7 @@ export default function CampaignAssociations({ campaign }) {
             <Card elevation={0} sx={{ height: "100%", borderRadius: 0, bgcolor: 'background.default', border: '1px solid var(--mui-palette-divider)', }}>
                 <CardHeader title="Campaign Associations" subheader="Campaign Associations Details" />
                 <CardContent>
-                    <Stack spacing={1}>
+                    <Stack spacing={0.5}>
                         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                             <Typography variant="subtitle2" gutterBottom color="text.secondary">
                                 Proposed Partners
