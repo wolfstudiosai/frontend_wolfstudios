@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Box, Button, Paper } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useTheme } from '@mui/material/styles';
+import { useParams } from 'next/navigation';
 
 const productionItems = [
   'https://picsum.photos/300/200?random=1',
@@ -15,7 +16,9 @@ const productionItems = [
   'https://picsum.photos/300/200?random=5',
 ];
 
-export const ProductionGalleryView = () => {
+export const ProductionAnalyticsView = ({ production }) => {
+  const params = useParams();
+  console.log(params.id);
   const [selectedItemSrc, setSelectedItemSrc] = useState(productionItems[0]);
 
   const theme = useTheme();

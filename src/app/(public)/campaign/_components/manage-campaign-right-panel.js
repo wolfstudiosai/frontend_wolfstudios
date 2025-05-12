@@ -22,6 +22,7 @@ import { DrawerContainer } from '../../../../components/drawer/drawer'; ///compo
 import { CampaignForm } from './campaign-form';
 import { formConstants } from '/src/app/constants/form-constants';
 import { imageUploader } from '/src/utils/upload-file';
+import Link from 'next/link';
 
 export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view }) => {
   const isUpdate = data?.id ? true : false;
@@ -163,6 +164,9 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
               </IconButton>
             )
           )}
+          <IconButton as={Link} href={`/campaign/${data?.id}`} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} title="Analytics">
+            <Iconify icon="mdi:analytics" />
+          </IconButton>
           {sidebarView === 'EDIT' && (
             <Button size="small" variant="contained" color="primary" onClick={handleSubmit} disabled={loading}>
               Save

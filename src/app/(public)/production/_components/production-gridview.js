@@ -56,7 +56,7 @@ export const ProductionGridView = ({ data, colums, fetchList, loading, handlePag
 export const ProductionCard = ({ item, fetchList, sx, infoSx }) => {
   const [openProductionRightPanel, setopenProductionRightPanel] = React.useState(null);
 
-  const handleMenuOpen = () => {};
+  const handleMenuOpen = () => { };
   return (
     <>
       <Card
