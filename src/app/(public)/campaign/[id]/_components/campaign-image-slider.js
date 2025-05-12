@@ -9,6 +9,18 @@ import 'swiper/css/scrollbar';
 import Image from 'next/image';
 
 export default function CampaignImageSlider({ campaign }) {
+    const campaignImages = [
+        "https://cdn.wolfstudios.ai/campaigns/images/488803486_1234597315338529_5509616514289520380_n.jpeg",
+        "https://cdn.wolfstudios.ai/campaigns/images/488803486_1234597315338529_5509616514289520380_n.jpeg",
+        "https://cdn.wolfstudios.ai/campaigns/images/488803486_1234597315338529_5509616514289520380_n.jpeg",
+        "https://cdn.wolfstudios.ai/campaigns/images/488803486_1234597315338529_5509616514289520380_n.jpeg",
+        "https://cdn.wolfstudios.ai/campaigns/images/488803486_1234597315338529_5509616514289520380_n.jpeg",
+        "https://cdn.wolfstudios.ai/campaigns/images/488803486_1234597315338529_5509616514289520380_n.jpeg",
+        "https://cdn.wolfstudios.ai/campaigns/images/488803486_1234597315338529_5509616514289520380_n.jpeg",
+        "https://cdn.wolfstudios.ai/campaigns/images/488803486_1234597315338529_5509616514289520380_n.jpeg",
+        "https://cdn.wolfstudios.ai/campaigns/images/488803486_1234597315338529_5509616514289520380_n.jpeg",
+        "https://cdn.wolfstudios.ai/campaigns/images/488803486_1234597315338529_5509616514289520380_n.jpeg",
+    ]
 
     return (
         <Grid2 item size={12}>
@@ -30,7 +42,7 @@ export default function CampaignImageSlider({ campaign }) {
                                 marginRight: '-12px',
                             }}
                         >
-                            {campaign?.CampaignImage?.map((image, index) => (
+                            {campaignImages?.map((image, index) => (
                                 <SwiperSlide key={index}>
                                     <FadeIn>
                                         <CampaignImageCard image={image} />

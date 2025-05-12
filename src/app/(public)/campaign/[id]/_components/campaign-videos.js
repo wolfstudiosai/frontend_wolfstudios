@@ -18,8 +18,7 @@ const CampaignVideoCard = ({ video }) => {
             }}
         >
             <Box
-                component="iframe"
-                src={"https://youtu.be/UIX_GYXJZpo?si=RTJvUZW3xPOEItOT"}
+                component="video"
                 sx={{
                     position: 'absolute',
                     left: 0,
@@ -31,15 +30,30 @@ const CampaignVideoCard = ({ video }) => {
                     height: '100%',
                     objectFit: 'cover',
                 }}
-                autoPlay
+                controls
+                // autoPlay
                 loop
                 muted
-            />
+            >
+                <source src={video} type="video/mp4" />
+            </Box>
         </Box>
     );
 };
 
 export default function CampaignVideos({ campaign }) {
+
+    const campaignVideo = [
+        "https://download-video-ak.vimeocdn.com/v3-1/playback/e0d3e959-d1f4-4355-9f02-1d354b52f410/f53a3ff8-f46f8e3d?__token__=st=1747042084~exp=1747056484~acl=%2Fv3-1%2Fplayback%2Fe0d3e959-d1f4-4355-9f02-1d354b52f410%2Ff53a3ff8-f46f8e3d%2A~hmac=c9ff09461a27382d329b579b3b3cec0cb981aff4533e592871b7b84749946d96&r=dXMtd2VzdDE%3D",
+        "https://download-video-ak.vimeocdn.com/v3-1/playback/e0d3e959-d1f4-4355-9f02-1d354b52f410/f53a3ff8-f46f8e3d?__token__=st=1747042084~exp=1747056484~acl=%2Fv3-1%2Fplayback%2Fe0d3e959-d1f4-4355-9f02-1d354b52f410%2Ff53a3ff8-f46f8e3d%2A~hmac=c9ff09461a27382d329b579b3b3cec0cb981aff4533e592871b7b84749946d96&r=dXMtd2VzdDE%3D",
+        "https://download-video-ak.vimeocdn.com/v3-1/playback/e0d3e959-d1f4-4355-9f02-1d354b52f410/f53a3ff8-f46f8e3d?__token__=st=1747042084~exp=1747056484~acl=%2Fv3-1%2Fplayback%2Fe0d3e959-d1f4-4355-9f02-1d354b52f410%2Ff53a3ff8-f46f8e3d%2A~hmac=c9ff09461a27382d329b579b3b3cec0cb981aff4533e592871b7b84749946d96&r=dXMtd2VzdDE%3D",
+        "https://download-video-ak.vimeocdn.com/v3-1/playback/e0d3e959-d1f4-4355-9f02-1d354b52f410/f53a3ff8-f46f8e3d?__token__=st=1747042084~exp=1747056484~acl=%2Fv3-1%2Fplayback%2Fe0d3e959-d1f4-4355-9f02-1d354b52f410%2Ff53a3ff8-f46f8e3d%2A~hmac=c9ff09461a27382d329b579b3b3cec0cb981aff4533e592871b7b84749946d96&r=dXMtd2VzdDE%3D",
+        "https://download-video-ak.vimeocdn.com/v3-1/playback/e0d3e959-d1f4-4355-9f02-1d354b52f410/f53a3ff8-f46f8e3d?__token__=st=1747042084~exp=1747056484~acl=%2Fv3-1%2Fplayback%2Fe0d3e959-d1f4-4355-9f02-1d354b52f410%2Ff53a3ff8-f46f8e3d%2A~hmac=c9ff09461a27382d329b579b3b3cec0cb981aff4533e592871b7b84749946d96&r=dXMtd2VzdDE%3D",
+        "https://download-video-ak.vimeocdn.com/v3-1/playback/e0d3e959-d1f4-4355-9f02-1d354b52f410/f53a3ff8-f46f8e3d?__token__=st=1747042084~exp=1747056484~acl=%2Fv3-1%2Fplayback%2Fe0d3e959-d1f4-4355-9f02-1d354b52f410%2Ff53a3ff8-f46f8e3d%2A~hmac=c9ff09461a27382d329b579b3b3cec0cb981aff4533e592871b7b84749946d96&r=dXMtd2VzdDE%3D",
+        "https://download-video-ak.vimeocdn.com/v3-1/playback/e0d3e959-d1f4-4355-9f02-1d354b52f410/f53a3ff8-f46f8e3d?__token__=st=1747042084~exp=1747056484~acl=%2Fv3-1%2Fplayback%2Fe0d3e959-d1f4-4355-9f02-1d354b52f410%2Ff53a3ff8-f46f8e3d%2A~hmac=c9ff09461a27382d329b579b3b3cec0cb981aff4533e592871b7b84749946d96&r=dXMtd2VzdDE%3D",
+        "https://download-video-ak.vimeocdn.com/v3-1/playback/e0d3e959-d1f4-4355-9f02-1d354b52f410/f53a3ff8-f46f8e3d?__token__=st=1747042084~exp=1747056484~acl=%2Fv3-1%2Fplayback%2Fe0d3e959-d1f4-4355-9f02-1d354b52f410%2Ff53a3ff8-f46f8e3d%2A~hmac=c9ff09461a27382d329b579b3b3cec0cb981aff4533e592871b7b84749946d96&r=dXMtd2VzdDE%3D",
+        "https://download-video-ak.vimeocdn.com/v3-1/playback/e0d3e959-d1f4-4355-9f02-1d354b52f410/f53a3ff8-f46f8e3d?__token__=st=1747042084~exp=1747056484~acl=%2Fv3-1%2Fplayback%2Fe0d3e959-d1f4-4355-9f02-1d354b52f410%2Ff53a3ff8-f46f8e3d%2A~hmac=c9ff09461a27382d329b579b3b3cec0cb981aff4533e592871b7b84749946d96&r=dXMtd2VzdDE%3D",
+    ]
 
     return (
         <Grid2 item size={12}>
@@ -61,7 +75,7 @@ export default function CampaignVideos({ campaign }) {
                                 marginRight: '-12px',
                             }}
                         >
-                            {campaign?.VideoInspirationGallery?.map((video, index) => (
+                            {campaignVideo?.map((video, index) => (
                                 <SwiperSlide key={index}>
                                     <FadeIn>
                                         <CampaignVideoCard video={video} />
