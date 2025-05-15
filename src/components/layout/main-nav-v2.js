@@ -14,6 +14,7 @@ import { paths } from '/src/paths';
 import { isNavItemActive } from '/src/lib/is-nav-item-active';
 import { SettingsContext } from '/src/contexts/settings';
 import useAuth from '/src/hooks/useAuth';
+import SocialLogin from '/src/components/common/social-login';
 import { Dropdown } from '/src/components/core/dropdown/dropdown';
 import { DropdownPopover } from '/src/components/core/dropdown/dropdown-popover';
 import { DropdownTrigger } from '/src/components/core/dropdown/dropdown-trigger';
@@ -310,6 +311,15 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
               Sign up
             </Typography>
           </Typography>
+
+          <Stack spacing={2} direction="row" alignItems="center" justifyContent="space-between">
+            <SocialLogin provider="facebook" style={{ paddingY: '10px' }}>
+              <Iconify icon="logos:facebook" />
+            </SocialLogin>
+            <SocialLogin provider="google" style={{ paddingY: '10px' }}>
+              <Iconify icon="devicon:google" />
+            </SocialLogin>
+          </Stack>
         </Box>
       </Popover>{' '}
     </React.Fragment>
@@ -328,24 +338,24 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
       <Box
         {...(hasPopover
           ? {
-            onClick: (event) => {
-              if (disabled) {
-                event.preventDefault();
-                return;
-              }
-            },
-            role: 'button',
-          }
+              onClick: (event) => {
+                if (disabled) {
+                  event.preventDefault();
+                  return;
+                }
+              },
+              role: 'button',
+            }
           : {
-            ...(href && !disabled
-              ? {
-                component: external ? 'a' : RouterLink,
-                href,
-                target: external ? '_blank' : undefined,
-                rel: external ? 'noreferrer' : undefined,
-              }
-              : { role: 'button' }),
-          })}
+              ...(href && !disabled
+                ? {
+                    component: external ? 'a' : RouterLink,
+                    href,
+                    target: external ? '_blank' : undefined,
+                    rel: external ? 'noreferrer' : undefined,
+                  }
+                : { role: 'button' }),
+            })}
         sx={{
           alignItems: 'center',
           borderRadius: 1,
