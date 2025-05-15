@@ -51,8 +51,7 @@ export const HeroSection = () => {
         sx={{
           position: 'relative',
           width: '100%',
-          height: isFeaturedCardVisible ? 'calc(100vh - 100px)' : 'calc(100vh - 44px)',
-          // height: { xs: '25rem', sm: '30rem', md: '35rem' },
+          height: "60vh",
           overflow: 'hidden',
         }}
       >

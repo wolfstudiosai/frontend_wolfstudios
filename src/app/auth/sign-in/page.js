@@ -8,6 +8,9 @@ import { paths } from '/src/paths';
 import { config } from '/src/config';
 
 import { LoginForm } from '../_components/LoginForm';
+import SocialLogin from '/src/components/common/social-login';
+import Divider from '@mui/material/Divider';
+import { Iconify } from '/src/components/iconify/iconify';
 
 export const metadata = { title: `Sign in | ${config.site.name}` };
 
@@ -31,6 +34,20 @@ export default function Page() {
         <Link component={RouterLink} href={paths.auth.default.forgotPassword} variant="subtitle2">
           Forgot password?
         </Link>
+
+        <Divider sx={{ my: 2 }}>OR</Divider>
+
+        <Stack spacing={2} direction='column' alignItems='center'>
+          <SocialLogin provider="facebook">
+            <Iconify icon="logos:facebook" />
+            Sign In with Facebook
+          </SocialLogin>
+          <SocialLogin provider="google">
+            <Iconify icon="devicon:google" />
+            Sign In with Google
+          </SocialLogin>
+        </Stack>
+
       </SplitLayout>
     </GuestGuard>
   );

@@ -18,6 +18,9 @@ import * as Yup from 'yup';
 import { createUser } from '/src/app/dashboard/users/_lib/user.actions';
 import { defaultUser } from '/src/app/dashboard/users/_lib/user.types';
 import { paths } from '/src/paths';
+import SocialLogin from '/src/components/common/social-login';
+import { Iconify } from '/src/components/iconify/iconify';
+
 const oAuthProviders = [
   { id: 'google', name: 'Google', logo: '/assets/logo-google.svg' },
 ];
@@ -65,7 +68,7 @@ export function SignupForm({ redirect = null }) {
 
   return (
     <Stack spacing={3}>
-      <Stack spacing={2}>
+      {/* <Stack spacing={2}>
         {oAuthProviders.map((provider) => (
           <Button
             color="secondary"
@@ -82,7 +85,8 @@ export function SignupForm({ redirect = null }) {
           </Button>
         ))}
       </Stack>
-      <Divider>or</Divider>
+      <Divider>or</Divider> */}
+
       <Stack spacing={2}>
         <form onSubmit={handleSubmit}>
           <Stack spacing={2}>
@@ -134,6 +138,19 @@ export function SignupForm({ redirect = null }) {
             </Button>
           </Stack>
         </form>
+      </Stack>
+
+      <Divider sx={{ mt: 2 }}>OR</Divider>
+
+      <Stack spacing={2} direction='column' alignItems='center'>
+        <SocialLogin provider="facebook">
+          <Iconify icon="logos:facebook" />
+          Sign In with Facebook
+        </SocialLogin>
+        <SocialLogin provider="google">
+          <Iconify icon="devicon:google" />
+          Sign In with Google
+        </SocialLogin>
       </Stack>
     </Stack>
   );
