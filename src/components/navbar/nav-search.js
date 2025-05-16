@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { Box, InputBase, styled, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Box, InputBase, styled, Typography } from '@mui/material';
-import { isModifier } from 'typescript';
+import React, { useState } from 'react';
 
 import { Iconify } from '/src/components/iconify/iconify';
 
@@ -91,8 +90,7 @@ export const NavSearch = ({ isMobile = false }) => {
                   }
                   return null;
                 })
-                .filter(Boolean); // remove nulls
-
+                .filter(Boolean);
               setFilteredData(filtered);
             }}
             inputProps={{ 'aria-label': 'search' }}
