@@ -8,15 +8,17 @@ export const CustomTab = ({ tabs, handleChange, value }) => {
       <Tabs
         value={value}
         onChange={(event, newValue) => handleChange(event, newValue)}
-        aria-label="wrapped label tabs example"
-        
+        variant="scrollable"
+        scrollButtons="none"
       >
         {tabs.map((tab, index) => (
           <Tab
             key={index}
             label={tab.label}
             value={tab.value}
-            // sx={{ textTransform: 'capitalize', fontWeight: 500, bgcolor: (theme) => theme.palette.primary.main }}
+            sx={{
+              fontSize: '0.75rem',
+            }}
           />
         ))}
       </Tabs>

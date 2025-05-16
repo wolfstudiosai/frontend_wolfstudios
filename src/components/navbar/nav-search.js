@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Box, InputBase, styled, Typography } from '@mui/material';
+import { isModifier } from 'typescript';
 
 import { Iconify } from '/src/components/iconify/iconify';
 
@@ -12,9 +13,9 @@ const searchResult = [
   {
     label: 'Campaign',
     items: [
-      { label: 'Campaign 1', img: 'https://picsum.photos/300/200?random=3', occupation: 'Designer' },
-      { label: 'Campaign 2', img: 'https://picsum.photos/300/200?random=3', occupation: 'Designer' },
-      { label: 'Campaign 3', img: 'https://picsum.photos/300/200?random=3', occupation: 'Designer' },
+      { label: 'REVO Partner Program', img: 'https://picsum.photos/300/200?random=3', occupation: 'Designer' },
+      { label: 'REVO Cupper (Cellulite)', img: 'https://picsum.photos/300/200?random=3', occupation: 'Designer' },
+      { label: 'REVO Valentines Day', img: 'https://picsum.photos/300/200?random=3', occupation: 'Designer' },
     ],
   },
   {
@@ -28,9 +29,9 @@ const searchResult = [
   {
     label: 'Partner',
     items: [
-      { label: 'Partner 1', img: 'https://picsum.photos/300/200?random=2', occupation: 'Designer' },
-      { label: 'Partner 2', img: 'https://picsum.photos/300/200?random=2', occupation: 'Designer' },
-      { label: 'Partner 3', img: 'https://picsum.photos/300/200?random=2', occupation: 'Designer' },
+      { label: 'Amie luxury boutique', img: 'https://picsum.photos/300/200?random=2', occupation: 'Designer' },
+      { label: 'its.all.about.gigi', img: 'https://picsum.photos/300/200?random=2', occupation: 'Designer' },
+      { label: 'Mile High Run Club', img: 'https://picsum.photos/300/200?random=2', occupation: 'Designer' },
     ],
   },
 ];
@@ -41,6 +42,20 @@ export const NavSearch = ({ isMobile = false }) => {
   const [searchValue, setSearchValue] = useState('');
   const [tab, setTab] = useState('partner');
   const [filteredValue, setFilteredData] = useState([]);
+  const containerRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        setIsInput(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -48,7 +63,7 @@ export const NavSearch = ({ isMobile = false }) => {
   };
 
   return (
-    <SearchWrapper isMobile={isMobile}>
+    <SearchWrapper isMobile={isMobile} ref={containerRef}>
       <form onSubmit={handleSubmit}>
         <Search>
           <SearchIconWrapper>
@@ -102,6 +117,10 @@ export const NavSearch = ({ isMobile = false }) => {
                 { label: 'Partner', value: 'partner', isWrapped: true },
                 { label: 'Campaign', value: 'campaign', isWrapped: false },
                 { label: 'Production', value: 'production', isWrapped: false },
+                { label: 'Messages', value: 'messages', isWrapped: false },
+                { label: 'Products', value: 'products', isWrapped: false },
+                { label: 'Spaces', value: 'spaces', isWrapped: false },
+                { label: 'Portfolio', value: 'portfolio', isWrapped: false },
               ]}
               value={tab}
               handleChange={(e, newValue) => setTab(newValue)}
@@ -113,7 +132,7 @@ export const NavSearch = ({ isMobile = false }) => {
             {filteredValue
               .filter((section) => section.label.toLocaleLowerCase() === tab)
               .map((section, index) => (
-                <Section key={index}>
+                <Section key={index} >
                   <ScrollableRow>
                     {section.items.map((item, itemIndex) => (
                       <Link
@@ -153,21 +172,15 @@ export const NavSearch = ({ isMobile = false }) => {
 
 const SearchWrapper = styled('div')(({ theme, isMobile }) => ({
   position: 'relative',
-  width: isMobile ? '100%' : pxToRem(350),
+  width: isMobile ? '100%' : '80%',
   transition: isMobile ? 'none' : 'width 0.1s ease',
-  //   display: { xs: 'none', lg: 'block' },
-  // '&:focus-within': {
-  //   width: isMobile ? '100%' : '100%',
-  // },
 }));
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
-  // borderRadius: 'calc(1 * var(--mui-shape-borderRadius))',
   backgroundColor: 'var(--mui-palette-background-paper)',
   transition: 'background-color 0.5s ease, width 0.4s ease',
   height: pxToRem(32),
-  // border: '1px solid var(--mui-palette-divider)',
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -199,13 +212,11 @@ const DropdownContainer = styled('div')(({ theme }) => ({
   left: 0,
   right: 0,
   backgroundColor: 'var(--mui-palette-background-default)',
-  // borderRadius: '4px',
   boxShadow: 'none',
   marginTop: theme.spacing(0.5),
   zIndex: 9999,
   maxHeight: '60vh',
   overflowY: 'auto',
-  // padding: theme.spacing(1),
 }));
 
 const Section = styled('div')(({ theme }) => ({
@@ -230,7 +241,7 @@ const TableName = styled('span')(({ theme }) => ({
 const ScrollableRow = styled('div')(({ theme }) => ({
   display: 'flex',
   flexWrap: 'wrap',
-  columnGap: theme.spacing(1),
+  columnGap: theme.spacing(.5),
   flexDirection: 'row',
   paddingBottom: theme.spacing(1),
   position: 'relative',
@@ -239,12 +250,13 @@ const ScrollableRow = styled('div')(({ theme }) => ({
   },
 }));
 
-const ResultItem = styled('div')(({ theme }) => ({
+const ResultItem = styled('div')(({ theme, isMobile }) => ({
   display: 'flex',
-  gap: theme.spacing(1.5),
+  gap: theme.spacing(.5),
+  padding: `${theme.spacing(0)} ${theme.spacing(1)}`,
   alignItems: 'start',
   textAlign: 'center',
-  width: '220px',
+  // width: { xs: '100px', sm: '150px', md: '200px' },
   marginBottom: theme.spacing(1),
   border: '1px solid var(--mui-palette-divider)',
   cursor: 'pointer',

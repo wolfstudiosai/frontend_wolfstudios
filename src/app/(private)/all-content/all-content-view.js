@@ -20,7 +20,6 @@ export const AllContentView = () => {
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [data, setData] = React.useState([]);
-  console.log(data, 'data.....');
   const [filters, setFilters] = React.useState({
     COL: 4,
     TAG: [],
