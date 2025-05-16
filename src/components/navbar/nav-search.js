@@ -1,30 +1,46 @@
 import { useState } from 'react';
-import { Box, Button, InputBase, styled, Typography } from '@mui/material';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Box, InputBase, styled, Typography } from '@mui/material';
+
 import { Iconify } from '/src/components/iconify/iconify';
 
+import { CustomTab } from '../core/custom-tab';
 import { pxToRem } from '/src/utils/helper';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 const searchResult = [
   {
     label: 'Campaign',
-    items: Array(5).fill({ name: 'John Doe', img: 'https://picsum.photos/300/200?random=3', occupation: 'Designer' }),
+    items: [
+      { label: 'Campaign 1', img: 'https://picsum.photos/300/200?random=3', occupation: 'Designer' },
+      { label: 'Campaign 2', img: 'https://picsum.photos/300/200?random=3', occupation: 'Designer' },
+      { label: 'Campaign 3', img: 'https://picsum.photos/300/200?random=3', occupation: 'Designer' },
+    ],
   },
   {
     label: 'Production',
-    items: Array(3).fill({ name: 'Project X', img: 'https://picsum.photos/300/200?random=1', occupation: 'Designer' }),
+    items: [
+      { label: 'Production 1', img: 'https://picsum.photos/300/200?random=1', occupation: 'Designer' },
+      { label: 'Production 2', img: 'https://picsum.photos/300/200?random=1', occupation: 'Designer' },
+      { label: 'Production 3', img: 'https://picsum.photos/300/200?random=1', occupation: 'Designer' },
+    ],
   },
   {
     label: 'Partner',
-    items: Array(4).fill({ name: 'Summer Sale', img: 'https://picsum.photos/300/200?random=2', occupation: 'Designer' }),
+    items: [
+      { label: 'Partner 1', img: 'https://picsum.photos/300/200?random=2', occupation: 'Designer' },
+      { label: 'Partner 2', img: 'https://picsum.photos/300/200?random=2', occupation: 'Designer' },
+      { label: 'Partner 3', img: 'https://picsum.photos/300/200?random=2', occupation: 'Designer' },
+    ],
   },
-]
+];
 
 export const NavSearch = ({ isMobile = false }) => {
   const router = useRouter();
   const [isInput, setIsInput] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [tab, setTab] = useState('partner');
+  const [filteredValue, setFilteredData] = useState([]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -41,41 +57,94 @@ export const NavSearch = ({ isMobile = false }) => {
           <StyledInputBase
             placeholder="Search…"
             value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              setSearchValue(value);
+
+              if (!value.trim()) {
+                setFilteredData(searchResult);
+                return;
+              }
+
+              const filtered = searchResult
+                .map((section) => {
+                  const filteredItems = section.items.filter((item) =>
+                    item.label.toLowerCase().includes(value.toLowerCase())
+                  );
+                  if (filteredItems.length > 0) {
+                    return { ...section, items: filteredItems };
+                  }
+                  return null;
+                })
+                .filter(Boolean); // remove nulls
+
+              setFilteredData(filtered);
+            }}
             inputProps={{ 'aria-label': 'search' }}
             onInput={() => setIsInput(true)}
-            onBlur={() => setTimeout(() => setIsInput(false), 300)}
+            // onBlur={() => setTimeout(() => setIsInput(false), 300)}
           />
         </Search>
       </form>
       {/* Recent Searches Dropdown */}
       {isInput && (
         <DropdownContainer>
-          {/* Search Results */}
-          {searchResult.map((section, index) => (
-            <Section key={index}>
-              <SectionHeader>
-                <TableName>{section.label} </TableName>
-                <Button onClick={() => router.push(`/${section.label.toLowerCase()}`)} variant="text" sx={{ fontSize: '12px' }}>{section.items.length > 3 ? <span style={{ color: 'var(--mui-palette-primary-main)' }}>See More ({section.items.length - 3}+)</span> : ''}</Button>
-              </SectionHeader>
+          <Box
+            sx={{
+              backgroundColor: 'var(--mui-palette-background-paper)',
+              px: 2,
+              // borderRadius: '4px',
+              // boxShadow: 'var(--mui-shadows-16)',
+            }}
+          >
+            <CustomTab
+              tabs={[
+                { label: 'Partner', value: 'partner', isWrapped: true },
+                { label: 'Campaign', value: 'campaign', isWrapped: false },
+                { label: 'Production', value: 'production', isWrapped: false },
+              ]}
+              value={tab}
+              handleChange={(e, newValue) => setTab(newValue)}
+            />
+          </Box>
 
-              <ScrollableRow>
-                {section.items.slice(0, 3).map((item, itemIndex) => (
-                  <Link style={{ textDecoration: 'none' }} href={`/${section.label.toLowerCase()}/${item.name}`} key={itemIndex}>
-                    <ResultItem>
-                      <ProfileImage src={item.img} alt={item.name} />
-                      <Box sx={{ p: 0.5, display: 'flex', flexDirection: 'column', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        <ItemName>{item.name}</ItemName>
-                        <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'start' }}>
-                          {item.occupation}
-                        </Typography>
-                      </Box>
-                    </ResultItem>
-                  </Link>
-                ))}
-              </ScrollableRow>
-            </Section>
-          ))}
+          {/* Search Results */}
+          <Box sx={{ padding: (theme) => theme.spacing(1) }}>
+            {filteredValue
+              .filter((section) => section.label.toLocaleLowerCase() === tab)
+              .map((section, index) => (
+                <Section key={index}>
+                  <ScrollableRow>
+                    {section.items.map((item, itemIndex) => (
+                      <Link
+                        style={{ textDecoration: 'none' }}
+                        href={`/${section.label.toLowerCase()}/${item.label}`}
+                        key={itemIndex}
+                      >
+                        <ResultItem>
+                          <ProfileImage src={item.img} alt={item.label} />
+                          <Box
+                            sx={{
+                              p: 0.5,
+                              display: 'flex',
+                              flexDirection: 'column',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            <ItemName>{item.label}</ItemName>
+                            <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'start' }}>
+                              {item.occupation}
+                            </Typography>
+                          </Box>
+                        </ResultItem>
+                      </Link>
+                    ))}
+                  </ScrollableRow>
+                </Section>
+              ))}
+          </Box>
         </DropdownContainer>
       )}
     </SearchWrapper>
@@ -84,20 +153,21 @@ export const NavSearch = ({ isMobile = false }) => {
 
 const SearchWrapper = styled('div')(({ theme, isMobile }) => ({
   position: 'relative',
-  width: isMobile ? '100%' : pxToRem(420),
+  width: isMobile ? '100%' : pxToRem(350),
   transition: isMobile ? 'none' : 'width 0.1s ease',
   //   display: { xs: 'none', lg: 'block' },
-  '&:focus-within': {
-    width: isMobile ? '100%' : '100%',
-  },
+  // '&:focus-within': {
+  //   width: isMobile ? '100%' : '100%',
+  // },
 }));
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
-  borderRadius: 'calc(1 * var(--mui-shape-borderRadius))',
-  backgroundColor: 'var(--mui-palette-background-level2)',
+  // borderRadius: 'calc(1 * var(--mui-shape-borderRadius))',
+  backgroundColor: 'var(--mui-palette-background-paper)',
   transition: 'background-color 0.5s ease, width 0.4s ease',
   height: pxToRem(32),
+  // border: '1px solid var(--mui-palette-divider)',
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -125,17 +195,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const DropdownContainer = styled('div')(({ theme }) => ({
   position: 'absolute',
-  top: '100%',
+  top: 28,
   left: 0,
   right: 0,
-  backgroundColor: 'var(--mui-palette-background-paper)',
-  borderRadius: '4px',
+  backgroundColor: 'var(--mui-palette-background-default)',
+  // borderRadius: '4px',
   boxShadow: 'none',
   marginTop: theme.spacing(0.5),
   zIndex: 9999,
   maxHeight: '60vh',
   overflowY: 'auto',
-  padding: theme.spacing(1),
+  // padding: theme.spacing(1),
 }));
 
 const Section = styled('div')(({ theme }) => ({
