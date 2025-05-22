@@ -1,21 +1,25 @@
 import { Box, CircularProgress, InputBase, styled, Typography } from '@mui/material';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import React, { useState } from 'react';
 import { Iconify } from '/src/components/iconify/iconify';
 import { CustomTab } from '../core/custom-tab';
 import { pxToRem } from '/src/utils/helper';
 import { useDebounce } from '/src/hooks/use-debounce';
 import { api } from '/src/utils/api';
+import { CampaignRightPanel } from '/src/app/(public)/campaign/_components/campaign-right-panel';
 
 export const NavSearch = ({ isMobile = false }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const [isInput, setIsInput] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const containerRef = React.useRef(null);
   const [searchData, setSearchData] = useState([]);
   const [tabs, setTabs] = useState([]);
   const [tab, setTab] = useState('');
+  const [selectedItem, setSelectedItem] = useState(null);
+  const isSearchPage = pathname === '/search';
 
   // Loading state
   const [loading, setLoading] = useState(false);
@@ -47,12 +51,12 @@ export const NavSearch = ({ isMobile = false }) => {
     }
   }, [debouncedSearchValue]);
 
-
   // Close search on outside click
   React.useEffect(() => {
     const handleClickOutside = (event) => {
       if (containerRef.current && !containerRef.current.contains(event.target)) {
         setIsInput(false);
+        setTabs([]);
       }
     };
 
@@ -69,92 +73,104 @@ export const NavSearch = ({ isMobile = false }) => {
     router.push(`/search?q=${searchValue}`);
   };
 
+  // Handle item click
+  const handleItemClick = (section, id) => setSelectedItem({ section, id })
+
   return (
-    <SearchWrapper isMobile={isMobile} ref={containerRef}>
-      <form onSubmit={handleSubmit}>
-        <Search>
-          <SearchIconWrapper>
-            <Iconify icon="jam:search" color={'var(--mui-palette-neutral-400)'} />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search…"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            inputProps={{ 'aria-label': 'search' }}
-            onInput={() => setIsInput(true)}
-          />
-        </Search>
-      </form>
-      {/* Recent Searches Dropdown */}
-      {isInput && (
-        <DropdownContainer>
-          {/* Search Results */}
-          <Box>
-            {loading ? (
-              <Box sx={{ m: 0 }}>
-                <Box
-                  sx={{ minHeight: "100px" }}
-                  display={"flex"}
-                  flexDirection={"column"}
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <CircularProgress size={20} />
-                  <Typography sx={{ mt: 1 }} variant="body2">
-                    Please wait a moment...
-                  </Typography>
-                </Box>
-              </Box>
-            ) : (
-              <Box sx={{ padding: (theme) => theme.spacing(1), pt: 0 }}>
-                <>
-                  {tabs.length > 0 ? <Box sx={{ mb: 2, backgroundColor: 'var(--mui-palette-background-paper)', position: 'sticky', top: 0, zIndex: 1 }}>
-                    <CustomTab
-                      tabs={tabs.map((item) => ({
-                        label: item.label,
-                        value: item.value,
-                      }))}
-                      value={tab}
-                      handleChange={(e, newValue) => setTab(newValue)}
-                    />
-                  </Box> : <Box height={50} width="100%" display="flex" alignItems="center" justifyContent="center">
-                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: pxToRem(12) }}>
-                      No results found
+    <>
+      <SearchWrapper isMobile={isMobile} ref={containerRef}>
+        <form onSubmit={handleSubmit}>
+          <Search>
+            <SearchIconWrapper>
+              <Iconify icon="jam:search" color={'var(--mui-palette-neutral-400)'} />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              inputProps={{ 'aria-label': 'search' }}
+              onInput={() => setIsInput(true)}
+            />
+          </Search>
+        </form>
+        {/* Recent Searches Dropdown */}
+        {isInput && !isSearchPage && (
+          <DropdownContainer>
+            {/* Search Results */}
+            <Box>
+              {loading ? (
+                <Box sx={{ m: 0 }}>
+                  <Box
+                    sx={{ minHeight: "100px" }}
+                    display={"flex"}
+                    flexDirection={"column"}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                  >
+                    <CircularProgress size={20} />
+                    <Typography sx={{ mt: 1, color: 'var(--mui-palette-text-secondary)' }} variant="body2">
+                      Please wait a moment...
                     </Typography>
-                  </Box>}
-                </>
-                {tabs.length > 0 && searchData.filter((sections) => sections.label.toLowerCase() === tab).map((section, index) => (
-                  <Section key={index} >
-                    <ScrollableRow>
-                      {section.items.map((item) => (
-                        <ResultItem key={item.id}>
-                          <ProfileImage src={item.img || '/assets/image-placeholder.jpg'} alt={item.label} />
-                          <Box
-                            sx={{
-                              p: 0.5,
-                              display: 'flex',
-                              flexDirection: 'column',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                            }}
-                          >
-                            <ItemName>{item.label || 'N/A'}</ItemName>
-                            <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'start', fontSize: pxToRem(12) }}>
-                              {item.occupation || 'N/A'}
-                            </Typography>
-                          </Box>
-                        </ResultItem>
-                      ))}
-                    </ScrollableRow>
-                  </Section>
-                ))}
-              </Box>
-            )}
-          </Box>
-        </DropdownContainer>
+                  </Box>
+                </Box>
+              ) : (
+                <Box sx={{ padding: (theme) => theme.spacing(1), pt: 0 }}>
+                  <>
+                    {tabs.length > 0 ? <Box sx={{ mb: 2, backgroundColor: 'var(--mui-palette-background-paper)', position: 'sticky', top: 0, zIndex: 1 }}>
+                      <CustomTab
+                        tabs={tabs.map((item) => ({
+                          label: item.label,
+                          value: item.value,
+                        }))}
+                        value={tab}
+                        handleChange={(e, newValue) => setTab(newValue)}
+                      />
+                    </Box> : <Box height={50} width="100%" display="flex" alignItems="center" justifyContent="center">
+                      <Typography variant="body2" color="text.secondary" sx={{ fontSize: pxToRem(12) }}>
+                        No results found
+                      </Typography>
+                    </Box>}
+                  </>
+                  {tabs.length > 0 && searchData.filter((sections) => sections.label.toLowerCase() === tab).map((section, index) => (
+                    <Section key={index} >
+                      <ScrollableRow>
+                        {section.items.map((item) => (
+                          <ResultItem key={item.id} onClick={() => handleItemClick(section.label, item.id)}>
+                            <ProfileImage src={item.img || '/assets/image-placeholder.jpg'} alt={item.label} />
+                            <Box
+                              sx={{
+                                p: 0.5,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                              }}
+                            >
+                              <ItemName>{item.label || 'N/A'}</ItemName>
+                              <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'start', fontSize: pxToRem(12) }}>
+                                {item.occupation || 'N/A'}
+                              </Typography>
+                            </Box>
+                          </ResultItem>
+                        ))}
+                      </ScrollableRow>
+                    </Section>
+                  ))}
+                </Box>
+              )}
+            </Box>
+          </DropdownContainer>
+        )}
+      </SearchWrapper>
+
+      {selectedItem?.section === 'Campaign' && (
+        <CampaignRightPanel
+          onClose={() => setSelectedItem(null)}
+          id={selectedItem.id}
+        />
       )}
-    </SearchWrapper>
+    </>
   );
 };
 

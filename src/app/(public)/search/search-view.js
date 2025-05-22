@@ -54,7 +54,6 @@ const SearchView = ({ search }) => {
       try {
         setLoading(true);
         const res = await api.get(`/search?search=${search}`);
-        console.log(res.data, 'res.data');
         setSearchData(res.data);
       } catch (error) {
         console.log(error);
