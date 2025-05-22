@@ -5,6 +5,7 @@ import { Avatar, Box, Card, CardContent, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { PageContainer } from '/src/components/container/PageContainer';
+import { api } from '/src/utils/api';
 
 import { CustomTab } from '../../../components/core/custom-tab';
 
@@ -36,11 +37,12 @@ const searchResult = [
 ];
 
 const SearchView = ({ search }) => {
+  // console.log(search, 'search value....');
   const [loading, setLoading] = useState(false);
   //   const [selectedTab, setSelectedTab] = useState('All');
   const [tab, setTab] = useState('');
   const [filteredValue, setFilteredData] = useState([]);
-  console.log(filteredValue, 'filteredValue value....');
+  const [searchData, setSearchData] = useState([]);
 
   // Reset pagination and data when tab changes
   const handleTabChange = (event, newValue) => {
@@ -48,16 +50,18 @@ const SearchView = ({ search }) => {
   };
 
   React.useEffect(() => {
-    const filtered = searchResult
-      .map((section) => {
-        const filteredItems = section.items.filter((item) => item.label.toLowerCase().includes(search.q.toLowerCase()));
-        if (filteredItems.length > 0) {
-          return { ...section, items: filteredItems };
-        }
-        return null;
-      })
-      .filter(Boolean);
-    setFilteredData(filtered);
+    const getSearchData = async () => {
+      try {
+        setLoading(true);
+        const res = await api.get(`/search?search=${search}`);
+        setSearchData(res.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getSearchData();
   }, [search]);
 
   return (
@@ -68,10 +72,10 @@ const SearchView = ({ search }) => {
           { label: 'Partner', value: 'partner', isWrapped: true },
           { label: 'Campaign', value: 'campaign', isWrapped: false },
           { label: 'Production', value: 'production', isWrapped: false },
-          { label: 'Messages', value: 'messages', isWrapped: false },
-          { label: 'Products', value: 'products', isWrapped: false },
-          { label: 'Spaces', value: 'spaces', isWrapped: false },
-          { label: 'Portfolio', value: 'portfolio', isWrapped: false },
+          // { label: 'Messages', value: 'messages', isWrapped: false },
+          // { label: 'Products', value: 'products', isWrapped: false },
+          // { label: 'Spaces', value: 'spaces', isWrapped: false },
+          // { label: 'Portfolio', value: 'portfolio', isWrapped: false },
         ]}
         value={tab}
         handleChange={(e, newValue) => setTab(newValue)}
