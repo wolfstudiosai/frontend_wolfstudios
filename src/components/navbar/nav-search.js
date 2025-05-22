@@ -12,9 +12,10 @@ export const NavSearch = ({ isMobile = false }) => {
   const router = useRouter();
   const [isInput, setIsInput] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [tab, setTab] = useState('partner');
   const containerRef = React.useRef(null);
   const [searchData, setSearchData] = useState([]);
+  const [tabs, setTabs] = useState([]);
+  const [tab, setTab] = useState('');
 
   // Loading state
   const [loading, setLoading] = useState(false);
@@ -28,6 +29,14 @@ export const NavSearch = ({ isMobile = false }) => {
           setLoading(true);
           const res = await api.get(`/search?search=${debouncedSearchValue}`);
           setSearchData(res.data.data);
+          const filteredData = res.data.data.filter((item) => item.items.length > 0).map((item) => {
+            return {
+              label: `${item.label} (${item.items.length})`,
+              value: item.label.toLowerCase(),
+            }
+          })
+          setTabs(filteredData);
+          setTab(filteredData[0]?.value);
         } catch (error) {
           console.log(error);
         } finally {
@@ -79,25 +88,6 @@ export const NavSearch = ({ isMobile = false }) => {
       {/* Recent Searches Dropdown */}
       {isInput && (
         <DropdownContainer>
-          <Box
-            sx={{
-              backgroundColor: 'var(--mui-palette-background-paper)',
-              px: 2,
-              // borderRadius: '4px',
-              // boxShadow: 'var(--mui-shadows-16)',
-            }}
-          >
-            <CustomTab
-              tabs={[
-                { label: 'Partner', value: 'partner', isWrapped: true },
-                { label: 'Campaign', value: 'campaign', isWrapped: false },
-                { label: 'Production', value: 'production', isWrapped: false },
-              ]}
-              value={tab}
-              handleChange={(e, newValue) => setTab(newValue)}
-            />
-          </Box>
-
           {/* Search Results */}
           <Box>
             {loading ? (
@@ -116,42 +106,46 @@ export const NavSearch = ({ isMobile = false }) => {
                 </Box>
               </Box>
             ) : (
-              <Box sx={{ padding: (theme) => theme.spacing(1) }}>
-                {searchData.filter((item) => item.label.toLowerCase() === tab).map((section, index) => (
+              <Box sx={{ padding: (theme) => theme.spacing(1), pt: 0 }}>
+                <>
+                  {tabs.length > 0 ? <Box sx={{ mb: 2, backgroundColor: 'var(--mui-palette-background-paper)', position: 'sticky', top: 0, zIndex: 1 }}>
+                    <CustomTab
+                      tabs={tabs.map((item) => ({
+                        label: item.label,
+                        value: item.value,
+                      }))}
+                      value={tab}
+                      handleChange={(e, newValue) => setTab(newValue)}
+                    />
+                  </Box> : <Box height={50} width="100%" display="flex" alignItems="center" justifyContent="center">
+                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: pxToRem(12) }}>
+                      No results found
+                    </Typography>
+                  </Box>}
+                </>
+                {tabs.length > 0 && searchData.filter((sections) => sections.label.toLowerCase() === tab).map((section, index) => (
                   <Section key={index} >
                     <ScrollableRow>
-                      {section.items.length > 0 ? section.items.map((item, itemIndex) => (
-                        <Link
-                          style={{ textDecoration: 'none' }}
-                          href={`/${item.type}/${item.label}`}
-                          key={itemIndex}
-                        >
-                          <ResultItem>
-                            <ProfileImage src={item.img || '/assets/image-placeholder.jpg'} alt={item.label} />
-                            <Box
-                              sx={{
-                                p: 0.5,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                              }}
-                            >
-                              <ItemName>{item.label || 'N/A'}</ItemName>
-                              <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'start', fontSize: pxToRem(12) }}>
-                                {item.occupation || 'N/A'}
-                              </Typography>
-                            </Box>
-                          </ResultItem>
-                        </Link>
-                      )) : (
-                        <Box height={50} width="100%" display="flex" alignItems="center" justifyContent="center">
-                          <Typography variant="body2" color="text.secondary" sx={{ fontSize: pxToRem(12) }}>
-                            No results found
-                          </Typography>
-                        </Box>
-                      )}
+                      {section.items.map((item) => (
+                        <ResultItem key={item.id}>
+                          <ProfileImage src={item.img || '/assets/image-placeholder.jpg'} alt={item.label} />
+                          <Box
+                            sx={{
+                              p: 0.5,
+                              display: 'flex',
+                              flexDirection: 'column',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            <ItemName>{item.label || 'N/A'}</ItemName>
+                            <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'start', fontSize: pxToRem(12) }}>
+                              {item.occupation || 'N/A'}
+                            </Typography>
+                          </Box>
+                        </ResultItem>
+                      ))}
                     </ScrollableRow>
                   </Section>
                 ))}
@@ -205,12 +199,13 @@ const DropdownContainer = styled('div')(({ theme }) => ({
   top: 28,
   left: 0,
   right: 0,
-  backgroundColor: 'var(--mui-palette-background-default)',
+  backgroundColor: 'var(--mui-palette-background-paper)',
   boxShadow: 'none',
-  marginTop: theme.spacing(0.5),
+  // marginTop: theme.spacing(0.5),
   zIndex: 9999,
   maxHeight: '60vh',
   overflowY: 'auto',
+  scrollbarWidth: 'thin',
 }));
 
 const Section = styled('div')(({ theme }) => ({
@@ -244,13 +239,12 @@ const ScrollableRow = styled('div')(({ theme }) => ({
   },
 }));
 
-const ResultItem = styled('div')(({ theme, isMobile }) => ({
+const ResultItem = styled('div')(({ theme }) => ({
   display: 'flex',
   gap: theme.spacing(.5),
   paddingRight: theme.spacing(1),
   alignItems: 'start',
   textAlign: 'center',
-  // width: { xs: '100px', sm: '150px', md: '200px' },
   marginBottom: theme.spacing(1),
   border: '1px solid var(--mui-palette-divider)',
   cursor: 'pointer',

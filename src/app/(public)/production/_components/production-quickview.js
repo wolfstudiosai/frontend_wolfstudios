@@ -14,7 +14,7 @@ export const ProductionQuickView = ({ data }) => {
 
   return (
     <Box sx={{ position: 'relative' }}>
-      <Box sx={{ backgroundColor: 'var(--mui-palette-background-paper)', mb: 1, p: 2 }}>
+      {/* <Box sx={{ backgroundColor: 'var(--mui-palette-background-paper)', mb: 1, p: 2 }}>
         <Typography variant="h6" fontWeight={600} gutterBottom>
           Vertical Gallery
         </Typography>
@@ -182,7 +182,7 @@ export const ProductionQuickView = ({ data }) => {
             </Grid>
           ))}
         </Grid>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
