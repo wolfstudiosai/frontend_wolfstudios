@@ -21,13 +21,12 @@ import { paths } from '/src/paths';
 import SocialLogin from '/src/components/common/social-login';
 import { Iconify } from '/src/components/iconify/iconify';
 
-const oAuthProviders = [
-  { id: 'google', name: 'Google', logo: '/assets/logo-google.svg' },
-];
-const defaultValues = { email: '', password: '' };
 const validationSchema = Yup.object().shape({
-  first_name: Yup.string().required('First name is required'),
+  firstName: Yup.string().required('First name is required'),
+  lastName: Yup.string().required('Last name is required'),
   email: Yup.string().email('Invalid email').required('Email is required'),
+  username: Yup.string().required('Username is required'),
+  contactNumber: Yup.string().required('Contact number is required'),
   password: Yup.string().required('Password is required'),
 });
 
@@ -51,7 +50,11 @@ export function SignupForm({ redirect = null }) {
     validationSchema,
     onSubmit: async (values) => {
       setLoading(true)
-      const res = await createUser(values, true, (error) => {
+      const payload = {
+        ...values,
+        authType: "EMAIL_PASSWORD",
+      }
+      const res = await createUser(payload, (error) => {
         setError(error)
       })
 
@@ -68,46 +71,38 @@ export function SignupForm({ redirect = null }) {
 
   return (
     <Stack spacing={3}>
-      {/* <Stack spacing={2}>
-        {oAuthProviders.map((provider) => (
-          <Button
-            color="secondary"
-            disabled={loading}
-            endIcon={<Box alt="" component="img" height={24} src={provider.logo} width={24} />}
-            key={provider.id}
-            onClick={() => {
-              onAuth(provider.id).catch(() => {
-              });
-            }}
-            variant="outlined"
-          >
-            Continue with {provider.name}
-          </Button>
-        ))}
-      </Stack>
-      <Divider>or</Divider> */}
-
       <Stack spacing={2}>
         <form onSubmit={handleSubmit}>
           <Stack spacing={2}>
-            <FormControl error={Boolean(errors.first_name)}>
+            <FormControl error={Boolean(errors.firstName)}>
               <InputLabel>First Name</InputLabel>
               <OutlinedInput
-                type="first_name"
-                name="first_name"
-                value={values.first_name}
+                type="firstName"
+                name="firstName"
+                value={values.firstName}
                 onChange={handleChange}
               />
             </FormControl>
-            <FormControl error={Boolean(errors.last_name)}>
+            <FormControl error={Boolean(errors.lastName)}>
               <InputLabel>Last Name</InputLabel>
               <OutlinedInput
-                type="last_name"
-                name="last_name"
-                value={values.last_name}
+                type="lastName"
+                name="lastName"
+                value={values.lastName}
                 onChange={handleChange}
               />
             </FormControl>
+
+            <FormControl error={Boolean(errors.username)}>
+              <InputLabel>Username</InputLabel>
+              <OutlinedInput
+                type="username"
+                name="username"
+                value={values.username}
+                onChange={handleChange}
+              />
+            </FormControl>
+
             <FormControl error={Boolean(errors.email)}>
               <InputLabel>Email address</InputLabel>
               <OutlinedInput
@@ -118,6 +113,17 @@ export function SignupForm({ redirect = null }) {
               />
               {errors.email ? <FormHelperText>{errors.email.message}</FormHelperText> : null}
             </FormControl>
+
+            <FormControl error={Boolean(errors.contactNumber)}>
+              <InputLabel>Contact Number</InputLabel>
+              <OutlinedInput
+                type="contactNumber"
+                name="contactNumber"
+                value={values.contactNumber}
+                onChange={handleChange}
+              />
+            </FormControl>
+
             <FormControl error={Boolean(errors.password)}>
               <InputLabel>Password</InputLabel>
               <CustomPasswordInput

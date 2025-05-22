@@ -1,11 +1,11 @@
 
 export const defaultUser = {
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     email: "",
-    contact_number: "",
-    role: "USER",
+    username: "",
+    contactNumber: "",
     password: "",
-    confirm_password: "", 
+    role: "USER",
     status: "ACTIVE",
 }

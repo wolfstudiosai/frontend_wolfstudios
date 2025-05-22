@@ -21,9 +21,9 @@ export const AuthContext = createContext({
   userInfo: INITIAL_AUTH_STATE,
   // loading: false,
   isLogin: false,
-  login: () => {},
-  logout: () => {},
-  updateUserInfo: () => {},
+  login: () => { },
+  logout: () => { },
+  updateUserInfo: () => { },
 });
 
 export const isValidToken = (token) => {
@@ -52,13 +52,25 @@ export const AuthProvider = (props) => {
     setLoading(false);
   }, []);
 
-  const handleLogin = async (email, password, onError) => {
+  const handleLogin = async ({ email, password, authType, authId, onError }) => {
     setLoading(true);
     try {
-      const res = await server_base_api.post('/auth/login', {
-        email: email,
-        password: password,
-      });
+      let payload = {}
+
+      if (authType === "EMAIL_PASSWORD") {
+        payload = {
+          email,
+          password,
+          authType,
+        }
+      } else {
+        payload = {
+          authId,
+          authType,
+        }
+      }
+
+      const res = await server_base_api.post('/auth/login', payload);
       const token = res.data.data.accessToken;
 
       const userData = {
@@ -89,7 +101,7 @@ export const AuthProvider = (props) => {
         success: false,
         data: res.data.data,
       };
-      // router.push(paths.home);
+      router.push(paths.home);
     } catch (error) {
       onError(error.response?.data?.message || 'An error occurred');
     }

@@ -37,8 +37,10 @@ export function LoginForm({ onLoginSuccess, redirectToHome = false }) {
       validationSchema,
       onSubmit: async (values) => {
         setLoading(true);
-        const res = await login(values.email, values.password, (error) => {
-          setError(error);
+        const res = await login({
+          email: values.email, password: values.password, authType: "EMAIL_PASSWORD", onError: (error) => {
+            setError(error);
+          }
         });
         setLoading(false);
 

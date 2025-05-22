@@ -14,15 +14,10 @@ export const getUsers = async (queryParams) => {
   }
 };
 
-export const createUser = async (data, isPublicRegistration = false) => {
+export const createUser = async (payload) => {
   try {
-    const { confirm_password, status, ...rest } = data;
-    let res = '';
-    if (isPublicRegistration) {
-      res = await publicApi.post(`/auth/create-user`, rest);
-    } else {
-      res = await api.post(`/auth/create-user`, rest);
-    }
+    let res = await publicApi.post(`/auth/signup`, payload)
+
     if (!res.data.success) return;
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
