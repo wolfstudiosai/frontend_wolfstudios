@@ -7,9 +7,11 @@ import { Iconify } from '/src/components/iconify/iconify';
 
 import { ManageCampaignRightPanel } from './manage-campaign-right-panel';
 import { isSupabaseUrl } from '/src/utils/helper';
+import { CampaignRightPanel } from './campaign-right-panel';
 
 export const CampaignCard = ({ item, fetchList }) => {
-  const [openCampaignRightPanel, setOpenCampaignRightPanel] = React.useState(null);
+  const [openPanel, setOpenPanel] = React.useState(false);
+  const [selectedItemId, setSelectedItemId] = React.useState(null);
   const imageSrc = isSupabaseUrl(item.CampaignImage[0])
     ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.CampaignImage[0]}`
     : item.CampaignImage[0];
@@ -23,7 +25,10 @@ export const CampaignCard = ({ item, fetchList }) => {
           minHeight: { lg: 600, md: 750, sm: 200, xs: 250 },
           backgroundColor: 'background.paper',
         }}
-        onClick={() => setOpenCampaignRightPanel(item)}
+        onClick={() => {
+          setSelectedItemId(item.id)
+          setOpenPanel(true)
+        }}
       >
         <Box
           component="img"
@@ -88,14 +93,27 @@ export const CampaignCard = ({ item, fetchList }) => {
           </Stack>
         </Stack>
       </Stack>
-      <ManageCampaignRightPanel
+
+      {openPanel && (
+        <CampaignRightPanel
+          onClose={() => {
+            setSelectedItemId(null)
+            setOpenPanel(false)
+            fetchList()
+          }}
+          id={selectedItemId}
+          open={openPanel}
+        />
+      )}
+
+      {/* <ManageCampaignRightPanel
         view={'QUICK'}
         width="70%"
         fetchList={fetchList}
         open={openCampaignRightPanel ? true : false}
         data={openCampaignRightPanel}
         onClose={() => setOpenCampaignRightPanel(false)}
-      />
+      /> */}
     </>
   );
 };

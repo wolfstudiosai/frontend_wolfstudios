@@ -12,6 +12,7 @@ import { ManageCampaignRightPanel } from './_components/manage-campaign-right-pa
 import { getCampaignGroupListAsync } from './_lib/campaign.actions';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
 import { defaultCampaign } from './_lib/campaign.types';
+import { CampaignRightPanel } from './_components/campaign-right-panel';
 
 export const CampaignView = () => {
   const observerRef = useRef(null);
@@ -20,6 +21,7 @@ export const CampaignView = () => {
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [data, setData] = React.useState([]);
+  const [openPanel, setOpenPanel] = React.useState(false);
   const [filters, setFilters] = React.useState({
     COL: 4,
     TAG: [],
@@ -107,6 +109,7 @@ export const CampaignView = () => {
           showFilters={false}
           showColSlider={false}
           totalRecords={totalRecords}
+          setOpenPanel={setOpenPanel}
         />
         {filters.VIEW === 'grid' ? (
           <Box>
@@ -118,14 +121,22 @@ export const CampaignView = () => {
         ) : (
           <CampaignTabView data={data} fetchList={refreshListView} />
         )}
-        <ManageCampaignRightPanel
+        <CampaignRightPanel
+          onClose={() => {
+            setOpenPanel(false)
+            fetchList()
+          }}
+          open={openPanel}
+          view="EDIT"
+        />
+        {/* <ManageCampaignRightPanel
           view="EDIT"
           width="70%"
           data={defaultCampaign}
           fetchList={refreshListView}
           open={filters.ADD}
           onClose={() => setFilters((prev) => ({ ...prev, ADD: false }))}
-        />
+        /> */}
       </Box>
     </PageContainer>
   );

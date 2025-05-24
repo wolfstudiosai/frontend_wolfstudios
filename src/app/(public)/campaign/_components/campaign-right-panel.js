@@ -24,10 +24,10 @@ import { imageUploader } from '/src/utils/upload-file';
 import Link from 'next/link';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-export const CampaignRightPanel = ({ onClose, id, open }) => {
+export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
     const { isLogin } = useAuth();
     const router = useRouter();
-    const [view, setView] = React.useState('QUICK');
+    const [panelView, setPanelView] = React.useState(view);
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
 
@@ -151,25 +151,25 @@ export const CampaignRightPanel = ({ onClose, id, open }) => {
         <>
             {isLogin && (
                 <>
-                    {view === 'EDIT' && id ? (
-                        <IconButton onClick={() => setView('QUICK')} title="Edit">
+                    {panelView === 'EDIT' && id ? (
+                        <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
                             <Iconify icon="solar:eye-broken" />
                         </IconButton>
                     ) : (
                         id && (
-                            <IconButton onClick={() => setView('EDIT')} title="Quick">
+                            <IconButton onClick={() => setPanelView('EDIT')} title="Quick">
                                 <Iconify icon="mynaui:edit-one" />
                             </IconButton>
                         )
                     )}
 
-                    {view === 'EDIT' && (
+                    {panelView === 'EDIT' && (
                         <Button size="small" variant="contained" color="primary" onClick={handleSubmit} disabled={loading}>
                             Save
                         </Button>
                     )}
 
-                    {view === 'QUICK' && (
+                    {panelView === 'QUICK' && (
                         <>
                             <IconButton as={Link} href={`/campaign/${data?.id}`} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} title="Analytics">
                                 <Iconify icon="mdi:analytics" />
@@ -191,7 +191,7 @@ export const CampaignRightPanel = ({ onClose, id, open }) => {
     return (
         <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
             <PageLoader loading={loading}>
-                {view === 'QUICK' ? <CampaignQuickView data={data} /> : <CampaignForm handleChange={handleChange}
+                {panelView === 'QUICK' ? <CampaignQuickView data={data} /> : <CampaignForm handleChange={handleChange}
                     values={values}
                     errors={errors}
                     setFieldValue={setFieldValue}

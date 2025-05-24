@@ -20,6 +20,7 @@ export const PageHeader = ({
   showFilters = true,
   showColSlider = true,
   showAdd = true,
+  setOpenPanel,
 }) => {
   const {
     customSettings: { openSubNav },
@@ -116,6 +117,7 @@ export const PageHeader = ({
                   value="add"
                   aria-label="add new"
                   sx={{ padding: '2px', backgroundColor: values.ADD ? 'grey.200' : '' }}
+                  onClick={() => setOpenPanel(true)}
                 >
                   <Iconify icon="mynaui:plus" width={20} height={20} />
                 </ToggleButton>
