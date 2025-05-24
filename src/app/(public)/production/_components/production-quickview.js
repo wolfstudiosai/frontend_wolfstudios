@@ -14,7 +14,7 @@ export const ProductionQuickView = ({ data }) => {
 
   return (
     <Box sx={{ position: 'relative' }}>
-      {/* <Box sx={{ backgroundColor: 'var(--mui-palette-background-paper)', mb: 1, p: 2 }}>
+      <Box sx={{ backgroundColor: 'var(--mui-palette-background-paper)', mb: 1, p: 2 }}>
         <Typography variant="h6" fontWeight={600} gutterBottom>
           Vertical Gallery
         </Typography>
@@ -109,7 +109,7 @@ export const ProductionQuickView = ({ data }) => {
           Vertical Gallery
         </Typography>
         <Grid container spacing={1} sx={{ mt: 2, display: 'none' }} columns={{ xs: 10 }}>
-          {data.VerticalImageGallery?.map((item, index) => (
+          {data?.VerticalImageGallery?.map((item, index) => (
             <Grid item size={{ xs: 2 }} key={index}>
               {isVideoContent(item) ? (
                 <Box
@@ -149,7 +149,7 @@ export const ProductionQuickView = ({ data }) => {
           Horizontal Gallery
         </Typography>
         <Grid container spacing={0} sx={{ mt: 1 }}>
-          {data.HorizontalImageGallery?.map((item, index) => (
+          {data?.HorizontalImageGallery?.map((item, index) => (
             <Grid item size={{ xs: 2 }} key={index}>
               {isVideoContent(item) ? (
                 <Box
@@ -182,7 +182,7 @@ export const ProductionQuickView = ({ data }) => {
             </Grid>
           ))}
         </Grid>
-      </Box> */}
+      </Box>
     </Box>
   );
 };

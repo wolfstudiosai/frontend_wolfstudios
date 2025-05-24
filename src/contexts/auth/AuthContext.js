@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 
 import { api, server_base_api } from '/src/utils/api';
 import { removeTokenFromCookies, setTokenInCookies } from '/src/utils/axios-api.helpers';
+import { useSession } from '/src/lib/auth/auth-client';
 
 export const INITIAL_AUTH_STATE = {
   id: '',
@@ -40,6 +41,11 @@ export const AuthProvider = (props) => {
   const [userInfo, setUserInfo] = useState(INITIAL_AUTH_STATE);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const {
+    data: session,
+  } = useSession();
+
+  // console.log(session);
 
   React.useEffect(() => {
     setLoading(true);
@@ -101,7 +107,7 @@ export const AuthProvider = (props) => {
         success: false,
         data: res.data.data,
       };
-      router.push(paths.home);
+      // router.push(paths.home);
     } catch (error) {
       onError(error.response?.data?.message || 'An error occurred');
     }

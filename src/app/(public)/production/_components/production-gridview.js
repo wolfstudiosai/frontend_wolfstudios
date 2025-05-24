@@ -12,11 +12,12 @@ import { SwiperSlide } from 'swiper/react';
 import PageLoader from '/src/components/loaders/PageLoader';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
-import { ManageProductionRightPanel } from './manage-production-right-panel';
+import { ProductionRightPanel } from './production-right-panel';
 import { ProductionSliderItem } from './production-slider-item';
 import { isVideoContent } from '/src/utils/helper';
 
 export const ProductionGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
+  console.log(data, 'data');
   const slider_data = data.filter((item) => item.featured);
   return (
     <Box>
@@ -54,7 +55,8 @@ export const ProductionGridView = ({ data, colums, fetchList, loading, handlePag
 };
 
 export const ProductionCard = ({ item, fetchList, sx, infoSx }) => {
-  const [openProductionRightPanel, setopenProductionRightPanel] = React.useState(null);
+  const [openProductionPanel, setopenProductionPanel] = React.useState(null);
+  const [selectedItemId, setSelectedItemId] = React.useState(null);
 
   const handleMenuOpen = () => { };
   return (
@@ -79,7 +81,10 @@ export const ProductionCard = ({ item, fetchList, sx, infoSx }) => {
           },
           ...sx,
         }}
-        onClick={() => setopenProductionRightPanel(item)}
+        onClick={() => {
+          setSelectedItemId(item.id)
+          setopenProductionPanel(true)
+        }}
       >
         {/* top menu icon button */}
         <Box
@@ -222,14 +227,26 @@ export const ProductionCard = ({ item, fetchList, sx, infoSx }) => {
           </Stack>
         </Box>
 
-        <ManageProductionRightPanel
+        {openProductionPanel && (
+          <ProductionRightPanel
+            fetchList={fetchList}
+            id={selectedItemId}
+            open={openProductionPanel}
+            onClose={() => {
+              setopenProductionPanel(false)
+              setSelectedItemId(null)
+            }}
+          />
+        )}
+
+        {/* <ManageProductionRightPanel
           view={'QUICK'}
           fetchList={fetchList}
           width="70%"
           open={openProductionRightPanel ? true : false}
           data={openProductionRightPanel}
           onClose={() => setopenProductionRightPanel(false)}
-        />
+        /> */}
       </Card>
     </>
   );

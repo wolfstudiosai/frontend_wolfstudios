@@ -4,12 +4,13 @@ import { useState } from 'react';
 import { Avatar, Box, Card, CardContent, Divider, Grid, Stack, Typography } from '@mui/material';
 
 import { IconWithoutText } from '/src/components/utils/icon-text';
+import { PartnerRightPanel } from './partner-right-panel';
 
-import { ManagePartnerRightPanel } from './manage-partner-right-panel';
 import { formatCompactNumber } from '/src/utils/helper';
 
 export const PartnerCardTwo = ({ partner, fetchList }) => {
-  const [openPartnerRightPanel, setOpenPartnerRightPanel] = useState(null);
+  const [selectedItemId, setSelectedItemId] = useState(null);
+  const [openPartnerPanel, setOpenPartnerPanel] = useState(null);
 
   return (
     <Box>
@@ -24,7 +25,10 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
           width: { xs: '100%', sm: '350px', md: '380px', lg: '408px' },
           maxWidth: '100%',
         }}
-        onClick={() => setOpenPartnerRightPanel(partner)}
+        onClick={() => {
+          setSelectedItemId(partner.id)
+          setOpenPartnerPanel(true)
+        }}
       >
         {/* Large Profile Image */}
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
@@ -123,13 +127,17 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
       </Card>
 
       {/* Right Panel Component */}
-      <ManagePartnerRightPanel
-        view="QUICK"
-        fetchList={fetchList}
-        open={openPartnerRightPanel ? true : false}
-        data={openPartnerRightPanel}
-        onClose={() => setOpenPartnerRightPanel(false)}
-      />
+      {openPartnerPanel && (
+        <PartnerRightPanel
+          onClose={() => {
+            setSelectedItemId(null)
+            setOpenPartnerPanel(false)
+          }}
+          fetchList={fetchList}
+          id={selectedItemId}
+          open={openPartnerPanel}
+        />
+      )}
     </Box>
   );
 };

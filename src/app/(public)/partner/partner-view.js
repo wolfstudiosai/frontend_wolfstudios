@@ -12,10 +12,12 @@ import { PartnerGridView } from './_components/partner-gridview';
 import { PartnerListView } from './_components/partner-listview';
 import { getPartnerListAsync } from './_lib/partner.actions';
 import { defaultPartner } from './_lib/partner.types';
+import { PartnerRightPanel } from './_components/partner-right-panel';
 
 export const PartnerView = () => {
   const observerRef = useRef(null);
   const [data, setData] = React.useState([]);
+  const [openPanel, setOpenPanel] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [isFetching, setIsFetching] = React.useState(false);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
@@ -112,6 +114,7 @@ export const PartnerView = () => {
           onFilterChange={handleFilterChange}
           showFilters={false}
           showColSlider={false}
+          setOpenPanel={setOpenPanel}
         />
 
         {filters.VIEW === 'list' ? (
@@ -125,14 +128,13 @@ export const PartnerView = () => {
           </Box>
         )}
 
-        <ManagePartnerRightPanel
-          view="EDIT"
-          width="60vw"
-          data={defaultPartner}
+        <PartnerRightPanel
+          onClose={() => {
+            setOpenPanel(false)
+          }}
           fetchList={refreshListView}
-          open={filters.ADD}
-          onClose={handleContentCreated}
-          isAdd={filters.ADD && !data?.id}
+          open={openPanel}
+          view="EDIT"
         />
       </PageLoader>
     </PageContainer>

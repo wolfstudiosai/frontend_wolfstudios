@@ -6,124 +6,161 @@ import Grid from '@mui/material/Grid2';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { api } from '/src/utils/api';
-
+import PageLoader from '/src/components/loaders/PageLoader';
 import { CustomTab } from '../../../components/core/custom-tab';
+import { ProductionRightPanel } from '../production/_components/production-right-panel';
+import { PartnerRightPanel } from '../partner/_components/partner-right-panel';
+import { CampaignRightPanel } from '../campaign/_components/campaign-right-panel';
+import { useSettings } from '/src/hooks/use-settings';
 
-const searchResult = [
-  {
-    label: 'Campaign',
-    items: [
-      { label: 'REVO Partner Program', img: 'https://picsum.photos/300/200?random=3', occupation: 'Designer' }, //this is dummy data. you can return actual object.
-      { label: 'REVO Cupper (Cellulite)', img: 'https://picsum.photos/300/200?random=3', occupation: 'Designer' },
-      { label: 'REVO Valentines Day', img: 'https://picsum.photos/300/200?random=3', occupation: 'Designer' },
-    ],
-  },
-  {
-    label: 'Production',
-    items: [
-      { label: 'Production 1', img: 'https://picsum.photos/300/200?random=1', occupation: 'Designer' },
-      { label: 'Production 2', img: 'https://picsum.photos/300/200?random=1', occupation: 'Designer' },
-      { label: 'Production 3', img: 'https://picsum.photos/300/200?random=1', occupation: 'Designer' },
-    ],
-  },
-  {
-    label: 'Partner',
-    items: [
-      { label: 'Amie luxury boutique', img: 'https://picsum.photos/300/200?random=2', occupation: 'Designer' },
-      { label: 'its.all.about.gigi', img: 'https://picsum.photos/300/200?random=2', occupation: 'Designer' },
-      { label: 'Mile High Run Club', img: 'https://picsum.photos/300/200?random=2', occupation: 'Designer' },
-    ],
-  },
-];
-
-const SearchView = ({ search }) => {
-  // console.log(search, 'search value....');
+const SearchView = () => {
   const [loading, setLoading] = useState(false);
-  //   const [selectedTab, setSelectedTab] = useState('All');
+  const [tabs, setTabs] = useState([]);
   const [tab, setTab] = useState('');
-  const [filteredValue, setFilteredData] = useState([]);
   const [searchData, setSearchData] = useState([]);
+  const [openPanel, setOpenPanel] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const { debouncedSearch } = useSettings();
 
-  // Reset pagination and data when tab changes
-  const handleTabChange = (event, newValue) => {
-    setSelectedTab(newValue);
+  const getSearchData = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get(`/search?search=${debouncedSearch}`);
+      const filteredData = res?.data?.data?.filter((item) => item.items.length > 0).map((item) => {
+        return {
+          label: `${item.label} (${item.items.length})`,
+          value: item.label.toLowerCase(),
+        }
+      })
+
+      if (filteredData.length > 0) {
+        setTabs([{
+          label: 'All',
+          value: 'all',
+        }, ...filteredData]);
+        setTab('all');
+      } else {
+        setTabs([]);
+        setTab('');
+      }
+      setSearchData(res?.data?.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   React.useEffect(() => {
-    const getSearchData = async () => {
-      try {
-        setLoading(true);
-        const res = await api.get(`/search?search=${search}`);
-        setSearchData(res.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
     getSearchData();
-  }, [search]);
+  }, [debouncedSearch]);
+
+  // Handle item click
+  const handleItemClick = (section, id) => {
+    setSelectedItem({ section, id })
+    setOpenPanel(true)
+  }
 
   return (
     <PageContainer>
-      <CustomTab
-        tabs={[
-          { label: 'All', value: '', isWrapped: true },
-          { label: 'Partner', value: 'partner', isWrapped: true },
-          { label: 'Campaign', value: 'campaign', isWrapped: false },
-          { label: 'Production', value: 'production', isWrapped: false },
-          // { label: 'Messages', value: 'messages', isWrapped: false },
-          // { label: 'Products', value: 'products', isWrapped: false },
-          // { label: 'Spaces', value: 'spaces', isWrapped: false },
-          // { label: 'Portfolio', value: 'portfolio', isWrapped: false },
-        ]}
-        value={tab}
-        handleChange={(e, newValue) => setTab(newValue)}
-      />
-      <Box sx={{ padding: (theme) => theme.spacing(1) }}>
-        {filteredValue
-          .filter((section) => tab === '' || section.label.toLowerCase() === tab)
-          .map((section, index) => (
-            <Box key={index} sx={{ my: 2 }}>
-              <Typography variant="h6">{section.label}</Typography>
-              <Grid container spacing={0.5} sx={{ mt: 1 }}>
-                {section.items.map((item, index) => (
-                  <Grid key={index} size={{ xs: 12, sm: 4, md: 4, lg: 2, xl: 2 }}>
-                    <Card
-                      elevation={0}
-                      sx={{
-                        border: '1px solid var(--mui-palette-divider)',
-                        boxShadow: 2,
-                        borderRadius: 0,
-                        bgcolor: 'background.paper',
-                      }}
-                    >
-                      <Avatar
-                        src={item.img || '/src/assets/images/placeholder.png'}
-                        variant="square"
-                        p={0}
-                        sx={{
-                          width: '100%',
-                          height: 200,
-                          p: 0,
-                          borderRadius: 0,
-                        }}
-                      />
-                      <CardContent sx={{ p: '10px !important' }}>
-                        <Typography variant="body1" fontWeight="medium">
-                          {item.name}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {item.occupation}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
+      <PageLoader loading={loading}>
+        {tabs.length > 0 ? (
+          <>
+            <CustomTab
+              tabs={tabs}
+              value={tab}
+              handleChange={(e, newValue) => setTab(newValue)}
+            />
+            <Box sx={{ mt: 2 }}>
+              {searchData
+                .filter((section) => tab === 'all' || section.label.toLowerCase() === tab)
+                .map((section, index) => (
+                  <Box key={index}>
+                    {section.items.length > 0 && <> <Typography variant="h6" fontWeight="bold">{section.label}</Typography>
+                      <Grid container spacing={0.5} sx={{ mt: 1, mb: 4 }}>
+                        {section.items.map((item, index) => (
+                          <Grid key={index} size={{ xs: 12, sm: 4, md: 4, lg: 2, xl: 2 }}>
+                            <Card
+                              elevation={0}
+                              sx={{
+                                border: '1px solid var(--mui-palette-divider)',
+                                boxShadow: 2,
+                                borderRadius: 0,
+                                bgcolor: 'background.paper',
+                              }}
+                              onClick={() => handleItemClick(section.label, item.id)}
+                            >
+                              <Avatar
+                                src={item.img || '/assets/image-placeholder.jpg'}
+                                variant="square"
+                                p={0}
+                                sx={{
+                                  width: '100%',
+                                  height: 200,
+                                  p: 0,
+                                  borderRadius: 0,
+                                }}
+                              />
+                              <CardContent sx={{ p: '10px !important' }}>
+                                <Typography variant="body1" fontWeight="medium" sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                  {item.label || 'N/A'}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                  {item.occupation || 'N/A'}
+                                </Typography>
+                              </CardContent>
+                            </Card>
+                          </Grid>
+                        ))}
+                      </Grid></>}
+                  </Box>
                 ))}
-              </Grid>
             </Box>
-          ))}
-      </Box>
+
+            {selectedItem?.section === 'Campaign' && openPanel && (
+              <CampaignRightPanel
+                onClose={() => {
+                  setSelectedItem(null)
+                  setOpenPanel(false)
+                }}
+                fetchList={getSearchData}
+                id={selectedItem?.id}
+                open={openPanel}
+              />
+            )}
+
+            {selectedItem?.section === 'Partner' && openPanel && (
+              <PartnerRightPanel
+                onClose={() => {
+                  setSelectedItem(null)
+                  setOpenPanel(false)
+                }}
+                fetchList={getSearchData}
+                id={selectedItem?.id}
+                open={openPanel}
+              />
+            )}
+
+            {selectedItem?.section === 'Production' && openPanel && (
+              <ProductionRightPanel
+                onClose={() => {
+                  setSelectedItem(null)
+                  setOpenPanel(false)
+                }}
+                fetchList={getSearchData}
+                id={selectedItem?.id}
+                open={openPanel}
+              />
+            )}
+          </>
+        ) : (
+          <Box display="flex" alignItems="center" justifyContent="center" sx={{ mt: 5 }}>
+            <Typography variant="body1" color="text.secondary">
+              No results found
+            </Typography>
+          </Box>
+        )}
+      </PageLoader>
     </PageContainer>
   );
 };
