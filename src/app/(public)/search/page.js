@@ -1,10 +1,9 @@
 import SearchView from "./search-view";
 
-const SearchPage = ({ searchParams }) => {
-    const search = searchParams?.q || '';
+const SearchPage = () => {
     return (
         <>
-            <SearchView search={search} />
+            <SearchView />
         </>
     );
 }

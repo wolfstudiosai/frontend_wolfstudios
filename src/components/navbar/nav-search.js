@@ -9,6 +9,7 @@ import { api } from '/src/utils/api';
 import { CampaignRightPanel } from '/src/app/(public)/campaign/_components/campaign-right-panel';
 import { PartnerRightPanel } from '/src/app/(public)/partner/_components/partner-right-panel';
 import { ProductionRightPanel } from '/src/app/(public)/production/_components/production-right-panel';
+import { useSettings } from '/src/hooks/use-settings';
 
 export const NavSearch = ({ isMobile = false }) => {
   const router = useRouter();
@@ -22,6 +23,9 @@ export const NavSearch = ({ isMobile = false }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [openPanel, setOpenPanel] = React.useState(false);
   const isSearchPage = pathname === '/search';
+
+  // GLOBAL SEARCH
+  const { setSearch } = useSettings();
 
   // Loading state
   const [loading, setLoading] = useState(false);
@@ -72,7 +76,7 @@ export const NavSearch = ({ isMobile = false }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsInput(false);
-    router.push(`/search?q=${searchValue}`);
+    router.push(`/search`);
   };
 
   // Handle item click
@@ -92,7 +96,10 @@ export const NavSearch = ({ isMobile = false }) => {
             <StyledInputBase
               placeholder="Search…"
               value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
+              onChange={(e) => {
+                setSearchValue(e.target.value)
+                setSearch(e.target.value)
+              }}
               inputProps={{ 'aria-label': 'search' }}
               onInput={() => setIsInput(true)}
             />

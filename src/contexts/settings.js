@@ -4,6 +4,7 @@ import * as React from 'react';
 
 import { applyDefaultSettings } from '/src/lib/settings/apply-default-settings';
 import useAuth from '/src/hooks/useAuth';
+import { useDebounce } from '/src/hooks/use-debounce';
 
 export const SettingsContext = React.createContext({
   settings: applyDefaultSettings({}),
@@ -18,6 +19,8 @@ export const SettingsContext = React.createContext({
   setIsFeaturedCardVisible: () => { },
   openMenus: {},
   toggleMenuItem: () => { },
+  debouncedSearch: '',
+  setSearch: () => { },
 });
 
 export function SettingsProvider({ children, settings: initialSettings }) {
@@ -26,6 +29,11 @@ export function SettingsProvider({ children, settings: initialSettings }) {
   const [openSubNav, setOpenSubNav] = React.useState(isLogin ? true : false);
   const [isFeaturedCardVisible, setIsFeaturedCardVisible] = React.useState(false);
   const [openMenus, setOpenMenus] = React.useState({});
+
+  // GLOBAL SEARCH
+  const [search, setSearch] = React.useState('');
+  const debouncedSearch = useDebounce(search, 500);
+
 
   const toggleMenuItem = (key) => {
     if (key) {
@@ -55,6 +63,8 @@ export function SettingsProvider({ children, settings: initialSettings }) {
         setIsFeaturedCardVisible,
         openMenus,
         toggleMenuItem,
+        debouncedSearch,
+        setSearch,
       }}
     >
       {children}
