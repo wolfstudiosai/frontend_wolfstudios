@@ -52,9 +52,7 @@ const SearchView = () => {
   };
 
   React.useEffect(() => {
-    if (debouncedSearch) {
-      getSearchData();
-    }
+    getSearchData();
   }, [debouncedSearch]);
 
   // Handle item click
@@ -93,7 +91,7 @@ const SearchView = () => {
                               onClick={() => handleItemClick(section.label, item.id)}
                             >
                               <Avatar
-                                src={item.img || '/src/assets/images/placeholder.png'}
+                                src={item.img || '/assets/image-placeholder.jpg'}
                                 variant="square"
                                 p={0}
                                 sx={{

@@ -30,6 +30,7 @@ import { MobileSideNav } from './mobile-side-nav';
 import { LoginForm } from '/src/app/auth/_components/LoginForm';
 import { publicRoutes } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
+import Link from 'next/link';
 
 export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const {
@@ -303,9 +304,9 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
           <Typography color="text.secondary" variant="body2" sx={{ my: 1 }}>
             Don&#39;t have an account?{' '}
             <Typography
-              component={'span'}
+              as={Link}
+              href={paths.auth.default.sign_up}
               variant="body2"
-              onClick={handleRedirect}
               sx={{ cursor: 'pointer', color: 'var(--mui-palette-primary-main)' }}
             >
               Sign up
