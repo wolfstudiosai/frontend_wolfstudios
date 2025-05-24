@@ -1,5 +1,4 @@
 import { Box, CircularProgress, InputBase, styled, Typography } from '@mui/material';
-import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import React, { useState } from 'react';
 import { Iconify } from '/src/components/iconify/iconify';
@@ -19,6 +18,7 @@ export const NavSearch = ({ isMobile = false }) => {
   const [tabs, setTabs] = useState([]);
   const [tab, setTab] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
+  const [openPanel, setOpenPanel] = React.useState(false);
   const isSearchPage = pathname === '/search';
 
   // Loading state
@@ -74,7 +74,10 @@ export const NavSearch = ({ isMobile = false }) => {
   };
 
   // Handle item click
-  const handleItemClick = (section, id) => setSelectedItem({ section, id })
+  const handleItemClick = (section, id) => {
+    setSelectedItem({ section, id })
+    setOpenPanel(true)
+  }
 
   return (
     <>
@@ -164,10 +167,14 @@ export const NavSearch = ({ isMobile = false }) => {
         )}
       </SearchWrapper>
 
-      {selectedItem?.section === 'Campaign' && (
+      {selectedItem?.section === 'Campaign' && openPanel && (
         <CampaignRightPanel
-          onClose={() => setSelectedItem(null)}
+          onClose={() => {
+            setSelectedItem(null)
+            setOpenPanel(false)
+          }}
           id={selectedItem.id}
+          open={openPanel}
         />
       )}
     </>
@@ -226,21 +233,6 @@ const DropdownContainer = styled('div')(({ theme }) => ({
 
 const Section = styled('div')(({ theme }) => ({
   // marginBottom: theme.spacing(1),
-}));
-
-const SectionHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: theme.spacing(1),
-}));
-
-const TableName = styled('span')(({ theme }) => ({
-  fontSize: pxToRem(14),
-  fontWeight: 500,
-  borderBottom: '2px solid var(--mui-palette-primary-main)',
-  paddingBottom: theme.spacing(0.5),
-  color: 'var(--mui-palette-text-primary)',
 }));
 
 const ScrollableRow = styled('div')(({ theme }) => ({

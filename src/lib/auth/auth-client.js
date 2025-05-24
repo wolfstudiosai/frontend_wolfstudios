@@ -3,4 +3,5 @@ export const {
     signIn,
     signUp,
     signOut,
+    useSession
 } = createAuthClient();
