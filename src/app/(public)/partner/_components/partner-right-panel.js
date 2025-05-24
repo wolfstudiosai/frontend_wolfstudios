@@ -107,7 +107,6 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
         };
         getSingleData();
     }, [id]);
-    console.log(sidebarView);
 
     // *****************Action Buttons*******************************
     const actionButtons = (

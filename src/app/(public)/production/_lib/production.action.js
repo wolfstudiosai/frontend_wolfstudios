@@ -16,10 +16,10 @@ export const getProductionListAsync = async (queryParams) => {
   }
 };
 
-export const getProductionAsync = async (slug) => {
+export const getProductionAsync = async (id) => {
   try {
-    const res = await api.get(`/production-HQ/${slug}`);
-    return { success: true, data: res.data.data[0], totalRecords: res.data.meta.total };
+    const res = await api.get(`/production-HQ/${id}`);
+    return { success: true, data: res.data.data };
   } catch (error) {
     toast.error(error.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };

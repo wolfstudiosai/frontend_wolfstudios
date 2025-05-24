@@ -13,123 +13,108 @@ import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getProductionCategoryListAsync } from '../_lib/production.action';
 import { defaultProduction } from '../_lib/production.types';
 
-export const ProductionForm = ({ data, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
-    const [values, setValues] = React.useState(data || defaultProduction);
+export const ProductionForm = ({ values, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
+  const status = [
+    { value: 'Planning', label: 'Planning' },
+    { value: 'In Progress', label: 'In Progress' },
+    { value: 'Completed', label: 'Completed' },
+    { value: 'On Hold', label: 'On Hold' },
+    { value: 'Cancelled', label: 'Cancelled' },
+  ]
 
-    const status =[
-        { value: 'Planning', label: 'Planning' },
-        { value: 'In Progress', label: 'In Progress' },
-        { value: 'Completed', label: 'Completed' },
-        { value: 'On Hold', label: 'On Hold' },
-        { value: 'Cancelled', label: 'Cancelled' },
-    ]
+  const cardsUsed = [
+    { value: 'Card1', label: 'Card1' },
+    { value: 'Card2', label: 'Card2' },
+    { value: 'Card3', label: 'Card3' },
+    { value: 'Card4', label: 'Card4' },
+  ]
 
-    const cardsUsed =[
-        { value: 'Card1', label: 'Card1' },
-        { value: 'Card2', label: 'Card2' },
-        { value: 'Card3', label: 'Card3' },
-        { value: 'Card4', label: 'Card4' },
-    ]
+  const equipmentRentals = [
+    { value: 'Rental1', label: 'Rental1' },
+    { value: 'Rental2', label: 'Rental2' },
+    { value: 'Rental3', label: 'Rental3' },
+    { value: 'Rental4', label: 'Rental4' },
+  ]
 
-    const equipmentRentals =[
-        { value: 'Rental1', label: 'Rental1' },
-        { value: 'Rental2', label: 'Rental2' },
-        { value: 'Rental3', label: 'Rental3' },
-        { value: 'Rental4', label: 'Rental4' },
-    ]
+  const productionUsage = [
+    { value: 'Usage1', label: 'Usage1' },
+    { value: 'Usage2', label: 'Usage2' },
+    { value: 'Usage3', label: 'Usage3' },
+    { value: 'Usage4', label: 'Usage4' },
+  ]
 
-    const productionUsage =[
-        { value: 'Usage1', label: 'Usage1' },
-        { value: 'Usage2', label: 'Usage2' },
-        { value: 'Usage3', label: 'Usage3' },
-        { value: 'Usage4', label: 'Usage4' },
-    ]
-    
-    // *********************States*********************************
-      const [mediaPreview, setMediaPreview] = React.useState(null);
-      const [openVerticalUploadDialog, setOpenVerticalUploadDialog] = React.useState(false);
-      const [openHorizontalUploadDialog, setOpenHorizontalUploadDialog] = React.useState(false);
-      const [countries, setCountries] = React.useState([]);
-      const [states, setStates] = React.useState([]);
-      const [productionCategories, setproductionCategories] = React.useState([]);
-      const [partners, setPartners] = React.useState([]);
+  // *********************States*********************************
+  const [mediaPreview, setMediaPreview] = React.useState(null);
+  const [openVerticalUploadDialog, setOpenVerticalUploadDialog] = React.useState(false);
+  const [openHorizontalUploadDialog, setOpenHorizontalUploadDialog] = React.useState(false);
+  const [countries, setCountries] = React.useState([]);
+  const [states, setStates] = React.useState([]);
+  const [productionCategories, setproductionCategories] = React.useState([]);
+  const [partners, setPartners] = React.useState([]);
 
-      // *****************Use Effects*******************************
-    
-      React.useEffect(() => {
-        return () => {
-          setValues(defaultProduction);
-        };
-      }, []);
-    
-      React.useEffect(() => {
-        if (data) {
-          setValues(data);
+
+  React.useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const res = await getCountryListAsync({ page: 1, rowsPerPage: 100 });
+        if (res?.success) {
+          setCountries(res.data.map((item) => ({ value: item.id, label: item.Name })));
         }
-      }, [data]);
-    
-      React.useEffect(() => {
-        const fetchCountries = async () => {
-          try {
-            const res = await getCountryListAsync({ page: 1, rowsPerPage: 100 });
-            if (res?.success) {
-              setCountries(res.data.map((item) => ({ value: item.id, label: item.Name })));
-            }
-          } catch (err) {
-            console.error(err);
-          }
-        }
-    
-        fetchCountries();
-      }, []);
-    
-      React.useEffect(() => {
-        const fetchStates = async () => {
-          try {
-            const res = await getStateListAsync({ page: 1, rowsPerPage: 100 });
-            if (res?.success) {
-              setStates(res.data.map((item) => ({ value: item.id, label: item.Name })));
-            }
-          } catch (err) {
-            console.error(err);
-          }
-        }
-    
-        fetchStates();
-      }, []);
-    
-      React.useEffect(() => {
-        const fetchproductionCategories = async () => {
-          try {
-            const res = await getProductionCategoryListAsync({ page: 1, rowsPerPage: 100 });
-            if (res?.success) {
-              setproductionCategories(res.data.map((item) => ({ value: item.id, label: item.Name })));
-            }
-          } catch (err) {
-            console.error(err);
-          }
-        }
-    
-        fetchproductionCategories();
-      }, [])
-    
-      React.useEffect(() => {
-        const fetchPartners = async () => {
-          try {
-            const res = await getPartnerListAsync({ page: 1, rowsPerPage: 100 });
-            if (res?.success) {
-              setPartners(res.data.map((item) => ({ value: item.id, label: item.Name })));
-            }
-          } catch (err) {
-            console.error(err);
-          }
-        }
-    
-        fetchPartners();
-      }, [])
+      } catch (err) {
+        console.error(err);
+      }
+    }
 
-    return (
-        <>
+    fetchCountries();
+  }, []);
+
+  React.useEffect(() => {
+    const fetchStates = async () => {
+      try {
+        const res = await getStateListAsync({ page: 1, rowsPerPage: 100 });
+        if (res?.success) {
+          setStates(res.data.map((item) => ({ value: item.id, label: item.Name })));
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchStates();
+  }, []);
+
+  React.useEffect(() => {
+    const fetchproductionCategories = async () => {
+      try {
+        const res = await getProductionCategoryListAsync({ page: 1, rowsPerPage: 100 });
+        if (res?.success) {
+          setproductionCategories(res.data.map((item) => ({ value: item.id, label: item.Name })));
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchproductionCategories();
+  }, [])
+
+  React.useEffect(() => {
+    const fetchPartners = async () => {
+      try {
+        const res = await getPartnerListAsync({ page: 1, rowsPerPage: 100 });
+        if (res?.success) {
+          setPartners(res.data.map((item) => ({ value: item.id, label: item.Name })));
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchPartners();
+  }, [])
+
+  return (
+    <>
       <form onSubmit={onSubmit}>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12 }}>
@@ -176,7 +161,7 @@ export const ProductionForm = ({ data, onSubmit, onChange, errors, onSetFile, on
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-          <CustomDatePicker
+            <CustomDatePicker
               label={'Proposed Date'}
               error={errors.proposedDate}
               value={values.proposedDate}
@@ -185,7 +170,7 @@ export const ProductionForm = ({ data, onSubmit, onChange, errors, onSetFile, on
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-          <CustomDatePicker
+            <CustomDatePicker
               label={'Record Shoot Date'}
               error={errors.recordShootDate}
               value={values.recordShootDate}
@@ -279,6 +264,6 @@ export const ProductionForm = ({ data, onSubmit, onChange, errors, onSetFile, on
       </form>
 
       {mediaPreview && <MediaIframeDialog open={true} data={mediaPreview} onClose={() => setMediaPreview(null)} />}
-        </>
-    );
+    </>
+  );
 };

@@ -193,7 +193,8 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
     return (
         <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
             <PageLoader loading={loading}>
-                {panelView === 'QUICK' ? <CampaignQuickView data={data} /> : <CampaignForm handleChange={handleChange}
+                {panelView === 'QUICK' ? <CampaignQuickView data={data} /> : <CampaignForm
+                    handleChange={handleChange}
                     values={values}
                     errors={errors}
                     setFieldValue={setFieldValue}

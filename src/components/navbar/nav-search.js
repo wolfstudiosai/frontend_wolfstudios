@@ -8,6 +8,7 @@ import { useDebounce } from '/src/hooks/use-debounce';
 import { api } from '/src/utils/api';
 import { CampaignRightPanel } from '/src/app/(public)/campaign/_components/campaign-right-panel';
 import { PartnerRightPanel } from '/src/app/(public)/partner/_components/partner-right-panel';
+import { ProductionRightPanel } from '/src/app/(public)/production/_components/production-right-panel';
 
 export const NavSearch = ({ isMobile = false }) => {
   const router = useRouter();
@@ -180,6 +181,17 @@ export const NavSearch = ({ isMobile = false }) => {
       )}
       {selectedItem?.section === 'Partner' && openPanel && (
         <PartnerRightPanel
+          onClose={() => {
+            setSelectedItem(null)
+            setOpenPanel(false)
+          }}
+          id={selectedItem.id}
+          open={openPanel}
+        />
+      )}
+
+      {selectedItem?.section === 'Production' && openPanel && (
+        <ProductionRightPanel
           onClose={() => {
             setSelectedItem(null)
             setOpenPanel(false)
