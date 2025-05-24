@@ -99,21 +99,12 @@ export const CampaignCard = ({ item, fetchList }) => {
           onClose={() => {
             setSelectedItemId(null)
             setOpenPanel(false)
-            fetchList()
           }}
+          fetchList={fetchList}
           id={selectedItemId}
           open={openPanel}
         />
       )}
-
-      {/* <ManageCampaignRightPanel
-        view={'QUICK'}
-        width="70%"
-        fetchList={fetchList}
-        open={openCampaignRightPanel ? true : false}
-        data={openCampaignRightPanel}
-        onClose={() => setOpenCampaignRightPanel(false)}
-      /> */}
     </>
   );
 };

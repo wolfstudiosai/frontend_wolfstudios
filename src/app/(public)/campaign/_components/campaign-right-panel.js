@@ -24,7 +24,7 @@ import { imageUploader } from '/src/utils/upload-file';
 import Link from 'next/link';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
+export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK' }) => {
     const { isLogin } = useAuth();
     const router = useRouter();
     const [panelView, setPanelView] = React.useState(view);
@@ -106,6 +106,7 @@ export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
                 const res = id ? await updateCampaignAsync(id, finalData) : await createCampaignAsync(finalData);
                 if (res.success) {
                     onClose?.();
+                    fetchList?.()
                     resetForm();
                     router.refresh()
                 } else {
@@ -143,6 +144,7 @@ export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
 
     const handleDelete = async () => {
         onClose?.();
+        fetchList?.()
         router.refresh()
     };
 

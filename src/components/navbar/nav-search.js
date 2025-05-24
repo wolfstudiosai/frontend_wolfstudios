@@ -7,6 +7,7 @@ import { pxToRem } from '/src/utils/helper';
 import { useDebounce } from '/src/hooks/use-debounce';
 import { api } from '/src/utils/api';
 import { CampaignRightPanel } from '/src/app/(public)/campaign/_components/campaign-right-panel';
+import { PartnerRightPanel } from '/src/app/(public)/partner/_components/partner-right-panel';
 
 export const NavSearch = ({ isMobile = false }) => {
   const router = useRouter();
@@ -169,6 +170,16 @@ export const NavSearch = ({ isMobile = false }) => {
 
       {selectedItem?.section === 'Campaign' && openPanel && (
         <CampaignRightPanel
+          onClose={() => {
+            setSelectedItem(null)
+            setOpenPanel(false)
+          }}
+          id={selectedItem.id}
+          open={openPanel}
+        />
+      )}
+      {selectedItem?.section === 'Partner' && openPanel && (
+        <PartnerRightPanel
           onClose={() => {
             setSelectedItem(null)
             setOpenPanel(false)
