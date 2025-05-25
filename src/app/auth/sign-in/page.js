@@ -38,11 +38,11 @@ export default function Page() {
         <Divider sx={{ my: 2 }}>OR</Divider>
 
         <Stack spacing={2} direction='column' alignItems='center'>
-          <SocialLogin provider="facebook" type="LOGIN">
+          <SocialLogin provider="facebook" type="LOGIN|FACEBOOK">
             <Iconify icon="logos:facebook" />
             Sign In with Facebook
           </SocialLogin>
-          <SocialLogin provider="google" type="LOGIN">
+          <SocialLogin provider="google" type="LOGIN|GOOGLE">
             <Iconify icon="devicon:google" />
             Sign In with Google
           </SocialLogin>

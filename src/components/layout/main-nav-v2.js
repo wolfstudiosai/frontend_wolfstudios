@@ -314,10 +314,10 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
           </Typography>
 
           <Stack spacing={2} direction="row" alignItems="center" justifyContent="space-between">
-            <SocialLogin provider="facebook" type="LOGIN" style={{ paddingY: '10px' }}>
+            <SocialLogin provider="facebook" type="LOGIN|FACEBOOK" style={{ paddingY: '10px' }}>
               <Iconify icon="logos:facebook" />
             </SocialLogin>
-            <SocialLogin provider="google" type="LOGIN" style={{ paddingY: '10px' }}>
+            <SocialLogin provider="google" type="LOGIN|GOOGLE" style={{ paddingY: '10px' }}>
               <Iconify icon="devicon:google" />
             </SocialLogin>
           </Stack>

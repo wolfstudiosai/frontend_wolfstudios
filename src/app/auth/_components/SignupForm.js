@@ -164,11 +164,11 @@ export function SignupForm({ redirect = null }) {
       <Divider sx={{ mt: 2 }}>OR</Divider>
 
       <Stack spacing={2} direction='column' alignItems='center'>
-        <SocialLogin provider="facebook" type="SIGNUP">
+        <SocialLogin provider="facebook" type="SIGNUP|FACEBOOK">
           <Iconify icon="logos:facebook" />
           Sign In with Facebook
         </SocialLogin>
-        <SocialLogin provider="google" type="SIGNUP">
+        <SocialLogin provider="google" type="SIGNUP|GOOGLE">
           <Iconify icon="devicon:google" />
           Sign In with Google
         </SocialLogin>
