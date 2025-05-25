@@ -25,6 +25,7 @@ export const AuthContext = createContext({
   login: () => { },
   logout: () => { },
   updateUserInfo: () => { },
+  setUserInfo: () => { },
 });
 
 export const isValidToken = (token) => {
@@ -89,10 +90,12 @@ export const AuthProvider = (props) => {
         role: res.data.data.role,
         workspaces: res.data.data?.WorkspaceMembers?.map((member) => member?.Workspace),
       };
+
+      // save user data in local storage
       localStorage.setItem('auth', JSON.stringify({ ...userData }));
       localStorage.setItem('accessToken', token);
 
-      setTokenInCookies(userData.token);
+      setTokenInCookies(token);
       setUserInfo(userData);
 
       setLoading(false);
@@ -140,6 +143,7 @@ export const AuthProvider = (props) => {
         login: handleLogin,
         logout: handleLogout,
         updateUserInfo,
+        setUserInfo,
       }}
     >
       {props.children}

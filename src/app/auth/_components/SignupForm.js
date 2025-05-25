@@ -20,6 +20,8 @@ import { defaultUser } from '/src/app/dashboard/users/_lib/user.types';
 import { paths } from '/src/paths';
 import SocialLogin from '/src/components/common/social-login';
 import { Iconify } from '/src/components/iconify/iconify';
+import { setTokenInCookies } from '/src/utils/axios-api.helpers';
+import useAuth from '/src/hooks/useAuth';
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required('First name is required'),
@@ -31,7 +33,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export function SignupForm({ redirect = null }) {
-
+  const { setUserInfo } = useAuth();
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
 
@@ -41,10 +43,6 @@ export function SignupForm({ redirect = null }) {
     handleChange,
     handleSubmit,
     handleBlur,
-    setValues,
-    setFieldValue,
-    isValid,
-    resetForm,
   } = useFormik({
     initialValues: defaultUser,
     validationSchema,
@@ -59,6 +57,25 @@ export function SignupForm({ redirect = null }) {
       })
 
       if (res.success) {
+        console.log(res)
+        const userData = {
+          id: res.data.id,
+          token: res.data.accessToken,
+          name: res.data.name,
+          email: res.data.email,
+          contact_number: res.data.contactNumber,
+          profile_pic: res.data.profileImage,
+          role: res.data.role,
+          workspaces: res?.WorkspaceMembers?.map((member) => member?.Workspace),
+        }
+
+        // save user data in local storage
+        localStorage.setItem('auth', JSON.stringify({ ...userData }));
+        localStorage.setItem('accessToken', res.data.accessToken);
+
+        setTokenInCookies(res.data.accessToken);
+        setUserInfo(userData);
+
         if (redirect) {
           redirect();
         } else {

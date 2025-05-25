@@ -56,23 +56,6 @@ export function LoginForm({ onLoginSuccess, redirectToHome = false }) {
 
   return (
     <Stack spacing={3} sx={{ minWidth: 300 }}>
-      {/* <Stack spacing={2}>
-        {oAuthProviders.map((provider) => (
-          <Button
-            color="secondary"
-            disabled={loading}
-            endIcon={<Box alt="" component="img" height={24} src={provider.logo} width={24} />}
-            key={provider.id}
-            onClick={() => {
-              onAuth(provider.id).catch(() => {});
-            }}
-            variant="outlined"
-          >
-            Continue with {provider.name}
-          </Button>
-        ))}
-      </Stack>
-      <Divider>or</Divider> */}
       <Stack spacing={2}>
         <form onSubmit={handleSubmit}>
           <Stack spacing={2}>
