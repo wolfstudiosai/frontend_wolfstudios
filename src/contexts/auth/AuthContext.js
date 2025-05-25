@@ -55,6 +55,7 @@ export const AuthProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState(INITIAL_AUTH_STATE);
   const [loading, setLoading] = useState(true);
   const { data: session } = useSession();
+  const [socialButton, setSocialButton] = useState('');
 
   // ---- Handle Social Auth Flow ----
   const handleSocialAuth = useCallback(async (type, authType, user) => {
@@ -64,12 +65,13 @@ export const AuthProvider = ({ children }) => {
       email: user.email,
       username: user.name,
       firstName: user.given_name,
-      lastName: user.family_name,
+      lastName: user.family_name || '',
     };
 
     try {
       const endpoint = type === 'LOGIN' ? '/auth/login' : '/auth/signup';
       const res = await server_base_api.post(endpoint, payload);
+
       if (!res.data.success) throw new Error('Auth failed');
 
       const userData = extractUserData(res.data.data);
@@ -88,16 +90,16 @@ export const AuthProvider = ({ children }) => {
 
   // ---- Google Session Effect ----
   useEffect(() => {
-    const socialButton = localStorage.getItem('socialButton');
     if (session?.user?.id && socialButton && !isValidToken(userInfo.token)) {
-      const [type, authType] = socialButton.split('|');
+      const [type, authType] = socialButton?.split('|');
       handleSocialAuth(type, authType, session.user);
     }
-  }, [session, handleSocialAuth]);
+  }, [session]);
 
   // ---- Load Initial Auth ----
   useEffect(() => {
     const storedUser = localStorage.getItem('auth');
+    setSocialButton(localStorage.getItem('socialButton') || '');
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       if (isValidToken(parsedUser.token)) {

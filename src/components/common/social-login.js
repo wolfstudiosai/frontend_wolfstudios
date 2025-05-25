@@ -10,11 +10,14 @@ export default function SocialLogin({ provider, children, type, style }) {
     const handleSignIn = async () => {
         try {
             setLoading(true);
-            localStorage.setItem("socialButton", type);
-            await signIn(provider);
+            await signIn(provider, {
+                redirectTo: '/'
+            });
         } catch (error) {
             console.log("error", error)
         } finally {
+            localStorage.setItem("hello", "hello");
+            localStorage.setItem("socialButton", type);
             setLoading(false);
         }
     }
