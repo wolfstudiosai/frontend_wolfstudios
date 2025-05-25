@@ -6,8 +6,8 @@ import { jwtDecode } from 'jwt-decode';
 
 import { api, server_base_api } from '/src/utils/api';
 import { removeTokenFromCookies, setTokenInCookies } from '/src/utils/axios-api.helpers';
-import { useSession } from '/src/lib/auth/auth-client';
 import { toast } from 'sonner';
+import { useSession } from "next-auth/react"
 
 export const INITIAL_AUTH_STATE = {
   id: '',
@@ -43,7 +43,6 @@ export const AuthProvider = (props) => {
   const [userInfo, setUserInfo] = useState(INITIAL_AUTH_STATE);
   const [loading, setLoading] = useState(true);
   const [socialButton, setSocialButton] = useState('');
-
   const { data: session } = useSession();
 
   // handle google signup
@@ -53,8 +52,8 @@ export const AuthProvider = (props) => {
       authId: user.id,
       email: user.email,
       username: user.name,
-      firstName: user.name.split(' ')[0],
-      lastName: user.name.split(' ')[1],
+      firstName: user.given_name,
+      lastName: user.family_name,
     }
 
     try {
@@ -82,6 +81,9 @@ export const AuthProvider = (props) => {
     } catch (error) {
       toast.error(error.response.data.message);
       console.log(error);
+    } finally {
+      localStorage.removeItem('socialButton');
+      setLoading(false);
     }
   }
 
@@ -99,16 +101,14 @@ export const AuthProvider = (props) => {
     } catch (error) {
       console.log(error);
     } finally {
+      localStorage.removeItem('socialButton');
       setLoading(false);
     }
   }
 
-  console.log(session);
-
   // handle google
   React.useEffect(() => {
-    if (session?.user && userInfo.id === '') {
-      console.log(session);
+    if (session?.user?.id && isValidToken(userInfo.token)) {
       if (socialButton === 'LOGIN') {
         handleGoogleLogin(session.user);
       } else {
@@ -116,12 +116,12 @@ export const AuthProvider = (props) => {
       }
     }
   }, [session]);
+  console.log(session);
 
   React.useEffect(() => {
     setLoading(true);
     const auth = localStorage.getItem('auth');
-    const socialButton = localStorage.getItem('socialButton');
-    setSocialButton(socialButton);
+    setSocialButton(localStorage.getItem('socialButton') || '');
     if (auth) {
       const data = JSON.parse(auth);
       setUserInfo(data);

@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from "@mui/material";
-import { signIn, signOut } from "/src/lib/auth/auth-client"
+import { signIn } from "next-auth/react"
 import { useState } from "react";
 
 export default function SocialLogin({ provider, children, type, style }) {
@@ -11,7 +11,7 @@ export default function SocialLogin({ provider, children, type, style }) {
         try {
             setLoading(true);
             localStorage.setItem("socialButton", type);
-            await signIn.social({ provider });
+            await signIn(provider);
         } catch (error) {
             console.log("error", error)
         } finally {
@@ -19,18 +19,6 @@ export default function SocialLogin({ provider, children, type, style }) {
         }
     }
 
-    const handleLogout = async () => {
-        await signOut({
-            fetchOptions: {
-                onSuccess: (data) => {
-                    console.log("success", data)
-                },
-                onError: (error) => {
-                    console.log("error", error)
-                }
-            }
-        });
-    }
 
     return (
         <Button

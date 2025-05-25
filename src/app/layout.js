@@ -18,6 +18,7 @@ import { getSettings as getPersistedSettings } from '/src/lib/settings/get-setti
 import { AuthProvider } from '/src/contexts/auth/AuthContext';
 import { UserProvider } from '/src/contexts/auth/user-context';
 import { SettingsProvider } from '/src/contexts/settings';
+import { SessionProvider } from "next-auth/react"
 
 export const metadata = { title: config.site.name };
 
@@ -33,27 +34,29 @@ export default async function Layout({ children }) {
   return (
     <html lang={settings.language} suppressHydrationWarning>
       <body>
-        <AuthProvider>
-          <InitColorSchemeScript attribute="class" />
-          <Analytics>
-            <LocalizationProvider>
-              <UserProvider>
-                <SettingsProvider settings={settings}>
-                  <I18nProvider lng={settings.language}>
-                    <ThemeProvider>
-                      <Progressbar />
-                      <AuthGuard>
-                        <LayoutView>{children}</LayoutView>
-                      </AuthGuard>
-                      {/* <SettingsButton /> */}
-                      <Toaster position="top-right" />
-                    </ThemeProvider>
-                  </I18nProvider>
-                </SettingsProvider>
-              </UserProvider>
-            </LocalizationProvider>
-          </Analytics>
-        </AuthProvider>
+        <SessionProvider>
+          <AuthProvider>
+            <InitColorSchemeScript attribute="class" />
+            <Analytics>
+              <LocalizationProvider>
+                <UserProvider>
+                  <SettingsProvider settings={settings}>
+                    <I18nProvider lng={settings.language}>
+                      <ThemeProvider>
+                        <Progressbar />
+                        <AuthGuard>
+                          <LayoutView>{children}</LayoutView>
+                        </AuthGuard>
+                        {/* <SettingsButton /> */}
+                        <Toaster position="top-right" />
+                      </ThemeProvider>
+                    </I18nProvider>
+                  </SettingsProvider>
+                </UserProvider>
+              </LocalizationProvider>
+            </Analytics>
+          </AuthProvider>
+        </SessionProvider>
       </body>
     </html>
   );
