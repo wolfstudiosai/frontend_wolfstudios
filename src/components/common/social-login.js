@@ -1,23 +1,16 @@
 'use client'
 
 import { Button } from "@mui/material";
-import { signIn, signOut, useSession } from "/src/lib/auth/auth-client"
-import { useEffect, useState } from "react";
+import { signIn, signOut } from "/src/lib/auth/auth-client"
+import { useState } from "react";
 
-export default function SocialLogin({ provider, children, style }) {
+export default function SocialLogin({ provider, children, type, style }) {
     const [loading, setLoading] = useState(false);
-    const { data: session } = useSession();
-
-    useEffect(() => {
-        console.log("session--", session)
-        if (session?.session?.id) {
-            console.log("session", session)
-        }
-    }, [session])
 
     const handleSignIn = async () => {
         try {
             setLoading(true);
+            localStorage.setItem("socialButton", type);
             await signIn.social({ provider });
         } catch (error) {
             console.log("error", error)

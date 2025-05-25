@@ -17,8 +17,8 @@ import * as Yup from 'yup';
 
 import { paths } from '/src/paths';
 import useAuth from '/src/hooks/useAuth';
+import { server_base_api } from '/src/utils/api';
 
-const oAuthProviders = [{ id: 'google', name: 'Google', logo: '/assets/logo-google.svg' }];
 const defaultValues = { email: '', password: '' };
 const validationSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
@@ -53,6 +53,27 @@ export function LoginForm({ onLoginSuccess, redirectToHome = false }) {
         }
       },
     });
+
+  const handleGoogleLogin = async (user) => {
+    setLoading(true);
+    try {
+      const res = await server_base_api.post('/auth/login', {
+        authType: 'GOOGLE',
+        authId: user.id,
+      });
+
+      console.log(res);
+
+      // if (res.data.success) {
+      //   onLoginSuccess?.();
+      //   redirectToHome && router.push(paths.home);
+      // }
+    } catch (error) {
+      setError(error.response?.data?.message || 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <Stack spacing={3} sx={{ minWidth: 300 }}>

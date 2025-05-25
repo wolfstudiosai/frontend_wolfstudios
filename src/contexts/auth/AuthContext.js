@@ -7,6 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 import { api, server_base_api } from '/src/utils/api';
 import { removeTokenFromCookies, setTokenInCookies } from '/src/utils/axios-api.helpers';
 import { useSession } from '/src/lib/auth/auth-client';
+import { toast } from 'sonner';
 
 export const INITIAL_AUTH_STATE = {
   id: '',
@@ -41,20 +42,89 @@ export const isValidToken = (token) => {
 export const AuthProvider = (props) => {
   const [userInfo, setUserInfo] = useState(INITIAL_AUTH_STATE);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const {
-    data: session,
-  } = useSession();
+  const [socialButton, setSocialButton] = useState('');
 
-  // console.log(session);
+  const { data: session } = useSession();
+
+  // handle google signup
+  const handleGoogleSignup = async (user) => {
+    const payload = {
+      authType: "GOOGLE",
+      authId: user.id,
+      email: user.email,
+      username: user.name,
+      firstName: user.name.split(' ')[0],
+      lastName: user.name.split(' ')[1],
+    }
+
+    try {
+      const res = await server_base_api.post('/auth/signup', payload);
+
+      if (res.data.success) {
+        const userData = {
+          id: res.data.data.id,
+          token: res.data.data.accessToken,
+          name: res.data.data.name,
+          email: res.data.data.email,
+          contact_number: res.data.data.contactNumber,
+          profile_pic: res.data.data.profileImage,
+          role: res.data.data.role,
+          workspaces: res.data.data?.WorkspaceMembers?.map((member) => member?.Workspace),
+        };
+
+        // save user data in local storage
+        localStorage.setItem('auth', JSON.stringify({ ...userData }));
+        localStorage.setItem('accessToken', res.data.data.accessToken);
+
+        setTokenInCookies(res.data.data.accessToken);
+        setUserInfo(userData);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+      console.log(error);
+    }
+  }
+
+  // handle google login
+  const handleGoogleLogin = async (user) => {
+    setLoading(true);
+    try {
+      const res = await server_base_api.post('/auth/login', {
+        authType: 'GOOGLE',
+        authId: user.id,
+      });
+
+      console.log(res);
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  console.log(session);
+
+  // handle google
+  React.useEffect(() => {
+    if (session?.user && userInfo.id === '') {
+      console.log(session);
+      if (socialButton === 'LOGIN') {
+        handleGoogleLogin(session.user);
+      } else {
+        handleGoogleSignup(session.user);
+      }
+    }
+  }, [session]);
 
   React.useEffect(() => {
     setLoading(true);
     const auth = localStorage.getItem('auth');
+    const socialButton = localStorage.getItem('socialButton');
+    setSocialButton(socialButton);
     if (auth) {
       const data = JSON.parse(auth);
       setUserInfo(data);
-      //   api.defaults.headers.common['auth-Token'] = `${data.token}`;
     }
     setLoading(false);
   }, []);

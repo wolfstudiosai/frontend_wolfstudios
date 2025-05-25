@@ -3,7 +3,6 @@
 import { CustomPasswordInput } from '/src/components/formFields/CustomPasswordInput';
 import { CircularProgress } from '@mui/material';
 import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -57,7 +56,6 @@ export function SignupForm({ redirect = null }) {
       })
 
       if (res.success) {
-        console.log(res)
         const userData = {
           id: res.data.id,
           token: res.data.accessToken,
@@ -166,11 +164,11 @@ export function SignupForm({ redirect = null }) {
       <Divider sx={{ mt: 2 }}>OR</Divider>
 
       <Stack spacing={2} direction='column' alignItems='center'>
-        <SocialLogin provider="facebook">
+        <SocialLogin provider="facebook" type="SIGNUP">
           <Iconify icon="logos:facebook" />
           Sign In with Facebook
         </SocialLogin>
-        <SocialLogin provider="google">
+        <SocialLogin provider="google" type="SIGNUP">
           <Iconify icon="devicon:google" />
           Sign In with Google
         </SocialLogin>
