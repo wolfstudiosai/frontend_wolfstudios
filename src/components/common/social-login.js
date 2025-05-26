@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { signIn } from "next-auth/react"
 import { useState } from "react";
 
@@ -30,7 +30,7 @@ export default function SocialLogin({ provider, children, type, style }) {
             sx={{ bgcolor: "transparent", border: '1px solid var(--mui-palette-divider)', gap: 2, ...style }}
             disabled={loading}
         >
-            {loading ? "Loading..." : children}
+            {loading ? <CircularProgress size={20} color="inherit" /> : children}
         </Button>
     )
 }
