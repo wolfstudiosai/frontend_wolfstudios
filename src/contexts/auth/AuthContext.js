@@ -70,16 +70,17 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const endpoint = type === 'LOGIN' ? '/auth/login' : '/auth/signup';
-      const res = await server_base_api.post(endpoint, payload);
+      console.log(endpoint, payload)
+      // const res = await server_base_api.post(endpoint, payload);
 
-      if (!res.data.success) throw new Error('Auth failed');
+      // if (!res.data.success) throw new Error('Auth failed');
 
-      const userData = extractUserData(res.data.data);
-      localStorage.setItem('auth', JSON.stringify(userData));
-      localStorage.setItem('accessToken', userData.token);
+      // const userData = extractUserData(res.data.data);
+      // localStorage.setItem('auth', JSON.stringify(userData));
+      // localStorage.setItem('accessToken', userData.token);
 
-      setTokenInCookies(userData.token);
-      setUserInfo(userData);
+      // setTokenInCookies(userData.token);
+      // setUserInfo(userData);
     } catch (err) {
       toast.error(err?.response?.data?.message || 'Google auth failed');
     } finally {

@@ -24,7 +24,7 @@ import useAuth from '/src/hooks/useAuth';
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required('First name is required'),
-  lastName: Yup.string().required('Last name is required'),
+  lastName: Yup.string().optional(),
   email: Yup.string().email('Invalid email').required('Email is required'),
   username: Yup.string().required('Username is required'),
   contactNumber: Yup.string().required('Contact number is required'),
@@ -77,7 +77,7 @@ export function SignupForm({ redirect = null }) {
         if (redirect) {
           redirect();
         } else {
-          router.push(paths.auth.default.sign_in)
+          router.push(paths.home)
         }
       }
       setLoading(false)
@@ -155,7 +155,7 @@ export function SignupForm({ redirect = null }) {
               variant="contained"
               startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
             >
-              {loading ? 'Signing in...' : "Sign in"}
+              {loading ? 'Signing up...' : "Sign up"}
             </Button>
           </Stack>
         </form>
