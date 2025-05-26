@@ -48,7 +48,7 @@ export default async function Layout({ children }) {
                           <LayoutView>{children}</LayoutView>
                         </AuthGuard>
                         {/* <SettingsButton /> */}
-                        <Toaster position="top-right" />
+                        <Toaster position="bottom-right" />
                       </ThemeProvider>
                     </I18nProvider>
                   </SettingsProvider>
