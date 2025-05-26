@@ -23,31 +23,30 @@ export default function Page() {
         </Box>
         <Stack spacing={1}>
           <Typography variant="h5">Sign in</Typography>
-          <Typography color="text.secondary" variant="body2">
-            Don&apos;t have an account?{' '}
-            <Link component={RouterLink} href={paths.auth.default.sign_up} variant="subtitle2">
-              Sign up
-            </Link>
-          </Typography>
+          <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} alignItems='center' sx={{ mt: 2 }}>
+            <SocialLogin provider="facebook" type="LOGIN|FACEBOOK">
+              <Iconify icon="logos:facebook" />
+              Sign in with Facebook
+            </SocialLogin>
+            <SocialLogin provider="google" type="LOGIN|GOOGLE">
+              <Iconify icon="devicon:google" />
+              Sign in with Google
+            </SocialLogin>
+          </Stack>
         </Stack>
+
+        <Divider sx={{ my: 2 }}>OR</Divider>
         <LoginForm onLoginSuccess={null} redirectToHome={true} />
         <Link component={RouterLink} href={paths.auth.default.forgotPassword} variant="subtitle2">
           Forgot password?
         </Link>
 
-        <Divider sx={{ my: 2 }}>OR</Divider>
-
-        <Stack spacing={2} direction='column' alignItems='center'>
-          <SocialLogin provider="facebook" type="LOGIN|FACEBOOK">
-            <Iconify icon="logos:facebook" />
-            Sign In with Facebook
-          </SocialLogin>
-          <SocialLogin provider="google" type="LOGIN|GOOGLE">
-            <Iconify icon="devicon:google" />
-            Sign In with Google
-          </SocialLogin>
-        </Stack>
-
+        <Typography color="text.secondary" variant="body2" sx={{ mt: 2 }}>
+          Don&apos;t have an account?{' '}
+          <Link component={RouterLink} href={paths.auth.default.sign_up} variant="subtitle2">
+            Sign up
+          </Link>
+        </Typography>
       </SplitLayout>
     </GuestGuard>
   );
