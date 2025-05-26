@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 
 import { api, server_base_api } from '/src/utils/api';
 import { setTokenInCookies, removeTokenFromCookies } from '/src/utils/axios-api.helpers';
+import { signOut } from "next-auth/react"
 
 // ---- Initial User State ----
 const INITIAL_AUTH_STATE = {
@@ -59,30 +60,38 @@ export const AuthProvider = ({ children }) => {
 
   // ---- Handle Social Auth Flow ----
   const handleSocialAuth = useCallback(async (type, authType, user) => {
-    const payload = {
+    let payload = {
       authType: authType,
       authId: user.id,
-      email: user.email,
-      username: user.name,
-      firstName: user.given_name,
-      lastName: user.family_name || '',
-    };
+    }
+
+    if (type === 'SIGNUP') {
+      payload = {
+        ...payload,
+        email: user.email,
+        username: user.name,
+        firstName: user.given_name,
+        lastName: user.family_name || '',
+      }
+    }
 
     try {
       const endpoint = type === 'LOGIN' ? '/auth/login' : '/auth/signup';
-      console.log(endpoint, payload)
-      // const res = await server_base_api.post(endpoint, payload);
+      // console.log(endpoint, type, authType, payload)
+      const res = await server_base_api.post(endpoint, payload);
+      console.log(res)
 
-      // if (!res.data.success) throw new Error('Auth failed');
+      if (!res.data.success) throw new Error('Auth failed');
 
-      // const userData = extractUserData(res.data.data);
-      // localStorage.setItem('auth', JSON.stringify(userData));
-      // localStorage.setItem('accessToken', userData.token);
+      toast.success(res.data.message);
+      const userData = extractUserData(res.data.data);
+      localStorage.setItem('auth', JSON.stringify(userData));
+      localStorage.setItem('accessToken', userData.token);
 
-      // setTokenInCookies(userData.token);
-      // setUserInfo(userData);
+      setTokenInCookies(userData.token);
+      setUserInfo(userData);
     } catch (err) {
-      toast.error(err?.response?.data?.message || 'Google auth failed');
+      toast.error(err?.response?.data?.message || `${authType} auth failed`);
     } finally {
       localStorage.removeItem('socialButton');
       setLoading(false);
@@ -95,7 +104,7 @@ export const AuthProvider = ({ children }) => {
       const [type, authType] = socialButton?.split('|');
       handleSocialAuth(type, authType, session.user);
     }
-  }, [session]);
+  }, [session, socialButton]);
 
   // ---- Load Initial Auth ----
   useEffect(() => {
@@ -121,6 +130,9 @@ export const AuthProvider = ({ children }) => {
       const res = await server_base_api.post('/auth/login', payload);
       const userData = extractUserData(res.data.data);
 
+      // show toast message
+      toast.success(res.data.message);
+
       localStorage.setItem('auth', JSON.stringify(userData));
       localStorage.setItem('accessToken', userData.token);
 
@@ -141,7 +153,11 @@ export const AuthProvider = ({ children }) => {
     localStorage.clear();
     removeTokenFromCookies();
     setUserInfo(INITIAL_AUTH_STATE);
-    delete api.defaults.headers.common['Authorization'];
+    if (session?.user?.id) {
+      signOut();
+    } else {
+      delete api.defaults.headers.common['Authorization'];
+    }
   };
 
   // ---- Update User Info Locally ----
