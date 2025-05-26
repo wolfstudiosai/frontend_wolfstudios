@@ -199,9 +199,9 @@ const NotificationSidebar = ({ open, onClose }) => {
         open={open}
         onClose={onClose}
       >
-        <Box ref={observerRef} role='presentation' sx={{ width: '300px', height: '300px' }}>
+        <Box ref={observerRef} role='presentation' sx={{ width: '300px' }}>
           <PageLoader loading={loading}>
-            <Box sx={{ p: 2, bgcolor: 'background.default' }}>
+            <Box sx={{ p: 2 }}>
               <Typography variant="h6" sx={{ mb: 1 }}>
                 Notifications
               </Typography>

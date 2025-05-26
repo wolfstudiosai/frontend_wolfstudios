@@ -28,7 +28,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     family_name: profile.family_name,
                     locale: profile.locale,
                 }
-            }
+            },
+            clientId: process.env.NEXT_PUBLIC_GOOGLE_ID,
+            clientSecret: process.env.NEXT_PUBLIC_GOOGLE_SECRET,
         },
         {
             id: 'facebook',
@@ -53,8 +55,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     image: profile.picture?.data?.url,
                 }
             },
-            clientId: process.env.FACEBOOK_CLIENT_ID,
-            clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+            clientId: process.env.NEXT_PUBLIC_FACEBOOK_ID,
+            clientSecret: process.env.NEXT_PUBLIC_FACEBOOK_SECRET,
         }
     ],
 
