@@ -77,9 +77,9 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const endpoint = type === 'LOGIN' ? '/auth/login' : '/auth/signup';
-      // console.log(endpoint, type, authType, payload)
+
       const res = await server_base_api.post(endpoint, payload);
-      console.log(res)
+      // console.log(res)
 
       if (!res.data.success) throw new Error('Auth failed');
 
@@ -92,6 +92,7 @@ export const AuthProvider = ({ children }) => {
       setUserInfo(userData);
     } catch (err) {
       toast.error(err?.response?.data?.message || `${authType} auth failed`);
+      signOut();
     } finally {
       localStorage.removeItem('socialButton');
       setLoading(false);
@@ -101,7 +102,9 @@ export const AuthProvider = ({ children }) => {
   // ---- Google Session Effect ----
   useEffect(() => {
     if (session?.user?.id && socialButton && !isValidToken(userInfo.token)) {
+      console.log(session);
       const [type, authType] = socialButton?.split('|');
+      setSocialButton('');
       handleSocialAuth(type, authType, session.user);
     }
   }, [session, socialButton]);
