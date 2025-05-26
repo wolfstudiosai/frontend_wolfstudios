@@ -1,14 +1,16 @@
 'use client';
 
-import React, { createContext, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
+import { useSession } from "next-auth/react";
 import { jwtDecode } from 'jwt-decode';
+import { toast } from 'sonner';
 
 import { api, server_base_api } from '/src/utils/api';
-import { removeTokenFromCookies, setTokenInCookies } from '/src/utils/axios-api.helpers';
-import { useSession } from '/src/lib/auth/auth-client';
+import { setTokenInCookies, removeTokenFromCookies } from '/src/utils/axios-api.helpers';
+import { signOut } from "next-auth/react"
 
-export const INITIAL_AUTH_STATE = {
+// ---- Initial User State ----
+const INITIAL_AUTH_STATE = {
   id: '',
   token: '',
   name: '',
@@ -18,131 +20,165 @@ export const INITIAL_AUTH_STATE = {
   role: 'USER',
 };
 
+// ---- Auth Context Definition ----
 export const AuthContext = createContext({
   userInfo: INITIAL_AUTH_STATE,
-  // loading: false,
   isLogin: false,
   login: () => { },
   logout: () => { },
   updateUserInfo: () => { },
+  setUserInfo: () => { },
 });
 
-export const isValidToken = (token) => {
+// ---- Token Validation ----
+const isValidToken = (token) => {
   try {
-    const decoded = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
-    return decoded.exp > currentTime;
-  } catch (e) {
+    const { exp } = jwtDecode(token);
+    return exp > Date.now() / 1000;
+  } catch {
     return false;
   }
 };
 
-export const AuthProvider = (props) => {
+// ---- Extract Common User Mapping ----
+const extractUserData = (data) => ({
+  id: data.id,
+  token: data.accessToken,
+  name: data.name,
+  email: data.email,
+  contact_number: data.contactNumber,
+  profile_pic: data.profileImage,
+  role: data.role,
+  workspaces: data?.WorkspaceMembers?.map((member) => member?.Workspace),
+});
+
+export const AuthProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState(INITIAL_AUTH_STATE);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const {
-    data: session,
-  } = useSession();
+  const { data: session } = useSession();
+  const [socialButton, setSocialButton] = useState('');
 
-  // console.log(session);
+  // ---- Handle Social Auth Flow ----
+  const handleSocialAuth = useCallback(async (type, authType, user) => {
+    let payload = {
+      authType: authType,
+      authId: user.id,
+    }
 
-  React.useEffect(() => {
-    setLoading(true);
-    const auth = localStorage.getItem('auth');
-    if (auth) {
-      const data = JSON.parse(auth);
-      setUserInfo(data);
-      //   api.defaults.headers.common['auth-Token'] = `${data.token}`;
+    if (type === 'SIGNUP') {
+      payload = {
+        ...payload,
+        email: user.email,
+        username: user.name,
+        firstName: user.given_name,
+        lastName: user.family_name || '',
+      }
+    }
+
+    try {
+      const endpoint = type === 'LOGIN' ? '/auth/login' : '/auth/signup';
+      // console.log(endpoint, type, authType, payload)
+      const res = await server_base_api.post(endpoint, payload);
+      console.log(res)
+
+      if (!res.data.success) throw new Error('Auth failed');
+
+      toast.success(res.data.message);
+      const userData = extractUserData(res.data.data);
+      localStorage.setItem('auth', JSON.stringify(userData));
+      localStorage.setItem('accessToken', userData.token);
+
+      setTokenInCookies(userData.token);
+      setUserInfo(userData);
+    } catch (err) {
+      toast.error(err?.response?.data?.message || `${authType} auth failed`);
+    } finally {
+      localStorage.removeItem('socialButton');
+      setLoading(false);
+    }
+  }, []);
+
+  // ---- Google Session Effect ----
+  useEffect(() => {
+    if (session?.user?.id && socialButton && !isValidToken(userInfo.token)) {
+      const [type, authType] = socialButton?.split('|');
+      handleSocialAuth(type, authType, session.user);
+    }
+  }, [session, socialButton]);
+
+  // ---- Load Initial Auth ----
+  useEffect(() => {
+    const storedUser = localStorage.getItem('auth');
+    setSocialButton(localStorage.getItem('socialButton') || '');
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      if (isValidToken(parsedUser.token)) {
+        setUserInfo(parsedUser);
+      }
     }
     setLoading(false);
   }, []);
 
-  const handleLogin = async ({ email, password, authType, authId, onError }) => {
+  // ---- Email/Password or Social Login ----
+  const login = async ({ email, password, authType, authId, onError }) => {
     setLoading(true);
     try {
-      let payload = {}
-
-      if (authType === "EMAIL_PASSWORD") {
-        payload = {
-          email,
-          password,
-          authType,
-        }
-      } else {
-        payload = {
-          authId,
-          authType,
-        }
-      }
+      const payload = authType === 'EMAIL_PASSWORD'
+        ? { email, password, authType }
+        : { authId, authType };
 
       const res = await server_base_api.post('/auth/login', payload);
-      const token = res.data.data.accessToken;
+      const userData = extractUserData(res.data.data);
 
-      const userData = {
-        id: res.data.data.id,
-        token: token,
-        name: res.data.data.name,
-        email: res.data.data.email,
-        contact_number: res.data.data.contactNumber,
-        profile_pic: res.data.data.profileImage,
-        role: res.data.data.role,
-        workspaces: res.data.data?.WorkspaceMembers?.map((member) => member?.Workspace),
-      };
-      localStorage.setItem('auth', JSON.stringify({ ...userData }));
-      localStorage.setItem('accessToken', token);
+      // show toast message
+      toast.success(res.data.message);
+
+      localStorage.setItem('auth', JSON.stringify(userData));
+      localStorage.setItem('accessToken', userData.token);
 
       setTokenInCookies(userData.token);
       setUserInfo(userData);
 
+      return { success: true, data: res.data.data };
+    } catch (err) {
+      onError?.(err?.response?.data?.message || 'Login failed');
+      return { success: false };
+    } finally {
       setLoading(false);
-
-      if (res.status === 200) {
-        return {
-          success: true,
-          data: res.data.data,
-        };
-      }
-      return {
-        success: false,
-        data: res.data.data,
-      };
-      // router.push(paths.home);
-    } catch (error) {
-      onError(error.response?.data?.message || 'An error occurred');
     }
   };
 
-  const handleLogout = () => {
+  // ---- Logout ----
+  const logout = () => {
     localStorage.clear();
-    setUserInfo(INITIAL_AUTH_STATE);
-    delete api.defaults.headers.common['Authorization'];
     removeTokenFromCookies();
-    // router.push(paths.home);
+    setUserInfo(INITIAL_AUTH_STATE);
+    if (session?.user?.id) {
+      signOut();
+    } else {
+      delete api.defaults.headers.common['Authorization'];
+    }
   };
 
-  const updateUserInfo = (updatedFields) => {
-    const updatedUser = {
-      ...userInfo,
-      ...updatedFields,
-    };
-
-    setUserInfo(updatedUser);
-    localStorage.setItem('auth', JSON.stringify(updatedUser));
+  // ---- Update User Info Locally ----
+  const updateUserInfo = (updates) => {
+    const updated = { ...userInfo, ...updates };
+    setUserInfo(updated);
+    localStorage.setItem('auth', JSON.stringify(updated));
   };
 
   return (
     <AuthContext.Provider
       value={{
         userInfo,
-        // loading,
         isLogin: isValidToken(userInfo.token),
-        login: handleLogin,
-        logout: handleLogout,
+        login,
+        logout,
         updateUserInfo,
+        setUserInfo,
       }}
     >
-      {props.children}
+      {children}
     </AuthContext.Provider>
   );
 };

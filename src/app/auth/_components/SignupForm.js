@@ -3,9 +3,7 @@
 import { CustomPasswordInput } from '/src/components/formFields/CustomPasswordInput';
 import { CircularProgress } from '@mui/material';
 import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import InputLabel from '@mui/material/InputLabel';
@@ -18,12 +16,12 @@ import * as Yup from 'yup';
 import { createUser } from '/src/app/dashboard/users/_lib/user.actions';
 import { defaultUser } from '/src/app/dashboard/users/_lib/user.types';
 import { paths } from '/src/paths';
-import SocialLogin from '/src/components/common/social-login';
-import { Iconify } from '/src/components/iconify/iconify';
+import { setTokenInCookies } from '/src/utils/axios-api.helpers';
+import useAuth from '/src/hooks/useAuth';
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required('First name is required'),
-  lastName: Yup.string().required('Last name is required'),
+  lastName: Yup.string().optional(),
   email: Yup.string().email('Invalid email').required('Email is required'),
   username: Yup.string().required('Username is required'),
   contactNumber: Yup.string().required('Contact number is required'),
@@ -31,7 +29,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export function SignupForm({ redirect = null }) {
-
+  const { setUserInfo } = useAuth();
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
 
@@ -41,10 +39,6 @@ export function SignupForm({ redirect = null }) {
     handleChange,
     handleSubmit,
     handleBlur,
-    setValues,
-    setFieldValue,
-    isValid,
-    resetForm,
   } = useFormik({
     initialValues: defaultUser,
     validationSchema,
@@ -59,10 +53,28 @@ export function SignupForm({ redirect = null }) {
       })
 
       if (res.success) {
+        const userData = {
+          id: res.data.id,
+          token: res.data.accessToken,
+          name: res.data.name,
+          email: res.data.email,
+          contact_number: res.data.contactNumber,
+          profile_pic: res.data.profileImage,
+          role: res.data.role,
+          workspaces: res?.WorkspaceMembers?.map((member) => member?.Workspace),
+        }
+
+        // save user data in local storage
+        localStorage.setItem('auth', JSON.stringify({ ...userData }));
+        localStorage.setItem('accessToken', res.data.accessToken);
+
+        setTokenInCookies(res.data.accessToken);
+        setUserInfo(userData);
+
         if (redirect) {
           redirect();
         } else {
-          router.push(paths.auth.default.sign_in)
+          router.push(paths.home)
         }
       }
       setLoading(false)
@@ -74,24 +86,26 @@ export function SignupForm({ redirect = null }) {
       <Stack spacing={2}>
         <form onSubmit={handleSubmit}>
           <Stack spacing={2}>
-            <FormControl error={Boolean(errors.firstName)}>
-              <InputLabel>First Name</InputLabel>
-              <OutlinedInput
-                type="firstName"
-                name="firstName"
-                value={values.firstName}
-                onChange={handleChange}
-              />
-            </FormControl>
-            <FormControl error={Boolean(errors.lastName)}>
-              <InputLabel>Last Name</InputLabel>
-              <OutlinedInput
-                type="lastName"
-                name="lastName"
-                value={values.lastName}
-                onChange={handleChange}
-              />
-            </FormControl>
+            <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} alignItems='center'>
+              <FormControl error={Boolean(errors.firstName)} fullWidth>
+                <InputLabel>First Name</InputLabel>
+                <OutlinedInput
+                  type="firstName"
+                  name="firstName"
+                  value={values.firstName}
+                  onChange={handleChange}
+                />
+              </FormControl>
+              <FormControl error={Boolean(errors.lastName)} fullWidth>
+                <InputLabel>Last Name</InputLabel>
+                <OutlinedInput
+                  type="lastName"
+                  name="lastName"
+                  value={values.lastName}
+                  onChange={handleChange}
+                />
+              </FormControl>
+            </Stack>
 
             <FormControl error={Boolean(errors.username)}>
               <InputLabel>Username</InputLabel>
@@ -140,23 +154,10 @@ export function SignupForm({ redirect = null }) {
               variant="contained"
               startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
             >
-              {loading ? 'Signing in...' : "Sign in"}
+              {loading ? 'Signing up...' : "Sign up"}
             </Button>
           </Stack>
         </form>
-      </Stack>
-
-      <Divider sx={{ mt: 2 }}>OR</Divider>
-
-      <Stack spacing={2} direction='column' alignItems='center'>
-        <SocialLogin provider="facebook">
-          <Iconify icon="logos:facebook" />
-          Sign In with Facebook
-        </SocialLogin>
-        <SocialLogin provider="google">
-          <Iconify icon="devicon:google" />
-          Sign In with Google
-        </SocialLogin>
       </Stack>
     </Stack>
   );
