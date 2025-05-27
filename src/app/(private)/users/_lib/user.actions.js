@@ -49,16 +49,13 @@ export const updateUserData = async (data) => {
     }
 };
 
-export const deleteUserAsync = async (ids) => {
+export const deleteUserAsync = async (id) => {
     try {
-      const res = await api.delete(`/user/delete`, {
-        data: { ids: ids },
-      });
-      toast.success(res.data.message);
-      return { success: true, data: res.data.data };
+        const res = await api.delete(`/users/${id}`);
+        toast.success(res.data.message);
+        return { success: true, data: res.data.data };
     } catch (error) {
-      toast.error(error.response.data.message);
-      return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+        toast.error(error.response.data.message);
+        return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
     }
-  };
-  
+};

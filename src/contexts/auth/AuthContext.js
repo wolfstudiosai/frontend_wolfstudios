@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
       setUserInfo(userData);
     } catch (err) {
       toast.error(err?.response?.data?.message || `${authType} auth failed`);
-      signOut();
+      // signOut();
     } finally {
       localStorage.removeItem('socialButton');
       setLoading(false);
@@ -102,7 +102,6 @@ export const AuthProvider = ({ children }) => {
   // ---- Google Session Effect ----
   useEffect(() => {
     if (session?.user?.id && socialButton && !isValidToken(userInfo.token)) {
-      console.log(session);
       const [type, authType] = socialButton?.split('|');
       setSocialButton('');
       handleSocialAuth(type, authType, session.user);

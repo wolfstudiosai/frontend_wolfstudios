@@ -51,7 +51,7 @@ export const ManageUserDialog = (props) => {
                 id: data.id,
                 role: values.role,
                 is_deleted: false,
-                status: values.status,
+                // status: values.status,
                 contactNumber: values.contactNumber
             }) : await createUser(values);
             if (res.success) {
@@ -122,7 +122,7 @@ export const ManageUserDialog = (props) => {
                         </FormControl>
                     </Grid>
 
-                    <Grid size={isUpdated ? 12 : 6}>
+                    <Grid size={6}>
                         <FormControl fullWidth error={Boolean(errors.contactNumber)}>
                             <InputLabel>Contact No.</InputLabel>
 
@@ -130,6 +130,7 @@ export const ManageUserDialog = (props) => {
                                 name="contactNumber"
                                 value={values.contactNumber}
                                 onChange={handleChange}
+                                disabled={isUpdated}
                             />
 
                         </FormControl>
@@ -137,7 +138,7 @@ export const ManageUserDialog = (props) => {
 
 
 
-                    {isUpdated && <Grid size={6}>
+                    {/* {isUpdated && <Grid size={6}>
                         <FormControl fullWidth error={Boolean(errors.role)}>
                             <InputLabel>Status</InputLabel>
 
@@ -152,7 +153,7 @@ export const ManageUserDialog = (props) => {
                                 <MenuItem value={"BLOCKED"}>Blocked</MenuItem>
                             </Select>
                         </FormControl>
-                    </Grid>}
+                    </Grid>} */}
 
 
                     <Grid size={6}>
