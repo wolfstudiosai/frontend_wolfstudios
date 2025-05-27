@@ -102,7 +102,6 @@ export const AuthProvider = ({ children }) => {
   // ---- Google Session Effect ----
   useEffect(() => {
     if (session?.user?.id && socialButton && !isValidToken(userInfo.token)) {
-      console.log(session);
       const [type, authType] = socialButton?.split('|');
       setSocialButton('');
       handleSocialAuth(type, authType, session.user);

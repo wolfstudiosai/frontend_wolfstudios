@@ -66,17 +66,6 @@ export default function Page({ searchParams }) {
     fetchList();
   };
 
-  const handleDelete = async (password) => {
-    const idsToDelete = [];
-    selectedRows.forEach((row) => {
-      idsToDelete.push(row.id);
-    });
-    const response = await deleteUserAsync(idsToDelete);
-    if (response.success) {
-      fetchList();
-    }
-  };
-
   React.useEffect(() => {
     fetchList();
   }, [pagination, status]);
@@ -197,7 +186,14 @@ export default function Page({ searchParams }) {
                   }
                   rightItems={
                     <>
-                      <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}  onDelete={(password) => handleDelete(password)}  passwordInput disabled={selectedRows.length === 0} />
+                      <DeleteConfirmationPasswordPopover
+                        title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
+                        deleteFn={deleteUserAsync}
+                        id={selectedRows.map((row) => row.id)}
+                        onDelete={() => fetchList()}
+                        // passwordInput
+                        disabled={selectedRows.length === 0}
+                      />
                     </>
                   }
                   onRowsPerPageChange={(pageNumber, rowsPerPage) =>
