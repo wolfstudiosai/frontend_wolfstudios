@@ -24,6 +24,7 @@ export const DeleteConfirmationPasswordPopover = ({
     setError('');
     try {
       const res = await deleteFn(id, passwordInput ? password : null);
+      console.log(res);
       if (res.success) {
         setOpen(false);
         setPassword('');
