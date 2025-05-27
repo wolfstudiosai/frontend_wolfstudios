@@ -282,7 +282,11 @@ export const LeftSidebar = () => {
                         </MemberName>
                         <MemberRole>
                           {lastMessage?.senderId === userInfo?.id ? 'You: ' : ''}
-                          {lastMessage?.content}
+                          {lastMessage?.deletedAt ? (
+                            <span style={{ color: 'gray', fontStyle: 'italic' }}>This message was deleted</span>
+                          ) : (
+                            lastMessage?.content
+                          )}
                         </MemberRole>
                       </MemberInfo>
                       {notifications?.[channel.id] ? (
