@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
       setUserInfo(userData);
     } catch (err) {
       toast.error(err?.response?.data?.message || `${authType} auth failed`);
-      signOut();
+      // signOut();
     } finally {
       localStorage.removeItem('socialButton');
       setLoading(false);
