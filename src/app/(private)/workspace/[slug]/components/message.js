@@ -145,55 +145,57 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
         )}
 
         {/* File Attachments */}
-        <Stack direction="row" flexWrap="wrap" gap={1} sx={{ my: 1 }}>
-          {message?.Attachments?.map((file, index) => (
-            <Fragment key={index}>
-              {file.type.startsWith('image/') ? (
-                <Box
-                  component="img"
-                  src={file.url}
-                  alt={file.name}
-                  sx={{ maxWidth: sidebar ? '120px' : '280px', borderRadius: 0.5 }}
-                />
-              ) : (
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  gap={2}
-                  sx={{ border: '1px solid', borderColor: 'divider', width: '100%', p: 1, borderRadius: 0.5 }}
-                >
-                  <Stack direction="row" alignItems="center" gap={1}>
-                    <Iconify
-                      icon="bx:file"
-                      sx={{ width: sidebar ? '30px' : '50px', height: sidebar ? '30px' : '50px' }}
-                    />
-                    <Stack>
-                      <Typography variant="h6" color="text.primary" sx={{ fontSize: sidebar ? '14px' : '16px' }}>
-                        {file.name}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {new URL(file.url).hostname}
-                      </Typography>
-                    </Stack>
-                  </Stack>
-                  <IconButton
-                    size="small"
-                    href={file.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    sx={{ border: '1px solid', borderColor: 'divider', borderRadius: '50%' }}
+        {!message?.deletedAt && (
+          <Stack direction="row" flexWrap="wrap" gap={1} sx={{ my: 1 }}>
+            {message?.Attachments?.map((file, index) => (
+              <Fragment key={index}>
+                {file.type.startsWith('image/') ? (
+                  <Box
+                    component="img"
+                    src={file.url}
+                    alt={file.name}
+                    sx={{ maxWidth: sidebar ? '120px' : '280px', borderRadius: 0.5 }}
+                  />
+                ) : (
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    gap={2}
+                    sx={{ border: '1px solid', borderColor: 'divider', width: '100%', p: 1, borderRadius: 0.5 }}
                   >
-                    ↗
-                  </IconButton>
-                </Stack>
-              )}
-            </Fragment>
-          ))}
-        </Stack>
+                    <Stack direction="row" alignItems="center" gap={1}>
+                      <Iconify
+                        icon="bx:file"
+                        sx={{ width: sidebar ? '30px' : '50px', height: sidebar ? '30px' : '50px' }}
+                      />
+                      <Stack>
+                        <Typography variant="h6" color="text.primary" sx={{ fontSize: sidebar ? '14px' : '16px' }}>
+                          {file.name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {new URL(file.url).hostname}
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                    <IconButton
+                      size="small"
+                      href={file.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ border: '1px solid', borderColor: 'divider', borderRadius: '50%' }}
+                    >
+                      ↗
+                    </IconButton>
+                  </Stack>
+                )}
+              </Fragment>
+            ))}
+          </Stack>
+        )}
 
         {/* Reactions */}
-        {!pinnedTab && (
+        {!pinnedTab && !message?.deletedAt && (
           <Stack direction="row" alignItems="center" spacing={0.5}>
             {emojis?.length > 0 &&
               emojis.map((e, i) => (
