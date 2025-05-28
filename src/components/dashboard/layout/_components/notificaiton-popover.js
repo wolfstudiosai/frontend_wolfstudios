@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  alpha,
   Badge,
   Box,
   CircularProgress,
@@ -65,7 +66,13 @@ export const NotificationPopover = () => {
 const NotificationItem = ({ notification }) => {
   return (
     <ListItem
-      sx={{ alignItems: 'flex-start', cursor: 'pointer', '&:hover': { backgroundColor: 'action.hover' } }}
+      sx={{
+        mb: 0.5,
+        alignItems: 'flex-start',
+        cursor: 'pointer',
+        backgroundColor: notification.read ? 'transparent' : 'action.hover',
+        '&:hover': { backgroundColor: 'action.selected' }
+      }}
     >
       <ListItemText
         primaryTypographyProps={{
