@@ -10,13 +10,12 @@ import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
 import { paths } from '/src/paths';
 import { dayjs } from '/src/lib/dayjs';
-import { FilterButton } from '/src/components/core/filter-button';
-import { StatusFilterPopover } from '/src/components/core/filters/StatusFilterPopover';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { DataTable } from '/src/components/data-table/data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
@@ -27,7 +26,6 @@ import { defaultUser } from './_lib/user.types';
 import { ManageUserDialog } from './manage-user-dialog';
 
 export default function Page({ searchParams }) {
-  const { email, phone, sortDir } = searchParams;
   const [users, setUsers] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [openModal, setOpenModal] = React.useState(false);
@@ -36,6 +34,7 @@ export default function Page({ searchParams }) {
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [status, setStatus] = React.useState('');
+  const [searchValue, setSearchValue] = React.useState('');
 
   async function fetchList() {
     try {
@@ -174,17 +173,10 @@ export default function Page({ searchParams }) {
                   selectionMode="multiple"
                   leftItems={
                     <>
-                      <FilterButton
-                        displayValue={status}
-                        label="Status"
-                        onFilterApply={(value) => {
-                          setStatus(value);
-                        }}
-                        onFilterDelete={() => {
-                          handlePhoneChange();
-                        }}
-                        popover={<StatusFilterPopover />}
-                        value={status}
+                      <TextField
+                        value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}
+                        placeholder="Search users..."
                       />
                       <RefreshPlugin onClick={fetchList} />
                     </>
