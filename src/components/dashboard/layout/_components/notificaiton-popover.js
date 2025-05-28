@@ -136,12 +136,14 @@ const Notifications = ({ handleMenuClose, setOpen }) => {
             </List>
           )}
         </Box>
-        <Divider />
-        <Box sx={{ p: 1, bgcolor: 'background.default' }}>
-          <MenuItem component="div" onClick={handleAllNotifications} sx={{ justifyContent: 'center' }}>
-            All notifications
-          </MenuItem>
-        </Box>
+        {notifications?.length > 0 && (
+          <><Divider />
+            <Box sx={{ p: 1, bgcolor: 'background.default' }}>
+              <MenuItem component="div" onClick={handleAllNotifications} sx={{ justifyContent: 'center' }}>
+                All notifications
+              </MenuItem>
+            </Box></>
+        )}
       </PageLoader>
     </>
   )
