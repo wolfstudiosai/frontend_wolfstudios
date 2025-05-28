@@ -1,16 +1,23 @@
-import { getSearchQuery } from "/src/utils/helper";
 import { api, publicApi } from "/src/utils/api";
 import { toast } from "sonner";
 
 export const getUsers = async (queryParams) => {
-
     try {
-        const searchQuery = getSearchQuery(queryParams);
-        const res = await api.get(`/users${searchQuery}`);
+        const query = new URLSearchParams();
+        if (queryParams.page) {
+            query.append('page', queryParams.page);
+        }
+        if (queryParams.rowsPerPage) {
+            query.append('size', queryParams.rowsPerPage);
+        }
+        if (queryParams.search) {
+            query.append('search', queryParams.search);
+        }
+        const res = await api.get(`/users?${query.toString()}`);
         return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
     } catch (error) {
-        toast.error(error.message)
-        return { success: false, error: error.response ? error.response.data : "An unknown error occurred" };
+        // toast.error(error.message)
+        return { success: false, data: [], error: error.response ? error.response.data : "An unknown error occurred" };
     }
 };
 
@@ -49,9 +56,14 @@ export const updateUserData = async (data) => {
     }
 };
 
-export const deleteUserAsync = async (id) => {
+export const deleteUserAsync = async (ids, password) => {
     try {
-        const res = await api.delete(`/users/${id}`);
+        const res = await api.delete(`/users/bulk`, {
+            data: { IDs: ids },
+            headers: {
+                password: password,
+            },
+        });
         toast.success(res.data.message);
         return { success: true, data: res.data.data };
     } catch (error) {

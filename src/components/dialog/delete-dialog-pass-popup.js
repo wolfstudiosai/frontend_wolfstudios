@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Box, Button, CircularProgress, IconButton, Popover, TextField, Typography } from '@mui/material';
+import { Box, Button, IconButton, Popover, TextField, Typography } from '@mui/material';
 
 import { Iconify } from '../iconify/iconify';
 
@@ -33,6 +33,7 @@ export const DeleteConfirmationPasswordPopover = ({
         setError(res.error?.message || 'Deletion failed');
       }
     } catch (err) {
+      console.log(err);
       setError(err?.message || 'Something went wrong');
     } finally {
       setLoading(false);

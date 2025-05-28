@@ -10,25 +10,22 @@ import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
 import { paths } from '/src/paths';
 import { dayjs } from '/src/lib/dayjs';
-import { FilterButton } from '/src/components/core/filter-button';
-import { StatusFilterPopover } from '/src/components/core/filters/StatusFilterPopover';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { DataTable } from '/src/components/data-table/data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import PageLoader from '/src/components/loaders/PageLoader';
 
 import { deleteUserAsync, getUsers } from './_lib/user.actions';
 import { defaultUser } from './_lib/user.types';
 import { ManageUserDialog } from './manage-user-dialog';
-import { TextField } from '@mui/material';
+import { useDebounce } from '/src/hooks/use-debounce';
 
 export default function Page({ searchParams }) {
-  const { email, phone, sortDir } = searchParams;
   const [users, setUsers] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [openModal, setOpenModal] = React.useState(false);
@@ -37,6 +34,9 @@ export default function Page({ searchParams }) {
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [status, setStatus] = React.useState('');
+  const [searchValue, setSearchValue] = React.useState('');
+  const debounceSearch = useDebounce(searchValue, 500);
+
   async function fetchList() {
     try {
       setLoading(true);
@@ -44,11 +44,10 @@ export default function Page({ searchParams }) {
         page: pagination.pageNo,
         rowsPerPage: pagination.limit,
         status: status,
+        search: debounceSearch,
       });
-      if (response.success) {
-        setUsers(response.data);
-        setTotalRecords(response.totalRecords);
-      }
+      setUsers(response.data);
+      setTotalRecords(response.totalRecords);
     } catch (error) {
       console.log(error);
     } finally {
@@ -63,23 +62,22 @@ export default function Page({ searchParams }) {
 
   const handleConfirm = () => {
     setOpenModal(false);
-    // fetchUsersData();
+    fetchList();
+  };
+
+
+  const onDelete = () => {
     fetchList();
   };
 
   React.useEffect(() => {
     fetchList();
-  }, [pagination, status]);
+  }, [pagination, status, debounceSearch]);
 
   const columns = [
     {
       formatter: (row) => (
         <Stack direction="row">
-          <DeleteConfirmationPasswordPopover
-            title={`Are you sure you want to delete ${row.firstName}?`}
-            deleteFn={() => deleteUserAsync(row.id)}
-            onDelete={() => fetchList()}
-          />
           <IconButton onClick={() => handleOpenModal(row)}>
             <PencilSimpleIcon />
           </IconButton>
@@ -154,41 +152,58 @@ export default function Page({ searchParams }) {
             </Button>
           </Box>
         </Stack>
-        <PageLoader loading={loading} error={null}>
-          <Card>
-            <Box sx={{ overflowX: 'auto' }}>
-              <React.Fragment>
-                <DataTable
-                  isPagination={true}
-                  totalRecords={totalRecords}
-                  rowsPerPageOptions={pagination.limit}
-                  pageNo={pagination.pageNo}
-                  columns={columns}
-                  rows={users}
-                  uniqueRowId="id"
-                  selectionMode="none"
-                  leftItems={
-                    <>
-                      <TextField id="search" placeholder="Search" variant="outlined" />
-                      <RefreshPlugin onClick={fetchList} />
-                    </>
-                  }
-                  onRowsPerPageChange={(pageNumber, rowsPerPage) =>
-                    setPagination({ pageNo: pageNumber, limit: rowsPerPage })
-                  }
-                  onPageChange={(newPageNumber) => setPagination({ ...pagination, pageNo: newPageNumber })}
-                />
-                {!users?.length ? (
-                  <Box sx={{ p: 3 }}>
-                    <Typography color="text.secondary" sx={{ textAlign: 'center' }} variant="body2">
-                      No customers found
-                    </Typography>
-                  </Box>
-                ) : null}
-              </React.Fragment>
-            </Box>
-          </Card>
-        </PageLoader>
+        <Card>
+          <Box sx={{ overflowX: 'auto' }}>
+            <React.Fragment>
+              <DataTable
+                loading={loading}
+                isPagination={true}
+                totalRecords={totalRecords}
+                rowsPerPageOptions={pagination.limit}
+                pageNo={pagination.pageNo}
+                columns={columns}
+                rows={users}
+                uniqueRowId="id"
+                selectionMode="multiple"
+                leftItems={
+                  <>
+                    <TextField
+                      value={searchValue}
+                      onChange={(e) => setSearchValue(e.target.value)}
+                      placeholder="Search users..."
+                    />
+                    <RefreshPlugin onClick={fetchList} />
+                  </>
+                }
+                rightItems={
+                  <>
+                    <DeleteConfirmationPasswordPopover
+                      title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
+                      id={selectedRows.map((row) => row.id)}
+                      onDelete={onDelete}
+                      deleteFn={deleteUserAsync}
+                      passwordInput
+                      disabled={selectedRows.length === 0}
+                    />
+                  </>
+                }
+                onRowsPerPageChange={(pageNumber, rowsPerPage) =>
+                  setPagination({ pageNo: pageNumber, limit: rowsPerPage })
+                }
+                onPageChange={(newPageNumber) => setPagination({ ...pagination, pageNo: newPageNumber })}
+                onSelection={(selectedRows) => setSelectedRows?.(selectedRows)}
+              />
+              {!users?.length ? (
+                <Box sx={{ p: 3 }}>
+                  <Typography color="text.secondary" sx={{ textAlign: 'center' }} variant="body2">
+                    No customers found
+                  </Typography>
+                </Box>
+              ) : null}
+            </React.Fragment>
+          </Box>
+        </Card>
+
       </Stack>
       {openModal && (
         <ManageUserDialog

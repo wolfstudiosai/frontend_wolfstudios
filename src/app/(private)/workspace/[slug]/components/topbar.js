@@ -1,13 +1,34 @@
-import { useContext } from 'react';
-import { Avatar, Box, Breadcrumbs, IconButton, Link, Stack, Typography } from '@mui/material';
+import { useContext, useState } from 'react';
+import { Avatar, Box, Breadcrumbs, IconButton, Link, Stack, Typography, TextField } from '@mui/material';
 
 import { ChatContext } from '/src/contexts/chat';
 import useAuth from '/src/hooks/useAuth';
 import { Iconify } from '/src/components/iconify/iconify';
 
+const messages = [
+  {
+    id: 1,
+    content: "Hello, how are you?",
+    time: "10:00 AM"
+  },
+  {
+    id: 2,
+    content: "lorem ipsum dolor sit amet consectetur adipisicing elit ",
+    time: "08:04 AM"
+  },
+  {
+    id: 3,
+    content: "lorem ipsum dolor sit amet consectetur adipisicing elit lorem ipsum dolor sit amet consectetur adipisicing elit",
+    time: "10:01 AM"
+  },
+]
+
+
 export const Topbar = () => {
   const { activeTab, activeTabInfo } = useContext(ChatContext);
   const { userInfo } = useAuth();
+  const [search, setSearch] = useState('');
+  const [showResults, setShowResults] = useState(false);
 
   const sender = activeTabInfo?.sender?.id === userInfo?.id ? activeTabInfo?.receiver : activeTabInfo?.sender;
 
@@ -68,6 +89,67 @@ export const Topbar = () => {
 
       {/* Right Section */}
       <Stack direction="row" spacing={1} alignItems="center">
+        <Box sx={{ width: '250px', position: 'relative' }}>
+          <TextField
+            placeholder="Search messages..."
+            autoComplete="off"
+            fullWidth
+            value={search}
+            size='small'
+            onFocus={() => setShowResults(true)}
+            onBlur={() => setTimeout(() => setShowResults(false), 100)}
+            onChange={(e) => setSearch(e.target.value)}
+            sx={{ '& .MuiInputBase-root': { borderRadius: 0 } }}
+          />
+
+          {showResults && (
+            <Box
+              sx={{
+                bgcolor: 'background.paper',
+                p: 2,
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                right: 0,
+                zIndex: 1000,
+                border: '1px solid',
+                borderColor: 'divider',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              <Stack spacing={1}>
+                {messages.map((message) => (
+                  <Box
+                    key={message.id}
+                    width='100%'
+                    onClick={() => console.log(message)}
+                    sx={{
+                      cursor: 'pointer',
+                      '&:hover .message-text': {
+                        textDecoration: 'underline',
+                      },
+                    }}
+                  >
+                    <Typography
+                      className="message-text"
+                      variant="body2"
+                      sx={{
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: 2,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                    >
+                      {message.content}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>{message.time}</Typography>
+                  </Box>
+                ))}
+              </Stack>
+            </Box>
+          )}
+        </Box>
         <IconButton size="small">
           <Iconify icon="bi:three-dots" fontSize={20} />
         </IconButton>

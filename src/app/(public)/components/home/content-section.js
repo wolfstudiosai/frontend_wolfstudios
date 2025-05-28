@@ -18,43 +18,48 @@ import {
 } from '@mui/material';
 
 import { Iconify } from '/src/components/iconify/iconify';
-
-import { FadeIn } from '../../../../components/animation/fade-in';
+import { FadeIn } from '/src/components/animation/fade-in';
 
 export function ContentSection() {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); 
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <Stack direction="column" gap={1}>
       <FadeIn>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
-            alignItems: { xs: 'flex-start', md: 'center' },
-            flexWrap: 'wrap',
-            display: 'none',
-          }}
-        >
+        <Box sx={{ py: { xs: 1, md: 2 } }}>
+          <Stack direction="row">
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+              sx={{ color: 'text.primary', mb: { xs: 0, md: 1 } }}
+              textTransform="uppercase"
+              fontSize={{ xs: '1.5rem', sm: '2rem', md: '2.2rem' }}
+            >
+              Content Inspo
+            </Typography>
+            <Button
+              variant="text"
+              // onClick={() => router.push('/portfolio')}
+              endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
+              sx={{
+                margin: 0,
+                padding: 0,
+                display: { xs: 'none', sm: 'flex' },
+              }}
+            ></Button>
+          </Stack>
           <Typography
-            variant="h4"
-            fontWeight="bold"
+            fontWeight="semibold"
             sx={{
-              fontSize: { xs: '1.8rem', sm: '2rem', md: '2.2rem' },
-              letterSpacing: '0.5px',
-              textTransform: 'uppercase',
               color: 'text.primary',
+              lineHeight: 1,
+              fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' },
+              width: '100%',
             }}
           >
-            Project Drop
-          </Typography>
-          <Typography
-            fontSize={{ xs: 16, md: 18 }}
-            sx={{ color: 'text.main', mt: 1, width: { xs: '100%', md: '70%' } }}
-          >
-            Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
-            visuals that captivate audiences, evoke emotion, and leave a lasting impact.
+            By developing from the idea up, we transform concepts into strong creative execution that's driven by both
+            form and function.
           </Typography>
         </Box>
       </FadeIn>
