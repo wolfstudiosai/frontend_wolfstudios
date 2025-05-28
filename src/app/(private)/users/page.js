@@ -130,12 +130,6 @@ export default function Page({ searchParams }) {
       },
       name: 'Created at',
     },
-    {
-      formatter: (row) => {
-        return <Chip label={row.status} size="small" variant="outlined" />;
-      },
-      name: 'Status',
-    },
   ];
 
   return (
