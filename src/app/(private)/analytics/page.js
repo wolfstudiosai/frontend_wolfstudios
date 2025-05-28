@@ -1,17 +1,13 @@
-import { PageContainer } from '/src/components/container/PageContainer';
 
-import { ContentPerformance } from './_components/content-performance';
-import { Facilities } from './_components/facilities';
-import { PartnerMatrix } from './_components/partner-matrix';
+import { PageContainer } from '/src/components/container/PageContainer';
+import AnalyticsBarCharts from './_components/bar-chart/AnalyticsBarCharts';
 
 // export const metadata = { title: `Analytics | Dashboard | ${config.site.name}` };
 
 export default function Page() {
   return (
     <PageContainer>
-      <ContentPerformance />
-      <PartnerMatrix />
-      <Facilities />
+      <AnalyticsBarCharts />
     </PageContainer>
   );
 }

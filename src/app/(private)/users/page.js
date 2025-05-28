@@ -25,7 +25,6 @@ import PageLoader from '/src/components/loaders/PageLoader';
 import { deleteUserAsync, getUsers } from './_lib/user.actions';
 import { defaultUser } from './_lib/user.types';
 import { ManageUserDialog } from './manage-user-dialog';
-import { TextField } from '@mui/material';
 
 export default function Page({ searchParams }) {
   const { email, phone, sortDir } = searchParams;
@@ -37,6 +36,7 @@ export default function Page({ searchParams }) {
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [status, setStatus] = React.useState('');
+
   async function fetchList() {
     try {
       setLoading(true);
@@ -63,7 +63,11 @@ export default function Page({ searchParams }) {
 
   const handleConfirm = () => {
     setOpenModal(false);
-    // fetchUsersData();
+    fetchList();
+  };
+
+
+  const onDelete = () => {
     fetchList();
   };
 
@@ -75,11 +79,6 @@ export default function Page({ searchParams }) {
     {
       formatter: (row) => (
         <Stack direction="row">
-          <DeleteConfirmationPasswordPopover
-            title={`Are you sure you want to delete ${row.firstName}?`}
-            deleteFn={() => deleteUserAsync(row.id)}
-            onDelete={() => fetchList()}
-          />
           <IconButton onClick={() => handleOpenModal(row)}>
             <PencilSimpleIcon />
           </IconButton>
@@ -132,6 +131,12 @@ export default function Page({ searchParams }) {
       },
       name: 'Created at',
     },
+    {
+      formatter: (row) => {
+        return <Chip label={row.status} size="small" variant="outlined" />;
+      },
+      name: 'Status',
+    },
   ];
 
   return (
@@ -166,17 +171,41 @@ export default function Page({ searchParams }) {
                   columns={columns}
                   rows={users}
                   uniqueRowId="id"
-                  selectionMode="none"
+                  selectionMode="multiple"
                   leftItems={
                     <>
-                      <TextField id="search" placeholder="Search" variant="outlined" />
+                      <FilterButton
+                        displayValue={status}
+                        label="Status"
+                        onFilterApply={(value) => {
+                          setStatus(value);
+                        }}
+                        onFilterDelete={() => {
+                          handlePhoneChange();
+                        }}
+                        popover={<StatusFilterPopover />}
+                        value={status}
+                      />
                       <RefreshPlugin onClick={fetchList} />
+                    </>
+                  }
+                  rightItems={
+                    <>
+                      <DeleteConfirmationPasswordPopover
+                        title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
+                        id={selectedRows.map((row) => row.id)}
+                        onDelete={onDelete}
+                        deleteFn={deleteUserAsync}
+                        passwordInput
+                        disabled={selectedRows.length === 0}
+                      />
                     </>
                   }
                   onRowsPerPageChange={(pageNumber, rowsPerPage) =>
                     setPagination({ pageNo: pageNumber, limit: rowsPerPage })
                   }
                   onPageChange={(newPageNumber) => setPagination({ ...pagination, pageNo: newPageNumber })}
+                  onSelection={(selectedRows) => setSelectedRows?.(selectedRows)}
                 />
                 {!users?.length ? (
                   <Box sx={{ p: 3 }}>

@@ -49,9 +49,14 @@ export const updateUserData = async (data) => {
     }
 };
 
-export const deleteUserAsync = async (id) => {
+export const deleteUserAsync = async (ids, password) => {
     try {
-        const res = await api.delete(`/users/${id}`);
+        const res = await api.delete(`/users/bulk`, {
+            data: { IDs: ids },
+            headers: {
+                password: password,
+            },
+        });
         toast.success(res.data.message);
         return { success: true, data: res.data.data };
     } catch (error) {
