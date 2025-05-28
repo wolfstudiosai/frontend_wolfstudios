@@ -24,6 +24,7 @@ import PageLoader from '/src/components/loaders/PageLoader';
 import { deleteUserAsync, getUsers } from './_lib/user.actions';
 import { defaultUser } from './_lib/user.types';
 import { ManageUserDialog } from './manage-user-dialog';
+import { useDebounce } from '/src/hooks/use-debounce';
 
 export default function Page({ searchParams }) {
   const [users, setUsers] = React.useState([]);
@@ -35,6 +36,7 @@ export default function Page({ searchParams }) {
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [status, setStatus] = React.useState('');
   const [searchValue, setSearchValue] = React.useState('');
+  const debounceSearch = useDebounce(searchValue, 500);
 
   async function fetchList() {
     try {
@@ -43,11 +45,10 @@ export default function Page({ searchParams }) {
         page: pagination.pageNo,
         rowsPerPage: pagination.limit,
         status: status,
+        search: debounceSearch,
       });
-      if (response.success) {
-        setUsers(response.data);
-        setTotalRecords(response.totalRecords);
-      }
+      setUsers(response.data);
+      setTotalRecords(response.totalRecords);
     } catch (error) {
       console.log(error);
     } finally {
@@ -72,7 +73,7 @@ export default function Page({ searchParams }) {
 
   React.useEffect(() => {
     fetchList();
-  }, [pagination, status]);
+  }, [pagination, status, debounceSearch]);
 
   const columns = [
     {
