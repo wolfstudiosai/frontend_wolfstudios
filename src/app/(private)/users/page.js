@@ -19,7 +19,6 @@ import { dayjs } from '/src/lib/dayjs';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { DataTable } from '/src/components/data-table/data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import PageLoader from '/src/components/loaders/PageLoader';
 
 import { deleteUserAsync, getUsers } from './_lib/user.actions';
 import { defaultUser } from './_lib/user.types';
@@ -159,58 +158,58 @@ export default function Page({ searchParams }) {
             </Button>
           </Box>
         </Stack>
-        <PageLoader loading={loading} error={null}>
-          <Card>
-            <Box sx={{ overflowX: 'auto' }}>
-              <React.Fragment>
-                <DataTable
-                  isPagination={true}
-                  totalRecords={totalRecords}
-                  rowsPerPageOptions={pagination.limit}
-                  pageNo={pagination.pageNo}
-                  columns={columns}
-                  rows={users}
-                  uniqueRowId="id"
-                  selectionMode="multiple"
-                  leftItems={
-                    <>
-                      <TextField
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
-                        placeholder="Search users..."
-                      />
-                      <RefreshPlugin onClick={fetchList} />
-                    </>
-                  }
-                  rightItems={
-                    <>
-                      <DeleteConfirmationPasswordPopover
-                        title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
-                        id={selectedRows.map((row) => row.id)}
-                        onDelete={onDelete}
-                        deleteFn={deleteUserAsync}
-                        passwordInput
-                        disabled={selectedRows.length === 0}
-                      />
-                    </>
-                  }
-                  onRowsPerPageChange={(pageNumber, rowsPerPage) =>
-                    setPagination({ pageNo: pageNumber, limit: rowsPerPage })
-                  }
-                  onPageChange={(newPageNumber) => setPagination({ ...pagination, pageNo: newPageNumber })}
-                  onSelection={(selectedRows) => setSelectedRows?.(selectedRows)}
-                />
-                {!users?.length ? (
-                  <Box sx={{ p: 3 }}>
-                    <Typography color="text.secondary" sx={{ textAlign: 'center' }} variant="body2">
-                      No customers found
-                    </Typography>
-                  </Box>
-                ) : null}
-              </React.Fragment>
-            </Box>
-          </Card>
-        </PageLoader>
+        <Card>
+          <Box sx={{ overflowX: 'auto' }}>
+            <React.Fragment>
+              <DataTable
+                loading={loading}
+                isPagination={true}
+                totalRecords={totalRecords}
+                rowsPerPageOptions={pagination.limit}
+                pageNo={pagination.pageNo}
+                columns={columns}
+                rows={users}
+                uniqueRowId="id"
+                selectionMode="multiple"
+                leftItems={
+                  <>
+                    <TextField
+                      value={searchValue}
+                      onChange={(e) => setSearchValue(e.target.value)}
+                      placeholder="Search users..."
+                    />
+                    <RefreshPlugin onClick={fetchList} />
+                  </>
+                }
+                rightItems={
+                  <>
+                    <DeleteConfirmationPasswordPopover
+                      title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
+                      id={selectedRows.map((row) => row.id)}
+                      onDelete={onDelete}
+                      deleteFn={deleteUserAsync}
+                      passwordInput
+                      disabled={selectedRows.length === 0}
+                    />
+                  </>
+                }
+                onRowsPerPageChange={(pageNumber, rowsPerPage) =>
+                  setPagination({ pageNo: pageNumber, limit: rowsPerPage })
+                }
+                onPageChange={(newPageNumber) => setPagination({ ...pagination, pageNo: newPageNumber })}
+                onSelection={(selectedRows) => setSelectedRows?.(selectedRows)}
+              />
+              {!users?.length ? (
+                <Box sx={{ p: 3 }}>
+                  <Typography color="text.secondary" sx={{ textAlign: 'center' }} variant="body2">
+                    No customers found
+                  </Typography>
+                </Box>
+              ) : null}
+            </React.Fragment>
+          </Box>
+        </Card>
+
       </Stack>
       {openModal && (
         <ManageUserDialog
