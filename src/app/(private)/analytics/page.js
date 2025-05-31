@@ -12,15 +12,14 @@ import { ConversionByContent } from './_components/bar-chart/conversion-by-conte
 import { CampaignAssetsDelivered } from './_components/bar-chart/campaign-assets-deliverd';
 import Grid from '@mui/material/Grid2';
 import { UserDistribution } from './_components/bar-chart/user-distribution';
+import SparklineMetricsGrid from './_components/sparkline-matrics';
 
 // export const metadata = { title: `Analytics | Dashboard | ${config.site.name}` };
 
 export default function Page() {
   return (
     <PageContainer>
-      <ContentPerformance />
-      <PartnerMatrix />
-      <Facilities />
+      <SparklineMetricsGrid />
       <Grid container spacing={1} rowSpacing={1}>
         <OnboardingByRegion />
         <CampaignAssetsDelivered />

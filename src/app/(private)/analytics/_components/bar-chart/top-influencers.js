@@ -15,7 +15,7 @@ export function TopInfluencers() {
     ];
     return (
         <Grid size={{ xs: 12, md: 6, lg: 4 }}>
-            <Card sx={{ width: '100%', borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
+            <Card sx={{ height: '100%', borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
                 <CardContent>
                     <Typography variant="h6" sx={{ marginBottom: '16px' }}>
                         Top 5 Influencers by Engagement Rate

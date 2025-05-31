@@ -22,7 +22,7 @@ export function CampaignAssetsDelivered() {
     ];
     return (
         <Grid size={{ xs: 12, md: 5 }}>
-            <Card sx={{ width: '100%', borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
+            <Card sx={{ height: '100%', borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
                 <CardContent>
                     <Typography variant="h6" sx={{ marginBottom: '16px' }}>
                         Campaign Assets Delivered by Month
