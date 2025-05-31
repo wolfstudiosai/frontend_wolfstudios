@@ -16,7 +16,8 @@ import { AssetsStatusOverview } from './_components/donut-chart/assets-status-ov
 import { AudienceDemographics } from './_components/donut-chart/audience-demographics';
 import { ClientPlatformUsages } from './_components/donut-chart/client-platform-usages';
 import { PartnerPlatformUsages } from './_components/donut-chart/partner-platform-usages';
-
+import { BudgetAllocationCampaign } from './_components/donut-chart/budget-allocation-campaign';
+import { CampaignBreakdown } from './_components/donut-chart/campaign-breakdown';
 // export const metadata = { title: `Analytics | Dashboard | ${config.site.name}` };
 
 export default function Page() {
@@ -40,6 +41,8 @@ export default function Page() {
         <AudienceDemographics />
         <ClientPlatformUsages />
         <PartnerPlatformUsages />
+        <BudgetAllocationCampaign />
+        <CampaignBreakdown />
       </Grid>
     </PageContainer>
   );

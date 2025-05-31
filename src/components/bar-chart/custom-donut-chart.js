@@ -26,7 +26,7 @@ export function CustomDonutChart({ data, chartHeight = 250 }) {
                             ))}
                         </Pie>
                         <Tooltip />
-                        <Legend verticalAlign="bottom" height={36} />
+                        <Legend verticalAlign="bottom" height={20} />
                     </PieChart>
                 </ResponsiveContainer>
             </NoSsr>
