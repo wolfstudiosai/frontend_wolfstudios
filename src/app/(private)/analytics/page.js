@@ -14,6 +14,8 @@ import { FunnelDropOff } from './_components/donut-chart/funnel-drop-off';
 import { UsersEngagement } from './_components/donut-chart/users-engagement';
 import { AssetsStatusOverview } from './_components/donut-chart/assets-status-overview';
 import { AudienceDemographics } from './_components/donut-chart/audience-demographics';
+import { ClientPlatformUsages } from './_components/donut-chart/client-platform-usages';
+import { PartnerPlatformUsages } from './_components/donut-chart/partner-platform-usages';
 
 // export const metadata = { title: `Analytics | Dashboard | ${config.site.name}` };
 
@@ -36,6 +38,8 @@ export default function Page() {
         <UsersEngagement />
         <AssetsStatusOverview />
         <AudienceDemographics />
+        <ClientPlatformUsages />
+        <PartnerPlatformUsages />
       </Grid>
     </PageContainer>
   );
