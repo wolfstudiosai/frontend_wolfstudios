@@ -1,10 +1,6 @@
-
+'use client'
 
 import { PageContainer } from '/src/components/container/PageContainer';
-
-import { ContentPerformance } from './_components/content-performance';
-import { Facilities } from './_components/facilities';
-import { PartnerMatrix } from './_components/partner-matrix';
 import { OnboardingByRegion } from './_components/bar-chart/onboarding-by-region';
 import { OnboardingByCreator } from './_components/bar-chart/onboarding-by-creator';
 import { TopInfluencers } from './_components/bar-chart/top-influencers';
@@ -13,6 +9,8 @@ import { CampaignAssetsDelivered } from './_components/bar-chart/campaign-assets
 import Grid from '@mui/material/Grid2';
 import { UserDistribution } from './_components/bar-chart/user-distribution';
 import SparklineMetricsGrid from './_components/sparkline-matrics';
+import { ContentFormatCampaign } from './_components/donut-chart/contant-format-campaign';
+import { FunnelDropOff } from './_components/donut-chart/funnel-drop-off';
 
 // export const metadata = { title: `Analytics | Dashboard | ${config.site.name}` };
 
@@ -21,12 +19,17 @@ export default function Page() {
     <PageContainer>
       <SparklineMetricsGrid />
       <Grid container spacing={1} rowSpacing={1}>
+        {/* Bar charts */}
         <OnboardingByRegion />
         <CampaignAssetsDelivered />
         <OnboardingByCreator />
         <TopInfluencers />
         <ConversionByContent />
         <UserDistribution />
+
+        {/* Donut charts */}
+        <FunnelDropOff />
+        <ContentFormatCampaign />
       </Grid>
     </PageContainer>
   );

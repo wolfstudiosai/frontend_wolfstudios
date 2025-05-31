@@ -119,7 +119,7 @@ const SparklineMetricsGrid = () => {
     return (
         <Grid container spacing={1} mb={1}>
             {metrics.map((metric) => (
-                <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3, }} key={metric.title}>
+                <Grid size={{ xs: 6, md: 4, lg: 3, }} key={metric.title}>
                     <SparklineMetricsCard
                         title={metric.title}
                         value={metric.value}
