@@ -21,7 +21,7 @@ const chartData = [
 
 export function OnboardingByRegion() {
     return (
-        <Grid size={{ xs: 12, md: 8 }}>
+        <Grid size={{ xs: 12, md: 7 }}>
             <Card sx={{ width: '100%', borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
                 <CardContent>
                     <Typography variant="h6" sx={{ marginBottom: '16px' }}>
