@@ -12,7 +12,7 @@ import SparklineMetricsGrid from './_components/sparkline-matrics';
 import { ContentFormatCampaign } from './_components/donut-chart/content-format-campaign';
 import { FunnelDropOff } from './_components/donut-chart/funnel-drop-off';
 import { UsersEngagement } from './_components/donut-chart/users-engagement';
-
+import { AssetsStatusOverview } from './_components/donut-chart/assets-status-overview';
 // export const metadata = { title: `Analytics | Dashboard | ${config.site.name}` };
 
 export default function Page() {
@@ -32,6 +32,7 @@ export default function Page() {
         <FunnelDropOff />
         <ContentFormatCampaign />
         <UsersEngagement />
+        <AssetsStatusOverview />
       </Grid>
     </PageContainer>
   );
