@@ -1,13 +1,24 @@
 
+
 import { PageContainer } from '/src/components/container/PageContainer';
-import AnalyticsBarCharts from './_components/bar-chart/AnalyticsBarCharts';
+
+import { ContentPerformance } from './_components/content-performance';
+import { Facilities } from './_components/facilities';
+import { PartnerMatrix } from './_components/partner-matrix';
+import { OnboardingByRegion } from './_components/bar-chart/onboarding-by-region';
+import Grid from '@mui/material/Grid2';
 
 // export const metadata = { title: `Analytics | Dashboard | ${config.site.name}` };
 
 export default function Page() {
   return (
     <PageContainer>
-      <AnalyticsBarCharts />
+      <ContentPerformance />
+      <PartnerMatrix />
+      <Facilities />
+      <Grid container spacing={2}>
+        <OnboardingByRegion />
+      </Grid>
     </PageContainer>
   );
 }
