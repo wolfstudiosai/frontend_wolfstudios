@@ -10,7 +10,7 @@ export function OnboardingByCreator() {
         return { ...item, percent: Number((item.values / total) * 100).toFixed(2) };
     });
     return (
-        <Grid size={{ xs: 12, md: 5 }}>
+        <Grid size={{ xs: 12, md: 6, lg: 4 }}>
             <Card sx={{ width: '100%', borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
                 <CardContent>
                     <Typography variant="h6" sx={{ marginBottom: '16px' }}>

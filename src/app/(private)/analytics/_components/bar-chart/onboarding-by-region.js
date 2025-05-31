@@ -51,6 +51,7 @@ export function OnboardingByRegion() {
                                     dataKey="users"
                                     barSize={40}
                                     fill="#3f51b5"
+                                    radius={[0, 6, 6, 0]}
                                     label={renderCustomBarLabel}
                                 />
                             </BarChart>
