@@ -11,7 +11,6 @@ import { TopInfluencers } from './_components/bar-chart/top-influencers';
 import { ConversionByContent } from './_components/bar-chart/conversion-by-content';
 import { CampaignAssetsDelivered } from './_components/bar-chart/campaign-assets-deliverd';
 import Grid from '@mui/material/Grid2';
-import AnalyticsBarCharts from './_components/bar-chart/AnalyticsBarCharts';
 import { UserDistribution } from './_components/bar-chart/user-distribution';
 
 // export const metadata = { title: `Analytics | Dashboard | ${config.site.name}` };
@@ -22,8 +21,7 @@ export default function Page() {
       <ContentPerformance />
       <PartnerMatrix />
       <Facilities />
-      <AnalyticsBarCharts />
-      <Grid container spacing={1}>
+      <Grid container spacing={1} rowSpacing={1}>
         <OnboardingByRegion />
         <CampaignAssetsDelivered />
         <OnboardingByCreator />
