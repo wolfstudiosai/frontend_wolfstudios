@@ -34,7 +34,7 @@ export function CustomPieGraph({ data }) {
               label={renderCustomBarLabel}
             >
               {data.map((entry) => (
-                <Cell fill={entry.color} key={entry.name} />
+                <Cell fill={entry.color} key={entry.label} />
               ))}
             </Pie>
             <Tooltip animationDuration={50} content={<TooltipContent />} />
