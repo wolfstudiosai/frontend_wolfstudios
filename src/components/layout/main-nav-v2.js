@@ -36,7 +36,6 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const {
     customSettings: { setOpenSubNav },
   } = React.useContext(SettingsContext);
-  const [openNav, setOpenNav] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [routes, setRoutes] = React.useState(publicRoutes);
   const [chatOpen, setChatOpen] = React.useState(false);
@@ -82,14 +81,14 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
     const updatedRoutes = publicRoutes.map((group) => ({
       ...group,
       items: group.items
-        .filter((item) => (isLogin && item.key !== 'portfolio') || (!isLogin && item.key !== 'content'))
+        .filter((item) => (isLogin && item.key !== 'portfolio') || (isLogin && item.key !== 'partner') || (!isLogin && item.key !== 'content'))
         .map((item) => {
           const auth = localStorage.getItem('auth');
           if (auth) {
             const data = JSON.parse(auth);
             setIsAdmin(data.role === 'ADMIN' || data.role === 'SUPER_ADMIN');
           }
-          const requiresAdmin = ['campaign', 'production', 'content'].includes(item.key);
+          const requiresAdmin = ['campaign', 'production', 'content', 'partner'].includes(item.key);
           const disabled = requiresAdmin ? !isAdmin || !isLogin : false;
           return { ...item, disabled };
         }),
