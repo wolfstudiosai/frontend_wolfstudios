@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  alpha,
   Badge,
   Box,
   CircularProgress,
@@ -68,21 +67,20 @@ const NotificationItem = ({ notification }) => {
     <ListItem
       sx={{
         mb: 0.5,
+        p: 0.5,
         alignItems: 'flex-start',
         cursor: 'pointer',
-        backgroundColor: notification.read ? 'transparent' : 'action.hover',
-        '&:hover': { backgroundColor: 'action.selected' }
+        '&:hover': { backgroundColor: 'action.hover', transition: 'background-color 0.1s ease-in-out' }
       }}
     >
       <ListItemText
         primaryTypographyProps={{
-          style: { fontSize: pxToRem(14), whiteSpace: 'normal', fontWeight: 500 },
+          style: { fontSize: pxToRem(14), whiteSpace: 'normal', fontWeight: 500, lineHeight: '1.2' },
         }}
 
         primary={notification.message}
         secondary={
-          <Typography component="span" color="text.secondary" variant="caption">
-            {/* {dayjs(notification.createdAt).format('MMM D, hh:mm A')} */}
+          <Typography component="span" color="text.secondary" variant="caption" sx={{ fontSize: pxToRem(11), lineHeight: '1.2' }}>
             {dayjs(notification.createdAt).fromNow()}
           </Typography>
         }
@@ -99,7 +97,7 @@ const Notifications = ({ handleMenuClose, setOpen }) => {
 
   const getNotifications = async () => {
     try {
-      const response = await api.get('/notifications?page=1&size=3');
+      const response = await api.get('/notifications?page=1&size=5');
       setNotifications(response.data.data.data);
     } catch (error) {
       console.error('Error fetching notifications:', error);
