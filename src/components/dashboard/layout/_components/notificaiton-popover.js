@@ -85,7 +85,8 @@ const NotificationItem = ({ notification }) => {
         py: 0.5,
         alignItems: 'flex-start',
         cursor: 'pointer',
-        '&:hover': { backgroundColor: 'action.hover', transition: 'background-color 0.1s ease-in-out' }
+        '&:hover': { backgroundColor: 'action.hover', transition: 'background-color 0.1s ease-in-out' }, 
+        border: (theme) => `.5px solid ${theme.palette.divider}`,
       }}
     >
       <ListItemText
