@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  alpha,
   Badge,
   Box,
   CircularProgress,
@@ -27,9 +26,23 @@ dayjs.extend(relativeTime);
 export const NotificationPopover = () => {
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+  const [notificationsCount, setNotificationsCount] = React.useState(0);
+
+  React.useEffect(() => {
+    const getNotificationsCount = async () => {
+      try {
+        const response = await api.get('/notifications?type=POLL');
+        setNotificationsCount(response.data.data.count);
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      }
+    };
+    getNotificationsCount();
+  }, []);
 
   const handleMenuClose = () => {
     setMenuAnchorEl(null);
+    setNotificationsCount(0);
   };
 
   return (
@@ -40,7 +53,7 @@ export const NotificationPopover = () => {
         sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
       >
         <Tooltip title="Notifications">
-          <Badge color="primary" variant="dot">
+          <Badge color="primary" badgeContent={notificationsCount}>
             <Iconify icon="clarity:notification-line" width={20} style={{ color: 'var(--mui-palette-neutral-400)' }} />
           </Badge>
         </Tooltip>
@@ -68,21 +81,21 @@ const NotificationItem = ({ notification }) => {
     <ListItem
       sx={{
         mb: 0.5,
+        px: 1,
+        py: 0.5,
         alignItems: 'flex-start',
         cursor: 'pointer',
-        backgroundColor: notification.read ? 'transparent' : 'action.hover',
-        '&:hover': { backgroundColor: 'action.selected' }
+        '&:hover': { backgroundColor: 'action.hover', transition: 'background-color 0.1s ease-in-out' }
       }}
     >
       <ListItemText
         primaryTypographyProps={{
-          style: { fontSize: pxToRem(14), whiteSpace: 'normal', fontWeight: 500 },
+          style: { fontSize: pxToRem(14), whiteSpace: 'normal', fontWeight: 500, lineHeight: '1.2' },
         }}
 
         primary={notification.message}
         secondary={
-          <Typography component="span" color="text.secondary" variant="caption">
-            {/* {dayjs(notification.createdAt).format('MMM D, hh:mm A')} */}
+          <Typography component="span" color="text.secondary" variant="caption" sx={{ fontSize: pxToRem(11), lineHeight: '1.2' }}>
             {dayjs(notification.createdAt).fromNow()}
           </Typography>
         }
@@ -99,7 +112,7 @@ const Notifications = ({ handleMenuClose, setOpen }) => {
 
   const getNotifications = async () => {
     try {
-      const response = await api.get('/notifications?page=1&size=3');
+      const response = await api.get('/notifications?type=FETCH&page=1&size=5');
       setNotifications(response.data.data.data);
     } catch (error) {
       console.error('Error fetching notifications:', error);
@@ -120,7 +133,7 @@ const Notifications = ({ handleMenuClose, setOpen }) => {
   return (
     <>
       <PageLoader loading={loading}>
-        <Box sx={{ p: 2, bgcolor: 'background.default' }}>
+        <Box sx={{ p: 1.5 }}>
           <Typography variant="h6" sx={{ mb: 1 }}>
             Notifications
           </Typography>
@@ -138,7 +151,7 @@ const Notifications = ({ handleMenuClose, setOpen }) => {
         </Box>
         {notifications?.length > 0 && (
           <><Divider />
-            <Box sx={{ p: 1, bgcolor: 'background.default' }}>
+            <Box sx={{ p: 1 }}>
               <MenuItem component="div" onClick={handleAllNotifications} sx={{ justifyContent: 'center' }}>
                 All notifications
               </MenuItem>
@@ -163,7 +176,7 @@ const NotificationSidebar = ({ open, onClose }) => {
     if (isFetching) return;
     setIsFetching(true);
     try {
-      const response = await api.get(`/notifications?page=${pagination.pageNo}&size=${pagination.limit}`);
+      const response = await api.get(`/notifications?type=FETCH&page=${pagination.pageNo}&size=${pagination.limit}`);
       setNotifications((prev) => [...prev, ...response.data.data.data]);
       setTotalRecords(response.data.data.count);
 
