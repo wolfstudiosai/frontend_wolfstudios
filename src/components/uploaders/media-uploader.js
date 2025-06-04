@@ -120,6 +120,9 @@ export const MediaUploader = ({
         // }
       }
       onSave([...uploadedPaths, ...urls, ...videoUrls]);
+      console.log(uploadedPaths, 'uploadded paths')
+      console.log(urls, 'urls')
+      console.log(videoUrls, 'videoUrls')
       handleClose();
       setUploading(false);
     } catch (err) {

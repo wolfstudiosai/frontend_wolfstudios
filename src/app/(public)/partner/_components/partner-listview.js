@@ -186,7 +186,7 @@ export const PartnerListView = () => {
       <MediaUploader
         open={openImageUploadDialog}
         onClose={() => setOpenImageUploadDialog(false)}
-        onSave={(paths) => onSave([...value, ...paths])}
+        onSave={(paths) => setImages([...paths])}
         multiple
         hideVideoUploader={true}
         folderName="partner-HQ"
