@@ -27,17 +27,6 @@ import { dateFormatter } from '/src/utils/date-formatter';
 export const PortfolioListView = () => {
   // table columns
   const columns = [
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 70,
-      editable: false,
-      renderCell: (params) => (
-        <IconButton onClick={() => handleEdit(params.row)}>
-          <Iconify icon="ci:expand" />
-        </IconButton>
-      ),
-    },
     { field: 'ProjectTitle', headerName: 'Project Title', width: 280, editable: true },
     {
       field: 'category',
