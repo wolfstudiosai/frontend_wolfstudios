@@ -5,6 +5,7 @@ import { Typography } from '@mui/material'
 import { PageContainer } from '/src/components/container/PageContainer'
 import { CustomTab } from '../../../components/core/custom-tab';
 import { PortfolioListView } from '../../(public)/portfolio/_components/portfolio-listview';
+import { ProductionListView } from '../../(public)/production/_components/production-listview';
 
 const tabs = [
     { label: 'Production', value: 'production' },
@@ -24,23 +25,11 @@ export default function RecordPageView() {
             <CustomTab tabs={tabs} handleChange={handleChange} value={tab} />
             {tab === 'portfolio' && (
                 <PortfolioListView />
-                // <PortfolioRecord />
             )}
-            {/* {
-                tab === 'production' && (
-                    <ProductionRightPanel />
-                )
-            }
-            {
-                tab === 'partner' && (
-                    <PartnerRightPanel />
-                )
-            }
-            {
-                tab === 'campaign' && (
-                    <CampaignRightPanel />
-                )
-            } */}
+
+            {tab === 'production' && (
+                <ProductionListView />
+            )}
         </PageContainer>
     )
 }

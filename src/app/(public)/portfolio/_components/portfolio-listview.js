@@ -201,7 +201,7 @@ export const PortfolioListView = () => {
             checkboxSelection
             pagination
             paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
-            onPageChange={({ page, pageSize }) => setPagination({ pageNo: page + 1, limit: pageSize })}
+            onPageChange={handlePaginationModelChange}
             pageSizeOptions={[10, 20, 30]}
             onRowSelectionModelChange={handleRowSelection}
           />
