@@ -2,7 +2,7 @@ import Image from "next/image";
 import Box from "@mui/material/Box";
 import AttachFile from "@mui/icons-material/AttachFile";
 
-export const getPartnerColumns = ({ anchorEl, setImageToShow, setOpenImageUploadDialog }) => {
+export const getPartnerColumns = ({ anchorEl, setImageToShow, handleUploadModalOpen }) => {
     return [
         { field: 'name', headerName: 'Name', width: 280, editable: true },
         {
@@ -44,7 +44,7 @@ export const getPartnerColumns = ({ anchorEl, setImageToShow, setOpenImageUpload
                         <AttachFile
                             className="attach-icon"
                             titleAccess="Attach"
-                            onClick={() => setOpenImageUploadDialog(true)}
+                            onClick={() => handleUploadModalOpen(params.row)}
                             sx={{
                                 fontSize: 18,
                                 cursor: 'pointer',

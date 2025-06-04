@@ -16,7 +16,12 @@ export const EditableDataTable = ({
   onPageChange,
   paginationModel,
   checkboxSelection = false,
+  rowModesModel,
   onRowSelectionModelChange,
+  onRowModesModelChange,
+  onRowEditStop,
+  onRowEditStart,
+  editMode
 }) => {
   const [cellModesModel, setCellModesModel] = React.useState({});
 
@@ -75,6 +80,11 @@ export const EditableDataTable = ({
             border: (theme) => `1px solid ${theme.palette.divider}`,
           },
         }}
+        editMode={editMode}
+        onRowEditStart={onRowEditStart}
+        onRowEditStop={onRowEditStop}
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={onRowModesModelChange}
         disableColumnSorting
         onPaginationModelChange={onPageChange}
         paginationMode="server"

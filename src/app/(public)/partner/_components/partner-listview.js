@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Box, Button, Card, Popover } from '@mui/material';
+import { Box, Button, Card, IconButton, Popover, TextField } from '@mui/material';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
@@ -12,33 +12,39 @@ import { createPartnerAsync, deletePartnerAsync, getPartnerListAsync, updatePart
 import { defaultPartner } from '../_lib/partner.types';
 import { ManagePartnerRightPanel } from './manage-partner-right-panel';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { dateFormatter } from '/src/utils/date-formatter';
 import Image from 'next/image';
 import { getPartnerColumns } from '../_utils/get-partner-columns';
 import { MediaUploader } from '/src/components/uploaders/media-uploader';
+import AddIcon from '@mui/icons-material/Add';
+import { toast } from 'sonner';
 
 export const PartnerListView = () => {
   // Image upload popover
   const anchorEl = React.useRef(null);
   const [imageToShow, setImageToShow] = React.useState(null);
-  const [openImageUploadDialog, setOpenImageUploadDialog] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const handleUploadModalOpen = (data) => {
+    setOpen(true);
+    setUpdatedRow(data);
+  };
 
   // Table column
   const columns = getPartnerColumns({
     anchorEl,
     setImageToShow,
-    setOpenImageUploadDialog
+    handleUploadModalOpen
   });
 
   // Partner data handler
-  const [records, setRecords] = React.useState([]);
+  const [partners, setPartners] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [openDetails, setOpenDetails] = React.useState(null);
   const [selectedRows, setSelectedRows] = React.useState([]);
-  const [images, setImages] = React.useState([]);
+  const [updatedRow, setUpdatedRow] = React.useState(null);
+  const requiredFields = ["name", "email"];
 
   const handleClosePopover = () => {
     anchorEl.current = null;
@@ -53,13 +59,28 @@ export const PartnerListView = () => {
         rowsPerPage: pagination.limit,
       });
       if (response.success) {
-        setRecords(response.data);
+        setPartners(response.data);
         setTotalRecords(response.totalRecords);
       }
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
+    }
+  }
+
+
+  const handleUploadImage = async (images) => {
+    try {
+      const newData = {
+        ...updatedRow,
+        profileImage: [...updatedRow.profileImage, ...images]
+      }
+      await updatePartnerAsync(newData);
+    } catch (error) {
+      console.log(error)
+    } finally {
+      fetchList();
     }
   }
 
@@ -72,11 +93,18 @@ export const PartnerListView = () => {
 
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
-    if (newRow.id) {
-      await updatePartnerAsync(newRow);
+
+    const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
+
+    if (isTemporaryId) {
+      if (!requiredFields.every((field) => newRow[field])) {
+        toast.error("Please fill all required fields");
+      } else {
+        await createPartnerAsync(newRow);
+        fetchList();
+      }
     } else {
-      const { id, ...rest } = newRow;
-      await createPartnerAsync(null, rest);
+      await updatePartnerAsync(newRow);
       fetchList();
     }
     return newRow;
@@ -98,7 +126,7 @@ export const PartnerListView = () => {
   }, []);
 
   const handleRowSelection = (newRowSelectionModel) => {
-    const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
+    const selectedData = newRowSelectionModel.map((id) => partners.find((row) => row.id === id));
     setSelectedRows(selectedData);
   };
 
@@ -106,6 +134,18 @@ export const PartnerListView = () => {
     fetchList();
   }, [pagination]);
 
+  // new column added
+  const handleAddNewItem = () => {
+    const tempId = `temp_${Date.now()}`;
+    const newPartner = {
+      ...defaultPartner(),
+      id: tempId
+    };
+
+    setPartners((prev) => [newPartner, ...prev]);
+  };
+
+  // Column delete
   const handleDelete = async (password) => {
     const idsToDelete = [];
     selectedRows.forEach((row) => {
@@ -117,21 +157,30 @@ export const PartnerListView = () => {
     // }
   };
 
+
   return (
     <PageContainer>
       <PageLoader loading={loading}>
-        <Card>
-          <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
-            <Box>
+        <Card sx={{ borderRadius: 0 }}>
+          <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
+            <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
+            <Box display="flex" alignItems="center">
+              <IconButton onClick={handleAddNewItem}>
+                <AddIcon />
+              </IconButton>
               <RefreshPlugin onClick={fetchList} />
+              <DeleteConfirmationPasswordPopover
+                title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
+                onDelete={(password) => handleDelete(password)}
+                passwordInput
+                disabled={selectedRows.length === 0} />
             </Box>
-            <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`} onDelete={(password) => handleDelete(password)} passwordInput disabled={selectedRows.length === 0} />
           </Box>
 
           <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
             <EditableDataTable
               columns={visibleColumns}
-              rows={records?.map((row) => defaultPartner(row)) || []}
+              rows={partners?.map((row) => defaultPartner(row)) || []}
               processRowUpdate={processRowUpdate}
               onProcessRowUpdateError={handleProcessRowUpdateError}
               loading={loading}
@@ -184,9 +233,9 @@ export const PartnerListView = () => {
 
       {/* Image upload dialog */}
       <MediaUploader
-        open={openImageUploadDialog}
-        onClose={() => setOpenImageUploadDialog(false)}
-        onSave={(paths) => setImages([...paths])}
+        open={open}
+        onClose={() => setOpen(false)}
+        onSave={(paths) => handleUploadImage([...paths])}
         multiple
         hideVideoUploader={true}
         folderName="partner-HQ"
