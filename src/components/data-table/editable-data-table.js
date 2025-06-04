@@ -86,6 +86,7 @@ export const EditableDataTable = ({
         rowModesModel={rowModesModel}
         onRowModesModelChange={onRowModesModelChange}
         disableColumnSorting
+        disableRowSelectionOnClick
         onPaginationModelChange={onPageChange}
         paginationMode="server"
         checkboxSelection={checkboxSelection} // it will enable checkbox selection

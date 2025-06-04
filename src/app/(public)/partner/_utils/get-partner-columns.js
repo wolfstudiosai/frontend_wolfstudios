@@ -57,6 +57,18 @@ export const getPartnerColumns = ({ anchorEl, setImageToShow, handleUploadModalO
         },
         { field: 'email', headerName: 'Email', width: 250, editable: true },
         { field: 'journeyStep', headerName: 'Journey Step', width: 200, editable: true },
+        {
+            field: 'xUrl', headerName: 'X', width: 200, editable: true, renderCell: (params) => {
+
+                return <span>{params.row.X.url}</span>
+            }
+        },
+        {
+            field: 'xFollowing', headerName: 'X Following', width: 200, editable: true, renderCell: (params) => {
+
+                return <span>{params.row.X.following}</span>
+            }
+        },
         { field: 'notes', headerName: 'Notes', width: 300, editable: true },
         { field: 'hourlyRate', headerName: 'Hourly Rate', width: 150, editable: true },
         { field: 'bookingLink', headerName: 'Booking Link', width: 250, editable: true },

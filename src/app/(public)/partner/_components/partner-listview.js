@@ -44,7 +44,6 @@ export const PartnerListView = () => {
   const [openDetails, setOpenDetails] = React.useState(null);
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [updatedRow, setUpdatedRow] = React.useState(null);
-  const requiredFields = ["name", "email"];
 
   const handleClosePopover = () => {
     anchorEl.current = null;
@@ -70,6 +69,7 @@ export const PartnerListView = () => {
   }
 
 
+  // update partner after images uploaded
   const handleUploadImage = async (images) => {
     try {
       const newData = {
@@ -91,22 +91,30 @@ export const PartnerListView = () => {
     setPagination({ pageNo: page + 1, limit: pageSize });
   };
 
+  // update or create partner 
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
 
     const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
 
     if (isTemporaryId) {
-      if (!requiredFields.every((field) => newRow[field])) {
-        toast.error("Please fill all required fields");
-      } else {
-        await createPartnerAsync(newRow);
-        fetchList();
+      if (!newRow.name) {
+        toast.error("Please fill name");
+        return newRow;
       }
+
+      if (!newRow.email) {
+        toast.error("Please fill email");
+        return newRow;
+      }
+
+      await createPartnerAsync(newRow);
+      fetchList();
     } else {
       await updatePartnerAsync(newRow);
       fetchList();
     }
+
     return newRow;
   }, []);
 
@@ -138,8 +146,99 @@ export const PartnerListView = () => {
   const handleAddNewItem = () => {
     const tempId = `temp_${Date.now()}`;
     const newPartner = {
-      ...defaultPartner(),
-      id: tempId
+      id: tempId,
+      name: '',
+      email: '',
+      currentStatus: [],
+      journeyStep: '',
+      profileStatus: [],
+      notes: '',
+      hourlyRate: '',
+      bookingLink: '',
+      ageBracket: [],
+      linkedinConnections: 0,
+      X: '',
+      XFollowing: 0,
+      website: '',
+      medium: '',
+      soundcloud: '',
+      spotify: '',
+      opentoGifting: '',
+      occupation: '',
+      client: '',
+      linkedin: '',
+      mailingAddress: '',
+      phone: '',
+      pinterest: '',
+      podcast: '',
+      refusalReason: '',
+      twitch: '',
+      revoAmazonOrderConfirmationNumber: '',
+      amazonReviewLink: '',
+      amazonReviewCupper: '',
+      amazonReviewThePill: '',
+      amazonStorefront: '',
+      deliverables: '',
+      googleDriveFiles: '',
+      revoIGPost: '',
+      partnerIGRate: '',
+      partnerTTRate: '',
+      partnerYTRate: '',
+      amountPaid: '',
+      totalContributedEngagementByContent: '0',
+      totalAudience: '',
+      platformDeliverables:
+        [],
+      platforms: [],
+      previousCollabExpense: '',
+      revoOffer: '',
+      remainingCredits: 0,
+      ttPost: '',
+      totalROI: '',
+      ugcPaymentStatus: '',
+      ugcRetainerAmount: 0,
+      ugcTikTokLink: '',
+      revoUGCArmyTTUsernamePW: '',
+      whatsApp: '',
+      ytPost: '',
+      partnerPostViews: 0,
+      sourcedFrom: [],
+      estimatedTaxes: '',
+      fbaXLevanta: 0,
+      shippingFBAFeeGiftedPartners: '',
+      levantaAffiliateFee: '',
+      paypalFee: '',
+      shippingExpense: '',
+      amazonReferralFee: '',
+      amazonOrderTotal: '',
+      amazonTax: '',
+      amazonKickback: '',
+      monthSourced: '',
+      secondPaymentDate: '',
+      clientStatus: '',
+      linktree: '',
+      partnerUGCRate: '',
+      partner360Rate: '',
+      revoCounteroffer: '',
+      opentoWhitelisting: '',
+      conversionsBundleCupper: 0,
+      conversionsMassageGun: 0,
+      conversionsCupper: 0,
+      conversionsOils: 0,
+      conversionsWalkingPad: 0,
+      amazonReviewWalkingPadPro: '',
+      amazonReviewWalkingPadStandard: '',
+      amazonReviewOil: '',
+      amazonReviewSoothingCream: '',
+      amazonReviewBeautyWand: '',
+      contracts: [],
+      paymentLink: '',
+      totalExpense: '0',
+      totalProductCOGExpense: '0',
+      affiliatePlatform: [],
+      profileImage: [],
+      mediaKit: [],
+      receipts: [],
     };
 
     setPartners((prev) => [newPartner, ...prev]);
@@ -147,11 +246,12 @@ export const PartnerListView = () => {
 
   // Column delete
   const handleDelete = async (password) => {
-    const idsToDelete = [];
-    selectedRows.forEach((row) => {
-      idsToDelete.push(row.id);
-    });
-    // const response = await deletePartnerAsync(idsToDelete);
+    fetchList()
+    // const idsToDelete = [];
+    // selectedRows.forEach((row) => {
+    //   idsToDelete.push(row.id);
+    // });
+    // const response = await deletePartnerAsync(idsToDelete[0]);
     // if (response.success) {
     //   fetchList();
     // }
@@ -160,46 +260,47 @@ export const PartnerListView = () => {
 
   return (
     <PageContainer>
-      <PageLoader loading={loading}>
-        <Card sx={{ borderRadius: 0 }}>
-          <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
-            <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
-            <Box display="flex" alignItems="center">
-              <IconButton onClick={handleAddNewItem}>
-                <AddIcon />
-              </IconButton>
-              <RefreshPlugin onClick={fetchList} />
-              <DeleteConfirmationPasswordPopover
-                title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
-                onDelete={(password) => handleDelete(password)}
-                passwordInput
-                disabled={selectedRows.length === 0} />
-            </Box>
-          </Box>
-
-          <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
-            <EditableDataTable
-              columns={visibleColumns}
-              rows={partners?.map((row) => defaultPartner(row)) || []}
-              processRowUpdate={processRowUpdate}
-              onProcessRowUpdateError={handleProcessRowUpdateError}
-              loading={loading}
-              rowCount={totalRecords}
-              checkboxSelection
-              pageSizeOptions={[10, 20, 30]}
-              paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
-              onPageChange={handlePaginationModelChange}
-              onRowSelectionModelChange={handleRowSelection}
+      <Card sx={{ borderRadius: 0 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
+          <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
+          <Box display="flex" alignItems="center">
+            <IconButton onClick={handleAddNewItem}>
+              <AddIcon />
+            </IconButton>
+            <RefreshPlugin onClick={fetchList} />
+            <DeleteConfirmationPasswordPopover
+              title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
+              onDelete={(password) => handleDelete(password)}
+              passwordInput
+              id={selectedRows.map((row) => row.id)[0]}
+              disabled={selectedRows.length === 0}
+              deleteFn={deletePartnerAsync}
             />
           </Box>
-        </Card>
-        <ManagePartnerRightPanel
-          open={openDetails ? true : false}
-          onClose={() => setOpenDetails(null)}
-          data={openDetails}
-          fetchList={fetchList}
-        />
-      </PageLoader>
+        </Box>
+
+        <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
+          <EditableDataTable
+            columns={visibleColumns}
+            rows={partners?.map((row) => defaultPartner(row)) || []}
+            processRowUpdate={processRowUpdate}
+            onProcessRowUpdateError={handleProcessRowUpdateError}
+            loading={loading}
+            rowCount={totalRecords}
+            checkboxSelection
+            pageSizeOptions={[10, 20, 30]}
+            paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
+            onPageChange={handlePaginationModelChange}
+            onRowSelectionModelChange={handleRowSelection}
+          />
+        </Box>
+      </Card>
+      <ManagePartnerRightPanel
+        open={openDetails ? true : false}
+        onClose={() => setOpenDetails(null)}
+        data={openDetails}
+        fetchList={fetchList}
+      />
 
       {/* Image upload popover */}
       <Popover
