@@ -133,7 +133,7 @@ export const PartnerListView = () => {
 
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 200 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [openDetails, setOpenDetails] = React.useState(null);
@@ -212,7 +212,8 @@ export const PartnerListView = () => {
               onProcessRowUpdateError={handleProcessRowUpdateError}
               loading={loading}
               rowCount={totalRecords}
-              pageSizeOptions={[10, 25, 50, 100]}
+              pageSizeOptions={[10, 20, 30]}
+              paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
               onPageChange={handlePaginationModelChange}
             />
           </Box>
