@@ -171,8 +171,8 @@ export const ProductionListView = () => {
   return (
     <PageContainer>
       <PageLoader loading={loading}>
-        <Card>
-          <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
+        <Card sx={{ borderRadius: 0 }}>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
             <Box>
               <RefreshPlugin onClick={fetchList} />
             </Box>

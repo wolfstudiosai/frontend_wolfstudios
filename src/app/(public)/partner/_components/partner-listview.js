@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Box, Card } from '@mui/material';
+import { Box, Card, Popover } from '@mui/material';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
@@ -13,11 +13,62 @@ import { defaultPartner } from '../_lib/partner.types';
 import { ManagePartnerRightPanel } from './manage-partner-right-panel';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { dateFormatter } from '/src/utils/date-formatter';
+import Image from 'next/image';
+import AttachFile from '@mui/icons-material/AttachFile';
 
 export const PartnerListView = () => {
   // table columns
   const columns = [
     { field: 'name', headerName: 'Name', width: 280, editable: true },
+    {
+      field: 'profileImage',
+      headerName: 'Image',
+      width: 180,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => {
+        const imageArray = params.row.profileImage;
+        const imageUrl = Array.isArray(imageArray) ? imageArray[0] : null;
+
+        return (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.5,
+              width: '100%',
+              height: '100%',
+              position: 'relative',
+              '&:hover .attach-icon': {
+                display: 'inline-block',
+              },
+            }}
+          >
+            {imageUrl && (
+              <Image
+                src={imageUrl}
+                alt="Partner"
+                width={30}
+                height={30}
+                style={{ objectFit: 'cover', borderRadius: '4px' }}
+              />
+            )}
+            <AttachFile
+              className="attach-icon"
+              titleAccess="Attach"
+              onClick={(event) => handleAttachClick(event, params.row.id)}
+              sx={{
+                fontSize: 18,
+                cursor: 'pointer',
+                display: 'none',
+              }}
+            />
+          </Box>
+        );
+      },
+    }
+    ,
+
     // { field: 'ageBracket', headerName: 'Age Bracket', width: 200, editable: true },
     // {
     //   field: 'city',
@@ -140,6 +191,44 @@ export const PartnerListView = () => {
   const [openDetails, setOpenDetails] = React.useState(null);
   const [selectedRows, setSelectedRows] = React.useState([]);
 
+  // Image upload popover
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedRowId, setSelectedRowId] = React.useState(null);
+  const [popoverMode, setPopoverMode] = React.useState("");
+
+  const handleAttachClick = (event, rowId) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedRowId(rowId);
+  };
+
+  const handleClosePopover = () => {
+    setAnchorEl(null);
+    setSelectedRowId(null);
+  };
+
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file || !selectedRowId) return;
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('rowId', selectedRowId);
+
+      // Call your image upload API
+      console.log('Uploading file for row:', selectedRowId);
+
+      // Example: await uploadPartnerImageAsync(formData);
+
+      // Refresh list after successful upload
+      // await fetchList();
+    } catch (error) {
+      console.error('Upload failed:', error);
+    } finally {
+      // handleClosePopover();
+    }
+  };
+
   async function fetchList() {
     try {
       setLoading(true);
@@ -212,7 +301,6 @@ export const PartnerListView = () => {
     // }
   };
 
-
   return (
     <PageContainer>
       <PageLoader loading={loading}>
@@ -247,6 +335,26 @@ export const PartnerListView = () => {
           fetchList={fetchList}
         />
       </PageLoader>
+
+      {/* Image upload popover */}
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={handleClosePopover}
+        disableRestoreFocus
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      >
+        <Box sx={{ p: 2 }}>
+          <input type="file" onChange={handleFileUpload} />
+        </Box>
+      </Popover>
     </PageContainer>
   );
 };

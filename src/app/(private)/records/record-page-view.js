@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react';
-import { Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { PageContainer } from '/src/components/container/PageContainer'
 import { CustomTab } from '../../../components/core/custom-tab';
 import { PortfolioListView } from '../../(public)/portfolio/_components/portfolio-listview';
@@ -22,8 +22,9 @@ export default function RecordPageView() {
     };
     return (
         <PageContainer>
-            <Typography>Record Page View</Typography>
-            <CustomTab tabs={tabs} handleChange={handleChange} value={tab} />
+            <Box mb={1}>
+                <CustomTab tabs={tabs} handleChange={handleChange} value={tab} />
+            </Box>
             {tab === 'portfolio' && (
                 <PortfolioListView />
             )}
