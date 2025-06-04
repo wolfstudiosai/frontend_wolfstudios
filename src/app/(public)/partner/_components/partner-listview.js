@@ -8,9 +8,10 @@ import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-import { createPartnerAsync, getPartnerListAsync, updatePartnerAsync } from '../_lib/partner.actions';
+import { createPartnerAsync, deletePartnerAsync, getPartnerListAsync, updatePartnerAsync } from '../_lib/partner.actions';
 import { defaultPartner } from '../_lib/partner.types';
 import { ManagePartnerRightPanel } from './manage-partner-right-panel';
+import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { dateFormatter } from '/src/utils/date-formatter';
 
 export const PartnerListView = () => {
@@ -137,6 +138,7 @@ export const PartnerListView = () => {
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [openDetails, setOpenDetails] = React.useState(null);
+  const [selectedRows, setSelectedRows] = React.useState([]);
 
   async function fetchList() {
     try {
@@ -190,9 +192,26 @@ export const PartnerListView = () => {
     }
   }, []);
 
+  const handleRowSelection = (newRowSelectionModel) => {
+    const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
+    setSelectedRows(selectedData);
+  };
+
   React.useEffect(() => {
     fetchList();
   }, [pagination]);
+
+  const handleDelete = async (password) => {
+    const idsToDelete = [];
+    selectedRows.forEach((row) => {
+      idsToDelete.push(row.id);
+    });
+    // const response = await deletePartnerAsync(idsToDelete);
+    // if (response.success) {
+    //   fetchList();
+    // }
+  };
+
 
   return (
     <PageContainer>
@@ -202,6 +221,7 @@ export const PartnerListView = () => {
             <Box>
               <RefreshPlugin onClick={fetchList} />
             </Box>
+            <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`} onDelete={(password) => handleDelete(password)} passwordInput disabled={selectedRows.length === 0} />
           </Box>
 
           <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
@@ -212,9 +232,11 @@ export const PartnerListView = () => {
               onProcessRowUpdateError={handleProcessRowUpdateError}
               loading={loading}
               rowCount={totalRecords}
+              checkboxSelection
               pageSizeOptions={[10, 20, 30]}
               paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
               onPageChange={handlePaginationModelChange}
+              onRowSelectionModelChange={handleRowSelection}
             />
           </Box>
         </Card>
