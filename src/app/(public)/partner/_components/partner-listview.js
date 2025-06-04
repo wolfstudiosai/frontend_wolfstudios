@@ -28,7 +28,7 @@ export const PartnerListView = () => {
       filterable: false,
       renderCell: (params) => {
         const imageArray = params.row.profileImage;
-        const imageUrl = Array.isArray(imageArray) ? imageArray[0] : null;
+        // const imageUrl = Array.isArray(imageArray) ? imageArray[0] : null;
 
         return (
           <Box
@@ -44,14 +44,21 @@ export const PartnerListView = () => {
               },
             }}
           >
-            {imageUrl && (
-              <Image
+            {imageArray.length > 0 && (
+              imageArray.map(imageUrl => <Image
+                key={imageUrl}
                 src={imageUrl}
                 alt="Partner"
                 width={30}
                 height={30}
-                style={{ objectFit: 'cover', borderRadius: '4px' }}
-              />
+                style={{ objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setAnchorEl(event.currentTarget);
+                  setImageToShow(imageUrl);
+                  setPopoverMode('preview');
+                }}
+              />)
             )}
             <AttachFile
               className="attach-icon"
@@ -66,31 +73,7 @@ export const PartnerListView = () => {
           </Box>
         );
       },
-    }
-    ,
-
-    // { field: 'ageBracket', headerName: 'Age Bracket', width: 200, editable: true },
-    // {
-    //   field: 'city',
-    //   headerName: 'City',
-    //   width: 150,
-    //   editable: true,
-    //   valueGetter: (value, row) => row.ByCityPartnerHQ?.map((item) => item.ByCities?.Name).join(', '),
-    // },
-    // {
-    //   field: 'state',
-    //   headerName: 'State',
-    //   width: 150,
-    //   editable: true,
-    //   valueGetter: (value, row) => row.ByStatesPartnerHQ?.map((item) => item.ByStates?.Name).join(', '),
-    // },
-    // {
-    //   field: 'country',
-    //   headerName: 'Country',
-    //   width: 150,
-    //   editable: true,
-    //   valueGetter: (value, row) => row.ByCountryPartnerHQ?.map((item) => item.ByCountry?.Name).join(', '),
-    // },
+    },
     { field: 'email', headerName: 'Email', width: 250, editable: true },
     { field: 'journeyStep', headerName: 'Journey Step', width: 200, editable: true },
     { field: 'notes', headerName: 'Notes', width: 300, editable: true },
@@ -179,8 +162,6 @@ export const PartnerListView = () => {
     { field: 'amazonReviewSoothingCream', headerName: 'Amazon Review - Cream', width: 250, editable: true },
     { field: 'amazonReviewBeautyWand', headerName: 'Amazon Review - Beauty Wand', width: 250, editable: true },
     { field: 'paymentLink', headerName: 'Payment Link', width: 250, editable: true },
-    // { field: 'totalExpense', headerName: 'Total Expense', width: 200, type: 'number', editable: true },
-    // { field: 'totalProductCOGExpense', headerName: 'Product COG Expense', width: 250, type: 'number', editable: true },
   ];
 
   const [records, setRecords] = React.useState([]);
@@ -195,10 +176,12 @@ export const PartnerListView = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedRowId, setSelectedRowId] = React.useState(null);
   const [popoverMode, setPopoverMode] = React.useState("");
+  const [imageToShow, setImageToShow] = React.useState(null);
 
   const handleAttachClick = (event, rowId) => {
     setAnchorEl(event.currentTarget);
     setSelectedRowId(rowId);
+    setPopoverMode('upload');
   };
 
   const handleClosePopover = () => {
@@ -340,8 +323,12 @@ export const PartnerListView = () => {
       <Popover
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
-        onClose={handleClosePopover}
-        disableRestoreFocus
+        onClose={() => {
+          setAnchorEl(null);
+          setSelectedRowId(null);
+          setImageToShow(null);
+          setPopoverMode(null);
+        }}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left',
@@ -350,11 +337,25 @@ export const PartnerListView = () => {
           vertical: 'top',
           horizontal: 'left',
         }}
+        disableAutoFocus
+        disableEnforceFocus
       >
-        <Box sx={{ p: 2 }}>
-          <input type="file" onChange={handleFileUpload} />
+        <Box sx={{ p: 1 }}>
+          {popoverMode === 'upload' && (
+            <input type="file" onChange={handleFileUpload} />
+          )}
+          {popoverMode === 'preview' && imageToShow && (
+            <Image
+              src={imageToShow}
+              alt="Preview"
+              width={300}
+              height={300}
+              style={{ borderRadius: 8 }}
+            />
+          )}
         </Box>
       </Popover>
+
     </PageContainer>
   );
 };
