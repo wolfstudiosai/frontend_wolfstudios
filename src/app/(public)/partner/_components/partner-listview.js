@@ -99,12 +99,12 @@ export const PartnerListView = () => {
 
     if (isTemporaryId) {
       if (!newRow.name) {
-        toast.error("Please fill name");
+        toast.error("Please enter name");
         return newRow;
       }
 
       if (!newRow.email) {
-        toast.error("Please fill email");
+        toast.error("Please enter email");
         return newRow;
       }
 
