@@ -14,6 +14,7 @@ export const EditableDataTable = ({
   rowCount,
   pageSizeOptions,
   onPageChange,
+  paginationModel,
   checkboxSelection = false,
   onRowSelectionModelChange,
 }) => {
@@ -68,6 +69,7 @@ export const EditableDataTable = ({
         // pageSize={pageSize}
         loading={loading}
         pageSizeOptions={pageSizeOptions}
+        paginationModel={paginationModel}
         sx={{
           '& .MuiDataGrid-cell': {
             border: (theme) => `1px solid ${theme.palette.divider}`,

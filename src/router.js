@@ -343,6 +343,13 @@ export const privateRoutesV2 = [
     ],
   },
   {
+    key: "records",
+    title: "Records",
+    icon: "material-symbols-light:data-table-outline",
+    href: paths.private.record,
+    allowedRoles: ['admin', 'user', 'super_admin'],
+  },
+  {
     key: 'partner_hq',
     title: 'Partner HQ',
     icon: 'arcticons:partnerkaart',

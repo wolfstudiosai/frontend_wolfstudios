@@ -94,7 +94,7 @@ export const PortfolioListView = () => {
   ];
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 200 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -187,7 +187,7 @@ export const PortfolioListView = () => {
           <Box>
             <RefreshPlugin onClick={fetchList} />
           </Box>
-          <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}  onDelete={(password) => handleDelete(password)}  passwordInput disabled={selectedRows.length === 0} />
+          <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`} onDelete={(password) => handleDelete(password)} passwordInput disabled={selectedRows.length === 0} />
         </Box>
 
         <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
@@ -198,11 +198,14 @@ export const PortfolioListView = () => {
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}
             rowCount={totalRecords}
-            pageSizeOptions={[10, 25, 50, 100]}
-            onPageChange={handlePaginationModelChange}
-            checkboxSelection={true}
+            checkboxSelection
+            pagination
+            paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
+            onPageChange={({ page, pageSize }) => setPagination({ pageNo: page + 1, limit: pageSize })}
+            pageSizeOptions={[10, 20, 30]}
             onRowSelectionModelChange={handleRowSelection}
           />
+
         </Box>
       </Card>
       <ManagePortfolioRightPanel
