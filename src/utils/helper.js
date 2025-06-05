@@ -1,5 +1,6 @@
 import { alpha } from '@mui/material';
 import { toast } from 'sonner';
+
 import { setTokenInCookies } from './axios-api.helpers';
 
 export const getSearchQuery = (queryParams) => {
@@ -20,7 +21,7 @@ export const getSearchQuery = (queryParams) => {
   // if (toDate) {
   //     query += `to_date=${toDate}&`;
   // }
-  query += `page=${page}&size=${rowsPerPage > 30 ? 30 : rowsPerPage}`;
+  query += `page=${page}&size=${rowsPerPage || 10}`;
   return query;
 };
 

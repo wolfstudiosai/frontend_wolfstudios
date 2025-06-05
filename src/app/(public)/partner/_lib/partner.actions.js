@@ -7,6 +7,7 @@ import { uploadFileAsync } from '/src/utils/upload-file';
 export const getPartnerListAsync = async (queryParams) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
+    console.log('searchQuery', searchQuery);
     const res = await api.get(`/partner-HQ${searchQuery}`);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {

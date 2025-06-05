@@ -14,8 +14,14 @@ export const EditableDataTable = ({
   rowCount,
   pageSizeOptions,
   onPageChange,
+  paginationModel,
   checkboxSelection = false,
+  rowModesModel,
   onRowSelectionModelChange,
+  onRowModesModelChange,
+  onRowEditStop,
+  onRowEditStart,
+  editMode
 }) => {
   const [cellModesModel, setCellModesModel] = React.useState({});
 
@@ -68,12 +74,19 @@ export const EditableDataTable = ({
         // pageSize={pageSize}
         loading={loading}
         pageSizeOptions={pageSizeOptions}
+        paginationModel={paginationModel}
         sx={{
           '& .MuiDataGrid-cell': {
             border: (theme) => `1px solid ${theme.palette.divider}`,
           },
         }}
+        editMode={editMode}
+        onRowEditStart={onRowEditStart}
+        onRowEditStop={onRowEditStop}
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={onRowModesModelChange}
         disableColumnSorting
+        disableRowSelectionOnClick
         onPaginationModelChange={onPageChange}
         paginationMode="server"
         checkboxSelection={checkboxSelection} // it will enable checkbox selection
