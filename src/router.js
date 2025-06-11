@@ -513,7 +513,7 @@ export const privateRoutesV2 = [
       {
         key: 'analytics',
         title: 'Analytics',
-        href: paths.private.analytics,
+        href: paths.private.archive_analytics,
         icon: 'material-symbols:analytics-outline',
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
