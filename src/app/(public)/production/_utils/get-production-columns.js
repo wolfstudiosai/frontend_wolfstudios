@@ -3,7 +3,7 @@ import Image from "next/image";
 import AttachFile from "@mui/icons-material/AttachFile";
 import { dateFormatter } from "/src/utils/date-formatter";
 
-export const getProductionColumns = () => {
+export const getProductionColumns = ({ anchorEl, setImageToShow }) => {
     return [
         { field: 'ProjectTitle', headerName: 'Project Title', width: 280, editable: true },
         {
@@ -17,8 +17,7 @@ export const getProductionColumns = () => {
         {
             field: 'Imagefield',
             headerName: 'Image',
-            width: 150,
-            editable: true,
+            width: 180,
             renderCell: (params) =>
                 <Box sx={{
                     display: 'flex',

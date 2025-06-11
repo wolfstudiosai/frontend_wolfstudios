@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Box, Button, Card, IconButton, TextField } from '@mui/material';
+import { Box, Button, Card, IconButton, Popover, TextField } from '@mui/material';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
 import { PageContainer } from '/src/components/container/PageContainer';
@@ -16,15 +16,21 @@ import {
   updateProductionAsync,
 } from '../_lib/production.action';
 import { ManageProductionRightPanel } from './manage-production-right-panel';
-import PageLoader from '/src/components/loaders/PageLoader';
 import AddIcon from '@mui/icons-material/Add';
 import { defaultProduction } from '../../production/_lib/production.types';
 import { getProductionColumns } from '../_utils/get-production-columns';
+import Image from 'next/image';
 
 export const ProductionListView = () => {
+  const anchorEl = React.useRef(null);
+  const [imageToShow, setImageToShow] = React.useState(null);
 
   // table columns
-  const columns = getProductionColumns();
+  const columns = getProductionColumns({
+    anchorEl,
+    setImageToShow,
+    // handleUploadModalOpen
+  });
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
@@ -54,6 +60,11 @@ export const ProductionListView = () => {
   }
 
   // ******************************data grid handler starts*********************
+
+  const handleClosePopover = () => {
+    anchorEl.current = null;
+    setImageToShow(null);
+  };
 
   const handlePaginationModelChange = (newPaginationModel) => {
     const { page, pageSize } = newPaginationModel;
@@ -119,44 +130,72 @@ export const ProductionListView = () => {
 
   return (
     <PageContainer>
-      <PageLoader loading={loading}>
-        <Card sx={{ borderRadius: 0 }}>
-          <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
-            <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
-            <Box display="flex" justifyContent="space-between" alignItems="center">
-              <IconButton onClick={handleAddNewItem}>
-                <AddIcon />
-              </IconButton>
-              <Box>
-                <RefreshPlugin onClick={fetchList} />
-              </Box>
-              <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`} onDelete={(password) => handleDelete(password)} passwordInput disabled={selectedRows.length === 0} />
+      <Card sx={{ borderRadius: 0 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
+          <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <IconButton onClick={handleAddNewItem}>
+              <AddIcon />
+            </IconButton>
+            <Box>
+              <RefreshPlugin onClick={fetchList} />
             </Box>
+            <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`} onDelete={(password) => handleDelete(password)} passwordInput disabled={selectedRows.length === 0} />
           </Box>
+        </Box>
 
-          <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
-            <EditableDataTable
-              columns={visibleColumns}
-              rows={records}
-              processRowUpdate={processRowUpdate}
-              onProcessRowUpdateError={handleProcessRowUpdateError}
-              loading={loading}
-              rowCount={totalRecords}
-              pageSizeOptions={[10, 20, 30]}
-              paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
-              onPageChange={handlePaginationModelChange}
-              checkboxSelection={true}
-              onRowSelectionModelChange={handleRowSelection}
+        <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
+          <EditableDataTable
+            columns={visibleColumns}
+            rows={records}
+            processRowUpdate={processRowUpdate}
+            onProcessRowUpdateError={handleProcessRowUpdateError}
+            loading={loading}
+            rowCount={totalRecords}
+            pageSizeOptions={[10, 20, 30]}
+            paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
+            onPageChange={handlePaginationModelChange}
+            checkboxSelection={true}
+            onRowSelectionModelChange={handleRowSelection}
+          />
+        </Box>
+      </Card>
+      <ManageProductionRightPanel
+        open={openDetails ? true : false}
+        onClose={() => setOpenDetails(null)}
+        data={openDetails}
+        fetchList={fetchList}
+      />
+
+      {/* Image upload popover */}
+      <Popover
+        open={Boolean(anchorEl.current)}
+        anchorEl={anchorEl.current}
+        onClose={handleClosePopover}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        disableAutoFocus
+        disableEnforceFocus
+        disablePortal
+      >
+        <Box sx={{ p: 1.5 }}>
+          {imageToShow && (
+            <Image
+              src={imageToShow}
+              alt="Preview"
+              width={300}
+              height={300}
+              style={{ borderRadius: 8 }}
             />
-          </Box>
-        </Card>
-        <ManageProductionRightPanel
-          open={openDetails ? true : false}
-          onClose={() => setOpenDetails(null)}
-          data={openDetails}
-          fetchList={fetchList}
-        />
-      </PageLoader>
+          )}
+        </Box>
+      </Popover>
     </PageContainer>
   )
 };
