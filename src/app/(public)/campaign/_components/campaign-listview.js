@@ -4,90 +4,37 @@ import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { Iconify } from '/src/components/iconify/iconify';
-import { dateFormatter } from '/src/utils/date-formatter';
-import { IconButton } from '@mui/material';
+import { IconButton, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import * as React from 'react';
-
-// import {
-//   createPortfolioAsync,
-//   deletePortfolioAsync,
-//   getPortfolioListAsync,
-//   updatePortfolioAsync,
-// } from '../_lib/portfolio.actions';
-import { defaultCampaignData, singleCampaignData } from '../_lib/campagin.data';
-import { ManageCampaignRightPanel } from './manage-campaign-right-panel';
+import { getCampaignListAsync } from '../_lib/campaign.actions';
+import AddIcon from '@mui/icons-material/Add';
+import { getCampaignColumns } from '../_utils/get-campaign-columns';
 
 export const CampaignListView = () => {
   // table columns
-  const columns = [
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 70,
-      editable: false,
-      renderCell: (params) => (
-        <IconButton onClick={() => handleEdit(params.row)}>
-          <Iconify icon="ci:expand" />
-        </IconButton>
-      ),
-    },
-    { field: 'project_title', headerName: 'Project Title', width: 280, editable: true },
-    { field: 'category', headerName: 'Category', width: 150, editable: true },
-    { field: 'video_url', headerName: 'Video URL', width: 200, editable: true },
-    { field: 'hero_image', headerName: 'Hero Image', width: 150, editable: true },
-    { field: 'field_image', headerName: 'Field Image', width: 150, editable: true },
-    { field: 'thumbnail', headerName: 'Thumbnail', width: 150, editable: true },
-    { field: 'vertical_gallery_images', headerName: 'Vertical Gallery Images', width: 200, editable: true },
-    { field: 'horizontal_gallery_images', headerName: 'Horizontal Gallery Images', width: 200, editable: true },
-    {
-      field: 'date',
-      headerName: 'Date',
-      width: 150,
-      editable: true,
-      valueGetter: (value, row) => dateFormatter(value),
-    },
-    { field: 'short_description', headerName: 'Short Description', width: 200, editable: true },
-    { field: 'full_description', headerName: 'Full Description', width: 300, editable: true },
-    { field: 'state', headerName: 'State', width: 150, editable: true },
-    { field: 'partner_hq', headerName: 'Partner HQ', width: 150, editable: true },
-    { field: 'user_id', headerName: 'User ID', width: 150, editable: true },
-    {
-      field: 'created_at',
-      headerName: 'Created At',
-      width: 180,
-      editable: true,
-      valueGetter: (value, row) => dateFormatter(value),
-    },
-    {
-      field: 'updated_at',
-      headerName: 'Updated At',
-      width: 180,
-      editable: true,
-      valueGetter: (value, row) => dateFormatter(value),
-    },
-  ];
+  const columns = getCampaignColumns()
+
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 200 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [openDetails, setOpenDetails] = React.useState(null);
 
+  console.log(records);
+
   async function fetchList() {
     try {
       setLoading(true);
-      const response = await getPortfolioListAsync({
+      const response = await getCampaignListAsync({
         page: pagination.pageNo,
         rowsPerPage: pagination.limit,
       });
-      if (response.success) {
-        setRecords(response.data);
-        setTotalRecords(response.totalRecords);
-      }
+      setRecords(response.data);
+      setTotalRecords(response.totalRecords);
     } catch (error) {
       console.log(error);
     } finally {
@@ -160,11 +107,21 @@ export const CampaignListView = () => {
   return (
     <PageContainer>
       <Card>
-        <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
-          <Box>
-            <RefreshPlugin onClick={fetchList} />
+        <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
+          <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
+          <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
+            <IconButton onClick={handleAddNewItem}>
+              <AddIcon />
+            </IconButton>
+            <Box>
+              <RefreshPlugin onClick={fetchList} />
+            </Box>
+            <DeleteConfirmationPasswordPopover
+              title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
+              onDelete={(password) => handleDelete(password)}
+              passwordInput
+              disabled={selectedRows.length === 0} />
           </Box>
-          <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}  onDelete={(password) => handleDelete(password)}  passwordInput disabled={selectedRows.length === 0} />
         </Box>
 
         <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
@@ -175,20 +132,14 @@ export const CampaignListView = () => {
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}
             rowCount={totalRecords}
-            pageSizeOptions={[10, 25, 50, 100]}
+            checkboxSelection
+            pageSizeOptions={[10, 20, 30]}
+            paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
             onPageChange={handlePaginationModelChange}
-            checkboxSelection={true}
             onRowSelectionModelChange={handleRowSelection}
           />
         </Box>
       </Card>
-      <ManageCampaignRightPanel
-        open={openDetails ? true : false}
-        onClose={() => setOpenDetails(null)}
-        data={singleCampaignData}
-        fetchList={fetchList}
-      />
-      {/* </PageLoader> */}
     </PageContainer>
   );
 };

@@ -43,7 +43,7 @@ export const ProductionListView = () => {
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [updatedRow, setUpdatedRow] = React.useState(null);
 
-  // console.log(records);
+  console.log(records);
 
   async function fetchList() {
     try {
