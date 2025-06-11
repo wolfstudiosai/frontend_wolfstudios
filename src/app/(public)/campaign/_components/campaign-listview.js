@@ -4,17 +4,45 @@ import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { IconButton, TextField } from '@mui/material';
+import { IconButton, Popover, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import * as React from 'react';
 import { getCampaignListAsync } from '../_lib/campaign.actions';
 import AddIcon from '@mui/icons-material/Add';
 import { getCampaignColumns } from '../_utils/get-campaign-columns';
+import { updateCampaignAsync } from '../_lib/campaign.actions';
+import Image from 'next/image';
+
 
 export const CampaignListView = () => {
+  const anchorEl = React.useRef(null);
+  const [imageToShow, setImageToShow] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+  const handleUploadModalOpen = (data) => {
+    setOpen(true);
+    setUpdatedRow(data);
+  };
+
+  const handleClosePopover = () => {
+    anchorEl.current = null;
+    setImageToShow(null);
+  };
+
+  const handleUploadImage = async (images) => {
+    try {
+      const response = await updatePortfolioAsync(null, { ...updatedRow, PortfolioImage: images });
+      if (response.success) {
+        toast.success('Portfolio updated successfully');
+        fetchList();
+        setOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // table columns
-  const columns = getCampaignColumns()
+  const columns = getCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen)
 
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -140,6 +168,37 @@ export const CampaignListView = () => {
           />
         </Box>
       </Card>
+
+
+      {/* Image upload popover */}
+      <Popover
+        open={Boolean(anchorEl.current)}
+        anchorEl={anchorEl.current}
+        onClose={handleClosePopover}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        disableAutoFocus
+        disableEnforceFocus
+        disablePortal
+      >
+        <Box sx={{ p: 1.5 }}>
+          {imageToShow && (
+            <Image
+              src={imageToShow}
+              alt="Preview"
+              width={300}
+              height={300}
+              style={{ borderRadius: 8 }}
+            />
+          )}
+        </Box>
+      </Popover>
     </PageContainer>
   );
 };

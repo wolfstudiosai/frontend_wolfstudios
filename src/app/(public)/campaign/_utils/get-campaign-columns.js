@@ -5,7 +5,7 @@ import AttachFile from "@mui/icons-material/AttachFile";
 import { dateFormatter } from '/src/utils/date-formatter';
 import { formatCompactNumber } from '/src/utils/helper';
 
-export const getCampaignColumns = () => {
+export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOpen) => {
     return [
         { field: 'Name', headerName: 'Name', width: 280, editable: true },
         { field: 'CampaignStatus', headerName: 'Campaign Status', width: 150, editable: true },
