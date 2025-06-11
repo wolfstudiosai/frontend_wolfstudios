@@ -7,10 +7,11 @@ import { formatCompactNumber } from '/src/utils/helper';
 
 export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOpen) => {
     return [
-        { field: 'Name', headerName: 'Name', width: 280, editable: true },
-        { field: 'CampaignStatus', headerName: 'Campaign Status', width: 150, editable: true },
+        { field: 'name', headerName: 'Name', width: 280, editable: true },
+        { field: 'status', headerName: 'Campaign Status', width: 150, editable: true },
         {
-            field: "CampaignImage", headerName: "Campaign Image", width: 150, renderCell: (params) => {
+            field: "campaignImage", headerName: "Campaign Image", width: 150, renderCell: (params) => {
+                console.log(params.row)
                 return (
                     <Box sx={{
                         display: 'flex',
@@ -23,7 +24,7 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
                             display: 'inline-block',
                         },
                     }}>
-                        {params.row.CampaignImage.map((image, index) => (
+                        {/* {params.row?.campaignImage?.map((image, index) => (
                             <Image
                                 key={index}
                                 src={image}
@@ -36,7 +37,7 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
                                     setImageToShow(image);
                                 }}
                             />
-                        ))}
+                        ))} */}
 
                         <AttachFile
                             className="attach-icon"
@@ -53,58 +54,57 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
             }
         },
         {
-            field: 'Budget',
+            field: 'budget',
             headerName: 'Budget',
             width: 200, editable: true,
-            valueGetter: (value, row) => formatCompactNumber(row.Budget)
+            valueGetter: (value, row) => formatCompactNumber(row.budget)
         },
         {
-            field: 'ProductExpense',
+            field: 'productExpense',
             headerName: 'Product Expense',
             width: 150,
             editable: true,
-            valueGetter: (value, row) => formatCompactNumber(row.ProductExpense)
+            valueGetter: (value, row) => formatCompactNumber(row.productExpense)
         },
         {
-            field: 'CampaignROI',
+            field: 'campaignROI',
             headerName: 'Campaign ROI',
             width: 150,
             editable: true,
-            valueGetter: (value, row) => formatCompactNumber(row.CampaignROI)
+            valueGetter: (value, row) => formatCompactNumber(row.campaignROI)
         },
         {
-            field: 'Client',
+            field: 'client',
             headerName: 'Client',
             width: 150,
             editable: true
         },
         {
-            field: 'TotalExpense',
+            field: 'totalExpense',
             headerName: 'Total Expense',
             width: 200,
             editable: true,
-            valueGetter: (value, row) => formatCompactNumber(row.TotalExpense)
+            valueGetter: (value, row) => formatCompactNumber(row.totalExpense)
         },
         {
-            field: 'TotalContentEngagement',
+            field: 'totalContentEngagement',
             headerName: 'Total Revenue',
             width: 200,
             editable: true,
-            valueGetter: (value, row) => formatCompactNumber(row.TotalContentEngagement)
+            valueGetter: (value, row) => formatCompactNumber(row.totalContentEngagement)
         },
         {
-            field: 'CampaignGoals',
+            field: 'goals',
             headerName: 'Campaign Goals',
             width: 200,
             editable: true,
-            valueGetter: (value, row) => row.CampaignGoals.join(', ')
         },
         {
-            field: 'StartDate',
+            field: 'startDate',
             headerName: 'Created At',
             width: 180,
             editable: false,
-            valueGetter: (value, row) => dateFormatter(value),
+            valueGetter: (value, row) => dateFormatter(row?.startDate),
         },
     ];
 }

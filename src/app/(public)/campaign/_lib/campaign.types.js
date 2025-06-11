@@ -1,5 +1,6 @@
 export const defaultCampaign = (data) => {
   const defaultData = {
+    id: data?.id || null,
     name: data?.Name || '',
     client: data?.Client || '',
     guidelines: data?.Guidelines || '',
@@ -10,8 +11,8 @@ export const defaultCampaign = (data) => {
     budget: data?.Budget || 0,
     totalExpense: data?.TotalExpense || 0,
     campaignROI: data?.CampaignROI || 0,
-    startDate: data?.StartDate ? new Date(data?.StartDate) : null,
-    endDate: data?.EndDate ? new Date(data?.EndDate) : null,
+    startDate: data?.StartDate ? new Date(data?.StartDate) : new Date(),
+    endDate: data?.EndDate ? new Date(data?.EndDate) : new Date(),
     productExpense: data?.ProductExpense || 0,
     notes: data?.Notes || '',
     contentHQ:

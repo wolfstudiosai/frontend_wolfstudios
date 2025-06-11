@@ -6,7 +6,6 @@ import { Box, Button, Card, IconButton, Popover, TextField } from '@mui/material
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
-import PageLoader from '/src/components/loaders/PageLoader';
 
 import { createPartnerAsync, deletePartnerAsync, getPartnerListAsync, updatePartnerAsync } from '../_lib/partner.actions';
 import { defaultPartner } from '../_lib/partner.types';
@@ -44,6 +43,7 @@ export const PartnerListView = () => {
   const [openDetails, setOpenDetails] = React.useState(null);
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [updatedRow, setUpdatedRow] = React.useState(null);
+  console.log(partners)
 
   const handleClosePopover = () => {
     anchorEl.current = null;
@@ -247,14 +247,6 @@ export const PartnerListView = () => {
   // Column delete
   const handleDelete = async () => {
     fetchList()
-    // const idsToDelete = [];
-    // selectedRows.forEach((row) => {
-    //   idsToDelete.push(row.id);
-    // });
-    // const response = await deletePartnerAsync(idsToDelete[0]);
-    // if (response.success) {
-    //   fetchList();
-    // }
   };
 
 

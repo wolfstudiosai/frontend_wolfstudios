@@ -8,12 +8,14 @@ import { IconButton, Popover, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import * as React from 'react';
-import { getCampaignListAsync } from '../_lib/campaign.actions';
+import { createCampaignAsync, getCampaignListAsync } from '../_lib/campaign.actions';
 import AddIcon from '@mui/icons-material/Add';
 import { getCampaignColumns } from '../_utils/get-campaign-columns';
 import { updateCampaignAsync } from '../_lib/campaign.actions';
 import Image from 'next/image';
-
+import { MediaUploader } from '/src/components/uploaders/media-uploader';
+import { defaultCampaign } from '../_lib/campaign.types';
+import { toast } from 'sonner';
 
 export const CampaignListView = () => {
   const anchorEl = React.useRef(null);
@@ -50,7 +52,7 @@ export const CampaignListView = () => {
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
-  const [openDetails, setOpenDetails] = React.useState(null);
+  const [updatedRow, setUpdatedRow] = React.useState(null);
 
   console.log(records);
 
@@ -79,13 +81,23 @@ export const CampaignListView = () => {
 
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
-    if (newRow.id) {
-      await updatePortfolioAsync(null, newRow);
+
+    const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
+
+    if (isTemporaryId) {
+      console.log(newRow);
+      if (!newRow.Name) {
+        toast.error("Please enter name");
+        return newRow;
+      }
+
+      await createCampaignAsync(newRow);
+      fetchList();
     } else {
-      const { id, ...rest } = newRow;
-      await createPortfolioAsync(null, rest);
+      await updateCampaignAsync(newRow.id, newRow);
       fetchList();
     }
+
     return newRow;
   }, []);
 
@@ -98,16 +110,15 @@ export const CampaignListView = () => {
     console.log({ children: error.message, severity: 'error' });
   }, []);
 
-  const handleEdit = (params) => {
-    setOpenDetails(params);
-  };
 
   // ******************************data grid handler ends*********************
 
   const visibleColumns = columns.filter((col) => filteredValue.includes(col.field));
 
   const handleAddNewItem = () => {
-    setRecords([defaultCampaignData, ...records]);
+    const tempId = `temp_${Date.now()}`;
+    const newRecord = { id: tempId, ...defaultCampaign() };
+    setRecords([newRecord, ...records]);
   };
 
   const handleDelete = async (password) => {
@@ -132,6 +143,7 @@ export const CampaignListView = () => {
     fetchList();
   }, [pagination]);
 
+
   return (
     <PageContainer>
       <Card>
@@ -155,7 +167,7 @@ export const CampaignListView = () => {
         <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
           <EditableDataTable
             columns={visibleColumns}
-            rows={records}
+            rows={records.map((row) => defaultCampaign(row)) || []}
             processRowUpdate={processRowUpdate}
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}
@@ -199,6 +211,17 @@ export const CampaignListView = () => {
           )}
         </Box>
       </Popover>
+
+
+      {/* Image upload dialog */}
+      <MediaUploader
+        open={open}
+        onClose={() => setOpen(false)}
+        onSave={(paths) => handleUploadImage([...paths])}
+        multiple
+        hideVideoUploader={true}
+        folderName="partner-HQ"
+      />
     </PageContainer>
   );
 };
