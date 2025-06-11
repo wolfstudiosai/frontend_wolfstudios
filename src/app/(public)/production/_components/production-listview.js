@@ -16,64 +16,15 @@ import {
   updateProductionAsync,
 } from '../_lib/production.action';
 import { ManageProductionRightPanel } from './manage-production-right-panel';
-import { dateFormatter } from '/src/utils/date-formatter';
 import PageLoader from '/src/components/loaders/PageLoader';
 import AddIcon from '@mui/icons-material/Add';
 import { defaultProduction } from '../../production/_lib/production.types';
+import { getProductionColumns } from '../_utils/get-production-columns';
 
 export const ProductionListView = () => {
 
   // table columns
-  const columns = [
-    { field: 'ProjectTitle', headerName: 'Project Title', width: 280, editable: true },
-    {
-      field: 'category',
-      headerName: 'Category',
-      width: 150,
-      editable: true,
-      valueGetter: (value, row) =>
-        row.PortfolioCategoriesPortfolios?.map((item) => item.PortfolioCategories.Name).join(', '),
-    },
-    { field: 'VideoLink', headerName: 'Video URL', width: 200, editable: true },
-    {
-      field: 'Date',
-      headerName: 'Date',
-      width: 150,
-      editable: true,
-      valueGetter: (value, row) => dateFormatter(value),
-    },
-    { field: 'Projectshortdescription', headerName: 'Short Description', width: 200, editable: true },
-    { field: 'Projectsinglepagefulldescription', headerName: 'Full Description', width: 300, editable: true },
-    {
-      field: 'state',
-      headerName: 'State',
-      width: 150,
-      editable: true,
-      valueGetter: (value, row) => row.ByStatesPortfolios?.map((item) => item.ByStates.Name).join(', '),
-    },
-    {
-      field: 'partner_hq',
-      headerName: 'Partner HQ',
-      width: 150,
-      editable: true,
-      valueGetter: (value, row) => row.PartnerHQPortfolios?.map((item) => item.PartnerHQ.Name).join(', '),
-    },
-    // { field: 'user_id', headerName: 'User ID', width: 150, editable: true },
-    {
-      field: 'created_at',
-      headerName: 'Created At',
-      width: 180,
-      editable: true,
-      valueGetter: (value, row) => dateFormatter(value),
-    },
-    {
-      field: 'updated_at',
-      headerName: 'Updated At',
-      width: 180,
-      editable: true,
-      valueGetter: (value, row) => dateFormatter(value),
-    },
-  ];
+  const columns = getProductionColumns();
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
@@ -81,6 +32,8 @@ export const ProductionListView = () => {
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [openDetails, setOpenDetails] = React.useState(null);
+
+  // console.log(records);
 
   async function fetchList() {
     try {
