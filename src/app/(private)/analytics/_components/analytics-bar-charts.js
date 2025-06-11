@@ -10,8 +10,6 @@ import { useState, useEffect } from "react";
 import { api } from '/src/utils/api';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-
-
 export default function AnalyticsBarCharts() {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);

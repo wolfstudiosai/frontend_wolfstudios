@@ -1,23 +1,26 @@
 import { Grid2 as Grid, Card, CardContent, Typography } from "@mui/material";
 import { CustomDonutChart } from "/src/components/bar-chart/custom-donut-chart";
 
-export function AssetsStatusOverview() {
-    const data = [
-        { label: "Draft", values: 20, color: "#A28EFF" },
-        { label: "Under Review", values: 10, color: "#F39C12" },
-        { label: "Approved", values: 70, color: "#27AE60" },
-    ].map((item, index, array) => {
+const colors = [
+    '#A28EFF',
+    '#F39C12',
+    '#27AE60',
+];
+
+export function AssetsStatusOverview({ data }) {
+    const donutData = data?.data?.map((item, index, array) => {
         const total = array.reduce((sum, current) => sum + current.values, 0);
-        return { ...item, percent: Number((item.values / total) * 100).toFixed(2) };
+        return { label: item.label, percent: Number((item.values / total) * 100).toFixed(2), values: item.value, color: colors[index] };
     });
+
     return (
         <Grid size={{ xs: 12, md: 6, lg: 4 }}>
             <Card sx={{ height: '100%', borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
                 <CardContent>
                     <Typography variant="h6" sx={{ marginBottom: '16px' }}>
-                        Assets Status Overview
+                        {data?.label}
                     </Typography>
-                    <CustomDonutChart data={data} />
+                    <CustomDonutChart data={donutData} />
                 </CardContent>
             </Card>
         </Grid>

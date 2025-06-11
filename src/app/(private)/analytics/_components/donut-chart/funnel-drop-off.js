@@ -1,14 +1,16 @@
 import { Grid2 as Grid, Card, CardContent, Typography } from "@mui/material";
 import { CustomDonutChart } from "/src/components/bar-chart/custom-donut-chart";
 
-export function FunnelDropOff() {
-    const data = [
-        { label: "Invited", values: 500, color: '#FFC300' },
-        { label: "Signed Up", values: 600, color: '#00FFFF' },
-        { label: "Completed Profile", values: 300, color: '#FF9800' },
-    ].map((item, index, array) => {
+const colors = [
+    '#FFC300',
+    '#00FFFF',
+    '#FF9800',
+];
+
+export function FunnelDropOff({ data }) {
+    const donutData = data?.data?.map((item, index, array) => {
         const total = array.reduce((sum, current) => sum + current.values, 0);
-        return { ...item, percent: Number((item.values / total) * 100).toFixed(2) };
+        return { label: item.label, percent: Number((item.values / total) * 100).toFixed(2), values: item.value, color: colors[index] };
     });
 
     return (
@@ -16,9 +18,9 @@ export function FunnelDropOff() {
             <Card sx={{ height: '100%', borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
                 <CardContent>
                     <Typography variant="h6" sx={{ marginBottom: '16px' }}>
-                        Funnel Drop Off
+                        {data?.label}
                     </Typography>
-                    <CustomDonutChart data={data} />
+                    <CustomDonutChart data={donutData} />
                 </CardContent>
             </Card>
         </Grid>

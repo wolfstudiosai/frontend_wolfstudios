@@ -19,6 +19,7 @@ import { PartnerPlatformUsages } from './_components/donut-chart/partner-platfor
 import { BudgetAllocationCampaign } from './_components/donut-chart/budget-allocation-campaign';
 import { CampaignBreakdown } from './_components/donut-chart/campaign-breakdown';
 import AnalyticsBarCharts from './_components/analytics-bar-charts';
+import AnalyticsDonutCharts from './_components/analytics-donut-charts';
 // export const metadata = { title: `Analytics | Dashboard | ${config.site.name}` };
 
 export default function Page() {
@@ -30,15 +31,7 @@ export default function Page() {
         <AnalyticsBarCharts />
 
         {/* Donut charts */}
-        <FunnelDropOff />
-        <ContentFormatCampaign />
-        <UsersEngagement />
-        <AssetsStatusOverview />
-        <AudienceDemographics />
-        <ClientPlatformUsages />
-        <PartnerPlatformUsages />
-        <BudgetAllocationCampaign />
-        <CampaignBreakdown />
+        <AnalyticsDonutCharts />
       </Grid>
     </PageContainer>
   );
