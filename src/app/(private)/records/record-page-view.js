@@ -14,6 +14,7 @@ const tabs = [
     { label: 'Portfolio', value: 'portfolio' },
     { label: 'Production', value: 'production' },
     { label: 'Partner', value: 'partner' },
+    { label: 'Content', value: 'content' },
 ];
 
 export default function RecordPageView() {
