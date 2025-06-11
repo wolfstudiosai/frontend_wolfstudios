@@ -69,10 +69,13 @@ export const updateProductionAsync = async (file, data) => {
   }
 };
 
-export const deleteProductionAsync = async (ids) => {
+export const deleteProductionAsync = async (ids, password) => {
   try {
     const res = await api.delete(`/production-HQ/bulk`, {
       data: { IDs: ids },
+      headers: {
+        Password: password,
+      },
     });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };

@@ -245,7 +245,7 @@ export const PartnerListView = () => {
   };
 
   // Column delete
-  const handleDelete = async (password) => {
+  const handleDelete = async () => {
     fetchList()
     // const idsToDelete = [];
     // selectedRows.forEach((row) => {
@@ -270,7 +270,7 @@ export const PartnerListView = () => {
             <RefreshPlugin onClick={fetchList} />
             <DeleteConfirmationPasswordPopover
               title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
-              onDelete={(password) => handleDelete(password)}
+              onDelete={handleDelete}
               passwordInput
               id={selectedRows.map((row) => row.id)[0]}
               disabled={selectedRows.length === 0}

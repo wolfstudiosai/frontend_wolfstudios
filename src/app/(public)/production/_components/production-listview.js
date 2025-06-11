@@ -105,9 +105,9 @@ export const ProductionListView = () => {
     try {
       const newData = {
         ...updatedRow,
-        profileImage: [...updatedRow.profileImage, ...images]
+        Imagefield: [...updatedRow.Imagefield, ...images]
       }
-      await updatePartnerAsync(newData);
+      await updateProductionAsync(null, newData);
     } catch (error) {
       console.log(error)
     } finally {
@@ -121,15 +121,8 @@ export const ProductionListView = () => {
     setRecords([newRow, ...records]);
   };
 
-  const handleDelete = async (password) => {
-    const idsToDelete = [];
-    selectedRows.forEach((row) => {
-      idsToDelete.push(row.id);
-    });
-    const response = await deleteProductionAsync(idsToDelete);
-    if (response.success) {
-      fetchList();
-    }
+  const handleDelete = async () => {
+    fetchList();
   };
 
   React.useEffect(() => {
@@ -155,7 +148,14 @@ export const ProductionListView = () => {
             <Box>
               <RefreshPlugin onClick={fetchList} />
             </Box>
-            <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`} onDelete={(password) => handleDelete(password)} passwordInput disabled={selectedRows.length === 0} />
+            <DeleteConfirmationPasswordPopover
+              title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
+              onDelete={(password) => handleDelete(password)}
+              passwordInput
+              disabled={selectedRows.length === 0}
+              id={selectedRows.map((row) => row.id)}
+              deleteFn={deleteProductionAsync}
+            />
           </Box>
         </Box>
 
