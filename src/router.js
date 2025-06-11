@@ -510,6 +510,13 @@ export const privateRoutesV2 = [
         icon: 'material-symbols:data-table-outline',
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
+      {
+        key: 'analytics',
+        title: 'Analytics',
+        href: paths.private.analytics,
+        icon: 'material-symbols:analytics-outline',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
     ],
   },
 ];
