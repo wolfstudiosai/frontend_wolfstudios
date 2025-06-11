@@ -1,9 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Box, Button, Card, IconButton, Popover, TextField } from '@mui/material';
-import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
-
+import { Box, Card, IconButton, Popover, TextField } from '@mui/material';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
@@ -15,21 +13,27 @@ import {
   getProductionListAsync,
   updateProductionAsync,
 } from '../_lib/production.action';
-import { ManageProductionRightPanel } from './manage-production-right-panel';
 import AddIcon from '@mui/icons-material/Add';
 import { defaultProduction } from '../../production/_lib/production.types';
 import { getProductionColumns } from '../_utils/get-production-columns';
 import Image from 'next/image';
+import { MediaUploader } from '/src/components/uploaders/media-uploader';
 
 export const ProductionListView = () => {
   const anchorEl = React.useRef(null);
+  const [open, setOpen] = React.useState(false);
   const [imageToShow, setImageToShow] = React.useState(null);
+
+  const handleUploadModalOpen = (data) => {
+    setOpen(true);
+    setUpdatedRow(data);
+  };
 
   // table columns
   const columns = getProductionColumns({
     anchorEl,
     setImageToShow,
-    // handleUploadModalOpen
+    handleUploadModalOpen
   });
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -37,7 +41,7 @@ export const ProductionListView = () => {
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
-  const [openDetails, setOpenDetails] = React.useState(null);
+  const [updatedRow, setUpdatedRow] = React.useState(null);
 
   // console.log(records);
 
@@ -92,13 +96,24 @@ export const ProductionListView = () => {
     console.log({ children: error.message, severity: 'error' });
   }, []);
 
-  const handleEdit = (params) => {
-    setOpenDetails(params);
-  };
-
   // ******************************data grid handler ends*********************
 
   const visibleColumns = columns.filter((col) => filteredValue.includes(col.field));
+
+  // update partner after images uploaded
+  const handleUploadImage = async (images) => {
+    try {
+      const newData = {
+        ...updatedRow,
+        profileImage: [...updatedRow.profileImage, ...images]
+      }
+      await updatePartnerAsync(newData);
+    } catch (error) {
+      console.log(error)
+    } finally {
+      fetchList();
+    }
+  }
 
   const handleAddNewItem = () => {
     const tempId = `temp_${Date.now()}`;
@@ -160,12 +175,6 @@ export const ProductionListView = () => {
           />
         </Box>
       </Card>
-      <ManageProductionRightPanel
-        open={openDetails ? true : false}
-        onClose={() => setOpenDetails(null)}
-        data={openDetails}
-        fetchList={fetchList}
-      />
 
       {/* Image upload popover */}
       <Popover
@@ -196,6 +205,17 @@ export const ProductionListView = () => {
           )}
         </Box>
       </Popover>
+
+
+      {/* Image upload dialog */}
+      <MediaUploader
+        open={open}
+        onClose={() => setOpen(false)}
+        onSave={(paths) => handleUploadImage([...paths])}
+        multiple
+        hideVideoUploader={true}
+        folderName="partner-HQ"
+      />
     </PageContainer>
   )
 };

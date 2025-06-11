@@ -3,7 +3,7 @@ import Image from "next/image";
 import AttachFile from "@mui/icons-material/AttachFile";
 import { dateFormatter } from "/src/utils/date-formatter";
 
-export const getProductionColumns = ({ anchorEl, setImageToShow }) => {
+export const getProductionColumns = ({ anchorEl, setImageToShow, handleUploadModalOpen }) => {
     return [
         { field: 'ProjectTitle', headerName: 'Project Title', width: 280, editable: true },
         {
@@ -45,7 +45,7 @@ export const getProductionColumns = ({ anchorEl, setImageToShow }) => {
                     <AttachFile
                         className="attach-icon"
                         titleAccess="Attach"
-                        // onClick={() => handleUploadModalOpen(params.row)}
+                        onClick={() => handleUploadModalOpen(params.row)}
                         sx={{
                             fontSize: 18,
                             cursor: 'pointer',
