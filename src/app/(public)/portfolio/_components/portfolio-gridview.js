@@ -415,8 +415,8 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
               >
                 <Avatar
                   src={item?.SinglePageHeroImage}
-                  onMouseEnter={handlePopoverOpen}
-                  onMouseLeave={handlePopoverClose}
+                  // onMouseEnter={handlePopoverOpen}
+                  // onMouseLeave={handlePopoverClose}
                   sx={{
                     width: 20,
                     height: 20,
