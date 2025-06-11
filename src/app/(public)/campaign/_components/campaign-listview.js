@@ -85,9 +85,28 @@ export const CampaignListView = () => {
     const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
 
     if (isTemporaryId) {
-      console.log(newRow);
-      if (!newRow.Name) {
+      if (!newRow.name) {
         toast.error("Please enter name");
+        return newRow;
+      }
+
+      if (!newRow.notes) {
+        toast.error("Please enter notes");
+        return newRow;
+      }
+
+      if (!newRow.description) {
+        toast.error("Please enter description");
+        return newRow;
+      }
+
+      if (!newRow.client) {
+        toast.error("Please enter client");
+        return newRow;
+      }
+
+      if (!newRow.guidelines) {
+        toast.error("Please enter guidelines");
         return newRow;
       }
 
@@ -117,7 +136,7 @@ export const CampaignListView = () => {
 
   const handleAddNewItem = () => {
     const tempId = `temp_${Date.now()}`;
-    const newRecord = { id: tempId, ...defaultCampaign() };
+    const newRecord = { ...defaultCampaign(), id: tempId };
     setRecords([newRecord, ...records]);
   };
 

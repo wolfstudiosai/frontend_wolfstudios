@@ -11,7 +11,7 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
         { field: 'status', headerName: 'Campaign Status', width: 150, editable: true },
         {
             field: "campaignImage", headerName: "Campaign Image", width: 150, renderCell: (params) => {
-                console.log(params.row)
+
                 return (
                     <Box sx={{
                         display: 'flex',
@@ -24,20 +24,17 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
                             display: 'inline-block',
                         },
                     }}>
-                        {/* {params.row?.campaignImage?.map((image, index) => (
-                            <Image
-                                key={index}
-                                src={image}
-                                alt="Campaign Image"
-                                width={30}
-                                height={30}
-                                style={{ objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
-                                onClick={(event) => {
-                                    anchorEl.current = event.currentTarget;
-                                    setImageToShow(image);
-                                }}
-                            />
-                        ))} */}
+                        {params.row.campaignImage && <Image
+                            src={params.row.campaignImage}
+                            alt="Campaign Image"
+                            width={30}
+                            height={30}
+                            style={{ objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
+                            onClick={(event) => {
+                                anchorEl.current = event.currentTarget;
+                                setImageToShow(params.row.campaignImage);
+                            }}
+                        />}
 
                         <AttachFile
                             className="attach-icon"
@@ -52,6 +49,30 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
                     </Box>
                 );
             }
+        },
+        {
+            field: "notes",
+            headerName: "Notes",
+            width: 200,
+            editable: true,
+        },
+        {
+            field: "description",
+            headerName: "Description",
+            width: 200,
+            editable: true,
+        },
+        {
+            field: 'client',
+            headerName: 'Client',
+            width: 150,
+            editable: true
+        },
+        {
+            field: 'guidelines',
+            headerName: 'Guidelines',
+            width: 200,
+            editable: true
         },
         {
             field: 'budget',
@@ -72,12 +93,6 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
             width: 150,
             editable: true,
             valueGetter: (value, row) => formatCompactNumber(row.campaignROI)
-        },
-        {
-            field: 'client',
-            headerName: 'Client',
-            width: 150,
-            editable: true
         },
         {
             field: 'totalExpense',
