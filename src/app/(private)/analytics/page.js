@@ -18,6 +18,7 @@ import { ClientPlatformUsages } from './_components/donut-chart/client-platform-
 import { PartnerPlatformUsages } from './_components/donut-chart/partner-platform-usages';
 import { BudgetAllocationCampaign } from './_components/donut-chart/budget-allocation-campaign';
 import { CampaignBreakdown } from './_components/donut-chart/campaign-breakdown';
+import AnalyticsBarCharts from './_components/analytics-bar-charts';
 // export const metadata = { title: `Analytics | Dashboard | ${config.site.name}` };
 
 export default function Page() {
@@ -26,12 +27,7 @@ export default function Page() {
       <SparklineMetricsGrid />
       <Grid container spacing={1} rowSpacing={1}>
         {/* Bar charts */}
-        <OnboardingByRegion />
-        <CampaignAssetsDelivered />
-        <OnboardingByCreator />
-        <TopInfluencers />
-        <ConversionByContent />
-        <UserDistribution />
+        <AnalyticsBarCharts />
 
         {/* Donut charts */}
         <FunnelDropOff />
