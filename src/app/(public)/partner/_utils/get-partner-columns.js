@@ -28,8 +28,8 @@ export const getPartnerColumns = ({ anchorEl, setImageToShow, handleUploadModalO
                         }}
                     >
                         {imageArray.length > 0 && (
-                            imageArray.map(imageUrl => <Image
-                                key={imageUrl}
+                            imageArray.map((imageUrl, index) => <Image
+                                key={index}
                                 src={imageUrl}
                                 alt="Partner"
                                 width={30}
