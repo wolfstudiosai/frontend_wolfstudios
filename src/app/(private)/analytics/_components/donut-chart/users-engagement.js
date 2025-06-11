@@ -1,14 +1,16 @@
 import { Grid2 as Grid, Card, CardContent, Typography } from "@mui/material";
 import { CustomDonutChart } from "/src/components/bar-chart/custom-donut-chart";
 
-export function UsersEngagement() {
-    const data = [
-        { label: "Prospects", values: 500, color: '#00C49F' },
-        { label: "Active Users", values: 800, color: '#FFBB28' },
-        { label: "Inactive 96h+", values: 200, color: '#FF4442' },
-    ].map((item, index, array) => {
+const colors = [
+    '#00C49F',
+    '#FFBB28',
+    '#FF4442',
+];
+
+export function UsersEngagement({ data }) {
+    const donutData = data?.data?.map((item, index, array) => {
         const total = array.reduce((sum, current) => sum + current.values, 0);
-        return { ...item, percent: Number((item.values / total) * 100).toFixed(2) };
+        return { label: item.label, percent: Number((item.values / total) * 100).toFixed(2), values: item.value, color: colors[index] };
     });
 
     return (
@@ -16,9 +18,9 @@ export function UsersEngagement() {
             <Card sx={{ height: '100%', borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
                 <CardContent>
                     <Typography variant="h6" sx={{ marginBottom: '16px' }}>
-                        Users Engagement Status
+                        {data?.label}
                     </Typography>
-                    <CustomDonutChart data={data} />
+                    <CustomDonutChart data={donutData} />
                 </CardContent>
             </Card>
         </Grid>

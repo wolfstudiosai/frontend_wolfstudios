@@ -141,6 +141,7 @@ export const paths = {
     reporting: '/reporting',
     notification: '/notification',
     record: '/records',
+    archive_analytics: '/archive/analytics',
     expense: '/expense',
     contract: '/contract',
     calender: '/calender',

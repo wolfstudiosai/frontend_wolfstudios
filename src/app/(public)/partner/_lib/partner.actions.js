@@ -7,7 +7,6 @@ import { uploadFileAsync } from '/src/utils/upload-file';
 export const getPartnerListAsync = async (queryParams) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    console.log('searchQuery', searchQuery);
     const res = await api.get(`/partner-HQ${searchQuery}`);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
@@ -28,7 +27,7 @@ export const getPartnerAsync = async (id) => {
 
 export const createPartnerAsync = async (data) => {
   try {
-    const {id, ...rest} = partnerPayload(data);
+    const { id, ...rest } = partnerPayload(data);
     const partnerResponse = await api.post('/partner-HQ', rest);
     toast.success(partnerResponse.data.message);
     return { success: true, data: partnerResponse.data.data };
@@ -41,7 +40,7 @@ export const createPartnerAsync = async (data) => {
 
 export const updatePartnerAsync = async (data) => {
   try {
-    const {id, ...rest} = partnerPayload(data);
+    const { id, ...rest } = partnerPayload(data);
     const res = await api.patch(`/partner-HQ/${id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };

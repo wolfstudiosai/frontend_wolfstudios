@@ -7,8 +7,7 @@ import { uploadFileAsync } from '/src/utils/upload-file';
 export const getProductionListAsync = async (queryParams) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    const res = await api.get(`/portfolios${searchQuery}`);
-    // const res1 = await api.get(`/production-HQ${searchQuery}`);
+    const res = await api.get(`/production-HQ${searchQuery}`);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     toast.error(error.message);
@@ -69,10 +68,13 @@ export const updateProductionAsync = async (file, data) => {
   }
 };
 
-export const deleteProductionAsync = async (ids) => {
+export const deleteProductionAsync = async (ids, password) => {
   try {
     const res = await api.delete(`/production-HQ/bulk`, {
       data: { IDs: ids },
+      headers: {
+        Password: password,
+      },
     });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
