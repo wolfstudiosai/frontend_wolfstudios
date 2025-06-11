@@ -11,7 +11,6 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
         { field: 'status', headerName: 'Campaign Status', width: 150, editable: true },
         {
             field: "campaignImage", headerName: "Campaign Image", width: 150, renderCell: (params) => {
-
                 return (
                     <Box sx={{
                         display: 'flex',
@@ -24,7 +23,7 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
                             display: 'inline-block',
                         },
                     }}>
-                        {params.row.campaignImage && <Image
+                        {params.row.campaignImage.length > 0 && <Image
                             src={params.row.campaignImage}
                             alt="Campaign Image"
                             width={30}

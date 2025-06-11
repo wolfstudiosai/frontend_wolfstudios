@@ -8,7 +8,7 @@ import { IconButton, Popover, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import * as React from 'react';
-import { createCampaignAsync, getCampaignListAsync } from '../_lib/campaign.actions';
+import { createCampaignAsync, deleteCampaignBulkAsync, getCampaignListAsync } from '../_lib/campaign.actions';
 import AddIcon from '@mui/icons-material/Add';
 import { getCampaignColumns } from '../_utils/get-campaign-columns';
 import { updateCampaignAsync } from '../_lib/campaign.actions';
@@ -54,8 +54,6 @@ export const CampaignListView = () => {
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [updatedRow, setUpdatedRow] = React.useState(null);
 
-  console.log(records);
-
   async function fetchList() {
     try {
       setLoading(true);
@@ -87,6 +85,11 @@ export const CampaignListView = () => {
     if (isTemporaryId) {
       if (!newRow.name) {
         toast.error("Please enter name");
+        return newRow;
+      }
+
+      if (!newRow.status) {
+        toast.error("Please select campaign status");
         return newRow;
       }
 
@@ -140,15 +143,8 @@ export const CampaignListView = () => {
     setRecords([newRecord, ...records]);
   };
 
-  const handleDelete = async (password) => {
-    const idsToDelete = [];
-    selectedRows.forEach((row) => {
-      idsToDelete.push(row.id);
-    });
-    const response = await deletePortfolioAsync(idsToDelete);
-    if (response.success) {
-      fetchList();
-    }
+  const handleDelete = async () => {
+    fetchList();
   };
 
   React.useEffect(() => {
@@ -177,8 +173,10 @@ export const CampaignListView = () => {
             </Box>
             <DeleteConfirmationPasswordPopover
               title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
-              onDelete={(password) => handleDelete(password)}
+              onDelete={handleDelete}
               passwordInput
+              id={selectedRows.map((row) => row.id)}
+              deleteFn={deleteCampaignBulkAsync}
               disabled={selectedRows.length === 0} />
           </Box>
         </Box>
