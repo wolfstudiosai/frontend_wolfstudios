@@ -33,9 +33,9 @@ export const CampaignListView = () => {
 
   const handleUploadImage = async (images) => {
     try {
-      const response = await updatePortfolioAsync(null, { ...updatedRow, PortfolioImage: images });
+      const response = await updateCampaignAsync(updatedRow.id, { ...updatedRow, campaignImage: images });
       if (response.success) {
-        toast.success('Portfolio updated successfully');
+        toast.success('Campaign updated successfully');
         fetchList();
         setOpen(false);
       }
