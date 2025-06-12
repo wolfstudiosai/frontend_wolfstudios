@@ -54,10 +54,13 @@ export const updatePortfolioAsync = async (id, data) => {
   }
 };
 
-export const deletePortfolioAsync = async (ids) => {
+export const deletePortfolioAsync = async (ids, password) => {
   try {
-    const res = await api.delete(`/portfolio/delete`, {
-      data: { ids: ids },
+    const res = await api.delete(`/portfolios/bulk`, {
+      data: { IDs: ids },
+      headers: {
+        password,
+      },
     });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };

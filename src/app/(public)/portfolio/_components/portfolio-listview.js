@@ -73,9 +73,9 @@ export const PortfolioListView = () => {
         toast.error("Please enter date");
         return newRow;
       }
-      console.log(newRow)
-      // await createPortfolioAsync(newRow);
-      // fetchList();
+
+      await createPortfolioAsync(newRow);
+      fetchList();
     } else {
       await updatePortfolioAsync(newRow.id, newRow);
       fetchList();
@@ -103,15 +103,8 @@ export const PortfolioListView = () => {
     setRecords([newRecord, ...records]);
   };
 
-  const handleDelete = async (password) => {
-    const idsToDelete = [];
-    selectedRows.forEach((row) => {
-      idsToDelete.push(row.id);
-    });
-    const response = await deletePortfolioAsync(idsToDelete);
-    if (response.success) {
-      fetchList();
-    }
+  const handleDelete = async () => {
+    fetchList();
   };
 
   React.useEffect(() => {
@@ -138,7 +131,14 @@ export const PortfolioListView = () => {
             <Box>
               <RefreshPlugin onClick={fetchList} />
             </Box>
-            <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`} onDelete={(password) => handleDelete(password)} passwordInput disabled={selectedRows.length === 0} />
+            <DeleteConfirmationPasswordPopover
+              title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
+              onDelete={() => handleDelete()}
+              passwordInput
+              disabled={selectedRows.length === 0}
+              id={selectedRows.map((row) => row.id)}
+              deleteFn={deletePortfolioAsync}
+            />
           </Box>
         </Box>
 
