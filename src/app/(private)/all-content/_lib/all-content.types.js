@@ -9,7 +9,7 @@ export const defaultContent = (data) => {
     playbookLink: data?.PlaybookLink || '',
     upPromoteConversion: data?.UpPromoteConversion || 0,
     assetStatus: data?.AssetStatus || '',
-    monthUploaded: data?.MonthUploaded ? new Date(data?.MonthUploaded) : null,
+    monthUploaded: data?.MonthUploaded ? data.MonthUploaded : "",
     revoInstagram: data?.REVOInstagram || '',
     creatorStatus: data?.CreatorStatus || '',
 
@@ -50,7 +50,7 @@ export const defaultContent = (data) => {
     revo_ClubRevoYoutube: data?.REVOClubrevoYoutube || '',
 
     tikTokAccountsused: data?.TikTokAccountsused || '',
-    TTDummyAccountsUsed: data?.TTDummyAccountsUsed?.join(', ') || '',
+    TTDummyAccountsUsed: data?.TTDummyAccountsUsed?.join(', ') || [],
 
     postingStatus: data?.PostingStatus || '',
     totalContributedEngagement: data?.TotalContributedEngagement || '',
@@ -91,8 +91,8 @@ export const defaultContent = (data) => {
         label: item?.FacilitiesContributedContent?.Name,
       })) || [],
 
-      image: data?.Image || [],
-      video: data?.Video || [],
+    image: data?.Image || [],
+    video: data?.Video || [],
   };
 
   return defaultData;
