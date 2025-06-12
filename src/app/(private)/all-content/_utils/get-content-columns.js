@@ -1,4 +1,5 @@
 import DateEditCell from '/src/components/data-table/date-edit-cell';
+import { dateFormatter } from '/src/utils/date-formatter';
 
 export const getContentColumns = () => {
     return [
@@ -115,14 +116,14 @@ export const getContentColumns = () => {
             headerName: 'Created At',
             width: 180,
             editable: true,
-            valueGetter: (value, row) => moment(value).format('DD-MM-YYYY'),
+            valueGetter: (value, row) => dateFormatter(value),
         },
         {
             field: 'updated_at',
             headerName: 'Updated At',
             width: 180,
             editable: true,
-            valueGetter: (value, row) => moment(value).format('DD-MM-YYYY'),
+            valueGetter: (value, row) => dateFormatter(value),
         },
     ];
 }

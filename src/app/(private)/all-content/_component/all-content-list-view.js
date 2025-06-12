@@ -56,7 +56,6 @@ export default function AllContentListView() {
   // ******************************data grid handler starts*********************
 
   const handlePaginationModelChange = (newPaginationModel) => {
-    console.log(newPaginationModel)
     const { page, pageSize } = newPaginationModel;
     setPaginateData({ pageNo: page + 1, limit: pageSize });
   };
