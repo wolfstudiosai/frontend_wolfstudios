@@ -1,18 +1,14 @@
 'use client';
 
 import * as React from 'react';
-import { IconButton } from '@mui/material';
+import { IconButton, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { CardTitle } from '/src/components/cardTitle/CardTitle';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { Iconify } from '/src/components/iconify/iconify';
 
 import {
   createPortfolioAsync,
@@ -22,65 +18,12 @@ import {
 } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
-import { dateFormatter } from '/src/utils/date-formatter';
+import AddIcon from '@mui/icons-material/Add';
+import { getPortfolioColumns } from '../_utils/get-portfolio-columns';
 
 export const PortfolioListView = () => {
   // table columns
-  const columns = [
-    { field: 'ProjectTitle', headerName: 'Project Title', width: 280, editable: true },
-    {
-      field: 'category',
-      headerName: 'Category',
-      width: 150,
-      editable: true,
-      valueGetter: (value, row) =>
-        row.PortfolioCategoriesPortfolios.map((item) => item.PortfolioCategories.Name).join(', '),
-    },
-    { field: 'VideoLink', headerName: 'Video URL', width: 200, editable: true },
-    // { field: 'hero_image', headerName: 'Hero Image', width: 150, editable: true },
-    // { field: 'field_image', headerName: 'Field Image', width: 150, editable: true },
-    // { field: 'thumbnail', headerName: 'Thumbnail', width: 150, editable: true },
-    // { field: 'vertical_gallery_images', headerName: 'Vertical Gallery Images', width: 200, editable: true },
-    // { field: 'horizontal_gallery_images', headerName: 'Horizontal Gallery Images', width: 200, editable: true },
-    {
-      field: 'Date',
-      headerName: 'Date',
-      width: 150,
-      editable: true,
-      valueGetter: (value, row) => dateFormatter(value),
-    },
-    { field: 'Projectshortdescription', headerName: 'Short Description', width: 200, editable: true },
-    { field: 'Projectsinglepagefulldescription', headerName: 'Full Description', width: 300, editable: true },
-    {
-      field: 'state',
-      headerName: 'State',
-      width: 150,
-      editable: true,
-      valueGetter: (value, row) => row.ByStatesPortfolios.map((item) => item.ByStates.Name).join(', '),
-    },
-    {
-      field: 'partner_hq',
-      headerName: 'Partner HQ',
-      width: 150,
-      editable: true,
-      valueGetter: (value, row) => row.PartnerHQPortfolios.map((item) => item.PartnerHQ.Name).join(', '),
-    },
-    // { field: 'user_id', headerName: 'User ID', width: 150, editable: true },
-    {
-      field: 'created_at',
-      headerName: 'Created At',
-      width: 180,
-      editable: true,
-      valueGetter: (value, row) => dateFormatter(value),
-    },
-    {
-      field: 'updated_at',
-      headerName: 'Updated At',
-      width: 180,
-      editable: true,
-      valueGetter: (value, row) => dateFormatter(value),
-    },
-  ];
+  const columns = getPortfolioColumns()
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
@@ -106,6 +49,8 @@ export const PortfolioListView = () => {
       setLoading(false);
     }
   }
+
+  console.log(records)
 
   // ******************************data grid handler starts*********************
 
@@ -134,10 +79,6 @@ export const PortfolioListView = () => {
   const handleProcessRowUpdateError = React.useCallback((error) => {
     console.log({ children: error.message, severity: 'error' });
   }, []);
-
-  const handleEdit = (params) => {
-    setOpenDetails(params);
-  };
 
   // ******************************data grid handler ends*********************
 
@@ -171,18 +112,25 @@ export const PortfolioListView = () => {
 
   return (
     <PageContainer>
-      <Card>
-        <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
-          <Box>
-            <RefreshPlugin onClick={fetchList} />
+      <Card sx={{ borderRadius: 0 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
+          <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
+
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <IconButton onClick={handleAddNewItem}>
+              <AddIcon />
+            </IconButton>
+            <Box>
+              <RefreshPlugin onClick={fetchList} />
+            </Box>
+            <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`} onDelete={(password) => handleDelete(password)} passwordInput disabled={selectedRows.length === 0} />
           </Box>
-          <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`} onDelete={(password) => handleDelete(password)} passwordInput disabled={selectedRows.length === 0} />
         </Box>
 
         <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
           <EditableDataTable
             columns={visibleColumns}
-            rows={records}
+            rows={records.map((row) => defaultPortfolio(row)) || []}
             processRowUpdate={processRowUpdate}
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}
@@ -203,7 +151,6 @@ export const PortfolioListView = () => {
         data={openDetails}
         fetchList={fetchList}
       />
-      {/* </PageLoader> */}
     </PageContainer>
   );
 };

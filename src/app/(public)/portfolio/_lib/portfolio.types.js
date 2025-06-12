@@ -1,5 +1,6 @@
 export const defaultPortfolio = (data) => {
   const defaultData = {
+    id: data?.id || null,
     projectTitle: data?.ProjectTitle || '',
     date: data?.Date ? new Date(data?.Date) : null,
     shortDescription: data?.Projectshortdescription || '',
