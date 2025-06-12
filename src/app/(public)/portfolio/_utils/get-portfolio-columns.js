@@ -63,8 +63,9 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
             headerName: 'Category',
             width: 150,
             editable: true,
-            valueGetter: (value, row) =>
-                row?.portfolioCategories?.map((item) => item?.label).join(', '),
+            valueGetter: (value, row) => {
+                return row?.portfolioCategories?.map((item) => item?.label).join(', ');
+            }
         },
         {
             field: 'singlePageHeroImage',

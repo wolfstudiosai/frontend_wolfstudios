@@ -53,7 +53,7 @@ export const getContentColumns = () => {
             headerName: 'TikTok Dummy Account Used',
             width: 200,
             editable: true,
-            valueGetter: (value, row) => row,
+            valueGetter: (value, row) => row?.ttDummyAccountsUsed?.join(', '),
         },
 
         // YouTube
