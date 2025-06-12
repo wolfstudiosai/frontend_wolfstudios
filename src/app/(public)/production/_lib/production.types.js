@@ -1,27 +1,27 @@
 export const defaultProduction = (data) => {
   const defaultData = {
     id: data?.id || '',
-    name: data?.name || '',
-    internalNotes: data?.internalNotes || '',
-    status: data?.status || [],
-    totalExpense: data?.totalExpense || '',
-    cardsUsed: data?.cardsUsed || [],
-    proposedDate: data?.proposedDate ? new Date(data?.proposedDate) : null,
-    recordShootDate: data?.recordShootDate ? new Date(data?.recordShootDate) : null,
-    spaceExpense: data?.spaceExpense || '',
-    talentExpense: data?.talentExpense || '',
-    crewExpense: data?.crewExpense || '',
-    foodExpense: data?.foodExpense || '',
-    equipmentRentals: data?.equipmentRentals || '',
-    googleDriveFiles: data?.googleDriveFiles || '',
-    productionUsage: data?.productionUsage || [],
-    directorExpense: data?.directorExpense || '',
-    producerExpense: data?.producerExpense || '',
+    name: data?.Name || '',
+    internalNotes: data?.InternalNotes || '',
+    status: data?.Status || [],
+    totalExpense: data?.TotalExpense || '',
+    cardsUsed: data?.CardsUsed || [],
+    proposedDate: data?.ProposedDate ? new Date(data?.ProposedDate) : null,
+    recordShootDate: data?.RecordShootDate ? new Date(data?.RecordShootDate) : null,
+    spaceExpense: data?.SpaceExpense || '',
+    talentExpense: data?.TalentExpense || '',
+    crewExpense: data?.CrewExpense || '',
+    foodExpense: data?.FoodExpense || '',
+    equipmentRentals: data?.EquipmentRentals || '',
+    googleDriveFiles: data?.GoogleDriveFiles || '',
+    productionUsage: data?.ProductionUsage || [],
+    directorExpense: data?.DirectorExpense || '',
+    producerExpense: data?.ProducerExpense || '',
 
     //relations
-    spaces: data?.spaces || [],
-    stakeholders: data?.stakeholders || [],
-    partners: data?.partners || []
+    spaces: data?.ByProductionsSpaces || [],
+    stakeholders: data?.ByProductionsStakeholders || [],
+    partners: data?.ByProductionsPartners || []
   }
 
   return defaultData

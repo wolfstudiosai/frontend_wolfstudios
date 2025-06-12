@@ -162,7 +162,7 @@ export const ProductionListView = () => {
         <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
           <EditableDataTable
             columns={visibleColumns}
-            rows={records}
+            rows={records.map((row) => defaultProduction(row)) || []}
             processRowUpdate={processRowUpdate}
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}
