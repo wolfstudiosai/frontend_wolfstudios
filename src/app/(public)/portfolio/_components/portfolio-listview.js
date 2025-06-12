@@ -73,8 +73,9 @@ export const PortfolioListView = () => {
         toast.error("Please enter date");
         return newRow;
       }
-      await createPortfolioAsync(newRow);
-      fetchList();
+      console.log(newRow)
+      // await createPortfolioAsync(newRow);
+      // fetchList();
     } else {
       await updatePortfolioAsync(newRow.id, newRow);
       fetchList();

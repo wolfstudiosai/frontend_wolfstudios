@@ -15,6 +15,7 @@ export default function DateEditCell(props) {
         <DatePicker
             value={dayjs(value)}
             onChange={handleDateChange}
+            format="MMMM YYYY"
             slotProps={{
                 textField: {
                     variant: 'standard',
