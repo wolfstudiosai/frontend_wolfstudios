@@ -73,9 +73,11 @@ export const EditableDataTable = ({
         onCellClick={handleCellClick}
         // pageSize={pageSize}
         loading={loading}
+        autoHeight={false}
         pageSizeOptions={pageSizeOptions}
         paginationModel={paginationModel}
         sx={{
+          maxHeight: 600,
           '& .MuiDataGrid-cell': {
             border: (theme) => `1px solid ${theme.palette.divider}`,
           },
