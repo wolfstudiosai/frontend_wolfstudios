@@ -37,7 +37,7 @@ export const PartnerListView = () => {
   // Partner data handler
   const [partners, setPartners] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 30 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [openDetails, setOpenDetails] = React.useState(null);

@@ -32,7 +32,7 @@ export default function AllContentListView() {
   const [data, setData] = React.useState([]);
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
-  const [paginateData, setPaginateData] = React.useState({ pageNo: 1, limit: 20 });
+  const [paginateData, setPaginateData] = React.useState({ pageNo: 1, limit: 100 });
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
 
