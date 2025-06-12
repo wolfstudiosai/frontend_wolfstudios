@@ -24,7 +24,7 @@ export const defaultPortfolio = (data) => {
     })) || [],
     videoLink: data?.VideoLink || '',
     singlePageHeroImage: data?.SinglePageHeroImage?.[0] || [],
-    imagefield: data?.Imagefield?.[0] || [],
+    imagefield: data?.Imagefield || [],
     thumbnailImage: data?.ThumbnailImage?.[0] || [],
     verticalImageGallery: data?.VerticalImageGallery || [],
     horizontalImageGallery: data?.HorizontalImageGallery || [],

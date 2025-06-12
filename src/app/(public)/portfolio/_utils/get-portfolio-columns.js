@@ -1,16 +1,50 @@
 import { dateFormatter } from '/src/utils/date-formatter';
 import DateEditCell from '/src/components/data-table/date-edit-cell';
+import { Box } from '@mui/material';
+import Image from 'next/image';
+import AttachFile from "@mui/icons-material/AttachFile";
 
 export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalOpen) => {
     return [
         { field: 'projectTitle', headerName: 'Project Title', width: 280, editable: true },
         {
-            field: 'portfolioCategories',
-            headerName: 'Category',
-            width: 150,
-            editable: true,
-            valueGetter: (value, row) =>
-                row?.portfolioCategories?.map((item) => item?.label).join(', '),
+            field: 'imagefield', headerName: 'Image', width: 150, renderCell: (params) => {
+                return <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 0.5,
+                    width: '100%',
+                    height: '100%',
+                    position: 'relative',
+                    '&:hover .attach-icon': {
+                        display: 'inline-block',
+                    },
+                }}>
+                    {params.row.imagefield.length > 0 && params.row.imagefield.map((item, index) => <Image
+                        key={index}
+                        src={item}
+                        alt="Image"
+                        width={30}
+                        height={30}
+                        style={{ objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
+                        onClick={(event) => {
+                            anchorEl.current = event.currentTarget;
+                            setImageToShow(item);
+                        }}
+                    />)}
+
+                    <AttachFile
+                        className="attach-icon"
+                        titleAccess="Attach"
+                        onClick={() => handleUploadModalOpen(params.row)}
+                        sx={{
+                            fontSize: 18,
+                            cursor: 'pointer',
+                            display: 'none',
+                        }}
+                    />
+                </Box>
+            }
         },
         { field: 'videoLink', headerName: 'Video URL', width: 200, editable: true },
         // { field: 'hero_image', headerName: 'Hero Image', width: 150, editable: true },
@@ -24,6 +58,14 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
             width: 150,
             editable: true,
             renderEditCell: (params) => <DateEditCell {...params} />,
+        },
+        {
+            field: 'portfolioCategories',
+            headerName: 'Category',
+            width: 150,
+            editable: true,
+            valueGetter: (value, row) =>
+                row?.portfolioCategories?.map((item) => item?.label).join(', '),
         },
         { field: 'shortDescription', headerName: 'Short Description', width: 200, editable: true },
         { field: 'fullDescription', headerName: 'Full Description', width: 300, editable: true },

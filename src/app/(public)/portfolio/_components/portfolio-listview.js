@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { IconButton, TextField } from '@mui/material';
+import { IconButton, Popover, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 
@@ -20,10 +20,18 @@ import { defaultPortfolio } from '../_lib/portfolio.types';
 import AddIcon from '@mui/icons-material/Add';
 import { getPortfolioColumns } from '../_utils/get-portfolio-columns';
 import { toast } from 'sonner';
+import Image from 'next/image';
 
 export const PortfolioListView = () => {
+  const anchorEl = React.useRef(null);
+  const [imageToShow, setImageToShow] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+  const handleUploadModalOpen = (data) => {
+    setOpen(true);
+    setUpdatedRow(data);
+  };
   // table columns
-  const columns = getPortfolioColumns()
+  const columns = getPortfolioColumns(anchorEl, setImageToShow, handleUploadModalOpen)
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
@@ -69,6 +77,11 @@ export const PortfolioListView = () => {
         return newRow;
       }
 
+      if (!newRow.videoLink) {
+        toast.error("Please enter video link");
+        return newRow;
+      }
+
       if (!newRow.date) {
         toast.error("Please enter date");
         return newRow;
@@ -105,6 +118,11 @@ export const PortfolioListView = () => {
 
   const handleDelete = async () => {
     fetchList();
+  };
+
+  const handleClosePopover = () => {
+    anchorEl.current = null;
+    setImageToShow(null);
   };
 
   React.useEffect(() => {
@@ -160,6 +178,37 @@ export const PortfolioListView = () => {
 
         </Box>
       </Card>
+
+
+      {/* Image upload popover */}
+      <Popover
+        open={Boolean(anchorEl.current)}
+        anchorEl={anchorEl.current}
+        onClose={handleClosePopover}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        disableAutoFocus
+        disableEnforceFocus
+        disablePortal
+      >
+        <Box sx={{ p: 1.5 }}>
+          {imageToShow && (
+            <Image
+              src={imageToShow}
+              alt="Preview"
+              width={300}
+              height={300}
+              style={{ borderRadius: 8 }}
+            />
+          )}
+        </Box>
+      </Popover>
     </PageContainer>
   );
 };
