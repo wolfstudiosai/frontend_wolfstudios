@@ -1,10 +1,9 @@
-import dayjs from "dayjs";
 
 export const defaultPortfolio = (data) => {
   const defaultData = {
     id: data?.id || null,
     projectTitle: data?.ProjectTitle || '',
-    date: data?.Date ? dayjs(data?.Date, "MMMM YYYY") : null,
+    date: data?.Date ? data?.Date : null,
     shortDescription: data?.Projectshortdescription || '',
     fullDescription: data?.Projectsinglepagefulldescription || '',
     portfolioCategories: data?.PortfolioCategoriesPortfolios?.map((item) => ({

@@ -23,7 +23,6 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
             headerName: 'Date',
             width: 150,
             editable: true,
-            valueGetter: (value, row) => dateFormatter(row?.date, 'MMMM YYYY'),
             renderEditCell: (params) => <DateEditCell {...params} />,
         },
         { field: 'shortDescription', headerName: 'Short Description', width: 200, editable: true },
