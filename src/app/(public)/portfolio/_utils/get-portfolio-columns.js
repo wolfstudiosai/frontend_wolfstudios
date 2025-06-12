@@ -1,4 +1,3 @@
-import { dateFormatter } from '/src/utils/date-formatter';
 import DateEditCell from '/src/components/data-table/date-edit-cell';
 import { Box } from '@mui/material';
 import Image from 'next/image';
@@ -67,6 +66,114 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
             valueGetter: (value, row) =>
                 row?.portfolioCategories?.map((item) => item?.label).join(', '),
         },
+        {
+            field: 'singlePageHeroImage',
+            headerName: 'Single Page Hero Image',
+            width: 150,
+            renderCell: (params) => {
+                return <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 0.5,
+                    width: '100%',
+                    height: '100%',
+                }}>
+                    {params.row.singlePageHeroImage.length > 0 && params.row.singlePageHeroImage.map((item, index) => <Image
+                        key={index}
+                        src={item}
+                        alt="Image"
+                        width={30}
+                        height={30}
+                        style={{ objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
+                        onClick={(event) => {
+                            anchorEl.current = event.currentTarget;
+                            setImageToShow(item);
+                        }}
+                    />)}
+                </Box>
+            }
+        },
+        {
+            field: 'thumbnailImage',
+            headerName: 'Thumbnail Image',
+            width: 150,
+            renderCell: (params) => {
+                return <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 0.5,
+                    width: '100%',
+                    height: '100%',
+                }}>
+                    {params.row.thumbnailImage.length > 0 && params.row.thumbnailImage.map((item, index) => <Image
+                        key={index}
+                        src={item}
+                        alt="Image"
+                        width={30}
+                        height={30}
+                        style={{ objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
+                        onClick={(event) => {
+                            anchorEl.current = event.currentTarget;
+                            setImageToShow(item);
+                        }}
+                    />)}
+                </Box>
+            }
+        },
+        {
+            field: 'verticalImageGallery',
+            headerName: 'Vertical Image Gallery',
+            width: 150,
+            renderCell: (params) => {
+                return <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 0.5,
+                    width: '100%',
+                    height: '100%',
+                }}>
+                    {params.row.verticalImageGallery.length > 0 && params.row.verticalImageGallery.map((item, index) => <Image
+                        key={index}
+                        src={item}
+                        alt="Image"
+                        width={30}
+                        height={30}
+                        style={{ objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
+                        onClick={(event) => {
+                            anchorEl.current = event.currentTarget;
+                            setImageToShow(item);
+                        }}
+                    />)}
+                </Box>
+            }
+        },
+        {
+            field: 'horizontalImageGallery',
+            headerName: 'Horizontal Image Gallery',
+            width: 150,
+            renderCell: (params) => {
+                return <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 0.5,
+                    width: '100%',
+                    height: '100%',
+                }}>
+                    {params.row.horizontalImageGallery.length > 0 && params.row.horizontalImageGallery.map((item, index) => <Image
+                        key={index}
+                        src={item}
+                        alt="Image"
+                        width={30}
+                        height={30}
+                        style={{ objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
+                        onClick={(event) => {
+                            anchorEl.current = event.currentTarget;
+                            setImageToShow(item);
+                        }}
+                    />)}
+                </Box>
+            }
+        },
         { field: 'shortDescription', headerName: 'Short Description', width: 200, editable: true },
         { field: 'fullDescription', headerName: 'Full Description', width: 300, editable: true },
         {
@@ -77,6 +184,13 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
             valueGetter: (value, row) => row?.states?.map((item) => item?.label).join(', '),
         },
         {
+            field: 'countries',
+            headerName: 'Countries',
+            width: 150,
+            editable: true,
+            valueGetter: (value, row) => row?.countries?.map((item) => item?.label).join(', '),
+        },
+        {
             field: 'partner_hq',
             headerName: 'Partner HQ',
             width: 150,
@@ -84,12 +198,5 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
             valueGetter: (value, row) => row?.partnerHQ?.map((item) => item?.label).join(', '),
         },
         // { field: 'user_id', headerName: 'User ID', width: 150, editable: true },
-        {
-            field: 'created_at',
-            headerName: 'Created At',
-            width: 180,
-            editable: true,
-            valueGetter: (value, row) => dateFormatter(row?.created_at),
-        },
     ];
 }

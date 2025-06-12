@@ -23,9 +23,9 @@ export const defaultPortfolio = (data) => {
       label: item?.PartnerHQ?.Name
     })) || [],
     videoLink: data?.VideoLink || '',
-    singlePageHeroImage: data?.SinglePageHeroImage?.[0] || [],
+    singlePageHeroImage: data?.SinglePageHeroImage || [],
     imagefield: data?.Imagefield || [],
-    thumbnailImage: data?.ThumbnailImage?.[0] || [],
+    thumbnailImage: data?.ThumbnailImage || [],
     verticalImageGallery: data?.VerticalImageGallery || [],
     horizontalImageGallery: data?.HorizontalImageGallery || [],
   }

@@ -21,6 +21,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { getPortfolioColumns } from '../_utils/get-portfolio-columns';
 import { toast } from 'sonner';
 import Image from 'next/image';
+import { MediaUploader } from '/src/components/uploaders/media-uploader';
 
 export const PortfolioListView = () => {
   const anchorEl = React.useRef(null);
@@ -38,6 +39,7 @@ export const PortfolioListView = () => {
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
+  const [updatedRow, setUpdatedRow] = React.useState(null);
 
   async function fetchList() {
     try {
@@ -57,7 +59,7 @@ export const PortfolioListView = () => {
     }
   }
 
-  console.log(records)
+  // console.log(records)
 
   // ******************************data grid handler starts*********************
 
@@ -90,7 +92,15 @@ export const PortfolioListView = () => {
       await createPortfolioAsync(newRow);
       fetchList();
     } else {
-      await updatePortfolioAsync(newRow.id, newRow);
+      // const arrayFields = ['portfolioCategories', 'states', 'countries', 'partnerHQ'];
+      // for (const field of arrayFields) {
+      //   const value = newRow[field];
+      //   if (value.length > 0) {
+      //     const arrOfStr = value.map((item) => item.label);
+      //     newRow[field] = arrOfStr;
+      //   }
+      // }
+      // await updatePortfolioAsync(newRow.id, newRow);
       fetchList();
     }
 
@@ -123,6 +133,19 @@ export const PortfolioListView = () => {
   const handleClosePopover = () => {
     anchorEl.current = null;
     setImageToShow(null);
+  };
+
+  const handleUploadImage = async (images) => {
+    try {
+      const response = await updatePortfolioAsync(updatedRow.id, { ...updatedRow, campaignImage: [...updatedRow.campaignImage, ...images] });
+      if (response.success) {
+        toast.success('Portfolio updated successfully');
+        fetchList();
+        setOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   React.useEffect(() => {
@@ -209,6 +232,16 @@ export const PortfolioListView = () => {
           )}
         </Box>
       </Popover>
+
+      {/* Image upload dialog */}
+      <MediaUploader
+        open={open}
+        onClose={() => setOpen(false)}
+        onSave={(paths) => handleUploadImage([...paths])}
+        multiple
+        hideVideoUploader={true}
+        folderName="partner-HQ"
+      />
     </PageContainer>
   );
 };
