@@ -17,9 +17,9 @@ import {
   updatePortfolioAsync,
 } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
-import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
 import AddIcon from '@mui/icons-material/Add';
 import { getPortfolioColumns } from '../_utils/get-portfolio-columns';
+import { toast } from 'sonner';
 
 export const PortfolioListView = () => {
   // table columns
@@ -30,7 +30,6 @@ export const PortfolioListView = () => {
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
-  const [openDetails, setOpenDetails] = React.useState(null);
 
   async function fetchList() {
     try {
@@ -61,13 +60,26 @@ export const PortfolioListView = () => {
 
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
-    if (newRow.id) {
-      await updatePortfolioAsync(null, newRow);
+
+    const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
+
+    if (isTemporaryId) {
+      if (!newRow.projectTitle) {
+        toast.error("Please enter project title");
+        return newRow;
+      }
+
+      if (!newRow.date) {
+        toast.error("Please enter date");
+        return newRow;
+      }
+      await createPortfolioAsync(newRow);
+      fetchList();
     } else {
-      const { id, ...rest } = newRow;
-      await createPortfolioAsync(null, rest);
+      await updatePortfolioAsync(newRow.id, newRow);
       fetchList();
     }
+
     return newRow;
   }, []);
 
@@ -85,7 +97,9 @@ export const PortfolioListView = () => {
   const visibleColumns = columns.filter((col) => filteredValue.includes(col.field));
 
   const handleAddNewItem = () => {
-    setRecords([defaultPortfolio, ...records]);
+    const tempId = `temp_${Date.now()}`;
+    const newRecord = { ...defaultPortfolio(), id: tempId };
+    setRecords([newRecord, ...records]);
   };
 
   const handleDelete = async (password) => {
@@ -145,12 +159,6 @@ export const PortfolioListView = () => {
 
         </Box>
       </Card>
-      <ManagePortfolioRightPanel
-        open={openDetails ? true : false}
-        onClose={() => setOpenDetails(null)}
-        data={openDetails}
-        fetchList={fetchList}
-      />
     </PageContainer>
   );
 };

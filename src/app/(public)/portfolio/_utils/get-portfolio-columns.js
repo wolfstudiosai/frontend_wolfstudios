@@ -1,4 +1,5 @@
 import { dateFormatter } from '/src/utils/date-formatter';
+import DateEditCell from '/src/components/data-table/date-edit-cell';
 
 export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalOpen) => {
     return [
@@ -23,6 +24,7 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
             width: 150,
             editable: true,
             valueGetter: (value, row) => dateFormatter(row?.date),
+            renderEditCell: (params) => <DateEditCell {...params} />,
         },
         { field: 'shortDescription', headerName: 'Short Description', width: 200, editable: true },
         { field: 'fullDescription', headerName: 'Full Description', width: 300, editable: true },
