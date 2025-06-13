@@ -22,6 +22,7 @@ import { getPortfolioColumns } from '../_utils/get-portfolio-columns';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { MediaUploader } from '/src/components/uploaders/media-uploader';
+import { PortfolioTableFilter } from './portfolio-table-filter';
 
 export const PortfolioListView = () => {
   const anchorEl = React.useRef(null);
@@ -41,6 +42,10 @@ export const PortfolioListView = () => {
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [updatedRow, setUpdatedRow] = React.useState(null);
 
+  // filter
+  const [metaData, setMetaData] = React.useState([]);
+  const [filters, setFilters] = React.useState([]);
+
   async function fetchList() {
     try {
       setLoading(true);
@@ -51,6 +56,7 @@ export const PortfolioListView = () => {
       if (response.success) {
         setRecords(response.data);
         setTotalRecords(response.totalRecords);
+        setMetaData(response.meta);
       }
     } catch (error) {
       console.log(error);
@@ -166,6 +172,7 @@ export const PortfolioListView = () => {
           <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
 
           <Box display="flex" justifyContent="space-between" alignItems="center">
+            <PortfolioTableFilter metaData={metaData} filters={filters} setFilters={setFilters} />
             <IconButton onClick={handleAddNewItem}>
               <AddIcon />
             </IconButton>

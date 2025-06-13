@@ -52,9 +52,6 @@ export const PartnerListView = () => {
     { column: '', condition: '', value: '' },
   ]);
 
-  console.log(filters)
-
-
   const handleClosePopover = () => {
     anchorEl.current = null;
     setImageToShow(null);
@@ -67,6 +64,7 @@ export const PartnerListView = () => {
         page: pagination.pageNo,
         rowsPerPage: pagination.limit,
       });
+      console.log(response)
       if (response.success) {
         setPartners(response.data);
         setTotalRecords(response.totalRecords);
@@ -127,6 +125,8 @@ export const PartnerListView = () => {
 
     return newRow;
   }, []);
+
+  console.log(partners)
 
   const handleProcessRowUpdateError = React.useCallback((error) => {
     console.log({ children: error.message, severity: 'error' });
@@ -287,7 +287,7 @@ export const PartnerListView = () => {
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
           <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
           <Box display="flex" alignItems="center">
-            <TableFilterBuilder
+            {/* <TableFilterBuilder
               columns={filterColumns}
               conditions={conditions}
               anchorEl={showFilter}
@@ -298,7 +298,7 @@ export const PartnerListView = () => {
               <Button startIcon={<FilterListIcon />} size="small" variant="text" color='transparent' onClick={handleFilterOpen}>
                 Filter
               </Button>
-            </TableFilterBuilder>
+            </TableFilterBuilder> */}
             <IconButton onClick={handleAddNewItem}>
               <AddIcon />
             </IconButton>
