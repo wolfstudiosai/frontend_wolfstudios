@@ -70,6 +70,23 @@ export const deleteContentAsync = async (id, password) => {
   }
 };
 
+export const deleteBulkContentAsync = async (ids, password) => {
+  try {
+    const res = await api.delete(`/content-HQ/bulk`, {
+      data: { IDs: ids },
+      headers: {
+        password: password,
+      },
+    });
+
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
 export const createCommentAsync = async (contentID, data) => {
   try {
     const payload = {

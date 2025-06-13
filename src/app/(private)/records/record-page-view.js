@@ -8,6 +8,7 @@ import { PortfolioListView } from '../../(public)/portfolio/_components/portfoli
 import { ProductionListView } from '../../(public)/production/_components/production-listview';
 import { PartnerListView } from '../../(public)/partner/_components/partner-listview';
 import { CampaignListView } from '../../(public)/campaign/_components/campaign-listview';
+import AllContentListView from '../../(private)/all-content/_component/all-content-list-view';
 
 const tabs = [
     { label: 'Campaign', value: 'campaign' },
@@ -41,6 +42,10 @@ export default function RecordPageView() {
 
             {tab === 'partner' && (
                 <PartnerListView />
+            )}
+
+            {tab === 'content' && (
+                <AllContentListView />
             )}
         </PageContainer>
     )

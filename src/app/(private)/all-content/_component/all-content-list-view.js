@@ -13,174 +13,142 @@ import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 
-import { createContentAsync, deleteContentAsync, updateContentAsync } from '../_lib/all-content.actions';
+import {
+  createContentAsync,
+  deleteBulkContentAsync,
+  getContentList,
+  updateContentAsync
+} from '../_lib/all-content.actions';
 import { defaultContent } from '../_lib/all-content.types';
+import { IconButton, TextField } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import { toast } from 'sonner';
+import { getContentColumns } from '../_utils/get-content-columns';
 
-// table columns
-const columns = [
-  { field: 'name', headerName: 'Name', width: 280, editable: true },
-  {
-    field: 'postQuality',
-    headerName: 'Posting Quality',
-    width: 150,
-    editable: true,
-    valueGetter: (value, row) => value,
-  },
-  { field: 'googleDriveFiles', headerName: 'Google Drive Files', width: 200, editable: true },
-  { field: 'playbookLink', headerName: 'Playbook Link', width: 200, editable: true },
-  { field: 'upPromoteConversion', headerName: 'Uppromote Conversion', type: 'number', width: 150, editable: true },
-  { field: 'assetStatus', headerName: 'Asset Status', width: 120, editable: false },
-  { field: 'monthUploaded', headerName: 'Month Uploaded', width: 150, editable: false },
+export default function AllContentListView() {
+  // table columns
+  const columns = getContentColumns();
 
-  // Pinterest
-  { field: 'revoPinterest', headerName: 'Pinterest Status', width: 150, editable: true },
-  { field: 'pinAccountsUsed', headerName: 'Pinterest Accounts Used', width: 200, editable: true },
-  { field: 'pinterest_TotalPinClicks', headerName: 'Pinterest Pin Clicks', type: 'number', width: 150, editable: true },
-  { field: 'pinterest_TotalViews', headerName: 'Pinterest Views', type: 'number', width: 150, editable: true },
-
-  // Instagram
-  { field: 'revoInstagram', headerName: 'Instagram Status', width: 150, editable: false },
-  { field: 'ig_TotalLikes', headerName: 'Instagram Likes', type: 'number', width: 150, editable: true },
-  { field: 'ig_TotalComments', headerName: 'Instagram Comments', type: 'number', width: 150, editable: true },
-  { field: 'ig_TotalShares', headerName: 'Instagram Shares', type: 'number', width: 150, editable: true },
-  { field: 'ig_TotalViews', headerName: 'Instagram Views', type: 'number', width: 150, editable: true },
-  { field: 'ig_SocialSetsUsed', headerName: 'Instagram Social Sets Used', width: 200, editable: true },
-  { field: 'partner_IGLink', headerName: 'Partner Instagram Link', width: 200, editable: true },
-
-  // TikTok
-  { field: 'revo_TikTok', headerName: 'TikTok Status', width: 150, editable: false },
-  { field: 'revo_TTViews', headerName: 'TikTok REVO Views', type: 'number', width: 150, editable: true },
-  { field: 'tikTokAccountsused', headerName: 'TikTok Accounts Used', width: 200, editable: true },
-  { field: 'partner_TikTokLink', headerName: 'Partner TikTok Link', width: 200, editable: true },
-  { field: 'partner_TTLikes', headerName: 'Partner TikTok Likes', type: 'number', width: 150, editable: true },
-  { field: 'partner_TTComments', headerName: 'Partner TikTok Comments', type: 'number', width: 150, editable: true },
-  { field: 'partner_TTShares', headerName: 'Partner TikTok Shares', type: 'number', width: 150, editable: true },
-  { field: 'partner_TTViews', headerName: 'Partner TikTok Views', type: 'number', width: 150, editable: true },
-  { field: 'partner_TTSaves', headerName: 'Partner TikTok Saves', type: 'number', width: 150, editable: true },
-  {
-    field: 'ttDummyAccountsUsed',
-    headerName: 'TikTok Dummy Account Used',
-    width: 200,
-    editable: true,
-    valueGetter: (value, row) => row,
-  },
-
-  // YouTube
-  { field: 'yt_AccountsUsed', headerName: 'YouTube Account Used', width: 200, editable: true },
-  { field: 'partner_YTLink', headerName: 'Partner YouTube Link', width: 200, editable: true },
-  { field: 'yt_PartnerTotalLikes', headerName: 'Partner YouTube Likes', type: 'number', width: 150, editable: true },
-  {
-    field: 'yt_PartnerTotalComments',
-    headerName: 'Partner YouTube Comments',
-    type: 'number',
-    width: 150,
-    editable: true,
-  },
-  { field: 'yt_PartnerTotalViews', headerName: 'Partner YouTube Views', type: 'number', width: 150, editable: true },
-  { field: 'yt_PartnerTotalSaves', headerName: 'Partner YouTube Saves', type: 'number', width: 150, editable: true },
-  { field: 'revo_ClubRevoYoutube', headerName: 'Club REVO YouTube Status', width: 200, editable: true },
-  { field: 'revo_Youtube', headerName: 'YouTube REVO Status', width: 200, editable: true },
-  { field: 'yt_ClubREVOTotalLikes', headerName: 'YouTube Club REVO Likes', type: 'number', width: 150, editable: true },
-  {
-    field: 'yt_ClubREVOTotalViews',
-    headerName: 'YouTube Club REVO Views',
-    type: 'number',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'yt_REVOMADICTotalLikes',
-    headerName: 'YouTube REVOMADIC Likes',
-    type: 'number',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'yt_REVOMADICTotalComments',
-    headerName: 'YouTube REVOMADIC Comments',
-    type: 'number',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'yt_REVOMADICTotalShares',
-    headerName: 'YouTube REVOMADIC Shares',
-    type: 'number',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'yt_REVOMADICTotalViews',
-    headerName: 'YouTube REVOMADIC Views',
-    type: 'number',
-    width: 150,
-    editable: true,
-  },
-
-  // Other Fields
-  { field: 'creatorStatus', headerName: 'Creator Status', width: 150, editable: false },
-  { field: 'postingStatus', headerName: 'Posting Status', width: 150, editable: false },
-  {
-    field: 'created_at',
-    headerName: 'Created At',
-    width: 180,
-    editable: true,
-    valueGetter: (value, row) => moment(value).format('DD-MM-YYYY'),
-  },
-  {
-    field: 'updated_at',
-    headerName: 'Updated At',
-    width: 180,
-    editable: true,
-    valueGetter: (value, row) => moment(value).format('DD-MM-YYYY'),
-  },
-];
-
-export default function AllContentListView({ setPagination, totalRecords, data, setData, loading, fetchList }) {
+  const [data, setData] = React.useState([]);
+  const [totalRecords, setTotalRecords] = React.useState(0);
+  const [loading, setLoading] = React.useState(true);
+  const [paginateData, setPaginateData] = React.useState({ pageNo: 1, limit: 100 });
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
+
+  const fetchList = async () => {
+    try {
+      const response = await getContentList({
+        page: paginateData.pageNo,
+        rowsPerPage: paginateData.limit,
+      });
+      if (response.success) {
+        setData(response.data);
+        setTotalRecords(response.totalRecords);
+      }
+    } catch (error) {
+      console.error('Error fetching contents:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // ******************************data grid handler starts*********************
 
   const handlePaginationModelChange = (newPaginationModel) => {
     const { page, pageSize } = newPaginationModel;
-    setPagination({ pageNo: page + 1, limit: pageSize });
+    setPaginateData({ pageNo: page + 1, limit: pageSize });
   };
 
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
-    if (newRow.id) {
-      await updateContentAsync(newRow);
+
+    const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
+    if (isTemporaryId) {
+      if (!newRow.name) {
+        toast.error("Please enter name");
+        return newRow;
+      }
+
+      if (!newRow.revoPinterest) {
+        toast.error("Please enter pinterest status");
+        return newRow;
+      }
+
+      if (!newRow.pinAccountsUsed) {
+        toast.error("Please enter pin accounts used");
+        return newRow;
+      }
+
+      if (!newRow.googleDriveFiles) {
+        toast.error("Please enter google drive files");
+        return newRow;
+      }
+
+      if (!newRow.playbookLink) {
+        toast.error("Please enter playbook link");
+        return newRow;
+      }
+
+      if (!newRow.monthUploaded) {
+        toast.error("Please enter month uploaded");
+        return newRow;
+      }
+
+      if (!newRow.assetStatus) {
+        toast.error("Please enter asset status");
+        return newRow;
+      }
+
+      if (!newRow.revoInstagram) {
+        toast.error("Please enter instagram status");
+        return newRow;
+      }
+
+      if (!newRow.creatorStatus) {
+        toast.error("Please enter creator status");
+        return newRow;
+      }
+
+      await createContentAsync(newRow);
+      fetchList();
     } else {
-      const { id, ...rest } = newRow;
-      await createContentAsync(rest);
+      await updateContentAsync(newRow);
       fetchList();
     }
+
     return newRow;
+
   }, []);
+
+  // console.log(data)
 
   const handleProcessRowUpdateError = React.useCallback((error) => {
     console.log({ children: error.message, severity: 'error' });
   }, []);
+
+  const handleRowSelection = (newRowSelectionModel) => {
+    const selectedData = newRowSelectionModel.map((id) => data.find((row) => row.id === id));
+    setSelectedRows(selectedData);
+  };
 
   // ******************************data grid handler ends*********************
 
   const visibleColumns = columns.filter((col) => filteredValue.includes(col.field));
 
   const handleAddNewItem = () => {
-    setData([defaultContent, ...data]);
+    const tempId = `temp_${Date.now()}`;
+    const newRecord = { ...defaultContent(), id: tempId };
+    setData([newRecord, ...data]);
   };
 
-  const handleDelete = async (password) => {
-    const idsToDelete = [];
-    selectedRows.forEach((row) => {
-      idsToDelete.push(row.id);
-    });
-    const response = await deleteContentAsync(idsToDelete);
-    if (response.success) {
-      fetchList();
-    }
+  const handleDelete = async () => {
+    fetchList();
   };
+
+  React.useEffect(() => {
+    fetchList();
+  }, [paginateData]);
 
   React.useEffect(() => {
     const storedHiddenColumns = localStorage.getItem('hiddenColumns');
@@ -191,27 +159,25 @@ export default function AllContentListView({ setPagination, totalRecords, data, 
 
   return (
     <PageContainer>
-      <CardTitle
-        title={''}
-        rightItem={
-          <>
-            <Button startIcon={<PlusIcon />} variant="contained" onClick={handleAddNewItem}>
-              Add
-            </Button>
-          </>
-        }
-      />
-      <Card>
-        <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
-          <Box>
-            <RefreshPlugin onClick={fetchList} />
+      <Card sx={{ borderRadius: 0 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
+          <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <IconButton onClick={handleAddNewItem}>
+              <AddIcon />
+            </IconButton>
+            <Box>
+              <RefreshPlugin onClick={fetchList} />
+            </Box>
+            <DeleteConfirmationPasswordPopover
+              title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
+              onDelete={handleDelete}
+              passwordInput
+              id={selectedRows.map((row) => row.id)}
+              deleteFn={deleteBulkContentAsync}
+              disabled={selectedRows.length === 0}
+            />
           </Box>
-          <DeleteConfirmationPasswordPopover
-            title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
-            onDelete={(password) => handleDelete(password)}
-            passwordInput
-            disabled={selectedRows.length === 0}
-          />
         </Box>
 
         <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
@@ -222,8 +188,11 @@ export default function AllContentListView({ setPagination, totalRecords, data, 
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}
             rowCount={totalRecords}
-            pageSizeOptions={[10, 25, 50, 100]}
+            pageSizeOptions={[10, 20, 50]}
+            paginationModel={{ page: paginateData.pageNo - 1, pageSize: paginateData.limit }}
             onPageChange={handlePaginationModelChange}
+            onRowSelectionModelChange={handleRowSelection}
+            checkboxSelection
           />
         </Box>
       </Card>

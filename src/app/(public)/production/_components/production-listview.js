@@ -18,6 +18,7 @@ import { defaultProduction } from '../../production/_lib/production.types';
 import { getProductionColumns } from '../_utils/get-production-columns';
 import Image from 'next/image';
 import { MediaUploader } from '/src/components/uploaders/media-uploader';
+import { toast } from 'sonner';
 
 export const ProductionListView = () => {
   const anchorEl = React.useRef(null);
@@ -30,14 +31,10 @@ export const ProductionListView = () => {
   };
 
   // table columns
-  const columns = getProductionColumns({
-    anchorEl,
-    setImageToShow,
-    handleUploadModalOpen
-  });
+  const columns = getProductionColumns();
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -77,13 +74,32 @@ export const ProductionListView = () => {
 
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
-    if (newRow.id) {
-      await updateProductionAsync(null, newRow);
+
+    const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
+
+    if (isTemporaryId) {
+      if (!newRow.name) {
+        toast.error("Please enter name");
+        return newRow;
+      }
+
+      if (!newRow.proposedDate) {
+        toast.error("Please select proposed date");
+        return newRow;
+      }
+
+      if (!newRow.recordShootDate) {
+        toast.error("Please select record shoot date");
+        return newRow;
+      }
+
+      await createProductionAsync(null, newRow);
+      fetchList();
     } else {
-      const { id, ...rest } = newRow;
-      await createProductionAsync(null, rest);
+      await updateProductionAsync(null, newRow);
       fetchList();
     }
+
     return newRow;
   }, []);
 
@@ -150,7 +166,7 @@ export const ProductionListView = () => {
             </Box>
             <DeleteConfirmationPasswordPopover
               title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
-              onDelete={(password) => handleDelete(password)}
+              onDelete={() => handleDelete()}
               passwordInput
               disabled={selectedRows.length === 0}
               id={selectedRows.map((row) => row.id)}
@@ -162,7 +178,7 @@ export const ProductionListView = () => {
         <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
           <EditableDataTable
             columns={visibleColumns}
-            rows={records}
+            rows={records.map((row) => defaultProduction(row)) || []}
             processRowUpdate={processRowUpdate}
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}

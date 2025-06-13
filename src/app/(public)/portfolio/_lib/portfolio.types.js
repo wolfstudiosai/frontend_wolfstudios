@@ -1,7 +1,9 @@
+
 export const defaultPortfolio = (data) => {
   const defaultData = {
+    id: data?.id || null,
     projectTitle: data?.ProjectTitle || '',
-    date: data?.Date ? new Date(data?.Date) : null,
+    date: data?.Date ? data?.Date : null,
     shortDescription: data?.Projectshortdescription || '',
     fullDescription: data?.Projectsinglepagefulldescription || '',
     portfolioCategories: data?.PortfolioCategoriesPortfolios?.map((item) => ({
@@ -21,9 +23,9 @@ export const defaultPortfolio = (data) => {
       label: item?.PartnerHQ?.Name
     })) || [],
     videoLink: data?.VideoLink || '',
-    singlePageHeroImage: data?.SinglePageHeroImage?.[0] || [],
-    imagefield: data?.Imagefield?.[0] || [],
-    thumbnailImage: data?.ThumbnailImage?.[0] || [],
+    singlePageHeroImage: data?.SinglePageHeroImage || [],
+    imagefield: data?.Imagefield || [],
+    thumbnailImage: data?.ThumbnailImage || [],
     verticalImageGallery: data?.VerticalImageGallery || [],
     horizontalImageGallery: data?.HorizontalImageGallery || [],
   }

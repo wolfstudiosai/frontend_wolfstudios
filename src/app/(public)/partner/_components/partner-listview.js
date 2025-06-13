@@ -16,6 +16,8 @@ import { getPartnerColumns } from '../_utils/get-partner-columns';
 import { MediaUploader } from '/src/components/uploaders/media-uploader';
 import AddIcon from '@mui/icons-material/Add';
 import { toast } from 'sonner';
+import TableFilterBuilder from '/src/components/common/table-filter-builder';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 export const PartnerListView = () => {
   // Image upload popover
@@ -37,13 +39,18 @@ export const PartnerListView = () => {
   // Partner data handler
   const [partners, setPartners] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 30 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [openDetails, setOpenDetails] = React.useState(null);
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [updatedRow, setUpdatedRow] = React.useState(null);
-  console.log(partners)
+
+  // Filter
+  const [showFilter, setShowFilter] = React.useState(null);
+  const [filters, setFilters] = React.useState([
+    { column: '', condition: '', value: '' },
+  ]);
 
   const handleClosePopover = () => {
     anchorEl.current = null;
@@ -57,6 +64,7 @@ export const PartnerListView = () => {
         page: pagination.pageNo,
         rowsPerPage: pagination.limit,
       });
+      console.log(response)
       if (response.success) {
         setPartners(response.data);
         setTotalRecords(response.totalRecords);
@@ -117,6 +125,8 @@ export const PartnerListView = () => {
 
     return newRow;
   }, []);
+
+  console.log(partners)
 
   const handleProcessRowUpdateError = React.useCallback((error) => {
     console.log({ children: error.message, severity: 'error' });
@@ -249,6 +259,27 @@ export const PartnerListView = () => {
     fetchList()
   };
 
+  const handleFilterOpen = (event) => {
+    setShowFilter(event.currentTarget);
+  };
+
+  const filterColumns = [
+    'Customer Name',
+    'Email Address',
+    'Phone Number',
+    'Company Name',
+    'Industry',
+    'Role',
+  ];
+
+  const conditions = [
+    'contains',
+    'does not contain',
+    'is',
+    'is not',
+    'is empty',
+    'is not empty',
+  ];
 
   return (
     <PageContainer>
@@ -256,6 +287,18 @@ export const PartnerListView = () => {
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
           <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
           <Box display="flex" alignItems="center">
+            {/* <TableFilterBuilder
+              columns={filterColumns}
+              conditions={conditions}
+              anchorEl={showFilter}
+              setAnchorEl={setShowFilter}
+              filters={filters}
+              setFilters={setFilters}
+            >
+              <Button startIcon={<FilterListIcon />} size="small" variant="text" color='transparent' onClick={handleFilterOpen}>
+                Filter
+              </Button>
+            </TableFilterBuilder> */}
             <IconButton onClick={handleAddNewItem}>
               <AddIcon />
             </IconButton>

@@ -7,7 +7,7 @@ export const getPortfolioListAsync = async (queryParams) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
     const res = await api.get(`/portfolios${searchQuery}`);
-    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
+    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count, meta: res.data.data.meta };
   } catch (error) {
     toast.error(error.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
@@ -54,10 +54,13 @@ export const updatePortfolioAsync = async (id, data) => {
   }
 };
 
-export const deletePortfolioAsync = async (ids) => {
+export const deletePortfolioAsync = async (ids, password) => {
   try {
-    const res = await api.delete(`/portfolio/delete`, {
-      data: { ids: ids },
+    const res = await api.delete(`/portfolios/bulk`, {
+      data: { IDs: ids },
+      headers: {
+        password,
+      },
     });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
