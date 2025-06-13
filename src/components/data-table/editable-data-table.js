@@ -91,7 +91,7 @@ export const EditableDataTable = ({
         paginationMode="server"
         checkboxSelection={checkboxSelection} // it will enable checkbox selection
         onRowSelectionModelChange={onRowSelectionModelChange} //it will return all selected rows
-        slots={{ toolbar: GridToolbar }} // filtering csv download, hide cols, etc
+      // slots={{ toolbar: GridToolbar }} // filtering csv download, hide cols, etc
       />
     </Box>
   );
