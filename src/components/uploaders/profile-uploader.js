@@ -1,7 +1,6 @@
-import React from 'react';
-import Image from 'next/image';
 import { Box } from '@mui/material';
 import { Camera as CameraIcon } from '@phosphor-icons/react';
+import React from 'react';
 
 export default function ProfileUploader({ value, onFileSelect, onDelete, disabled = false }) {
   const [previewUrl, setPreviewUrl] = React.useState('');
@@ -26,20 +25,12 @@ export default function ProfileUploader({ value, onFileSelect, onDelete, disable
 
   return (
     <Box sx={{ position: 'relative', display: 'inline-block' }}>
-      {/* <Image
-        src={previewUrl}
-        alt="Uploaded Image"
-        width={200}
-        height={200}
-        style={{ objectFit: 'cover', borderRadius: '10px', border: '1px solid var(--mui-palette-divider)' }}
-      /> */}
-
       <Box
         component={'img'}
         src={previewUrl || '/assets/default_avatar.png'}
         alt="Uploaded Image"
-        width={200}
-        height={200}
+        width={220}
+        height={220}
         style={{ objectFit: 'cover', borderRadius: '10px', border: '1px solid var(--mui-palette-divider)' }}
       />
 
