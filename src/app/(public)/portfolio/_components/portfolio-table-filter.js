@@ -19,10 +19,17 @@ export const PortfolioTableFilter = ({ metaData, filters, setFilters }) => {
     useEffect(() => {
         if (filters.length === 0 && columnOptions.length > 0) {
             setFilters([
-                { column: columnOptions[0], condition: '', value: '', operator: '' },
+                {
+                    key: columnOptions[0],
+                    type: metaMap[columnOptions[0]].type,
+                    operator: '',
+                    value: '',
+                    gate: '',
+                }
             ]);
         }
-    }, [columnOptions, filters]);
+    }, [columnOptions, filters, metaMap]);
+
 
     return (
         <TableFilterBuilder metaMap={metaMap} filters={filters} setFilters={setFilters} />

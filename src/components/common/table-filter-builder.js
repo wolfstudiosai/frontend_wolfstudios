@@ -19,24 +19,33 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const columnOptions = useMemo(() => Object.keys(metaMap), [metaMap]);
 
-    const handleFilterChange = (index, key, value) => {
+    const handleFilterChange = (index, field, value) => {
         const newFilters = [...filters];
-        newFilters[index][key] = value;
+        newFilters[index][field] = value;
 
-        // Reset dependent fields
-        if (key === 'column') {
-            newFilters[index].condition = '';
+        if (field === 'key') {
+            const type = metaMap[value]?.type || '';
+            newFilters[index].type = type;
+            newFilters[index].operator = '';
             newFilters[index].value = '';
-        } else if (key === 'condition') {
+        } else if (field === 'operator') {
             newFilters[index].value = '';
         }
 
         setFilters(newFilters);
     };
 
+
     const handleAddCondition = () => {
-        setFilters([...filters, { column: columnOptions[0], condition: '', value: '', operator: 'OR' }]);
+        const defaultKey = columnOptions[0];
+        const defaultType = metaMap[defaultKey]?.type || 'string';
+
+        setFilters([
+            ...filters,
+            { key: defaultKey, type: defaultType, operator: '', value: '', gate: 'and' },
+        ]);
     };
+
 
     const handleRemoveCondition = (index) => {
         const newFilters = filters.filter((_, i) => i !== index);
@@ -54,27 +63,23 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
     const open = Boolean(anchorEl);
 
     const renderValueField = (filter) => {
-        const meta = metaMap[filter.column];
-        if (!meta || ['is empty', 'is not empty'].includes(filter.condition)) return null;
+        const meta = metaMap[filter.key];
+        if (!meta || ['is empty', 'is not empty'].includes(filter.operator)) return null;
 
         switch (meta.type) {
             case 'boolean':
                 return (
                     <Autocomplete
                         disableClearable
-                        size='small'
+                        size="small"
                         options={meta.values || ['true', 'false']}
                         value={filter.value || ''}
                         onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val || '')}
-                        renderInput={(params) => <TextField size='small' {...params} placeholder="Enter a value" sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />}
+                        renderInput={(params) => (
+                            <TextField size="small" {...params} placeholder="Enter a value" sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
+                        )}
                         sx={{ minWidth: 150 }}
-                        slotProps={{
-                            popper: {
-                                sx: {
-                                    minWidth: 220,
-                                },
-                            },
-                        }}
+                        slotProps={{ popper: { sx: { minWidth: 250 } } }}
                     />
                 );
             case 'string':
@@ -93,6 +98,7 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
                 return null;
         }
     };
+
 
     return (
         <>
@@ -114,88 +120,67 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
             >
                 <Box p={1.5} minWidth={350} maxWidth={650} sx={{ overflow: 'auto' }}>
                     <Stack spacing={1}>
-                        {filters.length > 0 ? filters.map((filter, index) => {
-                            const operators = metaMap[filter.column]?.operators || [];
-                            return (
-                                <Stack
-                                    key={index}
-                                    direction='row'
-                                    spacing={0}
-                                    alignItems="center"
-                                >
-                                    <Box width={80}>
-                                        {index === 0 ? (
-                                            <Typography component="div" sx={{ width: 80, fontSize: 12 }}>
-                                                WHERE
-                                            </Typography>
-                                        ) : (
-                                            <Autocomplete
-                                                disableClearable
-                                                size='small'
-                                                options={['and', 'or']}
-                                                value={filter.logic || 'and'}
-                                                onChange={(_, val) => handleFilterChange(index, 'logic', val)}
-                                                renderInput={(params) => <TextField size='small' {...params} sx={{
-                                                    '& .MuiOutlinedInput-root': {
-                                                        borderRadius: 0,
-                                                    },
-                                                }} />}
-                                                sx={{ width: '100%' }}
-                                            />
+                        {filters.length > 0 ? (
+                            filters.map((filter, index) => {
+                                const operators = metaMap[filter.key]?.operators || [];
+                                return (
+                                    <Stack key={index} direction="row" spacing={0} alignItems="center">
+                                        <Box width={80}>
+                                            {index === 0 ? (
+                                                <Typography component="div" sx={{ width: 80, fontSize: 12 }}>
+                                                    WHERE
+                                                </Typography>
+                                            ) : (
+                                                <Autocomplete
+                                                    disableClearable
+                                                    options={['and', 'or']}
+                                                    value={filter.gate || 'and'}
+                                                    onChange={(_, val) => handleFilterChange(index, 'gate', val)}
+                                                    renderInput={(params) => (
+                                                        <TextField size="small" {...params}
+                                                            sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
+                                                    )}
+                                                    sx={{ width: '100%' }}
+                                                />
+                                            )}
+                                        </Box>
+
+                                        <Autocomplete
+                                            disableClearable
+                                            options={columnOptions}
+                                            value={filter.key}
+                                            onChange={(_, val) => handleFilterChange(index, 'key', val)}
+                                            renderInput={(params) => (
+                                                <TextField size="small" {...params} placeholder="Select Column" sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
+                                            )}
+                                            sx={{ minWidth: 150 }}
+                                            slotProps={{ popper: { sx: { minWidth: 250 } } }}
+                                        />
+
+                                        <Autocomplete
+                                            disableClearable
+                                            options={operators}
+                                            value={filter.operator}
+                                            onChange={(_, val) => handleFilterChange(index, 'operator', val)}
+                                            renderInput={(params) => (
+                                                <TextField size="small" {...params} placeholder="Select Condition" sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
+                                            )}
+                                            sx={{ minWidth: 150 }}
+                                            disabled={!filter.key}
+                                            slotProps={{ popper: { sx: { minWidth: 250 } } }}
+                                        />
+
+                                        {renderValueField(filter)}
+
+                                        {filters.length > 1 && (
+                                            <IconButton color="error" onClick={() => handleRemoveCondition(index)}>
+                                                <DeleteIcon />
+                                            </IconButton>
                                         )}
-                                    </Box>
-
-                                    <Autocomplete
-                                        disableClearable
-                                        options={columnOptions}
-                                        value={filter.column}
-                                        onChange={(_, val) => handleFilterChange(index, 'column', val || '')}
-                                        renderInput={(params) => <TextField size='small' {...params} placeholder="Select Column" sx={{
-                                            '& .MuiOutlinedInput-root': {
-                                                borderRadius: 0,
-                                            },
-                                        }} />}
-                                        sx={{ minWidth: 150 }}
-                                        slotProps={{
-                                            popper: {
-                                                sx: {
-                                                    minWidth: 220,
-                                                },
-                                            },
-                                        }}
-                                    />
-
-                                    <Autocomplete
-                                        disableClearable
-                                        options={operators}
-                                        value={filter.condition}
-                                        onChange={(_, val) => handleFilterChange(index, 'condition', val || '')}
-                                        renderInput={(params) => <TextField size='small' {...params} placeholder="Select Condition" sx={{
-                                            '& .MuiOutlinedInput-root': {
-                                                borderRadius: 0,
-                                            },
-                                        }} />}
-                                        sx={{ minWidth: 150 }}
-                                        disabled={!filter.column}
-                                        slotProps={{
-                                            popper: {
-                                                sx: {
-                                                    minWidth: 220,
-                                                },
-                                            },
-                                        }}
-                                    />
-
-                                    {renderValueField(filter)}
-
-                                    {filters.length > 1 && (
-                                        <IconButton color="error" onClick={() => handleRemoveCondition(index)}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    )}
-                                </Stack>
-                            );
-                        }) : (
+                                    </Stack>
+                                );
+                            })
+                        ) : (
                             <Box display="flex" justifyContent="space-between" alignItems="center">
                                 <Typography variant="body2" fontWeight="500">No filter conditions are applied</Typography>
                             </Box>
