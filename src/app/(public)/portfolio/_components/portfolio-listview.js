@@ -165,6 +165,8 @@ export const PortfolioListView = () => {
     fetchList();
   }, [pagination]);
 
+  console.log(filters);
+
   return (
     <PageContainer>
       <Card sx={{ borderRadius: 0 }}>

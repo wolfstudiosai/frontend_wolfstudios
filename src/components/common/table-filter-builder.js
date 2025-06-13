@@ -22,6 +22,7 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
     const handleFilterChange = (index, key, value) => {
         const newFilters = [...filters];
         newFilters[index][key] = value;
+
         // Reset dependent fields
         if (key === 'column') {
             newFilters[index].condition = '';
@@ -29,11 +30,12 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
         } else if (key === 'condition') {
             newFilters[index].value = '';
         }
+
         setFilters(newFilters);
     };
 
     const handleAddCondition = () => {
-        setFilters([...filters, { column: columnOptions[0], condition: '', value: '' }]);
+        setFilters([...filters, { column: columnOptions[0], condition: '', value: '', operator: 'OR' }]);
     };
 
     const handleRemoveCondition = (index) => {
@@ -64,7 +66,7 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
                         options={meta.values || ['true', 'false']}
                         value={filter.value || ''}
                         onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val || '')}
-                        renderInput={(params) => <TextField size='small' {...params} placeholder="Enter a value" />}
+                        renderInput={(params) => <TextField size='small' {...params} placeholder="Enter a value" sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />}
                         sx={{ minWidth: 150 }}
                         slotProps={{
                             popper: {
@@ -83,7 +85,7 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
                         placeholder="Enter a value"
                         value={filter.value}
                         onChange={(e) => handleFilterChange(filters.indexOf(filter), 'value', e.target.value)}
-                        sx={{ minWidth: 150 }}
+                        sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
                         type={meta.type === 'number' ? 'number' : 'text'}
                     />
                 );
@@ -110,24 +112,49 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
                 onClose={handleClose}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             >
-                <Box p={1.5} minWidth={350} maxWidth={600} sx={{ overflow: 'auto' }}>
-                    <Stack spacing={2}>
+                <Box p={1.5} minWidth={350} maxWidth={650} sx={{ overflow: 'auto' }}>
+                    <Stack spacing={1}>
                         {filters.length > 0 ? filters.map((filter, index) => {
                             const operators = metaMap[filter.column]?.operators || [];
                             return (
                                 <Stack
                                     key={index}
-                                    direction={{ xs: 'column', sm: 'row' }}
-                                    spacing={2}
+                                    direction='row'
+                                    spacing={0}
                                     alignItems="center"
                                 >
+                                    <Box width={80}>
+                                        {index === 0 ? (
+                                            <Typography component="div" sx={{ width: 80, fontSize: 12 }}>
+                                                WHERE
+                                            </Typography>
+                                        ) : (
+                                            <Autocomplete
+                                                disableClearable
+                                                size='small'
+                                                options={['and', 'or']}
+                                                value={filter.logic || 'and'}
+                                                onChange={(_, val) => handleFilterChange(index, 'logic', val)}
+                                                renderInput={(params) => <TextField size='small' {...params} sx={{
+                                                    '& .MuiOutlinedInput-root': {
+                                                        borderRadius: 0,
+                                                    },
+                                                }} />}
+                                                sx={{ width: '100%' }}
+                                            />
+                                        )}
+                                    </Box>
+
                                     <Autocomplete
                                         disableClearable
-                                        size='small'
                                         options={columnOptions}
                                         value={filter.column}
                                         onChange={(_, val) => handleFilterChange(index, 'column', val || '')}
-                                        renderInput={(params) => <TextField size='small' {...params} placeholder="Select Column" />}
+                                        renderInput={(params) => <TextField size='small' {...params} placeholder="Select Column" sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: 0,
+                                            },
+                                        }} />}
                                         sx={{ minWidth: 150 }}
                                         slotProps={{
                                             popper: {
@@ -143,7 +170,11 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
                                         options={operators}
                                         value={filter.condition}
                                         onChange={(_, val) => handleFilterChange(index, 'condition', val || '')}
-                                        renderInput={(params) => <TextField size='small' {...params} placeholder="Select Condition" />}
+                                        renderInput={(params) => <TextField size='small' {...params} placeholder="Select Condition" sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: 0,
+                                            },
+                                        }} />}
                                         sx={{ minWidth: 150 }}
                                         disabled={!filter.column}
                                         slotProps={{
@@ -170,7 +201,7 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
                             </Box>
                         )}
 
-                        <Box display="flex" justifyContent="space-between" alignItems="center">
+                        <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 1 }}>
                             <Button variant="text" onClick={handleAddCondition} size="small" sx={{ width: '120px', px: 1 }}>
                                 + Add condition
                             </Button>

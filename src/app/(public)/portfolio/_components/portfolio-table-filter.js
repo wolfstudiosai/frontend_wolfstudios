@@ -19,7 +19,7 @@ export const PortfolioTableFilter = ({ metaData, filters, setFilters }) => {
     useEffect(() => {
         if (filters.length === 0 && columnOptions.length > 0) {
             setFilters([
-                { column: columnOptions[0], condition: '', value: '' },
+                { column: columnOptions[0], condition: '', value: '', operator: '' },
             ]);
         }
     }, [columnOptions, filters]);
