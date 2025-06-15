@@ -170,11 +170,10 @@ export const PortfolioListView = () => {
   return (
     <PageContainer>
       <Card sx={{ borderRadius: 0 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
-          <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
+        <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px' }}>
+          <PortfolioTableFilter metaData={metaData} filters={filters} setFilters={setFilters} />
 
           <Box display="flex" justifyContent="space-between" alignItems="center">
-            <PortfolioTableFilter metaData={metaData} filters={filters} setFilters={setFilters} />
             <IconButton onClick={handleAddNewItem}>
               <AddIcon />
             </IconButton>

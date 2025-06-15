@@ -71,14 +71,13 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
                 return (
                     <Autocomplete
                         disableClearable
-                        size="small"
                         options={meta.values || ['true', 'false']}
                         value={filter.value || ''}
                         onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val || '')}
                         renderInput={(params) => (
-                            <TextField size="small" {...params} placeholder="Enter a value" sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
+                            <TextField fullWidth size="small" {...params} placeholder="Enter a value" sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0, minWidth: 150 } }} />
                         )}
-                        sx={{ minWidth: 150 }}
+                        sx={{ flex: 1 }}
                         slotProps={{ popper: { sx: { minWidth: 250 } } }}
                     />
                 );
@@ -103,10 +102,10 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
     return (
         <>
             <Button
-                startIcon={<FilterListIcon />}
+                endIcon={<FilterListIcon />}
                 size="small"
                 variant="text"
-                color='transparent'
+                // color='transparent'
                 onClick={handleOpen}
             >
                 Filter
@@ -181,7 +180,7 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
                                 );
                             })
                         ) : (
-                            <Box display="flex" justifyContent="space-between" alignItems="center">
+                            <Box display="flex" justifyContent="center" alignItems="center">
                                 <Typography variant="body2" fontWeight="500">No filter conditions are applied</Typography>
                             </Box>
                         )}
