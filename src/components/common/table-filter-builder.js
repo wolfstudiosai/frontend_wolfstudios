@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from '@mui/icons-material/Close';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Autocomplete, Box, Button, IconButton, Popover, Stack, TextField, Typography } from '@mui/material';
 
@@ -200,8 +200,8 @@ export default function TableFilterBuilder({ metaData, filters, setFilters, hand
 
                     {renderValueField(filter)}
 
-                    <IconButton color="error" onClick={() => handleRemoveCondition(index)}>
-                      <DeleteIcon />
+                    <IconButton onClick={() => handleRemoveCondition(index)}>
+                      <CloseIcon />
                     </IconButton>
                   </Stack>
                 );
