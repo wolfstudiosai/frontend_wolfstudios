@@ -36,29 +36,7 @@ export function AccountDetailsForm() {
   let authData = localStorage.getItem('auth');
   const userId = JSON.parse(authData).id;
 
-  const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
-    useFormik({
-      initialValues: defaultProfileNew,
-      validate: (values) => {
-        const errors = {};
-
-        return errors;
-      },
-      onSubmit: async (values) => {
-        setLoading(true);
-        const res = await updateProfileData(values, userId);
-        if (res?.success) {
-          const data = res.data;
-          updateUserInfo({
-            name: ` ${data.firstName} ${data.lastName}`,
-            contact_number: data.contactNumber,
-            profile_pic: data.profileImage,
-          });
-        }
-        setLoading(false);
-        setIsEditing(false);
-      },
-    });
+ 
   async function fetchProfileData() {
     setLoading(true);
     try {

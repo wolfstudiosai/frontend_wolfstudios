@@ -33,7 +33,7 @@ export const paths = {
     chat_compose: '/dashboard/chat/compose',
 
     // settings
-    profile: '/dashboard/settings/account',
+    profile: '/user-profile',
     security: '/dashboard/settings/security',
 
     // content
