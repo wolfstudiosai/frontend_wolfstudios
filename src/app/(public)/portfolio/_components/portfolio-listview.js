@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { IconButton, Popover, TextField } from '@mui/material';
+import { IconButton, Popover } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 
@@ -49,10 +49,7 @@ export const PortfolioListView = () => {
   async function fetchList() {
     try {
       setLoading(true);
-      const response = await getPortfolioListAsync({
-        page: pagination.pageNo,
-        rowsPerPage: pagination.limit,
-      });
+      const response = await getPortfolioListAsync(pagination, filters);
       if (response.success) {
         setRecords(response.data);
         setTotalRecords(response.totalRecords);
@@ -154,6 +151,11 @@ export const PortfolioListView = () => {
     }
   };
 
+  // filter apply handler
+  const handleFilterApply = async () => {
+    fetchList();
+  }
+
   React.useEffect(() => {
     const storedHiddenColumns = localStorage.getItem('hiddenColumns');
     if (storedHiddenColumns) {
@@ -171,7 +173,12 @@ export const PortfolioListView = () => {
     <PageContainer>
       <Card sx={{ borderRadius: 0 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px' }}>
-          <PortfolioTableFilter metaData={metaData} filters={filters} setFilters={setFilters} />
+          <PortfolioTableFilter
+            metaData={metaData}
+            filters={filters}
+            setFilters={setFilters}
+            handleFilterApply={handleFilterApply}
+          />
 
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <IconButton onClick={handleAddNewItem}>

@@ -12,26 +12,26 @@ const extractMeta = (metaArray) => {
     return map;
 };
 
-export const PortfolioTableFilter = ({ metaData, filters, setFilters }) => {
+export const PortfolioTableFilter = ({ metaData, filters, setFilters, handleFilterApply }) => {
     const metaMap = useMemo(() => extractMeta(metaData), [metaData]);
     const columnOptions = useMemo(() => Object.keys(metaMap), [metaMap]);
 
-    useEffect(() => {
-        if (filters.length === 0 && columnOptions.length > 0) {
-            setFilters([
-                {
-                    key: columnOptions[0],
-                    type: metaMap[columnOptions[0]].type,
-                    operator: '',
-                    value: '',
-                    gate: '',
-                }
-            ]);
-        }
-    }, [columnOptions, filters, metaMap]);
+    // useEffect(() => {
+    //     if (filters.length === 0 && columnOptions.length > 0) {
+    //         setFilters([
+    //             {
+    //                 key: columnOptions[0],
+    //                 type: metaMap[columnOptions[0]].type,
+    //                 operator: '',
+    //                 value: '',
+    //                 gate: '',
+    //             }
+    //         ]);
+    //     }
+    // }, [columnOptions, filters, metaMap]);
 
 
     return (
-        <TableFilterBuilder metaMap={metaMap} filters={filters} setFilters={setFilters} />
+        <TableFilterBuilder metaMap={metaMap} filters={filters} setFilters={setFilters} handleFilterApply={handleFilterApply} />
     );
 }

@@ -15,7 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
 
-export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
+export default function TableFilterBuilder({ metaMap, filters, setFilters, handleFilterApply }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const columnOptions = useMemo(() => Object.keys(metaMap), [metaMap]);
 
@@ -60,6 +60,10 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
         setAnchorEl(null);
     };
 
+    const handleApply = () => {
+        handleFilterApply(filters);
+        handleClose();
+    };
     const open = Boolean(anchorEl);
 
     const renderValueField = (filter) => {
@@ -189,7 +193,7 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters }) {
                             <Button variant="text" onClick={handleAddCondition} size="small" sx={{ width: '120px', px: 1 }}>
                                 + Add condition
                             </Button>
-                            <Button variant="contained" onClick={handleClose} size="small" sx={{ width: '120px', px: 1 }}>Apply</Button>
+                            <Button variant="contained" onClick={handleApply} size="small" sx={{ width: '120px', px: 1 }}>Apply</Button>
                         </Box>
                     </Stack>
                 </Box>
