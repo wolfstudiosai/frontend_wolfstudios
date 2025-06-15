@@ -1,12 +1,36 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { getSearchQuery } from '/src/utils/helper';
+import { getSearchQuery, isFilterValid } from '/src/utils/helper';
 
-export const getPortfolioListAsync = async (queryParams) => {
+export const getPortfolioListAsync = async (pagination, filters) => {
   try {
-    const searchQuery = getSearchQuery(queryParams);
-    const res = await api.get(`/portfolios${searchQuery}`);
+    if (filters.length > 0) {
+      // check if all filters are valid
+      const allFiltersValid = filters.every(isFilterValid);
+      if (!allFiltersValid) {
+        toast.error('Please fill all the fields');
+        return;
+      }
+    }
+
+    // convert filters to query params
+    let apiUrl = `/portfolios?page=${pagination.pageNo}&size=${pagination.limit}`;
+    const gate = 'and';
+    const queryParts = [`gate=${gate}`];
+
+    filters.forEach((filter, index) => {
+      for (const key in filter) {
+        if (key !== 'gate') {
+          queryParts.push(`fields[${index}][${key}]=${encodeURIComponent(filter[key])}`);
+        }
+      }
+    });
+    const queryString = queryParts.join('&');
+    if (filters.length > 0) {
+      apiUrl += `&${queryString}`;
+    }
+    const res = await api.get(apiUrl);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count, meta: res.data.data.meta };
   } catch (error) {
     toast.error(error.message);

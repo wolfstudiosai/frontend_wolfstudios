@@ -169,3 +169,12 @@ export const handleCopy = async (text) => {
     console.error('Error copying text:', err);
   }
 };
+
+
+export function isFilterValid(filter) {
+  const requiredKeys = ['key', 'type', 'operator', 'value'];
+  return requiredKeys.every((key) => {
+    const value = filter[key];
+    return value !== undefined && value !== null && value !== '';
+  });
+}
