@@ -1,14 +1,19 @@
 'use client';
 
 import * as React from 'react';
+import Image from 'next/image';
+import AddIcon from '@mui/icons-material/Add';
 import { IconButton, Popover } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
+import { toast } from 'sonner';
 
+import TableFilterBuilder from '/src/components/common/table-filter-builder';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
+import { MediaUploader } from '/src/components/uploaders/media-uploader';
 
 import {
   createPortfolioAsync,
@@ -17,12 +22,7 @@ import {
   updatePortfolioAsync,
 } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
-import AddIcon from '@mui/icons-material/Add';
 import { getPortfolioColumns } from '../_utils/get-portfolio-columns';
-import { toast } from 'sonner';
-import Image from 'next/image';
-import { MediaUploader } from '/src/components/uploaders/media-uploader';
-import TableFilterBuilder from '/src/components/common/table-filter-builder';
 
 export const PortfolioListView = () => {
   const anchorEl = React.useRef(null);
@@ -33,7 +33,7 @@ export const PortfolioListView = () => {
     setUpdatedRow(data);
   };
   // table columns
-  const columns = getPortfolioColumns(anchorEl, setImageToShow, handleUploadModalOpen)
+  const columns = getPortfolioColumns(anchorEl, setImageToShow, handleUploadModalOpen);
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
@@ -78,17 +78,17 @@ export const PortfolioListView = () => {
 
     if (isTemporaryId) {
       if (!newRow.projectTitle) {
-        toast.error("Please enter project title");
+        toast.error('Please enter project title');
         return newRow;
       }
 
       if (!newRow.videoLink) {
-        toast.error("Please enter video link");
+        toast.error('Please enter video link');
         return newRow;
       }
 
       if (!newRow.date) {
-        toast.error("Please enter date");
+        toast.error('Please enter date');
         return newRow;
       }
 
@@ -140,7 +140,10 @@ export const PortfolioListView = () => {
 
   const handleUploadImage = async (images) => {
     try {
-      const response = await updatePortfolioAsync(updatedRow.id, { ...updatedRow, campaignImage: [...updatedRow.campaignImage, ...images] });
+      const response = await updatePortfolioAsync(updatedRow.id, {
+        ...updatedRow,
+        campaignImage: [...updatedRow.campaignImage, ...images],
+      });
       if (response.success) {
         toast.success('Portfolio updated successfully');
         fetchList();
@@ -151,10 +154,14 @@ export const PortfolioListView = () => {
     }
   };
 
-  // filter apply handler
-  const handleFilterApply = async () => {
-    fetchList();
-  }
+  const handleFilterApply = () => {
+    setPagination({ pageNo: 1, limit: 100 });
+  };
+
+  const handleFilterClear = () => {
+    setFilters([]);
+    setPagination({ pageNo: 1, limit: 100 });
+  };
 
   React.useEffect(() => {
     const storedHiddenColumns = localStorage.getItem('hiddenColumns');
@@ -167,8 +174,6 @@ export const PortfolioListView = () => {
     fetchList();
   }, [pagination]);
 
-  console.log(filters);
-
   return (
     <PageContainer>
       <Card sx={{ borderRadius: 0 }}>
@@ -178,6 +183,7 @@ export const PortfolioListView = () => {
             filters={filters}
             setFilters={setFilters}
             handleFilterApply={handleFilterApply}
+            handleFilterClear={handleFilterClear}
           />
 
           <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -210,13 +216,11 @@ export const PortfolioListView = () => {
             pagination
             paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
             onPageChange={handlePaginationModelChange}
-            pageSizeOptions={[10, 20, 30]}
+            pageSizeOptions={[100, 120, 150]}
             onRowSelectionModelChange={handleRowSelection}
           />
-
         </Box>
       </Card>
-
 
       {/* Image upload popover */}
       <Popover
@@ -237,13 +241,7 @@ export const PortfolioListView = () => {
       >
         <Box sx={{ p: 1.5 }}>
           {imageToShow && (
-            <Image
-              src={imageToShow}
-              alt="Preview"
-              width={300}
-              height={300}
-              style={{ borderRadius: 8 }}
-            />
+            <Image src={imageToShow} alt="Preview" width={300} height={300} style={{ borderRadius: 8 }} />
           )}
         </Box>
       </Popover>
