@@ -22,7 +22,7 @@ import { getPortfolioColumns } from '../_utils/get-portfolio-columns';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { MediaUploader } from '/src/components/uploaders/media-uploader';
-import { PortfolioTableFilter } from './portfolio-table-filter';
+import TableFilterBuilder from '/src/components/common/table-filter-builder';
 
 export const PortfolioListView = () => {
   const anchorEl = React.useRef(null);
@@ -173,7 +173,7 @@ export const PortfolioListView = () => {
     <PageContainer>
       <Card sx={{ borderRadius: 0 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px' }}>
-          <PortfolioTableFilter
+          <TableFilterBuilder
             metaData={metaData}
             filters={filters}
             setFilters={setFilters}

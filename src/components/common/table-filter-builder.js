@@ -14,9 +14,20 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
+const extractMeta = (metaArray) => {
+    const map = {};
+    metaArray.forEach((item) => {
+        const key = Object.keys(item)[0];
+        map[key] = item[key];
+    });
+    return map;
+};
 
-export default function TableFilterBuilder({ metaMap, filters, setFilters, handleFilterApply }) {
+
+
+export default function TableFilterBuilder({ metaData, filters, setFilters, handleFilterApply }) {
     const [anchorEl, setAnchorEl] = useState(null);
+    const metaMap = useMemo(() => extractMeta(metaData), [metaData]);
     const columnOptions = useMemo(() => Object.keys(metaMap), [metaMap]);
 
     const handleFilterChange = (index, field, value) => {
@@ -175,11 +186,9 @@ export default function TableFilterBuilder({ metaMap, filters, setFilters, handl
 
                                         {renderValueField(filter)}
 
-                                        {filters.length > 1 && (
-                                            <IconButton color="error" onClick={() => handleRemoveCondition(index)}>
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        )}
+                                        <IconButton color="error" onClick={() => handleRemoveCondition(index)}>
+                                            <DeleteIcon />
+                                        </IconButton>
                                     </Stack>
                                 );
                             })
