@@ -35,14 +35,15 @@ export default function TableFilterBuilder(
     const currentFilter = { ...updatedFilters[index] };
 
     if (field === 'value') {
-      currentFilter.value =
-        currentFilter.type === 'relation'
-          ? Array.isArray(value)
-            ? value
-            : value
-              ? [value]
-              : []
-          : value;
+      if (currentFilter.type === 'relation') {
+        currentFilter.value = Array.isArray(value)
+          ? value
+          : value
+            ? [value]
+            : [];
+      } else {
+        currentFilter.value = value;
+      }
     }
 
     if (field === 'key') {
@@ -50,7 +51,7 @@ export default function TableFilterBuilder(
       currentFilter.key = value;
       currentFilter.type = type;
       currentFilter.value = type === 'relation' ? [] : '';
-      currentFilter.depth = type === 'relation' ? columnOptions[index].depth || '' : '';
+      currentFilter.depth = type === 'relation' ? metaMap[value]?.depth || '' : '';
 
       const validOperatorsByType = {
         string: ["contains", "does not contain", "is", "is not", 'is empty', 'is not empty'],
@@ -116,8 +117,6 @@ export default function TableFilterBuilder(
 
   const open = Boolean(anchorEl);
 
-  console.log(filters)
-
   const renderValueField = (filter) => {
     const meta = metaMap[filter.key];
     if (!meta) return null;
@@ -140,9 +139,13 @@ export default function TableFilterBuilder(
           multiple={true}
           value={Array.isArray(filter.value) ? filter.value : filter.value ? [filter.value] : []}
           operator={filter.operator}
-          key={filter.key}
-          onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val ?? [])}
+          filterKey={filter.key}
+          onChange={(_, val) => {
+            // val is now an array of { value, label }
+            handleFilterChange(filters.indexOf(filter), 'value', val ?? []);
+          }}
         />
+
       );
     } else if (meta.type === 'images' || meta.type === 'boolean') {
       return (
@@ -193,6 +196,8 @@ export default function TableFilterBuilder(
         </Typography>
     }
   };
+
+  console.log(filters);
 
   return (
     <>
