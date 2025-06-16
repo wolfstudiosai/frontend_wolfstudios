@@ -2,7 +2,9 @@
 
 import { Autocomplete, Chip, TextField } from '@mui/material';
 import { getPartnerListAsync } from '/src/app/(public)/partner/_lib/partner.actions';
+import { getPortfolioCategoryListAsync } from '/src/app/(public)/portfolio/_lib/portfolio.actions';
 import { useEffect, useState } from 'react';
+import { getCountryListAsync, getStateListAsync } from '/src/lib/common.actions';
 
 const fetchOptions = async (key) => {
     let options = [];
@@ -12,6 +14,35 @@ const fetchOptions = async (key) => {
             options = partnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
         }
     }
+
+    if (key === "portfolioCategories") {
+        const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 100 });
+        if (categoryResponse?.success) {
+            options = categoryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+        }
+    }
+
+    if (key === "country") {
+        const countryResponse = await getCountryListAsync({ page: 1, rowsPerPage: 100 });
+        if (countryResponse?.success) {
+            options = countryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+        }
+    }
+
+    if (key === "states") {
+        const stateResponse = await getStateListAsync({ page: 1, rowsPerPage: 100 });
+        if (stateResponse?.success) {
+            options = stateResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+        }
+    }
+
+    // if (key === "caseStudies") {
+    //     const caseStudyResponse = await getCaseStudyListAsync({ page: 1, rowsPerPage: 100 });
+    //     if (caseStudyResponse?.success) {
+    //         options = caseStudyResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+    //     }
+    // }
+
     return options;
 }
 
@@ -25,17 +56,18 @@ export default function TableAutoComplete({
     onChange,
 }) {
     const [options, setOptions] = useState([]);
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         const getOptions = async () => {
+            setLoading(true);
             const options = await fetchOptions(filterKey);
             setOptions(options);
-        };
+            setLoading(false);
+        }
         if (operators.includes(operator)) {
             getOptions();
         }
     }, [filterKey, operator]);
-
-    // console.log(options);
 
     return (
         <Autocomplete
@@ -43,6 +75,7 @@ export default function TableAutoComplete({
             multiple={multiple}
             options={options}
             disabled={!operators.includes(operator)}
+            loading={loading}
             getOptionLabel={(option) =>
                 typeof option === 'string' ? option : option?.label || ''
             }

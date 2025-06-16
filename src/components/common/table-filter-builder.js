@@ -29,6 +29,7 @@ export default function TableFilterBuilder(
   const [anchorEl, setAnchorEl] = useState(null);
   const metaMap = useMemo(() => extractMeta(metaData), [metaData]);
   const columnOptions = useMemo(() => Object.keys(metaMap), [metaMap]);
+  console.log(metaData);
 
   const handleFilterChange = (index, field, value) => {
     const updatedFilters = [...filters];
@@ -196,8 +197,6 @@ export default function TableFilterBuilder(
         </Typography>
     }
   };
-
-  console.log(filters);
 
   return (
     <>
