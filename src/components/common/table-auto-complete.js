@@ -32,6 +32,7 @@ export default function TableAutoComplete({
         <Autocomplete
             multiple={multiple}
             options={options}
+            disabled={["is empty", "is not empty"].includes(operator)}
             getOptionLabel={(option) => (typeof option === 'string' ? option : '')}
             value={multiple ? (value || []) : (value || null)}
             onChange={(event, newValue) => onChange?.(event, newValue)}
@@ -52,7 +53,14 @@ export default function TableAutoComplete({
                 })
             }
             renderInput={(params) => <TextField {...params} />}
-            sx={{ width: 250, '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
+            sx={
+                {
+                    width: 250,
+                    '& .MuiOutlinedInput-root': { borderRadius: 0 },
+                    "& .MuiButtonBase-root": { display: ["is empty", "is not empty"].includes(operator) ? 'none' : 'block' },
+                    "& .MuiOutlinedInput-root .MuiAutocomplete-endAdornment": { right: 0 },
+                }
+            }
         />
     );
 }

@@ -31,38 +31,59 @@ export default function TableFilterBuilder(
   const columnOptions = useMemo(() => Object.keys(metaMap), [metaMap]);
 
   const handleFilterChange = (index, field, value) => {
-    const newFilters = [...filters];
-    newFilters[index][field] = value;
+    const updatedFilters = [...filters];
+    const currentFilter = { ...updatedFilters[index] };
 
-    // Normalize value based on type or operator
-    if (field === 'value' && newFilters[index].type === 'relation') {
-      newFilters[index][field] = Array.isArray(value) ? value : value ? [value] : [];
-    } else {
-      newFilters[index][field] = value;
+    if (field === 'value') {
+      currentFilter.value =
+        currentFilter.type === 'relation'
+          ? Array.isArray(value)
+            ? value
+            : value
+              ? [value]
+              : []
+          : value;
     }
 
     if (field === 'key') {
       const type = metaMap[value]?.type || '';
-      newFilters[index].type = type;
-      newFilters[index].operator = '';
-      if (type === 'relation') {
-        newFilters[index].value = [];
-        newFilters[index].depth = columnOptions[index].depth || '';
-      } else {
-        newFilters[index].value = '';
-      }
-    } else if (field === 'operator') {
-      newFilters[index].value = '';
+      currentFilter.key = value;
+      currentFilter.type = type;
+      currentFilter.value = type === 'relation' ? [] : '';
+      currentFilter.depth = type === 'relation' ? columnOptions[index].depth || '' : '';
+
+      const validOperatorsByType = {
+        string: ["contains", "does not contain", "is", "is not", 'is empty', 'is not empty'],
+        number: ["contains", "does not contain", "is", "is not", 'is empty', 'is not empty'],
+        images: ['is empty', 'is not empty'],
+        boolean: ['is', 'is not'],
+        relation: ['has any of', 'has none of', 'is empty', 'is not empty'],
+      };
+
+      const allowedOperators = validOperatorsByType[type] || [];
+      currentFilter.operator = allowedOperators.includes(currentFilter.operator) ? currentFilter.operator : '';
     }
 
-    setFilters(newFilters);
+    if (field === 'operator') {
+      currentFilter.operator = value;
+      currentFilter.value = '';
+    }
+
+    if (field !== 'key' && field !== 'value' && field !== 'operator') {
+      currentFilter[field] = value;
+    }
+
+    updatedFilters[index] = currentFilter;
+    setFilters(updatedFilters);
   };
+
 
   const handleAddCondition = () => {
     const defaultKey = columnOptions[0];
     const defaultType = metaMap[defaultKey]?.type || 'string';
+    const defaultOperator = metaMap[defaultKey]?.operators[0] || '';
 
-    setFilters([...filters, { key: defaultKey, type: defaultType, operator: '', value: '' }]);
+    setFilters([...filters, { key: defaultKey, type: defaultType, operator: defaultOperator, value: '' }]);
   };
 
   const handleRemoveCondition = (index) => {
@@ -101,52 +122,39 @@ export default function TableFilterBuilder(
     const meta = metaMap[filter.key];
     if (!meta) return null;
 
-    switch (meta.type) {
-      case 'string':
-      case 'number':
-        return (
-          <TextField
-            placeholder="Enter a value"
-            value={filter.value}
-            onChange={(e) => handleFilterChange(filters.indexOf(filter), 'value', e.target.value)}
-            sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
-            type={meta.type === 'number' ? 'number' : 'text'}
-          />
-        );
-
-      case 'relation':
-        return (
-          <TableAutoComplete
-            multiple={true}
-            value={Array.isArray(filter.value) ? filter.value : filter.value ? [filter.value] : []}
-            operator={filter.operator}
-            key={filter.key}
-            onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val ?? [])}
-          />
-        );
-      case "images":
-        return (
-          <Autocomplete
-            disableClearable
-            options={meta.values || ['true', 'false']}
-            value={filter.value || ''}
-            onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val || '')}
-            renderInput={(params) => (
-              <TextField
-                fullWidth
-                size="small"
-                {...params}
-                placeholder="Select value"
-                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0, minWidth: 150 } }}
-              />
-            )}
-            sx={{ flex: 1 }}
-            slotProps={{ popper: { sx: { minWidth: 250 } } }}
-          />
-        );
-      default:
-        return null;
+    if (meta.type === 'string' || meta.type === 'number') {
+      const isEmpty = filter.operator === 'is empty' || filter.operator === 'is not empty';
+      return (
+        <TextField
+          placeholder={isEmpty ? '' : 'Enter a value'}
+          value={filter.value}
+          disabled={isEmpty}
+          onChange={(e) => handleFilterChange(filters.indexOf(filter), 'value', e.target.value)}
+          sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
+          type={meta.type === 'number' ? 'number' : 'text'}
+        />
+      );
+    } else if (meta.type === 'relation') {
+      return (
+        <TableAutoComplete
+          multiple={true}
+          value={Array.isArray(filter.value) ? filter.value : filter.value ? [filter.value] : []}
+          operator={filter.operator}
+          key={filter.key}
+          onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val ?? [])}
+        />
+      );
+    } else if (meta.type === 'images' || meta.type === 'boolean') {
+      return (
+        <TextField
+          disabled
+          sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
+        />
+      );
+    } else {
+      return null;
     }
+
   };
 
   const renderGateField = (index) => {
@@ -168,10 +176,15 @@ export default function TableFilterBuilder(
               <TextField
                 size="small"
                 {...params}
-                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
+                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 }, }}
               />
             )}
-            sx={{ width: '100%' }}
+            sx={{
+              width: '100%',
+              '& .MuiOutlinedInput-root .MuiAutocomplete-endAdornment': {
+                right: 0,
+              }
+            }}
           />
         );
       default:
@@ -220,10 +233,15 @@ export default function TableFilterBuilder(
                           size="small"
                           {...params}
                           placeholder="Select Column"
-                          sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
+                          sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 }, }}
                         />
                       )}
-                      sx={{ minWidth: 150 }}
+                      sx={{
+                        minWidth: 150,
+                        '& .MuiOutlinedInput-root .MuiAutocomplete-endAdornment': {
+                          right: 0,
+                        }
+                      }}
                       slotProps={{ popper: { sx: { minWidth: 250 } } }}
                     />
 
@@ -237,10 +255,17 @@ export default function TableFilterBuilder(
                           size="small"
                           {...params}
                           placeholder="Select Condition"
-                          sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
+                          sx={{
+                            '& .MuiOutlinedInput-root': { borderRadius: 0 },
+                          }}
                         />
                       )}
-                      sx={{ minWidth: 150 }}
+                      sx={{
+                        minWidth: 150,
+                        '& .MuiOutlinedInput-root .MuiAutocomplete-endAdornment': {
+                          right: 0,
+                        }
+                      }}
                       disabled={!filter.key}
                       slotProps={{ popper: { sx: { minWidth: 250 } } }}
                     />
