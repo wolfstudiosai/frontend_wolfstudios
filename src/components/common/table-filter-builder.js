@@ -62,7 +62,7 @@ export default function TableFilterBuilder(
     const defaultKey = columnOptions[0];
     const defaultType = metaMap[defaultKey]?.type || 'string';
 
-    setFilters([...filters, { key: defaultKey, type: defaultType, operator: '', value: '', depth: '' }]);
+    setFilters([...filters, { key: defaultKey, type: defaultType, operator: '', value: '' }]);
   };
 
   const handleRemoveCondition = (index) => {
@@ -95,31 +95,13 @@ export default function TableFilterBuilder(
 
   const open = Boolean(anchorEl);
 
+  console.log(filters)
+
   const renderValueField = (filter) => {
     const meta = metaMap[filter.key];
     if (!meta) return null;
 
     switch (meta.type) {
-      case 'boolean':
-        return (
-          <Autocomplete
-            disableClearable
-            options={meta.values || ['true', 'false']}
-            value={filter.value || ''}
-            onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val || '')}
-            renderInput={(params) => (
-              <TextField
-                fullWidth
-                size="small"
-                {...params}
-                placeholder="Enter a value"
-                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0, minWidth: 150 } }}
-              />
-            )}
-            sx={{ flex: 1 }}
-            slotProps={{ popper: { sx: { minWidth: 250 } } }}
-          />
-        );
       case 'string':
       case 'number':
         return (
@@ -133,15 +115,35 @@ export default function TableFilterBuilder(
         );
 
       case 'relation':
-        return <TableAutoComplete
-          multiple={true}
-          value={Array.isArray(filter.value) ? filter.value : filter.value ? [filter.value] : []}
-          operator={filter.operator}
-          onChange={(_, val) => {
-            // Ensure value is always an array
-            handleFilterChange(filters.indexOf(filter), 'value', val ?? []);
-          }}
-        />
+        return (
+          <TableAutoComplete
+            multiple={true}
+            value={Array.isArray(filter.value) ? filter.value : filter.value ? [filter.value] : []}
+            operator={filter.operator}
+            key={filter.key}
+            onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val ?? [])}
+          />
+        );
+      case "images":
+        return (
+          <Autocomplete
+            disableClearable
+            options={meta.values || ['true', 'false']}
+            value={filter.value || ''}
+            onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val || '')}
+            renderInput={(params) => (
+              <TextField
+                fullWidth
+                size="small"
+                {...params}
+                placeholder="Select value"
+                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0, minWidth: 150 } }}
+              />
+            )}
+            sx={{ flex: 1 }}
+            slotProps={{ popper: { sx: { minWidth: 250 } } }}
+          />
+        );
       default:
         return null;
     }

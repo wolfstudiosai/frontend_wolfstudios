@@ -47,12 +47,10 @@ export const PortfolioListView = () => {
   const [filters, setFilters] = React.useState([]);
   const [gate, setGate] = React.useState('and');
 
-  console.log(metaData)
-
   async function fetchList() {
     try {
       setLoading(true);
-      const response = await getPortfolioListAsync(pagination, filters);
+      const response = await getPortfolioListAsync({ page: pagination.pageNo, rowsPerPage: pagination.limit }, filters);
       if (response.success) {
         setRecords(response.data);
         setTotalRecords(response.totalRecords);

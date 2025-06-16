@@ -1,7 +1,16 @@
 import { Autocomplete, Chip, TextField } from '@mui/material';
+import { api } from '/src/utils/api';
 
-const getOptions = (operator) => {
+const fetchOptions = async (url) => {
+    const response = await api.get(url);
+    console.log(response.data);
+    return response.data;
+}
+
+const keys = ["partnerHQ", "states", "countries"];
+const getOptions = (operator, key) => {
     if (["has any of", "has none of"].includes(operator)) {
+
         return ["has any of", "has none of"];
     } else if (["is empty", "is not empty"].includes(operator)) {
         return ["is empty", "is not empty"];
@@ -13,10 +22,11 @@ const getOptions = (operator) => {
 export default function TableAutoComplete({
     multiple,
     value,
+    key,
     operator,
     onChange,
 }) {
-    const options = getOptions(operator);
+    const options = getOptions(operator, key);
 
     return (
         <Autocomplete
