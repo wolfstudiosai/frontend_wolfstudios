@@ -50,7 +50,7 @@ export const PortfolioListView = () => {
   async function fetchList() {
     try {
       setLoading(true);
-      const response = await getPortfolioListAsync({ page: pagination.pageNo, rowsPerPage: pagination.limit }, filters);
+      const response = await getPortfolioListAsync({ page: pagination.pageNo, rowsPerPage: pagination.limit }, filters, gate);
       if (response.success) {
         setRecords(response.data);
         setTotalRecords(response.totalRecords);
@@ -62,8 +62,6 @@ export const PortfolioListView = () => {
       setLoading(false);
     }
   }
-
-  // console.log(records)
 
   // ******************************data grid handler starts*********************
 

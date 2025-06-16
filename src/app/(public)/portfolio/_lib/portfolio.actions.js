@@ -1,28 +1,24 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { getSearchQuery, isFilterValid } from '/src/utils/helper';
+import { getSearchQuery, validateFilters } from '/src/utils/helper';
 
-export const getPortfolioListAsync = async (pagination, filters) => {
+export const getPortfolioListAsync = async (pagination, filters, gate) => {
   try {
-    console.log(pagination, filters);
     let apiUrl = `/portfolios?page=${pagination.page}&size=${pagination.rowsPerPage}`;
 
     if (filters && filters.length > 0) {
       // check if all filters are valid
-      const allFiltersValid = filters.every(isFilterValid);
-      if (!allFiltersValid) {
-        toast.error('Please fill all the fields');
+      const allFiltersValid = validateFilters(filters);
+      if (!allFiltersValid.valid) {
+        toast.error(allFiltersValid.message);
         return;
       }
 
-      const gate = 'and';
       const queryParts = [`gate=${gate}`];
       filters.forEach((filter, index) => {
         for (const key in filter) {
-          if (key !== 'gate') {
-            queryParts.push(`fields[${index}][${key}]=${encodeURIComponent(filter[key])}`);
-          }
+          queryParts.push(`fields[${index}][${key}]=${encodeURIComponent(filter[key])}`);
         }
       });
       const queryString = queryParts.join('&');

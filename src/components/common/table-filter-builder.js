@@ -5,6 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Autocomplete, Box, Button, IconButton, Popover, Stack, TextField, Typography } from '@mui/material';
 import TableAutoComplete from './table-auto-complete';
+import { validateFilters } from '/src/utils/helper';
 
 const extractMeta = (metaArray) => {
   const map = {};
@@ -29,7 +30,7 @@ export default function TableFilterBuilder(
   const [anchorEl, setAnchorEl] = useState(null);
   const metaMap = useMemo(() => extractMeta(metaData), [metaData]);
   const columnOptions = useMemo(() => Object.keys(metaMap), [metaMap]);
-  console.log(metaData);
+  const [error, setError] = useState('');
 
   const handleFilterChange = (index, field, value) => {
     const updatedFilters = [...filters];
@@ -106,12 +107,23 @@ export default function TableFilterBuilder(
 
   // Apply filters and close the popover
   const handleApply = () => {
+    const allFiltersValid = validateFilters(filters);
+    if (!allFiltersValid.valid) {
+      setError(allFiltersValid.message);
+      return;
+    }
+
     handleFilterApply();
     handleClose();
   };
 
   // Clear all filters and close the popover
   const handleClearFilters = () => {
+    const allFiltersValid = validateFilters(filters);
+    if (!allFiltersValid.valid) {
+      setError(allFiltersValid.message);
+      return;
+    }
     handleFilterClear();
     handleClose();
   };
@@ -141,10 +153,7 @@ export default function TableFilterBuilder(
           value={Array.isArray(filter.value) ? filter.value : filter.value ? [filter.value] : []}
           operator={filter.operator}
           filterKey={filter.key}
-          onChange={(_, val) => {
-            // val is now an array of { value, label }
-            handleFilterChange(filters.indexOf(filter), 'value', val ?? []);
-          }}
+          onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val ?? [])}
         />
 
       );
@@ -315,6 +324,8 @@ export default function TableFilterBuilder(
                 </Button>
               </Box>
             </Box>
+
+            {error && <Typography variant="body2" color="error" textAlign="center">{error}</Typography>}
           </Stack>
         </Box>
       </Popover>
