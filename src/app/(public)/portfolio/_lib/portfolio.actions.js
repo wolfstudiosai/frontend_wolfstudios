@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { getSearchQuery, validateFilters } from '/src/utils/helper';
+import { validateFilters, buildQueryParams, getSearchQuery } from '/src/utils/helper';
 
 export const getPortfolioListAsync = async (pagination, filters, gate) => {
   try {
@@ -15,20 +15,14 @@ export const getPortfolioListAsync = async (pagination, filters, gate) => {
         return;
       }
 
-      const queryParts = [`gate=${gate}`];
-      filters.forEach((filter, index) => {
-        for (const key in filter) {
-          queryParts.push(`fields[${index}][${key}]=${encodeURIComponent(filter[key])}`);
-        }
-      });
-      const queryString = queryParts.join('&');
-      apiUrl += `&${queryString}`;
+      const queryParams = buildQueryParams(filters, gate);
+      apiUrl += `&${queryParams}`;
     }
 
     const res = await api.get(apiUrl);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count, meta: res.data.data.meta };
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };

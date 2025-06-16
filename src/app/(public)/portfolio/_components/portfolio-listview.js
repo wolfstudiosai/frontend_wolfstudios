@@ -159,6 +159,7 @@ export const PortfolioListView = () => {
 
   const handleFilterClear = () => {
     setFilters([]);
+    setGate('and');
     setPagination({ pageNo: 1, limit: 100 });
   };
 

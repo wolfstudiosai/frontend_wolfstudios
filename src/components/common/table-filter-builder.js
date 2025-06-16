@@ -110,22 +110,19 @@ export default function TableFilterBuilder(
     const allFiltersValid = validateFilters(filters);
     if (!allFiltersValid.valid) {
       setError(allFiltersValid.message);
-      return;
+    } else {
+      handleFilterApply();
+      handleClose();
+      setError('');
     }
 
-    handleFilterApply();
-    handleClose();
   };
 
   // Clear all filters and close the popover
   const handleClearFilters = () => {
-    const allFiltersValid = validateFilters(filters);
-    if (!allFiltersValid.valid) {
-      setError(allFiltersValid.message);
-      return;
-    }
     handleFilterClear();
     handleClose();
+    setError('');
   };
 
   const open = Boolean(anchorEl);

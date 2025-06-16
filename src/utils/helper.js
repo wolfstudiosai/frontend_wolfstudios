@@ -180,6 +180,7 @@ export function isFilterValid(filter) {
 }
 
 export function validateFilters(filters) {
+  const notRequiredFilters = ['is empty', 'is not empty'];
   for (let i = 0; i < filters.length; i++) {
     const filter = filters[i];
     const { type, operator, value } = filter;
@@ -193,7 +194,11 @@ export function validateFilters(filters) {
     }
 
     // 2. value is required for string or number types
-    if ((type === 'string' || type === 'number') && (!value || value.toString().trim() === '')) {
+    if (
+      (['string', 'number'].includes(type)) &&
+      !notRequiredFilters.includes(operator) &&
+      (value === undefined || value === null || value.toString().trim() === '')
+    ) {
       return {
         valid: false,
         message: `Value is required in condition ${i + 1}`,
@@ -214,4 +219,30 @@ export function validateFilters(filters) {
   }
 
   return { valid: true };
+}
+
+
+export function buildQueryParams(filters, gate) {
+  const params = new URLSearchParams();
+  // if (filters.length > 1) {
+  // }
+  params.append('gate', gate);
+  // Add each filter
+  filters.forEach((filter, index) => {
+    params.append(`fields[${index}][key]`, filter.key || '');
+    params.append(`fields[${index}][type]`, filter.type || '');
+    params.append(`fields[${index}][operator]`, filter.operator || '');
+    params.append(`fields[${index}][depth]`, filter.depth || '');
+
+    // Handle value based on type
+    if (filter.type === 'relation' && Array.isArray(filter.value)) {
+      filter.value.forEach((item, itemIndex) => {
+        params.append(`fields[${index}][value][${itemIndex}]`, item.value);
+      });
+    } else {
+      params.append(`fields[${index}][value]`, filter.value ?? '');
+    }
+  });
+
+  return params.toString();
 }
