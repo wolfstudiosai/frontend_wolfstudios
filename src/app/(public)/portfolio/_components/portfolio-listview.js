@@ -47,6 +47,8 @@ export const PortfolioListView = () => {
   const [filters, setFilters] = React.useState([]);
   const [gate, setGate] = React.useState('and');
 
+  console.log(metaData)
+
   async function fetchList() {
     try {
       setLoading(true);

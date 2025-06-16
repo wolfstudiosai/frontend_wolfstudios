@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Autocomplete, Box, Button, IconButton, Popover, Stack, TextField, Typography } from '@mui/material';
+import TableAutoComplete from './table-auto-complete';
 
 const extractMeta = (metaArray) => {
   const map = {};
@@ -33,12 +34,23 @@ export default function TableFilterBuilder(
     const newFilters = [...filters];
     newFilters[index][field] = value;
 
+    // Normalize value based on type or operator
+    if (field === 'value' && newFilters[index].type === 'relation') {
+      newFilters[index][field] = Array.isArray(value) ? value : value ? [value] : [];
+    } else {
+      newFilters[index][field] = value;
+    }
+
     if (field === 'key') {
       const type = metaMap[value]?.type || '';
       newFilters[index].type = type;
       newFilters[index].operator = '';
-      newFilters[index].value = '';
-      newFilters[index].depth = columnOptions[index].depth || '';
+      if (type === 'relation') {
+        newFilters[index].value = [];
+        newFilters[index].depth = columnOptions[index].depth || '';
+      } else {
+        newFilters[index].value = '';
+      }
     } else if (field === 'operator') {
       newFilters[index].value = '';
     }
@@ -50,7 +62,7 @@ export default function TableFilterBuilder(
     const defaultKey = columnOptions[0];
     const defaultType = metaMap[defaultKey]?.type || 'string';
 
-    setFilters([...filters, { key: defaultKey, type: defaultType, operator: '', value: '', gate: 'and', depth: '' }]);
+    setFilters([...filters, { key: defaultKey, type: defaultType, operator: '', value: '', depth: '' }]);
   };
 
   const handleRemoveCondition = (index) => {
@@ -85,7 +97,7 @@ export default function TableFilterBuilder(
 
   const renderValueField = (filter) => {
     const meta = metaMap[filter.key];
-    if (!meta || ['is empty', 'is not empty'].includes(filter.operator)) return null;
+    if (!meta) return null;
 
     switch (meta.type) {
       case 'boolean':
@@ -109,7 +121,6 @@ export default function TableFilterBuilder(
           />
         );
       case 'string':
-      case 'relation':
       case 'number':
         return (
           <TextField
@@ -120,6 +131,17 @@ export default function TableFilterBuilder(
             type={meta.type === 'number' ? 'number' : 'text'}
           />
         );
+
+      case 'relation':
+        return <TableAutoComplete
+          multiple={true}
+          value={Array.isArray(filter.value) ? filter.value : filter.value ? [filter.value] : []}
+          operator={filter.operator}
+          onChange={(_, val) => {
+            // Ensure value is always an array
+            handleFilterChange(filters.indexOf(filter), 'value', val ?? []);
+          }}
+        />
       default:
         return null;
     }
