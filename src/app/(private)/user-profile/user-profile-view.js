@@ -66,7 +66,7 @@ export const UserProfileView = () => {
     <>
       <Box sx={{ width: '100%', py: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Stack direction="row" gap={2} alignItems="center">
-          <Avatar alt="Remy Sharp" src={values?.profileImage} sx={{ width: 50, height: 50 }} />
+          <Avatar alt="User profile" src={values?.profileImage} sx={{ width: 50, height: 50 }} />
           <Box>
             <Typography variant="h6">
               {values?.firstName} {values?.lastName}
@@ -80,7 +80,7 @@ export const UserProfileView = () => {
               <Button variant="text" color="error" size="small" onClick={() => setIsEditing(false)}>
                 Cancel
               </Button>
-              <Button variant="contained" size="small" onClick={handleSubmit}>
+              <Button variant="contained" size="small" onClick={handleSubmit} disabled={loading}>
                 Save
               </Button>
             </Stack>
