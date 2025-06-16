@@ -45,6 +45,7 @@ export const PortfolioListView = () => {
   // filter
   const [metaData, setMetaData] = React.useState([]);
   const [filters, setFilters] = React.useState([]);
+  const [gate, setGate] = React.useState('and');
 
   async function fetchList() {
     try {
@@ -181,7 +182,9 @@ export const PortfolioListView = () => {
           <TableFilterBuilder
             metaData={metaData}
             filters={filters}
+            gate={gate}
             setFilters={setFilters}
+            setGate={setGate}
             handleFilterApply={handleFilterApply}
             handleFilterClear={handleFilterClear}
           />

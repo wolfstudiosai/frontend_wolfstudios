@@ -14,7 +14,17 @@ const extractMeta = (metaArray) => {
   return map;
 };
 
-export default function TableFilterBuilder({ metaData, filters, setFilters, handleFilterApply, handleFilterClear }) {
+export default function TableFilterBuilder(
+  {
+    metaData,
+    filters,
+    setFilters,
+    gate,
+    setGate,
+    handleFilterApply,
+    handleFilterClear
+  }
+) {
   const [anchorEl, setAnchorEl] = useState(null);
   const metaMap = useMemo(() => extractMeta(metaData), [metaData]);
   const columnOptions = useMemo(() => Object.keys(metaMap), [metaMap]);
@@ -115,6 +125,38 @@ export default function TableFilterBuilder({ metaData, filters, setFilters, hand
     }
   };
 
+  const renderGateField = (index) => {
+    switch (index) {
+      case 0:
+        return (
+          <Typography component="div" sx={{ width: 80, fontSize: 12 }}>
+            WHERE
+          </Typography>
+        );
+      case 1:
+        return (
+          <Autocomplete
+            disableClearable
+            options={['and', 'or']}
+            value={gate}
+            onChange={(_, val) => setGate(val)}
+            renderInput={(params) => (
+              <TextField
+                size="small"
+                {...params}
+                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
+              />
+            )}
+            sx={{ width: '100%' }}
+          />
+        );
+      default:
+        return <Typography component="div" sx={{ width: 80, fontSize: 14 }}>
+          {gate}
+        </Typography>
+    }
+  };
+
   return (
     <>
       <Button
@@ -141,26 +183,7 @@ export default function TableFilterBuilder({ metaData, filters, setFilters, hand
                 return (
                   <Stack key={index} direction="row" spacing={0} alignItems="center">
                     <Box width={80}>
-                      {index === 0 ? (
-                        <Typography component="div" sx={{ width: 80, fontSize: 12 }}>
-                          WHERE
-                        </Typography>
-                      ) : (
-                        <Autocomplete
-                          disableClearable
-                          options={['and', 'or']}
-                          value={filter.gate || 'and'}
-                          onChange={(_, val) => handleFilterChange(index, 'gate', val)}
-                          renderInput={(params) => (
-                            <TextField
-                              size="small"
-                              {...params}
-                              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
-                            />
-                          )}
-                          sx={{ width: '100%' }}
-                        />
-                      )}
+                      {renderGateField(index)}
                     </Box>
 
                     <Autocomplete
