@@ -1,9 +1,8 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { getSearchQuery } from '/src/utils/helper';
+import { validateFilters, buildQueryParams, getSearchQuery } from '/src/utils/helper';
 import { uploadFileAsync } from '/src/utils/upload-file';
-
 
 export const getCampainStatusListAsync = async () => {
   try {
@@ -47,13 +46,26 @@ export const getCampaignGroupListAsync = async (queryParams = {}) => {
   }
 };
 
-export const getCampaignListAsync = async (queryParams) => {
+export const getCampaignListAsync = async (pagination, filters, gate) => {
   try {
-    const searchQuery = getSearchQuery(queryParams);
-    const res = await api.get(`/campaign-HQ${searchQuery}`);
-    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
+    let apiUrl = `/campaign-HQ?page=${pagination.page}&size=${pagination.rowsPerPage}`;
+
+    if (filters && filters.length > 0) {
+      // check if all filters are valid
+      const allFiltersValid = validateFilters(filters);
+      if (!allFiltersValid.valid) {
+        toast.error(allFiltersValid.message);
+        return;
+      }
+
+      const queryParams = buildQueryParams(filters, gate);
+      apiUrl += `&${queryParams}`;
+    }
+
+    const res = await api.get(apiUrl);
+    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count, meta: res.data.data.meta };
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };

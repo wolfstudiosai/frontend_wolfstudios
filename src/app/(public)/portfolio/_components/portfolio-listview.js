@@ -36,7 +36,7 @@ export const PortfolioListView = () => {
   const columns = getPortfolioColumns(anchorEl, setImageToShow, handleUploadModalOpen);
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -52,7 +52,7 @@ export const PortfolioListView = () => {
       setLoading(true);
       const response = await getPortfolioListAsync({ page: pagination.pageNo, rowsPerPage: pagination.limit }, filters, gate);
       if (response.success) {
-        setRecords(response.data);
+        setRecords(response.data.map((row) => defaultPortfolio(row)) || []);
         setTotalRecords(response.totalRecords);
         setMetaData(response.meta);
       }
@@ -154,13 +154,13 @@ export const PortfolioListView = () => {
   };
 
   const handleFilterApply = () => {
-    setPagination({ pageNo: 1, limit: 100 });
+    setPagination({ pageNo: 1, limit: 20 });
   };
 
   const handleFilterClear = () => {
     setFilters([]);
     setGate('and');
-    setPagination({ pageNo: 1, limit: 100 });
+    setPagination({ pageNo: 1, limit: 20 });
   };
 
   React.useEffect(() => {
@@ -209,7 +209,7 @@ export const PortfolioListView = () => {
         <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
           <EditableDataTable
             columns={visibleColumns}
-            rows={records.map((row) => defaultPortfolio(row)) || []}
+            rows={records}
             processRowUpdate={processRowUpdate}
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}
@@ -218,7 +218,7 @@ export const PortfolioListView = () => {
             pagination
             paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
             onPageChange={handlePaginationModelChange}
-            pageSizeOptions={[100, 120, 150]}
+            pageSizeOptions={[20, 30, 50]}
             onRowSelectionModelChange={handleRowSelection}
           />
         </Box>

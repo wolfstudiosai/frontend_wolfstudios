@@ -224,8 +224,6 @@ export function validateFilters(filters) {
 
 export function buildQueryParams(filters, gate) {
   const params = new URLSearchParams();
-  // if (filters.length > 1) {
-  // }
   params.append('gate', gate);
   // Add each filter
   filters.forEach((filter, index) => {

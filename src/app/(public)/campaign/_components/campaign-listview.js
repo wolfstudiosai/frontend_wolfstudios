@@ -16,6 +16,7 @@ import Image from 'next/image';
 import { MediaUploader } from '/src/components/uploaders/media-uploader';
 import { defaultCampaign } from '../_lib/campaign.types';
 import { toast } from 'sonner';
+import TableFilterBuilder from '/src/components/common/table-filter-builder';
 
 export const CampaignListView = () => {
   const anchorEl = React.useRef(null);
@@ -48,11 +49,16 @@ export const CampaignListView = () => {
 
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [updatedRow, setUpdatedRow] = React.useState(null);
+
+  // filter
+  const [metaData, setMetaData] = React.useState([]);
+  const [filters, setFilters] = React.useState([]);
+  const [gate, setGate] = React.useState('and');
 
   async function fetchList() {
     try {
@@ -60,9 +66,13 @@ export const CampaignListView = () => {
       const response = await getCampaignListAsync({
         page: pagination.pageNo,
         rowsPerPage: pagination.limit,
-      });
-      setRecords(response.data);
-      setTotalRecords(response.totalRecords);
+      }, filters, gate);
+
+      if (response.success) {
+        setRecords(response.data.map((row) => defaultCampaign(row)) || []);
+        setTotalRecords(response.totalRecords);
+        setMetaData(response.meta);
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -147,6 +157,16 @@ export const CampaignListView = () => {
     fetchList();
   };
 
+  const handleFilterApply = () => {
+    setPagination({ pageNo: 1, limit: 20 });
+  };
+
+  const handleFilterClear = () => {
+    setFilters([]);
+    setGate('and');
+    setPagination({ pageNo: 1, limit: 20 });
+  };
+
   React.useEffect(() => {
     const storedHiddenColumns = localStorage.getItem('hiddenColumns');
     if (storedHiddenColumns) {
@@ -163,7 +183,15 @@ export const CampaignListView = () => {
     <PageContainer>
       <Card sx={{ borderRadius: 0 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
-          <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
+          <TableFilterBuilder
+            metaData={metaData}
+            filters={filters}
+            gate={gate}
+            setFilters={setFilters}
+            setGate={setGate}
+            handleFilterApply={handleFilterApply}
+            handleFilterClear={handleFilterClear}
+          />
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <IconButton onClick={handleAddNewItem}>
               <AddIcon />
@@ -184,13 +212,13 @@ export const CampaignListView = () => {
         <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
           <EditableDataTable
             columns={visibleColumns}
-            rows={records.map((row) => defaultCampaign(row)) || []}
+            rows={records}
             processRowUpdate={processRowUpdate}
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}
             rowCount={totalRecords}
             checkboxSelection
-            pageSizeOptions={[10, 20, 30]}
+            pageSizeOptions={[20, 30, 50]}
             paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
             onPageChange={handlePaginationModelChange}
             onRowSelectionModelChange={handleRowSelection}

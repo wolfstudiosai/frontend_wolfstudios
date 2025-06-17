@@ -5,32 +5,33 @@ import { getPartnerListAsync } from '/src/app/(public)/partner/_lib/partner.acti
 import { getPortfolioCategoryListAsync } from '/src/app/(public)/portfolio/_lib/portfolio.actions';
 import { useEffect, useState } from 'react';
 import { getCountryListAsync, getStateListAsync } from '/src/lib/common.actions';
+import { useDebounce } from '/src/hooks/use-debounce';
 
-const fetchOptions = async (key) => {
+const fetchOptions = async (key, searchValue) => {
     let options = [];
     if (key === "partnerHQ") {
-        const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 100 });
+        const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 20 });
         if (partnerResponse?.success) {
             options = partnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
         }
     }
 
     if (key === "portfolioCategories") {
-        const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 100 });
+        const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 20 });
         if (categoryResponse?.success) {
             options = categoryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
         }
     }
 
     if (key === "country") {
-        const countryResponse = await getCountryListAsync({ page: 1, rowsPerPage: 100 });
+        const countryResponse = await getCountryListAsync({ page: 1, rowsPerPage: 20 });
         if (countryResponse?.success) {
             options = countryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
         }
     }
 
     if (key === "states") {
-        const stateResponse = await getStateListAsync({ page: 1, rowsPerPage: 100 });
+        const stateResponse = await getStateListAsync({ page: 1, rowsPerPage: 20 });
         if (stateResponse?.success) {
             options = stateResponse.data.map((item) => ({ value: item.id, label: item.Name }));
         }
@@ -57,6 +58,9 @@ export default function TableAutoComplete({
 }) {
     const [options, setOptions] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [searchValue, setSearchValue] = useState("");
+    const debounceValue = useDebounce(searchValue, 500);
+
     useEffect(() => {
         const getOptions = async () => {
             setLoading(true);
@@ -82,6 +86,7 @@ export default function TableAutoComplete({
             isOptionEqualToValue={(option, value) => option.value === value.value}
             value={multiple ? (value || []) : value || null}
             onChange={(event, newValue) => onChange?.(event, newValue)}
+            onInputChange={(event, newValue) => setSearchValue(newValue)}
             renderTags={(value, getTagProps) =>
                 value.map((option, index) => {
                     const tagProps = getTagProps({ index });
