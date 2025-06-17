@@ -10,16 +10,32 @@ import { useDebounce } from '/src/hooks/use-debounce';
 const fetchOptions = async (key, searchValue) => {
     let options = [];
     if (key === "partnerHQ") {
-        const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 20 });
-        if (partnerResponse?.success) {
-            options = partnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+        if (searchValue) {
+            const filters = [{ key: "Name", type: "string", operator: "contains", value: searchValue }];
+            const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 20 }, filters, 'and');
+            if (partnerResponse?.success) {
+                options = partnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+            }
+        } else {
+            const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 20 });
+            if (partnerResponse?.success) {
+                options = partnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+            }
         }
     }
 
     if (key === "portfolioCategories") {
-        const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 20 });
-        if (categoryResponse?.success) {
-            options = categoryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+        if (searchValue) {
+            const filters = [{ key: "Name", type: "string", operator: "contains", value: searchValue }];
+            const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 20 }, filters, 'and');
+            if (categoryResponse?.success) {
+                options = categoryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+            }
+        } else {
+            const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 20 });
+            if (categoryResponse?.success) {
+                options = categoryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+            }
         }
     }
 
