@@ -35,10 +35,14 @@ export const getTagListAsync = async (queryParams) => {
   }
 };
 
-export const getStakeHolderListAsync = async (queryParams) => {
+export const getStakeHolderListAsync = async (queryParams, searchValue) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    const res = await api.get(`/stakeholders${searchQuery}`);
+    let url = `/stakeholders${searchQuery}`
+    if (searchValue) {
+      url += `&gate=and&fields[0][key]=Name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
+    }
+    const res = await api.get(url);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     toast.error(error.message);
@@ -76,10 +80,14 @@ export const getStateListAsync = async (queryParams, searchValue) => {
   }
 };
 
-export const getRetailPartnerListAsync = async (queryParams) => {
+export const getRetailPartnerListAsync = async (queryParams, searchValue) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    const res = await api.get(`/retail-partners${searchQuery}`);
+    let url = `/retail-partners${searchQuery}`
+    if (searchValue) {
+      url += `&gate=and&fields[0][key]=Name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
+    }
+    const res = await api.get(url);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     toast.error(error.message);

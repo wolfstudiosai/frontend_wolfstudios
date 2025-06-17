@@ -4,7 +4,13 @@ import { Autocomplete, Chip, TextField } from '@mui/material';
 import { getPartnerListAsync } from '/src/app/(public)/partner/_lib/partner.actions';
 import { getPortfolioCategoryListAsync } from '/src/app/(public)/portfolio/_lib/portfolio.actions';
 import { useEffect, useState } from 'react';
-import { getCountryListAsync, getStateListAsync, getCaseStudyListAsync } from '/src/lib/common.actions';
+import {
+    getCountryListAsync,
+    getStateListAsync,
+    getCaseStudyListAsync,
+    getStakeHolderListAsync,
+    getRetailPartnerListAsync
+} from '/src/lib/common.actions';
 import { useDebounce } from '/src/hooks/use-debounce';
 
 const fetchOptions = async (key, searchValue) => {
@@ -54,11 +60,32 @@ const fetchOptions = async (key, searchValue) => {
     }
 
     if (key === "caseStudies") {
-        const caseStudyResponse = await getCaseStudyListAsync({ page: 1, rowsPerPage: 100 }, searchValue);
+        const caseStudyResponse = await getCaseStudyListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
         if (caseStudyResponse?.success) {
             options = caseStudyResponse.data.map((item) => ({ value: item.id, label: item.Name }));
         }
     }
+
+    if (key === "stakeholders") {
+        const stakeholderResponse = await getStakeHolderListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
+        if (stakeholderResponse?.success) {
+            options = stakeholderResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+        }
+    }
+
+    if (key === "retailPartners") {
+        const retailPartnerResponse = await getRetailPartnerListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
+        if (retailPartnerResponse?.success) {
+            options = retailPartnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+        }
+    }
+
+    // if (key === "proposedPartners") {
+    //     const proposedPartnerResponse = await getProposedPartnerListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
+    //     if (proposedPartnerResponse?.success) {
+    //         options = proposedPartnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+    //     }
+    // }
 
     return options;
 }
