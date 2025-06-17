@@ -57,7 +57,16 @@ export default function TableFilterBuilder(
 
       const validOperatorsByType = {
         string: ["contains", "does not contain", "is", "is not", 'is empty', 'is not empty'],
-        number: ["contains", "does not contain", "is", "is not", 'is empty', 'is not empty'],
+        number: [
+          "equal to",
+          "not equal to",
+          "is empty",
+          "is not empty",
+          "greater than",
+          "less than",
+          "greater than equal to",
+          "less than equal to"
+        ],
         images: ['is empty', 'is not empty'],
         boolean: ['is', 'is not'],
         relation: ['has any of', 'has none of', 'is empty', 'is not empty'],

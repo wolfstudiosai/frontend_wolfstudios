@@ -1,8 +1,7 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { validateFilters, buildQueryParams, getSearchQuery } from '/src/utils/helper';
-import { uploadFileAsync } from '/src/utils/upload-file';
+import { validateFilters, buildQueryParams } from '/src/utils/helper';
 
 export const getPartnerListAsync = async (queryParams, filters, gate) => {
   try {
@@ -21,7 +20,7 @@ export const getPartnerListAsync = async (queryParams, filters, gate) => {
     const res = await api.get(apiUrl);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count, metaData: res.data.data.meta };
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.response?.data?.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
