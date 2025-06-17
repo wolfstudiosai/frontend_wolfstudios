@@ -170,6 +170,29 @@ export default function TableFilterBuilder(
           sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
         />
       );
+    } else if (meta.type === 'array') {
+      return (
+        <Autocomplete
+          disableClearable
+          options={metaMap[filter.key]?.values || []}
+          value={filter.value}
+          onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
+          renderInput={(params) => (
+            <TextField
+              size="small"
+              {...params}
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 }, }}
+            />
+          )}
+          sx={{
+            minWidth: 150,
+            width: '100%',
+            '& .MuiOutlinedInput-root .MuiAutocomplete-endAdornment': {
+              right: 0,
+            }
+          }}
+        />
+      );
     } else {
       return null;
     }
