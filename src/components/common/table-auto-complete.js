@@ -4,7 +4,7 @@ import { Autocomplete, Chip, TextField } from '@mui/material';
 import { getPartnerListAsync } from '/src/app/(public)/partner/_lib/partner.actions';
 import { getPortfolioCategoryListAsync } from '/src/app/(public)/portfolio/_lib/portfolio.actions';
 import { useEffect, useState } from 'react';
-import { getCountryListAsync, getStateListAsync } from '/src/lib/common.actions';
+import { getCountryListAsync, getStateListAsync, getCaseStudyListAsync } from '/src/lib/common.actions';
 import { useDebounce } from '/src/hooks/use-debounce';
 
 const fetchOptions = async (key, searchValue) => {
@@ -37,12 +37,12 @@ const fetchOptions = async (key, searchValue) => {
         }
     }
 
-    // if (key === "caseStudies") {
-    //     const caseStudyResponse = await getCaseStudyListAsync({ page: 1, rowsPerPage: 100 });
-    //     if (caseStudyResponse?.success) {
-    //         options = caseStudyResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-    //     }
-    // }
+    if (key === "caseStudies") {
+        const caseStudyResponse = await getCaseStudyListAsync({ page: 1, rowsPerPage: 100 }, searchValue);
+        if (caseStudyResponse?.success) {
+            options = caseStudyResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+        }
+    }
 
     return options;
 }

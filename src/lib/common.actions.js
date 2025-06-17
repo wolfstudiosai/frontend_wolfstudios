@@ -86,3 +86,18 @@ export const getRetailPartnerListAsync = async (queryParams) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
+
+export const getCaseStudyListAsync = async (queryParams, searchValue) => {
+  try {
+    const searchQuery = getSearchQuery(queryParams);
+    let url = `/case-studies${searchQuery}`
+    if (searchValue) {
+      url += `&gate=and&fields[0][key]=Name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
+    }
+    const res = await api.get(url);
+    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
+  } catch (error) {
+    // toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
