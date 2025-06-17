@@ -24,7 +24,7 @@ const fetchOptions = async (key, searchValue) => {
     }
 
     if (key === "country") {
-        const countryResponse = await getCountryListAsync({ page: 1, rowsPerPage: 20 });
+        const countryResponse = await getCountryListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
         if (countryResponse?.success) {
             options = countryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
         }
@@ -64,14 +64,14 @@ export default function TableAutoComplete({
     useEffect(() => {
         const getOptions = async () => {
             setLoading(true);
-            const options = await fetchOptions(filterKey);
+            const options = await fetchOptions(filterKey, debounceValue);
             setOptions(options);
             setLoading(false);
         }
         if (operators.includes(operator)) {
             getOptions();
         }
-    }, [filterKey, operator]);
+    }, [filterKey, operator, debounceValue]);
 
     return (
         <Autocomplete
