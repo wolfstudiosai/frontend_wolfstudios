@@ -19,28 +19,27 @@ import { getProductionColumns } from '../_utils/get-production-columns';
 import Image from 'next/image';
 import { MediaUploader } from '/src/components/uploaders/media-uploader';
 import { toast } from 'sonner';
+import TableFilterBuilder from '/src/components/common/table-filter-builder';
 
 export const ProductionListView = () => {
   const anchorEl = React.useRef(null);
   const [open, setOpen] = React.useState(false);
   const [imageToShow, setImageToShow] = React.useState(null);
 
-  const handleUploadModalOpen = (data) => {
-    setOpen(true);
-    setUpdatedRow(data);
-  };
-
   // table columns
   const columns = getProductionColumns();
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 50 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [updatedRow, setUpdatedRow] = React.useState(null);
 
-  console.log(records);
+  // filter
+  const [metaData, setMetaData] = React.useState([]);
+  const [filters, setFilters] = React.useState([]);
+  const [gate, setGate] = React.useState('and');
 
   async function fetchList() {
     try {
@@ -48,10 +47,11 @@ export const ProductionListView = () => {
       const response = await getProductionListAsync({
         page: pagination.pageNo,
         rowsPerPage: pagination.limit,
-      });
+      }, filters, gate);
       if (response.success) {
         setRecords(response.data);
         setTotalRecords(response.totalRecords);
+        setMetaData(response.metaData);
       }
     } catch (error) {
       console.log(error);
@@ -141,6 +141,16 @@ export const ProductionListView = () => {
     fetchList();
   };
 
+  const handleFilterApply = () => {
+    setPagination({ pageNo: 1, limit: 50 });
+  };
+
+  const handleFilterClear = () => {
+    setFilters([]);
+    setGate('and');
+    setPagination({ pageNo: 1, limit: 50 });
+  };
+
   React.useEffect(() => {
     const storedHiddenColumns = localStorage.getItem('hiddenColumns');
     if (storedHiddenColumns) {
@@ -156,7 +166,15 @@ export const ProductionListView = () => {
     <PageContainer>
       <Card sx={{ borderRadius: 0 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
-          <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
+          <TableFilterBuilder
+            metaData={metaData}
+            filters={filters}
+            setFilters={setFilters}
+            gate={gate}
+            setGate={setGate}
+            handleFilterApply={handleFilterApply}
+            handleFilterClear={handleFilterClear}
+          />
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <IconButton onClick={handleAddNewItem}>
               <AddIcon />
@@ -183,7 +201,7 @@ export const ProductionListView = () => {
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}
             rowCount={totalRecords}
-            pageSizeOptions={[10, 20, 30]}
+            pageSizeOptions={[50, 100, 150]}
             paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
             onPageChange={handlePaginationModelChange}
             checkboxSelection={true}

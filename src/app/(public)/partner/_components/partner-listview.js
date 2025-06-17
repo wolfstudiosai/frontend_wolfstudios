@@ -17,7 +17,6 @@ import { MediaUploader } from '/src/components/uploaders/media-uploader';
 import AddIcon from '@mui/icons-material/Add';
 import { toast } from 'sonner';
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
-import FilterListIcon from '@mui/icons-material/FilterList';
 
 export const PartnerListView = () => {
   // Image upload popover
@@ -39,18 +38,17 @@ export const PartnerListView = () => {
   // Partner data handler
   const [partners, setPartners] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 50 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [openDetails, setOpenDetails] = React.useState(null);
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [updatedRow, setUpdatedRow] = React.useState(null);
 
-  // Filter
-  const [showFilter, setShowFilter] = React.useState(null);
-  const [filters, setFilters] = React.useState([
-    { column: '', condition: '', value: '' },
-  ]);
+  // filter
+  const [metaData, setMetaData] = React.useState([]);
+  const [filters, setFilters] = React.useState([]);
+  const [gate, setGate] = React.useState('and');
 
   const handleClosePopover = () => {
     anchorEl.current = null;
@@ -63,11 +61,12 @@ export const PartnerListView = () => {
       const response = await getPartnerListAsync({
         page: pagination.pageNo,
         rowsPerPage: pagination.limit,
-      });
-      console.log(response)
+      }, filters, gate);
+
       if (response.success) {
         setPartners(response.data);
         setTotalRecords(response.totalRecords);
+        setMetaData(response.metaData);
       }
     } catch (error) {
       console.log(error);
@@ -259,46 +258,31 @@ export const PartnerListView = () => {
     fetchList()
   };
 
-  const handleFilterOpen = (event) => {
-    setShowFilter(event.currentTarget);
+  const handleFilterApply = () => {
+    setPagination({ pageNo: 1, limit: 50 });
   };
 
-  const filterColumns = [
-    'Customer Name',
-    'Email Address',
-    'Phone Number',
-    'Company Name',
-    'Industry',
-    'Role',
-  ];
+  const handleFilterClear = () => {
+    setFilters([]);
+    setGate('and');
+    setPagination({ pageNo: 1, limit: 50 });
+  };
 
-  const conditions = [
-    'contains',
-    'does not contain',
-    'is',
-    'is not',
-    'is empty',
-    'is not empty',
-  ];
 
   return (
     <PageContainer>
       <Card sx={{ borderRadius: 0 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
-          <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
+          <TableFilterBuilder
+            metaData={metaData}
+            filters={filters}
+            gate={gate}
+            setFilters={setFilters}
+            setGate={setGate}
+            handleFilterApply={handleFilterApply}
+            handleFilterClear={handleFilterClear}
+          />
           <Box display="flex" alignItems="center">
-            {/* <TableFilterBuilder
-              columns={filterColumns}
-              conditions={conditions}
-              anchorEl={showFilter}
-              setAnchorEl={setShowFilter}
-              filters={filters}
-              setFilters={setFilters}
-            >
-              <Button startIcon={<FilterListIcon />} size="small" variant="text" color='transparent' onClick={handleFilterOpen}>
-                Filter
-              </Button>
-            </TableFilterBuilder> */}
             <IconButton onClick={handleAddNewItem}>
               <AddIcon />
             </IconButton>
@@ -323,7 +307,7 @@ export const PartnerListView = () => {
             loading={loading}
             rowCount={totalRecords}
             checkboxSelection
-            pageSizeOptions={[10, 20, 30]}
+            pageSizeOptions={[50, 100, 150]}
             paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
             onPageChange={handlePaginationModelChange}
             onRowSelectionModelChange={handleRowSelection}

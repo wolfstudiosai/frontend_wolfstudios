@@ -4,6 +4,10 @@ import { useMemo, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Autocomplete, Box, Button, IconButton, Popover, Stack, TextField, Typography } from '@mui/material';
+import TableAutoComplete from './table-auto-complete';
+import { validateFilters } from '/src/utils/helper';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 const extractMeta = (metaArray) => {
   const map = {};
@@ -14,33 +18,92 @@ const extractMeta = (metaArray) => {
   return map;
 };
 
-export default function TableFilterBuilder({ metaData, filters, setFilters, handleFilterApply, handleFilterClear }) {
+export default function TableFilterBuilder(
+  {
+    metaData,
+    filters,
+    setFilters,
+    gate,
+    setGate,
+    handleFilterApply,
+    handleFilterClear
+  }
+) {
   const [anchorEl, setAnchorEl] = useState(null);
   const metaMap = useMemo(() => extractMeta(metaData), [metaData]);
   const columnOptions = useMemo(() => Object.keys(metaMap), [metaMap]);
+  const [error, setError] = useState('');
 
   const handleFilterChange = (index, field, value) => {
-    const newFilters = [...filters];
-    newFilters[index][field] = value;
+    const updatedFilters = [...filters];
+    const currentFilter = { ...updatedFilters[index] };
+
+    if (field === 'value') {
+      if (currentFilter.type === 'relation') {
+        currentFilter.value = Array.isArray(value)
+          ? value
+          : value
+            ? [value]
+            : [];
+      } else {
+        currentFilter.value = value;
+      }
+    }
 
     if (field === 'key') {
       const type = metaMap[value]?.type || '';
-      newFilters[index].type = type;
-      newFilters[index].operator = '';
-      newFilters[index].value = '';
-      newFilters[index].depth = columnOptions[index].depth || '';
-    } else if (field === 'operator') {
-      newFilters[index].value = '';
+      currentFilter.key = value;
+      currentFilter.type = type;
+      currentFilter.value = type === 'relation' ? [] : '';
+      currentFilter.depth = type === 'relation' ? metaMap[value]?.depth || '' : '';
+
+      const validOperatorsByType = {
+        string: ["contains", "does not contain", "is", "is not", 'is empty', 'is not empty'],
+        number: [
+          "equal to",
+          "not equal to",
+          "is empty",
+          "is not empty",
+          "greater than",
+          "less than",
+          "greater than equal to",
+          "less than equal to"
+        ],
+        date: [
+          "is",
+          "is not",
+          "is empty",
+          "is not empty"
+        ],
+        images: ['is empty', 'is not empty'],
+        boolean: ['is', 'is not'],
+        relation: ['has any of', 'has none of', 'is empty', 'is not empty'],
+      };
+
+      const allowedOperators = validOperatorsByType[type] || [];
+      currentFilter.operator = allowedOperators.includes(currentFilter.operator) ? currentFilter.operator : '';
     }
 
-    setFilters(newFilters);
+    if (field === 'operator') {
+      currentFilter.operator = value;
+      currentFilter.value = '';
+    }
+
+    if (field !== 'key' && field !== 'value' && field !== 'operator') {
+      currentFilter[field] = value;
+    }
+
+    updatedFilters[index] = currentFilter;
+    setFilters(updatedFilters);
   };
+
 
   const handleAddCondition = () => {
     const defaultKey = columnOptions[0];
     const defaultType = metaMap[defaultKey]?.type || 'string';
+    const defaultOperator = metaMap[defaultKey]?.operators[0] || '';
 
-    setFilters([...filters, { key: defaultKey, type: defaultType, operator: '', value: '', gate: 'and', depth: '' }]);
+    setFilters([...filters, { key: defaultKey, type: defaultType, operator: defaultOperator, value: '' }]);
   };
 
   const handleRemoveCondition = (index) => {
@@ -61,57 +124,185 @@ export default function TableFilterBuilder({ metaData, filters, setFilters, hand
 
   // Apply filters and close the popover
   const handleApply = () => {
-    handleFilterApply();
-    handleClose();
+    const allFiltersValid = validateFilters(filters);
+    if (!allFiltersValid.valid) {
+      setError(allFiltersValid.message);
+    } else {
+      handleFilterApply();
+      handleClose();
+      setError('');
+    }
+
   };
 
   // Clear all filters and close the popover
   const handleClearFilters = () => {
     handleFilterClear();
     handleClose();
+    setError('');
   };
 
   const open = Boolean(anchorEl);
 
+  // Render value field based on the type of the filter
   const renderValueField = (filter) => {
     const meta = metaMap[filter.key];
-    if (!meta || ['is empty', 'is not empty'].includes(filter.operator)) return null;
+    if (!meta) return null;
 
-    switch (meta.type) {
-      case 'boolean':
+    const isEmpty = filter.operator === 'is empty' || filter.operator === 'is not empty';
+    if (meta.type === 'string' || meta.type === 'number') {
+      if (meta.values) {
         return (
           <Autocomplete
             disableClearable
-            options={meta.values || ['true', 'false']}
-            value={filter.value || ''}
-            onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val || '')}
+            options={meta.values}
+            value={filter.value}
+            onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
             renderInput={(params) => (
               <TextField
-                fullWidth
                 size="small"
                 {...params}
-                placeholder="Enter a value"
-                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0, minWidth: 150 } }}
+                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 }, }}
               />
             )}
-            sx={{ flex: 1 }}
-            slotProps={{ popper: { sx: { minWidth: 250 } } }}
+            sx={{
+              minWidth: 150,
+              width: '100%',
+              '& .MuiOutlinedInput-root .MuiAutocomplete-endAdornment': {
+                right: 0,
+              }
+            }}
           />
         );
-      case 'string':
-      case 'relation':
-      case 'number':
+      } else {
         return (
           <TextField
-            placeholder="Enter a value"
+            placeholder={isEmpty ? '' : 'Enter a value'}
             value={filter.value}
+            disabled={isEmpty}
             onChange={(e) => handleFilterChange(filters.indexOf(filter), 'value', e.target.value)}
             sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
             type={meta.type === 'number' ? 'number' : 'text'}
           />
         );
+      }
+    } else if (meta.type === 'relation') {
+      return (
+        <TableAutoComplete
+          multiple={true}
+          value={Array.isArray(filter.value) ? filter.value : filter.value ? [filter.value] : []}
+          operator={filter.operator}
+          filterKey={filter.key}
+          onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val ?? [])}
+        />
+
+      );
+    } else if (meta.type === 'images') {
+      return (
+        <TextField
+          disabled
+          sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
+        />
+      );
+    } else if (meta.type === 'array') {
+      return (
+        <Autocomplete
+          disableClearable
+          multiple
+          options={meta?.values || []}
+          value={Array.isArray(filter.value) ? filter.value : []}
+          disabled={isEmpty}
+          onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
+          renderInput={(params) => (
+            <TextField
+              size="small"
+              {...params}
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 }, }}
+            />
+          )}
+          sx={{
+            minWidth: 150,
+            width: '100%',
+            '& .MuiOutlinedInput-root .MuiAutocomplete-endAdornment': {
+              right: 0,
+            }
+          }}
+        />
+      );
+    } else if (meta.type === 'boolean') {
+      return (
+        <Autocomplete
+          disableClearable
+          options={["true", "false"]}
+          value={filter.value}
+          disabled={isEmpty}
+          onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
+          renderInput={(params) => (
+            <TextField
+              size="small"
+              {...params}
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 }, }}
+            />
+          )}
+          sx={{
+            minWidth: 150,
+            width: '100%',
+            '& .MuiOutlinedInput-root .MuiAutocomplete-endAdornment': {
+              right: 0,
+            }
+          }}
+        />
+      );
+    } else if (meta.type === 'date') {
+      return (
+        <DatePicker
+          value={isEmpty ? null : dayjs(filter.value)}
+          format={meta.format.toUpperCase()}
+          disabled={isEmpty}
+          onChange={(e) => handleFilterChange(filters.indexOf(filter), 'value', dayjs(e).format(meta.format.toUpperCase()))}
+          sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
+      );
+    } else {
+      return null;
+    }
+
+  };
+
+  // Render gate field based on the index
+  const renderGateField = (index) => {
+    switch (index) {
+      case 0:
+        return (
+          <Typography component="div" sx={{ width: 80, fontSize: 12 }}>
+            WHERE
+          </Typography>
+        );
+      case 1:
+        return (
+          <Autocomplete
+            disableClearable
+            options={['and', 'or']}
+            value={gate}
+            onChange={(_, val) => setGate(val)}
+            renderInput={(params) => (
+              <TextField
+                size="small"
+                {...params}
+                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 }, }}
+              />
+            )}
+            sx={{
+              width: '100%',
+              '& .MuiOutlinedInput-root .MuiAutocomplete-endAdornment': {
+                right: 0,
+              }
+            }}
+          />
+        );
       default:
-        return null;
+        return <Typography component="div" sx={{ width: 80, fontSize: 14 }}>
+          {gate}
+        </Typography>
     }
   };
 
@@ -141,26 +332,7 @@ export default function TableFilterBuilder({ metaData, filters, setFilters, hand
                 return (
                   <Stack key={index} direction="row" spacing={0} alignItems="center">
                     <Box width={80}>
-                      {index === 0 ? (
-                        <Typography component="div" sx={{ width: 80, fontSize: 12 }}>
-                          WHERE
-                        </Typography>
-                      ) : (
-                        <Autocomplete
-                          disableClearable
-                          options={['and', 'or']}
-                          value={filter.gate || 'and'}
-                          onChange={(_, val) => handleFilterChange(index, 'gate', val)}
-                          renderInput={(params) => (
-                            <TextField
-                              size="small"
-                              {...params}
-                              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
-                            />
-                          )}
-                          sx={{ width: '100%' }}
-                        />
-                      )}
+                      {renderGateField(index)}
                     </Box>
 
                     <Autocomplete
@@ -173,10 +345,15 @@ export default function TableFilterBuilder({ metaData, filters, setFilters, hand
                           size="small"
                           {...params}
                           placeholder="Select Column"
-                          sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
+                          sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 }, }}
                         />
                       )}
-                      sx={{ minWidth: 150 }}
+                      sx={{
+                        minWidth: 150,
+                        '& .MuiOutlinedInput-root .MuiAutocomplete-endAdornment': {
+                          right: 0,
+                        }
+                      }}
                       slotProps={{ popper: { sx: { minWidth: 250 } } }}
                     />
 
@@ -190,10 +367,17 @@ export default function TableFilterBuilder({ metaData, filters, setFilters, hand
                           size="small"
                           {...params}
                           placeholder="Select Condition"
-                          sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
+                          sx={{
+                            '& .MuiOutlinedInput-root': { borderRadius: 0 },
+                          }}
                         />
                       )}
-                      sx={{ minWidth: 150 }}
+                      sx={{
+                        minWidth: 150,
+                        '& .MuiOutlinedInput-root .MuiAutocomplete-endAdornment': {
+                          right: 0,
+                        }
+                      }}
                       disabled={!filter.key}
                       slotProps={{ popper: { sx: { minWidth: 250 } } }}
                     />
@@ -239,6 +423,8 @@ export default function TableFilterBuilder({ metaData, filters, setFilters, hand
                 </Button>
               </Box>
             </Box>
+
+            {error && <Typography variant="body2" color="error" textAlign="center">{error}</Typography>}
           </Stack>
         </Box>
       </Popover>

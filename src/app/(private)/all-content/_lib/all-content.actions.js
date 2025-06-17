@@ -2,15 +2,25 @@ import dayjs from 'dayjs';
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { getSearchQuery } from '/src/utils/helper';
+import { validateFilters, buildQueryParams } from '/src/utils/helper';
 
-export const getContentList = async (queryParams) => {
+export const getContentList = async (queryParams, filters, gate) => {
   try {
-    const searchQuery = getSearchQuery(queryParams);
-    const res = await api.get(`/content-HQ${searchQuery}`);
-    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
+    let apiUrl = `/content-HQ?page=${queryParams.page}&size=${queryParams.rowsPerPage}`;
+    if (filters && filters.length > 0) {
+      // check if all filters are valid
+      const allFiltersValid = validateFilters(filters);
+      if (!allFiltersValid.valid) {
+        toast.error(allFiltersValid.message);
+        return;
+      }
+      const queryParams = buildQueryParams(filters, gate);
+      apiUrl += `&${queryParams}`;
+    }
+    const res = await api.get(apiUrl);
+    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count, metaData: res.data.data.meta };
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };

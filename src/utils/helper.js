@@ -178,3 +178,73 @@ export function isFilterValid(filter) {
     return value !== undefined && value !== null && value !== '';
   });
 }
+
+export function validateFilters(filters) {
+  const notRequiredFilters = ['is empty', 'is not empty'];
+  for (let i = 0; i < filters.length; i++) {
+    const filter = filters[i];
+    const { type, operator, value } = filter;
+
+    // 1. operator is always required
+    if (!operator || operator.trim() === '') {
+      return {
+        valid: false,
+        message: `Operator is required in condition ${i + 1}`,
+      };
+    }
+
+    // 2. value is required for string or number types
+    if (
+      (['string', 'number'].includes(type)) &&
+      !notRequiredFilters.includes(operator) &&
+      (value === undefined || value === null || value.toString().trim() === '')
+    ) {
+      return {
+        valid: false,
+        message: `Value is required in condition ${i + 1}`,
+      };
+    }
+
+    // 3. relation type with specific operators must have non-empty array
+    if (
+      type === 'relation' &&
+      ['has any of', 'has none of'].includes(operator) &&
+      (!Array.isArray(value) || value.length === 0)
+    ) {
+      return {
+        valid: false,
+        message: `At least one item must be selected in condition ${i + 1}`,
+      };
+    }
+  }
+
+  return { valid: true };
+}
+
+
+export function buildQueryParams(filters, gate) {
+  const params = new URLSearchParams();
+  params.append('gate', gate);
+  // Add each filter
+  filters.forEach((filter, index) => {
+    params.append(`fields[${index}][key]`, filter.key || '');
+    params.append(`fields[${index}][type]`, filter.type || '');
+    params.append(`fields[${index}][operator]`, filter.operator || '');
+    params.append(`fields[${index}][depth]`, filter.depth || '');
+
+    // Handle value based on type
+    if (filter.type === 'relation' && Array.isArray(filter.value)) {
+      filter.value.forEach((item, itemIndex) => {
+        params.append(`fields[${index}][value][${itemIndex}]`, item.value);
+      });
+    } else if (filter.type === 'array' && Array.isArray(filter.value)) {
+      filter.value.forEach((item, itemIndex) => {
+        params.append(`fields[${index}][value][${itemIndex}]`, item);
+      });
+    } else {
+      params.append(`fields[${index}][value]`, filter.value ?? '');
+    }
+  });
+
+  return params.toString();
+}

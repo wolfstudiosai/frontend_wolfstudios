@@ -1,39 +1,28 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { getSearchQuery, isFilterValid } from '/src/utils/helper';
+import { validateFilters, buildQueryParams, getSearchQuery } from '/src/utils/helper';
 
-export const getPortfolioListAsync = async (pagination, filters) => {
+export const getPortfolioListAsync = async (pagination, filters, gate) => {
   try {
-    if (filters.length > 0) {
+    let apiUrl = `/portfolios?page=${pagination.page}&size=${pagination.rowsPerPage}`;
+
+    if (filters && filters.length > 0) {
       // check if all filters are valid
-      const allFiltersValid = filters.every(isFilterValid);
-      if (!allFiltersValid) {
-        toast.error('Please fill all the fields');
+      const allFiltersValid = validateFilters(filters);
+      if (!allFiltersValid.valid) {
+        toast.error(allFiltersValid.message);
         return;
       }
+
+      const queryParams = buildQueryParams(filters, gate);
+      apiUrl += `&${queryParams}`;
     }
 
-    // convert filters to query params
-    let apiUrl = `/portfolios?page=${pagination.pageNo}&size=${pagination.limit}`;
-    const gate = 'and';
-    const queryParts = [`gate=${gate}`];
-
-    filters.forEach((filter, index) => {
-      for (const key in filter) {
-        if (key !== 'gate') {
-          queryParts.push(`fields[${index}][${key}]=${encodeURIComponent(filter[key])}`);
-        }
-      }
-    });
-    const queryString = queryParts.join('&');
-    if (filters.length > 0) {
-      apiUrl += `&${queryString}`;
-    }
     const res = await api.get(apiUrl);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count, meta: res.data.data.meta };
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };

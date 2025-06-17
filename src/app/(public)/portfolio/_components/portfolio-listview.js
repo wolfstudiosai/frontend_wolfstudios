@@ -36,7 +36,7 @@ export const PortfolioListView = () => {
   const columns = getPortfolioColumns(anchorEl, setImageToShow, handleUploadModalOpen);
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -45,13 +45,14 @@ export const PortfolioListView = () => {
   // filter
   const [metaData, setMetaData] = React.useState([]);
   const [filters, setFilters] = React.useState([]);
+  const [gate, setGate] = React.useState('and');
 
   async function fetchList() {
     try {
       setLoading(true);
-      const response = await getPortfolioListAsync(pagination, filters);
+      const response = await getPortfolioListAsync({ page: pagination.pageNo, rowsPerPage: pagination.limit }, filters, gate);
       if (response.success) {
-        setRecords(response.data);
+        setRecords(response.data.map((row) => defaultPortfolio(row)) || []);
         setTotalRecords(response.totalRecords);
         setMetaData(response.meta);
       }
@@ -61,8 +62,6 @@ export const PortfolioListView = () => {
       setLoading(false);
     }
   }
-
-  // console.log(records)
 
   // ******************************data grid handler starts*********************
 
@@ -155,12 +154,13 @@ export const PortfolioListView = () => {
   };
 
   const handleFilterApply = () => {
-    setPagination({ pageNo: 1, limit: 100 });
+    setPagination({ pageNo: 1, limit: 20 });
   };
 
   const handleFilterClear = () => {
     setFilters([]);
-    setPagination({ pageNo: 1, limit: 100 });
+    setGate('and');
+    setPagination({ pageNo: 1, limit: 20 });
   };
 
   React.useEffect(() => {
@@ -181,7 +181,9 @@ export const PortfolioListView = () => {
           <TableFilterBuilder
             metaData={metaData}
             filters={filters}
+            gate={gate}
             setFilters={setFilters}
+            setGate={setGate}
             handleFilterApply={handleFilterApply}
             handleFilterClear={handleFilterClear}
           />
@@ -207,7 +209,7 @@ export const PortfolioListView = () => {
         <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
           <EditableDataTable
             columns={visibleColumns}
-            rows={records.map((row) => defaultPortfolio(row)) || []}
+            rows={records}
             processRowUpdate={processRowUpdate}
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}
@@ -216,7 +218,7 @@ export const PortfolioListView = () => {
             pagination
             paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
             onPageChange={handlePaginationModelChange}
-            pageSizeOptions={[100, 120, 150]}
+            pageSizeOptions={[20, 30, 50]}
             onRowSelectionModelChange={handleRowSelection}
           />
         </Box>
