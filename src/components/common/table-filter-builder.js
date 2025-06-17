@@ -6,6 +6,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { Autocomplete, Box, Button, IconButton, Popover, Stack, TextField, Typography } from '@mui/material';
 import TableAutoComplete from './table-auto-complete';
 import { validateFilters } from '/src/utils/helper';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 const extractMeta = (metaArray) => {
   const map = {};
@@ -66,6 +68,12 @@ export default function TableFilterBuilder(
           "less than",
           "greater than equal to",
           "less than equal to"
+        ],
+        date: [
+          "is",
+          "is not",
+          "is empty",
+          "is not empty"
         ],
         images: ['is empty', 'is not empty'],
         boolean: ['is', 'is not'],
@@ -244,6 +252,16 @@ export default function TableFilterBuilder(
           }}
         />
       );
+    } else if (meta.type === 'date') {
+      return (
+        <DatePicker
+          value={dayjs(filter.value)}
+          format={meta.format}
+          onChange={(e) => handleFilterChange(filters.indexOf(filter), 'value', dayjs(e).format(meta.format))}
+          sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
+      );
+    } else {
+      return null;
     }
 
   };
