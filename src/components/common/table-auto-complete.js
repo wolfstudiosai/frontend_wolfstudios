@@ -16,95 +16,61 @@ import { useDebounce } from '/src/hooks/use-debounce';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
 
 const fetchOptions = async (key, searchValue) => {
-    let options = [];
-    if (key === "partnerHQ") {
-        if (searchValue) {
-            const filters = [{ key: "Name", type: "string", operator: "contains", value: searchValue }];
-            const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 20 }, filters, 'and');
-            if (partnerResponse?.success) {
-                options = partnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-            }
-        } else {
-            const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 20 });
-            if (partnerResponse?.success) {
-                options = partnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-            }
-        }
+    const getNameMapping = (item) => ({ value: item.id, label: item.Name });
+
+    const configMap = {
+        partnerHQ: {
+            fetch: getPartnerListAsync,
+            filterable: true
+        },
+        portfolioCategories: {
+            fetch: getPortfolioCategoryListAsync,
+            filterable: true
+        },
+        country: {
+            fetch: getCountryListAsync
+        },
+        states: {
+            fetch: getStateListAsync
+        },
+        caseStudies: {
+            fetch: getCaseStudyListAsync
+        },
+        stakeholders: {
+            fetch: getStakeHolderListAsync
+        },
+        retailPartners: {
+            fetch: getRetailPartnerListAsync
+        },
+        product: {
+            fetch: getProductListAsync
+        },
+        spaces: {
+            fetch: getSpaceListAsync
+        },
+        // proposedPartners: {
+        //     fetch: getProposedPartnerListAsync
+        // }
+    };
+
+    const config = configMap[key];
+    if (!config) return [];
+
+    const { fetch, filterable = false } = config;
+
+    let response;
+    const paging = { page: 1, rowsPerPage: 20 };
+
+    if (filterable && searchValue) {
+        const filters = [{ key: "Name", type: "string", operator: "contains", value: searchValue }];
+        response = await fetch(paging, filters, 'and');
+    } else {
+        response = await fetch(paging, searchValue);
     }
 
-    if (key === "portfolioCategories") {
-        if (searchValue) {
-            const filters = [{ key: "Name", type: "string", operator: "contains", value: searchValue }];
-            const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 20 }, filters, 'and');
-            if (categoryResponse?.success) {
-                options = categoryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-            }
-        } else {
-            const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 20 });
-            if (categoryResponse?.success) {
-                options = categoryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-            }
-        }
-    }
+    return response?.success ? response.data.map(getNameMapping) : [];
+};
 
-    if (key === "country") {
-        const countryResponse = await getCountryListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
-        if (countryResponse?.success) {
-            options = countryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-        }
-    }
-
-    if (key === "states") {
-        const stateResponse = await getStateListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
-        if (stateResponse?.success) {
-            options = stateResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-        }
-    }
-
-    if (key === "caseStudies") {
-        const caseStudyResponse = await getCaseStudyListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
-        if (caseStudyResponse?.success) {
-            options = caseStudyResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-        }
-    }
-
-    if (key === "stakeholders") {
-        const stakeholderResponse = await getStakeHolderListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
-        if (stakeholderResponse?.success) {
-            options = stakeholderResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-        }
-    }
-
-    if (key === "retailPartners") {
-        const retailPartnerResponse = await getRetailPartnerListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
-        if (retailPartnerResponse?.success) {
-            options = retailPartnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-        }
-    }
-
-    if (key === "product") {
-        const productResponse = await getProductListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
-        if (productResponse?.success) {
-            options = productResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-        }
-    }
-
-    if (key === "spaces") {
-        const spaceResponse = await getSpaceListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
-        if (spaceResponse?.success) {
-            options = spaceResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-        }
-    }
-
-    // if (key === "proposedPartners") {
-    //     const proposedPartnerResponse = await getProposedPartnerListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
-    //     if (proposedPartnerResponse?.success) {
-    //         options = proposedPartnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
-    //     }
-    // }
-
-    return options;
-}
 
 const operators = ["has any of", "has none of"];
 
