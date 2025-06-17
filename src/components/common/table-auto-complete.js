@@ -17,6 +17,7 @@ import {
 } from '/src/lib/common.actions';
 import { useDebounce } from '/src/hooks/use-debounce';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
+import { getContentList } from '/src/app/(private)/all-content/_lib/all-content.actions';
 
 const fetchOptions = async (key, searchValue) => {
     const getNameMapping = (item) => ({ value: item.id, label: item.Name });
@@ -45,6 +46,10 @@ const fetchOptions = async (key, searchValue) => {
         },
         country: {
             fetch: getCountryListAsync
+        },
+        contentHQ: {
+            fetch: getContentList,
+            filterable: true
         },
         states: {
             fetch: getStateListAsync
