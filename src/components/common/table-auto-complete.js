@@ -9,9 +9,11 @@ import {
     getStateListAsync,
     getCaseStudyListAsync,
     getStakeHolderListAsync,
-    getRetailPartnerListAsync
+    getRetailPartnerListAsync,
+    getProductListAsync
 } from '/src/lib/common.actions';
 import { useDebounce } from '/src/hooks/use-debounce';
+import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
 
 const fetchOptions = async (key, searchValue) => {
     let options = [];
@@ -77,6 +79,20 @@ const fetchOptions = async (key, searchValue) => {
         const retailPartnerResponse = await getRetailPartnerListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
         if (retailPartnerResponse?.success) {
             options = retailPartnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+        }
+    }
+
+    if (key === "product") {
+        const productResponse = await getProductListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
+        if (productResponse?.success) {
+            options = productResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+        }
+    }
+
+    if (key === "spaces") {
+        const spaceResponse = await getSpaceListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
+        if (spaceResponse?.success) {
+            options = spaceResponse.data.map((item) => ({ value: item.id, label: item.Name }));
         }
     }
 
