@@ -31,7 +31,7 @@ const fetchOptions = async (key, searchValue) => {
     }
 
     if (key === "states") {
-        const stateResponse = await getStateListAsync({ page: 1, rowsPerPage: 20 });
+        const stateResponse = await getStateListAsync({ page: 1, rowsPerPage: 20 }, searchValue);
         if (stateResponse?.success) {
             options = stateResponse.data.map((item) => ({ value: item.id, label: item.Name }));
         }
