@@ -136,22 +136,49 @@ export default function TableFilterBuilder(
 
   const open = Boolean(anchorEl);
 
+  // Render value field based on the type of the filter
   const renderValueField = (filter) => {
     const meta = metaMap[filter.key];
     if (!meta) return null;
 
     if (meta.type === 'string' || meta.type === 'number') {
       const isEmpty = filter.operator === 'is empty' || filter.operator === 'is not empty';
-      return (
-        <TextField
-          placeholder={isEmpty ? '' : 'Enter a value'}
-          value={filter.value}
-          disabled={isEmpty}
-          onChange={(e) => handleFilterChange(filters.indexOf(filter), 'value', e.target.value)}
-          sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
-          type={meta.type === 'number' ? 'number' : 'text'}
-        />
-      );
+
+      if (meta.values) {
+        return (
+          <Autocomplete
+            disableClearable
+            options={meta.values}
+            value={filter.value}
+            onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
+            renderInput={(params) => (
+              <TextField
+                size="small"
+                {...params}
+                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 }, }}
+              />
+            )}
+            sx={{
+              minWidth: 150,
+              width: '100%',
+              '& .MuiOutlinedInput-root .MuiAutocomplete-endAdornment': {
+                right: 0,
+              }
+            }}
+          />
+        );
+      } else {
+        return (
+          <TextField
+            placeholder={isEmpty ? '' : 'Enter a value'}
+            value={filter.value}
+            disabled={isEmpty}
+            onChange={(e) => handleFilterChange(filters.indexOf(filter), 'value', e.target.value)}
+            sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
+            type={meta.type === 'number' ? 'number' : 'text'}
+          />
+        );
+      }
     } else if (meta.type === 'relation') {
       return (
         <TableAutoComplete
@@ -199,6 +226,7 @@ export default function TableFilterBuilder(
 
   };
 
+  // Render gate field based on the index
   const renderGateField = (index) => {
     switch (index) {
       case 0:
