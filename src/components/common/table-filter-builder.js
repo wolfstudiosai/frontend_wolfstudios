@@ -149,9 +149,8 @@ export default function TableFilterBuilder(
     const meta = metaMap[filter.key];
     if (!meta) return null;
 
+    const isEmpty = filter.operator === 'is empty' || filter.operator === 'is not empty';
     if (meta.type === 'string' || meta.type === 'number') {
-      const isEmpty = filter.operator === 'is empty' || filter.operator === 'is not empty';
-
       if (meta.values) {
         return (
           <Autocomplete
@@ -210,8 +209,9 @@ export default function TableFilterBuilder(
         <Autocomplete
           disableClearable
           multiple
-          options={metaMap[filter.key]?.values || []}
-          value={filter.value}
+          options={meta?.values || []}
+          value={Array.isArray(filter.value) ? filter.value : []}
+          disabled={isEmpty}
           onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
           renderInput={(params) => (
             <TextField
@@ -235,6 +235,7 @@ export default function TableFilterBuilder(
           disableClearable
           options={["true", "false"]}
           value={filter.value}
+          disabled={isEmpty}
           onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
           renderInput={(params) => (
             <TextField
@@ -255,9 +256,10 @@ export default function TableFilterBuilder(
     } else if (meta.type === 'date') {
       return (
         <DatePicker
-          value={dayjs(filter.value)}
-          format={meta.format}
-          onChange={(e) => handleFilterChange(filters.indexOf(filter), 'value', dayjs(e).format(meta.format))}
+          value={isEmpty ? null : dayjs(filter.value)}
+          format={meta.format.toUpperCase()}
+          disabled={isEmpty}
+          onChange={(e) => handleFilterChange(filters.indexOf(filter), 'value', dayjs(e).format(meta.format.toUpperCase()))}
           sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
       );
     } else {

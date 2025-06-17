@@ -126,7 +126,44 @@ export const CampaignListView = () => {
       await createCampaignAsync(newRow);
       fetchList();
     } else {
-      await updateCampaignAsync(newRow.id, newRow);
+      const finalData = {
+        ...newRow,
+      };
+
+      const imageFields = ['campaignImage'];
+      for (const field of imageFields) {
+        const value = newRow[field];
+        if (value instanceof File) {
+          const res = await imageUploader(
+            [
+              {
+                file: value,
+                fileName: value.name.split('.').slice(0, -1).join('.'),
+                fileType: value.type.split('/')[1],
+              },
+            ],
+            'campaigns'
+          );
+
+          finalData[field] = res;
+        } else if (typeof value === 'string') {
+          finalData[field] = [value];
+        }
+      }
+
+      const arrayFields = ['contentHQ', 'stakeholders', 'retailPartners', 'proposedPartners', 'spaces'];
+      for (const field of arrayFields) {
+        const value = newRow[field];
+        if (value.length > 0) {
+          const arrOfStr = value.map((item) => item.value);
+          finalData[field] = arrOfStr;
+        }
+      }
+
+      if (finalData.goals && typeof finalData.goals === 'string') {
+        finalData.goals = finalData.goals.split(',').map((item) => item.trim());
+      }
+      await updateCampaignAsync(newRow.id, finalData);
       fetchList();
     }
 

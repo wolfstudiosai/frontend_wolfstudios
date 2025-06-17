@@ -237,6 +237,10 @@ export function buildQueryParams(filters, gate) {
       filter.value.forEach((item, itemIndex) => {
         params.append(`fields[${index}][value][${itemIndex}]`, item.value);
       });
+    } else if (filter.type === 'array' && Array.isArray(filter.value)) {
+      filter.value.forEach((item, itemIndex) => {
+        params.append(`fields[${index}][value][${itemIndex}]`, item);
+      });
     } else {
       params.append(`fields[${index}][value]`, filter.value ?? '');
     }
