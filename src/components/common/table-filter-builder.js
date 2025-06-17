@@ -190,7 +190,7 @@ export default function TableFilterBuilder(
         />
 
       );
-    } else if (meta.type === 'images' || meta.type === 'boolean') {
+    } else if (meta.type === 'images') {
       return (
         <TextField
           disabled
@@ -201,6 +201,7 @@ export default function TableFilterBuilder(
       return (
         <Autocomplete
           disableClearable
+          multiple
           options={metaMap[filter.key]?.values || []}
           value={filter.value}
           onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
@@ -220,8 +221,29 @@ export default function TableFilterBuilder(
           }}
         />
       );
-    } else {
-      return null;
+    } else if (meta.type === 'boolean') {
+      return (
+        <Autocomplete
+          disableClearable
+          options={["true", "false"]}
+          value={filter.value}
+          onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
+          renderInput={(params) => (
+            <TextField
+              size="small"
+              {...params}
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 }, }}
+            />
+          )}
+          sx={{
+            minWidth: 150,
+            width: '100%',
+            '& .MuiOutlinedInput-root .MuiAutocomplete-endAdornment': {
+              right: 0,
+            }
+          }}
+        />
+      );
     }
 
   };

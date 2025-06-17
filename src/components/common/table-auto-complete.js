@@ -3,6 +3,7 @@
 import { Autocomplete, Chip, TextField } from '@mui/material';
 import { getPartnerListAsync } from '/src/app/(public)/partner/_lib/partner.actions';
 import { getPortfolioCategoryListAsync } from '/src/app/(public)/portfolio/_lib/portfolio.actions';
+import { getCampaignListAsync } from '/src/app/(public)/campaign/_lib/campaign.actions';
 import { useEffect, useState } from 'react';
 import {
     getCountryListAsync,
@@ -10,7 +11,9 @@ import {
     getCaseStudyListAsync,
     getStakeHolderListAsync,
     getRetailPartnerListAsync,
-    getProductListAsync
+    getProductListAsync,
+    getCityListAsync,
+    getTagListAsync
 } from '/src/lib/common.actions';
 import { useDebounce } from '/src/hooks/use-debounce';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
@@ -23,9 +26,22 @@ const fetchOptions = async (key, searchValue) => {
             fetch: getPartnerListAsync,
             filterable: true
         },
+        partners: {
+            fetch: getPartnerListAsync,
+            filterable: true
+        },
         portfolioCategories: {
             fetch: getPortfolioCategoryListAsync,
             filterable: true
+        },
+        campaigns: {
+            fetch: getCampaignListAsync
+        },
+        caseStudies: {
+            fetch: getCaseStudyListAsync
+        },
+        cities: {
+            fetch: getCityListAsync
         },
         country: {
             fetch: getCountryListAsync
@@ -33,16 +49,19 @@ const fetchOptions = async (key, searchValue) => {
         states: {
             fetch: getStateListAsync
         },
-        caseStudies: {
-            fetch: getCaseStudyListAsync
-        },
         stakeholders: {
             fetch: getStakeHolderListAsync
+        },
+        tags: {
+            fetch: getTagListAsync
         },
         retailPartners: {
             fetch: getRetailPartnerListAsync
         },
         product: {
+            fetch: getProductListAsync
+        },
+        products: {
             fetch: getProductListAsync
         },
         spaces: {

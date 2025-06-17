@@ -24,6 +24,7 @@ import { IconButton, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { toast } from 'sonner';
 import { getContentColumns } from '../_utils/get-content-columns';
+import TableFilterBuilder from '/src/components/common/table-filter-builder';
 
 export default function AllContentListView() {
   // table columns
@@ -32,19 +33,25 @@ export default function AllContentListView() {
   const [data, setData] = React.useState([]);
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
-  const [paginateData, setPaginateData] = React.useState({ pageNo: 1, limit: 100 });
+  const [paginateData, setPaginateData] = React.useState({ pageNo: 1, limit: 50 });
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
+
+  // filter
+  const [metaData, setMetaData] = React.useState([]);
+  const [filters, setFilters] = React.useState([]);
+  const [gate, setGate] = React.useState('and');
 
   const fetchList = async () => {
     try {
       const response = await getContentList({
         page: paginateData.pageNo,
         rowsPerPage: paginateData.limit,
-      });
+      }, filters, gate);
       if (response.success) {
         setData(response.data);
         setTotalRecords(response.totalRecords);
+        setMetaData(response.metaData)
       }
     } catch (error) {
       console.error('Error fetching contents:', error);
@@ -146,6 +153,16 @@ export default function AllContentListView() {
     fetchList();
   };
 
+  const handleFilterApply = () => {
+    setPaginateData({ pageNo: 1, limit: 50 });
+  };
+
+  const handleFilterClear = () => {
+    setFilters([]);
+    setGate('and');
+    setPaginateData({ pageNo: 1, limit: 50 });
+  };
+
   React.useEffect(() => {
     fetchList();
   }, [paginateData]);
@@ -161,7 +178,15 @@ export default function AllContentListView() {
     <PageContainer>
       <Card sx={{ borderRadius: 0 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
-          <TextField placeholder="Search..." size='small' sx={{ width: 300 }} />
+          <TableFilterBuilder
+            metaData={metaData}
+            filters={filters}
+            gate={gate}
+            setFilters={setFilters}
+            setGate={setGate}
+            handleFilterApply={handleFilterApply}
+            handleFilterClear={handleFilterClear}
+          />
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <IconButton onClick={handleAddNewItem}>
               <AddIcon />
@@ -188,7 +213,7 @@ export default function AllContentListView() {
             onProcessRowUpdateError={handleProcessRowUpdateError}
             loading={loading}
             rowCount={totalRecords}
-            pageSizeOptions={[10, 20, 50]}
+            pageSizeOptions={[50, 100, 150]}
             paginationModel={{ page: paginateData.pageNo - 1, pageSize: paginateData.limit }}
             onPageChange={handlePaginationModelChange}
             onRowSelectionModelChange={handleRowSelection}
