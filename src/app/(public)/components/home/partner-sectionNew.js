@@ -18,10 +18,12 @@ export const PartnerSectionNew = ({ isSecondHorizontal }) => {
 
   const fetchPartners = async () => {
     try {
+      const filters = [{ key: "isFeatured", type: "boolean", operator: "is", value: true }];
       const response = await getPartnerListAsync({
         page: 1,
         rowsPerPage: 20,
-      });
+      }, filters, 'and');
+
       if (response?.success) {
         setPartners((prev) => [...prev, ...response.data]);
       }

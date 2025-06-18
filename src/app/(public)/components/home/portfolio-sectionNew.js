@@ -18,14 +18,6 @@ import Image from 'next/image';
 
 export const PortfolioSectionNew = () => {
   const [spaces, setSpaces] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isEnd, setIsEnd] = useState(false);
-
-  const handleSlideChange = (swiper) => {
-    setActiveIndex(swiper.realIndex);
-    setIsEnd(swiper.isEnd);
-  };
-
   const router = useRouter();
 
   const fetchSpaces = async () => {
@@ -94,7 +86,6 @@ export const PortfolioSectionNew = () => {
           <Stack spacing={2}>
             <SliderWrapper
               loop={false}
-              onSlideChange={handleSlideChange}
               breakpoints={{
                 0: {
                   slidesPerView: 1,

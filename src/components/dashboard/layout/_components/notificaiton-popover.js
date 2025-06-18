@@ -29,16 +29,29 @@ export const NotificationPopover = () => {
   const [notificationsCount, setNotificationsCount] = React.useState(0);
 
   React.useEffect(() => {
+    let isMounted = true;
+
     const getNotificationsCount = async () => {
       try {
         const response = await api.get('/notifications?type=POLL');
-        setNotificationsCount(response.data.data.count);
+        if (isMounted) {
+          setNotificationsCount(response.data.data.count);
+        }
       } catch (error) {
-        console.error('Error fetching notifications:', error);
+        // console.error('Error fetching notifications:', error);
       }
     };
+
     getNotificationsCount();
+
+    const interval = setInterval(getNotificationsCount, 60000); // 1 minute
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
+
 
   const handleMenuClose = () => {
     setMenuAnchorEl(null);
@@ -85,7 +98,7 @@ const NotificationItem = ({ notification }) => {
         py: 0.5,
         alignItems: 'flex-start',
         cursor: 'pointer',
-        '&:hover': { backgroundColor: 'action.hover', transition: 'background-color 0.1s ease-in-out' }, 
+        '&:hover': { backgroundColor: 'action.hover', transition: 'background-color 0.1s ease-in-out' },
         border: (theme) => `.5px solid ${theme.palette.divider}`,
       }}
     >
