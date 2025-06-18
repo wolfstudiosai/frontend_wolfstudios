@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, IconButton } from '@mui/material';
+import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect } from 'react';
 
@@ -31,6 +31,15 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
         fetchList();
         onClose?.();
         router.refresh()
+    };
+
+    const handleFeatured = async (featured) => {
+        setData({ ...data, isFeatured: featured });
+        const payload = defaultPartner({ ...data, isFeatured: featured })
+        const response = await updatePartnerAsync(payload)
+        if (response.success) {
+            fetchList();
+        }
     };
 
     const { values, errors, handleChange, handleSubmit, setFieldValue, setValues, resetForm } = useFormik({
@@ -124,6 +133,17 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
                             </IconButton>
                         )
                     )}
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                size="small"
+                                checked={data?.isFeatured}
+                                onChange={(e) => handleFeatured(e.target.checked)}
+                                color="primary"
+                            />
+                        }
+                        label="Featured"
+                    />
                     {sidebarView === 'EDIT' && (
                         <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
                             Save
