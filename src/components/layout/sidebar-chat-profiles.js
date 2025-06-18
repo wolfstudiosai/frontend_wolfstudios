@@ -96,6 +96,7 @@ export default function SidebarChatProfiles({ isOpen }) {
                     {data.map((user, index) => (
                         <ListItem
                             key={index}
+                            title={user.name}
                             onClick={() => router.push(`/workspace/chat`)}
                             sx={{
                                 px: 1,
