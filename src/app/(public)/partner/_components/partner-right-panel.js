@@ -17,6 +17,7 @@ import { formConstants } from '/src/app/constants/form-constants';
 import { imageUploader } from '/src/utils/upload-file';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { PageLoader } from '/src/components/loaders/PageLoader';
 
 export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK' }) => {
     const { isLogin } = useAuth();
@@ -170,17 +171,19 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
 
     return (
         <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-            {sidebarView === 'QUICK' ? (
-                <PartnerQuickView data={data} />
-            ) : (
-                <PartnerForm
-                    handleChange={handleChange}
-                    values={values}
-                    errors={errors}
-                    setFieldValue={setFieldValue}
-                    onSubmit={handleSubmit}
-                />
-            )}
+            <PageLoader loading={loading}>
+                {sidebarView === 'QUICK' ? (
+                    <PartnerQuickView data={data} />
+                ) : (
+                    <PartnerForm
+                        handleChange={handleChange}
+                        values={values}
+                        errors={errors}
+                        setFieldValue={setFieldValue}
+                        onSubmit={handleSubmit}
+                    />
+                )}
+            </PageLoader>
         </DrawerContainer>
     );
 };

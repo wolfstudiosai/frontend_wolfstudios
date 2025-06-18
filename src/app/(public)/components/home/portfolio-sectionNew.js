@@ -60,7 +60,7 @@ export const PortfolioSectionNew = () => {
                 </Typography>
                 <Button
                   variant="text"
-                  onClick={() => router.push('/portfolio')}
+                  onClick={() => router.push('/spaces')}
                   endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
                   sx={{
                     margin: 0,

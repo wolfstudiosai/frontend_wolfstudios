@@ -12,13 +12,13 @@ import { navColorStyles } from '../dashboard/layout/vertical/styles';
 import { dashboardFavItemsV2, privateRoutesV2 } from '/src/router';
 import { getWorkspacesTab } from '/src/utils/nav-utils';
 import SidebarMenuItems from '/src/utils/nav-utils';
+import SidebarChatProfiles from './sidebar-chat-profiles';
 
 export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible }) {
   const { colorScheme = 'light' } = useColorScheme();
   const styles = navColorStyles[colorScheme][color];
   const { userInfo } = useAuth();
   const { openMenus, toggleMenuItem } = useSettings();
-
 
   const workspacesTab = getWorkspacesTab(userInfo);
 
@@ -34,11 +34,14 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
         marginBottom: '10px',
         height: '100%',
         overflowY: 'auto',
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
-          width: '0px',
-        },
+          display: 'none',
+        }
       }}
     >
+      <SidebarChatProfiles isOpen={open} />
+      <Divider />
       <MenuList>
         <SidebarMenuItems
           items={dashboardFavItemsV2}
