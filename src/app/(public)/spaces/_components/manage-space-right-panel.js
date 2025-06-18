@@ -21,7 +21,7 @@ export const ManageSpaceRightPanel = ({ open, onClose, fetchList, data, width, v
   const [sidebarView, setSidebarView] = React.useState(view); //QUICK/ EDIT
   const [file, setFile] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
-  const [isFeatured, setIsFeatured] = React.useState(data?.featured);
+  const [isFeatured, setIsFeatured] = React.useState(data.isFeatured);
 
   const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
     useFormik({

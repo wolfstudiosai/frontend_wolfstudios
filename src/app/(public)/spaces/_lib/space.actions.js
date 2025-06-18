@@ -1,17 +1,23 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { getSearchQuery } from '/src/utils/helper';
+import { getSearchQuery, validateFilters, buildQueryParams } from '/src/utils/helper';
 import { uploadFileAsync } from '/src/utils/upload-file';
 
-export const getSpaceListAsync = async (queryParams, searchValue) => {
+export const getSpaceListAsync = async (queryParams, filters, gate) => {
   try {
-    const searchQuery = getSearchQuery(queryParams);
-    let url = `/spaces${searchQuery}`
-    if (searchValue) {
-      url += `&gate=and&fields[0][key]=Name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
+    let apiUrl = `/spaces?page=${queryParams.page}&size=${queryParams.rowsPerPage}`;
+    if (filters && filters.length > 0) {
+      // check if all filters are valid
+      const allFiltersValid = validateFilters(filters);
+      if (!allFiltersValid.valid) {
+        toast.error(allFiltersValid.message);
+        return;
+      }
+      const queryParams = buildQueryParams(filters, gate);
+      apiUrl += `&${queryParams}`;
     }
-    const res = await api.get(url);
+    const res = await api.get(apiUrl);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     toast.error(error.response.data.message);

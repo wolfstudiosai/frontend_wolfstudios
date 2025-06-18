@@ -21,10 +21,12 @@ export const PortfolioSection = () => {
 
   const fetchPortfolios = async () => {
     try {
+      const filters = [{ key: "isFeatured", type: "boolean", operator: "is", value: true }];
       const response = await getPortfolioListAsync({
         page: 1,
         rowsPerPage: 20,
-      });
+      }, filters, 'and');
+
       if (response?.success) {
         setPortfolios(response.data);
       }
@@ -42,7 +44,7 @@ export const PortfolioSection = () => {
       <Grid item xs={12}>
         <Stack direction="column" >
           <FadeIn>
-            <Box sx={{  py: { xs: 1, md: 2 } }}>
+            <Box sx={{ py: { xs: 1, md: 2 } }}>
               <Stack direction="row">
                 <Typography
                   variant="h4"
@@ -118,7 +120,7 @@ export const PortfolioSection = () => {
             {portfolios.map((portfolio) => (
               <SwiperSlide key={portfolio.id}>
                 <FadeIn>
-                  <Card card={portfolio} fetchList={portfolios} />
+                  <Card card={portfolio} fetchList={fetchPortfolios} />
                 </FadeIn>
               </SwiperSlide>
             ))}
@@ -297,7 +299,7 @@ const Card = ({ card, fetchList }) => {
         fetchList={fetchList}
         width="70%"
         open={!!openPortfolioRightPanel}
-        data={openPortfolioRightPanel}
+        data={card}
         onClose={() => setOpenPortfolioRightPanel(false)}
       />
     </>

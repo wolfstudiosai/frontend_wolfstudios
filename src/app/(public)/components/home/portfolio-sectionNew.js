@@ -2,35 +2,46 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Button, Card, IconButton, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
 import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
-import { ManagePortfolioRightPanel } from '../../portfolio/_components/manage-portfolio-right-panel';
-import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
+import { getSpaceListAsync } from '../../spaces/_lib/space.actions';
+import { ManageSpaceRightPanel } from '../../spaces/_components/manage-space-right-panel';
+import { isVideoContent } from '../../../../utils/helper';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Image from 'next/image';
 
 export const PortfolioSectionNew = () => {
-  const [portfolios, setPortfolios] = useState([]);
+  const [spaces, setSpaces] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isEnd, setIsEnd] = useState(false);
+
+  const handleSlideChange = (swiper) => {
+    setActiveIndex(swiper.realIndex);
+    setIsEnd(swiper.isEnd);
+  };
 
   const router = useRouter();
 
-  const fetchPortfolios = async () => {
-    const response = await getPortfolioListAsync({
+  const fetchSpaces = async () => {
+    const filters = [{ key: "isFeatured", type: "boolean", operator: "is", value: true }];
+    const response = await getSpaceListAsync({
       page: 1,
       rowsPerPage: 20,
-    });
+    }, filters, 'and');
+    console.log(response);
     if (response?.success) {
-      setPortfolios((prev) => [...prev, ...response.data]);
+      setSpaces(response.data);
     }
   };
 
   useEffect(() => {
-    fetchPortfolios();
+    fetchSpaces();
   }, []);
 
   return (
@@ -53,7 +64,7 @@ export const PortfolioSectionNew = () => {
                   textTransform="uppercase"
                   fontSize={{ xs: '1.5rem', sm: '2rem', md: '2.2rem' }}
                 >
-                  Portfolios
+                  Spaces
                 </Typography>
                 <Button
                   variant="text"
@@ -82,7 +93,8 @@ export const PortfolioSectionNew = () => {
         >
           <Stack spacing={2}>
             <SliderWrapper
-              modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
+              loop={false}
+              onSlideChange={handleSlideChange}
               breakpoints={{
                 0: {
                   slidesPerView: 1,
@@ -112,10 +124,10 @@ export const PortfolioSectionNew = () => {
                 },
               }}
             >
-              {portfolios.map((portfolio) => (
-                <SwiperSlide key={portfolio.id}>
+              {spaces.map((space) => (
+                <SwiperSlide key={space.id}>
                   <FadeIn>
-                    <Card card={portfolio} fetchList={portfolios} />
+                    <SpaceCard item={space} fetchList={fetchSpaces} />
                   </FadeIn>
                 </SwiperSlide>
               ))}
@@ -127,177 +139,139 @@ export const PortfolioSectionNew = () => {
   );
 };
 
-const Card = ({ card, fetchList }) => {
-  const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = useState(null);
+export const SpaceCard = ({ item, fetchList, sx, infoSx }) => {
+  const [openSpaceRightPanel, setOpenSpaceRightPanel] = useState(null);
+
   return (
     <>
-      <Box
-        key={card.id}
+      <Card
         sx={{
-          position: 'relative',
+          background: "var(--mui-palette-background-default)",
           height: '400px',
           width: { xs: '300px', sm: '280px', md: '260px' },
+          border: 'unset',
           overflow: 'hidden',
-          transition: 'transform 300ms ease',
-          border: '1px solid var(--mui-palette-divider)',
+          position: 'relative',
+          borderRadius: '0',
+          border: 'solid 1px var(--mui-palette-divider)',
+          display: 'flex',
+          flexDirection: 'column',
+          '&:hover .menu-icon': {
+            opacity: 1,
+          },
+          '&:hover .image-container': {
+            opacity: 0.8,
+          },
+          ...sx,
         }}
-        onClick={() => setOpenPortfolioRightPanel(card)}
+        onClick={() => setOpenSpaceRightPanel(item)}
       >
-        {/* Background Image or Video */}
-        {card.VideoLink ? (
-          <Box
-            component="video"
-            sx={{
-              position: 'absolute',
-              left: 0,
-              top: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            }}
-            autoPlay
-            loop
-            muted
-          >
-            <source src={card.VideoLink[0]} type="video/mp4" />
-            Your browser does not support the video tag.
-          </Box>
-        ) : (
-          <Box
-            className="image"
-            sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 0,
-              backgroundImage: `url(${card.ThumbnailImage[0]})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              transition: 'transform 300ms ease',
-            }}
-          />
-        )}
-
-        {/* Gradient Overlay */}
+        {/* top menu icon button */}
         <Box
+          className="menu-icon"
           sx={{
             position: 'absolute',
-            left: 0,
-            bottom: 0,
-            width: '100%',
-            height: '40%',
-            background: 'linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))',
-            zIndex: 5,
-          }}
-        />
-
-        {/* Title & Description */}
-        <Box
-          sx={{
-            position: 'absolute',
-            left: 0,
-            bottom: 0,
-            zIndex: 10,
-            width: '100%',
-            padding: 2,
-            boxSizing: 'border-box',
+            top: 8,
+            right: 8,
+            zIndex: 1,
+            opacity: 0,
+            transition: 'opacity 0.2s ease',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            borderRadius: '50%',
           }}
         >
-          <Typography
+          <IconButton size="small" sx={{ color: 'white' }}>
+            <MoreVertIcon fontSize="small" />
+          </IconButton>
+        </Box>
+
+        <Box className="image-container" sx={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+          {isVideoContent(item.videoLink || '') ? (
+            <Box
+              component="video"
+              src={item?.videoLink || ''}
+              muted
+              autoPlay
+              loop
+              draggable={false}
+              playsInline
+              sx={{
+                height: '100%',
+                width: '100%',
+                objectFit: 'cover',
+                borderRadius: 1,
+              }}
+            />
+          ) : (
+            <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
+              <Image
+                src={item?.ThumbnailImage?.at(0) || item?.Imagefield?.at(0) || '/assets/image-placeholder.jpg'}
+                alt={item.title || 'Space Image'}
+                draggable={false}
+                style={{
+                  objectFit: 'cover',
+                  filter: 'blur(20px)',
+                  transition: 'filter 0.2s ease-out',
+                }}
+                loading="lazy"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                fill
+                onLoad={(e) => {
+                  e.target.style.filter = 'blur(0px)';
+                }}
+              />
+            </Box>
+          )}
+
+          {/* Title Overlay */}
+          <Stack
+            direction="column"
             sx={{
-              color: 'white',
-              fontSize: { xs: '0.9rem', md: '1rem' },
-              fontFamily: 'Crimson Text, serif',
-              fontWeight: 500,
-              textTransform: 'uppercase',
-              marginBottom: '7px',
-              width: '100%',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              p: 1.5,
+              background: 'linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))',
             }}
           >
-            {card.ProjectTitle}
-          </Typography>
-
-          <Box
-            sx={{
-              width: '100%',
-              height: '1px',
-              backgroundColor: '#ffff',
-              marginBottom: '7px',
-            }}
-          />
-
-          <Stack
-            spacing={0.5}
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            // marginBottom={1.2}
-            sx={{ width: '100%' }}
-          >
-            {[card.designation, card.designation].map((text, index) => (
-              <Typography
-                key={index}
-                sx={{
-                  color: 'rgba(255, 255, 255, 0.8)',
-                  fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.9rem' },
-                  fontFamily: 'Crimson Text, serif',
-                  lineHeight: 1.2,
-                  flex: index === 0 ? 1 : 'none',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                  maxWidth: index === 0 ? '40%' : '30%',
-                }}
-              >
-                {card.ByCountryPortfolios?.map((country) => country?.ByCountry?.Name).join(', ')}
-              </Typography>
-            ))}
-          </Stack>
-
-          <Stack
-            spacing={0.5}
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            sx={{ width: '100%' }}
-          >
-            {[card.designation, card.designation].map((text, index) => (
-              <Typography
-                key={index}
-                sx={{
-                  color: 'rgba(255, 255, 255, 0.8)',
-                  fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.9rem' },
-                  fontFamily: 'Crimson Text, serif',
-                  lineHeight: 1.2,
-                  flex: index === 0 ? 1 : 'none',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                  maxWidth: index === 0 ? '40%' : '30%',
-                }}
-              >
-                {card.ByStatesPortfolios?.map((state) => state?.ByStates?.Name).join(', ')}
-              </Typography>
-            ))}
+            <Typography fontWeight={400} color="white" fontSize={{ xs: 12, md: 14 }} noWrap>
+              {(item.Name || '').split(/\s+/).slice(0, 4).join(' ') +
+                (item.Name?.split(/\s+/)?.length > 4 ? '...' : '')}
+            </Typography>
+            {/* Thin Line */}
+            <Box
+              sx={{
+                width: '100%',
+                height: '0.8px',
+                margin: '4px 0',
+                background: 'var(--mui-palette-divider)',
+              }}
+            />
           </Stack>
         </Box>
+
+        <ManageSpaceRightPanel
+          view={'QUICK'}
+          fetchList={fetchList}
+          width="70%"
+          open={openSpaceRightPanel ? true : false}
+          data={item}
+          onClose={() => setOpenSpaceRightPanel(false)}
+        />
+      </Card>
+      <Box
+        sx={{
+          flex: 0.1,
+          p: 1,
+          backgroundColor: "var(--mui-palette-background-default)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
       </Box>
-      <ManagePortfolioRightPanel
-        view="QUICK"
-        fetchList={fetchList}
-        width="70%"
-        open={!!openPortfolioRightPanel}
-        data={openPortfolioRightPanel}
-        onClose={() => setOpenPortfolioRightPanel(false)}
-      />
     </>
   );
 };
+
