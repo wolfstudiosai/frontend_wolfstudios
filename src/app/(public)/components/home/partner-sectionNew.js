@@ -12,7 +12,7 @@ import { ManagePartnerRightPanel } from '../../partner/_components/manage-partne
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { PartnerRightPanel } from '../../partner/_components/partner-right-panel';
 
-export const PartnerSectionNew = ({ isSecondHorizontal }) => {
+export const PartnerSectionNew = () => {
   const [partners, setPartners] = useState([]);
 
   const router = useRouter();
@@ -82,14 +82,13 @@ export const PartnerSectionNew = ({ isSecondHorizontal }) => {
         </Stack>
       </Grid>
       <Grid md={12} xs={12}>
-        <StaticGridView partners={partners} isSecondHorizontal={isSecondHorizontal} />
+        <StaticGridView partners={partners} />
       </Grid>
     </Grid>
   );
 };
 
-const StaticGridView = ({ partners, isSecondHorizontal }) => {
-  const reversedPartners = [...partners].reverse();
+const StaticGridView = ({ partners }) => {
   return (
     <Box
       sx={{
@@ -121,7 +120,6 @@ const StaticGridView = ({ partners, isSecondHorizontal }) => {
           >
             <Stack spacing={0.5}>
               <Card card={partner} fetchList={partners} />
-              {isSecondHorizontal && <Card card={reversedPartners[index]} fetchList={partners} />}
             </Stack>
           </Box>
         ))}
