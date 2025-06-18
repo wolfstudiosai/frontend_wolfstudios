@@ -56,7 +56,7 @@ export const SpaceGridView = ({ data, colums, fetchList, loading, handlePaginati
 export const SpaceCard = ({ item, fetchList, sx, infoSx }) => {
   const [openSpaceRightPanel, setOpenSpaceRightPanel] = React.useState(null);
 
-  const handleMenuOpen = () => {}
+  const handleMenuOpen = () => { }
 
   return (
     <>
@@ -172,7 +172,7 @@ export const SpaceCard = ({ item, fetchList, sx, infoSx }) => {
           fetchList={fetchList}
           width="70%"
           open={openSpaceRightPanel ? true : false}
-          data={openSpaceRightPanel}
+          data={item}
           onClose={() => setOpenSpaceRightPanel(false)}
         />
       </Card>
@@ -224,15 +224,15 @@ export const SpaceCard = ({ item, fetchList, sx, infoSx }) => {
               justifyContent: "flex-end",
             }}
           >
-              {/* Rating */}
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                <ThumbUpIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
-                <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                  50
-                </Typography>
-              </Box>
-              {/* Views */}
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            {/* Rating */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <ThumbUpIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                50
+              </Typography>
+            </Box>
+            {/* Views */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
               <VisibilityIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
               <Typography variant="body2" sx={{ fontWeight: 500 }}>
                 257

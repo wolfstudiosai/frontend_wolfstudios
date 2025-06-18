@@ -256,7 +256,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
     setShowModal(!showModal);
   };
 
-  const handleMenuOpen = () => {};
+  const handleMenuOpen = () => { };
 
   const handleChange = (e) => {
     setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -379,7 +379,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
           fetchList={fetchList}
           width="70%"
           open={openPortfolioRightPanel ? true : false}
-          data={openPortfolioRightPanel}
+          data={item}
           onClose={() => setOpenPortfolioRightPanel(false)}
         />
       </Card>

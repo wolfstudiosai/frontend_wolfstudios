@@ -58,7 +58,7 @@ export const updateContentAsync = async (data) => {
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
-    toast.error(error.response.message);
+    toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
@@ -106,6 +106,7 @@ export const createCommentAsync = async (contentID, data) => {
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
+    console.log(error);
     toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
@@ -113,6 +114,7 @@ export const createCommentAsync = async (contentID, data) => {
 
 const contentPayload = (data) => ({
   name: data.name || '',
+  isFeatured: data.isFeatured || false,
   revoPinterest: data.revoPinterest || '',
   pinAccountsUsed: data.pinAccountsUsed || '',
   postQuality: data.postQuality ? data.postQuality.split(',').map((item) => item.trim()) : [],
@@ -165,7 +167,7 @@ const contentPayload = (data) => ({
     ClubRevoYoutube: data.revo_ClubRevoYoutube || '',
   },
   tikTokAccountsused: data.tikTokAccountsused || '',
-  TTDummyAccountsUsed: data.TTDummyAccountsUsed?.length > 0 ? data.TTDummyAccountsUsed.split(', ').filter(Boolean) : [],
+  TTDummyAccountsUsed: data.TTDummyAccountsUsed?.length > 0 ? data.TTDummyAccountsUsed : [],
   postingStatus: data.postingStatus || '',
   totalContributedEngagement: data.totalContributedEngagement || '',
   // Relations: Extract IDs from arrays of { value, label }

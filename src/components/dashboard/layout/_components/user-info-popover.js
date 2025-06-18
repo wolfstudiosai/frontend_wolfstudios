@@ -6,7 +6,7 @@ import { paths } from '/src/paths';
 import useAuth from '/src/hooks/useAuth';
 import { Iconify } from '/src/components/iconify/iconify';
 
-export const UserInfoPopover = () => {
+export const UserInfoPopover = ({ sidebar = false }) => {
   const { userInfo, logout } = useAuth();
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
 
@@ -39,7 +39,7 @@ export const UserInfoPopover = () => {
             </Typography>
           </Box>
           <Divider />
-          <List sx={{ p: 1 }}>
+          <List sx={{ p: 1, display: sidebar ? 'none' : 'block' }}>
             <MenuItem component={RouterLink} href={paths.dashboard.profile} onClick={() => setMenuAnchorEl(null)}>
               <ListItemIcon>
                 <Iconify icon="solar:user-linear" />

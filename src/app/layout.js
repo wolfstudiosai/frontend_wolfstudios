@@ -1,6 +1,10 @@
 import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
 
 import '/src/styles/global.css';
+import 'swiper/css';
+import 'swiper/css/scrollbar';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 import { AuthGuard } from '/src/app/auth/guard/auth-guard';
 import { Analytics } from '/src/components/core/analytics';
