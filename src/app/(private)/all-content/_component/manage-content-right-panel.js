@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, IconButton } from '@mui/material';
+import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
 
 import useAuth from '/src/hooks/useAuth';
@@ -26,6 +26,7 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }
   const { isLogin } = useAuth();
   const [sidebarView, setSidebarView] = React.useState(view); // QUICK // EDIT
   const [loading, setLoading] = React.useState(false);
+  const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
 
   const { values, errors, handleChange, setFieldValue, resetForm, setValues, handleSubmit } = useFormik({
     initialValues: defaultContent(),
@@ -93,6 +94,16 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }
     onClose?.();
   };
 
+  const handleFeatured = async (featured) => {
+    try {
+      setIsFeatured(featured);
+      await updateContentAsync({ ...data, isFeatured: featured });
+      fetchList();
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   // --------------- Fetch campaign during update -------------------
   React.useEffect(() => {
     const fetSingleData = async () => {
@@ -134,6 +145,20 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }
               </IconButton>
             )
           )}
+
+          <>
+            <FormControlLabel
+              control={
+                <Switch
+                  size="small"
+                  checked={isFeatured}
+                  onChange={(e) => handleFeatured(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label="Featured"
+            />
+          </>
           {sidebarView === 'EDIT' && (
             <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
               Save
