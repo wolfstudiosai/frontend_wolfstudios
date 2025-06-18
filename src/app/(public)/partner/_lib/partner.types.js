@@ -3,6 +3,7 @@ import { profileStatus, status } from './partner.constants';
 export const defaultPartner = (data) => {
   const formattedValue = {
     id: data?.id || null,
+    isFeatured: data?.isFeatured || false,
     name: data?.Name || '',
     email: data?.Email || '',
     currentStatus:

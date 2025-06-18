@@ -123,14 +123,6 @@ export const PortfolioView = () => {
             </div>
           </Box>
         )}
-        <ManagePortfolioRightPanel
-          view="EDIT"
-          width="70%"
-          data={null}
-          fetchList={refreshListView}
-          open={filters.ADD}
-          onClose={() => setFilters((prev) => ({ ...prev, ADD: false }))}
-        />
       </PageLoader>
     </PageContainer>
   );

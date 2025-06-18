@@ -5,7 +5,6 @@ export const publicRoutes = [
   {
     key: 'public-navitems',
     items: [
-      // { key: 'home', title: 'Home', href: paths.home },
       {
         key: 'campaign',
         title: 'Campaign',
@@ -36,11 +35,6 @@ export const publicRoutes = [
         title: 'Spaces',
         href: paths.dashboardPublic.spaces,
       },
-      // {
-      //   key: 'chat',
-      //   title: 'Chat',
-      //   href: paths.private.chat,
-      // },
     ],
   },
 ];
@@ -285,6 +279,51 @@ export const privateRoutes = [
 // dashboard routes
 export const privateRoutesV2 = [
   {
+    key: 'overview',
+    title: 'Dashboard ',
+    icon: 'material-symbols:space-dashboard-outline',
+    href: paths.private.overview,
+    items: [
+      {
+        key: 'notifications',
+        title: 'Notifications',
+        icon: 'nimbus:marketing',
+        href: '/notifications',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
+  {
+    key: 'favorites',
+    title: 'Favorites',
+    icon: 'iconamoon:heart-light',
+    href: paths.private.favorites,
+    items: [
+      {
+        key: 'bev',
+        title: 'BEV ',
+        icon: 'tabler:map',
+        href: paths.private.favorites_bev,
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
+  {
+    key: 'chat',
+    title: 'Chat',
+    icon: 'fluent:chat-16-regular',
+    href: paths.private.chat,
+    // items: [
+    //   {
+    //     key: 'bev',
+    //     title: 'BEV ',
+    //     icon: 'tabler:map',
+    //     href: paths.private.favorites_bev,
+    //     allowedRoles: ['admin', 'user', 'super_admin'],
+    //   },
+    // ],
+  },
+  {
     key: 'analytics',
     title: 'Analytics',
     icon: 'material-symbols-light:overview-outline-rounded',
@@ -343,9 +382,9 @@ export const privateRoutesV2 = [
     ],
   },
   {
-    key: "records",
-    title: "Records",
-    icon: "material-symbols-light:data-table-outline",
+    key: 'records',
+    title: 'Records',
+    icon: 'material-symbols-light:data-table-outline',
     href: paths.private.record,
     allowedRoles: ['admin', 'user', 'super_admin'],
   },
@@ -496,111 +535,10 @@ export const privateRoutesV2 = [
       },
     ],
   },
-  {
-    key: 'archive',
-    title: 'Archive',
-    // href: paths.private.archive,
-    icon: 'material-symbols:archive-outline',
-    allowedRoles: ['admin', 'user', 'super_admin'],
-    items: [
-      {
-        key: 'records',
-        title: 'Records',
-        href: paths.private.archive_records,
-        icon: 'material-symbols:data-table-outline',
-        allowedRoles: ['admin', 'user', 'super_admin'],
-      },
-      {
-        key: 'analytics',
-        title: 'Analytics',
-        href: paths.private.archive_analytics,
-        icon: 'material-symbols:analytics-outline',
-        allowedRoles: ['admin', 'user', 'super_admin'],
-      },
-    ],
-  },
-];
-
-// dashboard fav items
-export const dashboardFavItemsV2 = [
-  {
-    key: 'overview',
-    title: 'Dashboard ',
-    icon: 'material-symbols:space-dashboard-outline',
-    href: paths.private.overview,
-    items: [
-      {
-        key: 'notifications',
-        title: 'Notifications',
-        icon: 'nimbus:marketing',
-        href: '/notifications',
-        allowedRoles: ['admin', 'user', 'super_admin'],
-      },
-    ],
-  },
-  {
-    key: 'favorites',
-    title: 'Favorites',
-    icon: 'iconamoon:heart-light',
-    href: paths.private.favorites,
-    items: [
-      {
-        key: 'bev',
-        title: 'BEV ',
-        icon: 'tabler:map',
-        href: paths.private.favorites_bev,
-        allowedRoles: ['admin', 'user', 'super_admin'],
-      },
-    ],
-  },
-  {
-    key: 'chat',
-    title: 'Chat',
-    icon: 'fluent:chat-16-regular',
-    href: paths.private.chat,
-    // items: [
-    //   {
-    //     key: 'bev',
-    //     title: 'BEV ',
-    //     icon: 'tabler:map',
-    //     href: paths.private.favorites_bev,
-    //     allowedRoles: ['admin', 'user', 'super_admin'],
-    //   },
-    // ],
-  },
 ];
 
 // dashboard fav items
 export const dashboardFavItems = [
-  // {
-  //   key: 'chat2',
-  //   title: 'Workspace 1',
-  //   icon: 'fluent:chat-12-regular',
-  //   href: 'chat2',
-  //   allowedRoles: ['admin', 'user', 'super_admin'],
-  // },
-  // {
-  //   key: 'dms',
-  //   title: 'DMs',
-  //   icon: 'eva:message-circle-outline',
-  //   href: paths.private.dms,
-  //   allowedRoles: ['admin', 'user', 'super_admin'],
-  // },
-  // {
-  //   key: 'activity',
-  //   title: 'Activity',
-  //   icon: 'mdi:bell-notification-outline',
-  //   href: paths.private.activity,
-  //   allowedRoles: ['admin', 'user', 'super_admin'],
-  // },
-
-  // {
-  //   key: 'channel',
-  //   title: 'Channel',
-  //   icon: 'uil:channel',
-  //   href: paths.private.channel,
-  //   allowedRoles: ['admin', 'user', 'super_admin'],
-  // },
   {
     key: 'favorite',
     title: 'Favorite',

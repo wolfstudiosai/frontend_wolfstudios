@@ -251,7 +251,7 @@ const SidebarMenuItems = ({
 };
 
 // Popover menu item
-const PopoverMenuItem = ({ item, onClick }) => {
+export const PopoverMenuItem = ({ item, onClick }) => {
   const pathname = usePathname();
   const isActive = item.href && pathname === item.href;
   return (

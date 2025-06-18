@@ -121,16 +121,6 @@ export const CampaignView = () => {
         ) : (
           <CampaignTabView data={data} fetchList={refreshListView} />
         )}
-
-        {/* Right Panel Component */}
-        <CampaignRightPanel
-          onClose={() => {
-            setOpenPanel(false)
-            fetchList()
-          }}
-          open={openPanel}
-          view="EDIT"
-        />
       </Box>
     </PageContainer>
   );

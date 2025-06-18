@@ -125,8 +125,6 @@ export const PartnerListView = () => {
     return newRow;
   }, []);
 
-  console.log(partners)
-
   const handleProcessRowUpdateError = React.useCallback((error) => {
     console.log({ children: error.message, severity: 'error' });
   }, []);

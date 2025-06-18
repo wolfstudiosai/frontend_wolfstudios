@@ -70,7 +70,8 @@ const fetchOptions = async (key, searchValue) => {
             fetch: getProductListAsync
         },
         spaces: {
-            fetch: getSpaceListAsync
+            fetch: getSpaceListAsync,
+            filterable: true
         },
         // proposedPartners: {
         //     fetch: getProposedPartnerListAsync

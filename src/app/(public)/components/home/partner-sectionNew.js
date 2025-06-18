@@ -10,20 +10,23 @@ import { Iconify } from '/src/components/iconify/iconify';
 
 import { ManagePartnerRightPanel } from '../../partner/_components/manage-partner-right-panel';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
+import { PartnerRightPanel } from '../../partner/_components/partner-right-panel';
 
-export const PartnerSectionNew = ({ isSecondHorizontal }) => {
+export const PartnerSectionNew = () => {
   const [partners, setPartners] = useState([]);
 
   const router = useRouter();
 
   const fetchPartners = async () => {
     try {
+      const filters = [{ key: "isFeatured", type: "boolean", operator: "is", value: true }];
       const response = await getPartnerListAsync({
         page: 1,
         rowsPerPage: 20,
-      });
+      }, filters, 'and');
+
       if (response?.success) {
-        setPartners((prev) => [...prev, ...response.data]);
+        setPartners(response.data);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -79,14 +82,13 @@ export const PartnerSectionNew = ({ isSecondHorizontal }) => {
         </Stack>
       </Grid>
       <Grid md={12} xs={12}>
-        <StaticGridView partners={partners} isSecondHorizontal={isSecondHorizontal} />
+        <StaticGridView partners={partners} />
       </Grid>
     </Grid>
   );
 };
 
-const StaticGridView = ({ partners, isSecondHorizontal }) => {
-  const reversedPartners = [...partners].reverse();
+const StaticGridView = ({ partners }) => {
   return (
     <Box
       sx={{
@@ -118,7 +120,6 @@ const StaticGridView = ({ partners, isSecondHorizontal }) => {
           >
             <Stack spacing={0.5}>
               <Card card={partner} fetchList={partners} />
-              {isSecondHorizontal && <Card card={reversedPartners[index]} fetchList={partners} />}
             </Stack>
           </Box>
         ))}
@@ -129,6 +130,7 @@ const StaticGridView = ({ partners, isSecondHorizontal }) => {
 
 const Card = ({ card, fetchList }) => {
   const [openPartnerRightPanel, setOpenPartnerRightPanel] = useState(null);
+  const [selectedItemId, setSelectedItemId] = useState(null);
   return (
     <>
       <Box
@@ -141,7 +143,10 @@ const Card = ({ card, fetchList }) => {
           transition: 'transform 300ms ease',
           border: '1px solid var(--mui-palette-divider)',
         }}
-        onClick={() => setOpenPartnerRightPanel(card)}
+        onClick={() => {
+          setSelectedItemId(card.id)
+          setOpenPartnerRightPanel(true)
+        }}
       >
         {/* Background Image or Video */}
         {card?.video ? (
@@ -308,13 +313,17 @@ const Card = ({ card, fetchList }) => {
           {/* Add new text elements here */}
         </Box>
       </Box>
-      <ManagePartnerRightPanel
-        view="QUICK"
-        fetchList={fetchList}
-        open={openPartnerRightPanel ? true : false}
-        data={openPartnerRightPanel}
-        onClose={() => setOpenPartnerRightPanel(false)}
-      />
+      {openPartnerRightPanel && (
+        <PartnerRightPanel
+          onClose={() => {
+            setSelectedItemId(null)
+            setOpenPartnerRightPanel(false)
+          }}
+          fetchList={fetchList}
+          id={selectedItemId}
+          open={openPartnerRightPanel}
+        />
+      )}
     </>
   );
 };
