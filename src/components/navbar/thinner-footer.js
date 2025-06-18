@@ -1,11 +1,57 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Box, Container, Stack, Typography } from '@mui/material';
+import { Box, Button, Container, Popover, Stack, Typography } from '@mui/material';
 
 import { footerRoutes } from '/src/router';
+import { paths } from '/src/paths';
 import { pxToRem } from '/src/utils/helper';
+import { PopoverMenuItem } from '/src/utils/nav-utils';
+
+const archiveRoutes = [
+  {
+    key: 'records',
+    title: 'Records',
+    href: paths.private.archive_records,
+    icon: 'material-symbols:data-table-outline',
+    allowedRoles: ['admin', 'user', 'super_admin'],
+  },
+  {
+    key: 'analytics',
+    title: 'Analytics',
+    href: paths.private.archive_analytics,
+    icon: 'material-symbols:analytics-outline',
+    allowedRoles: ['admin', 'user', 'super_admin'],
+  },
+];
 
 export const ThinnerFooter = () => {
+  const [open, setOpen] = useState(false);
+  const buttonRef = useRef(null);
+
+  const [isHoveringButton, setIsHoveringButton] = useState(false);
+  const [isHoveringPopover, setIsHoveringPopover] = useState(false);
+
+  useEffect(() => {
+    setOpen(isHoveringButton || isHoveringPopover);
+  }, [isHoveringButton, isHoveringPopover]);
+  const handleButtonMouseEnter = () => {
+    setIsHoveringButton(true);
+  };
+
+  const handleButtonMouseLeave = () => {
+    setIsHoveringButton(false);
+  };
+
+  const handlePopoverMouseEnter = () => {
+    setIsHoveringPopover(true);
+  };
+
+  const handlePopoverMouseLeave = () => {
+    setIsHoveringPopover(false);
+  };
+
   return (
     <React.Fragment>
       <Box
@@ -60,7 +106,7 @@ export const ThinnerFooter = () => {
                     </Typography>
                   </Link>
                   {/* Divider */}
-                  {index !== footerRoutes.length - 1 && (
+                  {index !== footerRoutes.length && (
                     <Box
                       sx={{
                         height: pxToRem(12),
@@ -72,6 +118,55 @@ export const ThinnerFooter = () => {
                   )}
                 </React.Fragment>
               ))}
+
+              <>
+                <Button
+                  ref={buttonRef}
+                  variant="text"
+                  sx={{
+                    color: 'text.secondary',
+                    fontSize: '0.875rem',
+                    fontWeight: 400,
+                    lineHeight: '28px',
+                  }}
+                  onMouseEnter={handleButtonMouseEnter}
+                  onMouseLeave={handleButtonMouseLeave}
+                >
+                  Hover Me
+                </Button>
+
+                <Popover
+                  open={open}
+                  anchorEl={buttonRef.current}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                  }}
+                  onClose={() => setOpen(false)}
+                  disableRestoreFocus
+                  sx={{
+                    pointerEvents: 'none',
+                  }}
+                >
+                  <Box
+                    onMouseEnter={handlePopoverMouseEnter}
+                    onMouseLeave={handlePopoverMouseLeave}
+                    sx={{
+                      p: 0.5,
+                      pointerEvents: 'auto',
+                      width: 150,
+                    }}
+                  >
+                    {archiveRoutes.map((link, index) => (
+                      <PopoverMenuItem key={index} item={link} />
+                    ))}
+                  </Box>
+                </Popover>
+              </>
             </Stack>
 
             {/* Copyright Section */}
