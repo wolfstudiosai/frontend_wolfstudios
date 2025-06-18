@@ -17,6 +17,7 @@ import { PortfolioQuickView } from './portfolio-quickview';
 export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, view }) => {
   const { isLogin } = useAuth();
 
+  const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
   const [sidebarView, setSidebarView] = React.useState(view); //QUICK/ EDIT
 
   // *********************States*********************************
@@ -43,8 +44,8 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, view
   };
 
   const handleFeatured = async (featured) => {
-    setFieldValue('featured', featured);
-    await updatePortfolioAsync(file, { ...values, featured });
+    setIsFeatured(featured);
+    await updatePortfolioAsync(data.id, { ...data, isFeatured: featured });
     fetchList();
   };
 
@@ -71,8 +72,8 @@ export const ManagePortfolioRightPanel = ({ open, onClose, fetchList, data, view
                 control={
                   <Switch
                     size="small"
-                    checked={data?.featured}
-                    onChange={() => handleFeatured(!data?.featured)}
+                    checked={isFeatured}
+                    onChange={(e) => handleFeatured(e.target.checked)}
                     color="primary"
                   />
                 }
