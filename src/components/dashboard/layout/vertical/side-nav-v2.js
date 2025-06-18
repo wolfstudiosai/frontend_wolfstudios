@@ -1,18 +1,18 @@
 'use client';
 
-import * as React from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Collapse, Divider, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
+import { Collapse, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useColorScheme } from '@mui/material/styles';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import * as React from 'react';
 
-import useAuth from '/src/hooks/useAuth';
 import { Iconify } from '/src/components/iconify/iconify';
+import useAuth from '/src/hooks/useAuth';
 
 import { navColorStyles } from './styles';
-import { dashboardFavItemsV2, privateRoutesV2 } from '/src/router';
+import { privateRoutesV2 } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
 
 export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
@@ -173,8 +173,6 @@ export function SideNavV2({ color = 'evident', open, isFeaturedCardVisible }) {
         background: 'transparent',
       }}
     >
-      <MenuList>{renderMenuItems(dashboardFavItemsV2, 0, userInfo?.workspaces)}</MenuList>
-      <Divider />
       <MenuList>{renderMenuItems(privateRoutesV2)}</MenuList>
     </Box>
   );

@@ -132,7 +132,7 @@ export const ThinnerFooter = () => {
                   onMouseEnter={handleButtonMouseEnter}
                   onMouseLeave={handleButtonMouseLeave}
                 >
-                  Hover Me
+                  Archive
                 </Button>
 
                 <Popover
