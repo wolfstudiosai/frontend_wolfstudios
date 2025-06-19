@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -183,7 +185,9 @@ export const ChatProvider = ({ children }) => {
             (member) => member?.id !== userInfo?.id
           ),
         });
-        setActiveTab({ type: 'channel', id: data?.Channels[0]?.id });
+        if (activeTab === null) {
+          setActiveTab({ type: 'channel', id: data?.Channels[0]?.id });
+        }
       }
     } catch (error) {
       console.error('Error fetching workspace:', error);

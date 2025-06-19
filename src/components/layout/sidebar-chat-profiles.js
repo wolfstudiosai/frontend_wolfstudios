@@ -13,167 +13,141 @@ import {
 } from "@mui/material"
 import { Circle } from "@mui/icons-material"
 import { useRouter } from "next/navigation";
-
-const data = [
-    {
-        name: "John Doe",
-        image: "/placeholder.svg?height=40&width=40",
-        status: "Online",
-        unreadMessage: 2,
-        lastMessage: "Hello, how are you?",
-    },
-    {
-        name: "Jane Smith",
-        image: "/placeholder.svg?height=40&width=40",
-        status: "Offline",
-        unreadMessage: 5,
-        lastMessage: "See you tomorrow!",
-    },
-    {
-        name: "Mike Johnson",
-        image: "/placeholder.svg?height=40&width=40",
-        status: "Online",
-        unreadMessage: 1,
-        lastMessage: "Thanks for the help",
-    },
-    {
-        name: "Emily Davis",
-        image: "/placeholder.svg?height=40&width=40",
-        status: "Online",
-        unreadMessage: 3,
-        lastMessage: "Got it, thanks!",
-    },
-    {
-        name: "Robert Brown",
-        image: "/placeholder.svg?height=40&width=40",
-        status: "Away",
-        unreadMessage: 0,
-        lastMessage: "I'll be right back.",
-    },
-    {
-        name: "Olivia Wilson",
-        image: "/placeholder.svg?height=40&width=40",
-        status: "Offline",
-        unreadMessage: 7,
-        lastMessage: "Don't forget our meeting.",
-    },
-    {
-        name: "David Miller",
-        image: "/placeholder.svg?height=40&width=40",
-        status: "Online",
-        unreadMessage: 4,
-        lastMessage: "Can you review this?",
-    },
-    {
-        name: "Sophia Martinez",
-        image: "/placeholder.svg?height=40&width=40",
-        status: "Online",
-        unreadMessage: 0,
-        lastMessage: "Talk soon!",
-    },
-];
+import { useContext, useEffect, useState } from "react";
+import useAuth from '/src/hooks/useAuth';
+import { chatApi } from "../../utils/api";
+import { ChatContext } from "/src/contexts/chat";
 
 export default function SidebarChatProfiles({ isOpen }) {
+    const { userInfo } = useAuth();
+    const [directChannels, setDirectChannels] = useState([]);
     const router = useRouter();
-    const getStatusColor = (status) => {
-        return status === "Online" ? "#4caf50" : "#9e9e9e"
+    const { setActiveTab } = useContext(ChatContext);
+
+    const getDirectChannel = async () => {
+        const workspace = userInfo?.workspaces.find((workspace) => workspace.slug === "chat");
+        const response = await chatApi.get(`/workspaces/${workspace.id}`);
+        setDirectChannels(response?.data?.data?.DirectChannels);
     }
+
+    const getStatusColor = (status) => {
+        return status === "ONLINE" ? "#4caf50" : "#9e9e9e"
+    }
+
+    const handleDirectChannel = (channel) => {
+        setActiveTab({ type: 'direct', id: channel.id });
+        router.push(`/workspace/chat`);
+    }
+
+    useEffect(() => {
+        getDirectChannel();
+    }, []);
 
     return (
         <>
-            {data?.length > 0 ? (
-                <List sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: isOpen ? 0 : 0.5,
-                    minHeight: 240,
-                    overflowY: 'auto',
-                    scrollbarWidth: 'none',
-                    '&::-webkit-scrollbar': {
-                        display: 'none',
-                    },
-                }}>
-                    {data.map((user, index) => (
-                        <ListItem
-                            key={index}
-                            title={user.name}
-                            onClick={() => router.push(`/workspace/chat`)}
-                            sx={{
-                                px: 1,
-                                py: 1.5,
-                                borderRadius: 1,
-                                cursor: "pointer",
-                                "&:hover": {
-                                    backgroundColor: "action.hover",
-                                },
-                            }}
-                        >
-                            <ListItemAvatar>
-                                <Badge
-                                    badgeContent={user.unreadMessage}
-                                    color="error"
-                                    invisible={user.unreadMessage === 0}
-                                    sx={{
-                                        "& .MuiBadge-badge": {
-                                            fontSize: "0.75rem",
-                                            minWidth: "18px",
-                                            height: "18px",
-                                        },
-                                    }}
-                                >
-                                    <Box sx={{ position: "relative" }}>
-                                        <Avatar src={user.image} alt={user.name} sx={{ width: isOpen ? 30 : 25, height: isOpen ? 30 : 25 }} />
-                                        <Circle
-                                            sx={{
-                                                position: "absolute",
-                                                bottom: isOpen ? 0 : -2,
-                                                right: 0,
-                                                width: 8,
-                                                height: 8,
-                                                color: getStatusColor(user.status),
-                                                backgroundColor: "white",
-                                                borderRadius: "50%",
-                                            }}
-                                        />
-                                    </Box>
-                                </Badge>
-                            </ListItemAvatar>
+            {directChannels?.length > 0 ? (
+                <List
+                    dense
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: isOpen ? 0 : 0.5,
+                        minHeight: 200,
+                        overflowY: 'auto',
+                        scrollbarWidth: 'none',
+                        '&::-webkit-scrollbar': {
+                            display: 'none',
+                        },
+                    }}>
+                    {directChannels.map((channel, index) => {
+                        const user = channel?.Sender?.id === userInfo?.id ? channel?.Receiver : channel?.Sender;
+                        const lastMessage = channel?.DirectMessages?.at(-1);
+                        return (
+                            <ListItem
+                                key={index}
+                                title={user.firstName + " " + user.lastName}
+                                onClick={() => handleDirectChannel(channel)}
+                                sx={{
+                                    p: isOpen ? 0.5 : 1,
+                                    gap: isOpen ? 1 : 0,
+                                    borderRadius: 1,
+                                    justifyContent: isOpen ? "flex-start" : "center",
+                                    cursor: "pointer",
+                                    "&:hover": {
+                                        backgroundColor: "action.hover",
+                                    },
+                                }}
+                            >
+                                <ListItemAvatar>
+                                    <Badge
+                                        color="error"
+                                        invisible={user.unreadMessage === 0}
+                                        sx={{
+                                            "& .MuiBadge-badge": {
+                                                fontSize: "0.75rem",
+                                                minWidth: "18px",
+                                                height: "18px",
+                                            },
+                                        }}
+                                    >
+                                        <Box sx={{ position: "relative" }}>
+                                            <Avatar src={user.profileImage} alt={user.firstName + " " + user.lastName} sx={{ width: isOpen ? 30 : 25, height: isOpen ? 30 : 25 }} />
+                                            <Circle
+                                                sx={{
+                                                    position: "absolute",
+                                                    bottom: isOpen ? 0 : -2,
+                                                    right: 0,
+                                                    width: 8,
+                                                    height: 8,
+                                                    color: getStatusColor(user.chatStatus),
+                                                    backgroundColor: "white",
+                                                    borderRadius: "50%",
+                                                }}
+                                            />
+                                        </Box>
+                                    </Badge>
+                                </ListItemAvatar>
 
-                            <Collapse in={isOpen} orientation="horizontal">
-                                {isOpen && (
-                                    <ListItemText
-                                        primary={
-                                            <Typography
-                                                variant="subtitle2"
-                                                sx={{
-                                                    fontWeight: user.unreadMessage > 0 ? 600 : 400,
-                                                    color: "text.primary",
-                                                }}
-                                            >
-                                                {user.name}
-                                            </Typography>
-                                        }
-                                        secondary={
-                                            <Typography
-                                                variant="body2"
-                                                sx={{
-                                                    color: "text.secondary",
-                                                    overflow: "hidden",
-                                                    textOverflow: "ellipsis",
-                                                    whiteSpace: "nowrap",
-                                                    maxWidth: "200px",
-                                                    fontWeight: user.unreadMessage > 0 ? 500 : 400,
-                                                }}
-                                            >
-                                                {user.lastMessage}
-                                            </Typography>
-                                        }
-                                        sx={{ ml: 1 }}
-                                    />
-                                )}
-                            </Collapse>
-                        </ListItem>
-                    ))}
+                                <Collapse in={isOpen} orientation="horizontal">
+                                    {isOpen && (
+                                        <ListItemText
+                                            primary={
+                                                <Typography
+                                                    variant="subtitle2"
+                                                    sx={{
+                                                        fontWeight: 500,
+                                                        color: "text.primary",
+                                                    }}
+                                                >
+                                                    {user.firstName} {user.lastName}
+                                                </Typography>
+                                            }
+                                            secondary={
+                                                <Typography
+                                                    variant="body2"
+                                                    sx={{
+                                                        color: "text.secondary",
+                                                        overflow: "hidden",
+                                                        textOverflow: "ellipsis",
+                                                        whiteSpace: "nowrap",
+                                                        maxWidth: "200px",
+                                                    }}
+                                                >
+                                                    {lastMessage?.senderId === userInfo?.id ? 'You: ' : ''}
+                                                    {lastMessage?.deletedAt ? (
+                                                        <span style={{ color: 'gray', fontStyle: 'italic' }}>This message was deleted</span>
+                                                    ) : (
+                                                        lastMessage?.content
+                                                    )}
+                                                </Typography>
+                                            }
+                                            sx={{ ml: 1 }}
+                                        />
+                                    )}
+                                </Collapse>
+                            </ListItem>
+                        )
+                    })}
                 </List>
             ) : (
                 <></>

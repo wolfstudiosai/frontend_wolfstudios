@@ -37,6 +37,8 @@ const SidebarMenuItems = ({
   const pathname = usePathname();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openSubmenuKey, setOpenSubmenuKey] = useState(null)
+  const [submenuAnchorEl, setSubmenuAnchorEl] = useState(null);
+  const [hoveredItem, setHoveredItem] = useState(null);
 
   // Ref to store the hover timeout
   const hoverTimeoutRef = useRef(null)
@@ -195,91 +197,145 @@ const SidebarMenuItems = ({
         );
       })}
 
-      {!isOpen && isDesktop && (
-        items.map(item => {
-          return item.items && (
-            <Popover
-              key={item.key}
-              open={openSubmenuKey === item.key && Boolean(anchorEl)}
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              onClose={closeSubmenu}
-              onClick={closeSubmenu}
-              disableRestoreFocus
-              sx={{
-                pointerEvents: "none",
-                "& .MuiPaper-root": {
-                  pointerEvents: "auto",
+      {!isOpen && isDesktop && items.map((item) => {
+        if (!item.items?.length) return null;
+
+        const handleSubmenuEnter = (event, itemKey) => {
+          setHoveredItem(itemKey);
+          setSubmenuAnchorEl(event.currentTarget);
+        };
+
+        const handleSubmenuLeave = () => {
+          setHoveredItem(null);
+          setSubmenuAnchorEl(null);
+        };
+
+        return (
+          <Popover
+            key={item.key}
+            open={openSubmenuKey === item.key && Boolean(anchorEl)}
+            anchorEl={anchorEl}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+            onClose={closeSubmenu}
+            disableRestoreFocus
+            sx={{ pointerEvents: 'none' }}
+            slotProps={{
+              paper: {
+                onMouseEnter: cancelCloseSubmenu,
+                onMouseLeave: closeSubmenu,
+                sx: {
+                  pointerEvents: 'auto',
                   boxShadow: 3,
-                  mt: 0,
-                  ml: 0.5,
                   p: 0.5,
-                  minWidth: 200,
-                  borderRadius: 0,
                   bgcolor: 'background.paper',
-                },
-              }}
-              slotProps={{
-                paper: {
-                  onMouseEnter: cancelCloseSubmenu,
-                  onMouseLeave: closeSubmenu,
-                },
-              }}
-            >
-              <Box>
-                {item.href && <PopoverMenuItem
-                  item={item}
-                  onClick={closeSubmenu}
-                />}
-                {item.items.map((child) => (
-                  <PopoverMenuItem key={child.key} item={child} onClick={closeSubmenu} />
-                ))}
+                  borderRadius: 1,
+                  minWidth: 200,
+                }
+              }
+            }}
+          >
+            <Box>
+              <Box
+                onClick={() => item.href && router.push(item.href)}
+                sx={{
+                  px: 2,
+                  py: 1,
+                  cursor: 'pointer',
+                  bgcolor: item.href && pathname === item.href ? 'action.hover' : 'transparent',
+                  '&:hover': { bgcolor: 'action.hover' },
+                }}>
+                <Typography variant="body2" noWrap>
+                  {item.title}
+                </Typography>
               </Box>
-            </Popover>
-          )
-        })
-      )}
+              {item.items.map((child) => {
+                const isActive = child.href && pathname === child.href;
+                return (
+                  <Box
+                    key={child.key}
+                    onMouseEnter={(e) => handleSubmenuEnter(e, child.key)}
+                    onMouseLeave={handleSubmenuLeave}
+                    onClick={() => child.href && router.push(child.href)}
+                    sx={{
+                      px: 2,
+                      py: 1,
+                      cursor: 'pointer',
+                      bgcolor: isActive ? 'action.hover' : 'transparent',
+                      '&:hover': { bgcolor: 'action.hover' },
+                    }}
+                  >
+                    <Typography variant="body2" noWrap>
+                      {child.title}
+                    </Typography>
+
+                    {/* Recursive Submenu Popover */}
+                    {child.items?.length > 0 && hoveredItem === child.key && (
+                      <Popover
+                        open={Boolean(submenuAnchorEl)}
+                        anchorEl={submenuAnchorEl}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                        onClose={handleSubmenuLeave}
+                        disableRestoreFocus
+                        sx={{ pointerEvents: 'none' }}
+                        slotProps={{
+                          paper: {
+                            onMouseEnter: () => {
+                              clearTimeout(hoverTimeoutRef.current);
+                            },
+                            onMouseLeave: handleSubmenuLeave,
+                            sx: {
+                              pointerEvents: 'auto',
+                              p: 0.5,
+                              minWidth: 200,
+                              bgcolor: 'background.paper',
+                            },
+                          }
+                        }}
+                      >
+                        {child.items?.map((item) => <SidebarPopoverItem key={item.key} item={item} />)}
+                      </Popover>
+                    )}
+                  </Box>
+                )
+              })}
+            </Box>
+          </Popover>
+        );
+      })}
+
+
     </>
   );
 };
 
 // Popover menu item
-export const PopoverMenuItem = ({ item, onClick }) => {
+export const SidebarPopoverItem = ({ item }) => {
+  const router = useRouter();
   const pathname = usePathname();
   const isActive = item.href && pathname === item.href;
+
   return (
-    <Box
-      component={Link}
-      href={item.href}
-      onClick={onClick}
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        px: 2,
-        py: 1,
-        borderRadius: 1,
-        color: 'text.primary',
-        textDecoration: 'none',
-        typography: 'body2',
-        bgcolor: isActive ? 'action.hover' : 'transparent',
-        '&:hover': {
-          bgcolor: 'action.hover',
-          textDecoration: 'none',
-        },
-      }}
-    >
-      <Typography variant="body2" noWrap>
-        {item.title}
-      </Typography>
+    <Box>
+      <Box
+        key={item.key}
+        onClick={() => item.href && router.push(item.href)}
+        sx={{
+          px: 2,
+          py: 1,
+          cursor: 'pointer',
+          bgcolor: isActive ? 'action.hover' : 'transparent',
+          '&:hover': { bgcolor: 'action.hover' }
+        }}
+      >
+        <Typography variant="body2" noWrap>
+          {item.title}
+        </Typography>
+      </Box>
     </Box>
   );
 };
+
 
 export default SidebarMenuItems;
