@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { UserInfoPopover } from '../dashboard/layout/_components/user-info-popover';
 import { navColorStyles } from '../dashboard/layout/vertical/styles';
 import SidebarChatProfiles from './sidebar-chat-profiles';
-import { privateRoutesV2 } from '/src/router';
+import { privateRoutesV3 } from '/src/router';
 import SidebarMenuItems, { getWorkspacesTab } from '/src/utils/nav-utils';
 
 export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible }) {
@@ -43,7 +43,7 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
       <Divider />
       <MenuList>
         <SidebarMenuItems
-          items={privateRoutesV2}
+          items={privateRoutesV3}
           openMenus={openMenus}
           toggleMenuItem={toggleMenuItem}
           isDesktop={true}

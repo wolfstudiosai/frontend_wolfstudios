@@ -7,7 +7,7 @@ import { Box, Button, Container, Popover, Stack, Typography } from '@mui/materia
 import { footerRoutes } from '/src/router';
 import { paths } from '/src/paths';
 import { pxToRem } from '/src/utils/helper';
-import { PopoverMenuItem } from '/src/utils/nav-utils';
+import { SidebarPopoverItem } from '/src/utils/nav-utils';
 
 const archiveRoutes = [
   {
@@ -162,7 +162,7 @@ export const ThinnerFooter = () => {
                     }}
                   >
                     {archiveRoutes.map((link, index) => (
-                      <PopoverMenuItem key={index} item={link} />
+                      <SidebarPopoverItem key={index} item={link} />
                     ))}
                   </Box>
                 </Popover>

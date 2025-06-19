@@ -570,3 +570,150 @@ export const footerRoutes = [
   { label: 'Shop', href: '/shop' },
   { label: 'Collaborate', href: '/collaborate' },
 ];
+
+
+export const workspacesItems = [
+  {
+    key: 'content',
+    title: 'Content',
+    icon: 'material-symbols:space-dashboard-outline',
+    href: "/",
+    items: [
+      {
+        key: 'by-client',
+        title: 'By Client',
+        icon: 'nimbus:marketing',
+        href: "/",
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'by-product',
+        title: 'By Product',
+        icon: 'ph:package-light',
+        href: "/",
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
+  {
+    key: 'campaign',
+    title: 'Campaign',
+    icon: 'nimbus:marketing',
+    href: "/",
+    allowedRoles: ['admin', 'user', 'super_admin'],
+    items: [
+      {
+        key: 'by-client',
+        title: 'By Client',
+        icon: 'nimbus:marketing',
+        href: "/",
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'by-product',
+        title: 'By Product',
+        icon: 'ph:package-light',
+        href: "/",
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
+  {
+    key: 'partner',
+    title: 'Partner',
+    icon: 'nimbus:marketing',
+    href: '/',
+    allowedRoles: ['admin', 'user', 'super_admin'],
+    items: [
+      {
+        key: 'by-client',
+        title: 'By Client',
+        icon: 'nimbus:marketing',
+        href: "/",
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'by-product',
+        title: 'By Product',
+        icon: 'ph:package-light',
+        href: "/",
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  }
+]
+
+export const privateRoutesV3 = [
+  {
+    key: 'overview',
+    title: 'Dashboard ',
+    icon: 'material-symbols:space-dashboard-outline',
+    href: paths.private.overview,
+    items: [
+      {
+        key: 'notifications',
+        title: 'Notifications',
+        icon: 'nimbus:marketing',
+        href: '/notifications',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
+  {
+    key: 'favorites',
+    title: 'Favorites',
+    icon: 'iconamoon:heart-light',
+    href: paths.private.favorites,
+    items: [
+      {
+        key: 'bev',
+        title: 'BEV ',
+        icon: 'tabler:map',
+        href: paths.private.favorites_bev,
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
+  {
+    key: 'chat',
+    title: 'Chat',
+    icon: 'fluent:chat-16-regular',
+    href: paths.private.chat,
+    allowedRoles: ['admin', 'user', 'super_admin'],
+  },
+  {
+    key: 'workspaces',
+    title: 'Workspaces',
+    icon: 'fluent:chat-12-regular',
+    items: workspacesItems,
+  },
+  {
+    key: "records",
+    title: "Records",
+    icon: "material-symbols-light:data-table-outline",
+    href: paths.private.record,
+    allowedRoles: ['admin', 'user', 'super_admin'],
+  },
+  {
+    key: 'analytics',
+    title: 'Analytics',
+    icon: 'material-symbols-light:overview-outline-rounded',
+    href: paths.private.analytics,
+    items: [
+      {
+        key: 'by-platform',
+        title: 'By Platform',
+        href: paths.private.analytics_by_platform,
+        icon: 'tabler:device-analytics',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'by-partner',
+        title: 'By Partner',
+        href: paths.private.analytics_by_partner,
+        icon: 'ph:handshake-thin',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
+];
