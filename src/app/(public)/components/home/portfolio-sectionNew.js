@@ -26,7 +26,7 @@ export const PortfolioSectionNew = () => {
       page: 1,
       rowsPerPage: 20,
     }, filters, 'and');
-    console.log(response);
+
     if (response?.success) {
       setSpaces(response.data);
     }

@@ -7,8 +7,6 @@ import Grid from '@mui/material/Grid2';
 
 import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
-
-import { ManagePartnerRightPanel } from '../../partner/_components/manage-partner-right-panel';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { PartnerRightPanel } from '../../partner/_components/partner-right-panel';
 
