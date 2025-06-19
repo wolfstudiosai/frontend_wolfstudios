@@ -31,7 +31,12 @@ export default function TableFilterBuilder(
 ) {
   const [anchorEl, setAnchorEl] = useState(null);
   const metaMap = useMemo(() => extractMeta(metaData), [metaData]);
-  const columnOptions = useMemo(() => Object.keys(metaMap), [metaMap]);
+  const columnOptions = useMemo(() => metaData.map(item => {
+    const columnName = Object.keys(item)[0];
+    const label = item[columnName].label;
+    return { label, columnName };
+  }), [metaData]);
+
   const [error, setError] = useState('');
 
   const handleFilterChange = (index, field, value) => {
@@ -99,7 +104,7 @@ export default function TableFilterBuilder(
 
 
   const handleAddCondition = () => {
-    const defaultKey = columnOptions[0];
+    const defaultKey = columnOptions[0].columnName;
     const defaultType = metaMap[defaultKey]?.type || 'string';
     const defaultOperator = metaMap[defaultKey]?.operators[0] || '';
 
@@ -338,8 +343,10 @@ export default function TableFilterBuilder(
                     <Autocomplete
                       disableClearable
                       options={columnOptions}
-                      value={filter.key}
-                      onChange={(_, val) => handleFilterChange(index, 'key', val)}
+                      value={columnOptions.find(opt => opt.columnName === filter.key) || null}
+                      onChange={(_, val) => handleFilterChange(index, 'key', val?.columnName)}
+                      getOptionLabel={(option) => option.label || ''}
+                      isOptionEqualToValue={(option, value) => option.columnName === value.columnName}
                       renderInput={(params) => (
                         <TextField
                           size="small"
@@ -399,7 +406,7 @@ export default function TableFilterBuilder(
             )}
 
             <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 1 }}>
-              <Button variant="text" onClick={handleAddCondition} size="small" sx={{ width: '120px', px: 1 }}>
+              <Button disabled={metaData.length < 1} variant="text" onClick={handleAddCondition} size="small" sx={{ width: '120px', px: 1 }}>
                 + Add condition
               </Button>
               <Box display="flex" alignItems="center" justifyContent="center" gap={2}>
