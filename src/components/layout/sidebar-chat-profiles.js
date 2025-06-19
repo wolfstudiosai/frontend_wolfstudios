@@ -22,7 +22,7 @@ export default function SidebarChatProfiles({ isOpen }) {
     const { userInfo } = useAuth();
     const [directChannels, setDirectChannels] = useState([]);
     const router = useRouter();
-    const { setActiveTab, activeTab } = useContext(ChatContext);
+    const { setActiveTab } = useContext(ChatContext);
 
     const getDirectChannel = async () => {
         const workspace = userInfo?.workspaces.find((workspace) => workspace.slug === "chat");
@@ -68,9 +68,10 @@ export default function SidebarChatProfiles({ isOpen }) {
                                 title={user.firstName + " " + user.lastName}
                                 onClick={() => handleDirectChannel(channel)}
                                 sx={{
-                                    p: 1,
-                                    gap: 0,
+                                    p: isOpen ? 0.5 : 1,
+                                    gap: isOpen ? 1 : 0,
                                     borderRadius: 1,
+                                    justifyContent: isOpen ? "flex-start" : "center",
                                     cursor: "pointer",
                                     "&:hover": {
                                         backgroundColor: "action.hover",
