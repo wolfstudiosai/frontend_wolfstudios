@@ -10,11 +10,15 @@ import { RightSidebar } from './components/right-sidebar';
 import { ContentSkeleton } from './components/skeleton';
 
 export const ChatView = ({ slug }) => {
-  const { getWorkspace, activeTab, activeChannelThread, activeDirectThread } = useContext(ChatContext);
+  const { getWorkspace, activeTab, activeChannelThread, activeDirectThread, setActiveTab } = useContext(ChatContext);
 
   useEffect(() => {
     if (slug) {
       getWorkspace(slug);
+    }
+
+    return () => {
+      setActiveTab(null);
     }
   }, [slug]);
 

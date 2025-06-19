@@ -23,6 +23,8 @@ import { AuthProvider } from '/src/contexts/auth/AuthContext';
 import { UserProvider } from '/src/contexts/auth/user-context';
 import { SettingsProvider } from '/src/contexts/settings';
 import { SessionProvider } from "next-auth/react"
+import { ChatProvider } from '/src/contexts/chat';
+import { SocketProvider } from '/src/contexts/socket';
 
 export const metadata = { title: config.site.name };
 
@@ -49,7 +51,11 @@ export default async function Layout({ children }) {
                       <ThemeProvider>
                         <Progressbar />
                         <AuthGuard>
-                          <LayoutView>{children}</LayoutView>
+                          <SocketProvider>
+                            <ChatProvider>
+                              <LayoutView>{children}</LayoutView>
+                            </ChatProvider>
+                          </SocketProvider>
                         </AuthGuard>
                         {/* <SettingsButton /> */}
                         <Toaster position="bottom-right" />
