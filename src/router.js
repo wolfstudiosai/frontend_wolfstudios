@@ -571,26 +571,25 @@ export const footerRoutes = [
   { label: 'Collaborate', href: '/collaborate' },
 ];
 
-
 export const workspacesItems = [
   {
     key: 'content',
     title: 'Content',
     icon: 'material-symbols:space-dashboard-outline',
-    href: "/",
+    href: '/content/1',
     items: [
       {
         key: 'by-client',
         title: 'By Client',
         icon: 'nimbus:marketing',
-        href: "/",
+        href: '/content/2',
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
       {
         key: 'by-product',
         title: 'By Product',
         icon: 'ph:package-light',
-        href: "/",
+        href: '/content/3',
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
     ],
@@ -599,21 +598,21 @@ export const workspacesItems = [
     key: 'campaign',
     title: 'Campaign',
     icon: 'nimbus:marketing',
-    href: "/",
+    href: '/campaign',
     allowedRoles: ['admin', 'user', 'super_admin'],
     items: [
       {
         key: 'by-client',
         title: 'By Client',
         icon: 'nimbus:marketing',
-        href: "/",
+        href: '/campaign/1',
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
       {
         key: 'by-product',
         title: 'By Product',
         icon: 'ph:package-light',
-        href: "/",
+        href: '/campaign/2',
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
     ],
@@ -622,26 +621,26 @@ export const workspacesItems = [
     key: 'partner',
     title: 'Partner',
     icon: 'nimbus:marketing',
-    href: '/',
+    href: '/partner',
     allowedRoles: ['admin', 'user', 'super_admin'],
     items: [
       {
         key: 'by-client',
         title: 'By Client',
         icon: 'nimbus:marketing',
-        href: "/",
+        href: '/partner/1',
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
       {
         key: 'by-product',
         title: 'By Product',
         icon: 'ph:package-light',
-        href: "/",
+        href: '/partner/2',
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
     ],
-  }
-]
+  },
+];
 
 export const privateRoutesV3 = [
   {
@@ -688,9 +687,9 @@ export const privateRoutesV3 = [
     items: workspacesItems,
   },
   {
-    key: "records",
-    title: "Records",
-    icon: "material-symbols-light:data-table-outline",
+    key: 'records',
+    title: 'Records',
+    icon: 'material-symbols-light:data-table-outline',
     href: paths.private.record,
     allowedRoles: ['admin', 'user', 'super_admin'],
   },
