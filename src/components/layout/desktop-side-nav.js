@@ -1,19 +1,17 @@
 'use client';
 
-import * as React from 'react';
-import { Box, Collapse, Divider, IconButton, ListItem, MenuList, Typography } from '@mui/material';
+import { Box, Divider, IconButton, ListItem, MenuList, Typography } from '@mui/material';
 import { useColorScheme } from '@mui/material/styles';
 import { useSettings } from '/src/hooks/use-settings';
 import useAuth from '/src/hooks/useAuth';
 
-import { navColorStyles } from '../dashboard/layout/vertical/styles';
-import { dashboardFavItemsV2, privateRoutesV2 } from '/src/router';
-import { getWorkspacesTab } from '/src/utils/nav-utils';
-import SidebarMenuItems from '/src/utils/nav-utils';
-import SidebarChatProfiles from './sidebar-chat-profiles';
-import { UserInfoPopover } from '../dashboard/layout/_components/user-info-popover';
 import { Person, Settings } from '@mui/icons-material';
 import Link from 'next/link';
+import { UserInfoPopover } from '../dashboard/layout/_components/user-info-popover';
+import { navColorStyles } from '../dashboard/layout/vertical/styles';
+import SidebarChatProfiles from './sidebar-chat-profiles';
+import { privateRoutesV2 } from '/src/router';
+import SidebarMenuItems, { getWorkspacesTab } from '/src/utils/nav-utils';
 
 export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible }) {
   const { colorScheme = 'light' } = useColorScheme();
@@ -42,16 +40,6 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
       }}
     >
       <SidebarChatProfiles isOpen={open} />
-      <Divider />
-      <MenuList>
-        <SidebarMenuItems
-          items={dashboardFavItemsV2}
-          openMenus={openMenus}
-          toggleMenuItem={toggleMenuItem}
-          isDesktop={true}
-          isOpen={open}
-        />
-      </MenuList>
       <Divider />
       <MenuList>
         <SidebarMenuItems
