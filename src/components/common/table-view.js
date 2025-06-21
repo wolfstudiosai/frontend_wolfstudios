@@ -1,12 +1,12 @@
 'use client';
 
 import React from 'react';
-import { Box, IconButton, TextField, Typography, Popover, Paper, FormControl, FormControlLabel, Radio, RadioGroup, Button, Divider, Stack } from '@mui/material';
+import { Box, IconButton, TextField, Typography, Popover, Paper, FormControl, FormControlLabel, Radio, RadioGroup, Button, Divider, Stack, Drawer } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import { Iconify } from '/src/components/iconify/iconify';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -16,8 +16,14 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useTheme } from '@mui/material/styles';
 import { alpha } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
 
-export default function TableView({ views, setViews, selectedView }) {
+export default function TableView({ views, setViews, selectedView, showView, setShowView }) {
+    // drawer
+    const theme = useTheme();
+    const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
+    const [drawerOpen, setDrawerOpen] = useState(showView);
+
     const router = useRouter();
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab');
@@ -46,9 +52,16 @@ export default function TableView({ views, setViews, selectedView }) {
         }]);
     };
 
-    return (
-        <>
-            <Box width={250} bgcolor='background.paper' px={1.5}>
+    useEffect(() => {
+        if (!isLargeScreen && showView) {
+            setDrawerOpen(true);
+        }
+    }, [isLargeScreen, showView]);
+
+
+    const renderViewSidebar = () => {
+        return (
+            <Box width="100%" bgcolor='background.paper' px={1.5}>
                 <Box display='flex' justifyContent='space-between' alignItems='center'>
                     <Typography fontWeight={500} sx={{ fontSize: "14px", color: "text.secondary" }}>My Views</Typography>
                     <IconButton onClick={handleOpen}>
@@ -132,6 +145,33 @@ export default function TableView({ views, setViews, selectedView }) {
                     </Stack>
                 </Box>
             </Box>
+        )
+    }
+
+    return (
+        <>
+            {showView && (isLargeScreen ? (
+                // Show directly on large screens
+                <Box width={250} bgcolor="background.paper">
+                    {renderViewSidebar()}
+                </Box>
+            ) : (
+                // Show in Drawer on small screens
+                <Drawer
+                    anchor="left"
+                    open={drawerOpen}
+                    onClose={() => {
+                        setDrawerOpen(false);
+                        setShowView(false);
+                    }}
+                >
+                    <Box width={250} pt={1}>
+                        {renderViewSidebar()}
+                    </Box>
+                </Drawer>
+            ))}
+
+
 
             {/* View Popover */}
             <Popover
@@ -160,7 +200,7 @@ export default function TableView({ views, setViews, selectedView }) {
                         }}
                         onSubmit={handleCreateView}
                     >
-                        {({ values, handleChange }) => (
+                        {({ values, handleChange, isSubmitting }) => (
                             <Form>
                                 {/* Header */}
                                 <Box sx={{ p: 1.5 }}>
@@ -272,6 +312,7 @@ export default function TableView({ views, setViews, selectedView }) {
                                         variant="contained"
                                         color="primary"
                                         size="small"
+                                        disabled={isSubmitting || !values.name || !values.editPermission}
                                     >
                                         Create
                                     </Button>

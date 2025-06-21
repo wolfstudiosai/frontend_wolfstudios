@@ -309,12 +309,12 @@ export const CampaignListView = () => {
 
         <Box display='flex' justifyContent='center' alignItems='start'>
           {/* View */}
-          {showView && (
-            <TableView
-              views={views}
-              setViews={setViews}
-              selectedView={selectedView} />
-          )}
+          <TableView
+            views={views}
+            showView={showView}
+            setViews={setViews}
+            setShowView={setShowView}
+            selectedView={selectedView} />
 
           {/* Table */}
           <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
