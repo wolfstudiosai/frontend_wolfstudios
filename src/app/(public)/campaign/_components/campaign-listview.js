@@ -61,7 +61,7 @@ export const CampaignListView = () => {
   const [updatedRow, setUpdatedRow] = React.useState(null);
 
   // View
-  const [showView, setShowView] = React.useState(true);
+  const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([
     {
       name: 'Name',
@@ -70,6 +70,7 @@ export const CampaignListView = () => {
         { key: 'Name', value: 'REVO', operator: 'contains', type: 'string' },
       ],
       sort: { field: 'name', order: 'asc' },
+      favorite: true,
     },
     {
       name: 'Status',
@@ -78,6 +79,14 @@ export const CampaignListView = () => {
         { key: 'CampaignStatus', value: 'Active', operator: 'contains', type: 'string' },
       ],
       sort: { field: 'status', order: 'asc' },
+    },
+    {
+      name: 'Client',
+      editPermission: 'collaborative',
+      filters: [
+        { key: 'Client', value: 'REVO', operator: 'contains', type: 'string' },
+      ],
+      sort: { field: 'client', order: 'asc' },
     },
   ]);
   const searchParams = useSearchParams();
@@ -251,6 +260,9 @@ export const CampaignListView = () => {
       const viewData = views.find((v) => v.name === view);
       setSelectedView(viewData);
       setFilters(viewData?.filters || []);
+    } else {
+      setSelectedView(null);
+      setFilters([]);
     }
   }, [searchParams]);
 

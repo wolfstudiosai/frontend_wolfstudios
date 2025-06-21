@@ -13,7 +13,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function TableView({ views, setViews, selectedView }) {
@@ -55,6 +54,22 @@ export default function TableView({ views, setViews, selectedView }) {
                 <Divider sx={{ my: 1 }} />
 
                 <Stack>
+                    <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        onClick={() => router.push(`?tab=${tab}`)}
+                        sx={{
+                            p: 1,
+                            cursor: 'pointer',
+                            '&:hover': { bgcolor: 'action.hover' },
+                        }}
+                    >
+                        <Box display="flex" alignItems="center" gap={1}>
+                            <Iconify icon="tabler:table" width={18} height={18} />
+                            <Typography variant="body2" fontWeight={500}>Default View</Typography>
+                        </Box>
+                    </Box>
                     {views.map((view, index) => (
                         <Box
                             key={index}
@@ -93,8 +108,6 @@ export default function TableView({ views, setViews, selectedView }) {
                                 sx={{ display: 'none', alignItems: 'center', justifyContent: 'center' }}
                             />
                         </Box>
-
-
                     ))}
                 </Stack>
             </Box>
