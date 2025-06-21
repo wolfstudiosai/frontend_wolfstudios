@@ -16,7 +16,14 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 export default function TableView() {
     const [anchorEl, setAnchorEl] = useState(null);
     const [viewAnchorEl, setViewAnchorEl] = useState(null);
-    const [views, setViews] = useState([]);
+    const [views, setViews] = useState([
+        {
+            name: 'Default',
+            editPermission: 'collaborative',
+            filters: [],
+            sort: { field: 'name', order: 'asc' },
+        },
+    ]);
 
     const handleOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -25,7 +32,12 @@ export default function TableView() {
     const handleCreateView = (values) => {
         console.log('Form submitted:', values);
         setAnchorEl(null);
-        setViews([...views, values]);
+        setViews([...views, {
+            name: values.name,
+            editPermission: values.editPermission,
+            filters: [],
+            sort: { field: 'name', order: 'asc' },
+        }]);
     };
 
     return (
