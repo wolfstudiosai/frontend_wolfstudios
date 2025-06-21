@@ -4,7 +4,7 @@ import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { IconButton, Popover, TextField } from '@mui/material';
+import { alpha, Button, IconButton, Popover, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import * as React from 'react';
@@ -17,8 +17,12 @@ import { MediaUploader } from '/src/components/uploaders/media-uploader';
 import { defaultCampaign } from '../_lib/campaign.types';
 import { toast } from 'sonner';
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
+import TableView from '/src/components/common/table-view';
+import TableReorderIcon from '@mui/icons-material/Reorder';
+import { useTheme } from '@mui/material/styles';
 
 export const CampaignListView = () => {
+  const theme = useTheme();
   const anchorEl = React.useRef(null);
   const [imageToShow, setImageToShow] = React.useState(null);
   const [open, setOpen] = React.useState(false);
@@ -59,6 +63,9 @@ export const CampaignListView = () => {
   const [metaData, setMetaData] = React.useState([]);
   const [filters, setFilters] = React.useState([]);
   const [gate, setGate] = React.useState('and');
+
+  // View
+  const [view, setView] = React.useState(true);
 
   async function fetchList() {
     try {
@@ -220,15 +227,27 @@ export const CampaignListView = () => {
     <PageContainer>
       <Card sx={{ borderRadius: 0 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
-          <TableFilterBuilder
-            metaData={metaData}
-            filters={filters}
-            gate={gate}
-            setFilters={setFilters}
-            setGate={setGate}
-            handleFilterApply={handleFilterApply}
-            handleFilterClear={handleFilterClear}
-          />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Button
+              startIcon={<TableReorderIcon />}
+              variant="text"
+              size="small"
+              onClick={() => setView(!view)}
+              sx={{ bgcolor: view ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
+            >
+              View
+            </Button>
+
+            <TableFilterBuilder
+              metaData={metaData}
+              filters={filters}
+              gate={gate}
+              setFilters={setFilters}
+              setGate={setGate}
+              handleFilterApply={handleFilterApply}
+              handleFilterClear={handleFilterClear}
+            />
+          </Box>
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <IconButton onClick={handleAddNewItem}>
               <AddIcon />
@@ -246,20 +265,23 @@ export const CampaignListView = () => {
           </Box>
         </Box>
 
-        <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
-          <EditableDataTable
-            columns={visibleColumns}
-            rows={records}
-            processRowUpdate={processRowUpdate}
-            onProcessRowUpdateError={handleProcessRowUpdateError}
-            loading={loading}
-            rowCount={totalRecords}
-            checkboxSelection
-            pageSizeOptions={[20, 30, 50]}
-            paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
-            onPageChange={handlePaginationModelChange}
-            onRowSelectionModelChange={handleRowSelection}
-          />
+        <Box display='flex' justifyContent='center' alignItems='start'>
+          {view && <TableView />}
+          <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
+            <EditableDataTable
+              columns={visibleColumns}
+              rows={records}
+              processRowUpdate={processRowUpdate}
+              onProcessRowUpdateError={handleProcessRowUpdateError}
+              loading={loading}
+              rowCount={totalRecords}
+              checkboxSelection
+              pageSizeOptions={[20, 30, 50]}
+              paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
+              onPageChange={handlePaginationModelChange}
+              onRowSelectionModelChange={handleRowSelection}
+            />
+          </Box>
         </Box>
       </Card>
 

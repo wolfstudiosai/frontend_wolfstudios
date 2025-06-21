@@ -314,10 +314,9 @@ export default function TableFilterBuilder(
   return (
     <>
       <Button
-        endIcon={<FilterListIcon />}
+        startIcon={<FilterListIcon />}
         size="small"
         variant="text"
-        // color='transparent'
         onClick={handleOpen}
       >
         Filter
