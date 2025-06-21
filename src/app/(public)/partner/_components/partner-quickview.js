@@ -577,13 +577,20 @@ export const PartnerSliderCard = ({ item, sx = {} }) => {
 
 export const PartnerIframes = ({ profiles }) => {
   const getEmbedUrl = (url) => {
+
     if (url && url?.includes('instagram.com')) {
-      const postMatch = url.match(/instagram\.com\/p\/([^\/]+)/);
+
+      const cleanUrl = url.split('?')[0];
+
+      const postMatch = cleanUrl.match(/instagram\.com\/p\/([^\/]+)/);
+
       if (postMatch) {
         return `https://www.instagram.com/p/${postMatch[1]}/embed`;
       }
-      // Profile fallback (best effort)
-      const username = url.split('/').filter(Boolean).pop();
+      // Profile fallback
+      const parts = cleanUrl.split('/').filter(Boolean);
+      const instagramIndex = parts.findIndex(part => part.includes('instagram.com'));
+      const username = parts[instagramIndex + 1]; 
       return `https://www.instagram.com/${username}/embed`;
     }
     if (url && url?.includes('tiktok.com')) {
@@ -620,6 +627,92 @@ export const PartnerIframes = ({ profiles }) => {
 export const EmbedCard = ({ platform, embedUrl }) => {
   const [hasError, setHasError] = useState(false);
 
+  const isInstagram = embedUrl?.includes('instagram.com');
+  const isTwitter = embedUrl?.includes('x.com') || embedUrl?.includes('twitframe.com');
+  const isPinterest = embedUrl?.includes('pinterest.com');
+  const isLinkedIn = embedUrl?.includes('linkedin.com');
+
+  const shouldShowDirectLink = isTwitter || isPinterest || isLinkedIn;
+  const isUnsupportedEmbed = shouldShowDirectLink && !hasError;
+
+  const isInstagramWithoutUsername = (() => {
+    if (!isInstagram) return false;
+    try {
+      const url = new URL(embedUrl);
+      const pathParts = url.pathname.split('/').filter(Boolean);
+      return pathParts.length === 0;
+    } catch {
+      return true;
+    }
+  })();
+
+  const isFallback =
+    (!embedUrl || ['Not Found', 'Not found', 'unknown', 'Not Provided'].includes(embedUrl) || hasError) &&
+    !isInstagram;
+
+  const shouldShowInstagramFallback = isInstagram && isInstagramWithoutUsername;
+
+  const renderPlatformFallback = () => {
+    let icon, color, message;
+    
+    switch (platform.toLowerCase()) {
+      case 'instagram':
+        icon = 'mdi:instagram';
+        color = '#E1306C';
+        message = 'Instagram profile is unavailable.';
+        break;
+      case 'x':
+      case 'twitter':
+        icon = 'ri:twitter-x-fill';
+        color = '#000000';
+        message = 'Twitter (X) profile is unavailable';
+        break;
+      case 'pinterest':
+        icon = 'ri:pinterest-fill';
+        color = '#E60023';
+        message = 'Pinterest profile is unavailable';
+        break;
+      case 'linkedin':
+        icon = 'mdi:linkedin';
+        color = '#0077B5';
+        message = 'LinkedIn profile is unavailable';
+        break;
+      default:
+        icon = 'mdi:link-variant-off';
+        color = '#666666';
+        message = 'This profile is private or unavailable.';
+    }
+
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          textAlign: 'center',
+          px: 2,
+        }}
+      >
+        <Iconify icon={icon} width={36} height={36} sx={{ color, opacity: 0.5, mb: 1 }} />
+        <Typography variant="body2" color="text.secondary">
+          {message}
+        </Typography>
+        {embedUrl && !['Not Found', 'Not found', 'unknown', 'Not Provided'].includes(embedUrl) && (
+          <Link href={embedUrl} passHref legacyBehavior>
+            <a target="_blank" rel="noopener noreferrer" style={{ marginTop: 8 }}>
+              <Typography variant="caption" color="primary">
+                Open in {platform}
+              </Typography>
+            </a>
+          </Link>
+        )}
+      </Box>
+    );
+  };
+
   return (
     <Box
       sx={{
@@ -632,10 +725,12 @@ export const EmbedCard = ({ platform, embedUrl }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: hasError ? '#f9f9f9' : 'white',
+        backgroundColor: hasError || isFallback || shouldShowInstagramFallback || isUnsupportedEmbed ? '#f9f9f9' : 'white',
       }}
     >
-      {embedUrl !== 'Not Found' && embedUrl !== 'Not found' && embedUrl !== 'unknown' && embedUrl !== 'Not Provided' ? (
+      {isFallback || shouldShowInstagramFallback || isUnsupportedEmbed ? (
+        renderPlatformFallback()
+      ) : (
         <iframe
           src={embedUrl}
           title={`${platform} preview`}
@@ -647,10 +742,6 @@ export const EmbedCard = ({ platform, embedUrl }) => {
           }}
           onError={() => setHasError(true)}
         />
-      ) : (
-        <Typography variant="body2" color="text.secondary" align="center" sx={{ px: 2 }}>
-          This profile is private or unavailable
-        </Typography>
       )}
     </Box>
   );
