@@ -20,6 +20,7 @@ import TableFilterBuilder from '/src/components/common/table-filter-builder';
 import TableView from '/src/components/common/table-view';
 import TableReorderIcon from '@mui/icons-material/Reorder';
 import { useTheme } from '@mui/material/styles';
+import { useSearchParams } from 'next/navigation';
 
 export const CampaignListView = () => {
   const theme = useTheme();
@@ -59,13 +60,35 @@ export const CampaignListView = () => {
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [updatedRow, setUpdatedRow] = React.useState(null);
 
+  // View
+  const [showView, setShowView] = React.useState(true);
+  const [views, setViews] = React.useState([
+    {
+      name: 'Name',
+      editPermission: 'collaborative',
+      filters: [
+        { key: 'Name', value: 'REVO', operator: 'contains', type: 'string' },
+      ],
+      sort: { field: 'name', order: 'asc' },
+    },
+    {
+      name: 'Status',
+      editPermission: 'collaborative',
+      filters: [
+        { key: 'CampaignStatus', value: 'Active', operator: 'contains', type: 'string' },
+      ],
+      sort: { field: 'status', order: 'asc' },
+    },
+  ]);
+  const searchParams = useSearchParams();
+  const [selectedView, setSelectedView] = React.useState(null);
+
   // filter
   const [metaData, setMetaData] = React.useState([]);
   const [filters, setFilters] = React.useState([]);
   const [gate, setGate] = React.useState('and');
 
-  // View
-  const [view, setView] = React.useState(true);
+  console.log(filters);
 
   async function fetchList() {
     try {
@@ -222,6 +245,15 @@ export const CampaignListView = () => {
     fetchList();
   }, [pagination]);
 
+  React.useEffect(() => {
+    const view = searchParams.get('view');
+    if (view) {
+      const viewData = views.find((v) => v.name === view);
+      setSelectedView(viewData);
+      setFilters(viewData?.filters || []);
+    }
+  }, [searchParams]);
+
 
   return (
     <PageContainer>
@@ -232,8 +264,8 @@ export const CampaignListView = () => {
               startIcon={<TableReorderIcon />}
               variant="text"
               size="small"
-              onClick={() => setView(!view)}
-              sx={{ bgcolor: view ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
+              onClick={() => setShowView(!showView)}
+              sx={{ bgcolor: showView ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
             >
               View
             </Button>
@@ -266,7 +298,15 @@ export const CampaignListView = () => {
         </Box>
 
         <Box display='flex' justifyContent='center' alignItems='start'>
-          {view && <TableView />}
+          {/* View */}
+          {showView && (
+            <TableView
+              views={views}
+              setViews={setViews}
+              selectedView={selectedView} />
+          )}
+
+          {/* Table */}
           <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
             <EditableDataTable
               columns={visibleColumns}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box } from '@mui/material'
 import { PageContainer } from '/src/components/container/PageContainer'
 import { CustomTab } from '../../../components/core/custom-tab';
@@ -9,6 +9,7 @@ import { ProductionListView } from '../../(public)/production/_components/produc
 import { PartnerListView } from '../../(public)/partner/_components/partner-listview';
 import { CampaignListView } from '../../(public)/campaign/_components/campaign-listview';
 import AllContentListView from '../../(private)/all-content/_component/all-content-list-view';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 const tabs = [
     { label: 'Campaign', value: 'campaign' },
@@ -19,10 +20,24 @@ const tabs = [
 ];
 
 export default function RecordPageView() {
-    const [tab, setTab] = useState('campaign');
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [tab, setTab] = useState(searchParams.get('tab') || 'campaign');
+
     const handleChange = (event, newValue) => {
         setTab(newValue);
+        router.push(`?tab=${newValue}`);
     };
+
+
+    useEffect(() => {
+        const tab = searchParams.get('tab');
+        if (!tab) {
+            setTab('campaign');
+            router.push(`?tab=campaign`);
+        }
+    }, [searchParams]);
+
     return (
         <PageContainer>
             <Box mb={1}>

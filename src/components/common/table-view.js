@@ -12,21 +12,23 @@ import { Iconify } from '/src/components/iconify/iconify';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-export default function TableView() {
+export default function TableView({ views, setViews, selectedView }) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const tab = searchParams.get('tab');
     const [anchorEl, setAnchorEl] = useState(null);
     const [viewAnchorEl, setViewAnchorEl] = useState(null);
-    const [views, setViews] = useState([
-        {
-            name: 'Default',
-            editPermission: 'collaborative',
-            filters: [],
-            sort: { field: 'name', order: 'asc' },
-        },
-    ]);
 
     const handleOpen = (event) => {
         setAnchorEl(event.currentTarget);
+    };
+
+    const handleClickView = (view) => {
+        router.push(`?tab=${tab}&view=${view.name}`);
     };
 
     const handleCreateView = (values) => {
@@ -50,7 +52,7 @@ export default function TableView() {
                     </IconButton>
                 </Box>
 
-                <Divider sx={{ my: 2 }} />
+                <Divider sx={{ my: 1 }} />
 
                 <Stack>
                     {views.map((view, index) => (
@@ -59,9 +61,11 @@ export default function TableView() {
                             display="flex"
                             justifyContent="space-between"
                             alignItems="center"
+                            onClick={() => handleClickView(view)}
                             sx={{
                                 p: 1,
                                 cursor: 'pointer',
+                                bgcolor: selectedView?.name === view.name ? 'action.hover' : 'transparent',
                                 '&:hover': { bgcolor: 'action.hover' },
                                 '& .hover-icon': { display: 'none' },
                                 '&:hover .hover-icon': { display: 'inline-flex' },
@@ -78,7 +82,10 @@ export default function TableView() {
                                 </Typography>
                             </Box>
                             <Iconify
-                                onClick={(e) => setViewAnchorEl(e.currentTarget)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setViewAnchorEl(e.currentTarget);
+                                }}
                                 className="action-hover-icon"
                                 icon="iconamoon:arrow-down-2-light"
                                 width={18}
