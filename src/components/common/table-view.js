@@ -151,12 +151,10 @@ export default function TableView({ views, setViews, selectedView, showView, set
     return (
         <>
             {showView && (isLargeScreen ? (
-                // Show directly on large screens
                 <Box width={250} bgcolor="background.paper">
                     {renderViewSidebar()}
                 </Box>
             ) : (
-                // Show in Drawer on small screens
                 <Drawer
                     anchor="left"
                     open={drawerOpen}

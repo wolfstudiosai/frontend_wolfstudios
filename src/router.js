@@ -676,14 +676,14 @@ export const privateRoutesV3 = [
   {
     key: 'chat',
     title: 'Chat',
-    icon: 'fluent:chat-16-regular',
+    icon: 'fluent:chat-12-regular',
     href: paths.private.chat,
     allowedRoles: ['admin', 'user', 'super_admin'],
   },
   {
     key: 'workspaces',
     title: 'Workspaces',
-    icon: 'fluent:chat-12-regular',
+    icon: 'carbon:workspace',
     items: workspacesItems,
   },
   {
@@ -696,7 +696,7 @@ export const privateRoutesV3 = [
   {
     key: 'analytics',
     title: 'Analytics',
-    icon: 'material-symbols-light:overview-outline-rounded',
+    icon: 'mdi:analytics',
     href: paths.private.analytics,
     items: [
       {
