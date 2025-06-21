@@ -8,6 +8,8 @@ import TableAutoComplete from './table-auto-complete';
 import { validateFilters } from '/src/utils/helper';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import { useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 const extractMeta = (metaArray) => {
   const map = {};
@@ -29,6 +31,8 @@ export default function TableFilterBuilder(
     handleFilterClear
   }
 ) {
+  const searchParams = useSearchParams();
+  const view = searchParams.get('view');
   const [anchorEl, setAnchorEl] = useState(null);
   const metaMap = useMemo(() => extractMeta(metaData), [metaData]);
   const columnOptions = useMemo(() => metaData.map(item => {
@@ -311,13 +315,16 @@ export default function TableFilterBuilder(
     }
   };
 
+  useEffect(() => {
+    handleApply();
+  }, [view]);
+
   return (
     <>
       <Button
-        endIcon={<FilterListIcon />}
+        startIcon={<FilterListIcon />}
         size="small"
         variant="text"
-        // color='transparent'
         onClick={handleOpen}
       >
         Filter

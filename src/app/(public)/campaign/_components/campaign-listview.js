@@ -4,7 +4,7 @@ import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { IconButton, Popover, TextField } from '@mui/material';
+import { alpha, Button, IconButton, Popover, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import * as React from 'react';
@@ -17,8 +17,14 @@ import { MediaUploader } from '/src/components/uploaders/media-uploader';
 import { defaultCampaign } from '../_lib/campaign.types';
 import { toast } from 'sonner';
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
+import TableView from '/src/components/common/table-view';
+import TableReorderIcon from '@mui/icons-material/Reorder';
+import { useTheme } from '@mui/material/styles';
+import { useSearchParams } from 'next/navigation';
+import { Iconify } from '/src/components/iconify/iconify';
 
 export const CampaignListView = () => {
+  const theme = useTheme();
   const anchorEl = React.useRef(null);
   const [imageToShow, setImageToShow] = React.useState(null);
   const [open, setOpen] = React.useState(false);
@@ -54,6 +60,38 @@ export const CampaignListView = () => {
   const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [updatedRow, setUpdatedRow] = React.useState(null);
+
+  // View
+  const [showView, setShowView] = React.useState(false);
+  const [views, setViews] = React.useState([
+    {
+      name: 'Name',
+      editPermission: 'collaborative',
+      filters: [
+        { key: 'Name', value: 'REVO', operator: 'contains', type: 'string' },
+      ],
+      sort: { field: 'name', order: 'asc' },
+      favorite: true,
+    },
+    {
+      name: 'Status',
+      editPermission: 'locked',
+      filters: [
+        { key: 'CampaignStatus', value: 'Active', operator: 'contains', type: 'string' },
+      ],
+      sort: { field: 'status', order: 'asc' },
+    },
+    {
+      name: 'Client',
+      editPermission: 'personal',
+      filters: [
+        { key: 'Client', value: 'REVO', operator: 'contains', type: 'string' },
+      ],
+      sort: { field: 'client', order: 'asc' },
+    },
+  ]);
+  const searchParams = useSearchParams();
+  const [selectedView, setSelectedView] = React.useState(null);
 
   // filter
   const [metaData, setMetaData] = React.useState([]);
@@ -215,20 +253,59 @@ export const CampaignListView = () => {
     fetchList();
   }, [pagination]);
 
+  React.useEffect(() => {
+    const view = searchParams.get('view');
+    if (view) {
+      const viewData = views.find((v) => v.name === view);
+      setSelectedView(viewData);
+      setFilters(viewData?.filters || []);
+    } else {
+      setSelectedView(null);
+      setFilters([]);
+    }
+  }, [searchParams]);
+
 
   return (
     <PageContainer>
       <Card sx={{ borderRadius: 0 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
-          <TableFilterBuilder
-            metaData={metaData}
-            filters={filters}
-            gate={gate}
-            setFilters={setFilters}
-            setGate={setGate}
-            handleFilterApply={handleFilterApply}
-            handleFilterClear={handleFilterClear}
-          />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Button
+              startIcon={<TableReorderIcon />}
+              variant="text"
+              size="small"
+              onClick={() => setShowView(!showView)}
+              sx={{ bgcolor: showView ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
+            >
+              View
+            </Button>
+
+            <TableFilterBuilder
+              metaData={metaData}
+              filters={filters}
+              gate={gate}
+              setFilters={setFilters}
+              setGate={setGate}
+              handleFilterApply={handleFilterApply}
+              handleFilterClear={handleFilterClear}
+            />
+
+            <Button
+              startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />}
+              variant="text"
+              size="small"
+            >
+              Group
+            </Button>
+            <Button
+              startIcon={<Iconify icon="si:swap-vert-duotone" width={16} height={16} />}
+              variant="text"
+              size="small"
+            >
+              Sort
+            </Button>
+          </Box>
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <IconButton onClick={handleAddNewItem}>
               <AddIcon />
@@ -246,20 +323,31 @@ export const CampaignListView = () => {
           </Box>
         </Box>
 
-        <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
-          <EditableDataTable
-            columns={visibleColumns}
-            rows={records}
-            processRowUpdate={processRowUpdate}
-            onProcessRowUpdateError={handleProcessRowUpdateError}
-            loading={loading}
-            rowCount={totalRecords}
-            checkboxSelection
-            pageSizeOptions={[20, 30, 50]}
-            paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
-            onPageChange={handlePaginationModelChange}
-            onRowSelectionModelChange={handleRowSelection}
-          />
+        <Box display='flex' justifyContent='center' alignItems='start'>
+          {/* View */}
+          <TableView
+            views={views}
+            showView={showView}
+            setViews={setViews}
+            setShowView={setShowView}
+            selectedView={selectedView} />
+
+          {/* Table */}
+          <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
+            <EditableDataTable
+              columns={visibleColumns}
+              rows={records}
+              processRowUpdate={processRowUpdate}
+              onProcessRowUpdateError={handleProcessRowUpdateError}
+              loading={loading}
+              rowCount={totalRecords}
+              checkboxSelection
+              pageSizeOptions={[20, 30, 50]}
+              paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
+              onPageChange={handlePaginationModelChange}
+              onRowSelectionModelChange={handleRowSelection}
+            />
+          </Box>
         </Box>
       </Card>
 

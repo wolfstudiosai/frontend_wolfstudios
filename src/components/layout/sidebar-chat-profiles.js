@@ -19,15 +19,19 @@ import { chatApi } from "../../utils/api";
 import { ChatContext } from "/src/contexts/chat";
 
 export default function SidebarChatProfiles({ isOpen }) {
-    const { userInfo } = useAuth();
+    const { userInfo, isLogin } = useAuth();
     const [directChannels, setDirectChannels] = useState([]);
     const router = useRouter();
     const { setActiveTab } = useContext(ChatContext);
 
     const getDirectChannel = async () => {
-        const workspace = userInfo?.workspaces.find((workspace) => workspace.slug === "chat");
-        const response = await chatApi.get(`/workspaces/${workspace.id}`);
-        setDirectChannels(response?.data?.data?.DirectChannels);
+        try {
+            const workspace = userInfo?.workspaces.find((workspace) => workspace.slug === "chat");
+            const response = await chatApi.get(`/workspaces/${workspace.id}`);
+            setDirectChannels(response?.data?.data?.DirectChannels);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const getStatusColor = (status) => {
@@ -40,8 +44,10 @@ export default function SidebarChatProfiles({ isOpen }) {
     }
 
     useEffect(() => {
-        getDirectChannel();
-    }, []);
+        if (isLogin) {
+            getDirectChannel();
+        }
+    }, [isLogin]);
 
     return (
         <>
