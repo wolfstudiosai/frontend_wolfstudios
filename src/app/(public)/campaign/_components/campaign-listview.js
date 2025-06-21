@@ -74,7 +74,7 @@ export const CampaignListView = () => {
     },
     {
       name: 'Status',
-      editPermission: 'collaborative',
+      editPermission: 'locked',
       filters: [
         { key: 'CampaignStatus', value: 'Active', operator: 'contains', type: 'string' },
       ],
@@ -82,7 +82,7 @@ export const CampaignListView = () => {
     },
     {
       name: 'Client',
-      editPermission: 'collaborative',
+      editPermission: 'personal',
       filters: [
         { key: 'Client', value: 'REVO', operator: 'contains', type: 'string' },
       ],
@@ -96,8 +96,6 @@ export const CampaignListView = () => {
   const [metaData, setMetaData] = React.useState([]);
   const [filters, setFilters] = React.useState([]);
   const [gate, setGate] = React.useState('and');
-
-  console.log(filters);
 
   async function fetchList() {
     try {

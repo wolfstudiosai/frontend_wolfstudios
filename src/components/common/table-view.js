@@ -14,6 +14,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import { useTheme } from '@mui/material/styles';
+import { alpha } from '@mui/material';
 
 export default function TableView({ views, setViews, selectedView }) {
     const router = useRouter();
@@ -21,6 +23,10 @@ export default function TableView({ views, setViews, selectedView }) {
     const tab = searchParams.get('tab');
     const [anchorEl, setAnchorEl] = useState(null);
     const [viewAnchorEl, setViewAnchorEl] = useState(null);
+
+    // favorite view
+    const favoriteViews = views.filter((view) => view.favorite);
+    const personalViews = views.filter((view) => view.editPermission === 'personal');
 
     const handleOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -31,7 +37,6 @@ export default function TableView({ views, setViews, selectedView }) {
     };
 
     const handleCreateView = (values) => {
-        console.log('Form submitted:', values);
         setAnchorEl(null);
         setViews([...views, {
             name: values.name,
@@ -53,63 +58,79 @@ export default function TableView({ views, setViews, selectedView }) {
 
                 <Divider sx={{ my: 1 }} />
 
-                <Stack>
-                    <Box
-                        display="flex"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        onClick={() => router.push(`?tab=${tab}`)}
-                        sx={{
-                            p: 1,
-                            cursor: 'pointer',
-                            '&:hover': { bgcolor: 'action.hover' },
-                        }}
-                    >
-                        <Box display="flex" alignItems="center" gap={1}>
-                            <Iconify icon="tabler:table" width={18} height={18} />
-                            <Typography variant="body2" fontWeight={500}>Default View</Typography>
-                        </Box>
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    onClick={() => router.push(`?tab=${tab}`)}
+                    sx={{
+                        p: 1,
+                        mb: 1,
+                        cursor: 'pointer',
+                        '&:hover': { bgcolor: 'action.hover' },
+                    }}
+                >
+                    <Box display="flex" alignItems="center" gap={1}>
+                        <Iconify icon="tabler:table" width={18} height={18} />
+                        <Typography variant="body2" fontWeight={500}>Default View</Typography>
                     </Box>
-                    {views.map((view, index) => (
-                        <Box
-                            key={index}
-                            display="flex"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            onClick={() => handleClickView(view)}
-                            sx={{
-                                p: 1,
-                                cursor: 'pointer',
-                                bgcolor: selectedView?.name === view.name ? 'action.hover' : 'transparent',
-                                '&:hover': { bgcolor: 'action.hover' },
-                                '& .hover-icon': { display: 'none' },
-                                '&:hover .hover-icon': { display: 'inline-flex' },
-                                '&:hover .default-icon': { display: 'none' },
-                                '&:hover .action-hover-icon': { display: 'inline-flex' },
-                            }}
-                        >
-                            <Box display="flex" alignItems="center" gap={1}>
-                                <Iconify className="default-icon" icon="tabler:table" width={18} height={18} />
-                                <Iconify className="hover-icon" icon="line-md:star" width={18} height={18} />
+                </Box>
 
-                                <Typography variant="body2" fontWeight={500}>
-                                    {view.name}
-                                </Typography>
-                            </Box>
-                            <Iconify
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setViewAnchorEl(e.currentTarget);
-                                }}
-                                className="action-hover-icon"
-                                icon="iconamoon:arrow-down-2-light"
-                                width={18}
-                                height={18}
-                                sx={{ display: 'none', alignItems: 'center', justifyContent: 'center' }}
+                {/* Favorite Views */}
+                {favoriteViews.length > 0 && (
+                    <Box>
+                        <Typography fontWeight={500} sx={{ fontSize: "14px", color: "text.secondary", mb: 1 }}>Favorite Views</Typography>
+                        <Stack>
+                            {favoriteViews.map((view, index) => (
+                                <SingleView
+                                    key={index}
+                                    view={view}
+                                    handleClickView={handleClickView}
+                                    selectedView={selectedView}
+                                    setViewAnchorEl={setViewAnchorEl}
+                                />
+                            ))}
+                        </Stack>
+                    </Box>
+                )}
+
+                <Divider sx={{ my: 1 }} />
+
+                {/* Personal Views */}
+                {personalViews.length > 0 && (
+                    <><Box>
+                        <Typography fontWeight={500} sx={{ fontSize: "14px", color: "text.secondary", mb: 1 }}>Personal Views</Typography>
+                        <Stack>
+                            {personalViews.map((view, index) => (
+                                <SingleView
+                                    key={index}
+                                    view={view}
+                                    handleClickView={handleClickView}
+                                    selectedView={selectedView}
+                                    setViewAnchorEl={setViewAnchorEl}
+                                />
+                            ))}
+                        </Stack>
+                    </Box>
+                        <Divider sx={{ my: 1 }} /></>
+                )}
+
+
+                {/* All Views */}
+                <Box>
+                    <Typography fontWeight={500} sx={{ fontSize: "14px", color: "text.secondary", mb: 1 }}>All Views</Typography>
+                    <Stack>
+                        {views.map((view, index) => (
+                            <SingleView
+                                key={index}
+                                view={view}
+                                handleClickView={handleClickView}
+                                selectedView={selectedView}
+                                setViewAnchorEl={setViewAnchorEl}
                             />
-                        </Box>
-                    ))}
-                </Stack>
+                        ))}
+                    </Stack>
+                </Box>
             </Box>
 
             {/* View Popover */}
@@ -307,5 +328,49 @@ export default function TableView({ views, setViews, selectedView }) {
                 </Paper>
             </Popover>
         </>
+    );
+}
+
+
+const SingleView = ({ view, handleClickView, selectedView, setViewAnchorEl }) => {
+    const theme = useTheme();
+    return (
+        <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            onClick={() => handleClickView(view)}
+            sx={{
+                p: 1,
+                cursor: 'pointer',
+                bgcolor: selectedView?.name === view.name ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
+                '&:hover': { bgcolor: selectedView?.name === view.name ? alpha(theme.palette.primary.main, 0.2) : 'action.hover' },
+                '& .hover-icon': { display: 'none' },
+                '&:hover .hover-icon': { display: 'inline-flex' },
+                '&:hover .default-icon': { display: 'none' },
+                '&:hover .action-hover-icon': { display: 'inline-flex' },
+            }}
+        >
+            <Box display="flex" alignItems="center" gap={1}>
+                <Iconify className="default-icon" icon="tabler:table" width={18} height={18} sx={{ color: 'primary.main' }} />
+                <Iconify className="hover-icon" icon="line-md:star" width={18} height={18} sx={{ color: 'yellow' }} />
+
+                <Typography variant="body2" fontWeight={500}>
+                    {view.name}
+                </Typography>
+                {view.editPermission === 'locked' && <LockIcon sx={{ fontSize: 16, color: 'text.secondary' }} />}
+            </Box>
+            <Iconify
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setViewAnchorEl(e.currentTarget);
+                }}
+                className="action-hover-icon"
+                icon="iconamoon:arrow-down-2-light"
+                width={18}
+                height={18}
+                sx={{ display: 'none', alignItems: 'center', justifyContent: 'center' }}
+            />
+        </Box>
     );
 }
