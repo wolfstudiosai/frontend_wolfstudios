@@ -21,6 +21,7 @@ import TableView from '/src/components/common/table-view';
 import TableReorderIcon from '@mui/icons-material/Reorder';
 import { useTheme } from '@mui/material/styles';
 import { useSearchParams } from 'next/navigation';
+import { Iconify } from '/src/components/iconify/iconify';
 
 export const CampaignListView = () => {
   const theme = useTheme();
@@ -289,6 +290,21 @@ export const CampaignListView = () => {
               handleFilterApply={handleFilterApply}
               handleFilterClear={handleFilterClear}
             />
+
+            <Button
+              startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />}
+              variant="text"
+              size="small"
+            >
+              Group
+            </Button>
+            <Button
+              startIcon={<Iconify icon="si:swap-vert-duotone" width={16} height={16} />}
+              variant="text"
+              size="small"
+            >
+              Sort
+            </Button>
           </Box>
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <IconButton onClick={handleAddNewItem}>
