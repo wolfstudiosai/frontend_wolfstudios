@@ -63,33 +63,7 @@ export const CampaignListView = () => {
 
   // View
   const [showView, setShowView] = React.useState(false);
-  const [views, setViews] = React.useState([
-    {
-      name: 'Name',
-      editPermission: 'collaborative',
-      filters: [
-        { key: 'Name', value: 'REVO', operator: 'contains', type: 'string' },
-      ],
-      sort: { field: 'name', order: 'asc' },
-      favorite: true,
-    },
-    {
-      name: 'Status',
-      editPermission: 'locked',
-      filters: [
-        { key: 'CampaignStatus', value: 'Active', operator: 'contains', type: 'string' },
-      ],
-      sort: { field: 'status', order: 'asc' },
-    },
-    {
-      name: 'Client',
-      editPermission: 'personal',
-      filters: [
-        { key: 'Client', value: 'REVO', operator: 'contains', type: 'string' },
-      ],
-      sort: { field: 'client', order: 'asc' },
-    },
-  ]);
+  const [views, setViews] = React.useState([]);
   const searchParams = useSearchParams();
   const [selectedView, setSelectedView] = React.useState(null);
 
@@ -271,9 +245,11 @@ export const CampaignListView = () => {
       const viewData = views.find((v) => v.id === view);
       setSelectedView(viewData);
       setFilters(viewData?.filters || []);
+      setGate(viewData?.gate || 'and');
     } else {
       setSelectedView(null);
       setFilters([]);
+      setGate('and');
     }
   }, [searchParams]);
 

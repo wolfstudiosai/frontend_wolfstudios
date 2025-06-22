@@ -220,6 +220,17 @@ export const createCampaignView = async (data) => {
   }
 }
 
+export const updateCampaignView = async (id, data) => {
+  try {
+    const res = await api.patch(`/views/${id}`, data);
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+}
+
 export const deleteCampaignView = async (id) => {
   try {
     const res = await api.delete(`/views/${id}`);
