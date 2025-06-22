@@ -17,6 +17,7 @@ import { useRouter } from 'next/navigation';
 import { useTheme } from '@mui/material/styles';
 import { alpha } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
+import { createCampaignView } from '/src/app/(public)/campaign/_lib/campaign.actions';
 
 export default function TableView({ views, setViews, selectedView, showView, setShowView }) {
     // drawer
@@ -42,14 +43,31 @@ export default function TableView({ views, setViews, selectedView, showView, set
         router.push(`?tab=${tab}&view=${view.id}`);
     };
 
-    const handleCreateView = (values) => {
-        setAnchorEl(null);
-        setViews([...views, {
-            label: values.label,
-            editPermission: values.editPermission,
+    const handleCreateView = async (values) => {
+        const data = {
+            label: values.name,
+            description: "",
+            table: "CAMPAIGN",
+            gate: "and",
+            isPublic: values.editPermission === 'personal' ? true : false,
             filters: [],
-            sort: { field: 'name', order: 'asc' },
-        }]);
+            columns: [
+                "id",
+                "Name"
+            ],
+            sort: [
+                {
+                    "key": "createdAt",
+                    "order": "desc"
+                }
+            ],
+            groups: []
+        }
+        const res = await createCampaignView(data);
+        if (res.success) {
+            setAnchorEl(null);
+            setViews([...views, res.data]);
+        }
     };
 
     useEffect(() => {
@@ -228,7 +246,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                             name="editPermission"
                                             value={values.editPermission}
                                             onChange={handleChange}
-                                            sx={{ justifyContent: "space-between" }}
+                                            sx={{ gap: 3 }}
                                         >
                                             <FormControlLabel
                                                 value="collaborative"
@@ -256,7 +274,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                                 }
                                                 sx={{ mx: 0, gap: 0.5 }}
                                             />
-                                            <FormControlLabel
+                                            {/* <FormControlLabel
                                                 value="locked"
                                                 control={<Radio size="small" />}
                                                 label={
@@ -268,7 +286,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                                     </Box>
                                                 }
                                                 sx={{ mx: 0, gap: 0.5 }}
-                                            />
+                                            /> */}
                                         </RadioGroup>
                                     </FormControl>
 
@@ -382,8 +400,8 @@ const SingleView = ({ view, handleClickView, selectedView, setViewAnchorEl }) =>
             sx={{
                 p: 1,
                 cursor: 'pointer',
-                bgcolor: selectedView?.name === view.name ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
-                '&:hover': { bgcolor: selectedView?.name === view.name ? alpha(theme.palette.primary.main, 0.2) : 'action.hover' },
+                bgcolor: selectedView?.label === view.label ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
+                '&:hover': { bgcolor: selectedView?.label === view.label ? alpha(theme.palette.primary.main, 0.2) : 'action.hover' },
                 '& .hover-icon': { display: 'none' },
                 '&:hover .hover-icon': { display: 'inline-flex' },
                 '&:hover .default-icon': { display: 'none' },
