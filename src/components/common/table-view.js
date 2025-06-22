@@ -39,13 +39,13 @@ export default function TableView({ views, setViews, selectedView, showView, set
     };
 
     const handleClickView = (view) => {
-        router.push(`?tab=${tab}&view=${view.name}`);
+        router.push(`?tab=${tab}&view=${view.id}`);
     };
 
     const handleCreateView = (values) => {
         setAnchorEl(null);
         setViews([...views, {
-            name: values.name,
+            label: values.label,
             editPermission: values.editPermission,
             filters: [],
             sort: { field: 'name', order: 'asc' },
@@ -394,8 +394,8 @@ const SingleView = ({ view, handleClickView, selectedView, setViewAnchorEl }) =>
                 <Iconify className="default-icon" icon="tabler:table" width={18} height={18} sx={{ color: 'primary.main' }} />
                 <Iconify className="hover-icon" icon="line-md:star" width={18} height={18} sx={{ color: 'yellow' }} />
 
-                <Typography variant="body2" fontWeight={500}>
-                    {view.name}
+                <Typography variant="body2" fontWeight={500} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {view.label}
                 </Typography>
                 {view.editPermission === 'locked' && <LockIcon sx={{ fontSize: 16, color: 'text.secondary' }} />}
             </Box>

@@ -8,7 +8,7 @@ import { alpha, Button, IconButton, Popover, TextField, Typography } from '@mui/
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import * as React from 'react';
-import { createCampaignAsync, deleteCampaignBulkAsync, getCampaignListAsync } from '../_lib/campaign.actions';
+import { createCampaignAsync, deleteCampaignBulkAsync, getCampaignListAsync, getCampaignViews } from '../_lib/campaign.actions';
 import AddIcon from '@mui/icons-material/Add';
 import { getCampaignColumns } from '../_utils/get-campaign-columns';
 import { updateCampaignAsync } from '../_lib/campaign.actions';
@@ -242,6 +242,18 @@ export const CampaignListView = () => {
     setPagination({ pageNo: 1, limit: 20 });
   };
 
+  const handleShowViews = async () => {
+    if (showView) {
+      setShowView(false);
+    } else {
+      setShowView(true);
+      const res = await getCampaignViews();
+      if (res.success) {
+        setViews(res.data);
+      }
+    }
+  }
+
   React.useEffect(() => {
     const storedHiddenColumns = localStorage.getItem('hiddenColumns');
     if (storedHiddenColumns) {
@@ -256,7 +268,7 @@ export const CampaignListView = () => {
   React.useEffect(() => {
     const view = searchParams.get('view');
     if (view) {
-      const viewData = views.find((v) => v.name === view);
+      const viewData = views.find((v) => v.id === view);
       setSelectedView(viewData);
       setFilters(viewData?.filters || []);
     } else {
@@ -275,7 +287,7 @@ export const CampaignListView = () => {
               startIcon={<TableReorderIcon />}
               variant="text"
               size="small"
-              onClick={() => setShowView(!showView)}
+              onClick={() => handleShowViews()}
               sx={{ bgcolor: showView ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
             >
               View
