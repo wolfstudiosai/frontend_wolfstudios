@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 import { useTheme } from '@mui/material/styles';
 import { alpha } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
-import { createCampaignView } from '/src/app/(public)/campaign/_lib/campaign.actions';
+import { createCampaignView, deleteCampaignView } from '/src/app/(public)/campaign/_lib/campaign.actions';
 
 export default function TableView({ views, setViews, selectedView, showView, setShowView }) {
     // drawer
@@ -29,7 +29,6 @@ export default function TableView({ views, setViews, selectedView, showView, set
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab');
     const [anchorEl, setAnchorEl] = useState(null);
-    const [viewAnchorEl, setViewAnchorEl] = useState(null);
 
     // favorite view
     const favoriteViews = views.filter((view) => view.favorite);
@@ -118,7 +117,8 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                     view={view}
                                     handleClickView={handleClickView}
                                     selectedView={selectedView}
-                                    setViewAnchorEl={setViewAnchorEl}
+                                    views={views}
+                                    setViews={setViews}
                                 />
                             ))}
                         </Stack>
@@ -138,7 +138,8 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                     view={view}
                                     handleClickView={handleClickView}
                                     selectedView={selectedView}
-                                    setViewAnchorEl={setViewAnchorEl}
+                                    views={views}
+                                    setViews={setViews}
                                 />
                             ))}
                         </Stack>
@@ -157,7 +158,8 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                 view={view}
                                 handleClickView={handleClickView}
                                 selectedView={selectedView}
-                                setViewAnchorEl={setViewAnchorEl}
+                                views={views}
+                                setViews={setViews}
                             />
                         ))}
                     </Stack>
@@ -186,8 +188,6 @@ export default function TableView({ views, setViews, selectedView, showView, set
                     </Box>
                 </Drawer>
             ))}
-
-
 
             {/* View Popover */}
             <Popover
@@ -316,10 +316,10 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                     sx={{ px: 3, py: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}
                                 >
                                     <Button
-                                        onClick={() => setViewAnchorEl(null)}
+                                        onClick={() => setAnchorEl(null)}
                                         variant="text"
                                         color="inherit"
-                                        sx={{ textTransform: "none", color: "#666", fontSize: "0.875rem" }}
+                                        sx={{ textTransform: "none", fontSize: "0.875rem" }}
                                     >
                                         Cancel
                                     </Button>
@@ -330,7 +330,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                         size="small"
                                         disabled={isSubmitting || !values.name || !values.editPermission}
                                     >
-                                        Create
+                                        {isSubmitting ? 'Creating...' : 'Create'}
                                     </Button>
                                 </Box>
                             </Form>
@@ -338,7 +338,65 @@ export default function TableView({ views, setViews, selectedView, showView, set
                     </Formik>
                 </Paper>
             </Popover>
+        </>
+    );
+}
 
+
+const SingleView = ({ view, handleClickView, selectedView, views, setViews }) => {
+    const theme = useTheme();
+    const [viewAnchorEl, setViewAnchorEl] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    const handleDeleteView = async () => {
+        setLoading(true);
+        setViewAnchorEl(null);
+        const res = await deleteCampaignView(view.id);
+        if (res.success) {
+            setViews(views.filter((v) => v.id !== view.id));
+            setLoading(false);
+        }
+    }
+
+    return (
+        <>
+            <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                onClick={() => handleClickView(view)}
+                sx={{
+                    p: 1,
+                    cursor: 'pointer',
+                    bgcolor: selectedView?.label === view.label ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
+                    '&:hover': { bgcolor: selectedView?.label === view.label ? alpha(theme.palette.primary.main, 0.2) : 'action.hover' },
+                    '& .hover-icon': { display: 'none' },
+                    '&:hover .hover-icon': { display: 'inline-flex' },
+                    '&:hover .default-icon': { display: 'none' },
+                    '&:hover .action-hover-icon': { display: 'inline-flex' },
+                }}
+            >
+                <Box display="flex" alignItems="center" gap={1}>
+                    <Iconify className="default-icon" icon="tabler:table" width={18} height={18} sx={{ color: 'primary.main' }} />
+                    <Iconify className="hover-icon" icon="line-md:star" width={18} height={18} sx={{ color: 'yellow' }} />
+
+                    <Typography variant="body2" fontWeight={500} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {view.label}
+                    </Typography>
+                    {view.editPermission === 'locked' && <LockIcon sx={{ fontSize: 16, color: 'text.secondary' }} />}
+                </Box>
+                <Iconify
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setViewAnchorEl(e.currentTarget);
+                    }}
+                    className="action-hover-icon"
+                    icon="iconamoon:arrow-down-2-light"
+                    width={18}
+                    height={18}
+                    sx={{ display: 'none', alignItems: 'center', justifyContent: 'center' }}
+                />
+            </Box>
             {/* View Action Popover */}
             <Popover
                 open={Boolean(viewAnchorEl)}
@@ -378,56 +436,12 @@ export default function TableView({ views, setViews, selectedView, showView, set
                         <Button startIcon={<ContentCopyIcon />} fullWidth variant="text" size="small" color='none' sx={{ justifyContent: "flex-start" }}>
                             Duplicate View
                         </Button>
-                        <Button startIcon={<DeleteIcon />} fullWidth variant="text" size="small" color="error" sx={{ justifyContent: "flex-start" }}>
+                        <Button disabled={loading} startIcon={<DeleteIcon />} fullWidth variant="text" size="small" color="error" sx={{ justifyContent: "flex-start" }} onClick={() => handleDeleteView(view)}>
                             Delete View
                         </Button>
                     </Stack>
                 </Paper>
             </Popover>
         </>
-    );
-}
-
-
-const SingleView = ({ view, handleClickView, selectedView, setViewAnchorEl }) => {
-    const theme = useTheme();
-    return (
-        <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            onClick={() => handleClickView(view)}
-            sx={{
-                p: 1,
-                cursor: 'pointer',
-                bgcolor: selectedView?.label === view.label ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
-                '&:hover': { bgcolor: selectedView?.label === view.label ? alpha(theme.palette.primary.main, 0.2) : 'action.hover' },
-                '& .hover-icon': { display: 'none' },
-                '&:hover .hover-icon': { display: 'inline-flex' },
-                '&:hover .default-icon': { display: 'none' },
-                '&:hover .action-hover-icon': { display: 'inline-flex' },
-            }}
-        >
-            <Box display="flex" alignItems="center" gap={1}>
-                <Iconify className="default-icon" icon="tabler:table" width={18} height={18} sx={{ color: 'primary.main' }} />
-                <Iconify className="hover-icon" icon="line-md:star" width={18} height={18} sx={{ color: 'yellow' }} />
-
-                <Typography variant="body2" fontWeight={500} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {view.label}
-                </Typography>
-                {view.editPermission === 'locked' && <LockIcon sx={{ fontSize: 16, color: 'text.secondary' }} />}
-            </Box>
-            <Iconify
-                onClick={(e) => {
-                    e.stopPropagation();
-                    setViewAnchorEl(e.currentTarget);
-                }}
-                className="action-hover-icon"
-                icon="iconamoon:arrow-down-2-light"
-                width={18}
-                height={18}
-                sx={{ display: 'none', alignItems: 'center', justifyContent: 'center' }}
-            />
-        </Box>
     );
 }
