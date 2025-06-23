@@ -54,7 +54,6 @@ export const getCampaignListAsync = async (pagination, filters, gate) => {
       // check if all filters are valid
       const allFiltersValid = validateFilters(filters);
       if (!allFiltersValid.valid) {
-        toast.error(allFiltersValid.message);
         return;
       }
 
@@ -233,7 +232,7 @@ export const createCampaignView = async (data) => {
 export const updateCampaignView = async (id, data) => {
   try {
     const res = await api.patch(`/views/${id}`, data);
-    toast.success(res.data.message);
+    // toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
     toast.error(error.response.data.message);

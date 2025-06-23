@@ -8,7 +8,7 @@ import { alpha, Button, Checkbox, FormControlLabel, FormGroup, IconButton, Popov
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import * as React from 'react';
-import { createCampaignAsync, deleteCampaignBulkAsync, getCampaignListAsync, getCampaignViews, getSingleCampaignView } from '../_lib/campaign.actions';
+import { createCampaignAsync, deleteCampaignBulkAsync, getCampaignListAsync, getCampaignViews, getSingleCampaignView, updateCampaignView } from '../_lib/campaign.actions';
 import AddIcon from '@mui/icons-material/Add';
 import { getCampaignColumns } from '../_utils/get-campaign-columns';
 import { updateCampaignAsync } from '../_lib/campaign.actions';
@@ -20,7 +20,7 @@ import TableFilterBuilder from '/src/components/common/table-filter-builder';
 import TableView from '/src/components/common/table-view';
 import TableReorderIcon from '@mui/icons-material/Reorder';
 import { useTheme } from '@mui/material/styles';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Iconify } from '/src/components/iconify/iconify';
 
 export const CampaignListView = () => {
@@ -68,12 +68,15 @@ export const CampaignListView = () => {
   const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([]);
   const searchParams = useSearchParams();
+  const tab = searchParams.get('tab');
+  const view = searchParams.get('view');
   const [selectedView, setSelectedView] = React.useState(null);
 
   // filter
   const [metaData, setMetaData] = React.useState([]);
   const [filters, setFilters] = React.useState([]);
   const [gate, setGate] = React.useState('and');
+  const timeoutRef = React.useRef(null);
 
 
   // table columns
@@ -82,7 +85,8 @@ export const CampaignListView = () => {
       const key = Object.keys(obj)[0];
       return {
         label: obj[key].label,
-        columnName: key
+        columnName: key,
+        depth: obj[key].depth
       };
     }),
     [metaData]
@@ -99,7 +103,7 @@ export const CampaignListView = () => {
         rowsPerPage: pagination.limit,
       }, filters, gate);
 
-      if (response.success) {
+      if (response?.success) {
         setRecords(response.data.map((row) => defaultCampaign(row)) || []);
         setTotalRecords(response.totalRecords);
         setMetaData(response.meta);
@@ -109,6 +113,23 @@ export const CampaignListView = () => {
     } finally {
       setLoading(false);
     }
+  }
+
+  async function updateView() {
+    if (tab === 'campaign' && view) {
+      const data = {
+        label: selectedView?.meta?.label,
+        description: selectedView?.meta?.description,
+        table: selectedView?.meta?.table,
+        isPublic: selectedView?.meta?.isPublic,
+        columns: selectedView?.meta?.columns,
+        gate,
+        filters,
+        sort: selectedView?.meta?.sort,
+        groups: selectedView?.meta?.groups
+      }
+      await updateCampaignView(view, data);
+    };
   }
 
   // ******************************data grid handler starts*********************
@@ -238,6 +259,9 @@ export const CampaignListView = () => {
   const handleShowViews = async () => {
     if (showView) {
       setShowView(false);
+      setFilters([]);
+      setGate('and');
+      setSelectedView(null);
     } else {
       setShowView(true);
       const res = await getCampaignViews();
@@ -258,28 +282,85 @@ export const CampaignListView = () => {
     }
   }
 
+  const handleColumnChange = (e, col) => {
+    if (e.target.checked) {
+      // Add column
+      setVisibleColumns((prev) => {
+        const exists = prev.some((c) => c.columnName === col.columnName);
+        if (exists) return prev;
+        return [...prev, col];
+      });
+    } else {
+      // Remove column
+      setVisibleColumns((prev) => prev.filter((c) => c.columnName !== col.columnName));
+    }
+
+    if (tab === 'campaign' && view) {
+      const data = {
+        columns: visibleColumns.filter((c) => c.columnName !== col.columnName).map((cl) => cl.columnName),
+        label: selectedView?.meta?.label,
+        description: selectedView?.meta?.description,
+        table: selectedView?.meta?.table,
+        isPublic: selectedView?.meta?.isPublic,
+        gate,
+        filters,
+        sort: selectedView?.meta?.sort,
+        groups: selectedView?.meta?.groups
+      };
+
+      updateCampaignView(view, data);
+    }
+  }
+
+  // Remove view from url if reload the page
+  // React.useEffect(() => {
+  //   // Check if this is a full page reload
+  //   const isReload = performance.getEntriesByType("navigation")[0]?.type === "reload";
+
+  //   if (isReload) {
+  //     const view = searchParams.get('view');
+  //     if (view) {
+  //       const params = new URLSearchParams(searchParams.toString());
+  //       params.delete('view');
+  //       router.replace(`${window.location.pathname}?${params.toString()}`, { scroll: false });
+  //     }
+  //   }
+  // }, []);
+
   React.useEffect(() => {
     fetchList();
-  }, [pagination]);
+    updateView();
+  }, [pagination, filters, gate]);
 
   React.useEffect(() => {
     const view = searchParams.get('view');
+
     if (view) {
       getSingleView(view);
     } else {
       setSelectedView(null);
       setFilters([]);
       setGate('and');
+      setVisibleColumns(allColumns);
     }
   }, [searchParams]);
 
+  // debounce filter api call
+  // React.useEffect(() => {
+  //   if (timeoutRef.current) {
+  //     clearTimeout(timeoutRef.current);
+  //   }
+  //   timeoutRef.current = setTimeout(() => {
+  //     fetchList();
+  //     updateView();
+  //   }, 500);
+  // }, [filters, gate]);
 
   React.useEffect(() => {
-    const view = searchParams.get('view');
-    if (!view) {
+    if (allColumns.length > 0 && visibleColumns.length === 0) {
       setVisibleColumns(allColumns);
     }
-  }, [allColumns]);
+  }, [allColumns, searchParams]);
 
   return (
     <PageContainer>
@@ -313,6 +394,7 @@ export const CampaignListView = () => {
               setGate={setGate}
               handleFilterApply={handleFilterApply}
               handleFilterClear={handleFilterClear}
+              selectedView={selectedView}
             />
 
             <Button
@@ -354,7 +436,10 @@ export const CampaignListView = () => {
             showView={showView}
             setViews={setViews}
             setShowView={setShowView}
-            selectedView={selectedView} />
+            selectedView={selectedView}
+            setFilters={setFilters}
+            setGate={setGate}
+          />
 
           {/* Table */}
           <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
@@ -426,25 +511,13 @@ export const CampaignListView = () => {
         disablePortal
       >
         <Box sx={{ p: 1.5, width: 250, maxHeight: 350, overflowY: 'auto', scrollbarWidth: 'thin' }}>
-          <FormGroup sx={{ gap: 0.5, pb: 2 }}>
+          <FormGroup sx={{ gap: 0.5, pb: 1 }}>
             {allColumns.map((col) => {
               return <FormControlLabel
                 key={col.field}
                 control={<Checkbox
                   checked={visibleColumns.some((c) => c.columnName === col.columnName)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      // Add column
-                      setVisibleColumns((prev) => {
-                        const exists = prev.some((c) => c.columnName === col.columnName);
-                        if (exists) return prev;
-                        return [...prev, col];
-                      });
-                    } else {
-                      // Remove column
-                      setVisibleColumns((prev) => prev.filter((c) => c.columnName !== col.columnName));
-                    }
-                  }}
+                  onChange={e => handleColumnChange(e, col)}
                 />}
                 label={col.label}
               />

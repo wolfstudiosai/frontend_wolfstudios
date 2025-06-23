@@ -5,7 +5,6 @@ import { Box, IconButton, TextField, Typography, Popover, Paper, FormControl, Fo
 import AddIcon from '@mui/icons-material/Add';
 import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
-import LockIcon from '@mui/icons-material/Lock';
 import { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import { Iconify } from '/src/components/iconify/iconify';
@@ -19,19 +18,18 @@ import { alpha } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import { createCampaignView, deleteCampaignView, updateCampaignView } from '/src/app/(public)/campaign/_lib/campaign.actions';
 
-export default function TableView({ views, setViews, selectedView, showView, setShowView }) {
+export default function TableView({ views, setViews, selectedView, showView, setShowView, setFilters, setGate }) {
     // drawer
     const theme = useTheme();
     const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
     const [drawerOpen, setDrawerOpen] = useState(showView);
-
     const router = useRouter();
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab');
     const [anchorEl, setAnchorEl] = useState(null);
 
     // Personal view
-    const personalViews = views.filter((view) => view.isPublic);
+    const personalViews = views.filter((view) => !view.isPublic);
 
     const handleOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -48,15 +46,29 @@ export default function TableView({ views, setViews, selectedView, showView, set
             table: "CAMPAIGN",
             gate: "and",
             isPublic: values.editPermission === 'personal' ? false : true,
-            filters: [],
+            filters: [
+                {
+                    key: "Name",
+                    type: "string",
+                    operator: "contains",
+                    value: "Revo"
+                }
+            ],
             columns: [
                 "id",
-                "Name"
+                "Name",
+                "CampaignStatus",
+                "Budget",
+                "StartDate",
+                "EndDate",
+                "CampaignImage",
+                "CampaignGoals",
+                "createdAt"
             ],
             sort: [
                 {
-                    "key": "createdAt",
-                    "order": "desc"
+                    key: "createdAt",
+                    order: "desc"
                 }
             ],
             groups: []
