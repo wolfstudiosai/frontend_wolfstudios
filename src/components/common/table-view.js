@@ -18,7 +18,7 @@ import { alpha } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import { createCampaignView, deleteCampaignView, updateCampaignView } from '/src/app/(public)/campaign/_lib/campaign.actions';
 
-export default function TableView({ views, setViews, selectedView, showView, setShowView, setFilters, setGate }) {
+export default function TableView({ views, setViews, selectedView, showView, setShowView }) {
     // drawer
     const theme = useTheme();
     const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));

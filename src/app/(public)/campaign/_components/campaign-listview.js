@@ -4,7 +4,7 @@ import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { alpha, Button, Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField, Typography } from '@mui/material';
+import { alpha, Button, Checkbox, CircularProgress, FormControlLabel, FormGroup, IconButton, Popover, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import * as React from 'react';
@@ -42,6 +42,7 @@ export const CampaignListView = () => {
 
   const handleClosePopoverHide = () => {
     setAnchorElHide(null);
+    setSearchColumns(allColumns);
   };
 
   const handleUploadImage = async (images) => {
@@ -76,23 +77,22 @@ export const CampaignListView = () => {
   const [metaData, setMetaData] = React.useState([]);
   const [filters, setFilters] = React.useState([]);
   const [gate, setGate] = React.useState('and');
-  const timeoutRef = React.useRef(null);
-
 
   // table columns
-  const allColumns = React.useMemo(() =>
-    metaData.map(obj => {
+  const allColumns = React.useMemo(() => {
+    const columns = metaData.map(obj => {
       const key = Object.keys(obj)[0];
       return {
         label: obj[key].label,
         columnName: key,
         depth: obj[key].depth
       };
-    }),
-    [metaData]
-  );
+    });
+    return columns;
+  }, [metaData]);
 
   const [visibleColumns, setVisibleColumns] = React.useState(allColumns);
+  const [searchColumns, setSearchColumns] = React.useState(allColumns);
   const columns = React.useMemo(() => getCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns), [visibleColumns]);
 
   async function fetchList() {
@@ -283,21 +283,21 @@ export const CampaignListView = () => {
   }
 
   const handleColumnChange = (e, col) => {
+    let newVisibleColumns = [];
     if (e.target.checked) {
       // Add column
-      setVisibleColumns((prev) => {
-        const exists = prev.some((c) => c.columnName === col.columnName);
-        if (exists) return prev;
-        return [...prev, col];
-      });
+      const exists = visibleColumns.some((c) => c.columnName === col.columnName);
+      if (exists) return;
+      newVisibleColumns = [...visibleColumns, col];
     } else {
       // Remove column
-      setVisibleColumns((prev) => prev.filter((c) => c.columnName !== col.columnName));
+      newVisibleColumns = visibleColumns.filter((c) => c.columnName !== col.columnName);
     }
+    setVisibleColumns(newVisibleColumns);
 
     if (tab === 'campaign' && view) {
       const data = {
-        columns: visibleColumns.filter((c) => c.columnName !== col.columnName).map((cl) => cl.columnName),
+        columns: newVisibleColumns.map((c) => c.columnName),
         label: selectedView?.meta?.label,
         description: selectedView?.meta?.description,
         table: selectedView?.meta?.table,
@@ -310,6 +310,12 @@ export const CampaignListView = () => {
 
       updateCampaignView(view, data);
     }
+  }
+
+  // handle Column Search
+  const handleColumnSearch = (e) => {
+    const searchValue = e.target.value.toLowerCase();
+    setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
   }
 
   // Remove view from url if reload the page
@@ -437,8 +443,6 @@ export const CampaignListView = () => {
             setViews={setViews}
             setShowView={setShowView}
             selectedView={selectedView}
-            setFilters={setFilters}
-            setGate={setGate}
           />
 
           {/* Table */}
@@ -510,9 +514,24 @@ export const CampaignListView = () => {
         disableEnforceFocus
         disablePortal
       >
-        <Box sx={{ p: 1.5, width: 250, maxHeight: 350, overflowY: 'auto', scrollbarWidth: 'thin' }}>
-          <FormGroup sx={{ gap: 0.5, pb: 1 }}>
-            {allColumns.map((col) => {
+        <Box sx={{ width: 250, maxHeight: 350, overflowY: 'auto', scrollbarWidth: 'thin' }}>
+          <Box sx={{ p: 1.5, position: 'sticky', top: 0, zIndex: 1, backgroundColor: 'background.paper' }}>
+            <TextField
+              fullWidth
+              placeholder="Find fields..."
+              variant="outlined"
+              size="small"
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
+              onChange={(e) => handleColumnSearch(e)}
+            />
+          </Box>
+          <FormGroup sx={{ gap: 0.5, p: 1 }}>
+            {/* {loading && (
+              <Box sx={{ p: 1.5 }}>
+                <CircularProgress size={20} />
+              </Box>
+            )} */}
+            {searchColumns?.map((col) => {
               return <FormControlLabel
                 key={col.field}
                 control={<Checkbox

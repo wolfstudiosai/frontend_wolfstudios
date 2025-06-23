@@ -232,7 +232,6 @@ export const createCampaignView = async (data) => {
 export const updateCampaignView = async (id, data) => {
   try {
     const res = await api.patch(`/views/${id}`, data);
-    // toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
     toast.error(error.response.data.message);

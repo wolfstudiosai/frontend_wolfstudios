@@ -8,9 +8,7 @@ import TableAutoComplete from './table-auto-complete';
 import { validateFilters } from '/src/utils/helper';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { updateCampaignView } from '/src/app/(public)/campaign/_lib/campaign.actions';
 
 const extractMeta = (metaArray) => {
   const map = {};
