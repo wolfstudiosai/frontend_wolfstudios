@@ -90,7 +90,7 @@ export const EditableDataTable = ({
         onPaginationModelChange={onPageChange}
         paginationMode="server"
         checkboxSelection={checkboxSelection} // it will enable checkbox selection
-        onRowSelectionModelChange={onRowSelectionModelChange} //it will return all selected rows
+        onRowSelectionModelChange={onRowSelectionModelChange}
       />
     </Box>
   );

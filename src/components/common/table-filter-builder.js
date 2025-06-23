@@ -8,7 +8,6 @@ import TableAutoComplete from './table-auto-complete';
 import { validateFilters } from '/src/utils/helper';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 const extractMeta = (metaArray) => {
@@ -28,10 +27,12 @@ export default function TableFilterBuilder(
     gate,
     setGate,
     handleFilterApply,
-    handleFilterClear
+    handleFilterClear,
+    selectedView,
   }
 ) {
   const searchParams = useSearchParams();
+  const tab = searchParams.get('tab');
   const view = searchParams.get('view');
   const [anchorEl, setAnchorEl] = useState(null);
   const metaMap = useMemo(() => extractMeta(metaData), [metaData]);
@@ -132,7 +133,7 @@ export default function TableFilterBuilder(
   };
 
   // Apply filters and close the popover
-  const handleApply = () => {
+  const handleApply = async () => {
     const allFiltersValid = validateFilters(filters);
     if (!allFiltersValid.valid) {
       setError(allFiltersValid.message);
@@ -315,10 +316,6 @@ export default function TableFilterBuilder(
     }
   };
 
-  useEffect(() => {
-    handleApply();
-  }, [view]);
-
   return (
     <>
       <Button
@@ -416,7 +413,7 @@ export default function TableFilterBuilder(
               <Button disabled={metaData.length < 1} variant="text" onClick={handleAddCondition} size="small" sx={{ width: '120px', px: 1 }}>
                 + Add condition
               </Button>
-              <Box display="flex" alignItems="center" justifyContent="center" gap={2}>
+              {/* <Box display="flex" alignItems="center" justifyContent="center" gap={2}>
                 <Button
                   disabled={filters.length < 1}
                   variant="text"
@@ -429,13 +426,13 @@ export default function TableFilterBuilder(
                 <Button
                   disabled={filters.length < 1}
                   variant="contained"
-                  onClick={handleApply}
+                  onClick={handleClickApply}
                   size="small"
                   sx={{ width: '120px', px: 1 }}
                 >
                   Apply
                 </Button>
-              </Box>
+              </Box> */}
             </Box>
 
             {error && <Typography variant="body2" color="error" textAlign="center">{error}</Typography>}

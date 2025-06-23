@@ -54,7 +54,6 @@ export const getCampaignListAsync = async (pagination, filters, gate) => {
       // check if all filters are valid
       const allFiltersValid = validateFilters(filters);
       if (!allFiltersValid.valid) {
-        toast.error(allFiltersValid.message);
         return;
       }
 
@@ -196,3 +195,57 @@ export const deleteFileAsync = async (paths) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
+
+
+// Views
+export const getCampaignViews = async () => {
+  try {
+    const res = await api.get(`/views?table=CAMPAIGN`)
+    return { success: true, data: res.data.data }
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+}
+
+export const getSingleCampaignView = async (id) => {
+  try {
+    const res = await api.get(`/views/${id}`)
+    return { success: true, data: res.data.data }
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+}
+
+export const createCampaignView = async (data) => {
+  try {
+    const res = await api.post(`/views`, data);
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+}
+
+export const updateCampaignView = async (id, data) => {
+  try {
+    const res = await api.patch(`/views/${id}`, data);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+}
+
+export const deleteCampaignView = async (id) => {
+  try {
+    const res = await api.delete(`/views/${id}`);
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+}

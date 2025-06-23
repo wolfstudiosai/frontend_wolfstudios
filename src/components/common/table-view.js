@@ -5,7 +5,6 @@ import { Box, IconButton, TextField, Typography, Popover, Paper, FormControl, Fo
 import AddIcon from '@mui/icons-material/Add';
 import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
-import LockIcon from '@mui/icons-material/Lock';
 import { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import { Iconify } from '/src/components/iconify/iconify';
@@ -17,39 +16,68 @@ import { useRouter } from 'next/navigation';
 import { useTheme } from '@mui/material/styles';
 import { alpha } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
+import { createCampaignView, deleteCampaignView, updateCampaignView } from '/src/app/(public)/campaign/_lib/campaign.actions';
 
 export default function TableView({ views, setViews, selectedView, showView, setShowView }) {
     // drawer
     const theme = useTheme();
     const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
     const [drawerOpen, setDrawerOpen] = useState(showView);
-
     const router = useRouter();
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab');
     const [anchorEl, setAnchorEl] = useState(null);
-    const [viewAnchorEl, setViewAnchorEl] = useState(null);
 
-    // favorite view
-    const favoriteViews = views.filter((view) => view.favorite);
-    const personalViews = views.filter((view) => view.editPermission === 'personal');
+    // Personal view
+    const personalViews = views.filter((view) => !view.isPublic);
 
     const handleOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
     const handleClickView = (view) => {
-        router.push(`?tab=${tab}&view=${view.name}`);
+        router.push(`?tab=${tab}&view=${view.id}`);
     };
 
-    const handleCreateView = (values) => {
-        setAnchorEl(null);
-        setViews([...views, {
-            name: values.name,
-            editPermission: values.editPermission,
-            filters: [],
-            sort: { field: 'name', order: 'asc' },
-        }]);
+    const handleCreateView = async (values) => {
+        const data = {
+            label: values.name,
+            description: "",
+            table: "CAMPAIGN",
+            gate: "and",
+            isPublic: values.editPermission === 'personal' ? false : true,
+            filters: [
+                {
+                    key: "Name",
+                    type: "string",
+                    operator: "contains",
+                    value: "Revo"
+                }
+            ],
+            columns: [
+                "id",
+                "Name",
+                "CampaignStatus",
+                "Budget",
+                "StartDate",
+                "EndDate",
+                "CampaignImage",
+                "CampaignGoals",
+                "createdAt"
+            ],
+            sort: [
+                {
+                    key: "createdAt",
+                    order: "desc"
+                }
+            ],
+            groups: []
+        }
+        const res = await createCampaignView(data);
+        if (res.success) {
+            setAnchorEl(null);
+            setViews([...views, res.data]);
+        }
     };
 
     useEffect(() => {
@@ -61,7 +89,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
 
     const renderViewSidebar = () => {
         return (
-            <Box width="100%" bgcolor='background.paper' px={1.5}>
+            <Box width={220} bgcolor='background.paper' px={1.5}>
                 <Box display='flex' justifyContent='space-between' alignItems='center'>
                     <Typography fontWeight={500} sx={{ fontSize: "14px", color: "text.secondary" }}>My Views</Typography>
                     <IconButton onClick={handleOpen}>
@@ -90,7 +118,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
                 </Box>
 
                 {/* Favorite Views */}
-                {favoriteViews.length > 0 && (
+                {/* {favoriteViews.length > 0 && (
                     <Box>
                         <Typography fontWeight={500} sx={{ fontSize: "14px", color: "text.secondary", mb: 1 }}>Favorite Views</Typography>
                         <Stack>
@@ -100,12 +128,13 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                     view={view}
                                     handleClickView={handleClickView}
                                     selectedView={selectedView}
-                                    setViewAnchorEl={setViewAnchorEl}
+                                    views={views}
+                                    setViews={setViews}
                                 />
                             ))}
                         </Stack>
                     </Box>
-                )}
+                )} */}
 
                 <Divider sx={{ my: 1 }} />
 
@@ -120,7 +149,8 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                     view={view}
                                     handleClickView={handleClickView}
                                     selectedView={selectedView}
-                                    setViewAnchorEl={setViewAnchorEl}
+                                    views={views}
+                                    setViews={setViews}
                                 />
                             ))}
                         </Stack>
@@ -139,7 +169,8 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                 view={view}
                                 handleClickView={handleClickView}
                                 selectedView={selectedView}
-                                setViewAnchorEl={setViewAnchorEl}
+                                views={views}
+                                setViews={setViews}
                             />
                         ))}
                     </Stack>
@@ -151,7 +182,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
     return (
         <>
             {showView && (isLargeScreen ? (
-                <Box width={250} bgcolor="background.paper">
+                <Box width={220} bgcolor="background.paper">
                     {renderViewSidebar()}
                 </Box>
             ) : (
@@ -163,13 +194,11 @@ export default function TableView({ views, setViews, selectedView, showView, set
                         setShowView(false);
                     }}
                 >
-                    <Box width={250} pt={1}>
+                    <Box width={220} pt={1}>
                         {renderViewSidebar()}
                     </Box>
                 </Drawer>
             ))}
-
-
 
             {/* View Popover */}
             <Popover
@@ -228,7 +257,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                             name="editPermission"
                                             value={values.editPermission}
                                             onChange={handleChange}
-                                            sx={{ justifyContent: "space-between" }}
+                                            sx={{ gap: 3 }}
                                         >
                                             <FormControlLabel
                                                 value="collaborative"
@@ -256,7 +285,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                                 }
                                                 sx={{ mx: 0, gap: 0.5 }}
                                             />
-                                            <FormControlLabel
+                                            {/* <FormControlLabel
                                                 value="locked"
                                                 control={<Radio size="small" />}
                                                 label={
@@ -268,7 +297,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                                     </Box>
                                                 }
                                                 sx={{ mx: 0, gap: 0.5 }}
-                                            />
+                                            /> */}
                                         </RadioGroup>
                                     </FormControl>
 
@@ -298,10 +327,10 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                     sx={{ px: 3, py: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}
                                 >
                                     <Button
-                                        onClick={() => setViewAnchorEl(null)}
+                                        onClick={() => setAnchorEl(null)}
                                         variant="text"
                                         color="inherit"
-                                        sx={{ textTransform: "none", color: "#666", fontSize: "0.875rem" }}
+                                        sx={{ textTransform: "none", fontSize: "0.875rem" }}
                                     >
                                         Cancel
                                     </Button>
@@ -312,7 +341,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
                                         size="small"
                                         disabled={isSubmitting || !values.name || !values.editPermission}
                                     >
-                                        Create
+                                        {isSubmitting ? 'Creating...' : 'Create'}
                                     </Button>
                                 </Box>
                             </Form>
@@ -320,7 +349,99 @@ export default function TableView({ views, setViews, selectedView, showView, set
                     </Formik>
                 </Paper>
             </Popover>
+        </>
+    );
+}
 
+
+const SingleView = ({ view, handleClickView, selectedView, views, setViews }) => {
+    const theme = useTheme();
+    const [viewAnchorEl, setViewAnchorEl] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [viewLabel, setViewLabel] = useState(view.label);
+    const [isRenaming, setIsRenaming] = useState(false);
+
+    const handleDeleteView = async () => {
+        setLoading(true);
+        setViewAnchorEl(null);
+        const res = await deleteCampaignView(view.id);
+        if (res.success) {
+            setViews(views.filter((v) => v.id !== view.id));
+            setLoading(false);
+        }
+    }
+
+    const handleRenameView = async () => {
+        if (viewLabel.trim() === view.label || viewLabel.trim() === '') {
+            setIsRenaming(false);
+            setViewLabel(view.label);
+            return;
+        }
+        setLoading(true);
+        setIsRenaming(false);
+        setViewLabel(viewLabel.trim());
+        const res = await updateCampaignView(view.id, { label: viewLabel });
+        if (res.success) {
+            setViews(views.map((v) => v.id === view.id ? { ...v, label: viewLabel } : v));
+            setLoading(false);
+        }
+    }
+
+    return (
+        <>
+            {isRenaming ? (
+                <TextField
+                    value={viewLabel}
+                    onChange={(e) => setViewLabel(e.target.value)}
+                    onBlur={() => handleRenameView()}
+                    size="small"
+                    variant="outlined"
+                    sx={{ width: '100%', '& .MuiInputBase-root': { p: 1, borderRadius: 0 } }}
+                />
+            ) : (
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    onClick={() => handleClickView(view)}
+                    sx={{
+                        p: 1,
+                        cursor: 'pointer',
+                        bgcolor: selectedView?.meta?.label === view.label ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
+                        '&:hover': { bgcolor: selectedView?.meta?.label === view.label ? alpha(theme.palette.primary.main, 0.2) : 'action.hover' },
+                        '&:hover .action-hover-icon': { display: 'inline-flex' },
+                    }}
+                >
+                    <Box sx={{ width: '100%' }} display="flex" alignItems="center" gap={1}>
+                        <Iconify icon="tabler:table" width={18} height={18} sx={{ color: 'primary.main' }} />
+
+                        <Box sx={{ flex: 1 }} display="flex" alignItems="center" justifyContent="space-between">
+                            <Typography
+                                variant="body2"
+                                fontWeight={500}
+                                sx={{
+                                    minWidth: 0,
+                                    flex: 1,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap'
+                                }}>
+                                {viewLabel}
+                            </Typography>
+                            <Iconify
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setViewAnchorEl(e.currentTarget);
+                                }}
+                                className="action-hover-icon"
+                                icon="iconamoon:arrow-down-2-light"
+                                width={18}
+                                height={18}
+                                sx={{ display: 'none', alignItems: 'center', justifyContent: 'center' }}
+                            />
+                        </Box>
+                    </Box>
+                </Box>)}
             {/* View Action Popover */}
             <Popover
                 open={Boolean(viewAnchorEl)}
@@ -354,62 +475,48 @@ export default function TableView({ views, setViews, selectedView, showView, set
                     <Divider sx={{ my: 1.5 }} />
 
                     <Stack spacing={1}>
-                        <Button startIcon={<EditIcon />} fullWidth variant="text" size="small" color='none' sx={{ justifyContent: "flex-start" }}>
+                        <Button
+                            onClick={() => {
+                                setIsRenaming(true)
+                                setViewAnchorEl(null)
+                            }}
+                            startIcon={<EditIcon />}
+                            fullWidth
+                            variant="text"
+                            size="small"
+                            color='none'
+                            sx={{ justifyContent: "flex-start" }}>
                             Rename View
                         </Button>
-                        <Button startIcon={<ContentCopyIcon />} fullWidth variant="text" size="small" color='none' sx={{ justifyContent: "flex-start" }}>
+
+                        <Button
+                            // onClick={() => {
+                            //     setIsRenaming(true)
+                            //     setViewAnchorEl(null)
+                            // }}
+                            startIcon={<ContentCopyIcon />}
+                            fullWidth
+                            variant="text"
+                            size="small"
+                            color='none'
+                            sx={{ justifyContent: "flex-start" }}>
                             Duplicate View
                         </Button>
-                        <Button startIcon={<DeleteIcon />} fullWidth variant="text" size="small" color="error" sx={{ justifyContent: "flex-start" }}>
+
+                        <Button
+                            disabled={loading}
+                            startIcon={<DeleteIcon />}
+                            fullWidth
+                            variant="text"
+                            size="small"
+                            color="error"
+                            sx={{ justifyContent: "flex-start" }}
+                            onClick={() => handleDeleteView(view)}>
                             Delete View
                         </Button>
                     </Stack>
                 </Paper>
             </Popover>
         </>
-    );
-}
-
-
-const SingleView = ({ view, handleClickView, selectedView, setViewAnchorEl }) => {
-    const theme = useTheme();
-    return (
-        <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            onClick={() => handleClickView(view)}
-            sx={{
-                p: 1,
-                cursor: 'pointer',
-                bgcolor: selectedView?.name === view.name ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
-                '&:hover': { bgcolor: selectedView?.name === view.name ? alpha(theme.palette.primary.main, 0.2) : 'action.hover' },
-                '& .hover-icon': { display: 'none' },
-                '&:hover .hover-icon': { display: 'inline-flex' },
-                '&:hover .default-icon': { display: 'none' },
-                '&:hover .action-hover-icon': { display: 'inline-flex' },
-            }}
-        >
-            <Box display="flex" alignItems="center" gap={1}>
-                <Iconify className="default-icon" icon="tabler:table" width={18} height={18} sx={{ color: 'primary.main' }} />
-                <Iconify className="hover-icon" icon="line-md:star" width={18} height={18} sx={{ color: 'yellow' }} />
-
-                <Typography variant="body2" fontWeight={500}>
-                    {view.name}
-                </Typography>
-                {view.editPermission === 'locked' && <LockIcon sx={{ fontSize: 16, color: 'text.secondary' }} />}
-            </Box>
-            <Iconify
-                onClick={(e) => {
-                    e.stopPropagation();
-                    setViewAnchorEl(e.currentTarget);
-                }}
-                className="action-hover-icon"
-                icon="iconamoon:arrow-down-2-light"
-                width={18}
-                height={18}
-                sx={{ display: 'none', alignItems: 'center', justifyContent: 'center' }}
-            />
-        </Box>
     );
 }
