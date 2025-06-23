@@ -79,7 +79,7 @@ const TagChip = styled(Chip)(({ theme }) => ({
   marginLeft: theme.spacing(1),
 }));
 
-export const LeftSidebar = () => {
+export const LeftSidebar = ({ isMobile }) => {
   const { notifications, workspaceInfo, channels, directChannels, setActiveTab, activeTab } = useContext(ChatContext);
   const { userInfo } = useAuth();
   const [openCreateChannelDialog, setOpenCreateChannelDialog] = useState(false);
@@ -106,9 +106,17 @@ export const LeftSidebar = () => {
       <Stack
         direction="column"
         gap={1}
-        sx={{ width: '25%', height: '100%', px: 1, py: 2, borderRight: '1px solid', borderColor: 'divider' }}
+        sx={{
+          width: isMobile ? '100vw' : '25%',
+          height: isMobile ? '100vh' : '100%',
+          px: 1,
+          py: 2,
+          borderRight: isMobile ? 'none' : '1px solid',
+          borderColor: 'divider',
+          pt: isMobile ? 5.5 : 0,
+        }}
       >
-        <Stack direction="column" sx={{ height: 'calc(100vh - 126px)', overfolow: 'hidden' }}>
+        <Stack direction="column" sx={{ height: isMobile ? '100vh' : 'calc(100vh - 126px)', overfolow: 'hidden' }}>
           <SidebarHeader>
             <Typography variant="h6" fontWeight={600}>
               {workspaceInfo.name}
