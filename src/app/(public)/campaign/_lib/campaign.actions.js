@@ -209,6 +209,16 @@ export const getCampaignViews = async () => {
   }
 }
 
+export const getSingleCampaignView = async (id) => {
+  try {
+    const res = await api.get(`/views/${id}`)
+    return { success: true, data: res.data.data }
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+}
+
 export const createCampaignView = async (data) => {
   try {
     const res = await api.post(`/views`, data);

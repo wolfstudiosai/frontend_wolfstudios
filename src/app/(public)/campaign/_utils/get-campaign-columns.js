@@ -5,8 +5,8 @@ import AttachFile from "@mui/icons-material/AttachFile";
 import { dateFormatter } from '/src/utils/date-formatter';
 import { formatCompactNumber } from '/src/utils/helper';
 
-export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOpen) => {
-    return [
+export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns) => {
+    const columns = [
         { field: 'name', headerName: 'Name', width: 280, editable: true },
         { field: 'status', headerName: 'Campaign Status', width: 150, editable: true },
         {
@@ -120,5 +120,11 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
             editable: false,
             valueGetter: (value, row) => dateFormatter(row?.startDate),
         },
-    ];
+    ]
+
+    const hiddenFields = columns.filter(col => !visibleColumns.some(visibleCol => visibleCol.columnName.charAt(0).toLowerCase() + visibleCol.columnName.slice(1) === col.field));
+
+    const visibleFields = columns.filter(col => visibleColumns.some(visibleCol => visibleCol.columnName.charAt(0).toLowerCase() + visibleCol.columnName.slice(1) === col.field));
+
+    return visibleFields;
 }

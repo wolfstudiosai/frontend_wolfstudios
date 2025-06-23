@@ -8,7 +8,7 @@ import { alpha, Button, Checkbox, FormControlLabel, FormGroup, IconButton, Popov
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import * as React from 'react';
-import { createCampaignAsync, deleteCampaignBulkAsync, getCampaignListAsync, getCampaignViews } from '../_lib/campaign.actions';
+import { createCampaignAsync, deleteCampaignBulkAsync, getCampaignListAsync, getCampaignViews, getSingleCampaignView } from '../_lib/campaign.actions';
 import AddIcon from '@mui/icons-material/Add';
 import { getCampaignColumns } from '../_utils/get-campaign-columns';
 import { updateCampaignAsync } from '../_lib/campaign.actions';
@@ -57,15 +57,10 @@ export const CampaignListView = () => {
     }
   };
 
-  // table columns
-  const allColumns = getCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen);
-  const [visibleColumns, setVisibleColumns] = React.useState(allColumns);
-
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
-  const [filteredValue, setFilteredValue] = React.useState(allColumns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [updatedRow, setUpdatedRow] = React.useState(null);
 
@@ -79,6 +74,22 @@ export const CampaignListView = () => {
   const [metaData, setMetaData] = React.useState([]);
   const [filters, setFilters] = React.useState([]);
   const [gate, setGate] = React.useState('and');
+
+
+  // table columns
+  const allColumns = React.useMemo(() =>
+    metaData.map(obj => {
+      const key = Object.keys(obj)[0];
+      return {
+        label: obj[key].label,
+        columnName: key
+      };
+    }),
+    [metaData]
+  );
+
+  const [visibleColumns, setVisibleColumns] = React.useState(allColumns);
+  const columns = React.useMemo(() => getCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns), [visibleColumns]);
 
   async function fetchList() {
     try {
@@ -236,12 +247,19 @@ export const CampaignListView = () => {
     }
   }
 
-  React.useEffect(() => {
-    const storedHiddenColumns = localStorage.getItem('hiddenColumns');
-    if (storedHiddenColumns) {
-      setFilteredValue(JSON.parse(storedHiddenColumns));
+  // get single view
+  const getSingleView = async (viewId) => {
+    const res = await getSingleCampaignView(viewId);
+    if (res.success) {
+      setSelectedView(res.data);
+      setFilters(res.data.meta?.filters || []);
+      setGate(res.data.meta?.gate || 'and');
+
+      // columns.forEach((col) => console.log(col.field));
+      // console.log(res.data.meta?.columns);
+      // console.log(visibleColumns);
     }
-  }, []);
+  }
 
   React.useEffect(() => {
     fetchList();
@@ -250,16 +268,18 @@ export const CampaignListView = () => {
   React.useEffect(() => {
     const view = searchParams.get('view');
     if (view) {
-      const viewData = views.find((v) => v.id === view);
-      setSelectedView(viewData);
-      setFilters(viewData?.filters || []);
-      setGate(viewData?.gate || 'and');
+      getSingleView(view);
     } else {
       setSelectedView(null);
       setFilters([]);
       setGate('and');
     }
   }, [searchParams]);
+
+
+  React.useEffect(() => {
+    setVisibleColumns(allColumns);
+  }, [allColumns]);
 
   return (
     <PageContainer>
@@ -339,7 +359,7 @@ export const CampaignListView = () => {
           {/* Table */}
           <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
             <EditableDataTable
-              columns={visibleColumns}
+              columns={columns}
               rows={records}
               processRowUpdate={processRowUpdate}
               onProcessRowUpdateError={handleProcessRowUpdateError}
@@ -411,29 +431,22 @@ export const CampaignListView = () => {
               return <FormControlLabel
                 key={col.field}
                 control={<Checkbox
-                  checked={visibleColumns.some((c) => c.field === col.field)}
+                  checked={visibleColumns.some((c) => c.columnName === col.columnName)}
                   onChange={(e) => {
                     if (e.target.checked) {
-                      // Show column
+                      // Add column
                       setVisibleColumns((prev) => {
-                        const exists = prev.some((c) => c.field === col.field);
+                        const exists = prev.some((c) => c.columnName === col.columnName);
                         if (exists) return prev;
-
-                        // Insert in correct order (match original allColumns order)
-                        const updated = allColumns.filter(c =>
-                          [...prev, col].some(v => v.field === c.field)
-                        );
-                        return updated;
+                        return [...prev, col];
                       });
                     } else {
-                      // Hide column
-                      setVisibleColumns((prev) =>
-                        prev.filter((c) => c.field !== col.field)
-                      );
+                      // Remove column
+                      setVisibleColumns((prev) => prev.filter((c) => c.columnName !== col.columnName));
                     }
                   }}
                 />}
-                label={col.headerName}
+                label={col.label}
               />
             })}
           </FormGroup>

@@ -30,9 +30,8 @@ export default function TableView({ views, setViews, selectedView, showView, set
     const tab = searchParams.get('tab');
     const [anchorEl, setAnchorEl] = useState(null);
 
-    // favorite view
-    // const favoriteViews = views.filter((view) => view.favorite);
-    const personalViews = views.filter((view) => !view.isPublic);
+    // Personal view
+    const personalViews = views.filter((view) => view.isPublic);
 
     const handleOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -48,7 +47,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
             description: "",
             table: "CAMPAIGN",
             gate: "and",
-            isPublic: values.editPermission === 'personal' ? true : false,
+            isPublic: values.editPermission === 'personal' ? false : true,
             filters: [],
             columns: [
                 "id",
@@ -396,17 +395,13 @@ const SingleView = ({ view, handleClickView, selectedView, views, setViews }) =>
                     sx={{
                         p: 1,
                         cursor: 'pointer',
-                        bgcolor: selectedView?.label === view.label ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
-                        '&:hover': { bgcolor: selectedView?.label === view.label ? alpha(theme.palette.primary.main, 0.2) : 'action.hover' },
-                        '& .hover-icon': { display: 'none' },
-                        '&:hover .hover-icon': { display: 'inline-flex' },
-                        '&:hover .default-icon': { display: 'none' },
+                        bgcolor: selectedView?.meta?.label === view.label ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
+                        '&:hover': { bgcolor: selectedView?.meta?.label === view.label ? alpha(theme.palette.primary.main, 0.2) : 'action.hover' },
                         '&:hover .action-hover-icon': { display: 'inline-flex' },
                     }}
                 >
                     <Box sx={{ width: '100%' }} display="flex" alignItems="center" gap={1}>
-                        <Iconify className="default-icon" icon="tabler:table" width={18} height={18} sx={{ color: 'primary.main' }} />
-                        <Iconify className="hover-icon" icon="line-md:star" width={18} height={18} sx={{ color: 'yellow' }} />
+                        <Iconify icon="tabler:table" width={18} height={18} sx={{ color: 'primary.main' }} />
 
                         <Box sx={{ flex: 1 }} display="flex" alignItems="center" justifyContent="space-between">
                             <Typography
