@@ -4,7 +4,7 @@ import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { alpha, Button, IconButton, Popover, TextField, Typography } from '@mui/material';
+import { alpha, Button, Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import * as React from 'react';
@@ -26,8 +26,10 @@ import { Iconify } from '/src/components/iconify/iconify';
 export const CampaignListView = () => {
   const theme = useTheme();
   const anchorEl = React.useRef(null);
+  const [anchorElHide, setAnchorElHide] = React.useState(null);
   const [imageToShow, setImageToShow] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+
   const handleUploadModalOpen = (data) => {
     setOpen(true);
     setUpdatedRow(data);
@@ -36,6 +38,10 @@ export const CampaignListView = () => {
   const handleClosePopover = () => {
     anchorEl.current = null;
     setImageToShow(null);
+  };
+
+  const handleClosePopoverHide = () => {
+    setAnchorElHide(null);
   };
 
   const handleUploadImage = async (images) => {
@@ -50,14 +56,16 @@ export const CampaignListView = () => {
       console.log(error);
     }
   };
+
   // table columns
-  const columns = getCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen)
+  const allColumns = getCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen);
+  const [visibleColumns, setVisibleColumns] = React.useState(allColumns);
 
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
-  const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
+  const [filteredValue, setFilteredValue] = React.useState(allColumns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [updatedRow, setUpdatedRow] = React.useState(null);
 
@@ -194,7 +202,7 @@ export const CampaignListView = () => {
 
   // ******************************data grid handler ends*********************
 
-  const visibleColumns = columns.filter((col) => filteredValue.includes(col.field));
+  // const visibleColumns = allColumns.filter((col) => filteredValue.includes(col.field));
 
   const handleAddNewItem = () => {
     const tempId = `temp_${Date.now()}`;
@@ -253,7 +261,6 @@ export const CampaignListView = () => {
     }
   }, [searchParams]);
 
-
   return (
     <PageContainer>
       <Card sx={{ borderRadius: 0 }}>
@@ -267,6 +274,15 @@ export const CampaignListView = () => {
               sx={{ bgcolor: showView ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
             >
               View
+            </Button>
+
+            <Button
+              startIcon={<Iconify icon="eva:eye-off-outline" width={16} height={16} />}
+              variant="text"
+              size="small"
+              onClick={(e) => setAnchorElHide(e.currentTarget)}
+            >
+              Hide Fields
             </Button>
 
             <TableFilterBuilder
@@ -367,6 +383,60 @@ export const CampaignListView = () => {
               style={{ borderRadius: 8 }}
             />
           )}
+        </Box>
+      </Popover>
+
+
+      {/* Hide fields popover */}
+      <Popover
+        id="hide-fields-popover"
+        open={Boolean(anchorElHide)}
+        anchorEl={anchorElHide}
+        onClose={handleClosePopoverHide}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        disableAutoFocus
+        disableEnforceFocus
+        disablePortal
+      >
+        <Box sx={{ p: 1.5, width: 250, maxHeight: 350, overflowY: 'auto', scrollbarWidth: 'thin' }}>
+          <FormGroup sx={{ gap: 0.5, pb: 2 }}>
+            {allColumns.map((col) => {
+              return <FormControlLabel
+                key={col.field}
+                control={<Checkbox
+                  checked={visibleColumns.some((c) => c.field === col.field)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      // Show column
+                      setVisibleColumns((prev) => {
+                        const exists = prev.some((c) => c.field === col.field);
+                        if (exists) return prev;
+
+                        // Insert in correct order (match original allColumns order)
+                        const updated = allColumns.filter(c =>
+                          [...prev, col].some(v => v.field === c.field)
+                        );
+                        return updated;
+                      });
+                    } else {
+                      // Hide column
+                      setVisibleColumns((prev) =>
+                        prev.filter((c) => c.field !== col.field)
+                      );
+                    }
+                  }}
+                />}
+                label={col.headerName}
+              />
+            })}
+          </FormGroup>
         </Box>
       </Popover>
 
