@@ -254,10 +254,7 @@ export const CampaignListView = () => {
       setSelectedView(res.data);
       setFilters(res.data.meta?.filters || []);
       setGate(res.data.meta?.gate || 'and');
-
-      // columns.forEach((col) => console.log(col.field));
-      // console.log(res.data.meta?.columns);
-      // console.log(visibleColumns);
+      setVisibleColumns(allColumns.filter((col) => res.data.meta?.columns.includes(col.columnName)));
     }
   }
 
@@ -278,7 +275,10 @@ export const CampaignListView = () => {
 
 
   React.useEffect(() => {
-    setVisibleColumns(allColumns);
+    const view = searchParams.get('view');
+    if (!view) {
+      setVisibleColumns(allColumns);
+    }
   }, [allColumns]);
 
   return (
