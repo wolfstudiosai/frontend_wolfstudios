@@ -25,7 +25,6 @@ export default function TableFilterBuilder(
     setFilters,
     gate,
     setGate,
-    handleFilterClear,
     updateView,
   }
 ) {
@@ -102,7 +101,7 @@ export default function TableFilterBuilder(
 
     updatedFilters[index] = currentFilter;
     setCurrentFilters(updatedFilters);
-    setDebouncedFilters(updatedFilters, fetchList, updateView);
+    setDebouncedFilters(updatedFilters, updateView);
   };
 
 
@@ -111,16 +110,16 @@ export default function TableFilterBuilder(
     const defaultType = metaMap[defaultKey]?.type || 'string';
     const defaultOperator = metaMap[defaultKey]?.operators[0] || '';
 
-    setCurrentFilters([...currentFilters, { key: defaultKey, type: defaultType, operator: defaultOperator, value: '' }]);
+    const newFilters = [...currentFilters, { key: defaultKey, type: defaultType, operator: defaultOperator, value: '' }];
+
+    setCurrentFilters(newFilters);
   };
 
   const handleRemoveCondition = (index) => {
     const newFilters = currentFilters.filter((_, i) => i !== index);
     setCurrentFilters(newFilters);
     setFilters(newFilters);
-    if (newFilters.length === 0) {
-      handleClearFilters();
-    }
+    updateView(newFilters);
   };
 
   const handleOpen = (event) => {
@@ -129,13 +128,6 @@ export default function TableFilterBuilder(
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  // Clear all filters and close the popover
-  const handleClearFilters = () => {
-    handleFilterClear();
-    handleClose();
-    setError('');
   };
 
   const open = Boolean(anchorEl);

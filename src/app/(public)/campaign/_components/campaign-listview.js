@@ -77,6 +77,7 @@ export const CampaignListView = () => {
   // filter
   const [metaData, setMetaData] = React.useState([]);
   const [filters, setFilters] = React.useState([]);
+  const [filtersLoaded, setFiltersLoaded] = React.useState(false);
   const [gate, setGate] = React.useState('and');
 
   // table columns
@@ -245,16 +246,6 @@ export const CampaignListView = () => {
     fetchList();
   };
 
-  const handleFilterApply = () => {
-    setPagination({ pageNo: 1, limit: 20 });
-  };
-
-  const handleFilterClear = () => {
-    setFilters([]);
-    setGate('and');
-    setPagination({ pageNo: 1, limit: 20 });
-  };
-
   // get single view
   const getSingleView = async (viewId) => {
     const res = await getSingleCampaignView(viewId);
@@ -262,6 +253,7 @@ export const CampaignListView = () => {
       setSelectedView(res.data);
       setFilters(res.data.meta?.filters || []);
       setGate(res.data.meta?.gate || 'and');
+      setFiltersLoaded(true);
     }
   }
 
@@ -302,20 +294,23 @@ export const CampaignListView = () => {
   }
 
   React.useEffect(() => {
-    fetchList();
-    console.log("fetch");
-  }, [pagination, filters, gate]);
+    if (filtersLoaded) {
+      fetchList();
+    }
+  }, [pagination, filters, gate, filtersLoaded]);
 
   React.useEffect(() => {
     const view = searchParams.get('view');
 
     if (view) {
       getSingleView(view);
+      setFiltersLoaded(false);
     } else {
       setSelectedView(null);
       setFilters([]);
       setGate('and');
       setVisibleColumns(allColumns);
+      setFiltersLoaded(true);
     }
   }, [searchParams]);
 
@@ -380,7 +375,6 @@ export const CampaignListView = () => {
               setFilters={setFilters}
               setGate={setGate}
               updateView={updateView}
-              handleFilterClear={handleFilterClear}
             />
 
             <Button
