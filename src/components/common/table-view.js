@@ -17,8 +17,9 @@ import { useTheme } from '@mui/material/styles';
 import { alpha } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import { createCampaignView, deleteCampaignView, updateCampaignView } from '/src/app/(public)/campaign/_lib/campaign.actions';
+import { CampaignListViewSkelton } from '/src/app/(public)/campaign/_components/campaign-list-view-skelton';
 
-export default function TableView({ views, setViews, selectedView, showView, setShowView }) {
+export default function TableView({ views, setViews, selectedView, showView, setShowView, viewsLoading }) {
     // drawer
     const theme = useTheme();
     const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
@@ -105,7 +106,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
                     alignItems="center"
                     onClick={() => router.push(`?tab=${tab}`)}
                     sx={{
-                        p: 1,
+                        p: 0.5,
                         mb: 1,
                         cursor: 'pointer',
                         '&:hover': { bgcolor: 'action.hover' },
@@ -116,25 +117,6 @@ export default function TableView({ views, setViews, selectedView, showView, set
                         <Typography variant="body2" fontWeight={500}>Default View</Typography>
                     </Box>
                 </Box>
-
-                {/* Favorite Views */}
-                {/* {favoriteViews.length > 0 && (
-                    <Box>
-                        <Typography fontWeight={500} sx={{ fontSize: "14px", color: "text.secondary", mb: 1 }}>Favorite Views</Typography>
-                        <Stack>
-                            {favoriteViews.map((view, index) => (
-                                <SingleView
-                                    key={index}
-                                    view={view}
-                                    handleClickView={handleClickView}
-                                    selectedView={selectedView}
-                                    views={views}
-                                    setViews={setViews}
-                                />
-                            ))}
-                        </Stack>
-                    </Box>
-                )} */}
 
                 <Divider sx={{ my: 1 }} />
 
@@ -183,7 +165,11 @@ export default function TableView({ views, setViews, selectedView, showView, set
         <>
             {showView && (isLargeScreen ? (
                 <Box width={220} bgcolor="background.paper">
-                    {renderViewSidebar()}
+                    {viewsLoading ? (
+                        <CampaignListViewSkelton />
+                    ) : (
+                        renderViewSidebar()
+                    )}
                 </Box>
             ) : (
                 <Drawer
@@ -396,7 +382,7 @@ const SingleView = ({ view, handleClickView, selectedView, views, setViews }) =>
                     onBlur={() => handleRenameView()}
                     size="small"
                     variant="outlined"
-                    sx={{ width: '100%', '& .MuiInputBase-root': { p: 1, borderRadius: 0 } }}
+                    sx={{ width: '100%', '& .MuiInputBase-root': { p: 0.5, borderRadius: 0 } }}
                 />
             ) : (
                 <Box
@@ -405,7 +391,7 @@ const SingleView = ({ view, handleClickView, selectedView, views, setViews }) =>
                     alignItems="center"
                     onClick={() => handleClickView(view)}
                     sx={{
-                        p: 1,
+                        p: 0.5,
                         cursor: 'pointer',
                         bgcolor: selectedView?.meta?.label === view.label ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
                         '&:hover': { bgcolor: selectedView?.meta?.label === view.label ? alpha(theme.palette.primary.main, 0.2) : 'action.hover' },
@@ -415,18 +401,17 @@ const SingleView = ({ view, handleClickView, selectedView, views, setViews }) =>
                     <Box sx={{ width: '100%' }} display="flex" alignItems="center" gap={1}>
                         <Iconify icon="tabler:table" width={18} height={18} sx={{ color: 'primary.main' }} />
 
-                        <Box sx={{ flex: 1 }} display="flex" alignItems="center" justifyContent="space-between">
+                        <Box sx={{ flex: 1, minWidth: 0, gap: 1 }} display="flex" alignItems="center" justifyContent="space-between">
                             <Typography
                                 variant="body2"
                                 fontWeight={500}
                                 sx={{
-                                    minWidth: 0,
                                     flex: 1,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap'
                                 }}>
-                                {viewLabel}
+                                {view.label}
                             </Typography>
                             <Iconify
                                 onClick={(e) => {

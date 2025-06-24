@@ -91,6 +91,7 @@ export const EditableDataTable = ({
         paginationMode="server"
         checkboxSelection={checkboxSelection} // it will enable checkbox selection
         onRowSelectionModelChange={onRowSelectionModelChange}
+        density='compact'
       />
     </Box>
   );

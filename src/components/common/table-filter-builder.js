@@ -1,14 +1,13 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Autocomplete, Box, Button, IconButton, Popover, Stack, TextField, Typography } from '@mui/material';
 import TableAutoComplete from './table-auto-complete';
-import { validateFilters } from '/src/utils/helper';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import { useSearchParams } from 'next/navigation';
+import { useFilterDebounced } from '/src/hooks/use-filter-debounce';
 
 const extractMeta = (metaArray) => {
   const map = {};
@@ -26,15 +25,12 @@ export default function TableFilterBuilder(
     setFilters,
     gate,
     setGate,
-    handleFilterApply,
     handleFilterClear,
-    selectedView,
+    updateView,
   }
 ) {
-  const searchParams = useSearchParams();
-  const tab = searchParams.get('tab');
-  const view = searchParams.get('view');
   const [anchorEl, setAnchorEl] = useState(null);
+  const [currentFilters, setCurrentFilters] = useState([...filters]);
   const metaMap = useMemo(() => extractMeta(metaData), [metaData]);
   const columnOptions = useMemo(() => metaData.map(item => {
     const columnName = Object.keys(item)[0];
@@ -43,9 +39,10 @@ export default function TableFilterBuilder(
   }), [metaData]);
 
   const [error, setError] = useState('');
+  const setDebouncedFilters = useFilterDebounced(setFilters, updateView, 500);
 
   const handleFilterChange = (index, field, value) => {
-    const updatedFilters = [...filters];
+    const updatedFilters = [...currentFilters];
     const currentFilter = { ...updatedFilters[index] };
 
     if (field === 'value') {
@@ -104,7 +101,8 @@ export default function TableFilterBuilder(
     }
 
     updatedFilters[index] = currentFilter;
-    setFilters(updatedFilters);
+    setCurrentFilters(updatedFilters);
+    setDebouncedFilters(updatedFilters, fetchList, updateView);
   };
 
 
@@ -113,11 +111,12 @@ export default function TableFilterBuilder(
     const defaultType = metaMap[defaultKey]?.type || 'string';
     const defaultOperator = metaMap[defaultKey]?.operators[0] || '';
 
-    setFilters([...filters, { key: defaultKey, type: defaultType, operator: defaultOperator, value: '' }]);
+    setCurrentFilters([...currentFilters, { key: defaultKey, type: defaultType, operator: defaultOperator, value: '' }]);
   };
 
   const handleRemoveCondition = (index) => {
-    const newFilters = filters.filter((_, i) => i !== index);
+    const newFilters = currentFilters.filter((_, i) => i !== index);
+    setCurrentFilters(newFilters);
     setFilters(newFilters);
     if (newFilters.length === 0) {
       handleClearFilters();
@@ -130,19 +129,6 @@ export default function TableFilterBuilder(
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  // Apply filters and close the popover
-  const handleApply = async () => {
-    const allFiltersValid = validateFilters(filters);
-    if (!allFiltersValid.valid) {
-      setError(allFiltersValid.message);
-    } else {
-      handleFilterApply();
-      handleClose();
-      setError('');
-    }
-
   };
 
   // Clear all filters and close the popover
@@ -167,7 +153,7 @@ export default function TableFilterBuilder(
             disableClearable
             options={meta.values}
             value={filter.value}
-            onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
+            onChange={(_, val) => handleFilterChange(currentFilters.indexOf(filter), 'value', val)}
             renderInput={(params) => (
               <TextField
                 size="small"
@@ -190,7 +176,7 @@ export default function TableFilterBuilder(
             placeholder={isEmpty ? '' : 'Enter a value'}
             value={filter.value}
             disabled={isEmpty}
-            onChange={(e) => handleFilterChange(filters.indexOf(filter), 'value', e.target.value)}
+            onChange={(e) => handleFilterChange(currentFilters.indexOf(filter), 'value', e.target.value)}
             sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
             type={meta.type === 'number' ? 'number' : 'text'}
           />
@@ -203,7 +189,7 @@ export default function TableFilterBuilder(
           value={Array.isArray(filter.value) ? filter.value : filter.value ? [filter.value] : []}
           operator={filter.operator}
           filterKey={filter.key}
-          onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val ?? [])}
+          onChange={(_, val) => handleFilterChange(currentFilters.indexOf(filter), 'value', val ?? [])}
         />
 
       );
@@ -222,7 +208,7 @@ export default function TableFilterBuilder(
           options={meta?.values || []}
           value={Array.isArray(filter.value) ? filter.value : []}
           disabled={isEmpty}
-          onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
+          onChange={(_, val) => handleFilterChange(currentFilters.indexOf(filter), 'value', val)}
           renderInput={(params) => (
             <TextField
               size="small"
@@ -246,7 +232,7 @@ export default function TableFilterBuilder(
           options={["true", "false"]}
           value={filter.value}
           disabled={isEmpty}
-          onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
+          onChange={(_, val) => handleFilterChange(currentFilters.indexOf(filter), 'value', val)}
           renderInput={(params) => (
             <TextField
               size="small"
@@ -269,7 +255,7 @@ export default function TableFilterBuilder(
           value={isEmpty ? null : dayjs(filter.value)}
           format={meta.format.toUpperCase()}
           disabled={isEmpty}
-          onChange={(e) => handleFilterChange(filters.indexOf(filter), 'value', dayjs(e).format(meta.format.toUpperCase()))}
+          onChange={(e) => handleFilterChange(currentFilters.indexOf(filter), 'value', dayjs(e).format(meta.format.toUpperCase()))}
           sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
       );
     } else {
@@ -316,6 +302,12 @@ export default function TableFilterBuilder(
     }
   };
 
+  // Sync filters with currentFilters
+  useEffect(() => {
+    setCurrentFilters([...filters]);
+  }, [filters]);
+
+
   return (
     <>
       <Button
@@ -335,8 +327,8 @@ export default function TableFilterBuilder(
       >
         <Box p={1.5} minWidth={400} maxWidth={650} sx={{ overflow: 'auto' }}>
           <Stack spacing={1}>
-            {filters.length > 0 ? (
-              filters.map((filter, index) => {
+            {currentFilters.length > 0 ? (
+              currentFilters.map((filter, index) => {
                 const operators = metaMap[filter.key]?.operators || [];
                 return (
                   <Stack key={index} direction="row" spacing={0} alignItems="center">

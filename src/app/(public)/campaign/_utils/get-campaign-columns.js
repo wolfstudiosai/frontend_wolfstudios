@@ -4,6 +4,7 @@ import Image from 'next/image';
 import AttachFile from "@mui/icons-material/AttachFile";
 import { dateFormatter } from '/src/utils/date-formatter';
 import { formatCompactNumber } from '/src/utils/helper';
+import Link from 'next/link';
 
 export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns) => {
     const columns = [
@@ -26,9 +27,9 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
                         {params.row.campaignImage.length > 0 && <Image
                             src={params.row.campaignImage}
                             alt="Campaign Image"
-                            width={30}
-                            height={30}
-                            style={{ objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
+                            width={22}
+                            height={22}
+                            style={{ objectFit: 'cover', borderRadius: '2px', cursor: 'pointer' }}
                             onClick={(event) => {
                                 anchorEl.current = event.currentTarget;
                                 setImageToShow(params.row.campaignImage);
@@ -87,6 +88,36 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
             valueGetter: (value, row) => formatCompactNumber(row.productExpense)
         },
         {
+            field: 'imageInspirationGallery',
+            headerName: 'Image Inspiration Gallery',
+            width: 200,
+            editable: true,
+            renderCell: (params) => <Box sx={{ width: '100%', height: '100%', display: 'flex', gap: 0.5, alignItems: 'center' }}>
+                {params.row.imageInspirationGallery.length > 0 && params.row.imageInspirationGallery.map((image, index) => (
+                    <Image
+                        key={index}
+                        src={image}
+                        alt="Image Inspiration Gallery"
+                        width={22}
+                        height={22}
+                        style={{ objectFit: 'cover', borderRadius: '2px' }}
+                    />
+                ))}
+            </Box>
+        },
+        {
+            field: 'videoInspirationGallery',
+            headerName: 'Video Inspiration Gallery',
+            width: 200,
+            editable: false,
+            renderCell: (params) => <Box sx={{ width: '100%', height: '100%', display: 'flex', gap: 0.5, alignItems: 'center' }}>
+                {params.row.videoInspirationGallery.length > 0 && params.row.videoInspirationGallery.map((video, index) => (
+                    <Box key={index} as={Link} href={video} target="_blank" sx={{ cursor: 'pointer' }}>Link</Box>
+                ))}
+            </Box>
+
+        },
+        {
             field: 'campaignROI',
             headerName: 'Campaign ROI',
             width: 150,
@@ -112,7 +143,15 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
             headerName: 'Campaign Goals',
             width: 200,
             editable: true,
+            valueGetter: (value, row) => row?.goals?.join(', ')
         },
+        // {
+        //     field: 'spaces',
+        //     headerName: 'Spaces',
+        //     width: 180,
+        //     editable: true,
+        //     valueGetter: (value, row) => row?.spaces?.map((space) => space?.label).join(', ')
+        // },
         {
             field: 'startDate',
             headerName: 'Created At',
