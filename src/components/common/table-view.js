@@ -401,18 +401,17 @@ const SingleView = ({ view, handleClickView, selectedView, views, setViews }) =>
                     <Box sx={{ width: '100%' }} display="flex" alignItems="center" gap={1}>
                         <Iconify icon="tabler:table" width={18} height={18} sx={{ color: 'primary.main' }} />
 
-                        <Box sx={{ flex: 1 }} display="flex" alignItems="center" justifyContent="space-between">
+                        <Box sx={{ flex: 1, minWidth: 0, gap: 1 }} display="flex" alignItems="center" justifyContent="space-between">
                             <Typography
                                 variant="body2"
                                 fontWeight={500}
                                 sx={{
-                                    minWidth: 0,
                                     flex: 1,
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap'
                                 }}>
-                                {viewLabel}
+                                {view.label}
                             </Typography>
                             <Iconify
                                 onClick={(e) => {

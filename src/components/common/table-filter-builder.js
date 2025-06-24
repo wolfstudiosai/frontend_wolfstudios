@@ -25,9 +25,7 @@ export default function TableFilterBuilder(
     setFilters,
     gate,
     setGate,
-    handleFilterApply,
     handleFilterClear,
-    selectedView,
   }
 ) {
   const [anchorEl, setAnchorEl] = useState(null);

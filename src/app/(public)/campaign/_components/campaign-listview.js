@@ -397,9 +397,7 @@ export const CampaignListView = () => {
               gate={gate}
               setFilters={setFilters}
               setGate={setGate}
-              handleFilterApply={handleFilterApply}
               handleFilterClear={handleFilterClear}
-              selectedView={selectedView}
             />
 
             <Button
