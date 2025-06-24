@@ -45,6 +45,7 @@ export const CampaignListView = () => {
     setSearchColumns(allColumns);
   };
 
+  // handle upload image
   const handleUploadImage = async (images) => {
     try {
       const response = await updateCampaignAsync(updatedRow.id, { ...updatedRow, campaignImage: images });
@@ -293,14 +294,19 @@ export const CampaignListView = () => {
     setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
   }
 
+  // run when pagination, filters, gate, filtersLoaded change
   React.useEffect(() => {
     if (filtersLoaded) {
       fetchList();
     }
   }, [pagination, filters, gate, filtersLoaded]);
 
+  // run when view change
   React.useEffect(() => {
     const view = searchParams.get('view');
+
+    // Reset pageNo to 1 on view change
+    setPagination(prev => ({ ...prev, pageNo: 1 }));
 
     if (view) {
       getSingleView(view);
@@ -314,6 +320,7 @@ export const CampaignListView = () => {
     }
   }, [searchParams]);
 
+  // run when allColumns change
   React.useEffect(() => {
     if (allColumns.length > 0 && visibleColumns.length === 0) {
       setSearchColumns(allColumns);
@@ -321,6 +328,7 @@ export const CampaignListView = () => {
     }
   }, [allColumns]);
 
+  // run when selectedView and metaData change
   React.useEffect(() => {
     if (selectedView && metaData.length > 0) {
       const selectedColumnNames = selectedView.meta?.columns || [];
@@ -331,6 +339,7 @@ export const CampaignListView = () => {
     }
   }, [metaData, selectedView, allColumns]);
 
+  // run when viewsLoading change
   React.useEffect(() => {
     const fetchViews = async () => {
       setViewsLoading(true);
