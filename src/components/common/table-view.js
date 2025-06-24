@@ -106,7 +106,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
                     alignItems="center"
                     onClick={() => router.push(`?tab=${tab}`)}
                     sx={{
-                        p: 1,
+                        p: 0.5,
                         mb: 1,
                         cursor: 'pointer',
                         '&:hover': { bgcolor: 'action.hover' },
@@ -382,7 +382,7 @@ const SingleView = ({ view, handleClickView, selectedView, views, setViews }) =>
                     onBlur={() => handleRenameView()}
                     size="small"
                     variant="outlined"
-                    sx={{ width: '100%', '& .MuiInputBase-root': { p: 1, borderRadius: 0 } }}
+                    sx={{ width: '100%', '& .MuiInputBase-root': { p: 0.5, borderRadius: 0 } }}
                 />
             ) : (
                 <Box
@@ -391,7 +391,7 @@ const SingleView = ({ view, handleClickView, selectedView, views, setViews }) =>
                     alignItems="center"
                     onClick={() => handleClickView(view)}
                     sx={{
-                        p: 1,
+                        p: 0.5,
                         cursor: 'pointer',
                         bgcolor: selectedView?.meta?.label === view.label ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
                         '&:hover': { bgcolor: selectedView?.meta?.label === view.label ? alpha(theme.palette.primary.main, 0.2) : 'action.hover' },

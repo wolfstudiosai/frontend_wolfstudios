@@ -108,9 +108,6 @@ export const CampaignListView = () => {
         setRecords(response.data.map((row) => defaultCampaign(row)) || []);
         setTotalRecords(response.totalRecords);
         setMetaData(response.meta);
-      } else {
-        setRecords([]);
-        setTotalRecords(0);
       }
     } catch (error) {
       console.log(error);
@@ -261,32 +258,30 @@ export const CampaignListView = () => {
     setPagination({ pageNo: 1, limit: 20 });
   };
 
-  const handleShowViews = async () => {
-    if (showView) {
-      setShowView(false);
-      setFilters([]);
-      setGate('and');
-      setSelectedView(null);
-    } else {
-      setViewsLoading(true);
-      setShowView(true);
-      const res = await getCampaignViews();
-      if (res.success) {
-        setViews(res.data);
-      }
-      setViewsLoading(false);
-    }
-  }
+  // const handleShowViews = async () => {
+  //   if (showView) {
+  //     setShowView(false);
+  //     setFilters([]);
+  //     setGate('and');
+  //     setSelectedView(null);
+  //   } else {
+  //     setViewsLoading(true);
+  //     setShowView(true);
+  //     const res = await getCampaignViews();
+  //     if (res.success) {
+  //       setViews(res.data);
+  //     }
+  //     setViewsLoading(false);
+  //   }
+  // }
 
   // get single view
   const getSingleView = async (viewId) => {
     const res = await getSingleCampaignView(viewId);
-    console.log(res.data);
     if (res.success) {
       setSelectedView(res.data);
       setFilters(res.data.meta?.filters || []);
       setGate(res.data.meta?.gate || 'and');
-      // setVisibleColumns(allColumns.filter((col) => res.data.meta?.columns.includes(col.columnName)));
     }
   }
 
@@ -361,6 +356,16 @@ export const CampaignListView = () => {
     }
   }, [metaData, selectedView, allColumns]);
 
+  React.useEffect(() => {
+    const fetchViews = async () => {
+      const res = await getCampaignViews();
+      if (res.success) {
+        setViews(res.data);
+      }
+    }
+    fetchViews();
+  }, []);
+
 
   return (
     <PageContainer>
@@ -371,7 +376,7 @@ export const CampaignListView = () => {
               startIcon={<TableReorderIcon />}
               variant="text"
               size="small"
-              onClick={() => handleShowViews()}
+              onClick={() => setShowView(prev => !prev)}
               sx={{ bgcolor: showView ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
             >
               View

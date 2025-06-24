@@ -1,11 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Autocomplete, Box, Button, IconButton, Popover, Stack, TextField, Typography } from '@mui/material';
 import TableAutoComplete from './table-auto-complete';
-import { validateFilters } from '/src/utils/helper';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { useFilterDebounced } from '/src/hooks/use-filter-debounce';
@@ -130,19 +129,6 @@ export default function TableFilterBuilder(
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  // Apply filters and close the popover
-  const handleApply = async () => {
-    const allFiltersValid = validateFilters(currentFilters);
-    if (!allFiltersValid.valid) {
-      setError(allFiltersValid.message);
-    } else {
-      handleFilterApply();
-      handleClose();
-      setError('');
-    }
-
   };
 
   // Clear all filters and close the popover
@@ -315,6 +301,12 @@ export default function TableFilterBuilder(
         </Typography>
     }
   };
+
+  // Sync filters with currentFilters
+  useEffect(() => {
+    setCurrentFilters([...filters]);
+  }, [filters]);
+
 
   return (
     <>
