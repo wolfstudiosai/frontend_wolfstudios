@@ -68,6 +68,7 @@ export const CampaignListView = () => {
   // View
   const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([]);
+  const [viewsLoading, setViewsLoading] = React.useState(false);
   const searchParams = useSearchParams();
   const tab = searchParams.get('tab');
   const view = searchParams.get('view');
@@ -267,11 +268,13 @@ export const CampaignListView = () => {
       setGate('and');
       setSelectedView(null);
     } else {
+      setViewsLoading(true);
       setShowView(true);
       const res = await getCampaignViews();
       if (res.success) {
         setViews(res.data);
       }
+      setViewsLoading(false);
     }
   }
 
@@ -434,6 +437,7 @@ export const CampaignListView = () => {
             setViews={setViews}
             setShowView={setShowView}
             selectedView={selectedView}
+            viewsLoading={viewsLoading}
           />
 
           {/* Table */}

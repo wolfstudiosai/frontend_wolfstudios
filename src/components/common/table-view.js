@@ -17,8 +17,9 @@ import { useTheme } from '@mui/material/styles';
 import { alpha } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import { createCampaignView, deleteCampaignView, updateCampaignView } from '/src/app/(public)/campaign/_lib/campaign.actions';
+import { CampaignListViewSkelton } from '/src/app/(public)/campaign/_components/campaign-list-view-skelton';
 
-export default function TableView({ views, setViews, selectedView, showView, setShowView }) {
+export default function TableView({ views, setViews, selectedView, showView, setShowView, viewsLoading }) {
     // drawer
     const theme = useTheme();
     const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
@@ -117,25 +118,6 @@ export default function TableView({ views, setViews, selectedView, showView, set
                     </Box>
                 </Box>
 
-                {/* Favorite Views */}
-                {/* {favoriteViews.length > 0 && (
-                    <Box>
-                        <Typography fontWeight={500} sx={{ fontSize: "14px", color: "text.secondary", mb: 1 }}>Favorite Views</Typography>
-                        <Stack>
-                            {favoriteViews.map((view, index) => (
-                                <SingleView
-                                    key={index}
-                                    view={view}
-                                    handleClickView={handleClickView}
-                                    selectedView={selectedView}
-                                    views={views}
-                                    setViews={setViews}
-                                />
-                            ))}
-                        </Stack>
-                    </Box>
-                )} */}
-
                 <Divider sx={{ my: 1 }} />
 
                 {/* Personal Views */}
@@ -183,7 +165,11 @@ export default function TableView({ views, setViews, selectedView, showView, set
         <>
             {showView && (isLargeScreen ? (
                 <Box width={220} bgcolor="background.paper">
-                    {renderViewSidebar()}
+                    {viewsLoading ? (
+                        <CampaignListViewSkelton />
+                    ) : (
+                        renderViewSidebar()
+                    )}
                 </Box>
             ) : (
                 <Drawer
