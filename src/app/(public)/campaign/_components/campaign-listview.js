@@ -4,7 +4,7 @@ import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { alpha, Button, Checkbox, CircularProgress, FormControlLabel, FormGroup, IconButton, Popover, TextField, Typography } from '@mui/material';
+import { alpha, Button, Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import * as React from 'react';
@@ -20,7 +20,7 @@ import TableFilterBuilder from '/src/components/common/table-filter-builder';
 import TableView from '/src/components/common/table-view';
 import TableReorderIcon from '@mui/icons-material/Reorder';
 import { useTheme } from '@mui/material/styles';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Iconify } from '/src/components/iconify/iconify';
 
 export const CampaignListView = () => {
@@ -107,6 +107,9 @@ export const CampaignListView = () => {
         setRecords(response.data.map((row) => defaultCampaign(row)) || []);
         setTotalRecords(response.totalRecords);
         setMetaData(response.meta);
+      } else {
+        setRecords([]);
+        setTotalRecords(0);
       }
     } catch (error) {
       console.log(error);
@@ -116,7 +119,8 @@ export const CampaignListView = () => {
   }
 
   async function updateView() {
-    if (tab === 'campaign' && view) {
+    const isReload = performance.getEntriesByType("navigation")[0]?.type === "reload";
+    if (tab === 'campaign' && selectedView?.meta?.id && !isReload) {
       const data = {
         label: selectedView?.meta?.label,
         description: selectedView?.meta?.description,
@@ -274,11 +278,12 @@ export const CampaignListView = () => {
   // get single view
   const getSingleView = async (viewId) => {
     const res = await getSingleCampaignView(viewId);
+    console.log(res.data);
     if (res.success) {
       setSelectedView(res.data);
       setFilters(res.data.meta?.filters || []);
       setGate(res.data.meta?.gate || 'and');
-      setVisibleColumns(allColumns.filter((col) => res.data.meta?.columns.includes(col.columnName)));
+      // setVisibleColumns(allColumns.filter((col) => res.data.meta?.columns.includes(col.columnName)));
     }
   }
 
@@ -318,21 +323,6 @@ export const CampaignListView = () => {
     setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
   }
 
-  // Remove view from url if reload the page
-  // React.useEffect(() => {
-  //   // Check if this is a full page reload
-  //   const isReload = performance.getEntriesByType("navigation")[0]?.type === "reload";
-
-  //   if (isReload) {
-  //     const view = searchParams.get('view');
-  //     if (view) {
-  //       const params = new URLSearchParams(searchParams.toString());
-  //       params.delete('view');
-  //       router.replace(`${window.location.pathname}?${params.toString()}`, { scroll: false });
-  //     }
-  //   }
-  // }, []);
-
   React.useEffect(() => {
     fetchList();
     updateView();
@@ -351,22 +341,23 @@ export const CampaignListView = () => {
     }
   }, [searchParams]);
 
-  // debounce filter api call
-  // React.useEffect(() => {
-  //   if (timeoutRef.current) {
-  //     clearTimeout(timeoutRef.current);
-  //   }
-  //   timeoutRef.current = setTimeout(() => {
-  //     fetchList();
-  //     updateView();
-  //   }, 500);
-  // }, [filters, gate]);
-
   React.useEffect(() => {
     if (allColumns.length > 0 && visibleColumns.length === 0) {
+      setSearchColumns(allColumns);
       setVisibleColumns(allColumns);
     }
-  }, [allColumns, searchParams]);
+  }, [allColumns]);
+
+  React.useEffect(() => {
+    if (selectedView && metaData.length > 0) {
+      const selectedColumnNames = selectedView.meta?.columns || [];
+      const filteredColumns = allColumns.filter((col) =>
+        selectedColumnNames.includes(col.columnName)
+      );
+      setVisibleColumns(filteredColumns);
+    }
+  }, [metaData, selectedView, allColumns]);
+
 
   return (
     <PageContainer>
