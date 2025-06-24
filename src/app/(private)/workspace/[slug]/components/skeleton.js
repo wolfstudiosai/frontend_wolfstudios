@@ -20,12 +20,18 @@ export const MessageSkeleton = ({ sx }) => {
   );
 };
 
-export const ContentSkeleton = () => {
+export const ContentSkeleton = ({ isMobile }) => {
   return (
     <Stack
       direction="column"
       gap={1}
-      sx={{ width: '50%', height: 'calc(100vh - 94px)', borderRight: '1px solid', borderColor: 'divider' }}
+      sx={{
+        width: isMobile ? '100vw' : '50%',
+        height: isMobile ? '100vh' : 'calc(100vh - 94px)',
+        borderRight: isMobile ? 'none' : '1px solid',
+        borderColor: 'divider',
+        pt: isMobile ? 5 : 0,
+      }}
     >
       <Box
         sx={{
