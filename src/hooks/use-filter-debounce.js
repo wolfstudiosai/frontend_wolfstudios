@@ -1,7 +1,7 @@
-// hooks/useDebouncedSetter.ts
 import { useRef } from 'react';
+import { validateFilters } from '/src/utils/helper';
 
-export function useFilterDebounced(setState, delay = 500) {
+export function useFilterDebounced(setState, refetchData, updateView, delay = 500) {
     const debounceRef = useRef(null);
 
     const setDebounced = (value) => {
@@ -10,6 +10,10 @@ export function useFilterDebounced(setState, delay = 500) {
         }
         debounceRef.current = setTimeout(() => {
             setState(value);
+            const validFilters = validateFilters(value);
+            if (validFilters.valid) {
+                updateView(value);
+            }
         }, delay);
     };
 

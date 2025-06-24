@@ -26,6 +26,7 @@ export default function TableFilterBuilder(
     gate,
     setGate,
     handleFilterClear,
+    updateView,
   }
 ) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -38,7 +39,7 @@ export default function TableFilterBuilder(
   }), [metaData]);
 
   const [error, setError] = useState('');
-  const setDebouncedFilters = useFilterDebounced(setFilters, 500);
+  const setDebouncedFilters = useFilterDebounced(setFilters, updateView, 500);
 
   const handleFilterChange = (index, field, value) => {
     const updatedFilters = [...currentFilters];
@@ -101,7 +102,7 @@ export default function TableFilterBuilder(
 
     updatedFilters[index] = currentFilter;
     setCurrentFilters(updatedFilters);
-    setDebouncedFilters(updatedFilters);
+    setDebouncedFilters(updatedFilters, fetchList, updateView);
   };
 
 
@@ -116,6 +117,7 @@ export default function TableFilterBuilder(
   const handleRemoveCondition = (index) => {
     const newFilters = currentFilters.filter((_, i) => i !== index);
     setCurrentFilters(newFilters);
+    setFilters(newFilters);
     if (newFilters.length === 0) {
       handleClearFilters();
     }

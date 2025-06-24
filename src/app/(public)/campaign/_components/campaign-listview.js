@@ -116,22 +116,19 @@ export const CampaignListView = () => {
     }
   }
 
-  async function updateView() {
-    const isReload = performance.getEntriesByType("navigation")[0]?.type === "reload";
-    if (tab === 'campaign' && selectedView?.meta?.id && !isReload) {
-      const data = {
-        label: selectedView?.meta?.label,
-        description: selectedView?.meta?.description,
-        table: selectedView?.meta?.table,
-        isPublic: selectedView?.meta?.isPublic,
-        columns: selectedView?.meta?.columns,
-        gate,
-        filters,
-        sort: selectedView?.meta?.sort,
-        groups: selectedView?.meta?.groups
-      }
-      await updateCampaignView(view, data);
-    };
+  async function updateView(filters) {
+    const data = {
+      label: selectedView?.meta?.label,
+      description: selectedView?.meta?.description,
+      table: selectedView?.meta?.table,
+      isPublic: selectedView?.meta?.isPublic,
+      columns: selectedView?.meta?.columns,
+      gate,
+      filters,
+      sort: selectedView?.meta?.sort,
+      groups: selectedView?.meta?.groups
+    }
+    await updateCampaignView(view, data);
   }
 
   // ******************************data grid handler starts*********************
@@ -258,23 +255,6 @@ export const CampaignListView = () => {
     setPagination({ pageNo: 1, limit: 20 });
   };
 
-  // const handleShowViews = async () => {
-  //   if (showView) {
-  //     setShowView(false);
-  //     setFilters([]);
-  //     setGate('and');
-  //     setSelectedView(null);
-  //   } else {
-  //     setViewsLoading(true);
-  //     setShowView(true);
-  //     const res = await getCampaignViews();
-  //     if (res.success) {
-  //       setViews(res.data);
-  //     }
-  //     setViewsLoading(false);
-  //   }
-  // }
-
   // get single view
   const getSingleView = async (viewId) => {
     const res = await getSingleCampaignView(viewId);
@@ -323,7 +303,7 @@ export const CampaignListView = () => {
 
   React.useEffect(() => {
     fetchList();
-    updateView();
+    console.log("fetch");
   }, [pagination, filters, gate]);
 
   React.useEffect(() => {
@@ -358,10 +338,12 @@ export const CampaignListView = () => {
 
   React.useEffect(() => {
     const fetchViews = async () => {
+      setViewsLoading(true);
       const res = await getCampaignViews();
       if (res.success) {
         setViews(res.data);
       }
+      setViewsLoading(false);
     }
     fetchViews();
   }, []);
@@ -369,7 +351,7 @@ export const CampaignListView = () => {
 
   return (
     <PageContainer>
-      <Card sx={{ borderRadius: 0 }}>
+      <Card sx={{ borderRadius: 0, minHeight: 'calc(100vh - 150px)' }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px 10px' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <Button
@@ -397,6 +379,7 @@ export const CampaignListView = () => {
               gate={gate}
               setFilters={setFilters}
               setGate={setGate}
+              updateView={updateView}
               handleFilterClear={handleFilterClear}
             />
 
