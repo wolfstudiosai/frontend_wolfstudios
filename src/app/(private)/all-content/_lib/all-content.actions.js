@@ -11,7 +11,7 @@ export const getContentList = async (queryParams, filters, gate) => {
       // check if all filters are valid
       const allFiltersValid = validateFilters(filters);
       if (!allFiltersValid.valid) {
-        toast.error(allFiltersValid.message);
+        // toast.error(allFiltersValid.message);
         return;
       }
       const queryParams = buildQueryParams(filters, gate);
@@ -107,6 +107,57 @@ export const createCommentAsync = async (contentID, data) => {
     return { success: true, data: res.data.data };
   } catch (error) {
     console.log(error);
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
+// views
+export const getContentViews = async () => {
+  try {
+    const res = await api.get('/views?table=CONTENT');
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
+export const getSingleContentView = async (viewId) => {
+  try {
+    const res = await api.get(`/views/${viewId}`);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
+export const createContentView = async (data) => {
+  try {
+    const res = await api.post('/views', data);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
+export const updateContentView = async (viewId, data) => {
+  try {
+    const res = await api.put(`/views/${viewId}`, data);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
+export const deleteContentView = async (viewId) => {
+  try {
+    const res = await api.delete(`/views/${viewId}`);
+    return { success: true, data: res.data.data };
+  } catch (error) {
     toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }

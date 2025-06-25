@@ -1,8 +1,8 @@
 import DateEditCell from '/src/components/data-table/date-edit-cell';
 import { dateFormatter } from '/src/utils/date-formatter';
 
-export const getContentColumns = () => {
-    return [
+export const getContentColumns = (visibleColumns) => {
+    const columns = [
         { field: 'name', headerName: 'Name', width: 280, editable: true },
         {
             field: 'postQuality',
@@ -126,4 +126,10 @@ export const getContentColumns = () => {
             valueGetter: (value, row) => dateFormatter(value),
         },
     ];
+
+    // const hiddenFields = columns.filter(col => !visibleColumns.some(visibleCol => visibleCol.columnName.charAt(0).toLowerCase() + visibleCol.columnName.slice(1) === col.field));
+
+    const visibleFields = columns.filter(col => visibleColumns.some(visibleCol => visibleCol.columnName.charAt(0).toLowerCase() + visibleCol.columnName.slice(1) === col.field));
+
+    return visibleFields;
 }
