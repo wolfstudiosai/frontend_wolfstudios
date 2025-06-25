@@ -8,6 +8,7 @@ import TableAutoComplete from './table-auto-complete';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { useFilterDebounced } from '/src/hooks/use-filter-debounce';
+import { useSearchParams } from 'next/navigation';
 
 const extractMeta = (metaArray) => {
   const map = {};
@@ -29,6 +30,7 @@ export default function TableFilterBuilder(
   }
 ) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const searchParams = useSearchParams();
   const [currentFilters, setCurrentFilters] = useState([...filters]);
   const metaMap = useMemo(() => extractMeta(metaData), [metaData]);
   const columnOptions = useMemo(() => metaData.map(item => {
@@ -119,7 +121,9 @@ export default function TableFilterBuilder(
     const newFilters = currentFilters.filter((_, i) => i !== index);
     setCurrentFilters(newFilters);
     setFilters(newFilters);
-    updateView(newFilters);
+    if (searchParams.get('view')) {
+      updateView(newFilters);
+    }
   };
 
   const handleOpen = (event) => {
