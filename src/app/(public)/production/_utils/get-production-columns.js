@@ -1,8 +1,8 @@
 import { formatCompactNumber } from '/src/utils/helper';
 import DateEditCell from '/src/components/data-table/date-edit-cell';
 
-export const getProductionColumns = () => {
-    return [
+export const getProductionColumns = (visibleColumns) => {
+    const columns = [
         { field: 'name', headerName: 'Name', width: 280, editable: true },
         {
             field: 'status',
@@ -111,4 +111,10 @@ export const getProductionColumns = () => {
         { field: 'stakeholders', headerName: 'Stakeholders', width: 200, renderCell: (params) => params.row.stakeholders.join(', ') },
         { field: 'partners', headerName: 'Partners', width: 200, renderCell: (params) => params.row.partners.join(', ') },
     ];
+
+    // const hiddenFields = columns.filter(col => !visibleColumns.some(visibleCol => visibleCol.columnName.charAt(0).toLowerCase() + visibleCol.columnName.slice(1) === col.field));
+
+    const visibleFields = columns.filter(col => visibleColumns.some(visibleCol => visibleCol.columnName.charAt(0).toLowerCase() + visibleCol.columnName.slice(1) === col.field));
+
+    return visibleFields;
 }

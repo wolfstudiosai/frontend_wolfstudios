@@ -11,15 +11,14 @@ import { Iconify } from '/src/components/iconify/iconify';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useTheme } from '@mui/material/styles';
 import { alpha } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import { createCampaignView, deleteCampaignView, updateCampaignView } from '/src/app/(public)/campaign/_lib/campaign.actions';
 import { CampaignListViewSkelton } from '/src/app/(public)/campaign/_components/campaign-list-view-skelton';
 
-export default function TableView({ views, setViews, selectedView, showView, setShowView, viewsLoading }) {
+export default function TableView({ views, setViews, columns, selectedView, showView, setShowView, viewsLoading }) {
     // drawer
     const theme = useTheme();
     const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
@@ -41,6 +40,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
     };
 
     const handleCreateView = async (values) => {
+        const defaultColumns = columns.map((col) => col.columnName);
         const data = {
             label: values.name,
             description: "",
@@ -48,7 +48,7 @@ export default function TableView({ views, setViews, selectedView, showView, set
             gate: "and",
             isPublic: values.editPermission === 'personal' ? false : true,
             filters: [],
-            columns: [],
+            columns: defaultColumns,
             sort: [],
             groups: []
         }
@@ -320,6 +320,9 @@ export default function TableView({ views, setViews, selectedView, showView, set
 
 const SingleView = ({ view, handleClickView, selectedView, views, setViews }) => {
     const theme = useTheme();
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const tab = searchParams.get('tab');
     const [viewAnchorEl, setViewAnchorEl] = useState(null);
     const [loading, setLoading] = useState(false);
     const [viewLabel, setViewLabel] = useState(view.label);
@@ -332,6 +335,7 @@ const SingleView = ({ view, handleClickView, selectedView, views, setViews }) =>
         if (res.success) {
             setViews(views.filter((v) => v.id !== view.id));
             setLoading(false);
+            router.push(`?tab=${tab}`)
         }
     }
 
@@ -371,8 +375,8 @@ const SingleView = ({ view, handleClickView, selectedView, views, setViews }) =>
                     sx={{
                         p: 0.5,
                         cursor: 'pointer',
-                        bgcolor: selectedView?.meta?.label === view.label ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
-                        '&:hover': { bgcolor: selectedView?.meta?.label === view.label ? alpha(theme.palette.primary.main, 0.2) : 'action.hover' },
+                        bgcolor: selectedView?.meta?.id === view.id ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
+                        '&:hover': { bgcolor: selectedView?.meta?.id === view.id ? alpha(theme.palette.primary.main, 0.2) : 'action.hover' },
                         '&:hover .action-hover-icon': { display: 'inline-flex' },
                     }}
                 >

@@ -400,6 +400,7 @@ export const PortfolioListView = () => {
             showView={showView}
             setViews={setViews}
             setShowView={setShowView}
+            columns={allColumns}
             selectedView={selectedView}
             viewsLoading={viewsLoading}
           />

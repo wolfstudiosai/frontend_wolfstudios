@@ -2,6 +2,7 @@ import DateEditCell from '/src/components/data-table/date-edit-cell';
 import { Box } from '@mui/material';
 import Image from 'next/image';
 import AttachFile from "@mui/icons-material/AttachFile";
+import Link from 'next/link';
 
 export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns) => {
     const columns = [
@@ -45,7 +46,14 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
                 </Box>
             }
         },
-        { field: 'videoLink', headerName: 'Video URL', width: 200, editable: true },
+        {
+            field: 'videoLink',
+            headerName: 'Video URL',
+            width: 200,
+            editable: false,
+            renderCell: (params) => <Box as={Link} sx={{ cursor: 'pointer' }} href={params.row.videoLink} target="_blank" rel="noopener noreferrer">{params.row.videoLink}
+            </Box>
+        },
         // { field: 'hero_image', headerName: 'Hero Image', width: 150, editable: true },
         // { field: 'field_image', headerName: 'Field Image', width: 150, editable: true },
         // { field: 'thumbnail', headerName: 'Thumbnail', width: 150, editable: true },

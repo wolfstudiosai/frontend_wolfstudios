@@ -243,8 +243,6 @@ export const CampaignListView = () => {
 
   // ******************************data grid handler ends*********************
 
-  // const visibleColumns = allColumns.filter((col) => filteredValue.includes(col.field));
-
   const handleAddNewItem = () => {
     const tempId = `temp_${Date.now()}`;
     const newRecord = { ...defaultCampaign(), id: tempId };
@@ -337,7 +335,6 @@ export const CampaignListView = () => {
   }, [allColumns]);
 
   // run when selectedView and metaData change
-
   React.useEffect(() => {
     if (selectedView && metaData.length > 0) {
       const selectedColumnNames = selectedView.meta?.columns || [];
@@ -435,6 +432,7 @@ export const CampaignListView = () => {
             showView={showView}
             setViews={setViews}
             setShowView={setShowView}
+            columns={allColumns}
             selectedView={selectedView}
             viewsLoading={viewsLoading}
           />
