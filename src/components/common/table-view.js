@@ -44,34 +44,12 @@ export default function TableView({ views, setViews, selectedView, showView, set
         const data = {
             label: values.name,
             description: "",
-            table: "CAMPAIGN",
+            table: tab.toUpperCase(),
             gate: "and",
             isPublic: values.editPermission === 'personal' ? false : true,
-            filters: [
-                {
-                    key: "Name",
-                    type: "string",
-                    operator: "contains",
-                    value: "Revo"
-                }
-            ],
-            columns: [
-                "id",
-                "Name",
-                "CampaignStatus",
-                "Budget",
-                "StartDate",
-                "EndDate",
-                "CampaignImage",
-                "CampaignGoals",
-                "createdAt"
-            ],
-            sort: [
-                {
-                    key: "createdAt",
-                    order: "desc"
-                }
-            ],
+            filters: [],
+            columns: [],
+            sort: [],
             groups: []
         }
         const res = await createCampaignView(data);

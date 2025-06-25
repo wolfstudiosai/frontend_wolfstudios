@@ -3,9 +3,10 @@
 import * as React from 'react';
 import Image from 'next/image';
 import AddIcon from '@mui/icons-material/Add';
-import { IconButton, Popover } from '@mui/material';
+import { Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
+import Button from '@mui/material/Button';
 import { toast } from 'sonner';
 
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
@@ -19,38 +20,93 @@ import {
   createPortfolioAsync,
   deletePortfolioAsync,
   getPortfolioListAsync,
+  getPortfolioViews,
+  getSinglePortfolioView,
   updatePortfolioAsync,
+  updatePortfolioView,
 } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
 import { getPortfolioColumns } from '../_utils/get-portfolio-columns';
+import TableReorderIcon from '@mui/icons-material/Reorder';
+import { alpha } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
+import { useSearchParams } from 'next/navigation';
+import { Iconify } from '/src/components/iconify/iconify';
+import TableView from '/src/components/common/table-view';
 
 export const PortfolioListView = () => {
+  const theme = useTheme();
   const anchorEl = React.useRef(null);
+  const [anchorElHide, setAnchorElHide] = React.useState(null);
   const [imageToShow, setImageToShow] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+
   const handleUploadModalOpen = (data) => {
     setOpen(true);
     setUpdatedRow(data);
   };
+
+  const handleClosePopover = () => {
+    anchorEl.current = null;
+    setImageToShow(null);
+  };
+
+
+  const handleClosePopoverHide = () => {
+    setAnchorElHide(null);
+    setSearchColumns(allColumns);
+  };
+
+
   // table columns
-  const columns = getPortfolioColumns(anchorEl, setImageToShow, handleUploadModalOpen);
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
-  const [filteredValue, setFilteredValue] = React.useState(columns.map((col) => col.field));
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [updatedRow, setUpdatedRow] = React.useState(null);
+
+  // View
+  const [showView, setShowView] = React.useState(false);
+  const [views, setViews] = React.useState([]);
+  const [viewsLoading, setViewsLoading] = React.useState(false);
+  const searchParams = useSearchParams();
+  const tab = searchParams.get('tab');
+  const view = searchParams.get('view');
+  const [selectedView, setSelectedView] = React.useState(null);
+
 
   // filter
   const [metaData, setMetaData] = React.useState([]);
   const [filters, setFilters] = React.useState([]);
+  const [filtersLoaded, setFiltersLoaded] = React.useState(false);
   const [gate, setGate] = React.useState('and');
+
+  // table columns
+  const allColumns = React.useMemo(() => {
+    const columns = metaData.map(obj => {
+      const key = Object.keys(obj)[0];
+      return {
+        label: obj[key].label,
+        columnName: key,
+        depth: obj[key].depth
+      };
+    });
+    return columns;
+  }, [metaData]);
+
+  const [visibleColumns, setVisibleColumns] = React.useState(allColumns);
+  const [searchColumns, setSearchColumns] = React.useState(allColumns);
+  const columns = React.useMemo(() => getPortfolioColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns), [visibleColumns]);
 
   async function fetchList() {
     try {
       setLoading(true);
-      const response = await getPortfolioListAsync({ page: pagination.pageNo, rowsPerPage: pagination.limit }, filters, gate);
+      const response = await getPortfolioListAsync({
+        page: pagination.pageNo,
+        rowsPerPage: pagination.limit
+      }, filters, gate);
+
       if (response.success) {
         setRecords(response.data.map((row) => defaultPortfolio(row)) || []);
         setTotalRecords(response.totalRecords);
@@ -61,6 +117,21 @@ export const PortfolioListView = () => {
     } finally {
       setLoading(false);
     }
+  }
+
+  async function updateView(filters) {
+    const data = {
+      label: selectedView?.meta?.label,
+      description: selectedView?.meta?.description,
+      table: selectedView?.meta?.table,
+      isPublic: selectedView?.meta?.isPublic,
+      columns: selectedView?.meta?.columns,
+      gate,
+      filters,
+      sort: selectedView?.meta?.sort,
+      groups: selectedView?.meta?.groups
+    }
+    await updatePortfolioView(view, data);
   }
 
   // ******************************data grid handler starts*********************
@@ -120,8 +191,6 @@ export const PortfolioListView = () => {
 
   // ******************************data grid handler ends*********************
 
-  const visibleColumns = columns.filter((col) => filteredValue.includes(col.field));
-
   const handleAddNewItem = () => {
     const tempId = `temp_${Date.now()}`;
     const newRecord = { ...defaultPortfolio(), id: tempId };
@@ -132,10 +201,53 @@ export const PortfolioListView = () => {
     fetchList();
   };
 
-  const handleClosePopover = () => {
-    anchorEl.current = null;
-    setImageToShow(null);
-  };
+  // get single view
+  const getSingleView = async (viewId) => {
+    const res = await getSinglePortfolioView(viewId);
+    if (res.success) {
+      setSelectedView(res.data);
+      setFilters(res.data.meta?.filters || []);
+      setGate(res.data.meta?.gate || 'and');
+      setFiltersLoaded(true);
+    }
+  }
+
+  // handle column change
+  const handleColumnChange = (e, col) => {
+    let newVisibleColumns = [];
+    if (e.target.checked) {
+      // Add column
+      const exists = visibleColumns.some((c) => c.columnName === col.columnName);
+      if (exists) return;
+      newVisibleColumns = [...visibleColumns, col];
+    } else {
+      // Remove column
+      newVisibleColumns = visibleColumns.filter((c) => c.columnName !== col.columnName);
+    }
+    setVisibleColumns(newVisibleColumns);
+
+    if (tab === 'portfolio' && view) {
+      const data = {
+        columns: newVisibleColumns.map((c) => c.columnName),
+        label: selectedView?.meta?.label,
+        description: selectedView?.meta?.description,
+        table: selectedView?.meta?.table,
+        isPublic: selectedView?.meta?.isPublic,
+        gate,
+        filters,
+        sort: selectedView?.meta?.sort,
+        groups: selectedView?.meta?.groups
+      };
+
+      updatePortfolioView(view, data);
+    }
+  }
+
+  // handle Column Search
+  const handleColumnSearch = (e) => {
+    const searchValue = e.target.value.toLowerCase();
+    setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
+  }
 
   const handleUploadImage = async (images) => {
     try {
@@ -153,40 +265,115 @@ export const PortfolioListView = () => {
     }
   };
 
-  const handleFilterApply = () => {
-    setPagination({ pageNo: 1, limit: 20 });
-  };
 
-  const handleFilterClear = () => {
-    setFilters([]);
-    setGate('and');
-    setPagination({ pageNo: 1, limit: 20 });
-  };
-
+  // run when pagination, filters, gate, filtersLoaded change
   React.useEffect(() => {
-    const storedHiddenColumns = localStorage.getItem('hiddenColumns');
-    if (storedHiddenColumns) {
-      setFilteredValue(JSON.parse(storedHiddenColumns));
+    if (filtersLoaded) {
+      fetchList();
     }
+  }, [pagination, filters, gate, filtersLoaded]);
+
+  // run when view change
+  React.useEffect(() => {
+    const view = searchParams.get('view');
+
+    // Reset pageNo to 1 on view change
+    setPagination(prev => ({ ...prev, pageNo: 1 }));
+
+    if (view) {
+      getSingleView(view);
+      setFiltersLoaded(false);
+    } else {
+      setSelectedView(null);
+      setFilters([]);
+      setGate('and');
+      setVisibleColumns(allColumns);
+      setFiltersLoaded(true);
+    }
+  }, [searchParams]);
+
+  // run when allColumns change
+  React.useEffect(() => {
+    if (allColumns.length > 0 && visibleColumns.length === 0) {
+      setSearchColumns(allColumns);
+      setVisibleColumns(allColumns);
+    }
+  }, [allColumns]);
+
+  // run when selectedView and metaData change
+  React.useEffect(() => {
+    if (selectedView && metaData.length > 0) {
+      const selectedColumnNames = selectedView.meta?.columns || [];
+      const filteredColumns = allColumns.filter((col) =>
+        selectedColumnNames.includes(col.columnName)
+      );
+      setVisibleColumns(filteredColumns);
+    }
+  }, [metaData, selectedView, allColumns]);
+
+  // run when viewsLoading change
+  React.useEffect(() => {
+    const fetchViews = async () => {
+      setViewsLoading(true);
+      const res = await getPortfolioViews();
+      if (res.success) {
+        setViews(res.data);
+      }
+      setViewsLoading(false);
+    }
+    fetchViews();
   }, []);
 
-  React.useEffect(() => {
-    fetchList();
-  }, [pagination]);
 
   return (
     <PageContainer>
-      <Card sx={{ borderRadius: 0 }}>
+      <Card sx={{ borderRadius: 0, minHeight: 'calc(100vh - 150px)' }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ padding: '5px' }}>
-          <TableFilterBuilder
-            metaData={metaData}
-            filters={filters}
-            gate={gate}
-            setFilters={setFilters}
-            setGate={setGate}
-            handleFilterApply={handleFilterApply}
-            handleFilterClear={handleFilterClear}
-          />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Button
+              startIcon={<TableReorderIcon />}
+              variant="text"
+              size="small"
+              onClick={() => setShowView(prev => !prev)}
+              sx={{ bgcolor: showView ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
+            >
+              View
+            </Button>
+
+            <Button
+              startIcon={<Iconify icon="eva:eye-off-outline" width={16} height={16} />}
+              variant="text"
+              size="small"
+              onClick={(e) => setAnchorElHide(e.currentTarget)}
+            >
+              Hide Fields
+            </Button>
+
+
+            <TableFilterBuilder
+              metaData={metaData}
+              filters={filters}
+              gate={gate}
+              setFilters={setFilters}
+              setGate={setGate}
+              updateView={updateView}
+            />
+
+            <Button
+              startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />}
+              variant="text"
+              size="small"
+            >
+              Group
+            </Button>
+            <Button
+              startIcon={<Iconify icon="si:swap-vert-duotone" width={16} height={16} />}
+              variant="text"
+              size="small"
+            >
+              Sort
+            </Button>
+          </Box>
 
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <IconButton onClick={handleAddNewItem}>
@@ -206,23 +393,84 @@ export const PortfolioListView = () => {
           </Box>
         </Box>
 
-        <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
-          <EditableDataTable
-            columns={visibleColumns}
-            rows={records}
-            processRowUpdate={processRowUpdate}
-            onProcessRowUpdateError={handleProcessRowUpdateError}
-            loading={loading}
-            rowCount={totalRecords}
-            checkboxSelection
-            pagination
-            paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
-            onPageChange={handlePaginationModelChange}
-            pageSizeOptions={[20, 30, 50]}
-            onRowSelectionModelChange={handleRowSelection}
+        <Box display='flex' justifyContent='center' alignItems='start'>
+          {/* View */}
+          <TableView
+            views={views}
+            showView={showView}
+            setViews={setViews}
+            setShowView={setShowView}
+            selectedView={selectedView}
+            viewsLoading={viewsLoading}
           />
+          <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
+            <EditableDataTable
+              columns={columns}
+              rows={records}
+              processRowUpdate={processRowUpdate}
+              onProcessRowUpdateError={handleProcessRowUpdateError}
+              loading={loading}
+              rowCount={totalRecords}
+              checkboxSelection
+              pagination
+              paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
+              onPageChange={handlePaginationModelChange}
+              pageSizeOptions={[20, 30, 50]}
+              onRowSelectionModelChange={handleRowSelection}
+            />
+          </Box>
         </Box>
       </Card>
+
+
+      {/* Hide fields popover */}
+      <Popover
+        id="hide-fields-popover"
+        open={Boolean(anchorElHide)}
+        anchorEl={anchorElHide}
+        onClose={handleClosePopoverHide}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        disableAutoFocus
+        disableEnforceFocus
+        disablePortal
+      >
+        <Box sx={{ width: 250, maxHeight: 350, overflowY: 'auto', scrollbarWidth: 'thin' }}>
+          <Box sx={{ p: 1.5, position: 'sticky', top: 0, zIndex: 1, backgroundColor: 'background.paper' }}>
+            <TextField
+              fullWidth
+              placeholder="Find fields..."
+              variant="outlined"
+              size="small"
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
+              onChange={(e) => handleColumnSearch(e)}
+            />
+          </Box>
+          <FormGroup sx={{ gap: 0.5, p: 1 }}>
+            {/* {loading && (
+              <Box sx={{ p: 1.5 }}>
+                <CircularProgress size={20} />
+              </Box>
+            )} */}
+            {searchColumns?.map((col) => {
+              return <FormControlLabel
+                key={col.field}
+                control={<Checkbox
+                  checked={visibleColumns.some((c) => c.columnName === col.columnName)}
+                  onChange={e => handleColumnChange(e, col)}
+                />}
+                label={col.label}
+              />
+            })}
+          </FormGroup>
+        </Box>
+      </Popover>
 
       {/* Image upload popover */}
       <Popover

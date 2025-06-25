@@ -8,10 +8,18 @@ import { alpha, Button, Checkbox, FormControlLabel, FormGroup, IconButton, Popov
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import * as React from 'react';
-import { createCampaignAsync, deleteCampaignBulkAsync, getCampaignListAsync, getCampaignViews, getSingleCampaignView, updateCampaignView } from '../_lib/campaign.actions';
+import {
+  createCampaignAsync,
+  deleteCampaignBulkAsync,
+  getCampaignListAsync,
+  getCampaignViews,
+  getSingleCampaignView,
+  updateCampaignView,
+  updateCampaignAsync
+} from '../_lib/campaign.actions';
+
 import AddIcon from '@mui/icons-material/Add';
 import { getCampaignColumns } from '../_utils/get-campaign-columns';
-import { updateCampaignAsync } from '../_lib/campaign.actions';
 import Image from 'next/image';
 import { MediaUploader } from '/src/components/uploaders/media-uploader';
 import { defaultCampaign } from '../_lib/campaign.types';
@@ -329,6 +337,7 @@ export const CampaignListView = () => {
   }, [allColumns]);
 
   // run when selectedView and metaData change
+
   React.useEffect(() => {
     if (selectedView && metaData.length > 0) {
       const selectedColumnNames = selectedView.meta?.columns || [];
@@ -401,6 +410,7 @@ export const CampaignListView = () => {
               Sort
             </Button>
           </Box>
+
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <IconButton onClick={handleAddNewItem}>
               <AddIcon />
