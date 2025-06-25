@@ -161,7 +161,7 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
         },
     ]
 
-    const hiddenFields = columns.filter(col => !visibleColumns.some(visibleCol => visibleCol.columnName.charAt(0).toLowerCase() + visibleCol.columnName.slice(1) === col.field));
+    // const hiddenFields = columns.filter(col => !visibleColumns.some(visibleCol => visibleCol.columnName.charAt(0).toLowerCase() + visibleCol.columnName.slice(1) === col.field));
 
     const visibleFields = columns.filter(col => visibleColumns.some(visibleCol => visibleCol.columnName.charAt(0).toLowerCase() + visibleCol.columnName.slice(1) === col.field));
 

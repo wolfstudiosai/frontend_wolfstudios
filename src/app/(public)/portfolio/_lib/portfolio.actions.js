@@ -11,7 +11,7 @@ export const getPortfolioListAsync = async (pagination, filters, gate) => {
       // check if all filters are valid
       const allFiltersValid = validateFilters(filters);
       if (!allFiltersValid.valid) {
-        toast.error(allFiltersValid.message);
+        // toast.error(allFiltersValid.message);
         return;
       }
 
@@ -106,3 +106,59 @@ export const getPortfolioCategoryListAsync = async (queryParams) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
+
+
+export const getPortfolioViews = async () => {
+  try {
+    const res = await api.get(`/views?table=PORTFOLIO`);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    // toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+}
+
+
+export const getSinglePortfolioView = async (id) => {
+  try {
+    const res = await api.get(`/views/${id}`)
+    return { success: true, data: res.data.data }
+  } catch (error) {
+    // toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+}
+
+export const createPortfolioView = async (data) => {
+  try {
+    const res = await api.post(`/views`, data);
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+}
+
+export const updatePortfolioView = async (id, data) => {
+  try {
+    const res = await api.patch(`/views/${id}`, data);
+    // toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    // toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+}
+
+
+export const deletePortfolioView = async (id) => {
+  try {
+    const res = await api.delete(`/views/${id}`);
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+}

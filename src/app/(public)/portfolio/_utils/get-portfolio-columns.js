@@ -2,9 +2,10 @@ import DateEditCell from '/src/components/data-table/date-edit-cell';
 import { Box } from '@mui/material';
 import Image from 'next/image';
 import AttachFile from "@mui/icons-material/AttachFile";
+import Link from 'next/link';
 
-export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalOpen) => {
-    return [
+export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns) => {
+    const columns = [
         { field: 'projectTitle', headerName: 'Project Title', width: 280, editable: true },
         {
             field: 'imagefield', headerName: 'Image', width: 150, renderCell: (params) => {
@@ -23,8 +24,8 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
                         key={index}
                         src={item}
                         alt="Image"
-                        width={30}
-                        height={30}
+                        width={22}
+                        height={22}
                         style={{ objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
                         onClick={(event) => {
                             anchorEl.current = event.currentTarget;
@@ -45,7 +46,14 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
                 </Box>
             }
         },
-        { field: 'videoLink', headerName: 'Video URL', width: 200, editable: true },
+        {
+            field: 'videoLink',
+            headerName: 'Video URL',
+            width: 200,
+            editable: false,
+            renderCell: (params) => <Box as={Link} sx={{ cursor: 'pointer' }} href={params.row.videoLink} target="_blank" rel="noopener noreferrer">{params.row.videoLink}
+            </Box>
+        },
         // { field: 'hero_image', headerName: 'Hero Image', width: 150, editable: true },
         // { field: 'field_image', headerName: 'Field Image', width: 150, editable: true },
         // { field: 'thumbnail', headerName: 'Thumbnail', width: 150, editable: true },
@@ -83,8 +91,8 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
                         key={index}
                         src={item}
                         alt="Image"
-                        width={30}
-                        height={30}
+                        width={22}
+                        height={22}
                         style={{ objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
                         onClick={(event) => {
                             anchorEl.current = event.currentTarget;
@@ -110,8 +118,8 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
                         key={index}
                         src={item}
                         alt="Image"
-                        width={30}
-                        height={30}
+                        width={22}
+                        height={22}
                         style={{ objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
                         onClick={(event) => {
                             anchorEl.current = event.currentTarget;
@@ -137,8 +145,8 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
                         key={index}
                         src={item}
                         alt="Image"
-                        width={30}
-                        height={30}
+                        width={22}
+                        height={22}
                         style={{ objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
                         onClick={(event) => {
                             anchorEl.current = event.currentTarget;
@@ -164,8 +172,8 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
                         key={index}
                         src={item}
                         alt="Image"
-                        width={30}
-                        height={30}
+                        width={22}
+                        height={22}
                         style={{ objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
                         onClick={(event) => {
                             anchorEl.current = event.currentTarget;
@@ -200,4 +208,10 @@ export const getPortfolioColumns = (anchorEl, setImageToShow, handleUploadModalO
         },
         // { field: 'user_id', headerName: 'User ID', width: 150, editable: true },
     ];
+
+    const hiddenFields = columns.filter(col => !visibleColumns.some(visibleCol => visibleCol.columnName.charAt(0).toLowerCase() + visibleCol.columnName.slice(1) === col.field));
+
+    const visibleFields = columns.filter(col => visibleColumns.some(visibleCol => visibleCol.columnName.charAt(0).toLowerCase() + visibleCol.columnName.slice(1) === col.field));
+
+    return visibleFields;
 }

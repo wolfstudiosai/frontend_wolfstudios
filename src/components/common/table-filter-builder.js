@@ -39,7 +39,6 @@ export default function TableFilterBuilder(
     return { label, columnName };
   }), [metaData]);
 
-  const [error, setError] = useState('');
   const setDebouncedFilters = useFilterDebounced(setFilters, updateView, 500);
 
   const handleFilterChange = (index, field, value) => {
@@ -422,8 +421,6 @@ export default function TableFilterBuilder(
                 </Button>
               </Box> */}
             </Box>
-
-            {error && <Typography variant="body2" color="error" textAlign="center">{error}</Typography>}
           </Stack>
         </Box>
       </Popover>

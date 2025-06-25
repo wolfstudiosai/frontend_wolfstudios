@@ -2,8 +2,8 @@ import Image from "next/image";
 import Box from "@mui/material/Box";
 import AttachFile from "@mui/icons-material/AttachFile";
 
-export const getPartnerColumns = ({ anchorEl, setImageToShow, handleUploadModalOpen }) => {
-    return [
+export const getPartnerColumns = ({ anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns }) => {
+    const columns = [
         { field: 'name', headerName: 'Name', width: 280, editable: true },
         {
             field: 'profileImage',
@@ -156,4 +156,104 @@ export const getPartnerColumns = ({ anchorEl, setImageToShow, handleUploadModalO
         { field: 'amazonReviewBeautyWand', headerName: 'Amazon Review - Beauty Wand', width: 250, editable: true },
         { field: 'paymentLink', headerName: 'Payment Link', width: 250, editable: true },
     ];
+
+    // const hiddenFields = columns.filter(col => !visibleColumns.some(visibleCol => visibleCol.columnName.charAt(0).toLowerCase() + visibleCol.columnName.slice(1) === col.field));
+
+    const visibleFields = columns.filter(col => visibleColumns.some(visibleCol => visibleCol.columnName.charAt(0).toLowerCase() + visibleCol.columnName.slice(1) === col.field));
+
+    return visibleFields;
 }
+
+
+[
+    {
+        "label": "Proposed Partners",
+        "columnName": "proposedPartners",
+        "depth": "ByCampaignsProposedPartners.firstId",
+        "type": "relation"
+    },
+    {
+        "label": "City",
+        "columnName": "city",
+        "depth": "ByCityPartnerHQ.firstId",
+        "type": "relation"
+    },
+    {
+        "label": "Country",
+        "columnName": "country",
+        "depth": "ByCountryPartners.firstId",
+        "type": "relation"
+    },
+    {
+        "label": "Product",
+        "columnName": "product",
+        "depth": "ByProductPartnerHQ.firstId",
+        "type": "relation"
+    },
+    {
+        "label": "States",
+        "columnName": "states",
+        "depth": "ByStatesPartnerHQ.firstId",
+        "type": "relation"
+    },
+    {
+        "label": "Tags",
+        "columnName": "tags",
+        "depth": "ByTagsPartnerHQ.firstId",
+        "type": "relation"
+    },
+    {
+        "label": "Case Studies",
+        "columnName": "caseStudies",
+        "depth": "CaseStudiesPartnerHQ.firstId",
+        "type": "relation"
+    },
+    {
+        "label": "Content HQ",
+        "columnName": "contentHQ",
+        "depth": "ContentHQPartnerHQ.firstId",
+        "type": "relation"
+    },
+    {
+        "label": "Destinations",
+        "columnName": "destinations",
+        "depth": "DestinationsPartners.firstId",
+        "type": "relation"
+    },
+    {
+        "label": "Stakeholders",
+        "columnName": "stakeholders",
+        "depth": "PartnerHQStakeholder.secondId",
+        "type": "relation"
+    },
+    {
+        "label": "Portfolios",
+        "columnName": "portfolios",
+        "depth": "PartnerHQPortfolios.secondId",
+        "type": "relation"
+    },
+    {
+        "label": "Profile Categories",
+        "columnName": "profileCategories",
+        "depth": "PartnerHQProfileCategory.secondId",
+        "type": "relation"
+    },
+    {
+        "label": "Services",
+        "columnName": "services",
+        "depth": "PartnerHQServices.secondId",
+        "type": "relation"
+    },
+    {
+        "label": "Production HQ",
+        "columnName": "productionHQ",
+        "depth": "PartnerHQProductionHQ.secondId",
+        "type": "relation"
+    },
+    {
+        "label": "Facilities",
+        "columnName": "facilities",
+        "depth": "PartnerHQFacilities.secondId",
+        "type": "relation"
+    }
+]
