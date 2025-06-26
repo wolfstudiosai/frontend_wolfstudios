@@ -1,21 +1,15 @@
 import { useRef } from 'react';
-import { validateFilters } from '/src/utils/helper';
-import { useSearchParams } from 'next/navigation';
 
-export function useFilterDebounced(setState, updateView, delay = 500) {
+export function useFilterDebounced(setState, delay = 500) {
     const debounceRef = useRef(null);
-    const searchParams = useSearchParams();
 
-    const setDebounced = (value) => {
+    const setDebounced = (value, cb) => {
         if (debounceRef.current) {
             clearTimeout(debounceRef.current);
         }
         debounceRef.current = setTimeout(() => {
             setState(value);
-            const validFilters = validateFilters(value);
-            if (validFilters.valid && searchParams.get('view')) {
-                updateView(value);
-            }
+            cb(value)
         }, delay);
     };
 

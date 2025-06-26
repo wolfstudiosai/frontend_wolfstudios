@@ -26,6 +26,7 @@ import { defaultCampaign } from '../_lib/campaign.types';
 import { toast } from 'sonner';
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
 import TableView from '/src/components/common/table-view';
+import TableSortBuilder from '/src/components/common/table-sort-builder';
 import TableReorderIcon from '@mui/icons-material/Reorder';
 import { useTheme } from '@mui/material/styles';
 import { useSearchParams } from 'next/navigation';
@@ -88,6 +89,7 @@ export const CampaignListView = () => {
   const [filters, setFilters] = React.useState([]);
   const [filtersLoaded, setFiltersLoaded] = React.useState(false);
   const [gate, setGate] = React.useState('and');
+  const [sort, setSort] = React.useState([]);
 
   // table columns
   const allColumns = React.useMemo(() => {
@@ -96,6 +98,7 @@ export const CampaignListView = () => {
       return {
         label: obj[key].label,
         columnName: key,
+        type: obj[key].type,
         depth: obj[key].depth
       };
     });
@@ -106,18 +109,23 @@ export const CampaignListView = () => {
   const [searchColumns, setSearchColumns] = React.useState(allColumns);
   const columns = React.useMemo(() => getCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns), [visibleColumns]);
 
-  async function fetchList() {
+  async function fetchList(props) {
+    const filter = props ? props : filters;
     try {
       setLoading(true);
       const response = await getCampaignListAsync({
         page: pagination.pageNo,
         rowsPerPage: pagination.limit,
-      }, filters, gate);
+      }, filter, gate);
 
       if (response?.success) {
-        setRecords(response.data.map((row) => defaultCampaign(row)) || []);
-        setTotalRecords(response.totalRecords);
-        setMetaData(response.meta);
+        if (view) {
+          setMetaData(response.meta);
+        } else {
+          setRecords(response.data.map((row) => defaultCampaign(row)) || []);
+          setTotalRecords(response.totalRecords);
+          setMetaData(response.meta);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -126,7 +134,10 @@ export const CampaignListView = () => {
     }
   }
 
-  async function updateView(filters) {
+  async function updateView(props) {
+    console.log(sort)
+    const viewFilters = props.filters ? props.filters : filters;
+    const viewSort = props.sort ? props.sort : sort;
     const data = {
       label: selectedView?.meta?.label,
       description: selectedView?.meta?.description,
@@ -134,11 +145,12 @@ export const CampaignListView = () => {
       isPublic: selectedView?.meta?.isPublic,
       columns: selectedView?.meta?.columns,
       gate,
-      filters,
-      sort: selectedView?.meta?.sort,
+      filters: viewFilters,
+      sort: viewSort,
       groups: selectedView?.meta?.groups
     }
-    await updateCampaignView(view, data);
+    const result = await updateCampaignView(view, data);
+    return result;
   }
 
   // ******************************data grid handler starts*********************
@@ -255,16 +267,25 @@ export const CampaignListView = () => {
 
   // get single view
   const getSingleView = async (viewId) => {
-    const res = await getSingleCampaignView(viewId);
-    if (res.success) {
-      setSelectedView(res.data);
-      setFilters(res.data.meta?.filters || []);
-      setGate(res.data.meta?.gate || 'and');
-      setFiltersLoaded(true);
+    try {
+      setLoading(true);
+      const res = await getSingleCampaignView(viewId);
+      if (res.success) {
+        setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
+        setSelectedView(res.data);
+        setFilters(res.data.meta?.filters || []);
+        setGate(res.data.meta?.gate || 'and');
+        setSort(res.data.meta?.sort || []);
+        setFiltersLoaded(true);
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false);
     }
   }
 
-  const handleColumnChange = (e, col) => {
+  const handleColumnChange = async (e, col) => {
     let newVisibleColumns = [];
     if (e.target.checked) {
       // Add column
@@ -290,7 +311,10 @@ export const CampaignListView = () => {
         groups: selectedView?.meta?.groups
       };
 
-      updateCampaignView(view, data);
+      const res = await updateCampaignView(view, data);
+      if (res.success) {
+        getSingleView(view);
+      }
     }
   }
 
@@ -302,16 +326,11 @@ export const CampaignListView = () => {
 
   // run when pagination, filters, gate, filtersLoaded change
   React.useEffect(() => {
-    if (filtersLoaded) {
-      fetchList();
-    }
-  }, [pagination, filters, gate, filtersLoaded]);
+    fetchList();
+  }, []);
 
   // run when view change
   React.useEffect(() => {
-    const view = searchParams.get('view');
-
-    // Reset pageNo to 1 on view change
     setPagination(prev => ({ ...prev, pageNo: 1 }));
 
     if (view) {
@@ -321,8 +340,10 @@ export const CampaignListView = () => {
       setSelectedView(null);
       setFilters([]);
       setGate('and');
+      setSort([]);
       setVisibleColumns(allColumns);
       setFiltersLoaded(true);
+      fetchList()
     }
   }, [searchParams]);
 
@@ -358,7 +379,6 @@ export const CampaignListView = () => {
     fetchViews();
   }, []);
 
-
   return (
     <PageContainer>
       <Card sx={{ borderRadius: 0, minHeight: 'calc(100vh - 150px)' }}>
@@ -390,6 +410,8 @@ export const CampaignListView = () => {
               setFilters={setFilters}
               setGate={setGate}
               updateView={updateView}
+              fetchList={fetchList}
+              getSingleView={getSingleView}
             />
 
             <Button
@@ -399,13 +421,15 @@ export const CampaignListView = () => {
             >
               Group
             </Button>
-            <Button
-              startIcon={<Iconify icon="si:swap-vert-duotone" width={16} height={16} />}
-              variant="text"
-              size="small"
-            >
-              Sort
-            </Button>
+
+            <TableSortBuilder
+              allColumns={allColumns}
+              sort={sort}
+              setSort={setSort}
+              updateView={updateView}
+              fetchList={fetchList}
+              getSingleView={getSingleView}
+            />
           </Box>
 
           <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -432,6 +456,8 @@ export const CampaignListView = () => {
             showView={showView}
             setViews={setViews}
             setShowView={setShowView}
+            setSort={setSort}
+            setFilters={setFilters}
             columns={allColumns}
             selectedView={selectedView}
             viewsLoading={viewsLoading}
@@ -518,11 +544,6 @@ export const CampaignListView = () => {
             />
           </Box>
           <FormGroup sx={{ gap: 0.5, p: 1 }}>
-            {/* {loading && (
-              <Box sx={{ p: 1.5 }}>
-                <CircularProgress size={20} />
-              </Box>
-            )} */}
             {searchColumns?.map((col) => {
               return <FormControlLabel
                 key={col.field}

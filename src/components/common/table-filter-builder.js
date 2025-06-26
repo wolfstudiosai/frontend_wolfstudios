@@ -9,6 +9,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { useFilterDebounced } from '/src/hooks/use-filter-debounce';
 import { useSearchParams } from 'next/navigation';
+import { validateFilters } from '/src/utils/helper';
 
 const extractMeta = (metaArray) => {
   const map = {};
@@ -27,6 +28,8 @@ export default function TableFilterBuilder(
     gate,
     setGate,
     updateView,
+    fetchList,
+    getSingleView,
   }
 ) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -39,7 +42,7 @@ export default function TableFilterBuilder(
     return { label, columnName };
   }), [metaData]);
 
-  const setDebouncedFilters = useFilterDebounced(setFilters, updateView, 500);
+  const setDebouncedFilters = useFilterDebounced(setFilters, 500);
 
   const handleFilterChange = (index, field, value) => {
     const updatedFilters = [...currentFilters];
@@ -102,7 +105,22 @@ export default function TableFilterBuilder(
 
     updatedFilters[index] = currentFilter;
     setCurrentFilters(updatedFilters);
-    setDebouncedFilters(updatedFilters, updateView);
+
+    const cb = (value) => {
+      const validFilters = validateFilters(value);
+
+      if (validFilters.valid) {
+        const view = searchParams.get('view');
+        if (view) {
+          updateView({ filters: value }).then(() => {
+            getSingleView(view)
+          });
+        } else {
+          fetchList(value);
+        }
+      }
+    }
+    setDebouncedFilters(updatedFilters, cb);
   };
 
 
@@ -120,8 +138,13 @@ export default function TableFilterBuilder(
     const newFilters = currentFilters.filter((_, i) => i !== index);
     setCurrentFilters(newFilters);
     setFilters(newFilters);
-    if (searchParams.get('view')) {
-      updateView(newFilters);
+    const view = searchParams.get('view');
+    if (view) {
+      updateView({ filters: newFilters }).then(() => {
+        getSingleView(view)
+      });
+    } else {
+      fetchList(newFilters);
     }
   };
 
