@@ -106,18 +106,25 @@ export const CampaignListView = () => {
   const [searchColumns, setSearchColumns] = React.useState(allColumns);
   const columns = React.useMemo(() => getCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns), [visibleColumns]);
 
-  async function fetchList() {
+  async function fetchList(props) {
+    const filter = props ? props : filters;
     try {
+      console.log('fetching list');
+      console.log(filters);
       setLoading(true);
       const response = await getCampaignListAsync({
         page: pagination.pageNo,
         rowsPerPage: pagination.limit,
-      }, filters, gate);
+      }, filter, gate);
 
       if (response?.success) {
-        setRecords(response.data.map((row) => defaultCampaign(row)) || []);
-        setTotalRecords(response.totalRecords);
-        setMetaData(response.meta);
+        if (view) {
+          setMetaData(response.meta);
+        } else {
+          setRecords(response.data.map((row) => defaultCampaign(row)) || []);
+          setTotalRecords(response.totalRecords);
+          setMetaData(response.meta);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -138,7 +145,8 @@ export const CampaignListView = () => {
       sort: selectedView?.meta?.sort,
       groups: selectedView?.meta?.groups
     }
-    await updateCampaignView(view, data);
+    const result = await updateCampaignView(view, data);
+    return result;
   }
 
   // ******************************data grid handler starts*********************
@@ -255,16 +263,24 @@ export const CampaignListView = () => {
 
   // get single view
   const getSingleView = async (viewId) => {
-    const res = await getSingleCampaignView(viewId);
-    if (res.success) {
-      setSelectedView(res.data);
-      setFilters(res.data.meta?.filters || []);
-      setGate(res.data.meta?.gate || 'and');
-      setFiltersLoaded(true);
+    try {
+      setLoading(true);
+      const res = await getSingleCampaignView(viewId);
+      if (res.success) {
+        setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
+        setSelectedView(res.data);
+        setFilters(res.data.meta?.filters || []);
+        setGate(res.data.meta?.gate || 'and');
+        setFiltersLoaded(true);
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false);
     }
   }
 
-  const handleColumnChange = (e, col) => {
+  const handleColumnChange = async (e, col) => {
     let newVisibleColumns = [];
     if (e.target.checked) {
       // Add column
@@ -290,7 +306,10 @@ export const CampaignListView = () => {
         groups: selectedView?.meta?.groups
       };
 
-      updateCampaignView(view, data);
+      const res = await updateCampaignView(view, data);
+      if (res.success) {
+        getSingleView(view);
+      }
     }
   }
 
@@ -302,16 +321,11 @@ export const CampaignListView = () => {
 
   // run when pagination, filters, gate, filtersLoaded change
   React.useEffect(() => {
-    if (filtersLoaded) {
-      fetchList();
-    }
-  }, [pagination, filters, gate, filtersLoaded]);
+    fetchList();
+  }, []);
 
   // run when view change
   React.useEffect(() => {
-    const view = searchParams.get('view');
-
-    // Reset pageNo to 1 on view change
     setPagination(prev => ({ ...prev, pageNo: 1 }));
 
     if (view) {
@@ -323,6 +337,7 @@ export const CampaignListView = () => {
       setGate('and');
       setVisibleColumns(allColumns);
       setFiltersLoaded(true);
+      fetchList()
     }
   }, [searchParams]);
 
@@ -358,7 +373,6 @@ export const CampaignListView = () => {
     fetchViews();
   }, []);
 
-
   return (
     <PageContainer>
       <Card sx={{ borderRadius: 0, minHeight: 'calc(100vh - 150px)' }}>
@@ -390,6 +404,8 @@ export const CampaignListView = () => {
               setFilters={setFilters}
               setGate={setGate}
               updateView={updateView}
+              fetchList={fetchList}
+              getSingleView={getSingleView}
             />
 
             <Button
@@ -432,6 +448,7 @@ export const CampaignListView = () => {
             showView={showView}
             setViews={setViews}
             setShowView={setShowView}
+            setFilters={setFilters}
             columns={allColumns}
             selectedView={selectedView}
             viewsLoading={viewsLoading}
