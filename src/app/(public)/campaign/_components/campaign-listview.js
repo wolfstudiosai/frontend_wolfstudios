@@ -26,6 +26,7 @@ import { defaultCampaign } from '../_lib/campaign.types';
 import { toast } from 'sonner';
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
 import TableView from '/src/components/common/table-view';
+import TableSortBuilder from '/src/components/common/table-sort-builder';
 import TableReorderIcon from '@mui/icons-material/Reorder';
 import { useTheme } from '@mui/material/styles';
 import { useSearchParams } from 'next/navigation';
@@ -88,6 +89,7 @@ export const CampaignListView = () => {
   const [filters, setFilters] = React.useState([]);
   const [filtersLoaded, setFiltersLoaded] = React.useState(false);
   const [gate, setGate] = React.useState('and');
+  const [sort, setSort] = React.useState([]);
 
   // table columns
   const allColumns = React.useMemo(() => {
@@ -96,6 +98,7 @@ export const CampaignListView = () => {
       return {
         label: obj[key].label,
         columnName: key,
+        type: obj[key].type,
         depth: obj[key].depth
       };
     });
@@ -109,8 +112,6 @@ export const CampaignListView = () => {
   async function fetchList(props) {
     const filter = props ? props : filters;
     try {
-      console.log('fetching list');
-      console.log(filters);
       setLoading(true);
       const response = await getCampaignListAsync({
         page: pagination.pageNo,
@@ -271,6 +272,7 @@ export const CampaignListView = () => {
         setSelectedView(res.data);
         setFilters(res.data.meta?.filters || []);
         setGate(res.data.meta?.gate || 'and');
+        setSort(res.data.meta?.sort || []);
         setFiltersLoaded(true);
       }
     } catch (error) {
@@ -415,13 +417,8 @@ export const CampaignListView = () => {
             >
               Group
             </Button>
-            <Button
-              startIcon={<Iconify icon="si:swap-vert-duotone" width={16} height={16} />}
-              variant="text"
-              size="small"
-            >
-              Sort
-            </Button>
+
+            <TableSortBuilder allColumns={allColumns} sort={sort} setSort={setSort} />
           </Box>
 
           <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -535,11 +532,6 @@ export const CampaignListView = () => {
             />
           </Box>
           <FormGroup sx={{ gap: 0.5, p: 1 }}>
-            {/* {loading && (
-              <Box sx={{ p: 1.5 }}>
-                <CircularProgress size={20} />
-              </Box>
-            )} */}
             {searchColumns?.map((col) => {
               return <FormControlLabel
                 key={col.field}
