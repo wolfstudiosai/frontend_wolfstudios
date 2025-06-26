@@ -134,7 +134,10 @@ export const CampaignListView = () => {
     }
   }
 
-  async function updateView(filters) {
+  async function updateView(props) {
+    console.log(sort)
+    const viewFilters = props.filters ? props.filters : filters;
+    const viewSort = props.sort ? props.sort : sort;
     const data = {
       label: selectedView?.meta?.label,
       description: selectedView?.meta?.description,
@@ -142,8 +145,8 @@ export const CampaignListView = () => {
       isPublic: selectedView?.meta?.isPublic,
       columns: selectedView?.meta?.columns,
       gate,
-      filters,
-      sort: selectedView?.meta?.sort,
+      filters: viewFilters,
+      sort: viewSort,
       groups: selectedView?.meta?.groups
     }
     const result = await updateCampaignView(view, data);
@@ -337,6 +340,7 @@ export const CampaignListView = () => {
       setSelectedView(null);
       setFilters([]);
       setGate('and');
+      setSort([]);
       setVisibleColumns(allColumns);
       setFiltersLoaded(true);
       fetchList()
@@ -418,7 +422,14 @@ export const CampaignListView = () => {
               Group
             </Button>
 
-            <TableSortBuilder allColumns={allColumns} sort={sort} setSort={setSort} />
+            <TableSortBuilder
+              allColumns={allColumns}
+              sort={sort}
+              setSort={setSort}
+              updateView={updateView}
+              fetchList={fetchList}
+              getSingleView={getSingleView}
+            />
           </Box>
 
           <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -445,6 +456,7 @@ export const CampaignListView = () => {
             showView={showView}
             setViews={setViews}
             setShowView={setShowView}
+            setSort={setSort}
             setFilters={setFilters}
             columns={allColumns}
             selectedView={selectedView}

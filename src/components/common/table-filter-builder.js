@@ -112,7 +112,7 @@ export default function TableFilterBuilder(
       if (validFilters.valid) {
         const view = searchParams.get('view');
         if (view) {
-          updateView(value).then(() => {
+          updateView({ filters: value }).then(() => {
             getSingleView(view)
           });
         } else {
@@ -140,7 +140,7 @@ export default function TableFilterBuilder(
     setFilters(newFilters);
     const view = searchParams.get('view');
     if (view) {
-      updateView(newFilters).then(() => {
+      updateView({ filters: newFilters }).then(() => {
         getSingleView(view)
       });
     } else {

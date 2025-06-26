@@ -18,7 +18,7 @@ import { useMediaQuery } from '@mui/material';
 import { createCampaignView, deleteCampaignView, updateCampaignView } from '/src/app/(public)/campaign/_lib/campaign.actions';
 import { CampaignListViewSkelton } from '/src/app/(public)/campaign/_components/campaign-list-view-skelton';
 
-export default function TableView({ views, setViews, columns, selectedView, setFilters, showView, setShowView, viewsLoading }) {
+export default function TableView({ views, setViews, columns, selectedView, setFilters, setSort, showView, setShowView, viewsLoading }) {
     // drawer
     const theme = useTheme();
     const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
@@ -84,6 +84,7 @@ export default function TableView({ views, setViews, columns, selectedView, setF
                     alignItems="center"
                     onClick={() => {
                         setFilters([]);
+                        setSort([]);
                         router.push(`?tab=${tab}`);
                     }}
                     sx={{

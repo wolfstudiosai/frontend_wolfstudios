@@ -13,18 +13,23 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Iconify } from '/src/components/iconify/iconify';
+import { useSearchParams } from 'next/navigation';
 
-const TableSortBuilder = ({ allColumns, sort, setSort }) => {
+const TableSortBuilder = ({ allColumns, sort, setSort, updateView, fetchList, getSingleView }) => {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [searchColumns, setSearchColumns] = useState(allColumns);
+    const [searchText, setSearchText] = useState('');
+    const searchParams = useSearchParams();
 
     const columns = useMemo(
-        () =>
-            allColumns.filter(
-                (col) => col.type === 'string' || col.type === 'number' || col.type === 'date'
-            ),
+        () => allColumns.filter((col) => ['string', 'number', 'date'].includes(col.type)),
         [allColumns]
     );
+
+    const searchColumns = useMemo(() => {
+        const lower = searchText.toLowerCase();
+        return columns.filter((col) => col.label.toLowerCase().includes(lower));
+    }, [columns, searchText]);
+
 
     const handleOpen = (event) => setAnchorEl(event.currentTarget);
     const handleClose = () => setAnchorEl(null);
@@ -33,19 +38,30 @@ const TableSortBuilder = ({ allColumns, sort, setSort }) => {
         if (!sort[0]) return;
         const updated = { ...sort[0], [key]: key === 'key' ? value.columnName : value.value };
         setSort([updated]);
+
+        const view = searchParams.get('view');
+        if (view) {
+            updateView({ sort: [updated] }).then(() => {
+                getSingleView(view)
+            });
+        } else {
+            // fetchList(updated);
+        }
     };
 
     const handleRemoveSort = () => {
         setSort([]);
+        const view = searchParams.get('view');
+        if (view) {
+            updateView({ sort: [] }).then(() => {
+                getSingleView(view)
+            });
+        } else {
+            // fetchList(updated);
+        }
     };
 
-    console.log(sort);
-
-    const handleColumnSearch = (event) => {
-        const searchValue = event.target.value.toLowerCase();
-        const filteredColumns = columns.filter((col) => col.label.toLowerCase().includes(searchValue));
-        setSearchColumns(filteredColumns);
-    };
+    const handleColumnSearch = (e) => setSearchText(e.target.value);
 
     return (
         <>
@@ -156,7 +172,7 @@ const TableSortBuilder = ({ allColumns, sort, setSort }) => {
                                             px: 2,
                                             '&:hover': { backgroundColor: 'action.hover' }
                                         }}
-                                        onClick={() => setSort([{ key: item.columnName, order: 'asc' }])}
+                                        onClick={() => setSort([{ key: item.columnName, order: '' }])}
                                     >
                                         {item.label}
                                     </Button>
