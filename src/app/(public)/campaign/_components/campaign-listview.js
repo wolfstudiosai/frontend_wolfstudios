@@ -434,24 +434,18 @@ export const CampaignListView = () => {
     }
   }, [searchParams]);
 
-  // run when allColumns change
   React.useEffect(() => {
-    if (allColumns.length > 0 && visibleColumns.length === 0) {
-      setSearchColumns(allColumns);
+    if (allColumns.length === 0) return;
+    if (view && selectedView) {
+      const selectedColumnNames = selectedView.meta?.columns || [];
+      const filtered = allColumns.filter(col => selectedColumnNames.includes(col.columnName));
+      setVisibleColumns(filtered);
+    } else {
       setVisibleColumns(allColumns);
     }
-  }, [allColumns]);
+    setSearchColumns(allColumns);
+  }, [view, selectedView, allColumns]);
 
-  // run when selectedView and metaData change
-  React.useEffect(() => {
-    if (selectedView && metaData.length > 0) {
-      const selectedColumnNames = selectedView.meta?.columns || [];
-      const filteredColumns = allColumns.filter((col) =>
-        selectedColumnNames.includes(col.columnName)
-      );
-      setVisibleColumns(filteredColumns);
-    }
-  }, [metaData, selectedView, allColumns]);
 
   // run when viewsLoading change
   React.useEffect(() => {

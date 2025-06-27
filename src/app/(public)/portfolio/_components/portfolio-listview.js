@@ -87,7 +87,6 @@ export const PortfolioListView = () => {
   const [views, setViews] = React.useState([]);
   const [viewsLoading, setViewsLoading] = React.useState(false);
   const searchParams = useSearchParams();
-  const tab = searchParams.get('tab');
   const view = searchParams.get('view');
   const [selectedView, setSelectedView] = React.useState(null);
 
@@ -344,6 +343,7 @@ export const PortfolioListView = () => {
     }
   }
 
+
   // FILTERS
   // handle filter apply
   const handleFilterApply = async () => {
@@ -399,24 +399,17 @@ export const PortfolioListView = () => {
     }
   }, [searchParams]);
 
-  // run when allColumns change
   React.useEffect(() => {
-    if (allColumns.length > 0 && visibleColumns.length === 0) {
-      setSearchColumns(allColumns);
+    if (allColumns.length === 0) return;
+    if (view && selectedView) {
+      const selectedColumnNames = selectedView.meta?.columns || [];
+      const filtered = allColumns.filter(col => selectedColumnNames.includes(col.columnName));
+      setVisibleColumns(filtered);
+    } else {
       setVisibleColumns(allColumns);
     }
-  }, [allColumns]);
-
-  // run when selectedView and metaData change
-  React.useEffect(() => {
-    if (selectedView && metaData.length > 0) {
-      const selectedColumnNames = selectedView.meta?.columns || [];
-      const filteredColumns = allColumns.filter((col) =>
-        selectedColumnNames.includes(col.columnName)
-      );
-      setVisibleColumns(filteredColumns);
-    }
-  }, [metaData, selectedView, allColumns]);
+    setSearchColumns(allColumns);
+  }, [view, selectedView, allColumns]);
 
   // run when viewsLoading change
   React.useEffect(() => {
