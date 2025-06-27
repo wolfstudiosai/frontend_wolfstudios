@@ -9,6 +9,7 @@ import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete
 
 import {
   createProductionAsync,
+  createProductionViewAsync,
   deleteProductionAsync,
   getProductionListAsync,
   getProductionViewsAsync,
@@ -27,12 +28,13 @@ import TableSortBuilder from '/src/components/common/table-sort-builder';
 import TableView from '/src/components/common/table-view';
 import { useTheme } from '@mui/material/styles';
 import { Iconify } from '/src/components/iconify/iconify';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import TableReorderIcon from '@mui/icons-material/Reorder';
 
 export const ProductionListView = () => {
   const theme = useTheme();
   const anchorEl = React.useRef(null);
+  const router = useRouter();
   const [anchorElHide, setAnchorElHide] = React.useState(null);
   const [imageToShow, setImageToShow] = React.useState(null);
   const [open, setOpen] = React.useState(false);
@@ -84,21 +86,9 @@ export const ProductionListView = () => {
   const [sort, setSort] = React.useState([]);
 
   // table columns
-  const allColumns = React.useMemo(() => {
-    const columns = metaData.map(obj => {
-      const key = Object.keys(obj)[0];
-      return {
-        label: obj[key].label,
-        columnName: key,
-        type: obj[key].type,
-        depth: obj[key].depth
-      };
-    });
-    return columns;
-  }, [metaData]);
-
-  const [visibleColumns, setVisibleColumns] = React.useState(allColumns);
-  const [searchColumns, setSearchColumns] = React.useState(allColumns);
+  const [allColumns, setAllColumns] = React.useState([]);
+  const [visibleColumns, setVisibleColumns] = React.useState([]);
+  const [searchColumns, setSearchColumns] = React.useState([]);
   const columns = React.useMemo(() => getProductionColumns(visibleColumns), [visibleColumns]);
 
   async function fetchList(props) {
@@ -133,7 +123,6 @@ export const ProductionListView = () => {
       setLoading(true);
       const viewPagination = paginationProps ? paginationProps : pagination;
       const response = await getSingleProductionViewAsync(viewId, viewPagination);
-      console.log(response);
 
       if (response.success) {
         setRecords(response.data.data.map((row) => defaultProduction(row)) || []);
@@ -357,24 +346,69 @@ export const ProductionListView = () => {
     }
   };
 
-  React.useEffect(() => {
-    fetchList();
-  }, []);
+  // initialize
+  const initialize = async () => {
+    try {
+      setLoading(true)
+      const portfolios = await getProductionListAsync({
+        page: 1,
+        rowsPerPage: 1,
+      });
 
-  // run when view change
-  React.useEffect(() => {
-    if (view) {
-      getSingleView(view);
-    } else {
-      setSelectedView(null);
-      setFilters([]);
-      setGate('and');
-      setSort([]);
-      setVisibleColumns(allColumns);
-      fetchList()
+      // set meta data
+      setMetaData(portfolios.meta)
+      const columns = portfolios.meta.map(obj => {
+        const key = Object.keys(obj)[0];
+        return {
+          label: obj[key].label,
+          columnName: key,
+          type: obj[key].type,
+          depth: obj[key].depth
+        };
+      });
+
+      setAllColumns(columns);
+
+      // set views
+      const viewsData = await getProductionViewsAsync();
+      setViews(viewsData.data)
+
+      const viewId = searchParams.get('view');
+
+      if (viewId) {
+        getSingleView(viewId, pagination)
+      } else if (viewsData.data.length > 0) {
+        getSingleView(viewsData.data[0].id, pagination)
+        router.push(`?tab=production&view=${viewsData.data[0].id}`);
+      } else {
+        const payload = {
+          label: 'Default View',
+          description: 'Default View',
+          table: 'PRODUCTION',
+          gate: 'and',
+          isPublic: true,
+          filters: [],
+          columns: columns.map(col => col.columnName),
+          sort: [],
+          groups: []
+        }
+        const res = await createProductionViewAsync(payload);
+        if (res.success) {
+          const response = await getProductionViewsAsync();
+          setViews(response.data)
+          getSingleView(res.data.id, pagination)
+          router.push(`?tab=production&view=${res.data.id}`);
+        }
+      }
+
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
-  }, [searchParams]);
+  }
 
+  // update visible columns
   React.useEffect(() => {
     if (allColumns.length === 0) return;
     if (view && selectedView) {
@@ -387,18 +421,11 @@ export const ProductionListView = () => {
     setSearchColumns(allColumns);
   }, [view, selectedView, allColumns]);
 
-  // run when viewsLoading change
+  // Watch for URL viewId change
   React.useEffect(() => {
-    const fetchViews = async () => {
-      setViewsLoading(true);
-      const res = await getProductionViewsAsync();
-      if (res.success) {
-        setViews(res.data);
-      }
-      setViewsLoading(false);
-    }
-    fetchViews();
-  }, []);
+    setPagination(prev => ({ ...prev, pageNo: 1 }));
+    initialize()
+  }, [searchParams]);
 
   return (
     <PageContainer>

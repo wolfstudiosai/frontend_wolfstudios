@@ -15,7 +15,8 @@ import {
   getCampaignViews,
   getSingleCampaignView,
   updateCampaignView,
-  updateCampaignAsync
+  updateCampaignAsync,
+  createCampaignView
 } from '../_lib/campaign.actions';
 
 import AddIcon from '@mui/icons-material/Add';
@@ -29,11 +30,12 @@ import TableView from '/src/components/common/table-view';
 import TableSortBuilder from '/src/components/common/table-sort-builder';
 import TableReorderIcon from '@mui/icons-material/Reorder';
 import { useTheme } from '@mui/material/styles';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Iconify } from '/src/components/iconify/iconify';
 
 export const CampaignListView = () => {
   const theme = useTheme();
+  const router = useRouter();
   const anchorEl = React.useRef(null);
   const [anchorElHide, setAnchorElHide] = React.useState(null);
   const [imageToShow, setImageToShow] = React.useState(null);
@@ -60,8 +62,8 @@ export const CampaignListView = () => {
       const response = await updateCampaignAsync(updatedRow.id, { ...updatedRow, campaignImage: images });
       if (response.success) {
         toast.success('Campaign updated successfully');
-        fetchList();
         setOpen(false);
+        fetchList();
       }
     } catch (error) {
       console.log(error);
@@ -90,21 +92,10 @@ export const CampaignListView = () => {
   const [sort, setSort] = React.useState([]);
 
   // table columns
-  const allColumns = React.useMemo(() => {
-    const columns = metaData.map(obj => {
-      const key = Object.keys(obj)[0];
-      return {
-        label: obj[key].label,
-        columnName: key,
-        type: obj[key].type,
-        depth: obj[key].depth
-      };
-    });
-    return columns;
-  }, [metaData]);
 
-  const [visibleColumns, setVisibleColumns] = React.useState(allColumns);
-  const [searchColumns, setSearchColumns] = React.useState(allColumns);
+  const [allColumns, setAllColumns] = React.useState([]);
+  const [visibleColumns, setVisibleColumns] = React.useState([]);
+  const [searchColumns, setSearchColumns] = React.useState([]);
   const columns = React.useMemo(() => getCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns), [visibleColumns]);
 
   async function fetchList(props) {
@@ -139,6 +130,7 @@ export const CampaignListView = () => {
       setLoading(true);
       const viewPagination = paginationProps ? paginationProps : pagination;
       const res = await getSingleCampaignView(viewId, viewPagination);
+      console.log(res);
       if (res.success) {
         setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
         setTotalRecords(res.data.count);
@@ -416,24 +408,70 @@ export const CampaignListView = () => {
     }
   };
 
-  React.useEffect(() => {
-    fetchList();
-  }, []);
+  // initialize
+  const initialize = async () => {
+    try {
+      setLoading(true)
+      const campaigns = await getCampaignListAsync({
+        page: 1,
+        rowsPerPage: 1,
+      });
 
-  // run when view change
-  React.useEffect(() => {
-    if (view) {
-      getSingleView(view);
-    } else {
-      setSelectedView(null);
-      setFilters([]);
-      setGate('and');
-      setSort([]);
-      setVisibleColumns(allColumns);
-      fetchList()
+      // set meta data
+      setMetaData(campaigns.meta)
+      const columns = campaigns.meta.map(obj => {
+        const key = Object.keys(obj)[0];
+        return {
+          label: obj[key].label,
+          columnName: key,
+          type: obj[key].type,
+          depth: obj[key].depth
+        };
+      });
+
+      setAllColumns(columns);
+
+      // set views
+      const viewsData = await getCampaignViews();
+      setViews(viewsData.data)
+
+      const viewId = searchParams.get('view');
+
+
+      if (viewId) {
+        getSingleView(viewId, pagination)
+      } else if (viewsData.data.length > 0) {
+        getSingleView(viewsData.data[0].id, pagination)
+        router.push(`?tab=campaign&view=${viewsData.data[0].id}`);
+      } else {
+        const payload = {
+          label: 'Default View',
+          description: 'Default View',
+          table: 'CAMPAIGN',
+          gate: 'and',
+          isPublic: true,
+          filters: [],
+          columns: columns.map(col => col.columnName),
+          sort: [],
+          groups: []
+        }
+        const res = await createCampaignView(payload);
+        if (res.success) {
+          const response = await getCampaignViews();
+          setViews(response.data)
+          getSingleView(res.data.id, pagination)
+          router.push(`?tab=campaign&view=${res.data.id}`);
+        }
+      }
+
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
-  }, [searchParams]);
+  }
 
+  // update visible columns
   React.useEffect(() => {
     if (allColumns.length === 0) return;
     if (view && selectedView) {
@@ -447,18 +485,12 @@ export const CampaignListView = () => {
   }, [view, selectedView, allColumns]);
 
 
-  // run when viewsLoading change
+  // Watch for URL viewId change
   React.useEffect(() => {
-    const fetchViews = async () => {
-      setViewsLoading(true);
-      const res = await getCampaignViews();
-      if (res.success) {
-        setViews(res.data);
-      }
-      setViewsLoading(false);
-    }
-    fetchViews();
-  }, []);
+    setPagination(prev => ({ ...prev, pageNo: 1 }));
+    initialize()
+  }, [searchParams]);
+
 
   return (
     <PageContainer>

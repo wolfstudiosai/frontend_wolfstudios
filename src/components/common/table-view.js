@@ -29,7 +29,7 @@ export default function TableView({
     showView,
     setShowView,
     setPagination,
-    viewsLoading
+    viewsLoading,
 }) {
     // drawer
     const theme = useTheme();
@@ -48,7 +48,7 @@ export default function TableView({
     };
 
     const handleClickView = (view) => {
-        setPagination(prev => ({ ...prev, pageNo: 1 }));
+        setPagination({ pageNo: 1, limit: 20 });
         router.push(`?tab=${tab}&view=${view.id}`);
     };
 
@@ -91,7 +91,7 @@ export default function TableView({
 
                 <Divider sx={{ my: 1 }} />
 
-                <Box
+                {/* <Box
                     display="flex"
                     justifyContent="space-between"
                     alignItems="center"
@@ -112,7 +112,7 @@ export default function TableView({
                         <Iconify icon="tabler:table" width={18} height={18} />
                         <Typography variant="body2" fontWeight={500}>Default View</Typography>
                     </Box>
-                </Box>
+                </Box> */}
 
                 <Divider sx={{ my: 1 }} />
 

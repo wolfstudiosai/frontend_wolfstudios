@@ -19,6 +19,7 @@ import { MediaUploader } from '/src/components/uploaders/media-uploader';
 
 import {
   createPortfolioAsync,
+  createPortfolioView,
   deletePortfolioAsync,
   getPortfolioListAsync,
   getPortfolioViews,
@@ -31,12 +32,13 @@ import { getPortfolioColumns } from '../_utils/get-portfolio-columns';
 import TableReorderIcon from '@mui/icons-material/Reorder';
 import { alpha } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Iconify } from '/src/components/iconify/iconify';
 import TableView from '/src/components/common/table-view';
 
 export const PortfolioListView = () => {
   const theme = useTheme();
+  const router = useRouter();
   const anchorEl = React.useRef(null);
   const [anchorElHide, setAnchorElHide] = React.useState(null);
   const [imageToShow, setImageToShow] = React.useState(null);
@@ -98,21 +100,9 @@ export const PortfolioListView = () => {
   const [sort, setSort] = React.useState([]);
 
   // table columns
-  const allColumns = React.useMemo(() => {
-    const columns = metaData.map(obj => {
-      const key = Object.keys(obj)[0];
-      return {
-        label: obj[key].label,
-        columnName: key,
-        type: obj[key].type,
-        depth: obj[key].depth
-      };
-    });
-    return columns;
-  }, [metaData]);
-
-  const [visibleColumns, setVisibleColumns] = React.useState(allColumns);
-  const [searchColumns, setSearchColumns] = React.useState(allColumns);
+  const [allColumns, setAllColumns] = React.useState([]);
+  const [visibleColumns, setVisibleColumns] = React.useState([]);
+  const [searchColumns, setSearchColumns] = React.useState([]);
   const columns = React.useMemo(() => getPortfolioColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns), [visibleColumns]);
 
   async function fetchList(props) {
@@ -381,24 +371,69 @@ export const PortfolioListView = () => {
     }
   };
 
-  React.useEffect(() => {
-    fetchList();
-  }, []);
+  // initialize
+  const initialize = async () => {
+    try {
+      setLoading(true)
+      const portfolios = await getPortfolioListAsync({
+        page: 1,
+        rowsPerPage: 1,
+      });
 
-  // run when view change
-  React.useEffect(() => {
-    if (view) {
-      getSingleView(view);
-    } else {
-      setSelectedView(null);
-      setFilters([]);
-      setGate('and');
-      setSort([]);
-      setVisibleColumns(allColumns);
-      fetchList()
+      // set meta data
+      setMetaData(portfolios.meta)
+      const columns = portfolios.meta.map(obj => {
+        const key = Object.keys(obj)[0];
+        return {
+          label: obj[key].label,
+          columnName: key,
+          type: obj[key].type,
+          depth: obj[key].depth
+        };
+      });
+
+      setAllColumns(columns);
+
+      // set views
+      const viewsData = await getPortfolioViews();
+      setViews(viewsData.data)
+
+      const viewId = searchParams.get('view');
+
+      if (viewId) {
+        getSingleView(viewId, pagination)
+      } else if (viewsData.data.length > 0) {
+        getSingleView(viewsData.data[0].id, pagination)
+        router.push(`?tab=portfolio&view=${viewsData.data[0].id}`);
+      } else {
+        const payload = {
+          label: 'Default View',
+          description: 'Default View',
+          table: 'PORTFOLIO',
+          gate: 'and',
+          isPublic: true,
+          filters: [],
+          columns: columns.map(col => col.columnName),
+          sort: [],
+          groups: []
+        }
+        const res = await createPortfolioView(payload);
+        if (res.success) {
+          const response = await getPortfolioViews();
+          setViews(response.data)
+          getSingleView(res.data.id, pagination)
+          router.push(`?tab=portfolio&view=${res.data.id}`);
+        }
+      }
+
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
-  }, [searchParams]);
+  }
 
+  // update visible columns
   React.useEffect(() => {
     if (allColumns.length === 0) return;
     if (view && selectedView) {
@@ -411,18 +446,11 @@ export const PortfolioListView = () => {
     setSearchColumns(allColumns);
   }, [view, selectedView, allColumns]);
 
-  // run when viewsLoading change
+  // Watch for URL viewId change
   React.useEffect(() => {
-    const fetchViews = async () => {
-      setViewsLoading(true);
-      const res = await getPortfolioViews();
-      if (res.success) {
-        setViews(res.data);
-      }
-      setViewsLoading(false);
-    }
-    fetchViews();
-  }, []);
+    setPagination(prev => ({ ...prev, pageNo: 1 }));
+    initialize()
+  }, [searchParams]);
 
 
   return (
