@@ -133,31 +133,65 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
         },
         {
             field: 'totalContentEngagement',
-            headerName: 'Total Revenue',
+            headerName: 'Total Content Engagement',
             width: 200,
             editable: true,
             valueGetter: (value, row) => formatCompactNumber(row.totalContentEngagement)
         },
         {
             field: 'goals',
-            headerName: 'Campaign Goals',
+            headerName: 'Goals',
             width: 200,
-            editable: true,
-            valueGetter: (value, row) => row?.goals?.join(', ')
+            editable: false,
         },
-        // {
-        //     field: 'spaces',
-        //     headerName: 'Spaces',
-        //     width: 180,
-        //     editable: true,
-        //     valueGetter: (value, row) => row?.spaces?.map((space) => space?.label).join(', ')
-        // },
+        {
+            field: 'contentHQ',
+            headerName: 'Content HQ',
+            width: 200,
+            editable: false,
+            valueGetter: (value, row) => row?.contentHQ?.map((content) => content?.label).join(', ')
+        },
+        {
+            field: 'proposedPartners',
+            headerName: 'Proposed Partners',
+            width: 200,
+            editable: false,
+            valueGetter: (value, row) => row?.proposedPartners?.map((partner) => partner?.label).join(', ')
+        },
+        {
+            field: 'stakeholders',
+            headerName: 'Stakeholders',
+            width: 200,
+            editable: false,
+            valueGetter: (value, row) => row?.stakeholders?.map((stakeholder) => stakeholder?.label).join(', ')
+        },
+        {
+            field: 'retailPartners',
+            headerName: 'Retail Partners',
+            width: 200,
+            editable: false,
+            valueGetter: (value, row) => row?.retailPartners?.map((partner) => partner?.label).join(', ')
+        },
+        {
+            field: 'spaces',
+            headerName: 'Spaces',
+            width: 180,
+            editable: false,
+            valueGetter: (value, row) => row?.spaces?.map((space) => space?.label).join(', ')
+        },
         {
             field: 'startDate',
-            headerName: 'Created At',
+            headerName: 'Start Date',
             width: 180,
             editable: false,
             valueGetter: (value, row) => dateFormatter(row?.startDate),
+        },
+        {
+            field: 'endDate',
+            headerName: 'End Date',
+            width: 180,
+            editable: false,
+            valueGetter: (value, row) => dateFormatter(row?.endDate),
         },
     ]
 
