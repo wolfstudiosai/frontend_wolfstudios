@@ -284,6 +284,8 @@ export const CampaignListView = () => {
     }
   }
 
+  // Column handler
+  // handle column change
   const handleColumnChange = async (e, col) => {
     let newVisibleColumns = [];
     if (e.target.checked) {
@@ -297,7 +299,7 @@ export const CampaignListView = () => {
     }
     setVisibleColumns(newVisibleColumns);
 
-    if (tab === 'campaign' && view) {
+    if (view) {
       const data = {
         columns: newVisibleColumns.map((c) => c.columnName),
         label: selectedView?.meta?.label,
@@ -306,7 +308,7 @@ export const CampaignListView = () => {
         isPublic: selectedView?.meta?.isPublic,
         gate,
         filters,
-        sort: selectedView?.meta?.sort,
+        sort,
         groups: selectedView?.meta?.groups
       };
 
@@ -321,6 +323,54 @@ export const CampaignListView = () => {
   const handleColumnSearch = (e) => {
     const searchValue = e.target.value.toLowerCase();
     setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
+  }
+
+  const showAllColumns = async () => {
+    const newVisibleColumns = allColumns;
+    setVisibleColumns(newVisibleColumns);
+
+    if (view) {
+      const data = {
+        columns: allColumns.map((c) => c.columnName),
+        label: selectedView?.meta?.label,
+        description: selectedView?.meta?.description,
+        table: selectedView?.meta?.table,
+        isPublic: selectedView?.meta?.isPublic,
+        gate,
+        filters,
+        sort,
+        groups: selectedView?.meta?.groups
+      };
+
+      const res = await updateCampaignView(view, data);
+      if (res.success) {
+        getSingleView(view);
+      }
+    }
+  }
+
+  const hideAllColumns = async () => {
+    const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
+    setVisibleColumns(newVisibleColumns);
+
+    if (view) {
+      const data = {
+        columns: ['id'],
+        label: selectedView?.meta?.label,
+        description: selectedView?.meta?.description,
+        table: selectedView?.meta?.table,
+        isPublic: selectedView?.meta?.isPublic,
+        gate,
+        filters,
+        sort,
+        groups: selectedView?.meta?.groups
+      };
+
+      const res = await updateCampaignView(view, data);
+      if (res.success) {
+        getSingleView(view);
+      }
+    }
   }
 
   // FILTERS
@@ -567,8 +617,8 @@ export const CampaignListView = () => {
         disableEnforceFocus
         disablePortal
       >
-        <Box sx={{ width: 250, maxHeight: 350, overflowY: 'auto', scrollbarWidth: 'thin' }}>
-          <Box sx={{ p: 1.5, position: 'sticky', top: 0, zIndex: 1, backgroundColor: 'background.paper' }}>
+        <Box sx={{ width: 250 }}>
+          <Box sx={{ p: 1.5, backgroundColor: 'background.paper' }}>
             <TextField
               fullWidth
               placeholder="Find fields..."
@@ -578,7 +628,7 @@ export const CampaignListView = () => {
               onChange={(e) => handleColumnSearch(e)}
             />
           </Box>
-          <FormGroup sx={{ gap: 0.5, p: 1 }}>
+          <FormGroup sx={{ gap: 0.5, p: 1, display: 'flex', flexDirection: 'column', minHeight: 'auto', flexWrap: 'nowrap', maxHeight: 250, overflowY: 'auto', scrollbarWidth: 'thin' }}>
             {searchColumns.filter((col) => col.columnName !== 'id')?.map((col) => {
               return <FormControlLabel
                 key={col.field}
@@ -590,6 +640,22 @@ export const CampaignListView = () => {
               />
             })}
           </FormGroup>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }}>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={hideAllColumns}
+            >
+              Hide all
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={showAllColumns}
+            >
+              Show all
+            </Button>
+          </Box>
         </Box>
       </Popover>
 
