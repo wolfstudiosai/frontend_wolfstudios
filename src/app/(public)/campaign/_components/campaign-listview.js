@@ -87,7 +87,6 @@ export const CampaignListView = () => {
   // filter
   const [metaData, setMetaData] = React.useState([]);
   const [filters, setFilters] = React.useState([]);
-  const [filtersLoaded, setFiltersLoaded] = React.useState(false);
   const [gate, setGate] = React.useState('and');
   const [sort, setSort] = React.useState([]);
 
@@ -271,11 +270,11 @@ export const CampaignListView = () => {
       const res = await getSingleCampaignView(viewId);
       if (res.success) {
         setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
+        setTotalRecords(res.data.count);
         setSelectedView(res.data);
         setFilters(res.data.meta?.filters || []);
         setGate(res.data.meta?.gate || 'and');
         setSort(res.data.meta?.sort || []);
-        setFiltersLoaded(true);
       }
     } catch (error) {
       console.log(error)
@@ -416,18 +415,16 @@ export const CampaignListView = () => {
 
   // run when view change
   React.useEffect(() => {
-    setPagination(prev => ({ ...prev, pageNo: 1 }));
+    // setPagination(prev => ({ ...prev, pageNo: 1 }));
 
     if (view) {
       getSingleView(view);
-      setFiltersLoaded(false);
     } else {
       setSelectedView(null);
       setFilters([]);
       setGate('and');
       setSort([]);
       setVisibleColumns(allColumns);
-      setFiltersLoaded(true);
       fetchList()
     }
   }, [searchParams]);

@@ -17,6 +17,7 @@ import { alpha } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import { createCampaignView, deleteCampaignView, updateCampaignView } from '/src/app/(public)/campaign/_lib/campaign.actions';
 import { CampaignListViewSkelton } from '/src/app/(public)/campaign/_components/campaign-list-view-skelton';
+import { toast } from 'sonner';
 
 export default function TableView({ views, setViews, columns, selectedView, setFilters, setSort, showView, setShowView, viewsLoading }) {
     // drawer
@@ -116,6 +117,7 @@ export default function TableView({ views, setViews, columns, selectedView, setF
                                     views={views}
                                     setViews={setViews}
                                     setFilters={setFilters}
+                                    setSort={setSort}
                                 />
                             ))}
                         </Stack>
@@ -137,6 +139,7 @@ export default function TableView({ views, setViews, columns, selectedView, setF
                                 views={views}
                                 setViews={setViews}
                                 setFilters={setFilters}
+                                setSort={setSort}
                             />
                         ))}
                     </Stack>
@@ -324,7 +327,7 @@ export default function TableView({ views, setViews, columns, selectedView, setF
 }
 
 
-const SingleView = ({ view, handleClickView, selectedView, setFilters, views, setViews }) => {
+const SingleView = ({ view, handleClickView, selectedView, setFilters, setSort, views, setViews }) => {
     const theme = useTheme();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -342,11 +345,14 @@ const SingleView = ({ view, handleClickView, selectedView, setFilters, views, se
             setViews(views.filter((v) => v.id !== view.id));
             setLoading(false);
             setFilters([]);
+            setSort([]);
             router.push(`?tab=${tab}`)
         }
     }
 
-    const handleRenameView = async () => {
+    const handleRenameView = async (e) => {
+        e.preventDefault();
+        console.log(viewLabel);
         if (viewLabel.trim() === view.label || viewLabel.trim() === '') {
             setIsRenaming(false);
             setViewLabel(view.label);
@@ -359,20 +365,23 @@ const SingleView = ({ view, handleClickView, selectedView, setFilters, views, se
         if (res.success) {
             setViews(views.map((v) => v.id === view.id ? { ...v, label: viewLabel } : v));
             setLoading(false);
+            toast.success('View renamed successfully');
         }
     }
 
     return (
         <>
             {isRenaming ? (
-                <TextField
-                    value={viewLabel}
-                    onChange={(e) => setViewLabel(e.target.value)}
-                    onBlur={() => handleRenameView()}
-                    size="small"
-                    variant="outlined"
-                    sx={{ width: '100%', '& .MuiInputBase-root': { p: 0.5, borderRadius: 0 } }}
-                />
+                <form onSubmit={handleRenameView}>
+                    <TextField
+                        value={viewLabel}
+                        onChange={(e) => setViewLabel(e.target.value)}
+                        onBlur={handleRenameView}
+                        size="small"
+                        variant="outlined"
+                        sx={{ width: '100%', '& .MuiInputBase-root': { p: 0.5, borderRadius: 0 } }}
+                    />
+                </form>
             ) : (
                 <Box
                     display="flex"
@@ -394,6 +403,7 @@ const SingleView = ({ view, handleClickView, selectedView, setFilters, views, se
                             <Typography
                                 variant="body2"
                                 fontWeight={500}
+                                title={view.label}
                                 sx={{
                                     flex: 1,
                                     overflow: 'hidden',
@@ -437,7 +447,7 @@ const SingleView = ({ view, handleClickView, selectedView, setFilters, views, se
             >
                 <Paper sx={{ p: 1.5 }}>
 
-                    <Stack spacing={1}>
+                    <Stack>
                         <Button
                             onClick={() => {
                                 setIsRenaming(true)
