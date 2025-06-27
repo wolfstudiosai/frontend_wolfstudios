@@ -457,14 +457,14 @@ export const CampaignListView = () => {
               Group
             </Button>
 
-            {/* <TableSortBuilder
+            <TableSortBuilder
               allColumns={allColumns}
               sort={sort}
               setSort={setSort}
               updateView={updateView}
               fetchList={fetchList}
               getSingleView={getSingleView}
-            /> */}
+            />
           </Box>
 
           <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -579,7 +579,7 @@ export const CampaignListView = () => {
             />
           </Box>
           <FormGroup sx={{ gap: 0.5, p: 1 }}>
-            {searchColumns?.map((col) => {
+            {searchColumns.filter((col) => col.columnName !== 'id')?.map((col) => {
               return <FormControlLabel
                 key={col.field}
                 control={<Checkbox

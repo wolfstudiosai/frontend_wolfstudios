@@ -115,6 +115,7 @@ export default function TableView({ views, setViews, columns, selectedView, setF
                                     selectedView={selectedView}
                                     views={views}
                                     setViews={setViews}
+                                    setFilters={setFilters}
                                 />
                             ))}
                         </Stack>
@@ -135,6 +136,7 @@ export default function TableView({ views, setViews, columns, selectedView, setF
                                 selectedView={selectedView}
                                 views={views}
                                 setViews={setViews}
+                                setFilters={setFilters}
                             />
                         ))}
                     </Stack>
@@ -322,7 +324,7 @@ export default function TableView({ views, setViews, columns, selectedView, setF
 }
 
 
-const SingleView = ({ view, handleClickView, selectedView, views, setViews }) => {
+const SingleView = ({ view, handleClickView, selectedView, setFilters, views, setViews }) => {
     const theme = useTheme();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -339,6 +341,7 @@ const SingleView = ({ view, handleClickView, selectedView, views, setViews }) =>
         if (res.success) {
             setViews(views.filter((v) => v.id !== view.id));
             setLoading(false);
+            setFilters([]);
             router.push(`?tab=${tab}`)
         }
     }
@@ -433,17 +436,6 @@ const SingleView = ({ view, handleClickView, selectedView, views, setViews }) =>
                 }}
             >
                 <Paper sx={{ p: 1.5 }}>
-                    <Button
-                        startIcon={<Iconify className="hover-icon" icon="line-md:star" width={18} height={18} />}
-                        fullWidth
-                        variant="text"
-                        size="small"
-                        sx={{ justifyContent: "flex-start" }}
-                    >
-                        Add to "My Favorite"
-                    </Button>
-
-                    <Divider sx={{ my: 1.5 }} />
 
                     <Stack spacing={1}>
                         <Button

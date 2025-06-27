@@ -15,7 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Iconify } from '/src/components/iconify/iconify';
 import { useSearchParams } from 'next/navigation';
 
-const TableSortBuilder = ({ allColumns, sort, setSort, updateView, fetchList, getSingleView }) => {
+const TableSortBuilder = ({ allColumns, sort, setSort, updateView, fetchList, getSingleView, handleSortApply }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [searchText, setSearchText] = useState('');
     const searchParams = useSearchParams();
