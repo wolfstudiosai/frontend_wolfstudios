@@ -80,7 +80,6 @@ export const CampaignListView = () => {
   const [views, setViews] = React.useState([]);
   const [viewsLoading, setViewsLoading] = React.useState(false);
   const searchParams = useSearchParams();
-  const tab = searchParams.get('tab');
   const view = searchParams.get('view');
   const [selectedView, setSelectedView] = React.useState(null);
 
@@ -129,6 +128,27 @@ export const CampaignListView = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // get single view
+  const getSingleView = async (viewId, paginationProps) => {
+    try {
+      setLoading(true);
+      const viewPagination = paginationProps ? paginationProps : pagination;
+      const res = await getSingleCampaignView(viewId, viewPagination);
+      if (res.success) {
+        setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
+        setTotalRecords(res.data.count);
+        setSelectedView(res.data);
+        setFilters(res.data.meta?.filters || []);
+        setGate(res.data.meta?.gate || 'and');
+        setSort(res.data.meta?.sort || []);
+      }
+    } catch (error) {
+      console.log(error)
     } finally {
       setLoading(false);
     }
@@ -269,27 +289,6 @@ export const CampaignListView = () => {
   const handleDelete = async () => {
     fetchList();
   };
-
-  // get single view
-  const getSingleView = async (viewId, paginationProps) => {
-    try {
-      setLoading(true);
-      const viewPagination = paginationProps ? paginationProps : pagination;
-      const res = await getSingleCampaignView(viewId, viewPagination);
-      if (res.success) {
-        setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
-        setTotalRecords(res.data.count);
-        setSelectedView(res.data);
-        setFilters(res.data.meta?.filters || []);
-        setGate(res.data.meta?.gate || 'and');
-        setSort(res.data.meta?.sort || []);
-      }
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setLoading(false);
-    }
-  }
 
   // Column handler
   // handle column change

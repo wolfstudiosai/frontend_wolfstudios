@@ -8,6 +8,7 @@ import TableAutoComplete from './table-auto-complete';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { validateFilters } from '/src/utils/helper';
+import { toast } from 'sonner';
 
 const extractMeta = (metaArray) => {
   const map = {};
@@ -31,7 +32,6 @@ export default function TableFilterBuilder(
   }
 ) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [error, setError] = useState('');
   const metaMap = useMemo(() => extractMeta(metaData), [metaData]);
   const columnOptions = useMemo(() => metaData.map(item => {
     const columnName = Object.keys(item)[0];
@@ -126,9 +126,8 @@ export default function TableFilterBuilder(
     if (validFilters.valid) {
       handleFilterApply();
       handleClose();
-      setError('');
     } else {
-      setError(validFilters.message);
+      toast(validFilters.message);
     }
   };
 
@@ -414,11 +413,6 @@ export default function TableFilterBuilder(
                 </Button>
               </Box>
             </Box>
-            {error && (
-              <Typography variant="body2" color="error" sx={{ mt: 1, textAlign: 'center' }}>
-                {error}
-              </Typography>
-            )}
           </Stack>
         </Box>
       </Popover>

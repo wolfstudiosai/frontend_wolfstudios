@@ -119,9 +119,9 @@ export const getPortfolioViews = async () => {
 }
 
 
-export const getSinglePortfolioView = async (id) => {
+export const getSinglePortfolioView = async (id, pagination) => {
   try {
-    const res = await api.get(`/views/${id}`)
+    const res = await api.get(`/views/${id}?page=${pagination.pageNo}&size=${pagination.limit}`)
     return { success: true, data: res.data.data }
   } catch (error) {
     // toast.error(error.response.data.message);
