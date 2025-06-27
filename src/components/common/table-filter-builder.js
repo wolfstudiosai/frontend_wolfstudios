@@ -1,14 +1,12 @@
 'use client';
 
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Autocomplete, Box, Button, IconButton, Popover, Stack, TextField, Typography } from '@mui/material';
 import TableAutoComplete from './table-auto-complete';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import { useFilterDebounced } from '/src/hooks/use-filter-debounce';
-import { useSearchParams } from 'next/navigation';
 import { validateFilters } from '/src/utils/helper';
 
 const extractMeta = (metaArray) => {
@@ -27,14 +25,13 @@ export default function TableFilterBuilder(
     setFilters,
     gate,
     setGate,
-    updateView,
-    fetchList,
-    getSingleView,
+    handleFilterApply,
+    handleRemoveFilterCondition,
+    handleClearFilters,
   }
 ) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const searchParams = useSearchParams();
-  const [currentFilters, setCurrentFilters] = useState([...filters]);
+  const [error, setError] = useState('');
   const metaMap = useMemo(() => extractMeta(metaData), [metaData]);
   const columnOptions = useMemo(() => metaData.map(item => {
     const columnName = Object.keys(item)[0];
@@ -42,10 +39,8 @@ export default function TableFilterBuilder(
     return { label, columnName };
   }), [metaData]);
 
-  const setDebouncedFilters = useFilterDebounced(setFilters, 500);
-
   const handleFilterChange = (index, field, value) => {
-    const updatedFilters = [...currentFilters];
+    const updatedFilters = [...filters];
     const currentFilter = { ...updatedFilters[index] };
 
     if (field === 'value') {
@@ -104,23 +99,7 @@ export default function TableFilterBuilder(
     }
 
     updatedFilters[index] = currentFilter;
-    setCurrentFilters(updatedFilters);
-
-    const cb = (value) => {
-      const validFilters = validateFilters(value);
-
-      if (validFilters.valid) {
-        const view = searchParams.get('view');
-        if (view) {
-          updateView({ filters: value }).then(() => {
-            getSingleView(view)
-          });
-        } else {
-          fetchList(value);
-        }
-      }
-    }
-    setDebouncedFilters(updatedFilters, cb);
+    setFilters(updatedFilters);
   };
 
 
@@ -129,23 +108,9 @@ export default function TableFilterBuilder(
     const defaultType = metaMap[defaultKey]?.type || 'string';
     const defaultOperator = metaMap[defaultKey]?.operators[0] || '';
 
-    const newFilters = [...currentFilters, { key: defaultKey, type: defaultType, operator: defaultOperator, value: '' }];
+    const newFilters = [...filters, { key: defaultKey, type: defaultType, operator: defaultOperator, value: '' }];
 
-    setCurrentFilters(newFilters);
-  };
-
-  const handleRemoveCondition = (index) => {
-    const newFilters = currentFilters.filter((_, i) => i !== index);
-    setCurrentFilters(newFilters);
     setFilters(newFilters);
-    const view = searchParams.get('view');
-    if (view) {
-      updateView({ filters: newFilters }).then(() => {
-        getSingleView(view)
-      });
-    } else {
-      fetchList(newFilters);
-    }
   };
 
   const handleOpen = (event) => {
@@ -154,6 +119,17 @@ export default function TableFilterBuilder(
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleClickApply = () => {
+    const validFilters = validateFilters(filters);
+    if (validFilters.valid) {
+      handleFilterApply();
+      handleClose();
+      setError('');
+    } else {
+      setError(validFilters.message);
+    }
   };
 
   const open = Boolean(anchorEl);
@@ -171,7 +147,7 @@ export default function TableFilterBuilder(
             disableClearable
             options={meta.values}
             value={filter.value}
-            onChange={(_, val) => handleFilterChange(currentFilters.indexOf(filter), 'value', val)}
+            onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
             renderInput={(params) => (
               <TextField
                 size="small"
@@ -194,7 +170,7 @@ export default function TableFilterBuilder(
             placeholder={isEmpty ? '' : 'Enter a value'}
             value={filter.value}
             disabled={isEmpty}
-            onChange={(e) => handleFilterChange(currentFilters.indexOf(filter), 'value', e.target.value)}
+            onChange={(e) => handleFilterChange(filters.indexOf(filter), 'value', e.target.value)}
             sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
             type={meta.type === 'number' ? 'number' : 'text'}
           />
@@ -320,12 +296,6 @@ export default function TableFilterBuilder(
     }
   };
 
-  // Sync filters with currentFilters
-  useEffect(() => {
-    setCurrentFilters([...filters]);
-  }, [filters]);
-
-
   return (
     <>
       <Button
@@ -345,8 +315,8 @@ export default function TableFilterBuilder(
       >
         <Box p={1.5} minWidth={400} maxWidth={650} sx={{ overflow: 'auto' }}>
           <Stack spacing={1}>
-            {currentFilters.length > 0 ? (
-              currentFilters.map((filter, index) => {
+            {filters.length > 0 ? (
+              filters.map((filter, index) => {
                 const operators = metaMap[filter.key]?.operators || [];
                 return (
                   <Stack key={index} direction="row" spacing={0} alignItems="center">
@@ -405,7 +375,7 @@ export default function TableFilterBuilder(
 
                     {renderValueField(filter)}
 
-                    <IconButton onClick={() => handleRemoveCondition(index)}>
+                    <IconButton onClick={() => handleRemoveFilterCondition(index)}>
                       <CloseIcon />
                     </IconButton>
                   </Stack>
@@ -423,7 +393,7 @@ export default function TableFilterBuilder(
               <Button disabled={metaData.length < 1} variant="text" onClick={handleAddCondition} size="small" sx={{ width: '120px', px: 1 }}>
                 + Add condition
               </Button>
-              {/* <Box display="flex" alignItems="center" justifyContent="center" gap={2}>
+              <Box display="flex" alignItems="center" justifyContent="center" gap={2}>
                 <Button
                   disabled={filters.length < 1}
                   variant="text"
@@ -442,8 +412,13 @@ export default function TableFilterBuilder(
                 >
                   Apply
                 </Button>
-              </Box> */}
+              </Box>
             </Box>
+            {error && (
+              <Typography variant="body2" color="error" sx={{ mt: 1, textAlign: 'center' }}>
+                {error}
+              </Typography>
+            )}
           </Stack>
         </Box>
       </Popover>

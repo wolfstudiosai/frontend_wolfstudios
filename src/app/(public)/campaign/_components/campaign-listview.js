@@ -135,7 +135,6 @@ export const CampaignListView = () => {
   }
 
   async function updateView(props) {
-    console.log(sort)
     const viewFilters = props.filters ? props.filters : filters;
     const viewSort = props.sort ? props.sort : sort;
     const data = {
@@ -324,7 +323,43 @@ export const CampaignListView = () => {
     setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
   }
 
-  // run when pagination, filters, gate, filtersLoaded change
+  // FILTERS
+  // handle filter apply
+  const handleFilterApply = async () => {
+    if (view) {
+      updateView({ filters }).then(() => {
+        getSingleView(view)
+      });
+    } else {
+      fetchList(filters);
+    }
+  }
+
+  // handle remove filter condition
+  const handleRemoveFilterCondition = (index) => {
+    const newFilters = filters.filter((_, i) => i !== index);
+    setFilters(newFilters);
+    if (view) {
+      updateView({ filters: newFilters }).then(() => {
+        getSingleView(view)
+      });
+    } else {
+      fetchList(newFilters);
+    }
+  };
+
+  // handle clear filters
+  const handleClearFilters = () => {
+    setFilters([]);
+    if (view) {
+      updateView({ filters: [] }).then(() => {
+        getSingleView(view)
+      });
+    } else {
+      fetchList([]);
+    }
+  };
+
   React.useEffect(() => {
     fetchList();
   }, []);
@@ -409,9 +444,9 @@ export const CampaignListView = () => {
               gate={gate}
               setFilters={setFilters}
               setGate={setGate}
-              updateView={updateView}
-              fetchList={fetchList}
-              getSingleView={getSingleView}
+              handleFilterApply={handleFilterApply}
+              handleRemoveFilterCondition={handleRemoveFilterCondition}
+              handleClearFilters={handleClearFilters}
             />
 
             <Button
@@ -422,14 +457,14 @@ export const CampaignListView = () => {
               Group
             </Button>
 
-            <TableSortBuilder
+            {/* <TableSortBuilder
               allColumns={allColumns}
               sort={sort}
               setSort={setSort}
               updateView={updateView}
               fetchList={fetchList}
               getSingleView={getSingleView}
-            />
+            /> */}
           </Box>
 
           <Box display="flex" justifyContent="space-between" alignItems="center">
