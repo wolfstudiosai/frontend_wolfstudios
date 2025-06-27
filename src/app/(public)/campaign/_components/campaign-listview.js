@@ -110,11 +110,12 @@ export const CampaignListView = () => {
 
   async function fetchList(props) {
     const filter = props ? props : filters;
+    const paginationData = props ? props.pagination : pagination;
     try {
       setLoading(true);
       const response = await getCampaignListAsync({
-        page: pagination.pageNo,
-        rowsPerPage: pagination.limit,
+        page: paginationData.pageNo,
+        rowsPerPage: paginationData.limit,
       }, filter, gate);
 
       if (response?.success) {
@@ -155,7 +156,13 @@ export const CampaignListView = () => {
 
   const handlePaginationModelChange = (newPaginationModel) => {
     const { page, pageSize } = newPaginationModel;
-    setPagination({ pageNo: page + 1, limit: pageSize });
+    const newPagination = { pageNo: page + 1, limit: pageSize };
+    setPagination(newPagination);
+    if (view) {
+      getSingleView(view, newPagination);
+    } else {
+      fetchList({ pagination: newPagination });
+    }
   };
 
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
@@ -264,10 +271,11 @@ export const CampaignListView = () => {
   };
 
   // get single view
-  const getSingleView = async (viewId) => {
+  const getSingleView = async (viewId, paginationProps) => {
     try {
       setLoading(true);
-      const res = await getSingleCampaignView(viewId);
+      const viewPagination = paginationProps ? paginationProps : pagination;
+      const res = await getSingleCampaignView(viewId, viewPagination);
       if (res.success) {
         setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
         setTotalRecords(res.data.count);
@@ -415,8 +423,6 @@ export const CampaignListView = () => {
 
   // run when view change
   React.useEffect(() => {
-    // setPagination(prev => ({ ...prev, pageNo: 1 }));
-
     if (view) {
       getSingleView(view);
     } else {
@@ -540,6 +546,7 @@ export const CampaignListView = () => {
             setShowView={setShowView}
             setSort={setSort}
             setFilters={setFilters}
+            setPagination={setPagination}
             columns={allColumns}
             selectedView={selectedView}
             viewsLoading={viewsLoading}
@@ -639,7 +646,7 @@ export const CampaignListView = () => {
           </FormGroup>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }}>
             <Button
-              variant="contained"
+              variant="outlined"
               size="small"
               onClick={hideAllColumns}
             >

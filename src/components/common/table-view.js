@@ -19,7 +19,18 @@ import { createCampaignView, deleteCampaignView, updateCampaignView } from '/src
 import { CampaignListViewSkelton } from '/src/app/(public)/campaign/_components/campaign-list-view-skelton';
 import { toast } from 'sonner';
 
-export default function TableView({ views, setViews, columns, selectedView, setFilters, setSort, showView, setShowView, viewsLoading }) {
+export default function TableView({
+    views,
+    setViews,
+    columns,
+    selectedView,
+    setFilters,
+    setSort,
+    showView,
+    setShowView,
+    setPagination,
+    viewsLoading
+}) {
     // drawer
     const theme = useTheme();
     const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
@@ -37,6 +48,7 @@ export default function TableView({ views, setViews, columns, selectedView, setF
     };
 
     const handleClickView = (view) => {
+        setPagination(prev => ({ ...prev, pageNo: 1 }));
         router.push(`?tab=${tab}&view=${view.id}`);
     };
 
@@ -86,6 +98,7 @@ export default function TableView({ views, setViews, columns, selectedView, setF
                     onClick={() => {
                         setFilters([]);
                         setSort([]);
+                        setPagination({ pageNo: 1, limit: 20 });
                         router.push(`?tab=${tab}`);
                     }}
                     sx={{
@@ -327,7 +340,7 @@ export default function TableView({ views, setViews, columns, selectedView, setF
 }
 
 
-const SingleView = ({ view, handleClickView, selectedView, setFilters, setSort, views, setViews }) => {
+const SingleView = ({ view, handleClickView, selectedView, setFilters, setSort, setPagination, views, setViews }) => {
     const theme = useTheme();
     const router = useRouter();
     const searchParams = useSearchParams();

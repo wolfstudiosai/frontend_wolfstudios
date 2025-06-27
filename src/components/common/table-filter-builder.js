@@ -11,7 +11,7 @@ import { validateFilters } from '/src/utils/helper';
 
 const extractMeta = (metaArray) => {
   const map = {};
-  metaArray.forEach((item) => {
+  metaArray.filter((item) => Object.keys(item)[0] !== 'id').forEach((item) => {
     const key = Object.keys(item)[0];
     map[key] = item[key];
   });
@@ -37,7 +37,7 @@ export default function TableFilterBuilder(
     const columnName = Object.keys(item)[0];
     const label = item[columnName].label;
     return { label, columnName };
-  }), [metaData]);
+  }).filter((item) => item.columnName !== 'id'), [metaData]);
 
   const handleFilterChange = (index, field, value) => {
     const updatedFilters = [...filters];
