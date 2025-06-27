@@ -93,7 +93,7 @@ const RoleChip = styled(Chip, {
   };
 });
 
-export const RightSidebar = () => {
+export const RightSidebar = ({ isMobile }) => {
   const [tabValue, setTabValue] = useState(0);
   const [openAddMemberDialog, setOpenAddMemberDialog] = useState(false);
 
@@ -130,7 +130,19 @@ export const RightSidebar = () => {
 
   return (
     <>
-      <Stack direction="column" sx={{ width: '25%', height: 'calc(100vh - 102px)', overfolow: 'hidden', px: 2, py: 1 }}>
+      <Stack
+        direction="column"
+        sx={{
+          width: isMobile ? '100vw' : '25%',
+          height: isMobile ? '100vh' : 'calc(100vh - 102px)',
+          overfolow: 'hidden',
+          px: 2,
+          py: 1,
+          borderRight: isMobile ? 'none' : undefined,
+          borderColor: 'divider',
+          pt: isMobile ? 5.5 : 0,
+        }}
+      >
         <Box
           sx={{
             position: 'sticky',

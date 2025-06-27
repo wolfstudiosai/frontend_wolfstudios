@@ -204,6 +204,7 @@ export const paths = {
     production_revisions: '/production/revisions',
     production_creative_requests: '/production/creative-requests',
     spaces: '/spaces',
+    services: '/services',
 
     // knowledge base
     about: '/about',

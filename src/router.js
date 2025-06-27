@@ -35,6 +35,11 @@ export const publicRoutes = [
         title: 'Spaces',
         href: paths.dashboardPublic.spaces,
       },
+       {
+        key: 'services',
+        title: 'Services',
+        href: paths.dashboardPublic.services,
+      },
     ],
   },
 ];
