@@ -443,7 +443,10 @@ export const CampaignListView = () => {
       if (viewsData.success) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
         await getSingleView(firstView?.id, pagination);
-        router.push(`?tab=campaign&view=${firstView?.id}`);
+        if (!viewId) {
+          const currentTab = searchParams.get('tab') || 'campaign';
+          router.push(`?tab=${currentTab}&view=${firstView?.id}`);
+        }
       } else {
         const payload = {
           label: 'Default View',
