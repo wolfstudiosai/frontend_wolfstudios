@@ -52,6 +52,7 @@ export default function TableView({
   setPagination,
   viewsLoading,
 }) {
+  console.log(selectedView, 'selectedView from table view');
   // drawer
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
@@ -128,9 +129,9 @@ export default function TableView({
                   <SingleView
                     key={index}
                     view={view}
-                    setSelectedViewId={setSelectedViewId}
                     handleClickView={handleClickView}
                     selectedView={selectedView}
+                    setSelectedViewId={setSelectedViewId}
                     views={views}
                     setViews={setViews}
                     setFilters={setFilters}
@@ -153,9 +154,9 @@ export default function TableView({
               <SingleView
                 key={index}
                 view={view}
-                setSelectedViewId={setSelectedViewId}
                 handleClickView={handleClickView}
                 selectedView={selectedView}
+                setSelectedViewId={setSelectedViewId}
                 views={views}
                 setViews={setViews}
                 setFilters={setFilters}
@@ -335,16 +336,19 @@ const SingleView = ({
   const [viewLabel, setViewLabel] = useState(view.label);
   const [isRenaming, setIsRenaming] = useState(false);
 
-  const handleDeleteView = async () => {
+  const handleDeleteView = async (viewToDelete) => {
     setLoading(true);
     setViewAnchorEl(null);
-    const res = await deleteCampaignView(view.id);
+    const res = await deleteCampaignView(viewToDelete.id);
     if (res.success) {
-      setViews(views.filter((v) => v.id !== view.id));
+      setViews(views.filter((v) => v.id !== viewToDelete.id));
       setLoading(false);
       setFilters([]);
       setSort([]);
-      const nextAvailableView = views.filter((v) => v.id !== view.id)[0];
+      const viewsWithoutDeleted = views.filter((v) => v.id !== viewToDelete.id);
+
+      const nextAvailableView =
+        viewsWithoutDeleted.find((v) => v.id === selectedView?.meta?.id) || viewsWithoutDeleted[0];
       setSelectedViewId(nextAvailableView?.id);
       router.push(`?tab=${tab}&view=${nextAvailableView.id}`);
     }

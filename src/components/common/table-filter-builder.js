@@ -31,6 +31,7 @@ export default function TableFilterBuilder({
   handleFilterApply,
   handleRemoveFilterCondition,
   handleClearFilters,
+  loading,
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const metaMap = useMemo(() => extractMeta(metaData), [metaData]);
@@ -122,7 +123,7 @@ export default function TableFilterBuilder({
     const validFilters = validateFilters(filters);
     if (validFilters.valid) {
       handleFilterApply();
-      handleClose();
+      // handleClose();
     } else {
       toast(validFilters.message);
     }
@@ -381,7 +382,7 @@ export default function TableFilterBuilder({
                   Clear All
                 </Button>
                 <Button
-                  disabled={filters?.length < 1}
+                  disabled={filters?.length < 1  || loading}
                   variant="contained"
                   onClick={handleClickApply}
                   size="small"

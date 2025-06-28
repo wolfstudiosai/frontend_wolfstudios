@@ -1,14 +1,14 @@
 'use client';
 
+import * as React from 'react';
+import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
 import AddIcon from '@mui/icons-material/Add';
 import TableReorderIcon from '@mui/icons-material/Reorder';
 import { alpha, Button, Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import { useTheme } from '@mui/material/styles';
-import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
-import * as React from 'react';
 import { toast } from 'sonner';
 
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
@@ -41,6 +41,8 @@ export const CampaignListView = () => {
   const [anchorElHide, setAnchorElHide] = React.useState(null);
   const [imageToShow, setImageToShow] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+  const searchParams = useSearchParams();
+  const viewId = searchParams.get('view');
 
   const handleUploadModalOpen = (data) => {
     setOpen(true);
@@ -56,6 +58,36 @@ export const CampaignListView = () => {
     setAnchorElHide(null);
     setSearchColumns(allColumns);
   };
+
+  async function fetchList(props) {
+    const filter = props ? props : filters;
+    const paginationData = props ? props.pagination : pagination;
+    try {
+      setLoading(true);
+      const response = await getCampaignListAsync(
+        {
+          page: paginationData.pageNo,
+          rowsPerPage: paginationData.limit,
+        },
+        filter,
+        gate
+      );
+
+      if (response?.success) {
+        if (viewId) {
+          setMetaData(response.meta);
+        } else {
+          setRecords(response.data.map((row) => defaultCampaign(row)) || []);
+          setTotalRecords(response.totalRecords);
+          setMetaData(response.meta);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   // handle upload image
   const handleUploadImage = async (images) => {
@@ -82,9 +114,8 @@ export const CampaignListView = () => {
   const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([]);
   const [viewsLoading, setViewsLoading] = React.useState(false);
-  const searchParams = useSearchParams();
-  const view = searchParams.get('view');
-  const [selectedView, setSelectedView] = React.useState(null);
+  const [selectedViewId, setSelectedViewId] = React.useState(null);
+  const [selectedViewData, setSelectedViewData] = React.useState(null);
 
   // filter
   const [metaData, setMetaData] = React.useState([]);
@@ -101,36 +132,6 @@ export const CampaignListView = () => {
     [visibleColumns]
   );
 
-  async function fetchList(props) {
-    const filter = props ? props : filters;
-    const paginationData = props ? props.pagination : pagination;
-    try {
-      setLoading(true);
-      const response = await getCampaignListAsync(
-        {
-          page: paginationData.pageNo,
-          rowsPerPage: paginationData.limit,
-        },
-        filter,
-        gate
-      );
-
-      if (response?.success) {
-        if (view) {
-          setMetaData(response.meta);
-        } else {
-          setRecords(response.data.map((row) => defaultCampaign(row)) || []);
-          setTotalRecords(response.totalRecords);
-          setMetaData(response.meta);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   // get single view
   const getSingleView = async (viewId, paginationProps) => {
     try {
@@ -140,7 +141,7 @@ export const CampaignListView = () => {
       if (res.success) {
         setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
         setTotalRecords(res.data.count);
-        setSelectedView(res.data);
+        setSelectedViewData(res.data);
         setFilters(res.data.meta?.filters || []);
         setGate(res.data.meta?.gate || 'and');
         setSort(res.data.meta?.sort || []);
@@ -156,17 +157,17 @@ export const CampaignListView = () => {
     const viewFilters = props.filters ? props.filters : filters;
     const viewSort = props.sort ? props.sort : sort;
     const data = {
-      label: selectedView?.meta?.label,
-      description: selectedView?.meta?.description,
-      table: selectedView?.meta?.table,
-      isPublic: selectedView?.meta?.isPublic,
-      columns: selectedView?.meta?.columns,
+      label: selectedViewData?.meta?.label,
+      description: selectedViewData?.meta?.description,
+      table: selectedViewData?.meta?.table,
+      isPublic: selectedViewData?.meta?.isPublic,
+      columns: selectedViewData?.meta?.columns,
       gate,
       filters: viewFilters,
       sort: viewSort,
-      groups: selectedView?.meta?.groups,
+      groups: selectedViewData?.meta?.groups,
     };
-    const result = await updateCampaignView(view, data);
+    const result = await updateCampaignView(viewId, data);
     return result;
   }
 
@@ -176,8 +177,8 @@ export const CampaignListView = () => {
     const { page, pageSize } = newPaginationModel;
     const newPagination = { pageNo: page + 1, limit: pageSize };
     setPagination(newPagination);
-    if (view) {
-      getSingleView(view, newPagination);
+    if (viewId) {
+      getSingleView(viewId, newPagination);
     } else {
       fetchList({ pagination: newPagination });
     }
@@ -302,22 +303,22 @@ export const CampaignListView = () => {
     }
     setVisibleColumns(newVisibleColumns);
 
-    if (view) {
+    if (viewId) {
       const data = {
         columns: newVisibleColumns.map((c) => c.columnName),
-        label: selectedView?.meta?.label,
-        description: selectedView?.meta?.description,
-        table: selectedView?.meta?.table,
-        isPublic: selectedView?.meta?.isPublic,
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
         gate,
         filters,
         sort,
-        groups: selectedView?.meta?.groups,
+        groups: selectedViewData?.meta?.groups,
       };
 
-      const res = await updateCampaignView(view, data);
+      const res = await updateCampaignView(viewId, data);
       if (res.success) {
-        getSingleView(view);
+        getSingleView(viewId);
       }
     }
   };
@@ -332,22 +333,22 @@ export const CampaignListView = () => {
     const newVisibleColumns = allColumns;
     setVisibleColumns(newVisibleColumns);
 
-    if (view) {
+    if (viewId) {
       const data = {
         columns: allColumns.map((c) => c.columnName),
-        label: selectedView?.meta?.label,
-        description: selectedView?.meta?.description,
-        table: selectedView?.meta?.table,
-        isPublic: selectedView?.meta?.isPublic,
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
         gate,
         filters,
         sort,
-        groups: selectedView?.meta?.groups,
+        groups: selectedViewData?.meta?.groups,
       };
 
-      const res = await updateCampaignView(view, data);
+      const res = await updateCampaignView(viewId, data);
       if (res.success) {
-        getSingleView(view);
+        getSingleView(viewId);
       }
     }
   };
@@ -356,22 +357,22 @@ export const CampaignListView = () => {
     const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
     setVisibleColumns(newVisibleColumns);
 
-    if (view) {
+    if (viewId) {
       const data = {
         columns: ['id'],
-        label: selectedView?.meta?.label,
-        description: selectedView?.meta?.description,
-        table: selectedView?.meta?.table,
-        isPublic: selectedView?.meta?.isPublic,
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
         gate,
         filters,
         sort,
-        groups: selectedView?.meta?.groups,
+        groups: selectedViewData?.meta?.groups,
       };
 
-      const res = await updateCampaignView(view, data);
+      const res = await updateCampaignView(viewId, data);
       if (res.success) {
-        getSingleView(view);
+        getSingleView(viewId);
       }
     }
   };
@@ -379,9 +380,9 @@ export const CampaignListView = () => {
   // FILTERS
   // handle filter apply
   const handleFilterApply = async () => {
-    if (view) {
+    if (viewId) {
       updateView({ filters }).then(() => {
-        getSingleView(view);
+        getSingleView(viewId);
       });
     } else {
       fetchList(filters);
@@ -392,9 +393,9 @@ export const CampaignListView = () => {
   const handleRemoveFilterCondition = (index) => {
     const newFilters = filters.filter((_, i) => i !== index);
     setFilters(newFilters);
-    if (view) {
+    if (viewId) {
       updateView({ filters: newFilters }).then(() => {
-        getSingleView(view);
+        getSingleView(viewId);
       });
     } else {
       fetchList(newFilters);
@@ -404,9 +405,9 @@ export const CampaignListView = () => {
   // handle clear filters
   const handleClearFilters = () => {
     setFilters([]);
-    if (view) {
+    if (viewId) {
       updateView({ filters: [] }).then(() => {
-        getSingleView(view);
+        getSingleView(viewId);
       });
     } else {
       fetchList([]);
@@ -439,14 +440,10 @@ export const CampaignListView = () => {
       // set views
       const viewsData = await getCampaignViews();
       setViews(viewsData.data);
-
-      const viewId = searchParams.get('view');
-
-      if (viewId) {
-        getSingleView(viewId, pagination);
-      } else if (viewsData.data.length > 0) {
-        getSingleView(viewsData.data[0].id, pagination);
-        router.push(`?tab=campaign&view=${viewsData.data[0].id}`);
+      if (viewsData.success) {
+        const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
+        await getSingleView(firstView?.id, pagination);
+        router.push(`?tab=campaign&view=${firstView?.id}`);
       } else {
         const payload = {
           label: 'Default View',
@@ -459,39 +456,56 @@ export const CampaignListView = () => {
           sort: [],
           groups: [],
         };
+
         const res = await createCampaignView(payload);
+
         if (res.success) {
-          const response = await getCampaignViews();
-          setViews(response.data);
-          getSingleView(res.data.id, pagination);
+          const createViewData = res?.data;
+          setViews([
+            {
+              id: createViewData?.id,
+              table: createViewData?.table,
+              isPublic: createViewData?.isPublic,
+              label: createViewData?.label,
+              description: createViewData?.description,
+              CreatedByUser: {},
+              createdAt: createViewData?.createdAt,
+            },
+          ]);
+          await getSingleView(res.data.id, pagination);
           router.push(`?tab=campaign&view=${res.data.id}`);
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
-
   // update visible columns
   React.useEffect(() => {
     if (allColumns.length === 0) return;
-    if (view && selectedView) {
-      const selectedColumnNames = selectedView.meta?.columns || [];
+    if (viewId && selectedViewData) {
+      const selectedColumnNames = selectedViewData.meta?.columns || [];
       const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
       setVisibleColumns(filtered);
     } else {
       setVisibleColumns(allColumns);
     }
     setSearchColumns(allColumns);
-  }, [view, selectedView, allColumns]);
+  }, [viewId, selectedViewData, allColumns]);
 
   // Watch for URL viewId change
   React.useEffect(() => {
     setPagination((prev) => ({ ...prev, pageNo: 1 }));
     initialize();
-  }, [searchParams]);
+  }, []);
+
+  React.useEffect(() => {
+    if (selectedViewId) {
+      getSingleView(selectedViewId, pagination);
+    }
+  }, [selectedViewId]);
 
   return (
     <PageContainer>
@@ -526,6 +540,7 @@ export const CampaignListView = () => {
               handleFilterApply={handleFilterApply}
               handleRemoveFilterCondition={handleRemoveFilterCondition}
               handleClearFilters={handleClearFilters}
+              loading={loading}
             />
 
             <Button startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />} variant="text" size="small">
@@ -571,7 +586,8 @@ export const CampaignListView = () => {
             setFilters={setFilters}
             setPagination={setPagination}
             columns={allColumns}
-            selectedView={selectedView}
+            selectedView={selectedViewData}
+            setSelectedViewId={setSelectedViewId}
             viewsLoading={viewsLoading}
           />
 
