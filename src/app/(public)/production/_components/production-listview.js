@@ -364,72 +364,72 @@ export const ProductionListView = () => {
   };
 
   const initialize = async () => {
-      try {
-        setLoading(true);
-        const productions = await getProductionListAsync({
-          page: 1,
-          rowsPerPage: 1,
-        });
-  
-        // set meta data
-        setMetaData(productions.meta);
-        const columns = productions.meta.map((obj) => {
-          const key = Object.keys(obj)[0];
-          return {
-            label: obj[key].label,
-            columnName: key,
-            type: obj[key].type,
-            depth: obj[key].depth,
-          };
-        });
-  
-        setAllColumns(columns);
-  
-        // set views
-        const viewsData = await getProductionViewsAsync();
-        setViews(viewsData.data);
-        if (viewsData.success) {
-          const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
-          await getSingleView(firstView?.id, pagination);
-          router.push(`?tab=production&view=${firstView?.id}`);
-        } else {
-          const payload = {
-            label: 'Default View',
-            description: 'Default View',
-            table: 'PRODUCTION',
-            gate: 'and',
-            isPublic: true,
-            filters: [],
-            columns: columns.map((col) => col.columnName),
-            sort: [],
-            groups: [],
-          };
-  
-          const res = await createProductionViewAsync(payload);
-  
-          if (res.success) {
-            const createViewData = res?.data;
-            setViews([
-              {
-                id: createViewData?.id,
-                table: createViewData?.table,
-                isPublic: createViewData?.isPublic,
-                label: createViewData?.label,
-                description: createViewData?.description,
-                CreatedByUser: {},
-                createdAt: createViewData?.createdAt,
-              },
-            ]);
-            await getSingleView(res.data.id, pagination);
-            router.push(`?tab=production&view=${res.data.id}`);
-          }
+    try {
+      setLoading(true);
+      const productions = await getProductionListAsync({
+        page: 1,
+        rowsPerPage: 1,
+      });
+
+      // set meta data
+      setMetaData(productions.meta);
+      const columns = productions.meta.map((obj) => {
+        const key = Object.keys(obj)[0];
+        return {
+          label: obj[key].label,
+          columnName: key,
+          type: obj[key].type,
+          depth: obj[key].depth,
+        };
+      });
+
+      setAllColumns(columns);
+
+      // set views
+      const viewsData = await getProductionViewsAsync();
+      setViews(viewsData.data);
+      if (viewsData.success) {
+        const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
+        await getSingleView(firstView?.id, pagination);
+        router.push(`?tab=production&view=${firstView?.id}`);
+      } else {
+        const payload = {
+          label: 'Default View',
+          description: 'Default View',
+          table: 'PRODUCTION',
+          gate: 'and',
+          isPublic: true,
+          filters: [],
+          columns: columns.map((col) => col.columnName),
+          sort: [],
+          groups: [],
+        };
+
+        const res = await createProductionViewAsync(payload);
+
+        if (res.success) {
+          const createViewData = res?.data;
+          setViews([
+            {
+              id: createViewData?.id,
+              table: createViewData?.table,
+              isPublic: createViewData?.isPublic,
+              label: createViewData?.label,
+              description: createViewData?.description,
+              CreatedByUser: {},
+              createdAt: createViewData?.createdAt,
+            },
+          ]);
+          await getSingleView(res.data.id, pagination);
+          router.push(`?tab=production&view=${res.data.id}`);
         }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // update visible columns
   React.useEffect(() => {
@@ -451,10 +451,10 @@ export const ProductionListView = () => {
   }, []);
 
   React.useEffect(() => {
-      if (selectedViewId) {
-        getSingleView(selectedViewId, pagination);
-      }
-    }, [selectedViewId]);
+    if (selectedViewId) {
+      getSingleView(selectedViewId, pagination);
+    }
+  }, [selectedViewId]);
 
   return (
     <PageContainer>
