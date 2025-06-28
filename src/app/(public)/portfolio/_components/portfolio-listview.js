@@ -65,24 +65,24 @@ export const PortfolioListView = () => {
       const filter = props ? props : filters;
       const paginationData = props ? props.pagination : pagination;
 
-      // const response = await getPortfolioListAsync(
-      //   {
-      //     page: paginationData.pageNo,
-      //     rowsPerPage: paginationData.limit,
-      //   },
-      //   filter,
-      //   gate
-      // );
+      const response = await getPortfolioListAsync(
+        {
+          page: paginationData.pageNo,
+          rowsPerPage: paginationData.limit,
+        },
+        filter,
+        gate
+      );
 
-      // if (response.success) {
-      //   if (view) {
-      //     setMetaData(response.meta);
-      //   } else {
-      //     setRecords(response.data.map((row) => defaultPortfolio(row)) || []);
-      //     setTotalRecords(response.totalRecords);
-      //     setMetaData(response.meta);
-      //   }
-      // }
+      if (response.success) {
+        if (view) {
+          setMetaData(response.meta);
+        } else {
+          setRecords(response.data.map((row) => defaultPortfolio(row)) || []);
+          setTotalRecords(response.totalRecords);
+          setMetaData(response.meta);
+        }
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -119,8 +119,10 @@ export const PortfolioListView = () => {
   const [views, setViews] = React.useState([]);
   const [viewsLoading, setViewsLoading] = React.useState(false);
   const searchParams = useSearchParams();
-  const view = searchParams.get('view');
-  const [selectedView, setSelectedView] = React.useState(null);
+  const viewId = searchParams.get('view');
+  console.log(viewId, 'view params....');
+  const [selectedViewId, setSelectedViewId] = React.useState(null);
+  const [selectedViewData, setSelectedViewData] = React.useState(null);
 
   // filter
   const [metaData, setMetaData] = React.useState([]);
@@ -145,11 +147,11 @@ export const PortfolioListView = () => {
       const res = await getSinglePortfolioView(viewId, viewPagination);
       if (res.success) {
         setRecords(res.data.data.map((row) => defaultPortfolio(row)) || []);
-        // setTotalRecords(res.data.count);
-        // setSelectedView(res.data);
-        // setFilters(res.data.meta?.filters || []);
-        // setGate(res.data.meta?.gate || 'and');
-        // setSort(res.data.meta?.sort || []);
+        setTotalRecords(res.data.count);
+        setSelectedViewData(res.data);
+        setFilters(res.data.meta?.filters || []);
+        setGate(res.data.meta?.gate || 'and');
+        setSort(res.data.meta?.sort || []);
       }
 
       return res?.data?.data;
@@ -165,17 +167,17 @@ export const PortfolioListView = () => {
     const viewSort = props.sort ? props.sort : sort;
 
     const data = {
-      label: selectedView?.meta?.label,
-      description: selectedView?.meta?.description,
-      table: selectedView?.meta?.table,
-      isPublic: selectedView?.meta?.isPublic,
-      columns: selectedView?.meta?.columns,
+      label: selectedViewData?.meta?.label,
+      description: selectedViewData?.meta?.description,
+      table: selectedViewData?.meta?.table,
+      isPublic: selectedViewData?.meta?.isPublic,
+      columns: selectedViewData?.meta?.columns,
       gate,
       filters: viewFilters,
       sort: viewSort,
-      groups: selectedView?.meta?.groups,
+      groups: selectedViewData?.meta?.groups,
     };
-    await updatePortfolioView(view, data);
+    await updatePortfolioView(viewId, data);
   }
 
   // ******************************data grid handler starts*********************
@@ -184,8 +186,8 @@ export const PortfolioListView = () => {
     const { page, pageSize } = newPaginationModel;
     const newPagination = { pageNo: page + 1, limit: pageSize };
     setPagination(newPagination);
-    if (view) {
-      getSingleView(view, newPagination);
+    if (viewId) {
+      getSingleView(viewId, newPagination);
     } else {
       fetchList({ pagination: newPagination });
     }
@@ -265,22 +267,22 @@ export const PortfolioListView = () => {
     }
     setVisibleColumns(newVisibleColumns);
 
-    if (view) {
+    if (viewId) {
       const data = {
         columns: newVisibleColumns.map((c) => c.columnName),
-        label: selectedView?.meta?.label,
-        description: selectedView?.meta?.description,
-        table: selectedView?.meta?.table,
-        isPublic: selectedView?.meta?.isPublic,
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
         gate,
         filters,
         sort,
-        groups: selectedView?.meta?.groups,
+        groups: selectedViewData?.meta?.groups,
       };
 
-      const res = await updatePortfolioView(view, data);
+      const res = await updatePortfolioView(viewId, data);
       if (res.success) {
-        getSingleView(view);
+        getSingleView(viewId);
       }
     }
   };
@@ -295,22 +297,22 @@ export const PortfolioListView = () => {
     const newVisibleColumns = allColumns;
     setVisibleColumns(newVisibleColumns);
 
-    if (view) {
+    if (viewId) {
       const data = {
         columns: allColumns.map((c) => c.columnName),
-        label: selectedView?.meta?.label,
-        description: selectedView?.meta?.description,
-        table: selectedView?.meta?.table,
-        isPublic: selectedView?.meta?.isPublic,
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
         gate,
         filters,
         sort,
-        groups: selectedView?.meta?.groups,
+        groups: selectedViewData?.meta?.groups,
       };
 
-      const res = await updatePortfolioView(view, data);
+      const res = await updatePortfolioView(viewId, data);
       if (res.success) {
-        getSingleView(view);
+        getSingleView(viewId);
       }
     }
   };
@@ -319,22 +321,22 @@ export const PortfolioListView = () => {
     const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
     setVisibleColumns(newVisibleColumns);
 
-    if (view) {
+    if (viewId) {
       const data = {
         columns: ['id'],
-        label: selectedView?.meta?.label,
-        description: selectedView?.meta?.description,
-        table: selectedView?.meta?.table,
-        isPublic: selectedView?.meta?.isPublic,
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
         gate,
         filters,
         sort,
-        groups: selectedView?.meta?.groups,
+        groups: selectedViewData?.meta?.groups,
       };
 
-      const res = await updatePortfolioView(view, data);
+      const res = await updatePortfolioView(viewId, data);
       if (res.success) {
-        getSingleView(view);
+        getSingleView(viewId);
       }
     }
   };
@@ -342,9 +344,9 @@ export const PortfolioListView = () => {
   // FILTERS
   // handle filter apply
   const handleFilterApply = async () => {
-    if (view) {
+    if (viewId) {
       updateView({ filters }).then(() => {
-        getSingleView(view);
+        getSingleView(viewId);
       });
     } else {
       fetchList(filters);
@@ -355,9 +357,9 @@ export const PortfolioListView = () => {
   const handleRemoveFilterCondition = (index) => {
     const newFilters = filters.filter((_, i) => i !== index);
     setFilters(newFilters);
-    if (view) {
+    if (viewId) {
       updateView({ filters: newFilters }).then(() => {
-        getSingleView(view);
+        getSingleView(viewId);
       });
     } else {
       fetchList(newFilters);
@@ -367,9 +369,9 @@ export const PortfolioListView = () => {
   // handle clear filters
   const handleClearFilters = () => {
     setFilters([]);
-    if (view) {
+    if (viewId) {
       updateView({ filters: [] }).then(() => {
-        getSingleView(view);
+        getSingleView(viewId);
       });
     } else {
       fetchList([]);
@@ -402,12 +404,9 @@ export const PortfolioListView = () => {
       // set views
       const viewsData = await getPortfolioViews();
       setViews(viewsData.data);
-
       if (viewsData.success) {
-        console.log('we have views data', viewsData);
-        const firstView = viewsData.data[0];
-        const singleViewData = await getSingleView(firstView?.id, pagination);
-        setRecords(singleViewData.map((row) => defaultPortfolio(row)) || []);
+        const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
+        await getSingleView(firstView?.id, pagination);
         router.push(`?tab=portfolio&view=${firstView?.id}`);
       } else {
         const payload = {
@@ -425,7 +424,6 @@ export const PortfolioListView = () => {
         const res = await createPortfolioView(payload);
 
         if (res.success) {
-          // const response = await getPortfolioViews();
           const createViewData = res?.data;
           setViews([
             {
@@ -438,37 +436,10 @@ export const PortfolioListView = () => {
               createdAt: createViewData?.createdAt,
             },
           ]);
-          const singleViewData = await getSingleView(res.data.id, pagination);
-          setRecords(singleViewData.map((row) => defaultPortfolio(row)) || []);
+          await getSingleView(res.data.id, pagination);
           router.push(`?tab=portfolio&view=${res.data.id}`);
         }
       }
-
-      // if (view) {
-      //   getSingleView(view, pagination);
-      // } else if (viewsData.data.length > 0) {
-      //   getSingleView(viewsData.data[0].id, pagination);
-      //   router.push(`?tab=portfolio&view=${viewsData.data[0].id}`);
-      // } else {
-      //   const payload = {
-      //     label: 'Default View',
-      //     description: 'Default View',
-      //     table: 'PORTFOLIO',
-      //     gate: 'and',
-      //     isPublic: true,
-      //     filters: [],
-      //     columns: columns.map((col) => col.columnName),
-      //     sort: [],
-      //     groups: [],
-      //   };
-      //   const res = await createPortfolioView(payload);
-      //   if (res.success) {
-      //     const response = await getPortfolioViews();
-      //     setViews(response.data);
-      //     getSingleView(res.data.id, pagination);
-      //     router.push(`?tab=portfolio&view=${res.data.id}`);
-      //   }
-      // }
     } catch (error) {
       console.error(error);
     } finally {
@@ -476,25 +447,30 @@ export const PortfolioListView = () => {
     }
   };
 
-
   // update visible columns
   React.useEffect(() => {
     if (allColumns.length === 0) return;
-    if (view && selectedView) {
-      const selectedColumnNames = selectedView.meta?.columns || [];
+    if (viewId && selectedViewData) {
+      const selectedColumnNames = selectedViewData.meta?.columns || [];
       const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
       setVisibleColumns(filtered);
     } else {
       setVisibleColumns(allColumns);
     }
     setSearchColumns(allColumns);
-  }, [view, selectedView, allColumns]);
+  }, [viewId, selectedViewData, allColumns]);
 
   // Watch for URL viewId change
   React.useEffect(() => {
     setPagination((prev) => ({ ...prev, pageNo: 1 }));
     initialize();
   }, []);
+
+  React.useEffect(() => {
+    if (selectedViewId) {
+      getSingleView(selectedViewId, pagination);
+    }
+  }, [selectedViewId]);
 
   return (
     <PageContainer>
@@ -573,7 +549,8 @@ export const PortfolioListView = () => {
             setFilters={setFilters}
             setPagination={setPagination}
             columns={allColumns}
-            selectedView={selectedView}
+            selectedViewData={selectedViewData}
+            setSelectedViewId={setSelectedViewId}
             viewsLoading={viewsLoading}
           />
           <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
