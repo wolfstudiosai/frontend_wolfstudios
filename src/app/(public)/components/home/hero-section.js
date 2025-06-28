@@ -97,7 +97,7 @@ export const HeroSection = () => {
             </Typography>
 
             <Typography fontSize={{ xs: '1rem', sm: '1.2rem', md: '1.3rem' }}>
-              Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
+              Driven by the art of storytelling gg, we collaborate with brands, creators, and agencies to craft compelling
               visuals that captivate audiences, evoke emotion, and leave a lasting impact.
             </Typography>
           </FadeIn>
