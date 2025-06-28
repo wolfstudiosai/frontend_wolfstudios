@@ -52,7 +52,7 @@ export default function TableView({
   setPagination,
   viewsLoading,
 }) {
-  console.log(selectedView, 'selectedView from table view');
+
   // drawer
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));

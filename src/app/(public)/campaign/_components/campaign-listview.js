@@ -482,6 +482,7 @@ export const CampaignListView = () => {
       setLoading(false);
     }
   };
+
   // update visible columns
   React.useEffect(() => {
     if (allColumns.length === 0) return;

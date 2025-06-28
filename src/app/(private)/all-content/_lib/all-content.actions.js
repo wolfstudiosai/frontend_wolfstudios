@@ -18,7 +18,7 @@ export const getContentList = async (queryParams, filters, gate) => {
       apiUrl += `&${queryParams}`;
     }
     const res = await api.get(apiUrl);
-    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count, metaData: res.data.data.meta };
+    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count, meta: res.data.data.meta };
   } catch (error) {
     toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
@@ -145,7 +145,7 @@ export const createContentView = async (data) => {
 
 export const updateContentView = async (viewId, data) => {
   try {
-    const res = await api.put(`/views/${viewId}`, data);
+    const res = await api.patch(`/views/${viewId}`, data);
     return { success: true, data: res.data.data };
   } catch (error) {
     toast.error(error.response.data.message);
