@@ -128,6 +128,7 @@ export default function TableView({
                   <SingleView
                     key={index}
                     view={view}
+                    setSelectedViewId={setSelectedViewId}
                     handleClickView={handleClickView}
                     selectedView={selectedView}
                     views={views}
@@ -152,6 +153,7 @@ export default function TableView({
               <SingleView
                 key={index}
                 view={view}
+                setSelectedViewId={setSelectedViewId}
                 handleClickView={handleClickView}
                 selectedView={selectedView}
                 views={views}
@@ -314,7 +316,16 @@ export default function TableView({
   );
 }
 
-const SingleView = ({ view, handleClickView, selectedView, setFilters, setSort, setPagination, views, setViews }) => {
+const SingleView = ({
+  view,
+  handleClickView,
+  selectedView,
+  setFilters,
+  setSort,
+  views,
+  setViews,
+  setSelectedViewId,
+}) => {
   const theme = useTheme();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -333,7 +344,9 @@ const SingleView = ({ view, handleClickView, selectedView, setFilters, setSort, 
       setLoading(false);
       setFilters([]);
       setSort([]);
-      router.push(`?tab=${tab}`);
+      const nextAvailableView = views.filter((v) => v.id !== view.id)[0];
+      setSelectedViewId(nextAvailableView?.id);
+      router.push(`?tab=${tab}&view=${nextAvailableView.id}`);
     }
   };
 
@@ -468,18 +481,20 @@ const SingleView = ({ view, handleClickView, selectedView, setFilters, setSort, 
               Duplicate View
             </Button>
 
-            <Button
-              disabled={loading}
-              startIcon={<DeleteIcon />}
-              fullWidth
-              variant="text"
-              size="small"
-              color="error"
-              sx={{ justifyContent: 'flex-start' }}
-              onClick={() => handleDeleteView(view)}
-            >
-              Delete View
-            </Button>
+            {views?.length > 1 && (
+              <Button
+                disabled={loading}
+                startIcon={<DeleteIcon />}
+                fullWidth
+                variant="text"
+                size="small"
+                color="error"
+                sx={{ justifyContent: 'flex-start' }}
+                onClick={() => handleDeleteView(view)}
+              >
+                Delete View
+              </Button>
+            )}
           </Stack>
         </Paper>
       </Popover>

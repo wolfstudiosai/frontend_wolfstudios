@@ -42,6 +42,8 @@ export const PortfolioListView = () => {
   const [anchorElHide, setAnchorElHide] = React.useState(null);
   const [imageToShow, setImageToShow] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+  const searchParams = useSearchParams();
+  const viewId = searchParams.get('view');
 
   const handleUploadModalOpen = (data) => {
     setOpen(true);
@@ -75,7 +77,7 @@ export const PortfolioListView = () => {
       );
 
       if (response.success) {
-        if (view) {
+        if (viewId) {
           setMetaData(response.meta);
         } else {
           setRecords(response.data.map((row) => defaultPortfolio(row)) || []);
@@ -118,9 +120,6 @@ export const PortfolioListView = () => {
   const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([]);
   const [viewsLoading, setViewsLoading] = React.useState(false);
-  const searchParams = useSearchParams();
-  const viewId = searchParams.get('view');
-  console.log(viewId, 'view params....');
   const [selectedViewId, setSelectedViewId] = React.useState(null);
   const [selectedViewData, setSelectedViewData] = React.useState(null);
 
@@ -217,15 +216,15 @@ export const PortfolioListView = () => {
       await createPortfolioAsync(newRow);
       fetchList();
     } else {
-      // const arrayFields = ['portfolioCategories', 'states', 'countries', 'partnerHQ'];
-      // for (const field of arrayFields) {
-      //   const value = newRow[field];
-      //   if (value.length > 0) {
-      //     const arrOfStr = value.map((item) => item.label);
-      //     newRow[field] = arrOfStr;
-      //   }
-      // }
-      // await updatePortfolioAsync(newRow.id, newRow);
+      const arrayFields = ['portfolioCategories', 'states', 'countries', 'partnerHQ'];
+      for (const field of arrayFields) {
+        const value = newRow[field];
+        if (value.length > 0) {
+          const arrOfStr = value.map((item) => item.label);
+          newRow[field] = arrOfStr;
+        }
+      }
+      await updatePortfolioAsync(newRow.id, newRow);
       fetchList();
     }
 
@@ -549,7 +548,7 @@ export const PortfolioListView = () => {
             setFilters={setFilters}
             setPagination={setPagination}
             columns={allColumns}
-            selectedViewData={selectedViewData}
+            selectedView={selectedViewData}
             setSelectedViewId={setSelectedViewId}
             viewsLoading={viewsLoading}
           />
