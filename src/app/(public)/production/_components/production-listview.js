@@ -1,11 +1,34 @@
 'use client';
 
 import * as React from 'react';
-import { alpha, Box, Button, Card, Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField } from '@mui/material';
+import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import AddIcon from '@mui/icons-material/Add';
+import TableReorderIcon from '@mui/icons-material/Reorder';
+import {
+  alpha,
+  Box,
+  Button,
+  Card,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  IconButton,
+  Popover,
+  TextField,
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { toast } from 'sonner';
+
+import TableFilterBuilder from '/src/components/common/table-filter-builder';
+import TableSortBuilder from '/src/components/common/table-sort-builder';
+import TableView from '/src/components/common/table-view';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
+import { Iconify } from '/src/components/iconify/iconify';
+import { MediaUploader } from '/src/components/uploaders/media-uploader';
 
 import {
   createProductionAsync,
@@ -17,19 +40,8 @@ import {
   updateProductionAsync,
   updateProductionViewAsync,
 } from '../_lib/production.action';
-import AddIcon from '@mui/icons-material/Add';
-import { defaultProduction } from '../../production/_lib/production.types';
 import { getProductionColumns } from '../_utils/get-production-columns';
-import Image from 'next/image';
-import { MediaUploader } from '/src/components/uploaders/media-uploader';
-import { toast } from 'sonner';
-import TableFilterBuilder from '/src/components/common/table-filter-builder';
-import TableSortBuilder from '/src/components/common/table-sort-builder';
-import TableView from '/src/components/common/table-view';
-import { useTheme } from '@mui/material/styles';
-import { Iconify } from '/src/components/iconify/iconify';
-import { useSearchParams, useRouter } from 'next/navigation';
-import TableReorderIcon from '@mui/icons-material/Reorder';
+import { defaultProduction } from '../../production/_lib/production.types';
 
 export const ProductionListView = () => {
   const theme = useTheme();
@@ -38,6 +50,8 @@ export const ProductionListView = () => {
   const [anchorElHide, setAnchorElHide] = React.useState(null);
   const [imageToShow, setImageToShow] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+  const searchParams = useSearchParams();
+  const viewId = searchParams.get('view');
 
   const handleClosePopover = () => {
     anchorEl.current = null;
@@ -54,15 +68,15 @@ export const ProductionListView = () => {
     try {
       const newData = {
         ...updatedRow,
-        Imagefield: [...updatedRow.Imagefield, ...images]
-      }
+        Imagefield: [...updatedRow.Imagefield, ...images],
+      };
       await updateProductionAsync(null, newData);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
       fetchList();
     }
-  }
+  };
 
   const [records, setRecords] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -75,9 +89,8 @@ export const ProductionListView = () => {
   const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([]);
   const [viewsLoading, setViewsLoading] = React.useState(false);
-  const searchParams = useSearchParams();
-  const view = searchParams.get('view');
-  const [selectedView, setSelectedView] = React.useState(null);
+  const [selectedViewId, setSelectedViewId] = React.useState(null);
+  const [selectedViewData, setSelectedViewData] = React.useState(null);
 
   // filter
   const [metaData, setMetaData] = React.useState([]);
@@ -96,13 +109,17 @@ export const ProductionListView = () => {
     const paginationData = props ? props.pagination : pagination;
     try {
       setLoading(true);
-      const response = await getProductionListAsync({
-        page: paginationData.pageNo,
-        rowsPerPage: paginationData.limit,
-      }, filter, gate);
+      const response = await getProductionListAsync(
+        {
+          page: paginationData.pageNo,
+          rowsPerPage: paginationData.limit,
+        },
+        filter,
+        gate
+      );
 
       if (response.success) {
-        if (view) {
+        if (viewId) {
           setMetaData(response.meta);
         } else {
           setRecords(response.data.map((row) => defaultProduction(row)) || []);
@@ -127,7 +144,7 @@ export const ProductionListView = () => {
       if (response.success) {
         setRecords(response.data.data.map((row) => defaultProduction(row)) || []);
         setTotalRecords(response.data.count);
-        setSelectedView(response.data);
+        setSelectedViewData(response.data);
         setFilters(response.data.meta?.filters || []);
         setGate(response.data.meta?.gate || 'and');
         setSort(response.data.meta?.sort || []);
@@ -137,24 +154,24 @@ export const ProductionListView = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   async function updateView(props) {
     const viewFilters = props.filters ? props.filters : filters;
     const viewSort = props.sort ? props.sort : sort;
 
     const data = {
-      label: selectedView?.meta?.label,
-      description: selectedView?.meta?.description,
-      table: selectedView?.meta?.table,
-      isPublic: selectedView?.meta?.isPublic,
-      columns: selectedView?.meta?.columns,
+      label: selectedViewData?.meta?.label,
+      description: selectedViewData?.meta?.description,
+      table: selectedViewData?.meta?.table,
+      isPublic: selectedViewData?.meta?.isPublic,
+      columns: selectedViewData?.meta?.columns,
       gate,
       filters: viewFilters,
       sort: viewSort,
-      groups: selectedView?.meta?.groups
-    }
-    await updateProductionViewAsync(view, data);
+      groups: selectedViewData?.meta?.groups,
+    };
+    await updateProductionViewAsync(viewId, data);
   }
 
   // ******************************data grid handler starts*********************
@@ -163,8 +180,8 @@ export const ProductionListView = () => {
     const { page, pageSize } = newPaginationModel;
     const newPagination = { pageNo: page + 1, limit: pageSize };
     setPagination(newPagination);
-    if (view) {
-      getSingleView(view, newPagination);
+    if (viewId) {
+      getSingleView(viewId, newPagination);
     } else {
       fetchList({ pagination: newPagination });
     }
@@ -177,17 +194,17 @@ export const ProductionListView = () => {
 
     if (isTemporaryId) {
       if (!newRow.name) {
-        toast.error("Please enter name");
+        toast.error('Please enter name');
         return newRow;
       }
 
       if (!newRow.proposedDate) {
-        toast.error("Please select proposed date");
+        toast.error('Please select proposed date');
         return newRow;
       }
 
       if (!newRow.recordShootDate) {
-        toast.error("Please select record shoot date");
+        toast.error('Please select record shoot date');
         return newRow;
       }
 
@@ -235,99 +252,99 @@ export const ProductionListView = () => {
     }
     setVisibleColumns(newVisibleColumns);
 
-    if (view) {
+    if (viewId) {
       const data = {
         columns: newVisibleColumns.map((c) => c.columnName),
-        label: selectedView?.meta?.label,
-        description: selectedView?.meta?.description,
-        table: selectedView?.meta?.table,
-        isPublic: selectedView?.meta?.isPublic,
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
         gate,
         filters,
-        sort: selectedView?.meta?.sort,
-        groups: selectedView?.meta?.groups
+        sort: selectedViewData?.meta?.sort,
+        groups: selectedViewData?.meta?.groups,
       };
 
-      const res = await updateProductionViewAsync(view, data);
+      const res = await updateProductionViewAsync(viewId, data);
       if (res.success) {
-        getSingleView(view);
+        getSingleView(viewId);
       }
     }
-  }
+  };
 
   // handle Column Search
   const handleColumnSearch = (e) => {
     const searchValue = e.target.value.toLowerCase();
     setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
-  }
+  };
 
   const showAllColumns = async () => {
     const newVisibleColumns = allColumns;
     setVisibleColumns(newVisibleColumns);
 
-    if (view) {
+    if (viewId) {
       const data = {
         columns: allColumns.map((c) => c.columnName),
-        label: selectedView?.meta?.label,
-        description: selectedView?.meta?.description,
-        table: selectedView?.meta?.table,
-        isPublic: selectedView?.meta?.isPublic,
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
         gate,
         filters,
         sort,
-        groups: selectedView?.meta?.groups
+        groups: selectedViewData?.meta?.groups,
       };
 
-      const res = await updateProductionViewAsync(view, data);
+      const res = await updateProductionViewAsync(viewId, data);
       if (res.success) {
-        getSingleView(view);
+        getSingleView(viewId);
       }
     }
-  }
+  };
 
   const hideAllColumns = async () => {
     const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
     setVisibleColumns(newVisibleColumns);
 
-    if (view) {
+    if (viewId) {
       const data = {
         columns: ['id'],
-        label: selectedView?.meta?.label,
-        description: selectedView?.meta?.description,
-        table: selectedView?.meta?.table,
-        isPublic: selectedView?.meta?.isPublic,
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
         gate,
         filters,
         sort,
-        groups: selectedView?.meta?.groups
+        groups: selectedViewData?.meta?.groups,
       };
 
-      const res = await updateProductionViewAsync(view, data);
+      const res = await updateProductionViewAsync(viewId, data);
       if (res.success) {
-        getSingleView(view);
+        getSingleView(viewId);
       }
     }
-  }
+  };
 
   // FILTERS
   // handle filter apply
   const handleFilterApply = async () => {
-    if (view) {
+    if (viewId) {
       updateView({ filters }).then(() => {
-        getSingleView(view)
+        getSingleView(viewId);
       });
     } else {
       fetchList(filters);
     }
-  }
+  };
 
   // handle remove filter condition
   const handleRemoveFilterCondition = (index) => {
     const newFilters = filters.filter((_, i) => i !== index);
     setFilters(newFilters);
-    if (view) {
+    if (viewId) {
       updateView({ filters: newFilters }).then(() => {
-        getSingleView(view)
+        getSingleView(viewId);
       });
     } else {
       fetchList(newFilters);
@@ -337,95 +354,107 @@ export const ProductionListView = () => {
   // handle clear filters
   const handleClearFilters = () => {
     setFilters([]);
-    if (view) {
+    if (viewId) {
       updateView({ filters: [] }).then(() => {
-        getSingleView(view)
+        getSingleView(viewId);
       });
     } else {
       fetchList([]);
     }
   };
 
-  // initialize
   const initialize = async () => {
-    try {
-      setLoading(true)
-      const portfolios = await getProductionListAsync({
-        page: 1,
-        rowsPerPage: 1,
-      });
-
-      // set meta data
-      setMetaData(portfolios.meta)
-      const columns = portfolios.meta.map(obj => {
-        const key = Object.keys(obj)[0];
-        return {
-          label: obj[key].label,
-          columnName: key,
-          type: obj[key].type,
-          depth: obj[key].depth
-        };
-      });
-
-      setAllColumns(columns);
-
-      // set views
-      const viewsData = await getProductionViewsAsync();
-      setViews(viewsData.data)
-
-      const viewId = searchParams.get('view');
-
-      if (viewId) {
-        getSingleView(viewId, pagination)
-      } else if (viewsData.data.length > 0) {
-        getSingleView(viewsData.data[0].id, pagination)
-        router.push(`?tab=production&view=${viewsData.data[0].id}`);
-      } else {
-        const payload = {
-          label: 'Default View',
-          description: 'Default View',
-          table: 'PRODUCTION',
-          gate: 'and',
-          isPublic: true,
-          filters: [],
-          columns: columns.map(col => col.columnName),
-          sort: [],
-          groups: []
+      try {
+        setLoading(true);
+        const productions = await getProductionListAsync({
+          page: 1,
+          rowsPerPage: 1,
+        });
+  
+        // set meta data
+        setMetaData(productions.meta);
+        const columns = productions.meta.map((obj) => {
+          const key = Object.keys(obj)[0];
+          return {
+            label: obj[key].label,
+            columnName: key,
+            type: obj[key].type,
+            depth: obj[key].depth,
+          };
+        });
+  
+        setAllColumns(columns);
+  
+        // set views
+        const viewsData = await getProductionViewsAsync();
+        setViews(viewsData.data);
+        if (viewsData.success) {
+          const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
+          await getSingleView(firstView?.id, pagination);
+          router.push(`?tab=production&view=${firstView?.id}`);
+        } else {
+          const payload = {
+            label: 'Default View',
+            description: 'Default View',
+            table: 'PRODUCTION',
+            gate: 'and',
+            isPublic: true,
+            filters: [],
+            columns: columns.map((col) => col.columnName),
+            sort: [],
+            groups: [],
+          };
+  
+          const res = await createProductionViewAsync(payload);
+  
+          if (res.success) {
+            const createViewData = res?.data;
+            setViews([
+              {
+                id: createViewData?.id,
+                table: createViewData?.table,
+                isPublic: createViewData?.isPublic,
+                label: createViewData?.label,
+                description: createViewData?.description,
+                CreatedByUser: {},
+                createdAt: createViewData?.createdAt,
+              },
+            ]);
+            await getSingleView(res.data.id, pagination);
+            router.push(`?tab=production&view=${res.data.id}`);
+          }
         }
-        const res = await createProductionViewAsync(payload);
-        if (res.success) {
-          const response = await getProductionViewsAsync();
-          setViews(response.data)
-          getSingleView(res.data.id, pagination)
-          router.push(`?tab=production&view=${res.data.id}`);
-        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
-
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setLoading(false)
-    }
-  }
+    };
 
   // update visible columns
   React.useEffect(() => {
     if (allColumns.length === 0) return;
-    if (view && selectedView) {
-      const selectedColumnNames = selectedView.meta?.columns || [];
-      const filtered = allColumns.filter(col => selectedColumnNames.includes(col.columnName));
+    if (viewId && selectedViewData) {
+      const selectedColumnNames = selectedViewData.meta?.columns || [];
+      const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
       setVisibleColumns(filtered);
     } else {
       setVisibleColumns(allColumns);
     }
     setSearchColumns(allColumns);
-  }, [view, selectedView, allColumns]);
+  }, [viewId, selectedViewData, allColumns]);
 
   // Watch for URL viewId change
   React.useEffect(() => {
-    setPagination(prev => ({ ...prev, pageNo: 1 }));
-    initialize()
-  }, [searchParams]);
+    setPagination((prev) => ({ ...prev, pageNo: 1 }));
+    initialize();
+  }, []);
+
+  React.useEffect(() => {
+      if (selectedViewId) {
+        getSingleView(selectedViewId, pagination);
+      }
+    }, [selectedViewId]);
 
   return (
     <PageContainer>
@@ -436,7 +465,7 @@ export const ProductionListView = () => {
               startIcon={<TableReorderIcon />}
               variant="text"
               size="small"
-              onClick={() => setShowView(prev => !prev)}
+              onClick={() => setShowView((prev) => !prev)}
               sx={{ bgcolor: showView ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
             >
               View
@@ -462,11 +491,7 @@ export const ProductionListView = () => {
               handleClearFilters={handleClearFilters}
             />
 
-            <Button
-              startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />}
-              variant="text"
-              size="small"
-            >
+            <Button startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />} variant="text" size="small">
               Group
             </Button>
             <TableSortBuilder
@@ -497,7 +522,7 @@ export const ProductionListView = () => {
           </Box>
         </Box>
 
-        <Box display='flex' justifyContent='center' alignItems='start'>
+        <Box display="flex" justifyContent="center" alignItems="start">
           {/* View */}
           <TableView
             views={views}
@@ -508,7 +533,8 @@ export const ProductionListView = () => {
             setFilters={setFilters}
             setPagination={setPagination}
             columns={allColumns}
-            selectedView={selectedView}
+            selectedView={selectedViewData}
+            setSelectedViewId={setSelectedViewId}
             viewsLoading={viewsLoading}
           />
 
@@ -549,17 +575,10 @@ export const ProductionListView = () => {
       >
         <Box sx={{ p: 1.5 }}>
           {imageToShow && (
-            <Image
-              src={imageToShow}
-              alt="Preview"
-              width={300}
-              height={300}
-              style={{ borderRadius: 8 }}
-            />
+            <Image src={imageToShow} alt="Preview" width={300} height={300} style={{ borderRadius: 8 }} />
           )}
         </Box>
       </Popover>
-
 
       {/* Hide fields popover */}
       <Popover
@@ -590,37 +609,46 @@ export const ProductionListView = () => {
               onChange={(e) => handleColumnSearch(e)}
             />
           </Box>
-          <FormGroup sx={{ gap: 0.5, p: 1, display: 'flex', flexDirection: 'column', minHeight: 'auto', flexWrap: 'nowrap', maxHeight: 250, overflowY: 'auto', scrollbarWidth: 'thin' }}>
-            {searchColumns.filter((col) => col.columnName !== 'id')?.map((col) => {
-              return <FormControlLabel
-                key={col.field}
-                control={<Checkbox
-                  checked={visibleColumns.some((c) => c.columnName === col.columnName)}
-                  onChange={e => handleColumnChange(e, col)}
-                />}
-                label={col.label}
-              />
-            })}
+          <FormGroup
+            sx={{
+              gap: 0.5,
+              p: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: 'auto',
+              flexWrap: 'nowrap',
+              maxHeight: 250,
+              overflowY: 'auto',
+              scrollbarWidth: 'thin',
+            }}
+          >
+            {searchColumns
+              .filter((col) => col.columnName !== 'id')
+              ?.map((col) => {
+                return (
+                  <FormControlLabel
+                    key={col.field}
+                    control={
+                      <Checkbox
+                        checked={visibleColumns.some((c) => c.columnName === col.columnName)}
+                        onChange={(e) => handleColumnChange(e, col)}
+                      />
+                    }
+                    label={col.label}
+                  />
+                );
+              })}
           </FormGroup>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }}>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={hideAllColumns}
-            >
+            <Button variant="outlined" size="small" onClick={hideAllColumns}>
               Hide all
             </Button>
-            <Button
-              variant="contained"
-              size="small"
-              onClick={showAllColumns}
-            >
+            <Button variant="contained" size="small" onClick={showAllColumns}>
               Show all
             </Button>
           </Box>
         </Box>
       </Popover>
-
 
       {/* Image upload dialog */}
       <MediaUploader
@@ -632,5 +660,5 @@ export const ProductionListView = () => {
         folderName="partner-HQ"
       />
     </PageContainer>
-  )
+  );
 };
