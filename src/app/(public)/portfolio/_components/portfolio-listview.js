@@ -2,22 +2,29 @@
 
 import * as React from 'react';
 import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
 import AddIcon from '@mui/icons-material/Add';
+import TableReorderIcon from '@mui/icons-material/Reorder';
 import { Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import { alpha, useTheme } from '@mui/material/styles';
 import { toast } from 'sonner';
 
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
+import TableSortBuilder from '/src/components/common/table-sort-builder';
+import TableView from '/src/components/common/table-view';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
+import { Iconify } from '/src/components/iconify/iconify';
 import { MediaUploader } from '/src/components/uploaders/media-uploader';
 
 import {
   createPortfolioAsync,
+  createPortfolioView,
   deletePortfolioAsync,
   getPortfolioListAsync,
   getPortfolioViews,
@@ -27,19 +34,16 @@ import {
 } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
 import { getPortfolioColumns } from '../_utils/get-portfolio-columns';
-import TableReorderIcon from '@mui/icons-material/Reorder';
-import { alpha } from '@mui/material/styles';
-import { useTheme } from '@mui/material/styles';
-import { useSearchParams } from 'next/navigation';
-import { Iconify } from '/src/components/iconify/iconify';
-import TableView from '/src/components/common/table-view';
 
 export const PortfolioListView = () => {
   const theme = useTheme();
+  const router = useRouter();
   const anchorEl = React.useRef(null);
   const [anchorElHide, setAnchorElHide] = React.useState(null);
   const [imageToShow, setImageToShow] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+  const searchParams = useSearchParams();
+  const viewId = searchParams.get('view');
 
   const handleUploadModalOpen = (data) => {
     setOpen(true);
@@ -51,12 +55,58 @@ export const PortfolioListView = () => {
     setImageToShow(null);
   };
 
-
   const handleClosePopoverHide = () => {
     setAnchorElHide(null);
     setSearchColumns(allColumns);
   };
 
+  async function fetchList(props) {
+    try {
+      setLoading(true);
+
+      const filter = props ? props : filters;
+      const paginationData = props ? props.pagination : pagination;
+
+      const response = await getPortfolioListAsync(
+        {
+          page: paginationData.pageNo,
+          rowsPerPage: paginationData.limit,
+        },
+        filter,
+        gate
+      );
+
+      if (response.success) {
+        if (viewId) {
+          setMetaData(response.meta);
+        } else {
+          setRecords(response.data.map((row) => defaultPortfolio(row)) || []);
+          setTotalRecords(response.totalRecords);
+          setMetaData(response.meta);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleUploadImage = async (images) => {
+    try {
+      const response = await updatePortfolioAsync(updatedRow.id, {
+        ...updatedRow,
+        campaignImage: [...updatedRow.campaignImage, ...images],
+      });
+      if (response.success) {
+        toast.success('Portfolio updated successfully');
+        fetchList();
+        setOpen(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // table columns
   const [records, setRecords] = React.useState([]);
@@ -70,75 +120,76 @@ export const PortfolioListView = () => {
   const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([]);
   const [viewsLoading, setViewsLoading] = React.useState(false);
-  const searchParams = useSearchParams();
-  const tab = searchParams.get('tab');
-  const view = searchParams.get('view');
-  const [selectedView, setSelectedView] = React.useState(null);
-
+  const [selectedViewId, setSelectedViewId] = React.useState(null);
+  const [selectedViewData, setSelectedViewData] = React.useState(null);
 
   // filter
   const [metaData, setMetaData] = React.useState([]);
   const [filters, setFilters] = React.useState([]);
-  const [filtersLoaded, setFiltersLoaded] = React.useState(false);
   const [gate, setGate] = React.useState('and');
+  const [sort, setSort] = React.useState([]);
 
   // table columns
-  const allColumns = React.useMemo(() => {
-    const columns = metaData.map(obj => {
-      const key = Object.keys(obj)[0];
-      return {
-        label: obj[key].label,
-        columnName: key,
-        depth: obj[key].depth
-      };
-    });
-    return columns;
-  }, [metaData]);
+  const [allColumns, setAllColumns] = React.useState([]);
+  const [visibleColumns, setVisibleColumns] = React.useState([]);
+  const [searchColumns, setSearchColumns] = React.useState([]);
+  const columns = React.useMemo(
+    () => getPortfolioColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns),
+    [visibleColumns]
+  );
 
-  const [visibleColumns, setVisibleColumns] = React.useState(allColumns);
-  const [searchColumns, setSearchColumns] = React.useState(allColumns);
-  const columns = React.useMemo(() => getPortfolioColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns), [visibleColumns]);
-
-  async function fetchList() {
+  // get single view
+  const getSingleView = async (viewId, paginationProps) => {
     try {
       setLoading(true);
-      const response = await getPortfolioListAsync({
-        page: pagination.pageNo,
-        rowsPerPage: pagination.limit
-      }, filters, gate);
-
-      if (response.success) {
-        setRecords(response.data.map((row) => defaultPortfolio(row)) || []);
-        setTotalRecords(response.totalRecords);
-        setMetaData(response.meta);
+      const viewPagination = paginationProps ? paginationProps : pagination;
+      const res = await getSinglePortfolioView(viewId, viewPagination);
+      if (res.success) {
+        setRecords(res.data.data.map((row) => defaultPortfolio(row)) || []);
+        setTotalRecords(res.data.count);
+        setSelectedViewData(res.data);
+        setFilters(res.data.meta?.filters || []);
+        setGate(res.data.meta?.gate || 'and');
+        setSort(res.data.meta?.sort || []);
       }
+
+      return res?.data?.data;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  async function updateView(filters) {
+  async function updateView(props) {
+    const viewFilters = props.filters ? props.filters : filters;
+    const viewSort = props.sort ? props.sort : sort;
+
     const data = {
-      label: selectedView?.meta?.label,
-      description: selectedView?.meta?.description,
-      table: selectedView?.meta?.table,
-      isPublic: selectedView?.meta?.isPublic,
-      columns: selectedView?.meta?.columns,
+      label: selectedViewData?.meta?.label,
+      description: selectedViewData?.meta?.description,
+      table: selectedViewData?.meta?.table,
+      isPublic: selectedViewData?.meta?.isPublic,
+      columns: selectedViewData?.meta?.columns,
       gate,
-      filters,
-      sort: selectedView?.meta?.sort,
-      groups: selectedView?.meta?.groups
-    }
-    await updatePortfolioView(view, data);
+      filters: viewFilters,
+      sort: viewSort,
+      groups: selectedViewData?.meta?.groups,
+    };
+    await updatePortfolioView(viewId, data);
   }
 
   // ******************************data grid handler starts*********************
 
   const handlePaginationModelChange = (newPaginationModel) => {
     const { page, pageSize } = newPaginationModel;
-    setPagination({ pageNo: page + 1, limit: pageSize });
+    const newPagination = { pageNo: page + 1, limit: pageSize };
+    setPagination(newPagination);
+    if (viewId) {
+      getSingleView(viewId, newPagination);
+    } else {
+      fetchList({ pagination: newPagination });
+    }
   };
 
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
@@ -165,15 +216,15 @@ export const PortfolioListView = () => {
       await createPortfolioAsync(newRow);
       fetchList();
     } else {
-      // const arrayFields = ['portfolioCategories', 'states', 'countries', 'partnerHQ'];
-      // for (const field of arrayFields) {
-      //   const value = newRow[field];
-      //   if (value.length > 0) {
-      //     const arrOfStr = value.map((item) => item.label);
-      //     newRow[field] = arrOfStr;
-      //   }
-      // }
-      // await updatePortfolioAsync(newRow.id, newRow);
+      const arrayFields = ['portfolioCategories', 'states', 'countries', 'partnerHQ'];
+      for (const field of arrayFields) {
+        const value = newRow[field];
+        if (value.length > 0) {
+          const arrOfStr = value.map((item) => item.label);
+          newRow[field] = arrOfStr;
+        }
+      }
+      await updatePortfolioAsync(newRow.id, newRow);
       fetchList();
     }
 
@@ -186,7 +237,7 @@ export const PortfolioListView = () => {
   };
 
   const handleProcessRowUpdateError = React.useCallback((error) => {
-    console.log({ children: error.message, severity: 'error' });
+    console.error({ children: error.message, severity: 'error' });
   }, []);
 
   // ******************************data grid handler ends*********************
@@ -201,19 +252,8 @@ export const PortfolioListView = () => {
     fetchList();
   };
 
-  // get single view
-  const getSingleView = async (viewId) => {
-    const res = await getSinglePortfolioView(viewId);
-    if (res.success) {
-      setSelectedView(res.data);
-      setFilters(res.data.meta?.filters || []);
-      setGate(res.data.meta?.gate || 'and');
-      setFiltersLoaded(true);
-    }
-  }
-
   // handle column change
-  const handleColumnChange = (e, col) => {
+  const handleColumnChange = async (e, col) => {
     let newVisibleColumns = [];
     if (e.target.checked) {
       // Add column
@@ -226,104 +266,210 @@ export const PortfolioListView = () => {
     }
     setVisibleColumns(newVisibleColumns);
 
-    if (tab === 'portfolio' && view) {
+    if (viewId) {
       const data = {
         columns: newVisibleColumns.map((c) => c.columnName),
-        label: selectedView?.meta?.label,
-        description: selectedView?.meta?.description,
-        table: selectedView?.meta?.table,
-        isPublic: selectedView?.meta?.isPublic,
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
         gate,
         filters,
-        sort: selectedView?.meta?.sort,
-        groups: selectedView?.meta?.groups
+        sort,
+        groups: selectedViewData?.meta?.groups,
       };
 
-      updatePortfolioView(view, data);
+      const res = await updatePortfolioView(viewId, data);
+      if (res.success) {
+        getSingleView(viewId);
+      }
     }
-  }
+  };
 
   // handle Column Search
   const handleColumnSearch = (e) => {
     const searchValue = e.target.value.toLowerCase();
     setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
-  }
+  };
 
-  const handleUploadImage = async (images) => {
-    try {
-      const response = await updatePortfolioAsync(updatedRow.id, {
-        ...updatedRow,
-        campaignImage: [...updatedRow.campaignImage, ...images],
-      });
-      if (response.success) {
-        toast.success('Portfolio updated successfully');
-        fetchList();
-        setOpen(false);
+  const showAllColumns = async () => {
+    const newVisibleColumns = allColumns;
+    setVisibleColumns(newVisibleColumns);
+
+    if (viewId) {
+      const data = {
+        columns: allColumns.map((c) => c.columnName),
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
+        gate,
+        filters,
+        sort,
+        groups: selectedViewData?.meta?.groups,
+      };
+
+      const res = await updatePortfolioView(viewId, data);
+      if (res.success) {
+        getSingleView(viewId);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
+  const hideAllColumns = async () => {
+    const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
+    setVisibleColumns(newVisibleColumns);
 
-  // run when pagination, filters, gate, filtersLoaded change
-  React.useEffect(() => {
-    if (filtersLoaded) {
-      fetchList();
-    }
-  }, [pagination, filters, gate, filtersLoaded]);
+    if (viewId) {
+      const data = {
+        columns: ['id'],
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
+        gate,
+        filters,
+        sort,
+        groups: selectedViewData?.meta?.groups,
+      };
 
-  // run when view change
-  React.useEffect(() => {
-    const view = searchParams.get('view');
-
-    // Reset pageNo to 1 on view change
-    setPagination(prev => ({ ...prev, pageNo: 1 }));
-
-    if (view) {
-      getSingleView(view);
-      setFiltersLoaded(false);
-    } else {
-      setSelectedView(null);
-      setFilters([]);
-      setGate('and');
-      setVisibleColumns(allColumns);
-      setFiltersLoaded(true);
-    }
-  }, [searchParams]);
-
-  // run when allColumns change
-  React.useEffect(() => {
-    if (allColumns.length > 0 && visibleColumns.length === 0) {
-      setSearchColumns(allColumns);
-      setVisibleColumns(allColumns);
-    }
-  }, [allColumns]);
-
-  // run when selectedView and metaData change
-  React.useEffect(() => {
-    if (selectedView && metaData.length > 0) {
-      const selectedColumnNames = selectedView.meta?.columns || [];
-      const filteredColumns = allColumns.filter((col) =>
-        selectedColumnNames.includes(col.columnName)
-      );
-      setVisibleColumns(filteredColumns);
-    }
-  }, [metaData, selectedView, allColumns]);
-
-  // run when viewsLoading change
-  React.useEffect(() => {
-    const fetchViews = async () => {
-      setViewsLoading(true);
-      const res = await getPortfolioViews();
+      const res = await updatePortfolioView(viewId, data);
       if (res.success) {
-        setViews(res.data);
+        getSingleView(viewId);
       }
-      setViewsLoading(false);
     }
-    fetchViews();
+  };
+
+  // FILTERS
+  // handle filter apply
+  const handleFilterApply = async () => {
+    if (viewId) {
+      updateView({ filters }).then(() => {
+        getSingleView(viewId);
+      });
+    } else {
+      fetchList(filters);
+    }
+  };
+
+  // handle remove filter condition
+  const handleRemoveFilterCondition = (index) => {
+    const newFilters = filters.filter((_, i) => i !== index);
+    setFilters(newFilters);
+    if (viewId) {
+      updateView({ filters: newFilters }).then(() => {
+        getSingleView(viewId);
+      });
+    } else {
+      fetchList(newFilters);
+    }
+  };
+
+  // handle clear filters
+  const handleClearFilters = () => {
+    setFilters([]);
+    if (viewId) {
+      updateView({ filters: [] }).then(() => {
+        getSingleView(viewId);
+      });
+    } else {
+      fetchList([]);
+    }
+  };
+
+  // initialize
+  const initialize = async () => {
+    try {
+      setLoading(true);
+      const portfolios = await getPortfolioListAsync({
+        page: 1,
+        rowsPerPage: 1,
+      });
+
+      // set meta data
+      setMetaData(portfolios.meta);
+      const columns = portfolios.meta.map((obj) => {
+        const key = Object.keys(obj)[0];
+        return {
+          label: obj[key].label,
+          columnName: key,
+          type: obj[key].type,
+          depth: obj[key].depth,
+        };
+      });
+
+      setAllColumns(columns);
+
+      // set views
+      const viewsData = await getPortfolioViews();
+      setViews(viewsData.data);
+      if (viewsData.success) {
+        const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
+        await getSingleView(firstView?.id, pagination);
+        router.push(`?tab=portfolio&view=${firstView?.id}`);
+      } else {
+        const payload = {
+          label: 'Default View',
+          description: 'Default View',
+          table: 'PORTFOLIO',
+          gate: 'and',
+          isPublic: true,
+          filters: [],
+          columns: columns.map((col) => col.columnName),
+          sort: [],
+          groups: [],
+        };
+
+        const res = await createPortfolioView(payload);
+
+        if (res.success) {
+          const createViewData = res?.data;
+          setViews([
+            {
+              id: createViewData?.id,
+              table: createViewData?.table,
+              isPublic: createViewData?.isPublic,
+              label: createViewData?.label,
+              description: createViewData?.description,
+              CreatedByUser: {},
+              createdAt: createViewData?.createdAt,
+            },
+          ]);
+          await getSingleView(res.data.id, pagination);
+          router.push(`?tab=portfolio&view=${res.data.id}`);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // update visible columns
+  React.useEffect(() => {
+    if (allColumns.length === 0) return;
+    if (viewId && selectedViewData) {
+      const selectedColumnNames = selectedViewData.meta?.columns || [];
+      const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
+      setVisibleColumns(filtered);
+    } else {
+      setVisibleColumns(allColumns);
+    }
+    setSearchColumns(allColumns);
+  }, [viewId, selectedViewData, allColumns]);
+
+  // Watch for URL viewId change
+  React.useEffect(() => {
+    setPagination((prev) => ({ ...prev, pageNo: 1 }));
+    initialize();
   }, []);
 
+  React.useEffect(() => {
+    if (selectedViewId) {
+      getSingleView(selectedViewId, pagination);
+    }
+  }, [selectedViewId]);
 
   return (
     <PageContainer>
@@ -334,7 +480,7 @@ export const PortfolioListView = () => {
               startIcon={<TableReorderIcon />}
               variant="text"
               size="small"
-              onClick={() => setShowView(prev => !prev)}
+              onClick={() => setShowView((prev) => !prev)}
               sx={{ bgcolor: showView ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
             >
               View
@@ -349,30 +495,28 @@ export const PortfolioListView = () => {
               Hide Fields
             </Button>
 
-
             <TableFilterBuilder
               metaData={metaData}
               filters={filters}
               gate={gate}
               setFilters={setFilters}
               setGate={setGate}
-              updateView={updateView}
+              handleFilterApply={handleFilterApply}
+              handleRemoveFilterCondition={handleRemoveFilterCondition}
+              handleClearFilters={handleClearFilters}
             />
 
-            <Button
-              startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />}
-              variant="text"
-              size="small"
-            >
+            <Button startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />} variant="text" size="small">
               Group
             </Button>
-            <Button
-              startIcon={<Iconify icon="si:swap-vert-duotone" width={16} height={16} />}
-              variant="text"
-              size="small"
-            >
-              Sort
-            </Button>
+            <TableSortBuilder
+              allColumns={allColumns}
+              sort={sort}
+              setSort={setSort}
+              updateView={updateView}
+              fetchList={fetchList}
+              getSingleView={getSingleView}
+            />
           </Box>
 
           <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -393,15 +537,19 @@ export const PortfolioListView = () => {
           </Box>
         </Box>
 
-        <Box display='flex' justifyContent='center' alignItems='start'>
+        <Box display="flex" justifyContent="center" alignItems="start">
           {/* View */}
           <TableView
             views={views}
             showView={showView}
             setViews={setViews}
             setShowView={setShowView}
+            setSort={setSort}
+            setFilters={setFilters}
+            setPagination={setPagination}
             columns={allColumns}
-            selectedView={selectedView}
+            selectedView={selectedViewData}
+            setSelectedViewId={setSelectedViewId}
             viewsLoading={viewsLoading}
           />
           <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
@@ -423,7 +571,6 @@ export const PortfolioListView = () => {
         </Box>
       </Card>
 
-
       {/* Hide fields popover */}
       <Popover
         id="hide-fields-popover"
@@ -442,8 +589,8 @@ export const PortfolioListView = () => {
         disableEnforceFocus
         disablePortal
       >
-        <Box sx={{ width: 250, maxHeight: 350, overflowY: 'auto', scrollbarWidth: 'thin' }}>
-          <Box sx={{ p: 1.5, position: 'sticky', top: 0, zIndex: 1, backgroundColor: 'background.paper' }}>
+        <Box sx={{ width: 250 }}>
+          <Box sx={{ p: 1.5, backgroundColor: 'background.paper' }}>
             <TextField
               fullWidth
               placeholder="Find fields..."
@@ -453,23 +600,44 @@ export const PortfolioListView = () => {
               onChange={(e) => handleColumnSearch(e)}
             />
           </Box>
-          <FormGroup sx={{ gap: 0.5, p: 1 }}>
-            {/* {loading && (
-              <Box sx={{ p: 1.5 }}>
-                <CircularProgress size={20} />
-              </Box>
-            )} */}
-            {searchColumns?.map((col) => {
-              return <FormControlLabel
-                key={col.field}
-                control={<Checkbox
-                  checked={visibleColumns.some((c) => c.columnName === col.columnName)}
-                  onChange={e => handleColumnChange(e, col)}
-                />}
-                label={col.label}
-              />
-            })}
+          <FormGroup
+            sx={{
+              gap: 0.5,
+              p: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: 'auto',
+              flexWrap: 'nowrap',
+              maxHeight: 250,
+              overflowY: 'auto',
+              scrollbarWidth: 'thin',
+            }}
+          >
+            {searchColumns
+              .filter((col) => col.columnName !== 'id')
+              ?.map((col) => {
+                return (
+                  <FormControlLabel
+                    key={col.field}
+                    control={
+                      <Checkbox
+                        checked={visibleColumns.some((c) => c.columnName === col.columnName)}
+                        onChange={(e) => handleColumnChange(e, col)}
+                      />
+                    }
+                    label={col.label}
+                  />
+                );
+              })}
           </FormGroup>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }}>
+            <Button variant="outlined" size="small" onClick={hideAllColumns}>
+              Hide all
+            </Button>
+            <Button variant="contained" size="small" onClick={showAllColumns}>
+              Show all
+            </Button>
+          </Box>
         </Box>
       </Popover>
 

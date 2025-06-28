@@ -203,17 +203,17 @@ export const getCampaignViews = async () => {
     const res = await api.get(`/views?table=CAMPAIGN`)
     return { success: true, data: res.data.data }
   } catch (error) {
-    toast.error(error.response.data.message);
-    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+    // toast.error(error.response.data.message);
+    return { success: false, data: [], error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 }
 
-export const getSingleCampaignView = async (id) => {
+export const getSingleCampaignView = async (id, pagination) => {
   try {
-    const res = await api.get(`/views/${id}`)
+    const res = await api.get(`/views/${id}?page=${pagination.pageNo}&size=${pagination.limit}`)
     return { success: true, data: res.data.data }
   } catch (error) {
-    toast.error(error.response.data.message);
+    // toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 }
