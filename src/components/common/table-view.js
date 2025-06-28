@@ -16,7 +16,7 @@ import { useTheme } from '@mui/material/styles';
 import { alpha } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import { createCampaignView, deleteCampaignView, updateCampaignView } from '/src/app/(public)/campaign/_lib/campaign.actions';
-import { CampaignListViewSkelton } from '/src/app/(public)/campaign/_components/campaign-list-view-skelton';
+import { CampaignListViewSkelton } from '../../app/(public)/campaign/_components/campaign-list-view-skelton';
 import { toast } from 'sonner';
 
 export default function TableView({
@@ -41,7 +41,7 @@ export default function TableView({
     const [anchorEl, setAnchorEl] = useState(null);
 
     // Personal view
-    const personalViews = views.filter((view) => !view.isPublic);
+    const personalViews = views?.filter((view) => !view.isPublic);
 
     const handleOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -117,11 +117,11 @@ export default function TableView({
                 <Divider sx={{ my: 1 }} />
 
                 {/* Personal Views */}
-                {personalViews.length > 0 && (
+                {personalViews?.length > 0 && (
                     <><Box>
                         <Typography fontWeight={500} sx={{ fontSize: "14px", color: "text.secondary", mb: 1 }}>Personal Views</Typography>
                         <Stack>
-                            {personalViews.map((view, index) => (
+                            {personalViews?.map((view, index) => (
                                 <SingleView
                                     key={index}
                                     view={view}
@@ -143,7 +143,7 @@ export default function TableView({
                 <Box>
                     <Typography fontWeight={500} sx={{ fontSize: "14px", color: "text.secondary", mb: 1 }}>All Views</Typography>
                     <Stack>
-                        {views.map((view, index) => (
+                        {views?.map((view, index) => (
                             <SingleView
                                 key={index}
                                 view={view}

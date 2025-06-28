@@ -1,37 +1,38 @@
 'use client';
 
+import AddIcon from '@mui/icons-material/Add';
+import TableReorderIcon from '@mui/icons-material/Reorder';
+import { alpha, Button, Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField } from '@mui/material';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import { useTheme } from '@mui/material/styles';
+import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import * as React from 'react';
+import { toast } from 'sonner';
+
+import TableFilterBuilder from '/src/components/common/table-filter-builder';
+import TableSortBuilder from '/src/components/common/table-sort-builder';
+import TableView from '/src/components/common/table-view';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { alpha, Button, Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField } from '@mui/material';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import * as React from 'react';
+import { Iconify } from '/src/components/iconify/iconify';
+import { MediaUploader } from '/src/components/uploaders/media-uploader';
+
 import {
   createCampaignAsync,
+  createCampaignView,
   deleteCampaignBulkAsync,
   getCampaignListAsync,
   getCampaignViews,
   getSingleCampaignView,
-  updateCampaignView,
   updateCampaignAsync,
-  createCampaignView
+  updateCampaignView,
 } from '../_lib/campaign.actions';
-
-import AddIcon from '@mui/icons-material/Add';
-import { getCampaignColumns } from '../_utils/get-campaign-columns';
-import Image from 'next/image';
-import { MediaUploader } from '/src/components/uploaders/media-uploader';
 import { defaultCampaign } from '../_lib/campaign.types';
-import { toast } from 'sonner';
-import TableFilterBuilder from '/src/components/common/table-filter-builder';
-import TableView from '/src/components/common/table-view';
-import TableSortBuilder from '/src/components/common/table-sort-builder';
-import TableReorderIcon from '@mui/icons-material/Reorder';
-import { useTheme } from '@mui/material/styles';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { Iconify } from '/src/components/iconify/iconify';
+import { getCampaignColumns } from '../_utils/get-campaign-columns';
 
 export const CampaignListView = () => {
   const theme = useTheme();
@@ -92,21 +93,27 @@ export const CampaignListView = () => {
   const [sort, setSort] = React.useState([]);
 
   // table columns
-
   const [allColumns, setAllColumns] = React.useState([]);
   const [visibleColumns, setVisibleColumns] = React.useState([]);
   const [searchColumns, setSearchColumns] = React.useState([]);
-  const columns = React.useMemo(() => getCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns), [visibleColumns]);
+  const columns = React.useMemo(
+    () => getCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns),
+    [visibleColumns]
+  );
 
   async function fetchList(props) {
     const filter = props ? props : filters;
     const paginationData = props ? props.pagination : pagination;
     try {
       setLoading(true);
-      const response = await getCampaignListAsync({
-        page: paginationData.pageNo,
-        rowsPerPage: paginationData.limit,
-      }, filter, gate);
+      const response = await getCampaignListAsync(
+        {
+          page: paginationData.pageNo,
+          rowsPerPage: paginationData.limit,
+        },
+        filter,
+        gate
+      );
 
       if (response?.success) {
         if (view) {
@@ -130,7 +137,6 @@ export const CampaignListView = () => {
       setLoading(true);
       const viewPagination = paginationProps ? paginationProps : pagination;
       const res = await getSingleCampaignView(viewId, viewPagination);
-      console.log(res);
       if (res.success) {
         setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
         setTotalRecords(res.data.count);
@@ -140,11 +146,11 @@ export const CampaignListView = () => {
         setSort(res.data.meta?.sort || []);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   async function updateView(props) {
     const viewFilters = props.filters ? props.filters : filters;
@@ -158,8 +164,8 @@ export const CampaignListView = () => {
       gate,
       filters: viewFilters,
       sort: viewSort,
-      groups: selectedView?.meta?.groups
-    }
+      groups: selectedView?.meta?.groups,
+    };
     const result = await updateCampaignView(view, data);
     return result;
   }
@@ -184,32 +190,32 @@ export const CampaignListView = () => {
 
     if (isTemporaryId) {
       if (!newRow.name) {
-        toast.error("Please enter name");
+        toast.error('Please enter name');
         return newRow;
       }
 
       if (!newRow.status) {
-        toast.error("Please select campaign status");
+        toast.error('Please select campaign status');
         return newRow;
       }
 
       if (!newRow.notes) {
-        toast.error("Please enter notes");
+        toast.error('Please enter notes');
         return newRow;
       }
 
       if (!newRow.description) {
-        toast.error("Please enter description");
+        toast.error('Please enter description');
         return newRow;
       }
 
       if (!newRow.client) {
-        toast.error("Please enter client");
+        toast.error('Please enter client');
         return newRow;
       }
 
       if (!newRow.guidelines) {
-        toast.error("Please enter guidelines");
+        toast.error('Please enter guidelines');
         return newRow;
       }
 
@@ -269,7 +275,6 @@ export const CampaignListView = () => {
     console.log({ children: error.message, severity: 'error' });
   }, []);
 
-
   // ******************************data grid handler ends*********************
 
   const handleAddNewItem = () => {
@@ -307,7 +312,7 @@ export const CampaignListView = () => {
         gate,
         filters,
         sort,
-        groups: selectedView?.meta?.groups
+        groups: selectedView?.meta?.groups,
       };
 
       const res = await updateCampaignView(view, data);
@@ -315,13 +320,13 @@ export const CampaignListView = () => {
         getSingleView(view);
       }
     }
-  }
+  };
 
   // handle Column Search
   const handleColumnSearch = (e) => {
     const searchValue = e.target.value.toLowerCase();
     setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
-  }
+  };
 
   const showAllColumns = async () => {
     const newVisibleColumns = allColumns;
@@ -337,7 +342,7 @@ export const CampaignListView = () => {
         gate,
         filters,
         sort,
-        groups: selectedView?.meta?.groups
+        groups: selectedView?.meta?.groups,
       };
 
       const res = await updateCampaignView(view, data);
@@ -345,7 +350,7 @@ export const CampaignListView = () => {
         getSingleView(view);
       }
     }
-  }
+  };
 
   const hideAllColumns = async () => {
     const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
@@ -361,7 +366,7 @@ export const CampaignListView = () => {
         gate,
         filters,
         sort,
-        groups: selectedView?.meta?.groups
+        groups: selectedView?.meta?.groups,
       };
 
       const res = await updateCampaignView(view, data);
@@ -369,19 +374,19 @@ export const CampaignListView = () => {
         getSingleView(view);
       }
     }
-  }
+  };
 
   // FILTERS
   // handle filter apply
   const handleFilterApply = async () => {
     if (view) {
       updateView({ filters }).then(() => {
-        getSingleView(view)
+        getSingleView(view);
       });
     } else {
       fetchList(filters);
     }
-  }
+  };
 
   // handle remove filter condition
   const handleRemoveFilterCondition = (index) => {
@@ -389,7 +394,7 @@ export const CampaignListView = () => {
     setFilters(newFilters);
     if (view) {
       updateView({ filters: newFilters }).then(() => {
-        getSingleView(view)
+        getSingleView(view);
       });
     } else {
       fetchList(newFilters);
@@ -401,7 +406,7 @@ export const CampaignListView = () => {
     setFilters([]);
     if (view) {
       updateView({ filters: [] }).then(() => {
-        getSingleView(view)
+        getSingleView(view);
       });
     } else {
       fetchList([]);
@@ -411,21 +416,21 @@ export const CampaignListView = () => {
   // initialize
   const initialize = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const campaigns = await getCampaignListAsync({
         page: 1,
         rowsPerPage: 1,
       });
 
       // set meta data
-      setMetaData(campaigns.meta)
-      const columns = campaigns.meta.map(obj => {
+      setMetaData(campaigns.meta);
+      const columns = campaigns.meta.map((obj) => {
         const key = Object.keys(obj)[0];
         return {
           label: obj[key].label,
           columnName: key,
           type: obj[key].type,
-          depth: obj[key].depth
+          depth: obj[key].depth,
         };
       });
 
@@ -433,15 +438,14 @@ export const CampaignListView = () => {
 
       // set views
       const viewsData = await getCampaignViews();
-      setViews(viewsData.data)
+      setViews(viewsData.data);
 
       const viewId = searchParams.get('view');
 
-
       if (viewId) {
-        getSingleView(viewId, pagination)
+        getSingleView(viewId, pagination);
       } else if (viewsData.data.length > 0) {
-        getSingleView(viewsData.data[0].id, pagination)
+        getSingleView(viewsData.data[0].id, pagination);
         router.push(`?tab=campaign&view=${viewsData.data[0].id}`);
       } else {
         const payload = {
@@ -451,32 +455,31 @@ export const CampaignListView = () => {
           gate: 'and',
           isPublic: true,
           filters: [],
-          columns: columns.map(col => col.columnName),
+          columns: columns.map((col) => col.columnName),
           sort: [],
-          groups: []
-        }
+          groups: [],
+        };
         const res = await createCampaignView(payload);
         if (res.success) {
           const response = await getCampaignViews();
-          setViews(response.data)
-          getSingleView(res.data.id, pagination)
+          setViews(response.data);
+          getSingleView(res.data.id, pagination);
           router.push(`?tab=campaign&view=${res.data.id}`);
         }
       }
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   // update visible columns
   React.useEffect(() => {
     if (allColumns.length === 0) return;
     if (view && selectedView) {
       const selectedColumnNames = selectedView.meta?.columns || [];
-      const filtered = allColumns.filter(col => selectedColumnNames.includes(col.columnName));
+      const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
       setVisibleColumns(filtered);
     } else {
       setVisibleColumns(allColumns);
@@ -484,13 +487,11 @@ export const CampaignListView = () => {
     setSearchColumns(allColumns);
   }, [view, selectedView, allColumns]);
 
-
   // Watch for URL viewId change
   React.useEffect(() => {
-    setPagination(prev => ({ ...prev, pageNo: 1 }));
-    initialize()
+    setPagination((prev) => ({ ...prev, pageNo: 1 }));
+    initialize();
   }, [searchParams]);
-
 
   return (
     <PageContainer>
@@ -501,7 +502,7 @@ export const CampaignListView = () => {
               startIcon={<TableReorderIcon />}
               variant="text"
               size="small"
-              onClick={() => setShowView(prev => !prev)}
+              onClick={() => setShowView((prev) => !prev)}
               sx={{ bgcolor: showView ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
             >
               View
@@ -527,11 +528,7 @@ export const CampaignListView = () => {
               handleClearFilters={handleClearFilters}
             />
 
-            <Button
-              startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />}
-              variant="text"
-              size="small"
-            >
+            <Button startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />} variant="text" size="small">
               Group
             </Button>
 
@@ -558,11 +555,12 @@ export const CampaignListView = () => {
               passwordInput
               id={selectedRows.map((row) => row.id)}
               deleteFn={deleteCampaignBulkAsync}
-              disabled={selectedRows.length === 0} />
+              disabled={selectedRows.length === 0}
+            />
           </Box>
         </Box>
 
-        <Box display='flex' justifyContent='center' alignItems='start'>
+        <Box display="flex" justifyContent="center" alignItems="start">
           {/* View */}
           <TableView
             views={views}
@@ -596,7 +594,6 @@ export const CampaignListView = () => {
         </Box>
       </Card>
 
-
       {/* Image upload popover */}
       <Popover
         open={Boolean(anchorEl.current)}
@@ -616,17 +613,10 @@ export const CampaignListView = () => {
       >
         <Box sx={{ p: 1.5 }}>
           {imageToShow && (
-            <Image
-              src={imageToShow}
-              alt="Preview"
-              width={300}
-              height={300}
-              style={{ borderRadius: 8 }}
-            />
+            <Image src={imageToShow} alt="Preview" width={300} height={300} style={{ borderRadius: 8 }} />
           )}
         </Box>
       </Popover>
-
 
       {/* Hide fields popover */}
       <Popover
@@ -657,37 +647,46 @@ export const CampaignListView = () => {
               onChange={(e) => handleColumnSearch(e)}
             />
           </Box>
-          <FormGroup sx={{ gap: 0.5, p: 1, display: 'flex', flexDirection: 'column', minHeight: 'auto', flexWrap: 'nowrap', maxHeight: 250, overflowY: 'auto', scrollbarWidth: 'thin' }}>
-            {searchColumns.filter((col) => col.columnName !== 'id')?.map((col) => {
-              return <FormControlLabel
-                key={col.field}
-                control={<Checkbox
-                  checked={visibleColumns.some((c) => c.columnName === col.columnName)}
-                  onChange={e => handleColumnChange(e, col)}
-                />}
-                label={col.label}
-              />
-            })}
+          <FormGroup
+            sx={{
+              gap: 0.5,
+              p: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: 'auto',
+              flexWrap: 'nowrap',
+              maxHeight: 250,
+              overflowY: 'auto',
+              scrollbarWidth: 'thin',
+            }}
+          >
+            {searchColumns
+              .filter((col) => col.columnName !== 'id')
+              ?.map((col) => {
+                return (
+                  <FormControlLabel
+                    key={col.field}
+                    control={
+                      <Checkbox
+                        checked={visibleColumns.some((c) => c.columnName === col.columnName)}
+                        onChange={(e) => handleColumnChange(e, col)}
+                      />
+                    }
+                    label={col.label}
+                  />
+                );
+              })}
           </FormGroup>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }}>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={hideAllColumns}
-            >
+            <Button variant="outlined" size="small" onClick={hideAllColumns}>
               Hide all
             </Button>
-            <Button
-              variant="contained"
-              size="small"
-              onClick={showAllColumns}
-            >
+            <Button variant="contained" size="small" onClick={showAllColumns}>
               Show all
             </Button>
           </Box>
         </Box>
       </Popover>
-
 
       {/* Image upload dialog */}
       <MediaUploader

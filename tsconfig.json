@@ -27,7 +27,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/app/(public)/campaign/_components/campaign-list-view-skelton.jsx"  ],
   "exclude": [
     "node_modules"
   ]
