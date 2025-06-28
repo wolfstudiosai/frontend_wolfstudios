@@ -1,14 +1,23 @@
 'use client';
 
-import * as React from 'react';
+import AddIcon from '@mui/icons-material/Add';
+import TableReorderIcon from '@mui/icons-material/Reorder';
+import { Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
+import { alpha, useTheme } from '@mui/material/styles';
+import { useSearchParams } from 'next/navigation';
+import * as React from 'react';
+import { toast } from 'sonner';
 
+import TableFilterBuilder from '/src/components/common/table-filter-builder';
+import TableView from '/src/components/common/table-view';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
+import { Iconify } from '/src/components/iconify/iconify';
 
 import {
   createContentAsync,
@@ -17,20 +26,10 @@ import {
   getContentViews,
   getSingleContentView,
   updateContentAsync,
-  updateContentView
+  updateContentView,
 } from '../_lib/all-content.actions';
 import { defaultContent } from '../_lib/all-content.types';
-import { Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import { toast } from 'sonner';
 import { getContentColumns } from '../_utils/get-content-columns';
-import TableFilterBuilder from '/src/components/common/table-filter-builder';
-import TableView from '/src/components/common/table-view';
-import { useTheme } from '@mui/material/styles';
-import { useSearchParams } from 'next/navigation';
-import TableReorderIcon from '@mui/icons-material/Reorder';
-import { alpha } from '@mui/material/styles';
-import { Iconify } from '/src/components/iconify/iconify';
 
 export default function AllContentListView() {
   const theme = useTheme();
@@ -64,12 +63,12 @@ export default function AllContentListView() {
 
   // table columns
   const allColumns = React.useMemo(() => {
-    const columns = metaData.map(obj => {
+    const columns = metaData.map((obj) => {
       const key = Object.keys(obj)[0];
       return {
         label: obj[key].label,
         columnName: key,
-        depth: obj[key].depth
+        depth: obj[key].depth,
       };
     });
     return columns;
@@ -81,17 +80,19 @@ export default function AllContentListView() {
 
   const fetchList = async () => {
     try {
-      const response = await getContentList({
-        page: pagination.pageNo,
-        rowsPerPage: pagination.limit,
-      }, filters, gate);
-
-      console.log(response);
+      const response = await getContentList(
+        {
+          page: pagination.pageNo,
+          rowsPerPage: pagination.limit,
+        },
+        filters,
+        gate
+      );
 
       if (response.success) {
         setRecords(response.data.map((row) => defaultContent(row)));
         setTotalRecords(response.totalRecords);
-        setMetaData(response.metaData)
+        setMetaData(response.metaData);
       }
     } catch (error) {
       console.error('Error fetching contents:', error);
@@ -110,8 +111,8 @@ export default function AllContentListView() {
       gate,
       filters,
       sort: selectedView?.meta?.sort,
-      groups: selectedView?.meta?.groups
-    }
+      groups: selectedView?.meta?.groups,
+    };
     await updateContentView(view, data);
   }
 
@@ -128,47 +129,47 @@ export default function AllContentListView() {
     const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
     if (isTemporaryId) {
       if (!newRow.name) {
-        toast.error("Please enter name");
+        toast.error('Please enter name');
         return newRow;
       }
 
       if (!newRow.revoPinterest) {
-        toast.error("Please enter pinterest status");
+        toast.error('Please enter pinterest status');
         return newRow;
       }
 
       if (!newRow.pinAccountsUsed) {
-        toast.error("Please enter pin accounts used");
+        toast.error('Please enter pin accounts used');
         return newRow;
       }
 
       if (!newRow.googleDriveFiles) {
-        toast.error("Please enter google drive files");
+        toast.error('Please enter google drive files');
         return newRow;
       }
 
       if (!newRow.playbookLink) {
-        toast.error("Please enter playbook link");
+        toast.error('Please enter playbook link');
         return newRow;
       }
 
       if (!newRow.monthUploaded) {
-        toast.error("Please enter month uploaded");
+        toast.error('Please enter month uploaded');
         return newRow;
       }
 
       if (!newRow.assetStatus) {
-        toast.error("Please enter asset status");
+        toast.error('Please enter asset status');
         return newRow;
       }
 
       if (!newRow.revoInstagram) {
-        toast.error("Please enter instagram status");
+        toast.error('Please enter instagram status');
         return newRow;
       }
 
       if (!newRow.creatorStatus) {
-        toast.error("Please enter creator status");
+        toast.error('Please enter creator status');
         return newRow;
       }
 
@@ -180,7 +181,6 @@ export default function AllContentListView() {
     }
 
     return newRow;
-
   }, []);
 
   // console.log(data)
@@ -215,7 +215,7 @@ export default function AllContentListView() {
       setGate(res.data.meta?.gate || 'and');
       setFiltersLoaded(true);
     }
-  }
+  };
 
   const handleColumnChange = (e, col) => {
     let newVisibleColumns = [];
@@ -240,19 +240,18 @@ export default function AllContentListView() {
         gate,
         filters,
         sort: selectedView?.meta?.sort,
-        groups: selectedView?.meta?.groups
+        groups: selectedView?.meta?.groups,
       };
 
       updateContentView(view, data);
     }
-  }
+  };
 
   // handle Column Search
   const handleColumnSearch = (e) => {
     const searchValue = e.target.value.toLowerCase();
     setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
-  }
-
+  };
 
   // run when pagination, filters, gate, filtersLoaded change
   React.useEffect(() => {
@@ -266,7 +265,7 @@ export default function AllContentListView() {
     const view = searchParams.get('view');
 
     // Reset pageNo to 1 on view change
-    setPagination(prev => ({ ...prev, pageNo: 1 }));
+    setPagination((prev) => ({ ...prev, pageNo: 1 }));
 
     if (view) {
       getSingleView(view);
@@ -292,9 +291,7 @@ export default function AllContentListView() {
   React.useEffect(() => {
     if (selectedView && metaData.length > 0) {
       const selectedColumnNames = selectedView.meta?.columns || [];
-      const filteredColumns = allColumns.filter((col) =>
-        selectedColumnNames.includes(col.columnName)
-      );
+      const filteredColumns = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
       setVisibleColumns(filteredColumns);
     }
   }, [metaData, selectedView, allColumns]);
@@ -308,7 +305,7 @@ export default function AllContentListView() {
         setViews(res.data);
       }
       setViewsLoading(false);
-    }
+    };
     fetchViews();
   }, []);
 
@@ -321,7 +318,7 @@ export default function AllContentListView() {
               startIcon={<TableReorderIcon />}
               variant="text"
               size="small"
-              onClick={() => setShowView(prev => !prev)}
+              onClick={() => setShowView((prev) => !prev)}
               sx={{ bgcolor: showView ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
             >
               View
@@ -345,11 +342,7 @@ export default function AllContentListView() {
               updateView={updateView}
             />
 
-            <Button
-              startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />}
-              variant="text"
-              size="small"
-            >
+            <Button startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />} variant="text" size="small">
               Group
             </Button>
             <Button
@@ -379,7 +372,7 @@ export default function AllContentListView() {
           </Box>
         </Box>
 
-        <Box display='flex' justifyContent='center' alignItems='start'>
+        <Box display="flex" justifyContent="center" alignItems="start">
           {/* View */}
           <TableView
             views={views}
@@ -445,14 +438,18 @@ export default function AllContentListView() {
                     </Box>
                   )} */}
             {searchColumns?.map((col) => {
-              return <FormControlLabel
-                key={col.field}
-                control={<Checkbox
-                  checked={visibleColumns.some((c) => c.columnName === col.columnName)}
-                  onChange={e => handleColumnChange(e, col)}
-                />}
-                label={col.label}
-              />
+              return (
+                <FormControlLabel
+                  key={col.field}
+                  control={
+                    <Checkbox
+                      checked={visibleColumns.some((c) => c.columnName === col.columnName)}
+                      onChange={(e) => handleColumnChange(e, col)}
+                    />
+                  }
+                  label={col.label}
+                />
+              );
             })}
           </FormGroup>
         </Box>

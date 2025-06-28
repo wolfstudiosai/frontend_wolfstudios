@@ -1,27 +1,44 @@
 'use client';
 
 import * as React from 'react';
-import { Box, Button, Card, Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField } from '@mui/material';
+import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
+import AddIcon from '@mui/icons-material/Add';
+import TableReorderIcon from '@mui/icons-material/Reorder';
+import {
+  Box,
+  Button,
+  Card,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  IconButton,
+  Popover,
+  TextField,
+} from '@mui/material';
+import { alpha, useTheme } from '@mui/material/styles';
+import { toast } from 'sonner';
 
+import TableFilterBuilder from '/src/components/common/table-filter-builder';
+import TableView from '/src/components/common/table-view';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
-
-import { createPartnerAsync, deletePartnerAsync, getPartnerListAsync, getPartnerViews, getSinglePartnerView, updatePartnerAsync, updatePartnerView } from '../_lib/partner.actions';
-import { defaultPartner } from '../_lib/partner.types';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import Image from 'next/image';
-import { getPartnerColumns } from '../_utils/get-partner-columns';
-import { MediaUploader } from '/src/components/uploaders/media-uploader';
-import AddIcon from '@mui/icons-material/Add';
-import { toast } from 'sonner';
-import TableFilterBuilder from '/src/components/common/table-filter-builder';
-import TableView from '/src/components/common/table-view';
-import { useTheme } from '@mui/material/styles';
 import { Iconify } from '/src/components/iconify/iconify';
-import { alpha } from '@mui/material/styles';
-import TableReorderIcon from '@mui/icons-material/Reorder';
-import { useSearchParams } from 'next/navigation';
+import { MediaUploader } from '/src/components/uploaders/media-uploader';
+
+import {
+  createPartnerAsync,
+  deletePartnerAsync,
+  getPartnerListAsync,
+  getPartnerViews,
+  getSinglePartnerView,
+  updatePartnerAsync,
+  updatePartnerView,
+} from '../_lib/partner.actions';
+import { defaultPartner } from '../_lib/partner.types';
+import { getPartnerColumns } from '../_utils/get-partner-columns';
 
 export const PartnerListView = () => {
   const theme = useTheme();
@@ -29,6 +46,8 @@ export const PartnerListView = () => {
   const [anchorElHide, setAnchorElHide] = React.useState(null);
   const [imageToShow, setImageToShow] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+  const searchParams = useSearchParams();
+  const viewId = searchParams.get('view');
 
   const handleUploadModalOpen = (data) => {
     setOpen(true);
@@ -57,10 +76,7 @@ export const PartnerListView = () => {
   const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([]);
   const [viewsLoading, setViewsLoading] = React.useState(false);
-  const searchParams = useSearchParams();
-  const tab = searchParams.get('tab');
-  const view = searchParams.get('view');
-  const [selectedView, setSelectedView] = React.useState(null)
+  const [selectedView, setSelectedView] = React.useState(null);
 
   // filter
   const [metaData, setMetaData] = React.useState([]);
@@ -70,12 +86,12 @@ export const PartnerListView = () => {
 
   // table columns
   const allColumns = React.useMemo(() => {
-    const columns = metaData.map(obj => {
+    const columns = metaData.map((obj) => {
       const key = Object.keys(obj)[0];
       return {
         label: obj[key].label,
         columnName: key,
-        depth: obj[key].depth
+        depth: obj[key].depth,
       };
     });
     return columns;
@@ -87,16 +103,20 @@ export const PartnerListView = () => {
     anchorEl,
     setImageToShow,
     handleUploadModalOpen,
-    visibleColumns
+    visibleColumns,
   });
 
   async function fetchList() {
     try {
       setLoading(true);
-      const response = await getPartnerListAsync({
-        page: pagination.pageNo,
-        rowsPerPage: pagination.limit,
-      }, filters, gate);
+      const response = await getPartnerListAsync(
+        {
+          page: pagination.pageNo,
+          rowsPerPage: pagination.limit,
+        },
+        filters,
+        gate
+      );
 
       if (response.success) {
         setRecords(response.data.map((row) => defaultPartner(row)) || []);
@@ -120,9 +140,9 @@ export const PartnerListView = () => {
       gate,
       filters,
       sort: selectedView?.meta?.sort,
-      groups: selectedView?.meta?.groups
-    }
-    await updatePartnerView(view, data);
+      groups: selectedView?.meta?.groups,
+    };
+    await updatePartnerView(viewId, data);
   }
 
   // update partner after images uploaded
@@ -130,15 +150,15 @@ export const PartnerListView = () => {
     try {
       const newData = {
         ...updatedRow,
-        profileImage: [...updatedRow.profileImage, ...images]
-      }
+        profileImage: [...updatedRow.profileImage, ...images],
+      };
       await updatePartnerAsync(newData);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
       fetchList();
     }
-  }
+  };
 
   // ******************************data grid handler starts*********************
 
@@ -147,7 +167,7 @@ export const PartnerListView = () => {
     setPagination({ pageNo: page + 1, limit: pageSize });
   };
 
-  // update or create partner 
+  // update or create partner
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
 
@@ -155,12 +175,12 @@ export const PartnerListView = () => {
 
     if (isTemporaryId) {
       if (!newRow.name) {
-        toast.error("Please enter name");
+        toast.error('Please enter name');
         return newRow;
       }
 
       if (!newRow.email) {
-        toast.error("Please enter email");
+        toast.error('Please enter email');
         return newRow;
       }
 
@@ -230,8 +250,7 @@ export const PartnerListView = () => {
       amountPaid: '',
       totalContributedEngagementByContent: '0',
       totalAudience: '',
-      platformDeliverables:
-        [],
+      platformDeliverables: [],
       platforms: [],
       previousCollabExpense: '',
       revoOffer: '',
@@ -289,7 +308,7 @@ export const PartnerListView = () => {
 
   // Column delete
   const handleDelete = async () => {
-    fetchList()
+    fetchList();
   };
 
   // get single view
@@ -301,7 +320,7 @@ export const PartnerListView = () => {
       setGate(res.data.meta?.gate || 'and');
       setFiltersLoaded(true);
     }
-  }
+  };
 
   const handleColumnChange = (e, col) => {
     let newVisibleColumns = [];
@@ -316,7 +335,7 @@ export const PartnerListView = () => {
     }
     setVisibleColumns(newVisibleColumns);
 
-    if (tab === 'campaign' && view) {
+    if (viewId) {
       const data = {
         columns: newVisibleColumns.map((c) => c.columnName),
         label: selectedView?.meta?.label,
@@ -326,18 +345,18 @@ export const PartnerListView = () => {
         gate,
         filters,
         sort: selectedView?.meta?.sort,
-        groups: selectedView?.meta?.groups
+        groups: selectedView?.meta?.groups,
       };
 
-      updatePartnerView(view, data);
+      updatePartnerView(viewId, data);
     }
-  }
+  };
 
   // handle Column Search
   const handleColumnSearch = (e) => {
     const searchValue = e.target.value.toLowerCase();
     setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
-  }
+  };
 
   // run when pagination, filters, gate, filtersLoaded change
   React.useEffect(() => {
@@ -351,7 +370,7 @@ export const PartnerListView = () => {
     const view = searchParams.get('view');
 
     // Reset pageNo to 1 on view change
-    setPagination(prev => ({ ...prev, pageNo: 1 }));
+    setPagination((prev) => ({ ...prev, pageNo: 1 }));
 
     if (view) {
       getSingleView(view);
@@ -377,9 +396,7 @@ export const PartnerListView = () => {
   React.useEffect(() => {
     if (selectedView && metaData.length > 0) {
       const selectedColumnNames = selectedView.meta?.columns || [];
-      const filteredColumns = allColumns.filter((col) =>
-        selectedColumnNames.includes(col.columnName)
-      );
+      const filteredColumns = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
       setVisibleColumns(filteredColumns);
     }
   }, [metaData, selectedView, allColumns]);
@@ -393,10 +410,9 @@ export const PartnerListView = () => {
         setViews(res.data);
       }
       setViewsLoading(false);
-    }
+    };
     fetchViews();
   }, []);
-
 
   return (
     <PageContainer>
@@ -407,7 +423,7 @@ export const PartnerListView = () => {
               startIcon={<TableReorderIcon />}
               variant="text"
               size="small"
-              onClick={() => setShowView(prev => !prev)}
+              onClick={() => setShowView((prev) => !prev)}
               sx={{ bgcolor: showView ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
             >
               View
@@ -431,11 +447,7 @@ export const PartnerListView = () => {
               updateView={updateView}
             />
 
-            <Button
-              startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />}
-              variant="text"
-              size="small"
-            >
+            <Button startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />} variant="text" size="small">
               Group
             </Button>
             <Button
@@ -463,7 +475,7 @@ export const PartnerListView = () => {
           </Box>
         </Box>
 
-        <Box display='flex' justifyContent='center' alignItems='start'>
+        <Box display="flex" justifyContent="center" alignItems="start">
           {/* View */}
           <TableView
             views={views}
@@ -512,17 +524,10 @@ export const PartnerListView = () => {
       >
         <Box sx={{ p: 1.5 }}>
           {imageToShow && (
-            <Image
-              src={imageToShow}
-              alt="Preview"
-              width={300}
-              height={300}
-              style={{ borderRadius: 8 }}
-            />
+            <Image src={imageToShow} alt="Preview" width={300} height={300} style={{ borderRadius: 8 }} />
           )}
         </Box>
       </Popover>
-
 
       {/* Hide fields popover */}
       <Popover
@@ -555,14 +560,18 @@ export const PartnerListView = () => {
           </Box>
           <FormGroup sx={{ gap: 0.5, p: 1 }}>
             {searchColumns?.map((col) => {
-              return <FormControlLabel
-                key={col.field}
-                control={<Checkbox
-                  checked={visibleColumns.some((c) => c.columnName === col.columnName)}
-                  onChange={e => handleColumnChange(e, col)}
-                />}
-                label={col.label}
-              />
+              return (
+                <FormControlLabel
+                  key={col.field}
+                  control={
+                    <Checkbox
+                      checked={visibleColumns.some((c) => c.columnName === col.columnName)}
+                      onChange={(e) => handleColumnChange(e, col)}
+                    />
+                  }
+                  label={col.label}
+                />
+              );
             })}
           </FormGroup>
         </Box>
@@ -577,7 +586,6 @@ export const PartnerListView = () => {
         hideVideoUploader={true}
         folderName="partner-HQ"
       />
-
     </PageContainer>
   );
 };
