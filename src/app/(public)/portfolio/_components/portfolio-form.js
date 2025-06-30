@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { useFormik } from 'formik';
 
 import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
+import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
@@ -142,7 +143,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
   React.useEffect(() => {
     const fetchPrerequisitesData = async () => {
       try {
-        const countryResponse = await getCountryListAsync({ page: 1, rowsPerPage: 100 });
+        const countryResponse = await getCountryListAsync({ page: 1, rowsPerPage: 20 });
         if (countryResponse?.success) {
           const countryOptions = countryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
           setCountries(countryOptions);
@@ -152,17 +153,17 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
           //   setFieldValue("countries", preSelected);
           // }
         }
-        const stateResponse = await getStateListAsync({ page: 1, rowsPerPage: 100 });
+        const stateResponse = await getStateListAsync({ page: 1, rowsPerPage: 20 });
         if (stateResponse?.success) {
           const stateOptions = stateResponse.data.map((item) => ({ value: item.id, label: item.Name }));
           setStates(stateOptions);
         }
-        const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 100 });
+        const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 20 });
         if (categoryResponse?.success) {
           const categoryOptions = categoryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
           setPortfolioCategories(categoryOptions);
         }
-        const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 100 });
+        const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 20 });
         if (partnerResponse?.success) {
           const partnerOptions = partnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
           setPartners(partnerOptions);
@@ -217,12 +218,21 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomAutoComplete
+            <CustomAutoCompleteV2
               label="Countries"
-              value={values.countries}
-              onChange={(_, value) => setFieldValue('countries', value)}
-              options={countries}
               multiple
+              value={values.countries}
+              defaultOptions={countries}
+              onChange={(e, val) => setFieldValue('countries', val)}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 100 };
+                const res = await getCountryListAsync(paging, debounceValue);
+                console.log(res);
+                return res.data.map((item) => ({
+                  label: item.Name,
+                  value: item.id,
+                }));
+              }}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>

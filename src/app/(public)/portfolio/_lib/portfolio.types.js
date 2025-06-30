@@ -1,14 +1,25 @@
 
 export const defaultPortfolio = (data) => {
-  const defaultData = {
+  const defaultValue = {
     id: data?.id || null,
     projectTitle: data?.ProjectTitle || '',
-    date: data?.Date ? data?.Date : null,
     shortDescription: data?.Projectshortdescription || '',
     fullDescription: data?.Projectsinglepagefulldescription || '',
+    videoLink: data?.VideoLink || '',
+    date: data?.Date ? data?.Date : null,
+    horizontalImageGallery: data?.HorizontalImageGallery || [],
+    verticalImageGallery: data?.VerticalImageGallery || [],
+    singlePageHeroImage: data?.SinglePageHeroImage || [],
+    thumbnailImage: data?.ThumbnailImage || [],
+    imagefield: data?.Imagefield || [],
+    isFeatured: data?.IsFeatured || false,
     portfolioCategories: data?.PortfolioCategoriesPortfolios?.map((item) => ({
       value: item?.PortfolioCategories?.id,
       label: item?.PortfolioCategories?.Name
+    })) || [],
+    partnerHQ: data?.PartnerHQPortfolios?.map((item) => ({
+      value: item?.PartnerHQ?.id,
+      label: item?.PartnerHQ?.Name
     })) || [],
     states: data?.ByStatesPortfolios?.map((item) => ({
       value: item?.ByStates?.id,
@@ -18,17 +29,12 @@ export const defaultPortfolio = (data) => {
       value: item?.ByCountry?.id,
       label: item?.ByCountry?.Name
     })) || [],
-    partnerHQ: data?.PartnerHQPortfolios?.map((item) => ({
-      value: item?.PartnerHQ?.id,
-      label: item?.PartnerHQ?.Name
+    caseStudies: data?.CaseStudiesPortfolios?.map((item) => ({
+      value: item?.CaseStudies?.id,
+      label: item?.CaseStudies?.Name
     })) || [],
-    videoLink: data?.VideoLink || '',
-    singlePageHeroImage: data?.SinglePageHeroImage || [],
-    imagefield: data?.Imagefield || [],
-    thumbnailImage: data?.ThumbnailImage || [],
-    verticalImageGallery: data?.VerticalImageGallery || [],
-    horizontalImageGallery: data?.HorizontalImageGallery || [],
   }
 
-  return defaultData;
+
+  return defaultValue;
 }
