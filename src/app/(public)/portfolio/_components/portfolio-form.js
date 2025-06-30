@@ -94,10 +94,6 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
         if (finalData.videoLink.length === 0) {
           delete finalData.videoLink;
         }
-        if (finalData.date) {
-          finalData.date = dayjs(finalData.date).format('MMMM YYYY');
-        }
-        console.log(finalData);
 
         const res = id ? await updatePortfolioAsync(id, finalData) : await createPortfolioAsync(finalData);
         if (res.success) {
@@ -145,7 +141,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
       try {
         const countryResponse = await getCountryListAsync({ page: 1, rowsPerPage: 20 });
         if (countryResponse?.success) {
-          const countryOptions = countryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          const countryOptions = countryResponse.data.map((item) => ({ value: item.id, label: item.name }));
           setCountries(countryOptions);
           // if (data) {
           //   const preSelectedOptionsLabel = data?.ByCountryPortfolios?.map((item) => item?.ByCountry?.Name)?.filter(Boolean);
@@ -155,17 +151,17 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
         }
         const stateResponse = await getStateListAsync({ page: 1, rowsPerPage: 20 });
         if (stateResponse?.success) {
-          const stateOptions = stateResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          const stateOptions = stateResponse.data.map((item) => ({ value: item.id, label: item.name }));
           setStates(stateOptions);
         }
         const categoryResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 20 });
         if (categoryResponse?.success) {
-          const categoryOptions = categoryResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          const categoryOptions = categoryResponse.data.map((item) => ({ value: item.id, label: item.name }));
           setPortfolioCategories(categoryOptions);
         }
         const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 20 });
         if (partnerResponse?.success) {
-          const partnerOptions = partnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          const partnerOptions = partnerResponse.data.map((item) => ({ value: item.id, label: item.name }));
           setPartners(partnerOptions);
         }
       } catch (err) {
@@ -190,33 +186,66 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
             />
             <ErrorMessage error={errors.projectTitle} />
           </Grid>
+
+          {/* categories */}
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomAutoComplete
+            <CustomAutoCompleteV2
               label="Categories"
+              multiple
               value={values.portfolioCategories}
+              defaultOptions={portfolioCategories}
               onChange={(_, value) => setFieldValue('portfolioCategories', value)}
-              options={portfolioCategories}
-              multiple
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getPortfolioCategoryListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
             />
           </Grid>
+
+          {/* partners */}
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomAutoComplete
+            <CustomAutoCompleteV2
               label="Partners"
+              multiple
               value={values.partnerHQ}
+              defaultOptions={partners}
               onChange={(_, value) => setFieldValue('partnerHQ', value)}
-              options={partners}
-              multiple
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const filters = [{ key: "name", type: "string", operator: "contains", value: debounceValue }];
+                const res = await getPartnerListAsync(paging, filters, 'and');
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
             />
           </Grid>
+
+          {/* states */}
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomAutoComplete
+            <CustomAutoCompleteV2
               label="States"
-              value={values.states}
-              onChange={(_, value) => setFieldValue('states', value)}
-              options={states}
               multiple
+              value={values.states}
+              defaultOptions={states}
+              onChange={(_, value) => setFieldValue('states', value)}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getStateListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
             />
           </Grid>
+
+          {/* countries */}
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoCompleteV2
               label="Countries"
@@ -227,14 +256,15 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 100 };
                 const res = await getCountryListAsync(paging, debounceValue);
-                console.log(res);
-                return res.data.map((item) => ({
-                  label: item.Name,
+                return res?.data?.map((item) => ({
+                  label: item.name,
                   value: item.id,
-                }));
+                })) || [];
               }}
             />
           </Grid>
+
+          {/* date */}
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomDatePicker
               label={'Date'}
@@ -244,6 +274,8 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
               onChange={(value) => setFieldValue('date', value)}
             />
           </Grid>
+
+          {/* video link */}
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
               name="videoLink"
@@ -265,6 +297,8 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
               }}
             />
           </Grid>
+
+          {/* image field */}
           <Grid size={{ xs: 12, md: 4 }}>
             <FormControl fullWidth error={Boolean(errors.imagefield)}>
               <FormLabel sx={{ mb: 1 }}>Image Field</FormLabel>
@@ -275,6 +309,8 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
               />
             </FormControl>
           </Grid>
+
+          {/* hero image */}
           <Grid size={{ xs: 12, md: 4 }}>
             <FormControl fullWidth error={Boolean(errors.singlePageHeroImage)}>
               <FormLabel sx={{ mb: 1 }}>Hero Image</FormLabel>
@@ -285,6 +321,8 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
               />
             </FormControl>
           </Grid>
+
+          {/* thumbnail */}
           <Grid size={{ xs: 12, md: 4 }}>
             <FormControl fullWidth error={Boolean(errors.thumbnailImage)}>
               <FormLabel sx={{ mb: 1 }}>Thumbnail</FormLabel>
@@ -295,6 +333,8 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
               />
             </FormControl>
           </Grid>
+
+          {/* short description */}
           <Grid size={{ xs: 12 }}>
             <CustomTextField
               name="shortDescription"
@@ -305,6 +345,8 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
               rows={2}
             />
           </Grid>
+
+          {/* full description */}
           <Grid size={{ xs: 12 }}>
             <CustomTextField
               name="fullDescription"
@@ -316,6 +358,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
             />
           </Grid>
 
+          {/* vertical image gallery */}
           <Grid size={{ xs: 12, md: 6 }}>
             <MediaUploaderTrigger
               open={openVerticalUploadDialog}
@@ -329,6 +372,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
             />
           </Grid>
 
+          {/* horizontal image gallery */}
           <Grid size={{ xs: 12, md: 6 }}>
             <MediaUploaderTrigger
               open={openHorizontalUploadDialog}
@@ -342,6 +386,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
             />
           </Grid>
 
+          {/* save button */}
           <Grid size={{ xs: 12 }}>
             <Stack direction="row" justifyContent="flex-end">
               <Button size="small" variant="contained" color="primary" disabled={loading} type="submit">

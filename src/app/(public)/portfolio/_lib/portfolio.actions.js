@@ -96,13 +96,17 @@ export const deleteFileAsync = async (paths) => {
   }
 };
 
-export const getPortfolioCategoryListAsync = async (queryParams) => {
+export const getPortfolioCategoryListAsync = async (queryParams, searchValue) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    const res = await api.get(`/portfolio-categories${searchQuery}`);
+    let url = `/portfolio-categories${searchQuery}`
+    if (searchValue) {
+      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
+    }
+    const res = await api.get(url);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
-    toast.error(error.message);
+    // toast.error(error.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
