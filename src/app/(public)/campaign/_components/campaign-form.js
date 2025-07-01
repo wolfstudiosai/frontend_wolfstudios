@@ -279,6 +279,44 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
             />
           </Grid>
 
+          {/* Retail Partner 2 */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Retail Partner 2"
+              value={values.retailPartners2}
+              onChange={(_, value) => setFieldValue('retailPartners2', value)}
+              defaultOptions={retailPartnerOptions}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getRetailPartnerListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Retail Partner 3 */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Retail Partner 3"
+              value={values.retailPartners3}
+              onChange={(_, value) => setFieldValue('retailPartners3', value)}
+              defaultOptions={retailPartnerOptions}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getRetailPartnerListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
           {/* Contributed Partner */}
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoCompleteV2

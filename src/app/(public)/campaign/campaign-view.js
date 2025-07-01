@@ -22,6 +22,7 @@ export const CampaignView = () => {
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [data, setData] = React.useState([]);
   const [openPanel, setOpenPanel] = React.useState(false);
+  const [selectedItemId, setSelectedItemId] = React.useState(null);
   const [filters, setFilters] = React.useState({
     COL: 4,
     TAG: [],
@@ -53,12 +54,33 @@ export const CampaignView = () => {
     }
   }, [isFetching, pagination]);
 
+  const refetchList = React.useCallback(async () => {
+    if (isFetching) return;
+    setLoading(true);
+
+    try {
+      const response = await getCampaignGroupListAsync({
+        page: 1,
+        rowsPerPage: 10,
+      });
+
+      if (response.success) {
+        setData(response.data);
+        setTotalRecords(response.totalRecords);
+        setPagination((prev) => ({ ...prev, pageNo: 1 }));
+      }
+    } catch (error) {
+      console.error('Error fetching campaigns:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [isFetching]);
+
   const handleFilterChange = (type, value) => {
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
   const refreshListView = async () => {
-    console.log('campaign tab view...');
     const response = await getCampaignGroupListAsync({
       page: 1,
       rowsPerPage: 10,
@@ -111,7 +133,7 @@ export const CampaignView = () => {
           totalRecords={totalRecords}
           setOpenPanel={setOpenPanel}
         />
-        {/* {filters.VIEW === 'grid' ? (
+        {filters.VIEW === 'grid' ? (
           <Box>
             <CampaignGridView loading={loading} data={data} fetchList={refreshListView} />
             <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
@@ -119,17 +141,24 @@ export const CampaignView = () => {
             </div>
           </Box>
         ) : (
-          <CampaignTabView data={data} fetchList={refreshListView} />
-        )} */}
+          <Box>
+            {/* <CampaignTabView data={data} fetchList={refreshListView} /> */}
+          </Box>
+        )}
       </Box>
 
-      <ManageCampaignRightPanel
-        open={openPanel}
-        onClose={() => setOpenPanel(false)}
-        fetchList={refreshListView}
-        data={defaultCampaign}
-        view="ADD"
-      />
+      {openPanel && (
+        <CampaignRightPanel
+          onClose={() => {
+            setSelectedItemId(null)
+            setOpenPanel(false)
+          }}
+          fetchList={refetchList}
+          id={selectedItemId}
+          open={openPanel}
+          view="ADD"
+        />
+      )}
     </PageContainer>
   );
 };

@@ -11,7 +11,7 @@ import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 import { isVideoContent, pxToRem } from '/src/utils/helper';
 
 export const CampaignQuickView = ({ data }) => {
-  const mediaArr = [...(data?.ImageInspirationGallery || []), ...(data?.VideoInspirationGallery || [])];
+  const mediaArr = [...(data?.imageInspirationGallery || []), ...(data?.videoInspirationGallery || [])];
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -24,10 +24,10 @@ export const CampaignQuickView = ({ data }) => {
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Box>
             <Typography variant="h5" fontWeight={600} gutterBottom>
-              {data?.Name || 'Untitled'}
+              {data?.name || 'Untitled'}
             </Typography>
             <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              {data?.CampaignDescription || 'No description available.'}
+              {data?.campaignDescription || 'No description available.'}
             </Typography>
           </Box>
           <Button variant="contained">Join</Button>

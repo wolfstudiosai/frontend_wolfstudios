@@ -20,49 +20,49 @@ export const defaultCampaign = (data) => {
     campaignImage: data?.campaignImage?.[0] || [],
     contentHQ:
       data?.contentHQ?.map((item) => ({
-        value: item?.ContentHQ?.id,
-        label: item?.ContentHQ?.Name,
+        value: item?.id,
+        label: item?.name,
       })) || [],
     stakeholders:
       data?.stakeholders?.map((item) => ({
-        value: item?.Stakeholders?.id,
-        label: item?.Stakeholders?.Name,
+        value: item?.id,
+        label: item?.name,
       })) || [],
     retailPartners:
       data?.retailPartners?.map((item) => ({
-        value: item?.RetailPartners?.id,
-        label: item?.RetailPartners?.Name,
+        value: item?.id,
+        label: item?.name,
       })) || [],
     proposedPartners:
       data?.proposedPartners?.map((item) => ({
-        value: item?.ProposedPartners?.id,
-        label: item?.ProposedPartners?.Name,
+        value: item?.id,
+        label: item?.name,
       })) || [],
     contributedPartners:
       data?.contributedPartners?.map((item) => ({
-        value: item?.ContributedPartners?.id,
-        label: item?.ContributedPartners?.Name,
+        value: item?.id,
+        label: item?.name,
       })) || [],
     spaces:
       data?.spaces?.map((item) => ({
-        value: item?.Spaces?.id,
-        label: item?.Spaces?.Name,
+        value: item?.id,
+        label: item?.name,
       })) || [],
     productionHQ: data?.productionHQ?.map((item) => ({
       value: item?.id,
-      label: item?.Name,
+      label: item?.name,
     })) || [],
     products: data?.product?.map((item) => ({
       value: item?.id,
-      label: item?.Name,
+      label: item?.name,
     })) || [],
     retailPartners2: data?.retailPartners2?.map((item) => ({
       value: item?.id,
-      label: item?.Name,
+      label: item?.name,
     })) || [],
     retailPartners3: data?.retailPartners3?.map((item) => ({
       value: item?.id,
-      label: item?.Name,
+      label: item?.name,
     })) || [],
   };
 
