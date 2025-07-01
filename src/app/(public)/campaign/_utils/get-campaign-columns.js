@@ -20,48 +20,7 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
             renderEditCell: (params) => <SelectEditCell
                 {...params}
                 options={campaignProgressStatus}
-                label="Campaign Status"
             />
-        },
-        {
-            field: "campaignImage", headerName: "Campaign Image", width: 150, renderCell: (params) => {
-                return (
-                    <Box sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 0.5,
-                        width: '100%',
-                        height: '100%',
-                        position: 'relative',
-                        '&:hover .attach-icon': {
-                            display: 'inline-block',
-                        },
-                    }}>
-                        {params.row.campaignImage.length > 0 && <Image
-                            src={params.row.campaignImage}
-                            alt="Campaign Image"
-                            width={22}
-                            height={22}
-                            style={{ objectFit: 'cover', borderRadius: '2px', cursor: 'pointer' }}
-                            onClick={(event) => {
-                                anchorEl.current = event.currentTarget;
-                                setImageToShow(params.row.campaignImage);
-                            }}
-                        />}
-
-                        <AttachFile
-                            className="attach-icon"
-                            titleAccess="Attach"
-                            onClick={() => handleUploadModalOpen(params.row)}
-                            sx={{
-                                fontSize: 18,
-                                cursor: 'pointer',
-                                display: 'none',
-                            }}
-                        />
-                    </Box>
-                );
-            }
         },
         {
             field: "notes",
@@ -88,6 +47,100 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
             editable: true
         },
         {
+            field: "campaignImage",
+            headerName: "Campaign Image",
+            width: 150,
+            renderCell: (params) => {
+                return (
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 0.5,
+                            width: '100%',
+                            height: '100%',
+                            position: 'relative',
+                            '&:hover .attach-icon': {
+                                display: 'inline-block',
+                            },
+                        }}
+                    >
+                        {params.row.campaignImage.length > 0 && <Image
+                            src={params.row.campaignImage}
+                            alt="Campaign Image"
+                            width={22}
+                            height={22}
+                            style={{ objectFit: 'cover', borderRadius: '2px', cursor: 'pointer' }}
+                            onClick={(event) => {
+                                anchorEl.current = event.currentTarget;
+                                setImageToShow(params.row.campaignImage);
+                            }}
+                        />}
+
+                        <AttachFile
+                            className="attach-icon"
+                            titleAccess="Attach"
+                            onClick={() => handleUploadModalOpen(params.row, params.field)}
+                            sx={{
+                                fontSize: 18,
+                                cursor: 'pointer',
+                                display: 'none',
+                            }}
+                        />
+                    </Box>
+                );
+            }
+        },
+        {
+            field: 'imageInspirationGallery',
+            headerName: 'Image Inspiration Gallery',
+            width: 200,
+            editable: true,
+            renderCell: (params) => {
+                return (
+                    <Box
+                        sx={{
+                            width: '100%',
+                            height: '100%',
+                            display: 'flex',
+                            gap: 0.5,
+                            alignItems: 'center',
+                            position: 'relative',
+                            '&:hover .attach-icon': {
+                                display: 'inline-block',
+                            },
+                        }}
+                    >
+                        {params.row.imageInspirationGallery.length > 0 && params.row.imageInspirationGallery.map((image, index) => (
+                            <Image
+                                key={index}
+                                src={image}
+                                alt="Image Inspiration Gallery"
+                                width={22}
+                                height={22}
+                                style={{ objectFit: 'cover', borderRadius: '2px', cursor: 'pointer' }}
+                                onClick={(event) => {
+                                    anchorEl.current = event.currentTarget;
+                                    setImageToShow(params.row.imageInspirationGallery);
+                                }}
+                            />
+                        ))}
+
+                        <AttachFile
+                            className="attach-icon"
+                            titleAccess="Attach"
+                            onClick={() => handleUploadModalOpen(params.row, params.field)}
+                            sx={{
+                                fontSize: 18,
+                                cursor: 'pointer',
+                                display: 'none',
+                            }}
+                        />
+                    </Box>
+                )
+            }
+        },
+        {
             field: 'budget',
             headerName: 'Budget',
             width: 200, editable: true,
@@ -99,24 +152,6 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
             width: 150,
             editable: true,
             valueGetter: (value, row) => formatCompactNumber(row.productExpense)
-        },
-        {
-            field: 'imageInspirationGallery',
-            headerName: 'Image Inspiration Gallery',
-            width: 200,
-            editable: true,
-            renderCell: (params) => <Box sx={{ width: '100%', height: '100%', display: 'flex', gap: 0.5, alignItems: 'center' }}>
-                {params.row.imageInspirationGallery.length > 0 && params.row.imageInspirationGallery.map((image, index) => (
-                    <Image
-                        key={index}
-                        src={image}
-                        alt="Image Inspiration Gallery"
-                        width={22}
-                        height={22}
-                        style={{ objectFit: 'cover', borderRadius: '2px' }}
-                    />
-                ))}
-            </Box>
         },
         {
             field: 'videoInspirationGallery',

@@ -89,6 +89,7 @@ export default function TableView({
       groups: [],
     };
     const res = await createCampaignView(data);
+    console.log(res);
     if (res.success) {
       setAnchorEl(null);
       setViews([...views, res.data]);
