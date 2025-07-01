@@ -1,7 +1,6 @@
 import React from 'react';
 import Grid from '@mui/material/Grid2';
 import { Box, CircularProgress } from '@mui/material';
-
 import { SectionLoader } from '/src/components/loaders/section-loader';
 import { TabContainer } from '/src/components/tabs/tab-container';
 import { CampaignTabCard } from '../_components/campaign-tab-card';

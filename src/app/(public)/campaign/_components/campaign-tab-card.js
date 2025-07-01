@@ -6,13 +6,14 @@ import { CustomSelect } from '/src/components/formFields/custom-select';
 
 import { updateCampaignAsync } from '../_lib/campaign.actions';
 import { campaignProgressStatus } from '../_lib/campaign.constants';
-import { ManageCampaignRightPanel } from './manage-campaign-right-panel';
 import { isSupabaseUrl } from '/src/utils/helper';
+import { CampaignRightPanel } from './campaign-right-panel';
 
 export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, statusTabs, setStatusTabs }) => {
   const [openCampaignRightPanel, setOpenCampaignRightPanel] = React.useState(null);
-  const [prevCampaignProgress, setPrevCampaignProgress] = React.useState(campaign.CampaignStatus);
+  const [prevCampaignProgress, setPrevCampaignProgress] = React.useState(campaign.campaignStatus);
   const [campaignProgress, setCampaignProgress] = React.useState('');
+  const [selectedItemId, setSelectedItemId] = React.useState(null);
 
   async function updateCampaign() {
     try {
@@ -59,14 +60,14 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
   }
 
   React.useEffect(() => {
-    if (campaign.CampaignStatus !== campaignProgress && campaignProgress) {
+    if (campaign.campaignStatus !== campaignProgress && campaignProgress) {
       updateCampaign();
     }
   }, [campaignProgress]);
 
-  const imageSrc = isSupabaseUrl(campaign.CampaignImage[0])
-    ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${campaign.CampaignImage[0]}`
-    : campaign.CampaignImage[0];
+  const imageSrc = isSupabaseUrl(campaign.campaignImage[0])
+    ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${campaign.campaignImage[0]}`
+    : campaign.campaignImage[0];
 
   return (
     <>
@@ -87,11 +88,14 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
           sx={{
             height: '200px',
             width: '100%',
-            objectFit: 'contain',
+            objectFit: 'cover',
             border: '1px solid var(--mui-palette-divider)',
             cursor: 'pointer',
           }}
-          onClick={() => setOpenCampaignRightPanel(campaign)}
+          onClick={() => {
+            setSelectedItemId(campaign.id)
+            setOpenCampaignRightPanel(true)
+          }}
         />
 
         <Box>
@@ -100,7 +104,7 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
           </Typography>
           <Stack direction="row" flexWrap="wrap">
             <Typography sx={{ fontSize: '14px' }} color="text.secondary">
-              {campaign.ByCampaignsStakeholders?.map((item) => item?.Stakeholders?.Name)
+              {campaign?.stakeholders?.map((item) => item?.name)
                 .filter(Boolean)
                 .join(', ') || '-'}
             </Typography>
@@ -110,14 +114,14 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
           <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
             Campaign Status
           </Typography>
-          <Chip label={campaign.CampaignStatus} size="small" sx={{ fontSize: '10px' }} />
+          <Chip label={campaign.campaignStatus} size="small" color="primary" sx={{ fontSize: '10px' }} />
         </Box>
         <Box>
           <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
             Start Date
           </Typography>
           <Typography sx={{ fontSize: '14px' }} color="text.secodary">
-            {campaign.StartDate ? dayjs(campaign.StartDate).format('DD MMM YYYY') : '-'}
+            {campaign.startDate ? dayjs(campaign.startDate).format('DD MMM YYYY') : '-'}
           </Typography>
         </Box>
         <Box>
@@ -125,7 +129,7 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
             End Date
           </Typography>
           <Typography sx={{ fontSize: '14px' }} color="text.secodary">
-            {campaign.EndData ? dayjs(campaign.EndData).format('DD MMM YYYY') : '-'}
+            {campaign.endDate ? dayjs(campaign.endDate).format('DD MMM YYYY') : '-'}
           </Typography>
         </Box>
         <Box>
@@ -133,7 +137,7 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
             Budget
           </Typography>
           <Typography sx={{ fontSize: '14px' }} color="text.secodary">
-            {campaign.Budget || '-'}
+            {campaign.budget || '-'}
           </Typography>
         </Box>
         <Box>
@@ -141,7 +145,7 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
             Total Expense
           </Typography>
           <Typography sx={{ fontSize: '14px' }} color="text.secodary">
-            {campaign.TotalExpense || '-'}
+            {campaign.totalExpense || '-'}
           </Typography>
         </Box>
         <Box>
@@ -149,7 +153,7 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
             Campaign ROI
           </Typography>
           <Typography sx={{ fontSize: '14px' }} color="text.secodary">
-            {campaign.CampaignROI || '-'}
+            {campaign.campaignROI || '-'}
           </Typography>
         </Box>
         <Box>
@@ -157,7 +161,7 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
             Change Status
           </Typography>
           <CustomSelect
-            value={campaign?.CampaignStatus}
+            value={campaign?.campaignStatus}
             onChange={(value) => setCampaignProgress(value)}
             name="status"
             options={campaignProgressStatus}
@@ -165,14 +169,18 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
         </Box>
       </Stack>
 
-      <ManageCampaignRightPanel
-        view={'QUICK'}
-        width="70%"
-        fetchList={fetchList}
-        open={openCampaignRightPanel ? true : false}
-        data={openCampaignRightPanel}
-        onClose={() => setOpenCampaignRightPanel(false)}
-      />
+      {openCampaignRightPanel && (
+        <CampaignRightPanel
+          onClose={() => {
+            setSelectedItemId(null)
+            setOpenCampaignRightPanel(false)
+          }}
+          fetchList={fetchList}
+          id={selectedItemId}
+          open={openCampaignRightPanel}
+          view="QUICK"
+        />
+      )}
     </>
   );
 };

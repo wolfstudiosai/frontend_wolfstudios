@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import {
   Box, Button, Chip,
   LinearProgress,
@@ -15,8 +14,6 @@ import {
   Typography,
   List,
   ListItem,
-  ListItemAvatar,
-  Avatar,
   ListItemText,
   Divider
 } from '@mui/material';
@@ -27,7 +24,7 @@ import { SwiperSlide } from 'swiper/react';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
 import { isVideoContent, pxToRem } from '/src/utils/helper';
-import { Assessment, AttachMoney, Flag, People, Business, Speed } from '@mui/icons-material';
+import { Assessment, AttachMoney, Flag, People } from '@mui/icons-material';
 import { formatCompactNumber } from '../../../../utils/helper';
 
 export const CampaignQuickView = ({ data }) => {
@@ -263,7 +260,11 @@ export const CampaignQuickView = ({ data }) => {
               <ListItem key={stakeholder.id} sx={{ p: 0 }}>
                 <ListItemText
                   primary={stakeholder.name}
-                  secondaryTypographyProps={{ variant: "caption", fontFamily: "monospace" }}
+                  slotProps={{
+                    primary: {
+                      color: "text.secondary",
+                    },
+                  }}
                 />
               </ListItem>
             ))}
@@ -281,7 +282,11 @@ export const CampaignQuickView = ({ data }) => {
               <ListItem key={content.id} sx={{ p: 0 }}>
                 <ListItemText
                   primary={content.name}
-                  secondaryTypographyProps={{ variant: "caption", fontFamily: "monospace" }}
+                  slotProps={{
+                    primary: {
+                      color: "text.secondary",
+                    },
+                  }}
                 />
               </ListItem>
             ))}
@@ -299,7 +304,11 @@ export const CampaignQuickView = ({ data }) => {
               <ListItem key={production.id} sx={{ p: 0 }}>
                 <ListItemText
                   primary={production.name}
-                  secondaryTypographyProps={{ variant: "caption", fontFamily: "monospace" }}
+                  slotProps={{
+                    primary: {
+                      color: "text.secondary",
+                    },
+                  }}
                 />
               </ListItem>
             ))}
@@ -317,7 +326,11 @@ export const CampaignQuickView = ({ data }) => {
               <ListItem key={partner.id} sx={{ p: 0 }}>
                 <ListItemText
                   primary={partner.name}
-                  secondaryTypographyProps={{ variant: "caption", fontFamily: "monospace" }}
+                  slotProps={{
+                    primary: {
+                      color: "text.secondary",
+                    },
+                  }}
                 />
               </ListItem>
             ))}
@@ -335,7 +348,11 @@ export const CampaignQuickView = ({ data }) => {
               <ListItem key={partner.id} sx={{ p: 0 }}>
                 <ListItemText
                   primary={partner.name}
-                  secondaryTypographyProps={{ variant: "caption", fontFamily: "monospace" }}
+                  slotProps={{
+                    primary: {
+                      color: "text.secondary",
+                    },
+                  }}
                 />
               </ListItem>
             ))}
@@ -353,7 +370,11 @@ export const CampaignQuickView = ({ data }) => {
               <ListItem key={space.id} sx={{ p: 0 }}>
                 <ListItemText
                   primary={space.name}
-                  secondaryTypographyProps={{ variant: "caption", fontFamily: "monospace" }}
+                  slotProps={{
+                    primary: {
+                      color: "text.secondary",
+                    },
+                  }}
                 />
               </ListItem>
             ))}

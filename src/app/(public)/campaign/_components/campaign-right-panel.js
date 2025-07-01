@@ -31,6 +31,8 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
 
+    console.log(id);
+
     // *********************Formik*********************************
     const { values, errors, handleChange, handleSubmit, setFieldValue, resetForm, setValues } = useFormik({
         initialValues: defaultCampaign(),

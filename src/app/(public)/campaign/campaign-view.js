@@ -2,16 +2,12 @@
 
 import React, { useRef } from 'react';
 import { Box, CircularProgress } from '@mui/material';
-
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
-
 import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignTabView } from './_components/campaign-tab-view';
-import { ManageCampaignRightPanel } from './_components/manage-campaign-right-panel';
 import { getCampaignGroupListAsync } from './_lib/campaign.actions';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
-import { defaultCampaign } from './_lib/campaign.types';
 import { CampaignRightPanel } from './_components/campaign-right-panel';
 
 export const CampaignView = () => {
@@ -142,7 +138,7 @@ export const CampaignView = () => {
           </Box>
         ) : (
           <Box>
-            {/* <CampaignTabView data={data} fetchList={refreshListView} /> */}
+            <CampaignTabView data={data} fetchList={refreshListView} />
           </Box>
         )}
       </Box>
