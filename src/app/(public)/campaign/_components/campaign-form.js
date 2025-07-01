@@ -20,6 +20,7 @@ import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getContentList } from '/src/app/(private)/all-content/_lib/all-content.actions';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
 import { getProductionListAsync } from '../../production/_lib/production.action';
+import { campaignProgressStatus } from '../_lib/campaign.constants';
 
 export const CampaignForm = ({ handleChange, values, errors, loading, setFieldValue, onSubmit }) => {
   // *********************States*********************************
@@ -189,14 +190,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               label="Status"
               value={values.campaignStatus}
               onChange={(value) => setFieldValue('campaignStatus', value)}
-              options={[
-                { value: 'UPCOMING', label: 'Upcoming' },
-                { value: 'ACTIVE', label: 'Active' },
-                { value: 'PAUSED', label: 'Paused' },
-                { value: 'NEEDS_CASE_STUDY', label: 'Needs Case Study' },
-                { value: 'NEEDS_PARTNERS', label: 'Needs Partners' },
-                { value: 'ONBOARDING_PARTNERS', label: 'Onboarding Partners' },
-              ]}
+              options={campaignProgressStatus}
             />
             <ErrorMessage error={errors.campaignStatus} />
           </Grid>

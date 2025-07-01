@@ -17,9 +17,32 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
 
   async function updateCampaign() {
     try {
+      const finalCampaign = { ...campaign };
+
+      const arrayFields = [
+        'contentHQ',
+        'stakeholders',
+        'retailPartners',
+        'proposedPartners',
+        'contributedPartners',
+        'spaces',
+        'productionHQ',
+        'products',
+        'retailPartners2',
+        'retailPartners3',
+      ];
+
+      for (const field of arrayFields) {
+        const value = finalCampaign[field];
+        if (value.length > 0) {
+          const arrOfStr = value.map((item) => item.id);
+          finalCampaign[field] = arrOfStr;
+        }
+      }
+
       const res = await updateCampaignAsync(campaign?.id, {
-        ...campaign,
-        status: campaignProgress,
+        ...finalCampaign,
+        campaignStatus: campaignProgress,
       });
 
       if (res.success) {

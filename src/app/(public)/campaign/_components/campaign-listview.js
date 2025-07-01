@@ -138,6 +138,7 @@ export const CampaignListView = () => {
       setLoading(true);
       const viewPagination = paginationProps ? paginationProps : pagination;
       const res = await getSingleCampaignView(viewId, viewPagination);
+
       if (res.success) {
         setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
         setTotalRecords(res.data.count);
@@ -227,7 +228,7 @@ export const CampaignListView = () => {
         ...newRow,
       };
 
-      const imageFields = ['campaignImage'];
+      const imageFields = ['campaignImage', 'imageInspirationGallery'];
       for (const field of imageFields) {
         const value = newRow[field];
         if (value instanceof File) {
@@ -248,7 +249,19 @@ export const CampaignListView = () => {
         }
       }
 
-      const arrayFields = ['contentHQ', 'stakeholders', 'retailPartners', 'proposedPartners', 'spaces'];
+      const arrayFields = [
+        'contentHQ',
+        'stakeholders',
+        'retailPartners',
+        'proposedPartners',
+        'contributedPartners',
+        'spaces',
+        'productionHQ',
+        'products',
+        'retailPartners2',
+        'retailPartners3',
+      ];
+
       for (const field of arrayFields) {
         const value = newRow[field];
         if (value.length > 0) {
@@ -257,9 +270,10 @@ export const CampaignListView = () => {
         }
       }
 
-      if (finalData.goals && typeof finalData.goals === 'string') {
-        finalData.goals = finalData.goals.split(',').map((item) => item.trim());
+      if (finalData.campaignGoals && typeof finalData.campaignGoals === 'string') {
+        finalData.campaignGoals = finalData.campaignGoals.split(',').map((item) => item.trim());
       }
+
       await updateCampaignAsync(newRow.id, finalData);
       fetchList();
     }

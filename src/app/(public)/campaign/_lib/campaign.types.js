@@ -1,4 +1,5 @@
 export const defaultCampaign = (data) => {
+
   const defaultData = {
     id: data?.id || null,
     name: data?.name || '',

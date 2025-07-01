@@ -5,11 +5,24 @@ import AttachFile from "@mui/icons-material/AttachFile";
 import { dateFormatter } from '/src/utils/date-formatter';
 import { formatCompactNumber } from '/src/utils/helper';
 import Link from 'next/link';
+import DateEditCell from '/src/components/data-table/date-edit-cell';
+import SelectEditCell from '/src/components/data-table/select-edit-cell';
+import { campaignProgressStatus } from '/src/app/(public)/campaign/_lib/campaign.constants';
 
 export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns) => {
     const columns = [
         { field: 'name', headerName: 'Name', width: 280, editable: true },
-        { field: 'status', headerName: 'Campaign Status', width: 150, editable: true },
+        {
+            field: 'campaignStatus',
+            headerName: 'Campaign Status',
+            width: 150,
+            editable: true,
+            renderEditCell: (params) => <SelectEditCell
+                {...params}
+                options={campaignProgressStatus}
+                label="Campaign Status"
+            />
+        },
         {
             field: "campaignImage", headerName: "Campaign Image", width: 150, renderCell: (params) => {
                 return (
@@ -57,7 +70,7 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
             editable: true,
         },
         {
-            field: "description",
+            field: "campaignDescription",
             headerName: "Description",
             width: 200,
             editable: true,
@@ -139,7 +152,7 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
             valueGetter: (value, row) => formatCompactNumber(row.totalContentEngagement)
         },
         {
-            field: 'goals',
+            field: 'campaignGoals',
             headerName: 'Goals',
             width: 200,
             editable: false,
@@ -183,15 +196,17 @@ export const getCampaignColumns = (anchorEl, setImageToShow, handleUploadModalOp
             field: 'startDate',
             headerName: 'Start Date',
             width: 180,
-            editable: false,
-            valueGetter: (value, row) => dateFormatter(row?.startDate),
+            editable: true,
+            valueGetter: (value, row) => dateFormatter(row.startDate, 'YYYY-MM-DD'),
+            renderEditCell: (params) => <DateEditCell {...params} format="YYYY-MM-DD" />
         },
         {
             field: 'endDate',
             headerName: 'End Date',
             width: 180,
-            editable: false,
-            valueGetter: (value, row) => dateFormatter(row?.endDate),
+            editable: true,
+            valueGetter: (value, row) => dateFormatter(row.endDate, 'YYYY-MM-DD'),
+            renderEditCell: (params) => <DateEditCell {...params} format="YYYY-MM-DD" />
         },
     ]
 

@@ -138,7 +138,7 @@ export const CampaignView = () => {
           </Box>
         ) : (
           <Box>
-            <CampaignTabView data={data} fetchList={refreshListView} />
+            <CampaignTabView data={data} />
           </Box>
         )}
       </Box>

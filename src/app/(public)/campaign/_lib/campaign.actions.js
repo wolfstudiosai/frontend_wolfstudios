@@ -20,15 +20,22 @@ export const getCampainStatusListAsync = async () => {
   }
 };
 
-export const getCampaignGroupListAsync = async (queryParams = {}) => {
+export const getCampaignGroupListAsync = async (pagination, filters, gate) => {
   try {
-    let searchQuery = '';
-    if (Object.keys(queryParams).length > 0) {
-      searchQuery = getSearchQuery(queryParams);
+    let apiUrl = `/campaign-HQ?page=${pagination.page}&size=${pagination.rowsPerPage}`;
+
+    if (filters && filters.length > 0) {
+      // check if all filters are valid
+      const allFiltersValid = validateFilters(filters);
+      if (!allFiltersValid.valid) {
+        return;
+      }
+
+      const queryParams = buildQueryParams(filters, gate);
+      apiUrl += `&${queryParams}`;
     }
 
-    const res = await api.get(`/campaign-HQ${searchQuery}`);
-
+    const res = await api.get(apiUrl);
     return {
       success: true,
       data: res.data.data.data,
