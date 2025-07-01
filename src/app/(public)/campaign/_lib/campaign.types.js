@@ -1,48 +1,69 @@
 export const defaultCampaign = (data) => {
   const defaultData = {
     id: data?.id || null,
-    name: data?.Name || '',
-    client: data?.Client || '',
-    guidelines: data?.Guidelines || '',
-    goals: data?.CampaignGoals?.join(', ') || [],
-    description: data?.CampaignDescription || '',
-    totalContentEngagement: data?.TotalContentEngagement || 0,
-    status: data?.CampaignStatus || '',
-    budget: data?.Budget || 0,
-    totalExpense: data?.TotalExpense || 0,
-    campaignROI: data?.CampaignROI || 0,
-    startDate: data?.StartDate ? new Date(data?.StartDate) : new Date(),
-    endDate: data?.EndDate ? new Date(data?.EndDate) : new Date(),
-    productExpense: data?.ProductExpense || 0,
-    notes: data?.Notes || '',
+    name: data?.name || '',
+    client: data?.client || '',
+    guidelines: data?.guidelines || '',
+    campaignGoals: data?.campaignGoals.join(',') || [],
+    campaignDescription: data?.campaignDescription || '',
+    totalContentEngagement: data?.totalContentEngagement || 0,
+    campaignStatus: data?.campaignStatus || '',
+    budget: data?.budget || 0,
+    totalExpense: data?.totalExpense || 0,
+    campaignROI: data?.campaignROI || 0,
+    startDate: data?.startDate ? new Date(data?.startDate) : new Date(),
+    endDate: data?.endDate ? new Date(data?.endDate) : new Date(),
+    productExpense: data?.productExpense || 0,
+    notes: data?.notes || '',
+    imageInspirationGallery: data?.imageInspirationGallery || [],
+    videoInspirationGallery: data?.videoInspirationGallery || [],
+    campaignImage: data?.campaignImage?.[0] || [],
     contentHQ:
-      data?.ByCampaignsContentHQ?.map((item) => ({
+      data?.contentHQ?.map((item) => ({
         value: item?.ContentHQ?.id,
         label: item?.ContentHQ?.Name,
       })) || [],
     stakeholders:
-      data?.ByCampaignsStakeholders?.map((item) => ({
+      data?.stakeholders?.map((item) => ({
         value: item?.Stakeholders?.id,
         label: item?.Stakeholders?.Name,
       })) || [],
     retailPartners:
-      data?.ByCampaignsRetailPartners?.map((item) => ({
+      data?.retailPartners?.map((item) => ({
         value: item?.RetailPartners?.id,
         label: item?.RetailPartners?.Name,
       })) || [],
     proposedPartners:
-      data?.ByCampaignsProposedPartners?.map((item) => ({
+      data?.proposedPartners?.map((item) => ({
         value: item?.ProposedPartners?.id,
         label: item?.ProposedPartners?.Name,
       })) || [],
+    contributedPartners:
+      data?.contributedPartners?.map((item) => ({
+        value: item?.ContributedPartners?.id,
+        label: item?.ContributedPartners?.Name,
+      })) || [],
     spaces:
-      data?.ByCampaignsSpaces?.map((item) => ({
+      data?.spaces?.map((item) => ({
         value: item?.Spaces?.id,
         label: item?.Spaces?.Name,
       })) || [],
-    imageInspirationGallery: data?.ImageInspirationGallery || [],
-    videoInspirationGallery: data?.VideoInspirationGallery || [],
-    campaignImage: data?.CampaignImage?.[0] || [],
+    productionHQ: data?.productionHQ?.map((item) => ({
+      value: item?.id,
+      label: item?.Name,
+    })) || [],
+    products: data?.product?.map((item) => ({
+      value: item?.id,
+      label: item?.Name,
+    })) || [],
+    retailPartners2: data?.retailPartners2?.map((item) => ({
+      value: item?.id,
+      label: item?.Name,
+    })) || [],
+    retailPartners3: data?.retailPartners3?.map((item) => ({
+      value: item?.id,
+      label: item?.Name,
+    })) || [],
   };
 
   return defaultData;

@@ -111,7 +111,7 @@ export const CampaignView = () => {
           totalRecords={totalRecords}
           setOpenPanel={setOpenPanel}
         />
-        {filters.VIEW === 'grid' ? (
+        {/* {filters.VIEW === 'grid' ? (
           <Box>
             <CampaignGridView loading={loading} data={data} fetchList={refreshListView} />
             <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
@@ -120,8 +120,16 @@ export const CampaignView = () => {
           </Box>
         ) : (
           <CampaignTabView data={data} fetchList={refreshListView} />
-        )}
+        )} */}
       </Box>
+
+      <ManageCampaignRightPanel
+        open={openPanel}
+        onClose={() => setOpenPanel(false)}
+        fetchList={refreshListView}
+        data={defaultCampaign}
+        view="ADD"
+      />
     </PageContainer>
   );
 };

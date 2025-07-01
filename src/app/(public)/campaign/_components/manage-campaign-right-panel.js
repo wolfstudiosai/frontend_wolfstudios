@@ -48,11 +48,11 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
       if (!values.guidelines) {
         errors.guidelines = formConstants.required;
       }
-      if (!values.description) {
-        errors.description = formConstants.required;
+      if (!values.campaignDescription) {
+        errors.campaignDescription = formConstants.required;
       }
-      if (!values.status) {
-        errors.status = formConstants.required;
+      if (!values.campaignStatus) {
+        errors.campaignStatus = formConstants.required;
       }
       if (!values.startDate) {
         errors.startDate = formConstants.required;
@@ -67,13 +67,14 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
       return errors;
     },
     onSubmit: async (values) => {
+      console.log(values);
       setLoading(true);
       try {
         const finalData = {
-          ...values,
+          ...values
         };
 
-        const imageFields = ['campaignImage'];
+        const imageFields = ['campaignImage', 'imageInspirationGallery'];
         for (const field of imageFields) {
           const value = values[field];
           if (value instanceof File) {
@@ -94,7 +95,17 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
           }
         }
 
-        const arrayFields = ['contentHQ', 'stakeholders', 'retailPartners', 'proposedPartners', 'spaces'];
+        const arrayFields = [
+          'contentHQ',
+          'stakeholders',
+          'retailPartners',
+          'proposedPartners',
+          'contributedPartners',
+          'spaces',
+          'productionHQ',
+          'products',
+        ];
+
         for (const field of arrayFields) {
           const value = values[field];
           if (value.length > 0) {
@@ -103,8 +114,8 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
           }
         }
 
-        if (finalData.goals && typeof finalData.goals === 'string') {
-          finalData.goals = finalData.goals.split(',').map((item) => item.trim());
+        if (finalData.campaignGoals && typeof finalData.campaignGoals === 'string') {
+          finalData.campaignGoals = finalData.campaignGoals.split(',').map((item) => item.trim());
         }
         const res = isUpdate ? await updateCampaignAsync(data?.id, finalData) : await createCampaignAsync(finalData);
         if (res.success) {
@@ -196,6 +207,7 @@ export const ManageCampaignRightPanel = ({ open, onClose, fetchList, data, view 
           handleChange={handleChange}
           values={values}
           errors={errors}
+          loading={loading}
           setFieldValue={setFieldValue}
           onSubmit={handleSubmit}
         />

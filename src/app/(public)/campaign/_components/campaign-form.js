@@ -1,10 +1,11 @@
 'use client';
 
-import { FormControl, FormLabel } from '@mui/material';
+import { Button, FormControl, FormLabel, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import React from 'react';
 
 import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
+import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
 import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
@@ -14,12 +15,13 @@ import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-ifr
 import { ImageUploader } from '/src/components/uploaders/image-uploader';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
-import { getRetailPartnerListAsync, getStakeHolderListAsync } from '../../../../lib/common.actions';
+import { getRetailPartnerListAsync, getStakeHolderListAsync, getProductListAsync } from '../../../../lib/common.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getContentList } from '/src/app/(private)/all-content/_lib/all-content.actions';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
+import { getProductionListAsync } from '../../production/_lib/production.action';
 
-export const CampaignForm = ({ handleChange, values, errors, setFieldValue, onSubmit }) => {
+export const CampaignForm = ({ handleChange, values, errors, loading, setFieldValue, onSubmit }) => {
   // *********************States*********************************
   const [mediaPreview, setMediaPreview] = React.useState(null);
   const [contentOptions, setContentOptions] = React.useState([]);
@@ -27,6 +29,8 @@ export const CampaignForm = ({ handleChange, values, errors, setFieldValue, onSu
   const [retailPartnerOptions, setRetailPartnerOptions] = React.useState([]);
   const [partnerOptions, setPartnerOptions] = React.useState([]);
   const [spaceOptions, setSpaceOptions] = React.useState([]);
+  const [productionHQOptions, setProductionHQOptions] = React.useState([]);
+  const [productOptions, setProductOptions] = React.useState([]);
   const [openImageUploadDialog, setOpenImageUploadDialog] = React.useState(false);
   const [data, setData] = React.useState(null);
 
@@ -38,30 +42,42 @@ export const CampaignForm = ({ handleChange, values, errors, setFieldValue, onSu
   React.useEffect(() => {
     const fetchPrerequisitesData = async () => {
       try {
-        const contentResponse = await getContentList({ page: 1, rowsPerPage: 100 });
+        const contentResponse = await getContentList({ page: 1, rowsPerPage: 20 });
         if (contentResponse?.success) {
-          const options = contentResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          const options = contentResponse.data.map((item) => ({ value: item.id, label: item.name }));
           setContentOptions(options);
         }
-        const stakeholderResponse = await getStakeHolderListAsync({ page: 1, rowsPerPage: 100 });
+        const stakeholderResponse = await getStakeHolderListAsync({ page: 1, rowsPerPage: 20 });
         if (stakeholderResponse?.success) {
-          const options = stakeholderResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          const options = stakeholderResponse.data.map((item) => ({ value: item.id, label: item.name }));
           setStakeholderOptions(options);
         }
-        const retailPartnerResponse = await getRetailPartnerListAsync({ page: 1, rowsPerPage: 100 });
+        const retailPartnerResponse = await getRetailPartnerListAsync({ page: 1, rowsPerPage: 20 });
         if (retailPartnerResponse?.success) {
-          const options = retailPartnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          const options = retailPartnerResponse.data.map((item) => ({ value: item.id, label: item.name }));
           setRetailPartnerOptions(options);
         }
-        const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 100 });
+        const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 20 });
         if (partnerResponse?.success) {
-          const options = partnerResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          const options = partnerResponse.data.map((item) => ({ value: item.id, label: item.name }));
           setPartnerOptions(options);
         }
-        const spaceResponse = await getSpaceListAsync({ page: 1, rowsPerPage: 100 });
+        const spaceResponse = await getSpaceListAsync({ page: 1, rowsPerPage: 20 });
         if (spaceResponse?.success) {
-          const options = spaceResponse.data.map((item) => ({ value: item.id, label: item.Name }));
+          const options = spaceResponse.data.map((item) => ({ value: item.id, label: item.name }));
           setSpaceOptions(options);
+        }
+
+        const productionHQResponse = await getProductionListAsync({ page: 1, rowsPerPage: 20 });
+        if (productionHQResponse?.success) {
+          const options = productionHQResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setProductionHQOptions(options);
+        }
+
+        const productResponse = await getProductListAsync({ page: 1, rowsPerPage: 20 });
+        if (productResponse?.success) {
+          const options = productResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setProductOptions(options);
         }
       } catch (err) {
         console.error(err);
@@ -169,10 +185,10 @@ export const CampaignForm = ({ handleChange, values, errors, setFieldValue, onSu
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomSelect
-              name="status"
+              name="campaignStatus"
               label="Status"
-              value={values.status}
-              onChange={(value) => setFieldValue('status', value)}
+              value={values.campaignStatus}
+              onChange={(value) => setFieldValue('campaignStatus', value)}
               options={[
                 { value: 'UPCOMING', label: 'Upcoming' },
                 { value: 'ACTIVE', label: 'Active' },
@@ -182,53 +198,167 @@ export const CampaignForm = ({ handleChange, values, errors, setFieldValue, onSu
                 { value: 'ONBOARDING_PARTNERS', label: 'Onboarding Partners' },
               ]}
             />
-            <ErrorMessage error={errors.status} />
+            <ErrorMessage error={errors.campaignStatus} />
           </Grid>
+
+          {/* Content HQ */}
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomAutoComplete
+            <CustomAutoCompleteV2
+              multiple
               label="Content HQ"
               value={values.contentHQ}
               onChange={(_, value) => setFieldValue('contentHQ', value)}
-              options={contentOptions}
-              multiple
+              defaultOptions={contentOptions}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
+                const res = await getContentList(paging, filters, 'and');
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
             />
           </Grid>
+
+          {/* Stakeholder */}
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomAutoComplete
+            <CustomAutoCompleteV2
+              multiple
               label="Stakeholder"
               value={values.stakeholders}
               onChange={(_, value) => setFieldValue('stakeholders', value)}
-              options={stakeholderOptions}
-              multiple
+              defaultOptions={stakeholderOptions}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getStakeHolderListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
             />
           </Grid>
+
+          {/* Proposed Partner */}
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomAutoComplete
+            <CustomAutoCompleteV2
+              multiple
               label="Proposed Partner"
               value={values.proposedPartners}
               onChange={(_, value) => setFieldValue('proposedPartners', value)}
-              options={partnerOptions}
-              multiple
+              defaultOptions={partnerOptions}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
+                const res = await getPartnerListAsync(paging, filters, 'and');
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
             />
           </Grid>
+
+          {/* Retail Partner */}
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomAutoComplete
+            <CustomAutoCompleteV2
+              multiple
               label="Retail Partner"
               value={values.retailPartners}
               onChange={(_, value) => setFieldValue('retailPartners', value)}
-              options={retailPartnerOptions}
-              multiple
+              defaultOptions={retailPartnerOptions}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getRetailPartnerListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
             />
           </Grid>
+
+          {/* Contributed Partner */}
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomAutoComplete
+            <CustomAutoCompleteV2
+              multiple
+              label="Contributed Partner"
+              value={values.contributedPartners}
+              onChange={(_, value) => setFieldValue('contributedPartners', value)}
+              defaultOptions={partnerOptions}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
+                const res = await getPartnerListAsync(paging, filters, 'and');
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Space */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
               label="Space"
               value={values.spaces}
               onChange={(_, value) => setFieldValue('spaces', value)}
-              options={spaceOptions}
-              multiple
+              defaultOptions={spaceOptions}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
+                const res = await getSpaceListAsync(paging, filters, 'and');
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
             />
           </Grid>
+
+          {/* Production HQ */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Production HQ"
+              value={values.productionHQ}
+              onChange={(_, value) => setFieldValue('productionHQ', value)}
+              defaultOptions={productionHQOptions}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
+                const res = await getProductionListAsync(paging, filters, 'and');
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Product */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Product"
+              value={values.products}
+              onChange={(_, value) => setFieldValue('products', value)}
+              defaultOptions={productOptions}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
+                const res = await getProductListAsync(paging, filters, 'and');
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
           <Grid size={{ xs: 12, md: 6 }}>
             <FormControl fullWidth error={Boolean(errors.campaignImage)}>
               <FormLabel sx={{ mb: 1 }}>Campaign Image</FormLabel>
@@ -240,7 +370,7 @@ export const CampaignForm = ({ handleChange, values, errors, setFieldValue, onSu
             </FormControl>
           </Grid>
           <Grid size={{ xs: 12 }}>
-            <CustomTextField name="goals" label="Goals" value={values.goals} onChange={handleChange} />
+            <CustomTextField name="campaignGoals" label="Goals" value={values.campaignGoals} onChange={handleChange} />
           </Grid>
           <Grid size={{ xs: 12 }}>
             <CustomTextField name="notes" label="Notes " value={values.notes} onChange={handleChange} />
@@ -257,14 +387,14 @@ export const CampaignForm = ({ handleChange, values, errors, setFieldValue, onSu
           </Grid>
           <Grid size={{ xs: 12 }}>
             <CustomTextField
-              name="description"
+              name="campaignDescription"
               label="Description"
-              value={values.description}
+              value={values.campaignDescription}
               onChange={handleChange}
               multiline
               rows={4}
             />
-            <ErrorMessage error={errors.description} />
+            <ErrorMessage error={errors.campaignDescription} />
           </Grid>
           <Grid size={{ xs: 12 }}>
             <VideoLinkField
@@ -286,13 +416,13 @@ export const CampaignForm = ({ handleChange, values, errors, setFieldValue, onSu
               folderName="campaigns"
             />
           </Grid>
-          {/* <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }}>
             <Stack direction="row" justifyContent="flex-end">
               <Button size="small" variant="contained" color="primary" disabled={loading} type="submit">
                 Save
               </Button>
             </Stack>
-          </Grid> */}
+          </Grid>
         </Grid>
       </form>
 

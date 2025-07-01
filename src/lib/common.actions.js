@@ -40,7 +40,7 @@ export const getStakeHolderListAsync = async (queryParams, searchValue) => {
     const searchQuery = getSearchQuery(queryParams);
     let url = `/stakeholders${searchQuery}`
     if (searchValue) {
-      url += `&gate=and&fields[0][key]=Name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
+      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
     }
     const res = await api.get(url);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
@@ -85,7 +85,7 @@ export const getRetailPartnerListAsync = async (queryParams, searchValue) => {
     const searchQuery = getSearchQuery(queryParams);
     let url = `/retail-partners${searchQuery}`
     if (searchValue) {
-      url += `&gate=and&fields[0][key]=Name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
+      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
     }
     const res = await api.get(url);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
