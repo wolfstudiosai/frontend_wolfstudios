@@ -35,7 +35,7 @@ export const publicRoutes = [
         title: 'Spaces',
         href: paths.dashboardPublic.spaces,
       },
-       {
+      {
         key: 'services',
         title: 'Services',
         href: paths.dashboardPublic.services,
@@ -690,6 +690,13 @@ export const privateRoutesV3 = [
     title: 'Workspaces',
     icon: 'carbon:workspace',
     items: workspacesItems,
+  },
+  {
+    key: 'bev',
+    title: 'BEV ',
+    icon: 'tabler:map',
+    href: '/location',
+    allowedRoles: ['admin', 'user', 'super_admin'],
   },
   {
     key: 'records',
