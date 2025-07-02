@@ -22,6 +22,7 @@ export const PortfolioView = () => {
   const [isFetching, setIsFetching] = React.useState(false);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
   const [totalRecords, setTotalRecords] = React.useState(0);
+  const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
   const [filters, setFilters] = React.useState({
     COL: 4.5,
     TAG: [],
@@ -106,9 +107,10 @@ export const PortfolioView = () => {
           sorting={portfolioSorting}
           totalRecords={totalRecords}
           onFilterChange={handleFilterChange}
+          setOpenPanel={setOpenPortfolioRightPanel}
         />
 
-        {filters.VIEW === 'list' ? (
+        {/* {filters.VIEW === 'list' ? (
           <PortfolioListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />
         ) : (
           <Box>
@@ -117,13 +119,23 @@ export const PortfolioView = () => {
               fetchList={refreshListView}
               loading={loading}
               colums={sliderToGridColsCoverter(filters.COL)}
+              openPortfolioRightPanel={openPortfolioRightPanel}
+              setOpenPortfolioRightPanel={setOpenPortfolioRightPanel}
             />
             <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
               {isFetching && <CircularProgress size="30px" />}
             </div>
           </Box>
-        )}
+        )} */}
       </PageLoader>
+
+      <ManagePortfolioRightPanel
+        view={'EDIT'}
+        fetchList={fetchList}
+        width="70%"
+        open={openPortfolioRightPanel ? true : false}
+        onClose={() => setOpenPortfolioRightPanel(false)}
+      />
     </PageContainer>
   );
 };

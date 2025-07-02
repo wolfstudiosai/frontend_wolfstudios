@@ -2,16 +2,12 @@
 
 import React, { useRef } from 'react';
 import { Box, CircularProgress } from '@mui/material';
-
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
-
 import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignTabView } from './_components/campaign-tab-view';
-import { ManageCampaignRightPanel } from './_components/manage-campaign-right-panel';
 import { getCampaignGroupListAsync } from './_lib/campaign.actions';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
-import { defaultCampaign } from './_lib/campaign.types';
 import { CampaignRightPanel } from './_components/campaign-right-panel';
 
 export const CampaignView = () => {
@@ -22,6 +18,7 @@ export const CampaignView = () => {
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [data, setData] = React.useState([]);
   const [openPanel, setOpenPanel] = React.useState(false);
+  const [selectedItemId, setSelectedItemId] = React.useState(null);
   const [filters, setFilters] = React.useState({
     COL: 4,
     TAG: [],
@@ -53,12 +50,33 @@ export const CampaignView = () => {
     }
   }, [isFetching, pagination]);
 
+  const refetchList = React.useCallback(async () => {
+    if (isFetching) return;
+    setLoading(true);
+
+    try {
+      const response = await getCampaignGroupListAsync({
+        page: 1,
+        rowsPerPage: 10,
+      });
+
+      if (response.success) {
+        setData(response.data);
+        setTotalRecords(response.totalRecords);
+        setPagination((prev) => ({ ...prev, pageNo: 1 }));
+      }
+    } catch (error) {
+      console.error('Error fetching campaigns:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [isFetching]);
+
   const handleFilterChange = (type, value) => {
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
   const refreshListView = async () => {
-    console.log('campaign tab view...');
     const response = await getCampaignGroupListAsync({
       page: 1,
       rowsPerPage: 10,
@@ -119,9 +137,24 @@ export const CampaignView = () => {
             </div>
           </Box>
         ) : (
-          <CampaignTabView data={data} fetchList={refreshListView} />
+          <Box>
+            <CampaignTabView data={data} />
+          </Box>
         )}
       </Box>
+
+      {openPanel && (
+        <CampaignRightPanel
+          onClose={() => {
+            setSelectedItemId(null)
+            setOpenPanel(false)
+          }}
+          fetchList={refetchList}
+          id={selectedItemId}
+          open={openPanel}
+          view="ADD"
+        />
+      )}
     </PageContainer>
   );
 };

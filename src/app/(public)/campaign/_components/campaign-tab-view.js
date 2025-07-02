@@ -1,37 +1,44 @@
 import React from 'react';
 import Grid from '@mui/material/Grid2';
 import { Box, CircularProgress } from '@mui/material';
-
 import { SectionLoader } from '/src/components/loaders/section-loader';
 import { TabContainer } from '/src/components/tabs/tab-container';
 import { CampaignTabCard } from '../_components/campaign-tab-card';
 import { getCampaignGroupListAsync, getCampainStatusListAsync } from '../_lib/campaign.actions';
 
-export const CampaignTabView = ({ fetchList, loading }) => {
+export const CampaignTabView = () => {
   const [statusTabs, setStatusTabs] = React.useState([]);
   const [selectedStatus, setSelectedStatus] = React.useState('');
   const [campaigns, setCampaigns] = React.useState([]);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [isFetching, setIsFetching] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const observerRef = React.useRef(null);
 
   // Fetch campaign status tabs on mount
   React.useEffect(() => {
     const fetchStatusTabs = async () => {
-      const res = await getCampainStatusListAsync();
-      if (!res.success) return;
+      try {
+        setLoading(true);
+        const res = await getCampainStatusListAsync();
+        if (!res.success) return;
 
-      const tabs = res.data.flatMap(obj =>
-        Object.entries(obj).map(([key, count]) => ({
-          label: `${key.replace(/_/g, ' ')} (${count})`,
-          value: key,
-          count
-        }))
-      );
+        const tabs = res.data.flatMap(obj =>
+          Object.entries(obj).map(([key, count]) => ({
+            label: key ? `${key.replace(/_/g, ' ')} (${count})` : `Others (${count})`,
+            value: key,
+            count
+          }))
+        );
 
-      setStatusTabs(tabs);
-      setSelectedStatus(tabs[0]?.value || '');
+        setStatusTabs(tabs);
+        setSelectedStatus(tabs[0]?.value || '');
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchStatusTabs();
@@ -39,21 +46,30 @@ export const CampaignTabView = ({ fetchList, loading }) => {
 
   // Fetch campaign data when selected tab or pagination changes
   const fetchCampaigns = async () => {
-    setIsFetching(true);
-    const res = await getCampaignGroupListAsync({
-      status: selectedStatus,
-      page: pagination.pageNo,
-      rowsPerPage: pagination.limit,
-    });
+    try {
+      setIsFetching(true);
+      const filters = [{
+        key: 'campaignStatus',
+        operator: 'contains',
+        type: 'string',
+        value: selectedStatus
+      }]
+      const res = await getCampaignGroupListAsync({
+        page: pagination.pageNo,
+        rowsPerPage: pagination.limit,
+      }, filters, 'and');
 
-    if (res.success) {
-      setCampaigns(prev =>
-        pagination.pageNo === 1 ? res.data : [...prev, ...res.data]
-      );
-      setTotalRecords(res.totalRecords);
+      if (res.success) {
+        setCampaigns(prev =>
+          pagination.pageNo === 1 ? res.data : [...prev, ...res.data]
+        );
+        setTotalRecords(res.totalRecords);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
     }
-
-    setIsFetching(false);
   };
 
   React.useEffect(() => {
@@ -107,7 +123,7 @@ export const CampaignTabView = ({ fetchList, loading }) => {
             <Grid container spacing={0.5} mt={1}>
               {campaigns?.map(campaign => (
                 <Grid key={campaign.id} size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
-                  <CampaignTabCard campaign={campaign} campaigns={campaigns} setCampaigns={setCampaigns} statusTabs={statusTabs} setStatusTabs={setStatusTabs} fetchList={fetchList} />
+                  <CampaignTabCard campaign={campaign} campaigns={campaigns} setCampaigns={setCampaigns} statusTabs={statusTabs} setStatusTabs={setStatusTabs} />
                 </Grid>
               ))}
             </Grid>

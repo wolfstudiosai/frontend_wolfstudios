@@ -31,6 +31,8 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
 
+    console.log(id);
+
     // *********************Formik*********************************
     const { values, errors, handleChange, handleSubmit, setFieldValue, resetForm, setValues } = useFormik({
         initialValues: defaultCampaign(),
@@ -45,11 +47,11 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
             if (!values.guidelines) {
                 errors.guidelines = formConstants.required;
             }
-            if (!values.description) {
-                errors.description = formConstants.required;
+            if (!values.campaignDescription) {
+                errors.campaignDescription = formConstants.required;
             }
-            if (!values.status) {
-                errors.status = formConstants.required;
+            if (!values.campaignStatus) {
+                errors.campaignStatus = formConstants.required;
             }
             if (!values.startDate) {
                 errors.startDate = formConstants.required;
@@ -61,16 +63,24 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
                 errors.notes = formConstants.required;
             }
 
+            if (
+                values.startDate &&
+                values.endDate &&
+                new Date(values.startDate) > new Date(values.endDate)
+            ) {
+                errors.endDate = formConstants.endDate || "End date must be after start date";
+            }
+
             return errors;
         },
         onSubmit: async (values) => {
             setLoading(true);
             try {
                 const finalData = {
-                    ...values,
+                    ...values
                 };
 
-                const imageFields = ['campaignImage'];
+                const imageFields = ['campaignImage', 'imageInspirationGallery'];
                 for (const field of imageFields) {
                     const value = values[field];
                     if (value instanceof File) {
@@ -91,7 +101,19 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
                     }
                 }
 
-                const arrayFields = ['contentHQ', 'stakeholders', 'retailPartners', 'proposedPartners', 'spaces'];
+                const arrayFields = [
+                    'contentHQ',
+                    'stakeholders',
+                    'retailPartners',
+                    'proposedPartners',
+                    'contributedPartners',
+                    'spaces',
+                    'productionHQ',
+                    'products',
+                    'retailPartners2',
+                    'retailPartners3',
+                ];
+
                 for (const field of arrayFields) {
                     const value = values[field];
                     if (value.length > 0) {
@@ -100,15 +122,14 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
                     }
                 }
 
-                if (finalData.goals && typeof finalData.goals === 'string') {
-                    finalData.goals = finalData.goals.split(',').map((item) => item.trim());
+                if (finalData.campaignGoals && typeof finalData.campaignGoals === 'string') {
+                    finalData.campaignGoals = finalData.campaignGoals.split(',').map((item) => item.trim());
                 }
                 const res = id ? await updateCampaignAsync(id, finalData) : await createCampaignAsync(finalData);
                 if (res.success) {
                     onClose?.();
-                    fetchList?.()
                     resetForm();
-                    router.refresh()
+                    fetchList();
                 } else {
                     console.error('Operation failed:', res.message);
                 }
@@ -137,10 +158,11 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
                 setLoading(false);
             }
         };
-        getSingleData();
+
+        if (id) {
+            getSingleData();
+        }
     }, [id]);
-
-
 
     const handleDelete = async () => {
         onClose?.();

@@ -1,34 +1,40 @@
 
 export const defaultPortfolio = (data) => {
-  const defaultData = {
+  const defaultValue = {
     id: data?.id || null,
-    projectTitle: data?.ProjectTitle || '',
-    date: data?.Date ? data?.Date : null,
-    shortDescription: data?.Projectshortdescription || '',
-    fullDescription: data?.Projectsinglepagefulldescription || '',
-    portfolioCategories: data?.PortfolioCategoriesPortfolios?.map((item) => ({
-      value: item?.PortfolioCategories?.id,
-      label: item?.PortfolioCategories?.Name
+    projectTitle: data?.projectTitle || '',
+    shortDescription: data?.shortDescription || '',
+    fullDescription: data?.fullDescription || '',
+    videoLink: data?.videoLink || '',
+    date: data?.date ? data?.date : null,
+    horizontalImageGallery: data?.horizontalImageGallery || [],
+    verticalImageGallery: data?.verticalImageGallery || [],
+    singlePageHeroImage: data?.singlePageHeroImage || [],
+    thumbnailImage: data?.thumbnailImage || [],
+    imagefield: data?.imagefield || [],
+    isFeatured: data?.isFeatured || false,
+    portfolioCategories: data?.portfolioCategoriesPortfolios?.map((item) => ({
+      value: item?.portfolioCategories?.id,
+      label: item?.portfolioCategories?.name
     })) || [],
-    states: data?.ByStatesPortfolios?.map((item) => ({
-      value: item?.ByStates?.id,
-      label: item?.ByStates?.Name
+    partnerHQ: data?.partnerHQPortfolios?.map((item) => ({
+      value: item?.partnerHQ?.id,
+      label: item?.partnerHQ?.name
     })) || [],
-    countries: data?.ByCountryPortfolios?.map((item) => ({
-      value: item?.ByCountry?.id,
-      label: item?.ByCountry?.Name
+    states: data?.statesPortfolios?.map((item) => ({
+      value: item?.states?.id,
+      label: item?.states?.name
     })) || [],
-    partnerHQ: data?.PartnerHQPortfolios?.map((item) => ({
-      value: item?.PartnerHQ?.id,
-      label: item?.PartnerHQ?.Name
+    countries: data?.countriesPortfolios?.map((item) => ({
+      value: item?.countries?.id,
+      label: item?.countries?.name
     })) || [],
-    videoLink: data?.VideoLink || '',
-    singlePageHeroImage: data?.SinglePageHeroImage || [],
-    imagefield: data?.Imagefield || [],
-    thumbnailImage: data?.ThumbnailImage || [],
-    verticalImageGallery: data?.VerticalImageGallery || [],
-    horizontalImageGallery: data?.HorizontalImageGallery || [],
+    caseStudies: data?.caseStudiesPortfolios?.map((item) => ({
+      value: item?.caseStudies?.id,
+      label: item?.caseStudies?.name
+    })) || [],
   }
 
-  return defaultData;
+
+  return defaultValue;
 }

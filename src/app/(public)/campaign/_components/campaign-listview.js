@@ -40,12 +40,14 @@ export const CampaignListView = () => {
   const anchorEl = React.useRef(null);
   const [anchorElHide, setAnchorElHide] = React.useState(null);
   const [imageToShow, setImageToShow] = React.useState(null);
+  const [imageUpdatedField, setImageUpdatedField] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const searchParams = useSearchParams();
   const viewId = searchParams.get('view');
 
-  const handleUploadModalOpen = (data) => {
+  const handleUploadModalOpen = (data, field) => {
     setOpen(true);
+    setImageUpdatedField(field);
     setUpdatedRow(data);
   };
 
@@ -59,44 +61,45 @@ export const CampaignListView = () => {
     setSearchColumns(allColumns);
   };
 
-  async function fetchList(props) {
-    const filter = props ? props : filters;
-    const paginationData = props ? props.pagination : pagination;
-    try {
-      setLoading(true);
-      const response = await getCampaignListAsync(
-        {
-          page: paginationData.pageNo,
-          rowsPerPage: paginationData.limit,
-        },
-        filter,
-        gate
-      );
-
-      if (response?.success) {
-        if (viewId) {
-          setMetaData(response.meta);
-        } else {
-          setRecords(response.data.map((row) => defaultCampaign(row)) || []);
-          setTotalRecords(response.totalRecords);
-          setMetaData(response.meta);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   // handle upload image
   const handleUploadImage = async (images) => {
     try {
-      const response = await updateCampaignAsync(updatedRow.id, { ...updatedRow, campaignImage: images });
+      const finalData = {
+        ...updatedRow,
+      };
+
+      const arrayFields = [
+        'contentHQ',
+        'stakeholders',
+        'retailPartners',
+        'proposedPartners',
+        'contributedPartners',
+        'spaces',
+        'productionHQ',
+        'products',
+        'retailPartners2',
+        'retailPartners3',
+      ];
+
+      for (const field of arrayFields) {
+        const value = updatedRow[field];
+        if (value.length > 0) {
+          const arrOfStr = value.map((item) => item.value);
+          finalData[field] = arrOfStr;
+        }
+      }
+
+      if (finalData.campaignGoals && typeof finalData.campaignGoals === 'string') {
+        finalData.campaignGoals = finalData.campaignGoals.split(',').map((item) => item.trim());
+      }
+
+      console.log({ ...finalData, [imageUpdatedField]: images });
+
+      const response = await updateCampaignAsync(updatedRow.id, { ...finalData, [imageUpdatedField]: images });
       if (response.success) {
         toast.success('Campaign updated successfully');
         setOpen(false);
-        fetchList();
+        getSingleView(viewId);
       }
     } catch (error) {
       console.log(error);
@@ -138,6 +141,7 @@ export const CampaignListView = () => {
       setLoading(true);
       const viewPagination = paginationProps ? paginationProps : pagination;
       const res = await getSingleCampaignView(viewId, viewPagination);
+
       if (res.success) {
         setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
         setTotalRecords(res.data.count);
@@ -173,17 +177,17 @@ export const CampaignListView = () => {
 
   // ******************************data grid handler starts*********************
 
+  // handle pagination model change
   const handlePaginationModelChange = (newPaginationModel) => {
     const { page, pageSize } = newPaginationModel;
     const newPagination = { pageNo: page + 1, limit: pageSize };
     setPagination(newPagination);
     if (viewId) {
       getSingleView(viewId, newPagination);
-    } else {
-      fetchList({ pagination: newPagination });
     }
   };
 
+  // process row update
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
 
@@ -195,7 +199,7 @@ export const CampaignListView = () => {
         return newRow;
       }
 
-      if (!newRow.status) {
+      if (!newRow.campaignStatus) {
         toast.error('Please select campaign status');
         return newRow;
       }
@@ -205,7 +209,7 @@ export const CampaignListView = () => {
         return newRow;
       }
 
-      if (!newRow.description) {
+      if (!newRow.campaignDescription) {
         toast.error('Please enter description');
         return newRow;
       }
@@ -221,13 +225,13 @@ export const CampaignListView = () => {
       }
 
       await createCampaignAsync(newRow);
-      fetchList();
+      getSingleView(viewId);
     } else {
       const finalData = {
         ...newRow,
       };
 
-      const imageFields = ['campaignImage'];
+      const imageFields = ['campaignImage', 'imageInspirationGallery'];
       for (const field of imageFields) {
         const value = newRow[field];
         if (value instanceof File) {
@@ -248,7 +252,20 @@ export const CampaignListView = () => {
         }
       }
 
-      const arrayFields = ['contentHQ', 'stakeholders', 'retailPartners', 'proposedPartners', 'spaces'];
+      const arrayFields = [
+        'contentHQ',
+        'stakeholders',
+        'retailPartners',
+        'proposedPartners',
+        'contributedPartners',
+        'spaces',
+        'productionHQ',
+        'products',
+        'retailPartners2',
+        'retailPartners3',
+      ];
+
+      // process array fields
       for (const field of arrayFields) {
         const value = newRow[field];
         if (value.length > 0) {
@@ -257,35 +274,48 @@ export const CampaignListView = () => {
         }
       }
 
-      if (finalData.goals && typeof finalData.goals === 'string') {
-        finalData.goals = finalData.goals.split(',').map((item) => item.trim());
+      const numericFields = ['totalContentEngagement', 'budget', 'totalExpense', 'campaignROI', 'productExpense'];
+      for (const field of numericFields) {
+        const value = newRow[field];
+        if (value) {
+          finalData[field] = Number(value);
+        }
       }
+
+      if (finalData.campaignGoals && typeof finalData.campaignGoals === 'string') {
+        finalData.campaignGoals = finalData.campaignGoals.split(',').map((item) => item.trim());
+      }
+
       await updateCampaignAsync(newRow.id, finalData);
-      fetchList();
+      getSingleView(viewId);
     }
 
     return newRow;
   }, []);
 
+  // handle row selection
   const handleRowSelection = (newRowSelectionModel) => {
     const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
     setSelectedRows(selectedData);
   };
 
+  // handle process row update error
   const handleProcessRowUpdateError = React.useCallback((error) => {
     console.log({ children: error.message, severity: 'error' });
   }, []);
 
   // ******************************data grid handler ends*********************
 
+  // handle add new item
   const handleAddNewItem = () => {
     const tempId = `temp_${Date.now()}`;
     const newRecord = { ...defaultCampaign(), id: tempId };
     setRecords([newRecord, ...records]);
   };
 
+  // handle row delete
   const handleDelete = async () => {
-    fetchList();
+    getSingleView(viewId);
   };
 
   // Column handler
@@ -329,6 +359,7 @@ export const CampaignListView = () => {
     setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
   };
 
+  // handle show all columns
   const showAllColumns = async () => {
     const newVisibleColumns = allColumns;
     setVisibleColumns(newVisibleColumns);
@@ -353,6 +384,7 @@ export const CampaignListView = () => {
     }
   };
 
+  // handle hide all columns
   const hideAllColumns = async () => {
     const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
     setVisibleColumns(newVisibleColumns);
@@ -384,8 +416,6 @@ export const CampaignListView = () => {
       updateView({ filters }).then(() => {
         getSingleView(viewId);
       });
-    } else {
-      fetchList(filters);
     }
   };
 
@@ -397,8 +427,6 @@ export const CampaignListView = () => {
       updateView({ filters: newFilters }).then(() => {
         getSingleView(viewId);
       });
-    } else {
-      fetchList(newFilters);
     }
   };
 
@@ -409,8 +437,6 @@ export const CampaignListView = () => {
       updateView({ filters: [] }).then(() => {
         getSingleView(viewId);
       });
-    } else {
-      fetchList([]);
     }
   };
 
@@ -556,7 +582,6 @@ export const CampaignListView = () => {
               sort={sort}
               setSort={setSort}
               updateView={updateView}
-              fetchList={fetchList}
               getSingleView={getSingleView}
             />
           </Box>
@@ -566,7 +591,7 @@ export const CampaignListView = () => {
               <AddIcon />
             </IconButton>
             <Box>
-              <RefreshPlugin onClick={fetchList} />
+              <RefreshPlugin onClick={() => getSingleView(viewId)} />
             </Box>
             <DeleteConfirmationPasswordPopover
               title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}

@@ -145,16 +145,20 @@ export function capitalizeFirstLetter(string) {
 
 export const formatCompactNumber = (number) => {
   const num = Number(number || 0);
-  if (num >= 1_000_000_000) {
-    return (num / 1_000_000_000).toFixed(1) + 'B';
-  } else if (num >= 1_000_000) {
-    return (num / 1_000_000).toFixed(1) + 'M';
-  } else if (num >= 1_000) {
-    return (num / 1_000).toFixed(1) + 'K';
+  const absNum = Math.abs(num);
+  const sign = num < 0 ? '-' : '';
+
+  if (absNum >= 1_000_000_000) {
+    return sign + (absNum / 1_000_000_000).toFixed(2) + 'B';
+  } else if (absNum >= 1_000_000) {
+    return sign + (absNum / 1_000_000).toFixed(2) + 'M';
+  } else if (absNum >= 1_000) {
+    return sign + (absNum / 1_000).toFixed(2) + 'K';
   }
 
-  return num.toString();
+  return num.toFixed(2);
 };
+
 
 export const handleCopy = async (text) => {
   if (text.length === 0) {

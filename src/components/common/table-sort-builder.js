@@ -15,7 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Iconify } from '/src/components/iconify/iconify';
 import { useSearchParams } from 'next/navigation';
 
-const TableSortBuilder = ({ allColumns, sort, setSort, updateView, fetchList, getSingleView, handleSortApply }) => {
+const TableSortBuilder = ({ allColumns, sort, setSort, updateView, getSingleView }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [searchText, setSearchText] = useState('');
     const searchParams = useSearchParams();
@@ -44,8 +44,6 @@ const TableSortBuilder = ({ allColumns, sort, setSort, updateView, fetchList, ge
             updateView({ sort: [updated] }).then(() => {
                 getSingleView(view)
             });
-        } else {
-            // fetchList(updated);
         }
     };
 
@@ -56,8 +54,6 @@ const TableSortBuilder = ({ allColumns, sort, setSort, updateView, fetchList, ge
             updateView({ sort: [] }).then(() => {
                 getSingleView(view)
             });
-        } else {
-            // fetchList(updated);
         }
     };
 
