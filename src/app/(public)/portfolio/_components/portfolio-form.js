@@ -23,7 +23,7 @@ import {
   updatePortfolioAsync,
 } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
-import { getCountryListAsync, getStateListAsync } from '../../../../lib/common.actions';
+import { getCountryListAsync, getStateListAsync, getCaseStudyListAsync } from '../../../../lib/common.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { formConstants } from '/src/app/constants/form-constants';
 import { imageUploader } from '/src/utils/upload-file';
@@ -38,6 +38,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
   const [states, setStates] = React.useState([]);
   const [portfolioCategories, setPortfolioCategories] = React.useState([]);
   const [partners, setPartners] = React.useState([]);
+  const [caseStudies, setCaseStudies] = React.useState([]);
   const [data, setData] = React.useState(null);
 
   // ***************** Formik *******************************
@@ -50,9 +51,14 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
         errors.projectTitle = formConstants.required;
       }
 
+      if (!values.date) {
+        errors.date = formConstants.required;
+      }
+
       return errors;
     },
     onSubmit: async (values) => {
+
       setLoading(true);
       try {
         const finalData = {
@@ -95,6 +101,13 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
           delete finalData.videoLink;
         }
 
+        const isValidFormat = dayjs(values.date, 'MMMM YYYY', true).isValid();
+        if (isValidFormat) {
+          finalData.date = values.date;
+        } else {
+          finalData.date = dayjs().format('MMMM YYYY');
+        }
+
         const res = id ? await updatePortfolioAsync(id, finalData) : await createPortfolioAsync(finalData);
         if (res.success) {
           onClose?.();
@@ -113,11 +126,11 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
 
   // *****************Use Effects****************************
 
-  React.useEffect(() => {
-    if (data) {
-      setValues(defaultPortfolio(data));
-    }
-  }, [data, setValues]);
+  // React.useEffect(() => {
+  //   if (data) {
+  //     setValues(defaultPortfolio(data));
+  //   }
+  // }, [data, setValues]);
 
   React.useEffect(() => {
     const fetchSinglePortfolios = async () => {
@@ -125,6 +138,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
         const res = await getPortfolioAsync(id);
         if (res?.success) {
           setData(res.data);
+          setValues(defaultPortfolio(res.data));
         }
       } catch (err) {
         console.error(err);
@@ -163,6 +177,11 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
         if (partnerResponse?.success) {
           const partnerOptions = partnerResponse.data.map((item) => ({ value: item.id, label: item.name }));
           setPartners(partnerOptions);
+        }
+        const caseStudyResponse = await getCaseStudyListAsync({ page: 1, rowsPerPage: 20 });
+        if (caseStudyResponse?.success) {
+          const caseStudyOptions = caseStudyResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setCaseStudies(caseStudyOptions);
         }
       } catch (err) {
         console.error(err);
@@ -264,6 +283,25 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
             />
           </Grid>
 
+          {/* case study */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              label="Case Study"
+              multiple
+              value={values.caseStudies}
+              defaultOptions={caseStudies}
+              onChange={(e, val) => setFieldValue('caseStudies', val)}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 100 };
+                const res = await getCaseStudyListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
           {/* date */}
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomDatePicker
@@ -273,6 +311,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
               format="MMMM YYYY"
               onChange={(value) => setFieldValue('date', value)}
             />
+            <ErrorMessage error={errors.date} />
           </Grid>
 
           {/* video link */}
@@ -299,7 +338,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
           </Grid>
 
           {/* image field */}
-          <Grid size={{ xs: 12, md: 4 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <FormControl fullWidth error={Boolean(errors.imagefield)}>
               <FormLabel sx={{ mb: 1 }}>Image Field</FormLabel>
               <ImageUploader
@@ -311,7 +350,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
           </Grid>
 
           {/* hero image */}
-          <Grid size={{ xs: 12, md: 4 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <FormControl fullWidth error={Boolean(errors.singlePageHeroImage)}>
               <FormLabel sx={{ mb: 1 }}>Hero Image</FormLabel>
               <ImageUploader
@@ -323,7 +362,7 @@ export const PortfolioForm = ({ id, onClose, fetchList }) => {
           </Grid>
 
           {/* thumbnail */}
-          <Grid size={{ xs: 12, md: 4 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <FormControl fullWidth error={Boolean(errors.thumbnailImage)}>
               <FormLabel sx={{ mb: 1 }}>Thumbnail</FormLabel>
               <ImageUploader

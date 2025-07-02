@@ -143,6 +143,7 @@ export const CampaignListView = () => {
       const res = await getSingleCampaignView(viewId, viewPagination);
 
       if (res.success) {
+        console.log(res.data.data);
         setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
         setTotalRecords(res.data.count);
         setSelectedViewData(res.data);

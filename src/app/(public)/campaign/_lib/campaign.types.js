@@ -5,7 +5,7 @@ export const defaultCampaign = (data) => {
     name: data?.name || '',
     client: data?.client || '',
     guidelines: data?.guidelines || '',
-    campaignGoals: data?.campaignGoals.join(',') || [],
+    campaignGoals: data?.campaignGoals?.join(',') || [],
     campaignDescription: data?.campaignDescription || '',
     totalContentEngagement: data?.totalContentEngagement || 0,
     campaignStatus: data?.campaignStatus || '',

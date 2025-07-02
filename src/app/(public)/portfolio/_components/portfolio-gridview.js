@@ -18,11 +18,12 @@ import { PageLoader } from '/src/components/loaders/PageLoader';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
 import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
+import { PortfolioRightPanel } from './portfolio-right-panel';
 import { PortfolioSliderItem } from './portfolio-slider-item';
 import { getFancyColor, isVideoContent } from '/src/utils/helper';
 
 export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
-  const slider_data = data.filter((item) => item.featured);
+  const slider_data = data.filter((item) => item.isFeatured);
 
   return (
     <Box>
@@ -59,150 +60,12 @@ export const PortfolioGridView = ({ data, colums, fetchList, loading, handlePagi
   );
 };
 
-export const PortfolioCardOld = ({ item, fetchList, sx, infoSx }) => {
-  const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
-
-  return (
-    <>
-      <Card
-        sx={{
-          width: '100%',
-          aspectRatio: '9 / 16',
-          border: 'unset',
-          overflow: 'hidden',
-          position: 'relative',
-          backgroundColor: '#333',
-          borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-          border: 'solid .1px var(--mui-palette-divider)',
-          cursor: 'pointer',
-          '&:hover .portfolio-card-overlay': {
-            opacity: 1,
-          },
-          ...sx,
-        }}
-        onClick={() => setOpenPortfolioRightPanel(item)}
-      >
-        {isVideoContent(item.thumbnail || '') ? (
-          <Box
-            component="video"
-            src={item.thumbnail}
-            // controls
-            muted
-            autoPlay
-            loop
-            draggable={false}
-            playsInline
-            sx={{
-              height: '100%',
-              width: '100%',
-              objectFit: 'cover',
-              borderRadius: 1,
-            }}
-          />
-        ) : (
-          <Box
-            sx={{
-              position: 'relative',
-              width: '100%',
-              height: '100%',
-              overflow: 'hidden',
-            }}
-          >
-            <Image
-              // src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
-              src={item?.ThumbnailImage?.at(0) || item?.Imagefield?.at(0) || '/'}
-              alt={item.title || 'Portfolio Image'}
-              draggable={false}
-              style={{
-                objectFit: 'cover',
-                filter: 'blur(20px)',
-                transition: 'filter 0.2s ease-out',
-              }}
-              loading="lazy"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Adjust based on screen size
-              fill={true}
-              onLoad={(e) => {
-                e.target.style.filter = 'blur(0px)';
-              }}
-            />
-          </Box>
-        )}
-        <Stack
-          direction="column"
-          px={2}
-          sx={{
-            position: 'absolute',
-            bottom: 0,
-            right: 0,
-            left: 0,
-            width: '100%',
-            py: 1,
-            background: 'linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))',
-            ...infoSx,
-          }}
-        >
-          <Typography fontWeight={400} color="var(--mui-palette-common-white)" fontSize={{ xs: 12, md: 14 }}>
-            {(item.ProjectTitle || '').split(/\s+/).slice(0, 4).join(' ') +
-              (item.ProjectTitle?.split(/\s+/)?.length > 4 ? '...' : '')}
-          </Typography>
-          {/* Thin Line */}
-          <Box
-            sx={{
-              width: '100%',
-              height: '0.8px',
-              margin: '4px 0',
-            }}
-          />
-          <Stack direction={'row'} spacing={1} justifyContent={'space-between'} alignItems={'center'} mt={1}>
-            <Typography variant="body" color="var(--mui-palette-common-white)" sx={{ fontSize: '12px' }}>
-              {item.ByStatesPortfolios?.map((state) => state?.ByStates?.Name).join(', ')}
-            </Typography>
-            <Box
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-              }}
-            >
-              {item?.PortfolioCategoriesPortfolios?.map(
-                (portfolio, index) =>
-                  portfolio?.PortfolioCategories && (
-                    <Chip
-                      key={index}
-                      label={portfolio.PortfolioCategories.Name}
-                      size="small"
-                      sx={{
-                        backgroundColor: getFancyColor(index),
-                        fontSize: '10px',
-                        fontWeight: 400,
-                        color: 'var(--mui-palette-common-white)',
-                      }}
-                      className="category-chip"
-                    />
-                  )
-              )}
-            </Box>
-          </Stack>
-        </Stack>
-        <ManagePortfolioRightPanel
-          view={'QUICK'}
-          fetchList={fetchList}
-          width="70%"
-          open={openPortfolioRightPanel ? true : false}
-          data={openPortfolioRightPanel}
-          onClose={() => setOpenPortfolioRightPanel(false)}
-        />
-      </Card>
-    </>
-  );
-};
-
 export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
   const profileData = {
-    name: item?.ProjectTitle,
+    name: item?.projectTitle,
     location: 'Riyadh, Saudi Arabia',
-    avatar: item?.ThumbnailImage?.at(0) || item?.Imagefield?.at(0) || '/',
-    status: item?.PortfolioCategoriesPortfolios?.map((category) => category?.PortfolioCategories?.Name),
+    avatar: item?.thumbnailImage?.at(0) || item?.Imagefield?.at(0) || '/',
+    status: item?.portfolioCategories?.map((category) => category?.portfolioCategories?.name),
     stats: {
       instagram: '38.7K',
       tiktok: '725.5K',
@@ -215,6 +78,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
   const popoverTimeoutRef = React.useRef(null);
   const [showModal, setShowModal] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState(null);
   const [values, setValues] = React.useState([]);
 
   React.useEffect(() => {
@@ -287,7 +151,10 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
           },
           ...sx,
         }}
-        onClick={() => setOpenPortfolioRightPanel(item)}
+        onClick={() => {
+          setOpenPortfolioRightPanel(true);
+          setSelectedItem(item);
+        }}
       >
         {/* top menu icon button */}
         <Box
@@ -309,10 +176,10 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
         </Box>
 
         <Box className="image-container" sx={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
-          {isVideoContent(item.thumbnail || '') ? (
+          {isVideoContent(item.thumbnailImage || '') ? (
             <Box
               component="video"
-              src={item.thumbnail}
+              src={item.thumbnailImage}
               muted
               autoPlay
               loop
@@ -328,8 +195,8 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
           ) : (
             <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
               <Image
-                src={item?.ThumbnailImage?.at(0) || item?.Imagefield?.at(0) || '/'}
-                alt={item.title || 'Portfolio Image'}
+                src={item?.thumbnailImage?.at(0) || item?.imagefield?.at(0) || '/'}
+                alt={item.projectTitle || 'Portfolio Image'}
                 draggable={false}
                 style={{
                   objectFit: 'cover',
@@ -359,8 +226,8 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
             }}
           >
             <Typography fontWeight={400} color="white" fontSize={{ xs: 12, md: 14 }} noWrap>
-              {(item.ProjectTitle || '').split(/\s+/).slice(0, 4).join(' ') +
-                (item.ProjectTitle?.split(/\s+/)?.length > 4 ? '...' : '')}
+              {(item.projectTitle || '').split(/\s+/).slice(0, 4).join(' ') +
+                (item.projectTitle?.split(/\s+/)?.length > 4 ? '...' : '')}
             </Typography>
             {/* Thin Line */}
             <Box
@@ -374,14 +241,17 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
           </Stack>
         </Box>
 
-        <ManagePortfolioRightPanel
-          view={'QUICK'}
-          fetchList={fetchList}
-          width="70%"
-          open={openPortfolioRightPanel ? true : false}
-          data={item}
-          onClose={() => setOpenPortfolioRightPanel(false)}
-        />
+        {openPortfolioRightPanel && (
+          <PortfolioRightPanel
+            fetchList={fetchList}
+            id={selectedItem?.id}
+            onClose={() => {
+              setSelectedItem(null);
+              setOpenPortfolioRightPanel(false);
+            }}
+            open={openPortfolioRightPanel}
+          />
+        )}
       </Card>
 
       <Box
@@ -404,7 +274,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
             }}
           >
             {/* Thumbnail Circle */}
-            {item.ByStatesPortfolios?.length > 0 && (
+            {item.states?.length > 0 && (
               <Box
                 aria-owns={open ? 'state-popover' : undefined}
                 aria-haspopup="true"
@@ -444,7 +314,7 @@ export const PortfolioCard = ({ item, fetchList, sx, infoSx }) => {
                 },
               }}
             >
-              {item.ByStatesPortfolios?.map((state) => state?.ByStates?.Name).join(', ')}
+              {item.states?.map((state) => state?.name).join(', ')}
             </Typography>
           </Box>
           <Box
