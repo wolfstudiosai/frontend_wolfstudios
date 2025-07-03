@@ -93,8 +93,6 @@ export const CampaignListView = () => {
         finalData.campaignGoals = finalData.campaignGoals.split(',').map((item) => item.trim());
       }
 
-      console.log({ ...finalData, [imageUpdatedField]: images });
-
       const response = await updateCampaignAsync(updatedRow.id, { ...finalData, [imageUpdatedField]: images });
       if (response.success) {
         toast.success('Campaign updated successfully');
@@ -508,6 +506,12 @@ export const CampaignListView = () => {
     }
   };
 
+  // store isView sidebar is open or not on local storage
+  const handleOpenViewSidebar = () => {
+    setShowView(!showView);
+    localStorage.setItem('isRecordViewOpen', !showView);
+  };
+
   // update visible columns
   React.useEffect(() => {
     if (allColumns.length === 0) return;
@@ -528,6 +532,13 @@ export const CampaignListView = () => {
   }, []);
 
   React.useEffect(() => {
+    const isViewOpen = localStorage.getItem('isRecordViewOpen');
+    if (isViewOpen === 'true') {
+      setShowView(true);
+    }
+  }, [showView]);
+
+  React.useEffect(() => {
     if (selectedViewId) {
       getSingleView(selectedViewId, pagination);
     }
@@ -542,7 +553,7 @@ export const CampaignListView = () => {
               startIcon={<TableReorderIcon />}
               variant="text"
               size="small"
-              onClick={() => setShowView((prev) => !prev)}
+              onClick={handleOpenViewSidebar}
               sx={{ bgcolor: showView ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
             >
               View
