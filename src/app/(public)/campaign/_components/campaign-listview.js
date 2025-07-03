@@ -32,7 +32,7 @@ import {
   updateCampaignView,
 } from '../_lib/campaign.actions';
 import { defaultCampaign } from '../_lib/campaign.types';
-import { getCampaignColumns } from '../_utils/get-campaign-columns';
+import { useCampaignColumns } from '../hook/use-campaign-columns';
 
 export const CampaignListView = () => {
   const theme = useTheme();
@@ -130,10 +130,7 @@ export const CampaignListView = () => {
   const [allColumns, setAllColumns] = React.useState([]);
   const [visibleColumns, setVisibleColumns] = React.useState([]);
   const [searchColumns, setSearchColumns] = React.useState([]);
-  const columns = React.useMemo(
-    () => getCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns),
-    [visibleColumns]
-  );
+  const columns = useCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns);
 
   // get single view
   const getSingleView = async (viewId, paginationProps) => {
@@ -143,7 +140,6 @@ export const CampaignListView = () => {
       const res = await getSingleCampaignView(viewId, viewPagination);
 
       if (res.success) {
-        console.log(res.data.data);
         setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
         setTotalRecords(res.data.count);
         setSelectedViewData(res.data);
@@ -191,7 +187,6 @@ export const CampaignListView = () => {
   // process row update
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
-
     const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
 
     if (isTemporaryId) {

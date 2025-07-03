@@ -3,8 +3,6 @@
 import { Button, FormControl, FormLabel, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import React from 'react';
-
-import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
 import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
 import { CustomSelect } from '/src/components/formFields/custom-select';
@@ -33,11 +31,6 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
   const [productionHQOptions, setProductionHQOptions] = React.useState([]);
   const [productOptions, setProductOptions] = React.useState([]);
   const [openImageUploadDialog, setOpenImageUploadDialog] = React.useState(false);
-  const [data, setData] = React.useState(null);
-
-  // ********************* Formik *******************************
-
-  // ******************** Use Effects****************************
 
   // --------------- Fetch Prerequisites Data -------------------
   React.useEffect(() => {
@@ -87,31 +80,6 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
 
     fetchPrerequisitesData();
   }, []);
-
-  // // --------------- Fetch campaign during update -------------------
-  // React.useEffect(() => {
-  //   const fetchSingleCampaign = async () => {
-  //     try {
-  //       const res = await getCampaignAsync(id);
-  //       if (res?.success) {
-  //         setData(res.data);
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-
-  //   if (id) {
-  //     fetchSingleCampaign();
-  //   }
-  // }, [values.id]);
-
-  // // --------------- Set values during update -------------------
-  // React.useEffect(() => {
-  //   if (data) {
-  //     setValues(defaultCampaign(data));
-  //   }
-  // }, [data, setValues]);
 
   return (
     <>
@@ -381,8 +349,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               defaultOptions={productOptions}
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
-                const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
-                const res = await getProductListAsync(paging, filters, 'and');
+                const res = await getProductListAsync(paging, debounceValue);
                 return res?.data?.map((item) => ({
                   label: item.name,
                   value: item.id,

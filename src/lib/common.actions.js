@@ -13,10 +13,14 @@ export const getCityListAsync = async (queryParams) => {
   }
 };
 
-export const getProductListAsync = async (queryParams) => {
+export const getProductListAsync = async (queryParams, searchValue) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    const res = await api.get(`/products${searchQuery}`);
+    let url = `/products${searchQuery}`
+    if (searchValue) {
+      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
+    }
+    const res = await api.get(url);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     toast.error(error.message);

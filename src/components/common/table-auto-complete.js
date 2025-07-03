@@ -18,9 +18,10 @@ import {
 import { useDebounce } from '/src/hooks/use-debounce';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
 import { getContentList } from '/src/app/(private)/all-content/_lib/all-content.actions';
+import { getProductionListAsync } from '/src/app/(public)/production/_lib/production.action';
 
 const fetchOptions = async (key, searchValue) => {
-    const getNameMapping = (item) => ({ value: item.id, label: item.Name });
+    const getNameMapping = (item) => ({ value: item.id, label: item.name });
 
     const configMap = {
         partnerHQ: {
@@ -28,6 +29,14 @@ const fetchOptions = async (key, searchValue) => {
             filterable: true
         },
         partners: {
+            fetch: getPartnerListAsync,
+            filterable: true
+        },
+        proposedPartners: {
+            fetch: getPartnerListAsync,
+            filterable: true
+        },
+        contributedPartners: {
             fetch: getPartnerListAsync,
             filterable: true
         },
@@ -63,6 +72,12 @@ const fetchOptions = async (key, searchValue) => {
         retailPartners: {
             fetch: getRetailPartnerListAsync
         },
+        retailPartners2: {
+            fetch: getRetailPartnerListAsync
+        },
+        retailPartners3: {
+            fetch: getRetailPartnerListAsync
+        },
         product: {
             fetch: getProductListAsync
         },
@@ -73,9 +88,10 @@ const fetchOptions = async (key, searchValue) => {
             fetch: getSpaceListAsync,
             filterable: true
         },
-        // proposedPartners: {
-        //     fetch: getProposedPartnerListAsync
-        // }
+        productionHQ: {
+            fetch: getProductionListAsync,
+            filterable: true
+        }
     };
 
     const config = configMap[key];

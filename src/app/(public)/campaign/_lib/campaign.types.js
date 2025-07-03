@@ -53,7 +53,7 @@ export const defaultCampaign = (data) => {
       value: item?.id,
       label: item?.name,
     })) || [],
-    products: data?.product?.map((item) => ({
+    products: data?.products?.map((item) => ({
       value: item?.id,
       label: item?.name,
     })) || [],

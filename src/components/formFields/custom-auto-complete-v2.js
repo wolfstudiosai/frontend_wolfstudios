@@ -42,7 +42,6 @@ export const CustomAutoCompleteV2 = ({
         if (debounceValue) {
             fetchData();
         } else {
-            // Only show default options when input is empty
             setAutoCompleteOptions(defaultOptions || []);
         }
 
@@ -81,24 +80,28 @@ export const CustomAutoCompleteV2 = ({
                         );
                     })
                 }
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        placeholder={placeholder}
-                        variant="outlined"
-                        size={size}
-                        InputProps={{
-                            ...params.InputProps,
-                            endAdornment: (
-                                <>
-                                    {loading && <CircularProgress color="inherit" size={16} />}
-                                    {params.InputProps.endAdornment}
-                                </>
-                            ),
-                        }}
-                        sx={{ mt: 0.8 }}
-                    />
-                )}
+                renderInput={(params) => {
+                    const { InputProps, ...rest } = params;
+                    const { endAdornment, ...otherInputProps } = InputProps;
+
+                    return (
+                        <TextField
+                            {...rest}
+                            placeholder={placeholder}
+                            variant="outlined"
+                            size={size}
+                            InputProps={{
+                                ...otherInputProps,
+                                endAdornment: (
+                                    <>
+                                        {loading && <CircularProgress color="inherit" size={16} />}
+                                    </>
+                                ),
+                            }}
+                            sx={{ mt: 0.8 }}
+                        />
+                    );
+                }}
                 onFocus={() => {
                     onFocus?.(name);
                 }}

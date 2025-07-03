@@ -4,8 +4,6 @@ import { getFancyColor, getRandomColor } from '/src/utils/helper';
 import { Avatar, AvatarGroup, Box, Card, Chip, Stack, Typography } from '@mui/material';
 import { PortfolioRightPanel } from './portfolio-right-panel';
 
-import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
-
 export const PortfolioSliderItem = ({ item, index, fetchList }) => {
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
   const [selectedItem, setSelectedItem] = React.useState(null);
