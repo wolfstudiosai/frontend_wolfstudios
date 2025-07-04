@@ -93,7 +93,10 @@ export const CampaignListView = () => {
         finalData.campaignGoals = finalData.campaignGoals.split(',').map((item) => item.trim());
       }
 
-      const response = await updateCampaignAsync(updatedRow.id, { ...finalData, [imageUpdatedField]: images });
+      const response = await updateCampaignAsync(updatedRow.id, {
+        ...finalData,
+        [imageUpdatedField]: [...updatedRow[imageUpdatedField], ...images],
+      });
       if (response.success) {
         toast.success('Campaign updated successfully');
         setOpen(false);
@@ -747,7 +750,7 @@ export const CampaignListView = () => {
         onSave={(paths) => handleUploadImage([...paths])}
         multiple
         hideVideoUploader={true}
-        folderName="partner-HQ"
+        folderName="campaigns"
       />
     </PageContainer>
   );

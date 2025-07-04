@@ -18,7 +18,7 @@ export const defaultCampaign = (data) => {
     notes: data?.notes || '',
     imageInspirationGallery: data?.imageInspirationGallery || [],
     videoInspirationGallery: data?.videoInspirationGallery || [],
-    campaignImage: data?.campaignImage?.[0] || [],
+    campaignImage: data?.campaignImage || [],
     contentHQ:
       data?.contentHQ?.map((item) => ({
         value: item?.id,

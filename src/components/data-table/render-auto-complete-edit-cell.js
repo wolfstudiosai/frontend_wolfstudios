@@ -8,7 +8,7 @@ export const renderAutoCompleteCell = (value) => {
     return (
         <Tooltip
             title={
-                <Box sx={{ p: 1, bgcolor: 'background.default', borderRadius: 0 }}>
+                <Box sx={{ p: 1, bgcolor: 'background.default', color: 'text.primary', borderRadius: 0 }}>
                     {labels}
                 </Box>
             }

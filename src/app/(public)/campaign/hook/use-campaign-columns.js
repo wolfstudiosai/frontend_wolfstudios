@@ -136,17 +136,21 @@ export const useCampaignColumns = (
                             },
                         }}
                     >
-                        {params.row.campaignImage.length > 0 && <Image
-                            src={params.row.campaignImage}
-                            alt="Campaign Image"
-                            width={22}
-                            height={22}
-                            style={{ objectFit: 'cover', borderRadius: '2px', cursor: 'pointer' }}
-                            onClick={(event) => {
-                                anchorEl.current = event.currentTarget;
-                                setImageToShow(params.row.campaignImage);
-                            }}
-                        />}
+                        {params.row.campaignImage.length > 0 &&
+                            params.row.campaignImage.map((image, index) => (
+                                <Image
+                                    key={index}
+                                    src={image}
+                                    alt="Campaign Image"
+                                    width={22}
+                                    height={22}
+                                    style={{ objectFit: 'cover', borderRadius: '2px', cursor: 'pointer' }}
+                                    onClick={(event) => {
+                                        anchorEl.current = event.currentTarget;
+                                        setImageToShow(image);
+                                    }}
+                                />
+                            ))}
 
                         <AttachFile
                             className="attach-icon"
