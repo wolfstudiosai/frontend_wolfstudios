@@ -9,6 +9,7 @@ import Link from 'next/link';
 import DateEditCell from '/src/components/data-table/date-edit-cell';
 import SelectEditCell from '/src/components/data-table/select-edit-cell';
 import { renderAutoCompleteEditCell, renderAutoCompleteCell } from '/src/components/data-table/render-auto-complete-edit-cell';
+import { MultipleTextInputEditCell } from '/src/components/data-table/multiple-text-input-edit';
 import { campaignProgressStatus } from '/src/app/(public)/campaign/_lib/campaign.constants';
 import { useMemo } from 'react';
 import { getContentList } from '../../../(private)/all-content/_lib/all-content.actions';
@@ -262,9 +263,10 @@ export const useCampaignColumns = (
         {
             field: 'campaignGoals',
             headerName: 'Goals',
-            width: 200,
-            editable: false,
-            valueFormatter: (value) => value.join(', ')
+            width: 300,
+            editable: true,
+            valueFormatter: (value) => value.join(', '),
+            renderEditCell: (params) => <MultipleTextInputEditCell {...params} />,
         },
         // Content HQ
         {
