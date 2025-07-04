@@ -39,21 +39,29 @@ export const CampaignListView = () => {
   const router = useRouter();
   const anchorEl = React.useRef(null);
   const [anchorElHide, setAnchorElHide] = React.useState(null);
-  const [imageToShow, setImageToShow] = React.useState(null);
+  const [isImageUploadOpen, setIsImageUploadOpen] = React.useState(false);
+  const [mediaToShow, setMediaToShow] = React.useState({
+    type: '',
+    url: '',
+  });
   const [imageUpdatedField, setImageUpdatedField] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const searchParams = useSearchParams();
   const viewId = searchParams.get('view');
 
-  const handleUploadModalOpen = (data, field) => {
+  const handleUploadModalOpen = (data, field, uploadOpen) => {
     setOpen(true);
     setImageUpdatedField(field);
     setUpdatedRow(data);
+    setIsImageUploadOpen(uploadOpen);
   };
 
   const handleClosePopover = () => {
     anchorEl.current = null;
-    setImageToShow(null);
+    setMediaToShow({
+      type: '',
+      url: '',
+    });
   };
 
   const handleClosePopoverHide = () => {
@@ -129,7 +137,7 @@ export const CampaignListView = () => {
   const [visibleColumns, setVisibleColumns] = React.useState([]);
   const [newVisibleColumns, setNewVisibleColumns] = React.useState(visibleColumns);
   const [searchColumns, setSearchColumns] = React.useState([]);
-  const columns = useCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns);
+  const columns = useCampaignColumns(anchorEl, visibleColumns, setMediaToShow, handleUploadModalOpen);
 
   // get single view
   const getSingleView = async (viewId, paginationProps) => {
@@ -626,8 +634,11 @@ export const CampaignListView = () => {
         disablePortal
       >
         <Box sx={{ p: 1.5 }}>
-          {imageToShow && (
-            <Image src={imageToShow} alt="Preview" width={300} height={300} style={{ borderRadius: 8 }} />
+          {mediaToShow?.type === 'image' && (
+            <Image src={mediaToShow?.url} alt="Preview" width={300} height={300} style={{ borderRadius: 8, }} />
+          )}
+          {mediaToShow?.type === 'video' && (
+            <video src={mediaToShow?.url} controls style={{ height: 300, width: 300, borderRadius: 8 }} />
           )}
         </Box>
       </Popover>
@@ -709,11 +720,12 @@ export const CampaignListView = () => {
 
       {/* Image upload dialog */}
       <MediaUploader
+        multiple
         open={open}
         onClose={() => setOpen(false)}
         onSave={(paths) => handleUploadImage([...paths])}
-        multiple
-        hideVideoUploader={true}
+        hideVideoUploader={isImageUploadOpen}
+        hideImageUploader={!isImageUploadOpen}
         folderName="campaigns"
       />
     </PageContainer>

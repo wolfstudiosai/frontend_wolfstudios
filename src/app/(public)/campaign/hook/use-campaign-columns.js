@@ -20,9 +20,9 @@ import { getProductionListAsync } from '../../production/_lib/production.action'
 
 export const useCampaignColumns = (
     anchorEl,
-    setImageToShow,
+    visibleColumns,
+    setMediaToShow,
     handleUploadModalOpen,
-    visibleColumns
 ) => {
     const [contentOptions, setContentOptions] = React.useState([]);
     const [stakeholderOptions, setStakeholderOptions] = React.useState([]);
@@ -148,7 +148,10 @@ export const useCampaignColumns = (
                                     style={{ objectFit: 'cover', borderRadius: '2px', cursor: 'pointer' }}
                                     onClick={(event) => {
                                         anchorEl.current = event.currentTarget;
-                                        setImageToShow(image);
+                                        setMediaToShow({
+                                            type: 'image',
+                                            url: image,
+                                        });
                                     }}
                                 />
                             ))}
@@ -156,7 +159,7 @@ export const useCampaignColumns = (
                         <AttachFile
                             className="attach-icon"
                             titleAccess="Attach"
-                            onClick={() => handleUploadModalOpen(params.row, params.field)}
+                            onClick={() => handleUploadModalOpen(params.row, params.field, true)}
                             sx={{
                                 fontSize: 18,
                                 cursor: 'pointer',
@@ -196,7 +199,10 @@ export const useCampaignColumns = (
                                 style={{ objectFit: 'cover', borderRadius: '2px', cursor: 'pointer' }}
                                 onClick={(event) => {
                                     anchorEl.current = event.currentTarget;
-                                    setImageToShow(image);
+                                    setMediaToShow({
+                                        type: 'image',
+                                        url: image,
+                                    });
                                 }}
                             />
                         ))}
@@ -204,7 +210,7 @@ export const useCampaignColumns = (
                         <AttachFile
                             className="attach-icon"
                             titleAccess="Attach"
-                            onClick={() => handleUploadModalOpen(params.row, params.field)}
+                            onClick={() => handleUploadModalOpen(params.row, params.field, true)}
                             sx={{
                                 fontSize: 18,
                                 cursor: 'pointer',
@@ -233,10 +239,58 @@ export const useCampaignColumns = (
             headerName: 'Video Inspiration Gallery',
             width: 200,
             editable: false,
-            renderCell: (params) => <Box sx={{ width: '100%', height: '100%', display: 'flex', gap: 0.5, alignItems: 'center' }}>
+            renderCell: (params) => <Box
+                sx={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    gap: 0.5,
+                    alignItems: 'center',
+                    position: 'relative',
+                    '&:hover .attach-icon': {
+                        display: 'inline-block',
+                    },
+                }}
+            >
                 {params.row.videoInspirationGallery.length > 0 && params.row.videoInspirationGallery.map((video, index) => (
-                    <Box key={index} as={Link} href={video} target="_blank" sx={{ cursor: 'pointer' }}>Link</Box>
+                    <Box
+                        key={index}
+                        sx={{
+                            cursor: 'pointer',
+                            gap: 0.5,
+                            width: 22,
+                            height: 22,
+                        }}
+                        onClick={(event) => {
+                            anchorEl.current = event.currentTarget;
+                            setMediaToShow({
+                                type: 'video',
+                                url: video,
+                            });
+                        }}
+                    >
+                        <video
+                            src={video}
+                            controls={false}
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                            }}
+                        />
+                    </Box>
                 ))}
+
+                <AttachFile
+                    className="attach-icon"
+                    titleAccess="Attach"
+                    onClick={() => handleUploadModalOpen(params.row, params.field, false)}
+                    sx={{
+                        fontSize: 18,
+                        cursor: 'pointer',
+                        display: 'none',
+                    }}
+                />
             </Box>
         },
         {
@@ -492,7 +546,7 @@ export const useCampaignColumns = (
             valueGetter: (value, row) => dateFormatter(row.endDate, 'YYYY-MM-DD'),
             renderEditCell: (params) => <DateEditCell {...params} format="YYYY-MM-DD" />
         },
-    ], [anchorEl, setImageToShow, handleUploadModalOpen]);
+    ], [anchorEl, setMediaToShow, handleUploadModalOpen]);
 
     const visibleFields = useMemo(() =>
         columns.filter(col =>

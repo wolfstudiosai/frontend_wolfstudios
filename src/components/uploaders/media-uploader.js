@@ -28,8 +28,12 @@ export const MediaUploader = ({
   hideVideoUploader = false,
   folderName = "content-HQ"
 }) => {
+  const availableTabs = [
+    !hideImageUploader && { label: 'Add Image', type: 'image' },
+    !hideVideoUploader && { label: 'Add Video', type: 'video' },
+  ].filter(Boolean);
 
-  const [tab, setTab] = React.useState(hideImageUploader ? 1 : 0);
+  const [tab, setTab] = React.useState(0);
   const [urls, setUrls] = React.useState([]);
   const [files, setFiles] = React.useState([]);
   const [uploading, setUploading] = React.useState(false);
@@ -146,16 +150,19 @@ export const MediaUploader = ({
     return new Promise((resolve) => setTimeout(() => resolve(URL.createObjectURL(file)), 1000));
   };
 
+  if (availableTabs.length === 0) return null;
+
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       <DialogTitle>Media Uploader</DialogTitle>
       <DialogContent>
         <Tabs value={tab} onChange={handleTabChange} centered>
-          {!hideImageUploader && <Tab label="Add Image" />}
-          {!hideVideoUploader && <Tab label="Add Video" />}
+          {availableTabs.map((t, index) => (
+            <Tab key={index} label={t.label} />
+          ))}
         </Tabs>
         <Box mt={2}>
-          {tab === 0 && !hideImageUploader && (
+          {availableTabs[tab]?.type === 'image' && (
             <>
               <Stack direction="row" gap={2}>
                 <Button
@@ -229,7 +236,7 @@ export const MediaUploader = ({
               </Stack>
             </>
           )}
-          {tab === 1 && (
+          {availableTabs[tab]?.type === 'video' && (
             <>
               <TextField
                 value={url || ''}
