@@ -218,14 +218,14 @@ export const useCampaignColumns = (
             field: 'budget',
             headerName: 'Budget',
             width: 200, editable: true,
-            valueGetter: (value, row) => formatCompactNumber(row.budget)
+            valueFormatter: (value) => formatCompactNumber(value),
         },
         {
             field: 'productExpense',
             headerName: 'Product Expense',
             width: 150,
             editable: true,
-            valueGetter: (value, row) => formatCompactNumber(row.productExpense)
+            valueFormatter: (value) => formatCompactNumber(value),
         },
         {
             field: 'videoInspirationGallery',
@@ -237,28 +237,27 @@ export const useCampaignColumns = (
                     <Box key={index} as={Link} href={video} target="_blank" sx={{ cursor: 'pointer' }}>Link</Box>
                 ))}
             </Box>
-
         },
         {
             field: 'campaignROI',
             headerName: 'Campaign ROI',
             width: 150,
             editable: true,
-            valueGetter: (value, row) => formatCompactNumber(row.campaignROI)
+            valueFormatter: (value) => formatCompactNumber(value)
         },
         {
             field: 'totalExpense',
             headerName: 'Total Expense',
             width: 200,
             editable: true,
-            valueGetter: (value, row) => formatCompactNumber(row.totalExpense)
+            valueFormatter: (value) => formatCompactNumber(value)
         },
         {
             field: 'totalContentEngagement',
             headerName: 'Total Content Engagement',
             width: 200,
             editable: true,
-            valueGetter: (value, row) => formatCompactNumber(row.totalContentEngagement)
+            valueFormatter: (value) => formatCompactNumber(value)
         },
         {
             field: 'campaignGoals',
