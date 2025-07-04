@@ -7,10 +7,12 @@ export default function DateEditCell(props) {
     const { id, value, field, format = "MMMM YYYY" } = props;
     const apiRef = useGridApiContext();
 
-    console.log(value);
-
     const handleDateChange = (newValue) => {
         apiRef.current.setEditCellValue({ id, field, value: dayjs(newValue).format(format) });
+
+        setTimeout(() => {
+            apiRef.current.stopCellEditMode({ id, field });
+        }, 100);
     };
 
     return (

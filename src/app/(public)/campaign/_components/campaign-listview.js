@@ -58,6 +58,7 @@ export const CampaignListView = () => {
 
   const handleClosePopoverHide = () => {
     setAnchorElHide(null);
+    setNewVisibleColumns(visibleColumns);
     setSearchColumns(allColumns);
   };
 
@@ -130,6 +131,7 @@ export const CampaignListView = () => {
   // table columns
   const [allColumns, setAllColumns] = React.useState([]);
   const [visibleColumns, setVisibleColumns] = React.useState([]);
+  const [newVisibleColumns, setNewVisibleColumns] = React.useState(visibleColumns);
   const [searchColumns, setSearchColumns] = React.useState([]);
   const columns = useCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns);
 
@@ -318,18 +320,36 @@ export const CampaignListView = () => {
   // Column handler
   // handle column change
   const handleColumnChange = async (e, col) => {
-    let newVisibleColumns = [];
+    let columns = [...newVisibleColumns];
     if (e.target.checked) {
-      // Add column
-      const exists = visibleColumns.some((c) => c.columnName === col.columnName);
+      const exists = columns.some((c) => c.columnName === col.columnName);
       if (exists) return;
-      newVisibleColumns = [...visibleColumns, col];
+      columns = [...columns, col];
     } else {
-      // Remove column
-      newVisibleColumns = visibleColumns.filter((c) => c.columnName !== col.columnName);
+      columns = columns.filter((c) => c.columnName !== col.columnName);
     }
-    setVisibleColumns(newVisibleColumns);
+    setNewVisibleColumns(columns);
+  };
 
+  // handle Column Search
+  const handleColumnSearch = (e) => {
+    const searchValue = e.target.value.toLowerCase();
+    setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
+  };
+
+  // handle show all columns
+  const showAllColumns = async () => {
+    const newVisibleColumns = allColumns;
+    setNewVisibleColumns(newVisibleColumns);
+  };
+
+  // handle hide all columns
+  const hideAllColumns = async () => {
+    const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
+    setNewVisibleColumns(newVisibleColumns);
+  };
+
+  const handleSaveColumns = async () => {
     if (viewId) {
       const data = {
         columns: newVisibleColumns.map((c) => c.columnName),
@@ -346,62 +366,7 @@ export const CampaignListView = () => {
       const res = await updateCampaignView(viewId, data);
       if (res.success) {
         getSingleView(viewId);
-      }
-    }
-  };
-
-  // handle Column Search
-  const handleColumnSearch = (e) => {
-    const searchValue = e.target.value.toLowerCase();
-    setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
-  };
-
-  // handle show all columns
-  const showAllColumns = async () => {
-    const newVisibleColumns = allColumns;
-    setVisibleColumns(newVisibleColumns);
-
-    if (viewId) {
-      const data = {
-        columns: allColumns.map((c) => c.columnName),
-        label: selectedViewData?.meta?.label,
-        description: selectedViewData?.meta?.description,
-        table: selectedViewData?.meta?.table,
-        isPublic: selectedViewData?.meta?.isPublic,
-        gate,
-        filters,
-        sort,
-        groups: selectedViewData?.meta?.groups,
-      };
-
-      const res = await updateCampaignView(viewId, data);
-      if (res.success) {
-        getSingleView(viewId);
-      }
-    }
-  };
-
-  // handle hide all columns
-  const hideAllColumns = async () => {
-    const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
-    setVisibleColumns(newVisibleColumns);
-
-    if (viewId) {
-      const data = {
-        columns: ['id'],
-        label: selectedViewData?.meta?.label,
-        description: selectedViewData?.meta?.description,
-        table: selectedViewData?.meta?.table,
-        isPublic: selectedViewData?.meta?.isPublic,
-        gate,
-        filters,
-        sort,
-        groups: selectedViewData?.meta?.groups,
-      };
-
-      const res = await updateCampaignView(viewId, data);
-      if (res.success) {
-        getSingleView(viewId);
+        handleClosePopoverHide();
       }
     }
   };
@@ -522,8 +487,10 @@ export const CampaignListView = () => {
       const selectedColumnNames = selectedViewData.meta?.columns || [];
       const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
       setVisibleColumns(filtered);
+      setNewVisibleColumns(filtered);
     } else {
       setVisibleColumns(allColumns);
+      setNewVisibleColumns(allColumns);
     }
     setSearchColumns(allColumns);
   }, [viewId, selectedViewData, allColumns]);
@@ -723,7 +690,7 @@ export const CampaignListView = () => {
                     key={col.field}
                     control={
                       <Checkbox
-                        checked={visibleColumns.some((c) => c.columnName === col.columnName)}
+                        checked={newVisibleColumns.some((c) => c.columnName === col.columnName)}
                         onChange={(e) => handleColumnChange(e, col)}
                       />
                     }
@@ -733,11 +700,16 @@ export const CampaignListView = () => {
               })}
           </FormGroup>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }}>
-            <Button variant="outlined" size="small" onClick={hideAllColumns}>
-              Hide all
-            </Button>
-            <Button variant="contained" size="small" onClick={showAllColumns}>
-              Show all
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Button variant="outlined" size="small" onClick={hideAllColumns}>
+                Hide all
+              </Button>
+              <Button variant="outlined" size="small" onClick={showAllColumns}>
+                Show all
+              </Button>
+            </Box>
+            <Button variant="contained" size="small" onClick={handleSaveColumns}>
+              Save
             </Button>
           </Box>
         </Box>
