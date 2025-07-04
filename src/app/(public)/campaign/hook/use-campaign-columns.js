@@ -264,6 +264,7 @@ export const useCampaignColumns = (
             headerName: 'Goals',
             width: 200,
             editable: false,
+            valueFormatter: (value) => value.join(', ')
         },
         // Content HQ
         {

@@ -90,10 +90,6 @@ export const CampaignListView = () => {
         }
       }
 
-      if (finalData.campaignGoals && typeof finalData.campaignGoals === 'string') {
-        finalData.campaignGoals = finalData.campaignGoals.split(',').map((item) => item.trim());
-      }
-
       const response = await updateCampaignAsync(updatedRow.id, {
         ...finalData,
         [imageUpdatedField]: [...updatedRow[imageUpdatedField], ...images],
@@ -279,10 +275,6 @@ export const CampaignListView = () => {
         if (value) {
           finalData[field] = Number(value);
         }
-      }
-
-      if (finalData.campaignGoals && typeof finalData.campaignGoals === 'string') {
-        finalData.campaignGoals = finalData.campaignGoals.split(',').map((item) => item.trim());
       }
 
       await updateCampaignAsync(newRow.id, finalData);

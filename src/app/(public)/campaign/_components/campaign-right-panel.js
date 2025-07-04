@@ -116,9 +116,6 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
           }
         }
 
-        if (finalData.campaignGoals && typeof finalData.campaignGoals === 'string') {
-          finalData.campaignGoals = finalData.campaignGoals.split(',').map((item) => item.trim());
-        }
         const res = id ? await updateCampaignAsync(id, finalData) : await createCampaignAsync(finalData);
         if (res.success) {
           onClose?.();
