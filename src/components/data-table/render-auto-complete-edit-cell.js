@@ -40,6 +40,10 @@ export const renderAutoCompleteEditCell = ({
 
     const handleChange = (_, newValue) => {
         apiRef.current.setEditCellValue({ id, field, value: newValue });
+
+        setTimeout(() => {
+            apiRef.current.stopCellEditMode({ id, field });
+        }, 100);
     };
 
     return (
