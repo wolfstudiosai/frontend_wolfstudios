@@ -1,28 +1,53 @@
+// services/useCampaignList.js
 import useSWRInfinite from 'swr/infinite';
-
 import { getCampaignGroupListAsync } from '../app/(public)/campaign/_lib/campaign.actions';
+// import { getCampaignGroupListAsync } from '../_lib/campaign.actions';
 
-const getKey = (pageIndex, previousPageData) => {
+const getKey = (pageIndex, previousPageData, status) => {
+  // Reached the end
   if (previousPageData && !previousPageData.data?.length) return null;
-  return ['campaign-groups', pageIndex + 1, 20]; // 20 items per page
+  
+  return [
+    'campaign-groups',
+    pageIndex + 1,
+    10, // page size
+    status // filter by status
+  ];
 };
 
-export const useCampaignList = () => {
+export const useCampaignList = (status = '') => {
   const {
     data: pages,
     error,
     size,
     setSize,
     isValidating,
-    mutate,
-  } = useSWRInfinite(getKey, ([, pageNo, limit]) => getCampaignGroupListAsync({ page: pageNo, rowsPerPage: limit }), {
-    revalidateFirstPage: false,
-    parallel: true,
-  });
+    mutate
+  } = useSWRInfinite(
+    (pageIndex, previousPageData) => getKey(pageIndex, previousPageData, status),
+    ([, pageNo, limit, statusFilter]) => {
+      const filters = statusFilter ? [{
+        key: 'campaignStatus',
+        operator: 'contains',
+        type: 'string',
+        value: statusFilter
+      }] : [];
+      
+      return getCampaignGroupListAsync(
+        { page: pageNo, rowsPerPage: limit },
+        filters,
+        'and'
+      );
+    },
+    {
+      revalidateFirstPage: false,
+      parallel: true
+    }
+  );
 
   const isLoadingInitial = !pages && !error;
   const isLoadingMore = isValidating && size > 0;
-  const allRecords = pages?.flatMap((page) => page.data) || [];
+  const allRecords = pages?.flatMap(page => page.data) || [];
   const totalRecords = pages?.[0]?.totalRecords || 0;
   const hasMore = allRecords.length < totalRecords;
 
@@ -37,6 +62,6 @@ export const useCampaignList = () => {
     isLoadingMore,
     hasMore,
     loadMore,
-    refresh,
+    refresh
   };
 };

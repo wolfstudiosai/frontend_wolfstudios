@@ -31,11 +31,8 @@ export const CampaignView = () => {
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
-  // if (isLoading) return <Box>Loading...</Box>;
-  if (error) return <div>Error loading campaigns</div>;
-
   return (
-    <PageLoader loading={isLoading} error={null}>
+    <PageLoader loading={isLoading} error={error}>
       <PageContainer>
         <Box>
           <PageHeader
