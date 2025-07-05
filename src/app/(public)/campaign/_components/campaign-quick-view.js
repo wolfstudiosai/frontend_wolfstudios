@@ -1,21 +1,24 @@
 'use client';
 
+import { Assessment, AttachMoney, Flag, People } from '@mui/icons-material';
 import {
-  Box, Button, Chip,
+  Box,
+  Button,
+  Chip,
+  Divider,
   LinearProgress,
-  Paper,
-  Stack,
-  Table,
-  TableContainer,
-  TableHead,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography,
   List,
   ListItem,
   ListItemText,
-  Divider
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
@@ -23,12 +26,15 @@ import { SwiperSlide } from 'swiper/react';
 
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
-import { isVideoContent, pxToRem } from '/src/utils/helper';
-import { Assessment, AttachMoney, Flag, People } from '@mui/icons-material';
 import { formatCompactNumber } from '../../../../utils/helper';
+import { isVideoContent, pxToRem } from '/src/utils/helper';
 
 export const CampaignQuickView = ({ data }) => {
-  const mediaArr = [...(data?.imageInspirationGallery || []), ...(data?.videoInspirationGallery || [])];
+  const mediaArr = [
+    ...(data?.imageInspirationGallery || []),
+    ...(data?.videoInspirationGallery || []),
+    ...(data?.campaignImage || []),
+  ];
   const budgetUsed = data.budget === 0 ? 0 : (data.totalExpense / data.budget) * 100;
   const remainingBudget = data.budget - data.totalExpense;
 
@@ -105,47 +111,47 @@ export const CampaignQuickView = ({ data }) => {
 
       {/* Campaign Overview */}
       <Paper elevation={0} sx={{ p: 3, my: 1, borderRadius: 0.5 }}>
-        <Typography variant="h5" gutterBottom sx={{ display: "flex", alignItems: "center" }}>
+        <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
           <Assessment sx={{ mr: 1 }} />
           Campaign Overview
         </Typography>
         <Grid container spacing={3} mt={2}>
           <Grid item xs={12} sm={6} md={3}>
-            <Box sx={{ textAlign: "center", p: 2, bgcolor: "background.default" }}>
-              <Typography variant="h4" sx={{ color: "primary", fontWeight: 700 }}>
+            <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default' }}>
+              <Typography variant="h4" sx={{ color: 'primary', fontWeight: 700 }}>
                 {formatCompactNumber(data.budget)}
               </Typography>
-              <Typography variant="body2" sx={{ color: "primary" }}>
+              <Typography variant="body2" sx={{ color: 'primary' }}>
                 Total Budget
               </Typography>
             </Box>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Box sx={{ textAlign: "center", p: 2, bgcolor: "background.default" }}>
-              <Typography variant="h4" sx={{ color: "warning", fontWeight: 700 }}>
+            <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default' }}>
+              <Typography variant="h4" sx={{ color: 'warning', fontWeight: 700 }}>
                 {formatCompactNumber(data.totalExpense)}
               </Typography>
-              <Typography variant="body2" sx={{ color: "warning" }}>
+              <Typography variant="body2" sx={{ color: 'warning' }}>
                 Total Spent
               </Typography>
             </Box>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Box sx={{ textAlign: "center", p: 2, bgcolor: "background.default" }}>
-              <Typography variant="h4" sx={{ color: "success", fontWeight: 700 }}>
+            <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default' }}>
+              <Typography variant="h4" sx={{ color: 'success', fontWeight: 700 }}>
                 {formatCompactNumber(data.campaignROI)}x
               </Typography>
-              <Typography variant="body2" sx={{ color: "success" }}>
+              <Typography variant="body2" sx={{ color: 'success' }}>
                 ROI
               </Typography>
             </Box>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Box sx={{ textAlign: "center", p: 2, bgcolor: "background.default" }}>
-              <Typography variant="h4" sx={{ color: "info", fontWeight: 700 }}>
+            <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default' }}>
+              <Typography variant="h4" sx={{ color: 'info', fontWeight: 700 }}>
                 {formatCompactNumber(data.totalContentEngagement)}
               </Typography>
-              <Typography variant="body2" sx={{ color: "info" }}>
+              <Typography variant="body2" sx={{ color: 'info' }}>
                 Engagement
               </Typography>
             </Box>
@@ -155,12 +161,12 @@ export const CampaignQuickView = ({ data }) => {
 
       {/* Financial Breakdown */}
       <Paper elevation={0} sx={{ p: 3, mb: 2, borderRadius: 0.5 }}>
-        <Typography variant="h5" gutterBottom sx={{ display: "flex", alignItems: "center" }}>
+        <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
           <AttachMoney sx={{ mr: 1 }} />
           Financial Breakdown
         </Typography>
         <Box sx={{ mb: 3 }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
             <Typography variant="body1">Budget Utilization</Typography>
             <Typography variant="body1" fontWeight="bold">
               {budgetUsed.toFixed(1)}%
@@ -172,8 +178,8 @@ export const CampaignQuickView = ({ data }) => {
             sx={{
               height: 12,
               borderRadius: 6,
-              backgroundColor: "grey.200",
-              "& .MuiLinearProgress-bar": {
+              backgroundColor: 'grey.200',
+              '& .MuiLinearProgress-bar': {
                 borderRadius: 6,
                 background: 'primary.main',
               },
@@ -184,9 +190,13 @@ export const CampaignQuickView = ({ data }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ backgroundColor: "transparent !important" }}>Category</TableCell>
-                <TableCell align="right" sx={{ backgroundColor: "transparent !important" }}>Amount</TableCell>
-                <TableCell align="right" sx={{ backgroundColor: "transparent !important" }}>Percentage</TableCell>
+                <TableCell sx={{ backgroundColor: 'transparent !important' }}>Category</TableCell>
+                <TableCell align="right" sx={{ backgroundColor: 'transparent !important' }}>
+                  Amount
+                </TableCell>
+                <TableCell align="right" sx={{ backgroundColor: 'transparent !important' }}>
+                  Percentage
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -203,16 +213,14 @@ export const CampaignQuickView = ({ data }) => {
               <TableRow>
                 <TableCell>Product Expense</TableCell>
                 <TableCell align="right">{formatCompactNumber(data.productExpense)}</TableCell>
-                <TableCell align="right">
-                  {((data.productExpense / data.budget) * 100).toFixed(1)}%
-                </TableCell>
+                <TableCell align="right">{((data.productExpense / data.budget) * 100).toFixed(1)}%</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell sx={{ fontWeight: "bold" }}>Remaining Budget</TableCell>
-                <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                <TableCell sx={{ fontWeight: 'bold' }}>Remaining Budget</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 'bold' }}>
                   {formatCompactNumber(remainingBudget)}
                 </TableCell>
-                <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                <TableCell align="right" sx={{ fontWeight: 'bold' }}>
                   {(100 - budgetUsed).toFixed(1)}%
                 </TableCell>
               </TableRow>
@@ -223,7 +231,7 @@ export const CampaignQuickView = ({ data }) => {
 
       {/* Campaign Goals */}
       <Paper elevation={0} sx={{ p: 3, mb: 2, borderRadius: 0.5 }}>
-        <Typography variant="h5" gutterBottom sx={{ display: "flex", alignItems: "center" }}>
+        <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
           <Flag sx={{ mr: 1 }} />
           Campaign Goals & Guidelines
         </Typography>
@@ -246,15 +254,13 @@ export const CampaignQuickView = ({ data }) => {
 
       {/* Team & Stakeholders */}
       <Paper elevation={0} sx={{ p: 3, mb: 2, borderRadius: 0.5 }}>
-        <Typography variant="h5" gutterBottom sx={{ display: "flex", alignItems: "center" }}>
+        <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
           <People sx={{ mr: 1 }} />
           Team & Stakeholders
         </Typography>
 
         <Box>
-          <Typography variant="subtitle1">
-            Stakeholders ({data?.stakeholders?.length})
-          </Typography>
+          <Typography variant="subtitle1">Stakeholders ({data?.stakeholders?.length})</Typography>
           <List dense>
             {data?.stakeholders?.map((stakeholder) => (
               <ListItem key={stakeholder.id} sx={{ p: 0 }}>
@@ -262,7 +268,7 @@ export const CampaignQuickView = ({ data }) => {
                   primary={stakeholder.name}
                   slotProps={{
                     primary: {
-                      color: "text.secondary",
+                      color: 'text.secondary',
                     },
                   }}
                 />
@@ -274,9 +280,7 @@ export const CampaignQuickView = ({ data }) => {
         <Divider sx={{ my: 1 }} />
 
         <Box>
-          <Typography variant="subtitle1">
-            Content HQ ({data?.contentHQ?.length})
-          </Typography>
+          <Typography variant="subtitle1">Content HQ ({data?.contentHQ?.length})</Typography>
           <List dense>
             {data?.contentHQ?.map((content) => (
               <ListItem key={content.id} sx={{ p: 0 }}>
@@ -284,7 +288,7 @@ export const CampaignQuickView = ({ data }) => {
                   primary={content.name}
                   slotProps={{
                     primary: {
-                      color: "text.secondary",
+                      color: 'text.secondary',
                     },
                   }}
                 />
@@ -296,9 +300,7 @@ export const CampaignQuickView = ({ data }) => {
         <Divider sx={{ my: 1 }} />
 
         <Box>
-          <Typography variant="subtitle1">
-            Production HQ ({data?.productionHQ?.length})
-          </Typography>
+          <Typography variant="subtitle1">Production HQ ({data?.productionHQ?.length})</Typography>
           <List dense>
             {data?.productionHQ?.map((production) => (
               <ListItem key={production.id} sx={{ p: 0 }}>
@@ -306,7 +308,7 @@ export const CampaignQuickView = ({ data }) => {
                   primary={production.name}
                   slotProps={{
                     primary: {
-                      color: "text.secondary",
+                      color: 'text.secondary',
                     },
                   }}
                 />
@@ -318,9 +320,7 @@ export const CampaignQuickView = ({ data }) => {
         <Divider sx={{ my: 1 }} />
 
         <Box>
-          <Typography variant="subtitle1">
-            Proposed Partner ({data?.proposedPartners?.length})
-          </Typography>
+          <Typography variant="subtitle1">Proposed Partner ({data?.proposedPartners?.length})</Typography>
           <List dense>
             {data?.proposedPartners?.map((partner) => (
               <ListItem key={partner.id} sx={{ p: 0 }}>
@@ -328,7 +328,7 @@ export const CampaignQuickView = ({ data }) => {
                   primary={partner.name}
                   slotProps={{
                     primary: {
-                      color: "text.secondary",
+                      color: 'text.secondary',
                     },
                   }}
                 />
@@ -340,9 +340,7 @@ export const CampaignQuickView = ({ data }) => {
         <Divider sx={{ my: 1 }} />
 
         <Box>
-          <Typography variant="subtitle1">
-            Contributed Partner ({data?.contributedPartners?.length})
-          </Typography>
+          <Typography variant="subtitle1">Contributed Partner ({data?.contributedPartners?.length})</Typography>
           <List dense>
             {data?.contributedPartners?.map((partner) => (
               <ListItem key={partner.id} sx={{ p: 0 }}>
@@ -350,7 +348,7 @@ export const CampaignQuickView = ({ data }) => {
                   primary={partner.name}
                   slotProps={{
                     primary: {
-                      color: "text.secondary",
+                      color: 'text.secondary',
                     },
                   }}
                 />
@@ -362,9 +360,7 @@ export const CampaignQuickView = ({ data }) => {
         <Divider sx={{ my: 1 }} />
 
         <Box>
-          <Typography variant="subtitle1">
-            Spaces ({data?.spaces?.length})
-          </Typography>
+          <Typography variant="subtitle1">Spaces ({data?.spaces?.length})</Typography>
           <List dense>
             {data?.spaces?.map((space) => (
               <ListItem key={space.id} sx={{ p: 0 }}>
@@ -372,7 +368,7 @@ export const CampaignQuickView = ({ data }) => {
                   primary={space.name}
                   slotProps={{
                     primary: {
-                      color: "text.secondary",
+                      color: 'text.secondary',
                     },
                   }}
                 />

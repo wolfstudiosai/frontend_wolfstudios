@@ -1,10 +1,12 @@
 'use client';
 
+import React from 'react';
 import { Box, Button, Chip, FormControl, FormLabel, InputAdornment, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import React from 'react';
+
 import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
+import { CustomMultipleInputField } from '/src/components/formFields/custom-mulitple-input-field';
 import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
@@ -13,13 +15,16 @@ import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-ifr
 import { ImageUploader } from '/src/components/uploaders/image-uploader';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
-import { getRetailPartnerListAsync, getStakeHolderListAsync, getProductListAsync } from '../../../../lib/common.actions';
+import { campaignProgressStatus } from '../_lib/campaign.constants';
+import {
+  getProductListAsync,
+  getRetailPartnerListAsync,
+  getStakeHolderListAsync,
+} from '../../../../lib/common.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
+import { getProductionListAsync } from '../../production/_lib/production.action';
 import { getContentList } from '/src/app/(private)/all-content/_lib/all-content.actions';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
-import { getProductionListAsync } from '../../production/_lib/production.action';
-import { campaignProgressStatus } from '../_lib/campaign.constants';
-import { CustomMultipleInputField } from '/src/components/formFields/custom-mulitple-input-field';
 
 export const CampaignForm = ({ handleChange, values, errors, loading, setFieldValue, onSubmit }) => {
   // *********************States*********************************
@@ -32,6 +37,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
   const [productionHQOptions, setProductionHQOptions] = React.useState([]);
   const [productOptions, setProductOptions] = React.useState([]);
   const [openImageUploadDialog, setOpenImageUploadDialog] = React.useState(false);
+  const [openCampaignImage, setOpenCampaignImage] = React.useState(false);
 
   // --------------- Fetch Prerequisites Data -------------------
   React.useEffect(() => {
@@ -84,14 +90,14 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
 
   const handleAddGoal = () => {
     if (values.currentGoals?.trim() && !values.campaignGoals.includes(values.currentGoals.trim())) {
-      setFieldValue("campaignGoals", [...values.campaignGoals, values.currentGoals.trim()], { shouldValidate: true });
-      setFieldValue("currentGoals", "");
+      setFieldValue('campaignGoals', [...values.campaignGoals, values.currentGoals.trim()], { shouldValidate: true });
+      setFieldValue('currentGoals', '');
     }
   };
 
   const handleRemoveGoal = (goalToRemove) => {
     setFieldValue(
-      "campaignGoals",
+      'campaignGoals',
       values.campaignGoals.filter((goal) => goal !== goalToRemove),
       { shouldValidate: true }
     );
@@ -191,10 +197,12 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                 const paging = { page: 1, rowsPerPage: 20 };
                 const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
                 const res = await getContentList(paging, filters, 'and');
-                return res?.data?.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })) || [];
+                return (
+                  res?.data?.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  })) || []
+                );
               }}
             />
           </Grid>
@@ -210,10 +218,12 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const res = await getStakeHolderListAsync(paging, debounceValue);
-                return res?.data?.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })) || [];
+                return (
+                  res?.data?.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  })) || []
+                );
               }}
             />
           </Grid>
@@ -230,10 +240,12 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                 const paging = { page: 1, rowsPerPage: 20 };
                 const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
                 const res = await getPartnerListAsync(paging, filters, 'and');
-                return res?.data?.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })) || [];
+                return (
+                  res?.data?.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  })) || []
+                );
               }}
             />
           </Grid>
@@ -249,10 +261,12 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const res = await getRetailPartnerListAsync(paging, debounceValue);
-                return res?.data?.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })) || [];
+                return (
+                  res?.data?.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  })) || []
+                );
               }}
             />
           </Grid>
@@ -268,10 +282,12 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const res = await getRetailPartnerListAsync(paging, debounceValue);
-                return res?.data?.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })) || [];
+                return (
+                  res?.data?.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  })) || []
+                );
               }}
             />
           </Grid>
@@ -287,10 +303,12 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const res = await getRetailPartnerListAsync(paging, debounceValue);
-                return res?.data?.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })) || [];
+                return (
+                  res?.data?.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  })) || []
+                );
               }}
             />
           </Grid>
@@ -307,10 +325,12 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                 const paging = { page: 1, rowsPerPage: 20 };
                 const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
                 const res = await getPartnerListAsync(paging, filters, 'and');
-                return res?.data?.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })) || [];
+                return (
+                  res?.data?.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  })) || []
+                );
               }}
             />
           </Grid>
@@ -327,10 +347,12 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                 const paging = { page: 1, rowsPerPage: 20 };
                 const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
                 const res = await getSpaceListAsync(paging, filters, 'and');
-                return res?.data?.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })) || [];
+                return (
+                  res?.data?.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  })) || []
+                );
               }}
             />
           </Grid>
@@ -347,10 +369,12 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                 const paging = { page: 1, rowsPerPage: 20 };
                 const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
                 const res = await getProductionListAsync(paging, filters, 'and');
-                return res?.data?.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })) || [];
+                return (
+                  res?.data?.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  })) || []
+                );
               }}
             />
           </Grid>
@@ -366,15 +390,17 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const res = await getProductListAsync(paging, debounceValue);
-                return res?.data?.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })) || [];
+                return (
+                  res?.data?.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  })) || []
+                );
               }}
             />
           </Grid>
 
-          <Grid size={{ xs: 12, md: 6 }}>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
             <FormControl fullWidth error={Boolean(errors.campaignImage)}>
               <FormLabel sx={{ mb: 1 }}>Campaign Image</FormLabel>
               <ImageUploader
@@ -383,7 +409,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                 onDelete={() => setFieldValue('campaignImage', null)}
               />
             </FormControl>
-          </Grid>
+          </Grid> */}
 
           <Grid size={{ xs: 12 }}>
             <CustomMultipleInputField
@@ -397,7 +423,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               handleRemove={handleRemoveGoal}
             />
 
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 1 }}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
               {values.campaignGoals.map((goal, index) => (
                 <Chip
                   key={index}
@@ -454,6 +480,18 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               label="Inspiration Videos"
               value={values.videoInspirationGallery}
               setFieldValue={setFieldValue}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <MediaUploaderTrigger
+              open={openCampaignImage}
+              onClose={() => setOpenCampaignImage(false)}
+              onSave={(urls) => setFieldValue('campaignImage', urls)}
+              value={values?.campaignImage}
+              label="Campaign Image"
+              onAdd={() => setOpenCampaignImage(true)}
+              onDelete={(filteredUrls) => setFieldValue('campaignImage', filteredUrls)}
+              folderName="campaigns"
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
