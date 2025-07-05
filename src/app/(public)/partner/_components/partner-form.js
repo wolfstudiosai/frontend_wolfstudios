@@ -1,6 +1,7 @@
 'use client';
 
-import { FormControl, FormLabel } from '@mui/material';
+import React from 'react';
+import { Box, Button, Checkbox, FormControl, FormControlLabel, FormLabel, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
@@ -8,35 +9,451 @@ import { CustomDatePicker } from '/src/components/formFields/custom-date-picker'
 import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
-import { ImageUploader } from '/src/components/uploaders/image-uploader';
+import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
+import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
+import { CustomMultiDatePicker } from '/src/components/formFields/custom-multi-date-picker';
 
-import { ageBracket, profileStatus, status } from '../_lib/partner.constants';
+import { affiliatePlatform, ageBracket, platformDeliverables, platforms, sourcedFrom, status } from '../_lib/partner.constants';
+import {
+  getCaseStudyListAsync,
+  getCityListAsync,
+  getCountryListAsync,
+  getProductListAsync,
+  getRetailPartnerListAsync,
+  getStakeHolderListAsync,
+  getStateListAsync,
+  getTagListAsync,
+  getDestinationListAsync,
+} from '../../../../lib/common.actions';
+import { getContentList } from '/src/app/(private)/all-content/_lib/all-content.actions';
+import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
+import { getProductionListAsync } from '../../production/_lib/production.action';
+import { getCampaignListAsync } from '../../campaign/_lib/campaign.actions';
 
-export const PartnerForm = ({ handleChange, values, errors, setFieldValue, onSubmit }) => {
-  // *****************Use Effects*******************************
+export const PartnerForm = ({ handleChange, values, errors, setFieldValue, loading, onSubmit }) => {
+  // *********************States*********************************
+  const [openImageUploadDialog, setOpenImageUploadDialog] = React.useState({
+    profileImage: false,
+    mediaKit: false,
+    partnerGallery: false,
+    receipts: false,
+    contracts: false,
+  });
+  // Relational Data States
+  const [stackholders, setStackholders] = React.useState([]);
+  const [contentHQs, setContentHQs] = React.useState([]);
+  const [profileCategory, setProfileCategory] = React.useState([]);
+  const [portfolios, setPortfolios] = React.useState([]);
+  const [states, setStates] = React.useState([]);
+  const [cities, setCities] = React.useState([]);
+  const [services, setServices] = React.useState([]);
+  const [caseStudies, setCaseStudies] = React.useState([]);
+  const [productionHQs, setProductionHQs] = React.useState([]);
+  const [products, setProducts] = React.useState([]);
+  const [campaigns, setCampaigns] = React.useState([]);
+  const [countries, setCountries] = React.useState([]);
+  const [tags, setTags] = React.useState([]);
+  const [retailPartners, setRetailPartners] = React.useState([]);
+  const [destinations, setDestinations] = React.useState([]);
+
+  // --------------- Fetch Prerequisites Data -------------------
+  React.useEffect(() => {
+    const fetchPrerequisitesData = async () => {
+      try {
+        // Stakeholders
+        const stakeholdersResponse = await getStakeHolderListAsync({ page: 1, rowsPerPage: 20 });
+        if (stakeholdersResponse?.success) {
+          const options = stakeholdersResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setStackholders(options);
+        }
+
+        // Content HQs
+        const contentHQsResponse = await getContentList({ page: 1, rowsPerPage: 20 });
+        if (contentHQsResponse?.success) {
+          const options = contentHQsResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setContentHQs(options);
+        }
+
+        // Profile Category
+        // const profileCategoryResponse = await getProfileCategoryListAsync({ page: 1, rowsPerPage: 20 });
+        // if (profileCategoryResponse?.success) {
+        //   const options = profileCategoryResponse.data.map((item) => ({ value: item.id, label: item.name }));
+        //   setProfileCategory(options);
+        // }
+
+        // Portfolios
+        const portfoliosResponse = await getPortfolioListAsync({ page: 1, rowsPerPage: 20 });
+        if (portfoliosResponse?.success) {
+          const options = portfoliosResponse.data.map((item) => ({ value: item.id, label: item.projectTitle }));
+          setPortfolios(options);
+        }
+
+        // States
+        const statesResponse = await getStateListAsync({ page: 1, rowsPerPage: 20 });
+        if (statesResponse?.success) {
+          const options = statesResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setStates(options);
+        }
+
+        // Cities
+        const citiesResponse = await getCityListAsync({ page: 1, rowsPerPage: 20 });
+        if (citiesResponse?.success) {
+          const options = citiesResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setCities(options);
+        }
+
+        // Services
+        // const servicesResponse = await getServiceListAsync({ page: 1, rowsPerPage: 20 });
+        // if (servicesResponse?.success) {
+        //   const options = servicesResponse.data.map((item) => ({ value: item.id, label: item.name }));
+        //   setServices(options);
+        // }
+
+        // Case Studies
+        const caseStudiesResponse = await getCaseStudyListAsync({ page: 1, rowsPerPage: 20 });
+        if (caseStudiesResponse?.success) {
+          const options = caseStudiesResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setCaseStudies(options);
+        }
+
+        // Production HQs
+        const productionHQsResponse = await getProductionListAsync({ page: 1, rowsPerPage: 20 });
+        if (productionHQsResponse?.success) {
+          const options = productionHQsResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setProductionHQs(options);
+        }
+
+        // Products
+        const productsResponse = await getProductListAsync({ page: 1, rowsPerPage: 20 });
+        if (productsResponse?.success) {
+          const options = productsResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setProducts(options);
+        }
+
+        // Campaigns
+        const campaignsResponse = await getCampaignListAsync({ page: 1, rowsPerPage: 20 });
+        if (campaignsResponse?.success) {
+          const options = campaignsResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setCampaigns(options);
+        }
+
+        // Countries
+        const countriesResponse = await getCountryListAsync({ page: 1, rowsPerPage: 20 });
+        if (countriesResponse?.success) {
+          const options = countriesResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setCountries(options);
+        }
+
+        // Tags
+        const tagsResponse = await getTagListAsync({ page: 1, rowsPerPage: 20 });
+        if (tagsResponse?.success) {
+          const options = tagsResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setTags(options);
+        }
+
+        // Retail Partners
+        const retailPartnersResponse = await getRetailPartnerListAsync({ page: 1, rowsPerPage: 20 });
+        if (retailPartnersResponse?.success) {
+          const options = retailPartnersResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setRetailPartners(options);
+        }
+
+        // Destinations
+        const destinationsResponse = await getDestinationListAsync({ page: 1, rowsPerPage: 20 });
+        if (destinationsResponse?.success) {
+          const options = destinationsResponse.data.map((item) => ({ value: item.id, label: item.name }));
+          setDestinations(options);
+        }
+      } catch (error) {
+
+      }
+    };
+
+    fetchPrerequisitesData();
+  }, []);
 
   return (
     <>
       <form onSubmit={onSubmit}>
         <Grid container spacing={2} sx={{ pb: 5 }}>
+          {/* Name */}
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} />
             <ErrorMessage error={errors.name} />
           </Grid>
+          {/* Email */}
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField name="email" type="email" label="Email" value={values.email} onChange={handleChange} />
             <ErrorMessage error={errors.email} />
           </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
+
+          {/* Total ROI */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="totalROI" type="number" label="Total ROI" value={values.totalROI} onChange={handleChange} />
+          </Grid>
+
+          {/* Total Expense */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="totalExpense" type="number" label="Total Expense" value={values.totalExpense} onChange={handleChange} />
+          </Grid>
+
+          {/* Shipping FBA Fee Gifted Partners */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="shippingFBAFeeGiftedPartners" type="number" label="Shipping FBA Fee Gifted Partners" value={values.shippingFBAFeeGiftedPartners} onChange={handleChange} />
+          </Grid>
+
+          {/* Paypal Fee */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="paypalFee" type="number" label="Paypal Fee" value={values.paypalFee} onChange={handleChange} />
+          </Grid>
+
+          {/* Amazon Referral Fee */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="amazonReferralFee" type="number" label="Amazon Referral Fee" value={values.amazonReferralFee} onChange={handleChange} />
+          </Grid>
+
+          {/* Instagram */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="instagram" type="text" label="Instagram" value={values.instagram} onChange={handleChange} />
+          </Grid>
+
+          {/* Instagram Following */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="instagramFollowing" type="number" label="Instagram Following" value={values.instagramFollowing} onChange={handleChange} />
+          </Grid>
+
+          {/* Profile Status */}
+          <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoComplete
-              label="Current Status"
-              value={values.currentStatus}
-              onChange={(_, value) => setFieldValue('currentStatus', value)}
+              label="Profile Status"
+              value={values.profileStatus}
+              onChange={(value) => setFieldValue('profileStatus', value)}
               options={status}
               multiple
             />
           </Grid>
 
+          {/* LinkedIn */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="linkedin" type="text" label="LinkedIn" value={values.linkedin} onChange={handleChange} />
+          </Grid>
+
+          {/* LinkedIn Connections */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="linkedinConnections" type="number" label="LinkedIn Connections" value={values.linkedinConnections} onChange={handleChange} />
+          </Grid>
+
+          {/* Youtube */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="youtube" type="text" label="Youtube" value={values.youtube} onChange={handleChange} />
+          </Grid>
+
+          {/* Youtube Following */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="youtubeFollowing" type="number" label="Youtube Following" value={values.youtubeFollowing} onChange={handleChange} />
+          </Grid>
+
+          {/* Snapchat */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="snapchat" type="text" label="Snapchat" value={values.snapchat} onChange={handleChange} />
+          </Grid>
+
+          {/* Snapchat Following */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="snapchatFollowing" type="number" label="Snapchat Following" value={values.snapchatFollowing} onChange={handleChange} />
+          </Grid>
+
+          {/* X */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="x" type="text" label="X" value={values.x} onChange={handleChange} />
+          </Grid>
+
+          {/* X Following */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="xFollowing" type="number" label="X Following" value={values.xFollowing} onChange={handleChange} />
+          </Grid>
+
+          {/* Pinterest */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="pinterest" type="text" label="Pinterest" value={values.pinterest} onChange={handleChange} />
+          </Grid>
+
+          {/* Pinterest Following */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="pinterestFollowing" type="number" label="Pinterest Following" value={values.pinterestFollowing} onChange={handleChange} />
+          </Grid>
+
+          {/* Tiktok */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="tiktok" type="text" label="Tiktok" value={values.tiktok} onChange={handleChange} />
+          </Grid>
+
+          {/* Tiktok Following */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="tiktokFollowing" type="number" label="Tiktok Following" value={values.tiktokFollowing} onChange={handleChange} />
+          </Grid>
+
+          {/* Facebook */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="facebook" type="text" label="Facebook" value={values.facebook} onChange={handleChange} />
+          </Grid>
+
+          {/* Facebook Following */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="facebookFollowing" type="number" label="Facebook Following" value={values.facebookFollowing} onChange={handleChange} />
+          </Grid>
+
+          {/* Website */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="website" type="text" label="Website" value={values.website} onChange={handleChange} />
+          </Grid>
+
+          {/* Medium */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="medium" type="text" label="Medium" value={values.medium} onChange={handleChange} />
+          </Grid>
+
+          {/* Soundcloud */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="soundcloud" type="text" label="Soundcloud" value={values.soundcloud} onChange={handleChange} />
+          </Grid>
+
+          {/* Spotify */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="spotify" type="text" label="Spotify" value={values.spotify} onChange={handleChange} />
+          </Grid>
+
+          {/* Mailing Address */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="mailingAddress" type="text" label="Mailing Address" value={values.mailingAddress} onChange={handleChange} />
+          </Grid>
+
+          {/* Previous Collaboration Expense */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="previousCollabExpense" type="number" label="Previous Collaboration Expense" value={values.previousCollabExpense} onChange={handleChange} />
+          </Grid>
+
+          {/* Total Product COG Expense */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="totalProductCOGExpense" type="number" label="Total Product COG Expense" value={values.totalProductCOGExpense} onChange={handleChange} />
+          </Grid>
+
+          {/* Shipping Expense */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="shippingExpense" type="number" label="Shipping Expense" value={values.shippingExpense} onChange={handleChange} />
+          </Grid>
+
+          {/* One Off Expense */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomTextField name="oneOffExpense" type="number" label="One Off Expense" value={values.oneOffExpense} onChange={handleChange} />
+          </Grid>
+
+          {/* Current Status */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomAutoComplete
+              label="Current Status"
+              value={values.currentStatus}
+              onChange={(value) => setFieldValue('currentStatus', value)}
+              options={status}
+              multiple
+            />
+          </Grid>
+
+          {/* Occupation */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="occupation" label="Occupation" value={values.occupation} onChange={handleChange} />
+          </Grid>
+
+          {/* Payment Link */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="paymentLink" label="Payment Link" value={values.paymentLink} onChange={handleChange} />
+          </Grid>
+
+          {/* Client */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="client" label="Client" value={values.client} onChange={handleChange} />
+          </Grid>
+
+          {/* Notes */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="notes" label="Notes" multiline value={values.notes} onChange={handleChange} />
+          </Grid>
+
+          {/* Phone */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="phone" label="Phone" value={values.phone} onChange={handleChange} />
+          </Grid>
+
+          {/* Podcast */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="podcast" label="Podcast" value={values.podcast} onChange={handleChange} />
+          </Grid>
+
+          {/* Partner 360 Rate */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="partner360Rate" type="number" label="Partner 360 Rate" value={values.partner360Rate} onChange={handleChange} />
+          </Grid>
+
+          {/* Refusal Reason */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="refusalReason" label="Refusal Reason" value={values.refusalReason} onChange={handleChange} />
+          </Grid>
+
+          {/* Twitch */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="twitch" label="Twitch" value={values.twitch} onChange={handleChange} />
+          </Grid>
+
+          {/* Revo Amazon Order Confirmation Number */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="revoAmazonOrderConfirmationNumber" label="Revo Amazon Order Confirmation Number" value={values.revoAmazonOrderConfirmationNumber} onChange={handleChange} />
+          </Grid>
+
+          {/* Amazon Review Link */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="amazonReviewLink" label="Amazon Review Link" value={values.amazonReviewLink} onChange={handleChange} />
+          </Grid>
+
+          {/* Amazon Review Cupper */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="amazonReviewCupper" label="Amazon Review Cupper" value={values.amazonReviewCupper} onChange={handleChange} />
+          </Grid>
+
+          {/* Amazon Review The Pill */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="amazonReviewThePill" label="Amazon Review The Pill" value={values.amazonReviewThePill} onChange={handleChange} />
+          </Grid>
+
+          {/* Amazon Storefront */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="amazonStorefront" label="Amazon Storefront" value={values.amazonStorefront} onChange={handleChange} />
+          </Grid>
+
+          {/* Campaign Month */}
+          <Grid size={{ xs: 12 }}>
+            <CustomMultiDatePicker
+              name="campaignMonth"
+              label="Campaign Month"
+              value={values.campaignMonth}
+              onChange={(value) => setFieldValue('campaignMonth', value)} />
+          </Grid>
+
+          {/* Deliverables */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="deliverables" label="Deliverables" value={values.deliverables} onChange={handleChange} />
+          </Grid>
+
+          {/* Google Drive Files */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="googleDriveFiles" label="Google Drive Files" value={values.googleDriveFiles} onChange={handleChange} />
+          </Grid>
+
+          {/* Revo IG Post */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="revoIGPost" label="Revo IG Post" value={values.revoIGPost} onChange={handleChange} />
+          </Grid>
+
+          {/* Journey Step */}
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
               name="journeyStep"
@@ -45,973 +462,718 @@ export const PartnerForm = ({ handleChange, values, errors, setFieldValue, onSub
               onChange={handleChange}
             />
           </Grid>
+
+          {/* Partner IG Rate */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomAutoComplete
-              label="Profile Status"
-              value={values.profileStatus}
-              onChange={(_, value) => setFieldValue('profileStatus', value)}
-              options={profileStatus}
-              multiple
-            />
+            <CustomTextField name="partnerIGRate" type="number" label="Partner IG Rate" value={values.partnerIGRate} onChange={handleChange} />
           </Grid>
 
-          <Grid size={{ xs: 12 }}>
-            <CustomTextField name="notes" label="Notes" multiline value={values.notes} onChange={handleChange} />
-          </Grid>
-          {/* Instagram */}
+          {/* Partner TT Rate */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="instagram.url"
-              label="Instagram URL"
-              value={values.instagram?.url || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="instagram.following"
-              label="Instagram Following"
-              type="number"
-              value={values.instagram?.following || 0}
-              onChange={handleChange}
-            />
+            <CustomTextField name="partnerTTRate" type="number" label="Partner TT Rate" value={values.partnerTTRate} onChange={handleChange} />
           </Grid>
 
-          {/* Tiktok */}
+          {/* Partner YT Rate */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="tiktok.url"
-              label="Tiktok URL"
-              value={values.tiktok?.url || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="tiktok.following"
-              label="Tiktok Following"
-              type="number"
-              value={values.tiktok?.following || 0}
-              onChange={handleChange}
-            />
+            <CustomTextField name="partnerYTRate" type="number" label="Partner YT Rate" value={values.partnerYTRate} onChange={handleChange} />
           </Grid>
 
-          {/* YouTube */}
+          {/* Amount Paid */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="youtube.url"
-              label="YouTube URL"
-              value={values.youtube?.url || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="youtube.following"
-              label="YouTube Following"
-              type="number"
-              value={values.youtube?.following || 0}
-              onChange={handleChange}
-            />
+            <CustomTextField name="amountPaid" type="number" label="Amount Paid" value={values.amountPaid} onChange={handleChange} />
           </Grid>
 
-          {/* Snapchat */}
+          {/* Total Contributed Engagement By Content */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="snapchat.url"
-              label="Snapchat URL"
-              value={values.snapchat?.url || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="snapchat.following"
-              label="Snapchat Following"
-              type="number"
-              value={values.snapchat?.following || 0}
-              onChange={handleChange}
-            />
+            <CustomTextField name="totalContributedEngagementByContent" type="number" label="Total Contributed Engagement By Content" value={values.totalContributedEngagementByContent} onChange={handleChange} />
           </Grid>
 
-          {/* X */}
+          {/* Total Audience */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="X.url" label="X URL" value={values.X?.url || ''} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="X.following"
-              label="X Following"
-              type="number"
-              value={values.X?.following || 0}
-              onChange={handleChange}
-            />
+            <CustomTextField name="totalAudience" type="number" label="Total Audience" value={values.totalAudience} onChange={handleChange} />
           </Grid>
 
-          {/* Facebook */}
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="facebook.url"
-              label="Facebook URL"
-              value={values.facebook?.url || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="facebook.following"
-              label="Facebook Following"
-              type="number"
-              value={values.facebook?.following || 0}
-              onChange={handleChange}
-            />
-          </Grid>
-
-          {/* Pinterest */}
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="pinterest.url"
-              label="pinterest URL"
-              value={values.pinterest?.url || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="pinterest.following"
-              label="pinterest Following"
-              type="number"
-              value={values.pinterest?.following || 0}
-              onChange={handleChange}
-            />
-          </Grid>
-
-          {/* linkedin */}
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="linkedin" label="linkedin" value={values.linkedin || ''} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="linkedinConnections"
-              label="linkedin Connections"
-              type="number"
-              value={values.linkedinConnections || 0}
-              onChange={handleChange}
-            />
-          </Grid>
-
-          {/* additonal */}
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="hourlyRate"
-              label="Hourly Rate"
-              value={values.hourlyRate || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomAutoComplete
-              label="Age Bracket"
-              value={values.ageBracket}
-              onChange={(_, value) => setFieldValue('ageBracket', value)}
-              options={ageBracket}
-              multiple
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="bookingLink"
-              label="Booking Link"
-              value={values.bookingLink || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-
-          {/* Additional Fields */}
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="website" label="Website" value={values.website} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="medium" label="Medium" value={values.medium} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="soundcloud" label="Sound Cloud" value={values.soundcloud} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="spotify" label="Spotify" value={values.spotify} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomSelect
-              label="Open to Gifting"
-              value={values.opentoGifting}
-              onChange={(value) => setFieldValue('opentoGifting', value)}
-              name="opentoGifting"
-              options={[
-                { value: 'Yes', label: 'Yes' },
-                { value: 'No', label: 'No' },
-              ]}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="occupation" label="Occupation" value={values.occupation} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomSelect
-              label="Client"
-              value={values.client}
-              onChange={(value) => setFieldValue('client', value)}
-              name="client"
-              options={[
-                { value: 'Active', label: 'Active' },
-                { value: 'Deactive', label: 'Deactive' },
-              ]}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="mailingAddress"
-              label="Mailing Address"
-              value={values.mailingAddress}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="phone" label="Phone" value={values.phone} onChange={handleChange} />
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="podcast" label="Podcast" value={values.podcast} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="refusalReason"
-              label="Refusal Reason"
-              value={values.refusalReason}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="twitch" label="Twitch" value={values.twitch} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="revoAmazonOrderConfirmationNumber"
-              label="Revo Amazon Order Confirmation No."
-              value={values.revoAmazonOrderConfirmationNumber}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="amazonReviewLink"
-              label="Amazon Review Link"
-              value={values.amazonReviewLink}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="amazonReviewCupper"
-              label="Amazon Review Cupper"
-              value={values.amazonReviewCupper}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="amazonReviewThePill"
-              label="Amazon Review The Pill"
-              value={values.amazonReviewThePill}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="amazonStorefront"
-              label="Amazon Storefront"
-              value={values.amazonStorefront}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="deliverables"
-              label="Deliverables"
-              value={values.deliverables}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="googleDriveFiles"
-              label="Google Drive Files"
-              value={values.googleDriveFiles}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="revoIGPost" label="Revo IG Post" value={values.revoIGPost} onChange={handleChange} />
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="partnerIGRate"
-              label="Partner IG Rate"
-              value={values.partnerIGRate || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="partnerTTRate"
-              label="Partner TT Rate"
-              value={values.partnerTTRate || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="partnerYTRate"
-              label="Partner YT Rate"
-              value={values.partnerYTRate || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="amountPaid"
-              label="Amount Paid"
-              value={values.amountPaid || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="totalContributedEngagementByContent"
-              label="Total Contributed Engagement ByContent"
-              value={values.totalContributedEngagementByContent || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="totalAudience"
-              label="Total Audience"
-              value={values.totalAudience || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-
-          {/* Selection Fields */}
+          {/* Platform Deliverables */}
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomAutoComplete
               label="Platform Deliverables"
               value={values.platformDeliverables}
-              onChange={(_, value) => setFieldValue('platformDeliverables', value)}
-              options={[
-                { value: 'Instagram Post', label: 'Instagram Post' },
-                { value: 'YouTube Review', label: 'YouTube Review' },
-              ]}
+              onChange={(value) => setFieldValue('platformDeliverables', value)}
+              options={platformDeliverables}
               multiple
             />
           </Grid>
+
+          {/* Platforms */}
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomAutoComplete
               label="Platforms"
               value={values.platforms}
-              onChange={(_, value) => setFieldValue('platforms', value)}
-              options={[
-                { value: 'ACTIVE', label: 'Active' },
-                { value: 'INACTIVE', label: 'Inactive' },
-                { value: 'NOT_STARTED', label: 'Not started' },
-              ]}
+              onChange={(value) => setFieldValue('platforms', value)}
+              options={platforms}
               multiple
             />
           </Grid>
 
+          {/* Revos Offer */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="previousCollabExpense"
-              label="Previous Collab Expense"
-              value={values.previousCollabExpense || ''}
-              onChange={handleChange}
-            />
+            <CustomTextField name="revosOffer" label="Revos Offer" value={values.revosOffer} onChange={handleChange} />
           </Grid>
+
+          {/* Remaining Credits */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="revoOffer"
-              label="Revo Offer"
-              value={values.revoOffer || ''}
-              onChange={handleChange}
-            />
+            <CustomTextField name="remainingCredits" type="number" label="Remaining Credits" value={values.remainingCredits} onChange={handleChange} />
           </Grid>
+
+          {/* TT Post */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="remainingCredits"
-              label="Remaining Credits"
-              type="number"
-              value={values.remainingCredits || 0}
-              onChange={handleChange}
-            />
+            <CustomTextField name="ttPost" label="TT Post" value={values.ttPost} onChange={handleChange} />
           </Grid>
+
+          {/* UGC Payment Status */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="ttPost" label="tt Post" value={values.ttPost || ''} onChange={handleChange} />
+            <CustomTextField name="ugcPaymentStatus" label="UGC Payment Status" value={values.ugcPaymentStatus} onChange={handleChange} />
           </Grid>
+
+          {/* UGC Retainer Amount */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="totalROI" label="Total ROI" value={values.totalROI || ''} onChange={handleChange} />
+            <CustomTextField name="ugcRetainerAmount" type="number" label="UGC Retainer Amount" value={values.ugcRetainerAmount} onChange={handleChange} />
           </Grid>
+
+          {/* UGC TikTok Link */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomSelect
-              label="UGC Payment Status"
-              value={values.ugcPaymentStatus}
-              onChange={(value) => setFieldValue('ugcPaymentStatus', value)}
-              name="ugcPaymentStatus"
-              options={[
-                { value: 'Paid', label: 'Paid' },
-                { value: 'Not Paid', label: 'Not Paid' },
-              ]}
-            />
+            <CustomTextField name="ugcTikTokLink" label="UGC TikTok Link" value={values.ugcTikTokLink} onChange={handleChange} />
           </Grid>
+
+          {/* Revo UGC Army TT Username and PW */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="ugcRetainerAmount"
-              label="UGC Retainer Amount"
-              type="number"
-              value={values.ugcRetainerAmount || 0}
-              onChange={handleChange}
-            />
+            <CustomTextField name="revoUGCArmyTTUsernameAndPW" label="Revo UGC Army TT Username and PW" value={values.revoUGCArmyTTUsernameAndPW} onChange={handleChange} />
           </Grid>
+
+          {/* WhatsApp */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="ugcTikTokLink"
-              label="UGC TikTok Link"
-              value={values.ugcTikTokLink || ''}
-              onChange={handleChange}
-            />
+            <CustomTextField name="whatsapp" label="WhatsApp" value={values.whatsapp} onChange={handleChange} />
           </Grid>
+
+          {/* YT Post */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="revoUGCArmyTTUsernamePW"
-              label="Revo UGCArmy TT Username PW"
-              value={values.revoUGCArmyTTUsernamePW || ''}
-              onChange={handleChange}
-            />
+            <CustomTextField name="ytPost" label="YT Post" value={values.ytPost} onChange={handleChange} />
           </Grid>
+
+          {/* Partner Post Views */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="whatsApp" label="Whats App" value={values.whatsApp || ''} onChange={handleChange} />
+            <CustomTextField name="partnerPostViews" type="number" label="Partner Post Views" value={values.partnerPostViews} onChange={handleChange} />
           </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="ytPost" label="Youtube Post" value={values.ytPost || ''} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="partnerPostViews"
-              label="Partner Post Views"
-              type="number"
-              value={values.partnerPostViews || 0}
-              onChange={handleChange}
-            />
-          </Grid>
+
+          {/* Sourced From */}
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomAutoComplete
               label="Sourced From"
               value={values.sourcedFrom}
-              onChange={(_, value) => setFieldValue('sourcedFrom', value)}
-              options={[
-                { value: 'Instagram', label: 'Instagram' },
-                { value: 'Referral', label: 'Referral' },
-              ]}
+              onChange={(value) => setFieldValue('sourcedFrom', value)}
+              options={sourcedFrom}
               multiple
             />
           </Grid>
+
+          {/* Estimated Taxes */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="estimatedTaxes"
-              label="Estimated Taxes"
-              value={values.estimatedTaxes || ''}
-              onChange={handleChange}
-            />
+            <CustomTextField name="estimatedTaxes" type="number" label="Estimated Taxes" value={values.estimatedTaxes} onChange={handleChange} />
           </Grid>
+
+          {/* Amazon Tax */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="fbaXLevanta"
-              label="fbaXLevanta"
-              value={values.fbaXLevanta || ''}
-              type="number"
-              onChange={handleChange}
-            />
+            <CustomTextField name="amazonTax" type="number" label="Amazon Tax" value={values.amazonTax} onChange={handleChange} />
           </Grid>
+
+          {/* Amazon Kickback */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="shippingFBAFeeGiftedPartners"
-              label="Shipping FBA Fee Gifted Partners"
-              value={values.shippingFBAFeeGiftedPartners || ''}
-              onChange={handleChange}
-            />
+            <CustomTextField name="amazonKickback" type="number" label="Amazon Kickback" value={values.amazonKickback} onChange={handleChange} />
           </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="levantaAffiliateFee"
-              label="levanta Affiliate Fee"
-              value={values.levantaAffiliateFee || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="paypalFee"
-              label="Paypal Fee"
-              value={values.paypalFee || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="shippingExpense"
-              label="Shipping Expense"
-              value={values.shippingExpense || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="amazonReferralFee"
-              label="Amazon Referral Fee"
-              value={values.amazonReferralFee || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="amazonOrderTotal"
-              label="Amazon Order Total"
-              value={values.amazonOrderTotal || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="amazonTax"
-              label="Amazon Tax"
-              value={values.amazonTax || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="amazonKickback"
-              label="Amazon Kick back"
-              value={values.amazonKickback || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          {/* date pickers*/}
+
+          {/* Month Sourced */}
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomDatePicker
-              label={'Month Sourced'}
-              error={errors.monthSourced}
+              name="monthSourced"
+              label="Month Sourced"
               value={values.monthSourced}
-              format="MMMM YYYY"
               onChange={(value) => setFieldValue('monthSourced', value)}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomDatePicker
-              label={'Second Payment Date'}
-              error={errors.secondPaymentDate}
-              value={values.secondPaymentDate}
               format="MMMM YYYY"
-              onChange={(value) => setFieldValue('secondPaymentDate', value)}
             />
           </Grid>
 
+          {/* Second Payment Date */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomDatePicker
+              name="SecondPaymentDate"
+              label="Second Payment Date"
+              value={values.SecondPaymentDate}
+              onChange={(value) => setFieldValue('SecondPaymentDate', value)}
+              format="YYYY-MM-DD"
+            />
+          </Grid>
+
+          {/* Client Status */}
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomSelect
+              name="clientStatus"
               label="Client Status"
               value={values.clientStatus}
               onChange={(value) => setFieldValue('clientStatus', value)}
-              name="clientStatus"
-              options={[
-                { value: 'Active', label: 'Active' },
-                { value: 'Inactive', label: 'Inactive' },
-              ]}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="linktree" label="Link tree" value={values.linktree || ''} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="partnerUGCRate"
-              label="Partner UGC Rate"
-              value={values.partnerUGCRate || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="partner360Rate"
-              label="Partner 360 Rate"
-              value={values.partner360Rate || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="revoCounteroffer"
-              label="Revo Counter Offer"
-              value={values.revoCounteroffer || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomSelect
-              label="Open to White listing"
-              value={values.opentoWhitelisting}
-              onChange={(value) => setFieldValue('opentoWhitelisting', value)}
-              name="opentoWhitelisting"
-              options={[
-                { value: 'Yes', label: 'Yes' },
-                { value: 'No', label: 'No' },
-              ]}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="conversionsBundleCupper"
-              label="Conversions Bundle Cupper"
-              type="number"
-              value={values.conversionsBundleCupper || 0}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="conversionsMassageGun"
-              label="Conversions Massage Gun"
-              type="number"
-              value={values.conversionsMassageGun || 0}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="conversionsCupper"
-              label="Conversions Cupper"
-              type="number"
-              value={values.conversionsCupper || 0}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="conversionsOils"
-              label="Conversions Oils"
-              type="number"
-              value={values.conversionsOils || 0}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="conversionsWalkingPad"
-              label="Conversions Walking Pad"
-              type="number"
-              value={values.conversionsWalkingPad || 0}
-              onChange={handleChange}
+              options={status}
             />
           </Grid>
 
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="amazonReviewWalkingPadPro"
-              label="Amazon Review Walking PadPro"
-              value={values.amazonReviewWalkingPadPro || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="amazonReviewWalkingPadStandard"
-              label="Amazon Review Walking Pad Standard"
-              value={values.amazonReviewWalkingPadStandard || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="amazonReviewOil"
-              label="amazon Review Oil"
-              value={values.amazonReviewOil || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="amazonReviewSoothingCream"
-              label="Amazon Review Soothing Cream"
-              value={values.amazonReviewSoothingCream || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="amazonReviewBeautyWand"
-              label="Amazon Review Beauty Wand"
-              value={values.amazonReviewBeautyWand || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomAutoComplete
-              label="Contracts"
-              value={values.contracts}
-              onChange={(_, value) => setFieldValue('contracts', value)}
-              options={[
-                { value: 'Contract1.pdf', label: 'Contract.pdf' },
-                { value: 'Contract2.pdf', label: 'Contract2.pdf' },
-                { value: 'Contract3.pdf', label: 'Contract3.pdf' },
-              ]}
-              multiple
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="paymentLink"
-              label="Payment Link"
-              value={values.paymentLink || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="totalExpense"
-              label="Total Expense"
-              value={values.totalExpense || ''}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="totalProductCOGExpense"
-              label="Total Product COG Expense"
-              value={values.totalProductCOGExpense || ''}
-              onChange={handleChange}
-            />
-          </Grid>
+          {/* Affiliate Platform */}
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomAutoComplete
               label="Affiliate Platform"
               value={values.affiliatePlatform}
-              onChange={(_, value) => setFieldValue('affiliatePlatform', value)}
-              options={[
-                { value: 'Amazon', label: 'Amazon' },
-                { value: 'ShareASale', label: 'ShareASale' },
-              ]}
+              onChange={(value) => setFieldValue('affiliatePlatform', value)}
+              options={affiliatePlatform}
               multiple
             />
           </Grid>
+
+          {/* Booking Link */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <FormControl fullWidth error={Boolean(errors.profileImage)}>
-              <FormLabel sx={{ mb: 1 }}>Profile Image</FormLabel>
-              <ImageUploader
-                value={values.profileImage}
-                onFileSelect={(file) => setFieldValue('profileImage', file)}
-                onDelete={() => setFieldValue('profileImage', null)}
-              />
-            </FormControl>
+            <CustomTextField name="bookingLink" label="Booking Link" value={values.bookingLink} onChange={handleChange} />
           </Grid>
+
+          {/* Age Bracket */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <FormControl fullWidth error={Boolean(errors.mediaKit)}>
-              <FormLabel sx={{ mb: 1 }}>Media kit</FormLabel>
-              <ImageUploader
-                label="Upload Media Kit"
-                value={values.mediaKit}
-                onFileSelect={(file) => setFieldValue('mediaKit', file)}
-                onDelete={() => setFieldValue('mediaKit', null)}
-                accept="application/pdf"
-              />
-            </FormControl>
+            <CustomAutoComplete
+              label="Age Bracket"
+              value={values.ageBracket}
+              onChange={(value) => setFieldValue('ageBracket', value)}
+              options={ageBracket}
+              multiple
+            />
           </Grid>
+
+          {/* Hourly Rate */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <FormControl fullWidth error={Boolean(errors.receipts)}>
-              <FormLabel sx={{ mb: 1 }}>Receipts</FormLabel>
-              <ImageUploader
-                label="Upload Receipts"
-                value={values.receipts}
-                onFileSelect={(file) => setFieldValue('receipts', file)}
-                onDelete={() => setFieldValue('receipts', null)}
-                accept="application/pdf"
-              />
-            </FormControl>
+            <CustomTextField name="hourlyRate" type="number" label="Hourly Rate" value={values.hourlyRate} onChange={handleChange} />
           </Grid>
+
+          {/* Linktree */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="linktree" label="Linktree" value={values.linktree} onChange={handleChange} />
+          </Grid>
+
+          {/* Partner UGC Rate */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="partnerUGCRate" type="number" label="Partner UGC Rate" value={values.partnerUGCRate} onChange={handleChange} />
+          </Grid>
+
+          {/* Revo Counteroffer */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="revoCounteroffer" label="Revo Counteroffer" value={values.revoCounteroffer} onChange={handleChange} />
+          </Grid>
+
+          {/* Amazon Review Walking Pad Pro */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="amazonReviewWalkingPadPro" label="Amazon Review Walking Pad Pro" value={values.amazonReviewWalkingPadPro} onChange={handleChange} />
+          </Grid>
+
+          {/* Amazon Review Walking Pad Standard */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="amazonReviewWalkingPadStandard" label="Amazon Review Walking Pad Standard" value={values.amazonReviewWalkingPadStandard} onChange={handleChange} />
+          </Grid>
+
+          {/* Amazon Review Oil */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="amazonReviewOil" label="Amazon Review Oil" value={values.amazonReviewOil} onChange={handleChange} />
+          </Grid>
+
+          {/* Amazon Review Soothing Cream */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="amazonReviewSoothingCream" label="Amazon Review Soothing Cream" value={values.amazonReviewSoothingCream} onChange={handleChange} />
+          </Grid>
+
+          {/* Amazon Review Beauty Wand */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="amazonReviewBeautyWand" label="Amazon Review Beauty Wand" value={values.amazonReviewBeautyWand} onChange={handleChange} />
+          </Grid>
+
+          {/* Levanta ID */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="levantaID" type="number" label="Levanta ID" value={values.levantaID} onChange={handleChange} />
+          </Grid>
+
+          {/* Impact ID */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="impactID" type="number" label="Impact ID" value={values.impactID} onChange={handleChange} />
+          </Grid>
+
+          {/* Shareasale ID */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="shareasaleID" type="number" label="Shareasale ID" value={values.shareasaleID} onChange={handleChange} />
+          </Grid>
+
+          {/* FBA X Levanta */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="fbaXLevanta" type="number" label="FBA X Levanta" value={values.fbaXLevanta} onChange={handleChange} />
+          </Grid>
+
+          {/* Amazon Order Total */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CustomTextField name="amazonOrderTotal" type="number" label="Amazon Order Total" value={values.amazonOrderTotal} onChange={handleChange} />
+          </Grid>
+
+          {/* Stakeholder */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Stakeholder"
+              value={values.stakeholders}
+              onChange={(_, value) => setFieldValue('stakeholders', value)}
+              defaultOptions={stackholders}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getStakeHolderListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Content HQ */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Content HQ"
+              value={values.contentHQ}
+              onChange={(_, value) => setFieldValue('contentHQ', value)}
+              defaultOptions={contentHQs}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getContentList(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Profile Category */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            {/* <CustomAutoCompleteV2
+              multiple
+              label="Profile Category"
+              value={values.profileCategory}
+              onChange={(_, value) => setFieldValue('profileCategory', value)}
+              defaultOptions={profileCategories}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getProfileCategoryListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            /> */}
+          </Grid>
+
+          {/* Portfolios */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Portfolio"
+              value={values.portfolios}
+              onChange={(_, value) => setFieldValue('portfolios', value)}
+              defaultOptions={portfolios}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getPortfolioListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* State */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="State"
+              value={values.state}
+              onChange={(_, value) => setFieldValue('state', value)}
+              defaultOptions={states}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getStateListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* City */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="City"
+              value={values.city}
+              onChange={(_, value) => setFieldValue('city', value)}
+              defaultOptions={cities}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getCityListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Services */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            {/* <CustomAutoCompleteV2
+              multiple
+              label="Service"
+              value={values.services}
+              onChange={(_, value) => setFieldValue('services', value)}
+              defaultOptions={services}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getServiceListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            /> */}
+          </Grid>
+
+          {/* Case Study */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Case Study"
+              value={values.caseStudies}
+              onChange={(_, value) => setFieldValue('caseStudies', value)}
+              defaultOptions={caseStudies}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getCaseStudyListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Production HQ */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Production HQ"
+              value={values.productionHQ}
+              onChange={(_, value) => setFieldValue('productionHQ', value)}
+              defaultOptions={productionHQs}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getProductionHQListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Products */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Product"
+              value={values.products}
+              onChange={(_, value) => setFieldValue('products', value)}
+              defaultOptions={products}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getProductListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Contributed Campaign */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Contributed Campaign"
+              value={values.contributedCampaigns}
+              onChange={(_, value) => setFieldValue('contributedCampaigns', value)}
+              defaultOptions={campaigns}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getCampaignListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+
+          {/* Country */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Country"
+              value={values.country}
+              onChange={(_, value) => setFieldValue('country', value)}
+              defaultOptions={countries}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getCountryListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Tags */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Tags"
+              value={values.tags}
+              onChange={(_, value) => setFieldValue('tags', value)}
+              defaultOptions={tags}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getTagListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Retail Partner */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Retail Partner"
+              value={values.retailPartner}
+              onChange={(_, value) => setFieldValue('retailPartner', value)}
+              defaultOptions={retailPartners}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getRetailPartnerListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Destination */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Destination"
+              value={values.destinations}
+              onChange={(_, value) => setFieldValue('destinations', value)}
+              defaultOptions={destinations}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getDestinationListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Propsed Campaign */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Proposed Campaign"
+              value={values.proposedCampaigns}
+              onChange={(_, value) => setFieldValue('proposedCampaigns', value)}
+              defaultOptions={campaigns}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getCampaignListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Production HQ */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <CustomAutoCompleteV2
+              multiple
+              label="Production HQ 2"
+              value={values.productionHQ2}
+              onChange={(_, value) => setFieldValue('productionHQ2', value)}
+              defaultOptions={productionHQs}
+              fetchOptions={async (debounceValue) => {
+                const paging = { page: 1, rowsPerPage: 20 };
+                const res = await getProductionListAsync(paging, debounceValue);
+                return res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || [];
+              }}
+            />
+          </Grid>
+
+          {/* Is Featured */}
+          <Grid size={{ xs: 12 }} sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box display="flex" gap={2} flexWrap="wrap" justifyContent="space-between" width="100%">
+              <FormControlLabel
+                checked={values.isFeatured}
+                onChange={handleChange}
+                name="isFeatured"
+                control={<Checkbox />}
+                label="Is Featured"
+              />
+
+              <FormControlLabel
+                checked={values.auditedJan2025}
+                onChange={handleChange}
+                name="auditedJan2025"
+                control={<Checkbox />}
+                label="Audited Jan 2025"
+              />
+
+              <FormControlLabel
+                checked={values.auditedJune2025}
+                onChange={handleChange}
+                name="auditedJune2025"
+                control={<Checkbox />}
+                label="Audited June 2025"
+              />
+
+              <FormControlLabel
+                checked={values.openToWhitelisting}
+                onChange={handleChange}
+                name="openToWhitelisting"
+                control={<Checkbox />}
+                label="Open To Whitelisting"
+              />
+
+              <FormControlLabel
+                checked={values.openToGifting}
+                onChange={handleChange}
+                name="openToGifting"
+                control={<Checkbox />}
+                label="Open To Gifting"
+              />
+            </Box>
+          </Grid>
+
+          {/* Profile Image */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <MediaUploaderTrigger
+              open={openImageUploadDialog.profileImage}
+              onClose={() => setOpenImageUploadDialog({ ...openImageUploadDialog, profileImage: false })}
+              onSave={(urls) => setFieldValue('profileImage', urls)}
+              value={values?.profileImage}
+              label="Profile Image"
+              onAdd={() => setOpenImageUploadDialog({ ...openImageUploadDialog, profileImage: true })}
+              onDelete={(filteredUrls) => setFieldValue('profileImage', filteredUrls)}
+              folderName="partner-HQ"
+              hideVideoUploader
+            />
+          </Grid>
+
+          {/* Media Kit */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <MediaUploaderTrigger
+              open={openImageUploadDialog.mediaKit}
+              onClose={() => setOpenImageUploadDialog({ ...openImageUploadDialog, mediaKit: false })}
+              onSave={(urls) => setFieldValue('mediaKit', urls)}
+              value={values?.mediaKit}
+              label="Media Kit"
+              onAdd={() => setOpenImageUploadDialog({ ...openImageUploadDialog, mediaKit: true })}
+              onDelete={(filteredUrls) => setFieldValue('mediaKit', filteredUrls)}
+              folderName="partner-HQ"
+              hideVideoUploader
+            />
+          </Grid>
+
+          {/* Partner Gallery */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <MediaUploaderTrigger
+              open={openImageUploadDialog.partnerGallery}
+              onClose={() => setOpenImageUploadDialog({ ...openImageUploadDialog, partnerGallery: false })}
+              onSave={(urls) => setFieldValue('partnerGallery', urls)}
+              value={values?.partnerGallery}
+              label="Partner Gallery"
+              onAdd={() => setOpenImageUploadDialog({ ...openImageUploadDialog, partnerGallery: true })}
+              onDelete={(filteredUrls) => setFieldValue('partnerGallery', filteredUrls)}
+              folderName="partner-HQ"
+              hideVideoUploader
+            />
+          </Grid>
+
+          {/* Receipts */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <MediaUploaderTrigger
+              open={openImageUploadDialog.receipts}
+              onClose={() => setOpenImageUploadDialog({ ...openImageUploadDialog, receipts: false })}
+              onSave={(urls) => setFieldValue('receipts', urls)}
+              value={values?.receipts}
+              label="Receipts"
+              onAdd={() => setOpenImageUploadDialog({ ...openImageUploadDialog, receipts: true })}
+              onDelete={(filteredUrls) => setFieldValue('receipts', filteredUrls)}
+              folderName="partner-HQ"
+              hideVideoUploader
+            />
+          </Grid>
+
+          {/* Contracts */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <MediaUploaderTrigger
+              open={openImageUploadDialog.contracts}
+              onClose={() => setOpenImageUploadDialog({ ...openImageUploadDialog, contracts: false })}
+              onSave={(urls) => setFieldValue('contracts', urls)}
+              value={values?.contracts}
+              label="Contracts"
+              onAdd={() => setOpenImageUploadDialog({ ...openImageUploadDialog, contracts: true })}
+              onDelete={(filteredUrls) => setFieldValue('contracts', filteredUrls)}
+              folderName="partner-HQ"
+              hideVideoUploader
+            />
+          </Grid>
+
+        </Grid>
+        <Grid size={{ xs: 12 }}>
+          <Stack direction="row" justifyContent="flex-end">
+            <Button size="small" variant="contained" color="primary" disabled={loading} type="submit">
+              Save
+            </Button>
+          </Stack>
         </Grid>
       </form>
     </>
   );
 };
-
-{
-  /* <PageLoader loading={loading} error={null}> */
-}
-{
-  /* <form onSubmit={onSubmit}>
-        <Grid container spacing={2}>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} />
-            <ErrorMessage error={errors.name} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="email" type={'email'} label="Email" value={values.email} onChange={handleChange} />
-            <ErrorMessage error={errors.email} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="phone" label="Phone" value={values.phone} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="website" label="Website" value={values.website} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="instagram" label="Instagram" value={values.instagram} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="instagram_following"
-              label="Instagram Following"
-              value={values.instagram_following}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="tiktok" label="Tiktok" value={values.tiktok} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="tiktok_following"
-              label="Tiktok Following"
-              value={values.tiktok_following}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="youtube" label="Youtube" value={values.youtube} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="youtube_following"
-              label="Youtube Following"
-              value={values.youtube_following}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="x" label="X" value={values.x} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="x_following" label="X Following" value={values.x_following} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="facebook" label="Facebook" value={values.facebook} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="facebook_following"
-              label="Facebook Following"
-              value={values.facebook_following}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="pinterest" label="pinterest" value={values.pinterest} onChange={handleChange} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="pinterest_following"
-              label="pinterest Following"
-              value={values.pinterest_following}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="partner_IF_rate"
-              label="Partner IG rate"
-              value={values.partner_IF_rate}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="partner_TT_rate"
-              label="Partner TT rate"
-              value={values.partner_TT_rate}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="partner_YT_rate"
-              label="Partner YT rate"
-              value={values.partner_YT_rate}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="partner_UGC_rate"
-              label="Partner UGC rate"
-              value={values.partner_UGC_rate}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField
-              name="partner_360_rate"
-              label="Partner 360 rate"
-              value={values.partner_360_rate}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomSelect
-              label={'Profile category'}
-              value={values.profile_category}
-              onChange={(value) => setFieldValue('profile_category', value)}
-              name="profile_category"
-              options={[
-                { value: 'MODEL', label: 'Model' },
-                { value: 'CREATOR', label: 'Creator' },
-                { value: 'PHOTOGRAPHER', label: 'Photographer' },
-                { value: 'REVIEW_PARTNER', label: 'Review partner' },
-                { value: 'B2B', label: 'b2b' },
-                { value: 'BLOG_OR_REVIEWER', label: 'Blog or reviewer' },
-              ]}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CustomSelect
-              label={'Current Status'}
-              value={values.current_status}
-              onChange={(value) => setFieldValue('current_status', value)}
-              name="current_status"
-              options={[
-                { value: 'ACTIVE', label: 'Active' },
-                { value: 'INACTIVE', label: 'Inactive' },
-                { value: 'NOT_STARTED', label: 'Not started' },
-              ]}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <FormControl fullWidth error={Boolean(errors.thumbnail)}>
-              <FormLabel sx={{ mb: 1 }}>Profile Image</FormLabel>
-              <ImageUploader
-                value={values.profile_image}
-                onFileSelect={(file) => onSetFile(file)}
-                onDelete={onDelete}
-              />
-            </FormControl>
-          </Grid>
-        </Grid>
-      </form> */
-}

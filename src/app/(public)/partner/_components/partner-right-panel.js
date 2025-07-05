@@ -59,29 +59,7 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
         onSubmit: async (values) => {
             setLoading(true);
             try {
-                const finalData = { ...values };
-                const imageFields = ['profileImage', 'mediaKit', 'receipts'];
-                // Collect image files and their metadata
-                for (const field of imageFields) {
-                    const value = values[field];
-                    if (value instanceof File) {
-                        const res = await imageUploader(
-                            [
-                                {
-                                    file: value,
-                                    fileName: value.name.split('.').slice(0, -1).join('.'),
-                                    fileType: value.type.split('/')[1],
-                                },
-                            ],
-                            'partner-HQ'
-                        );
-
-                        finalData[field] = res;
-                    } else if (typeof value === 'string') {
-                        finalData[field] = [value];
-                    }
-                }
-                const res = id ? await updatePartnerAsync(finalData) : await createPartnerAsync(finalData);
+                const res = id ? await updatePartnerAsync(values) : await createPartnerAsync(values);
                 if (res.success) {
                     resetForm();
                     onClose?.();
@@ -115,7 +93,10 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
                 setLoading(false);
             }
         };
-        getSingleData();
+
+        if (id) {
+            getSingleData();
+        }
     }, [id]);
 
     // *****************Action Buttons*******************************
@@ -180,6 +161,7 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
                         values={values}
                         errors={errors}
                         setFieldValue={setFieldValue}
+                        loading={loading}
                         onSubmit={handleSubmit}
                     />
                 )}

@@ -11,6 +11,7 @@ import { PartnerGridView } from './_components/partner-gridview';
 import { PartnerListView } from './_components/partner-listview';
 import { getPartnerListAsync } from './_lib/partner.actions';
 import { defaultPartner } from './_lib/partner.types';
+import { PartnerRightPanel } from './_components/partner-right-panel';
 
 export const PartnerView = () => {
   const observerRef = useRef(null);
@@ -18,9 +19,8 @@ export const PartnerView = () => {
   const [openPanel, setOpenPanel] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [isFetching, setIsFetching] = React.useState(false);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
   const [totalRecords, setTotalRecords] = React.useState(0);
-  const [selectedContent, setSelectedContent] = React.useState(null);
   const [filters, setFilters] = React.useState({
     COL: 3,
     TAG: [],
@@ -54,9 +54,6 @@ export const PartnerView = () => {
   }, [isFetching, pagination]);
 
   const handleFilterChange = (type, value) => {
-    if (type === 'ADD') {
-      setSelectedContent(value ? defaultPartner : null);
-    }
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
@@ -68,7 +65,7 @@ export const PartnerView = () => {
   const refreshListView = async () => {
     const response = await getPartnerListAsync({
       page: 1,
-      rowsPerPage: 40,
+      rowsPerPage: 10,
     });
 
     if (response.success) {
@@ -115,7 +112,7 @@ export const PartnerView = () => {
           setOpenPanel={setOpenPanel}
         />
 
-        {filters.VIEW === 'list' ? (
+        {/* {filters.VIEW === 'list' ? (
           <PartnerListView />
         ) : (
           <Box>
@@ -124,8 +121,20 @@ export const PartnerView = () => {
               {isFetching && <CircularProgress size="30px" />}
             </div>
           </Box>
-        )}
+        )} */}
       </PageLoader>
+
+      {openPanel && (
+        <PartnerRightPanel
+          onClose={() => {
+            setOpenPanel(false)
+          }}
+          fetchList={refreshListView}
+          id={null}
+          open={openPanel}
+          view="ADD"
+        />
+      )}
     </PageContainer>
   );
 };
