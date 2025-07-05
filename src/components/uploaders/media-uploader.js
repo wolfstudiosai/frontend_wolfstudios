@@ -1,3 +1,4 @@
+import React, { useRef } from 'react';
 import {
   Box,
   Button,
@@ -13,10 +14,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React from 'react';
-import { isVideoContent, pxToRem } from '/src/utils/helper';
 
 import { Iconify } from '../iconify/iconify';
+import { isVideoContent, pxToRem } from '/src/utils/helper';
 import { imageUploader } from '/src/utils/upload-file';
 
 export const MediaUploader = ({
@@ -26,12 +26,14 @@ export const MediaUploader = ({
   multiple = true,
   hideImageUploader = false,
   hideVideoUploader = false,
-  folderName = "content-HQ"
+  folderName = 'content-HQ',
 }) => {
   const availableTabs = [
     !hideImageUploader && { label: 'Add Image', type: 'image' },
     !hideVideoUploader && { label: 'Add Video', type: 'video' },
   ].filter(Boolean);
+
+  const fileInputRef = useRef(null);
 
   const [tab, setTab] = React.useState(0);
   const [urls, setUrls] = React.useState([]);
@@ -87,6 +89,7 @@ export const MediaUploader = ({
       }
     } else {
       setFiles(files.filter((file) => file?.name !== item?.name));
+      fileInputRef.current.value = null;
     }
   };
 
@@ -103,11 +106,16 @@ export const MediaUploader = ({
         // File upload in the server
         for (const file of files) {
           if (file instanceof File) {
-            const res = await imageUploader([{
-              file,
-              fileName: file.name.split('.').slice(0, -1).join('.'),
-              fileType: file.type.split('/')[1],
-            }], folderName);
+            const res = await imageUploader(
+              [
+                {
+                  file,
+                  fileName: file.name.split('.').slice(0, -1).join('.'),
+                  fileType: file.type.split('/')[1],
+                },
+              ],
+              folderName
+            );
 
             uploadedPaths = [...uploadedPaths, ...res];
           }
@@ -124,9 +132,6 @@ export const MediaUploader = ({
         // }
       }
       onSave([...uploadedPaths, ...urls, ...videoUrls]);
-      console.log(uploadedPaths, 'uploadded paths')
-      console.log(urls, 'urls')
-      console.log(videoUrls, 'videoUrls')
       handleClose();
       setUploading(false);
     } catch (err) {
@@ -184,7 +189,14 @@ export const MediaUploader = ({
                     <Iconify icon="akar-icons:cloud-upload" width={24} height={24} />
                     <Typography>Upload Image</Typography>
                   </Stack>
-                  <input type="file" accept="image/*" hidden multiple={multiple} onChange={handleFileChange} />
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    multiple={multiple}
+                    onChange={handleFileChange}
+                  />
                 </Button>
                 <TextField
                   value={url || ''}

@@ -14,7 +14,9 @@ export const defaultProduction = (data) => {
     foodExpense: data?.FoodExpense || '',
     equipmentRentals: data?.EquipmentRentals || [],
     equipmentExpense: data?.EquipmentExpense || '',
-    googleDriveFiles: data?.GoogleDriveFiles || '',
+    reimbursments: data?.reimbursments || '',
+    wardrobeExpense: data?.WardrobeExpense || '',
+    playbookLink: data?.playbookLink || '',
     productionUsage: data?.ProductionUsage || [],
     directorExpense: data?.DirectorExpense || '',
     producerExpense: data?.ProducerExpense || '',
@@ -22,8 +24,19 @@ export const defaultProduction = (data) => {
     //relations
     spaces: data?.ByProductionsSpaces || [],
     stakeholders: data?.ByProductionsStakeholders || [],
-    partners: data?.ByProductionsPartners || []
-  }
+    products: [],
+    contributingPartners: [],
+    proposedPartners: [],
+    proposedSpaces: [],
 
-  return defaultData
-}
+    // images
+    receipts: [],
+    contracts: [],
+    shotlist: [],
+    callSheet: [],
+    proofingLibrary: [],
+    imageInspiration: [],
+  };
+
+  return defaultData;
+};

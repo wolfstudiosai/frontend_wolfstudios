@@ -2,13 +2,15 @@
 
 import React, { useRef } from 'react';
 import { Box, CircularProgress } from '@mui/material';
+
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
+
 import { CampaignGridView } from './_components/campaign-grid-view';
+import { CampaignRightPanel } from './_components/campaign-right-panel';
 import { CampaignTabView } from './_components/campaign-tab-view';
 import { getCampaignGroupListAsync } from './_lib/campaign.actions';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
-import { CampaignRightPanel } from './_components/campaign-right-panel';
 
 export const CampaignView = () => {
   const observerRef = useRef(null);
@@ -146,8 +148,8 @@ export const CampaignView = () => {
       {openPanel && (
         <CampaignRightPanel
           onClose={() => {
-            setSelectedItemId(null)
-            setOpenPanel(false)
+            setSelectedItemId(null);
+            setOpenPanel(false);
           }}
           fetchList={refetchList}
           id={selectedItemId}

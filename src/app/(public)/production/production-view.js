@@ -2,6 +2,7 @@
 
 import React, { useRef } from 'react';
 import { Box, CircularProgress } from '@mui/material';
+
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 import PageLoader from '/src/components/loaders/PageLoader';
@@ -9,6 +10,7 @@ import PageLoader from '/src/components/loaders/PageLoader';
 import { ManageProductionRightPanel } from './_components/manage-production-right-panel';
 import { ProductionGridView } from './_components/production-gridview';
 import { ProductionListView } from './_components/production-listview';
+import { ProductionRightPanel } from './_components/production-right-panel';
 import { productionFilters, productionSorting, productionTags } from './_lib/constant';
 import { getProductionListAsync } from './_lib/production.action';
 import { defaultProduction } from './_lib/production.types';
@@ -29,6 +31,7 @@ export const ProductionView = () => {
     VIEW: 'grid',
     ADD: false,
   });
+  const [openPanel, setOpenPanel] = React.useState(false);
 
   async function fetchList() {
     if (isFetching) return;
@@ -105,7 +108,10 @@ export const ProductionView = () => {
           sorting={productionSorting}
           totalRecords={totalRecords}
           onFilterChange={handleFilterChange}
+          showColSlider={false}
+          setOpenPanel={setOpenPanel}
         />
+
         {filters.VIEW === 'list' ? (
           <ProductionListView totalRecords1={totalRecords} fetchList1={fetchList} data={data} loading1={loading} />
         ) : (
@@ -120,6 +126,14 @@ export const ProductionView = () => {
               {isFetching && <CircularProgress size="30px" />}
             </div>
           </Box>
+        )}
+        {openPanel && (
+          <ProductionRightPanel
+            open={openPanel}
+            onClose={() => setOpenPanel(false)}
+            view="ADD"
+            fetchList={refreshListView}
+          />
         )}
         {/* <ManageProductionRightPanel
           view="EDIT"
