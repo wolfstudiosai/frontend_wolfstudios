@@ -50,8 +50,6 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
           isOpen={open}
         />
       </MenuList>
-      <Divider sx={{ mb: open ? 1 : 2 }} />
-      {/* User settings */}
       <Box
         sx={{
           mt: 'auto',

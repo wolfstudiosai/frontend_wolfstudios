@@ -38,7 +38,7 @@ export const SettingsPopover = ({ isSidebarOpen = false }) => {
           justifyContent: isSidebarOpen ? 'flex-start' : 'center',
         }}
       >
-        <MenuItem>
+        <MenuItem sx={{width: "100%"}}>
           <ListItemIcon sx={{ mr: isSidebarOpen ? 1 : 0 }}>
             <Iconify icon="solar:settings-linear" fontSize={isSidebarOpen ? 'small' : 'inherit'} />
           </ListItemIcon>
