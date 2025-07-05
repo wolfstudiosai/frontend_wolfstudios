@@ -25,6 +25,7 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
     const [data, setData] = React.useState(null);
     const [sidebarView, setSidebarView] = React.useState(view);
     const [loading, setLoading] = React.useState(false);
+    const [isFeatured, setIsFeatured] = React.useState(false);
 
     // *********************States*********************************
 
@@ -35,7 +36,7 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
     };
 
     const handleFeatured = async (featured) => {
-        setData({ ...data, isFeatured: featured });
+        setIsFeatured(featured);
         const payload = defaultPartner({ ...data, isFeatured: featured })
         const response = await updatePartnerAsync(payload)
         if (response.success) {
@@ -76,8 +77,6 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
         },
     });
 
-    console.log(data);
-
     // *****************Use Effects**********************************
     useEffect(() => {
         const getSingleData = async () => {
@@ -86,6 +85,7 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
                 const response = await getPartnerAsync(id);
                 if (response.data) {
                     setData(response.data);
+                    setIsFeatured(response.data.isFeatured);
                     setValues(defaultPartner(response.data));
                 }
             } catch (error) {
@@ -134,6 +134,18 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
                             >
                                 <Iconify icon="mdi:analytics" />
                             </IconButton>
+
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        size="small"
+                                        checked={isFeatured}
+                                        onChange={(e) => handleFeatured(e.target.checked)}
+                                        color="primary"
+                                    />
+                                }
+                                label="Featured"
+                            />
                             <DeleteConfirmationPasswordPopover
                                 id={data?.id}
                                 title="Are you sure you want to delete?"
