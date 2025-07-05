@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import RouterLink from 'next/link';
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button, Popover } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -30,7 +31,6 @@ import { MobileSideNav } from './mobile-side-nav';
 import { LoginForm } from '/src/app/auth/_components/LoginForm';
 import { publicRoutes } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
-import Link from 'next/link';
 
 export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const {
@@ -81,7 +81,12 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
     const updatedRoutes = publicRoutes.map((group) => ({
       ...group,
       items: group.items
-        .filter((item) => (isLogin && item.key !== 'portfolio') || (isLogin && item.key !== 'partner') || (!isLogin && item.key !== 'content'))
+        .filter(
+          (item) =>
+            (isLogin && item.key !== 'portfolio') ||
+            (isLogin && item.key !== 'partner') ||
+            (!isLogin && item.key !== 'content')
+        )
         .map((item) => {
           const auth = localStorage.getItem('auth');
           if (auth) {
@@ -242,13 +247,6 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                   },
                 }}
               >
-                {/* Settings */}
-                <SettingsGear />
-                {/* Chat sidebar */}
-                {isLogin && (
-                  <ChatSidePanel open={chatOpen} onClose={() => setChatOpen(false)} onToggle={handleChatToggle} />
-                )}
-                {/* Notifications */}
                 {isLogin ? (
                   <React.Fragment>
                     <NotificationPopover />
@@ -265,7 +263,6 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                 )}
               </Box>
               {/* user popover */}
-              {isLogin && <UserInfoPopover />}
             </Stack>
           </Stack>
         </Container>
@@ -338,24 +335,24 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
       <Box
         {...(hasPopover
           ? {
-            onClick: (event) => {
-              if (disabled) {
-                event.preventDefault();
-                return;
-              }
-            },
-            role: 'button',
-          }
+              onClick: (event) => {
+                if (disabled) {
+                  event.preventDefault();
+                  return;
+                }
+              },
+              role: 'button',
+            }
           : {
-            ...(href && !disabled
-              ? {
-                component: external ? 'a' : RouterLink,
-                href,
-                target: external ? '_blank' : undefined,
-                rel: external ? 'noreferrer' : undefined,
-              }
-              : { role: 'button' }),
-          })}
+              ...(href && !disabled
+                ? {
+                    component: external ? 'a' : RouterLink,
+                    href,
+                    target: external ? '_blank' : undefined,
+                    rel: external ? 'noreferrer' : undefined,
+                  }
+                : { role: 'button' }),
+            })}
         sx={{
           alignItems: 'center',
           borderRadius: 1,
