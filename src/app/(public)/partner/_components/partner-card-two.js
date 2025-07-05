@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Avatar, Box, Card, CardContent, Divider, Grid, Stack, Typography } from '@mui/material';
-
+import { Avatar, Box, Card, CardContent, Divider, Stack, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { IconWithoutText } from '/src/components/utils/icon-text';
 import { PartnerRightPanel } from './partner-right-panel';
 
@@ -33,7 +33,7 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
         {/* Large Profile Image */}
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
           <Avatar
-            src={partner.ProfileImage[0] ? partner.ProfileImage[0] : '/src/assets/images/placeholder.png'}
+            src={partner?.profileImage[0] ? partner?.profileImage[0] : '/src/assets/images/placeholder.png'}
             variant="square"
             p={0}
             sx={{
@@ -57,30 +57,30 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
               whiteSpace: 'nowrap',
             }}
           >
-            {partner.Name ? partner.Name : '....'}
+            {partner?.name ? partner?.name : '....'}
           </Typography>
           <Typography variant="body1" color="text.secondary" gutterBottom>
-            {partner?.Occupation ? partner.Occupation : 'N/A'}
+            {partner?.occupation ? partner?.occupation : 'N/A'}
           </Typography>
 
           <Stack direction="row" spacing={2} sx={{ my: 1.5, height: '32px' }} justifyContent="center">
-            {partner?.Email && (
-              <IconWithoutText icon="mage:email" value={partner?.Email} type={'email'} sx={{ color: '#4267B2' }} />
+            {partner?.email && (
+              <IconWithoutText icon="mage:email" value={partner?.email} type={'email'} sx={{ color: '#4267B2' }} />
             )}
-            {partner?.Instagram && (
-              <IconWithoutText icon="mdi:instagram" value={partner?.Instagram} type={'url'} sx={{ color: '#E1306C' }} />
+            {partner?.instagram && (
+              <IconWithoutText icon="mdi:instagram" value={partner?.instagram} type={'url'} sx={{ color: '#E1306C' }} />
             )}
             {/* {partner?.Facebook && (
               <IconWithoutText icon="mdi:facebook" value={partner?.Facebook} type={'url'} sx={{ color: '#4267B2' }} />
             )} */}
-            {partner?.Youtube && (
-              <IconWithoutText icon="mdi:youtube" value={partner?.Youtube} type={'url'} sx={{ color: '#FF0000' }} />
+            {partner?.youtube && (
+              <IconWithoutText icon="mdi:youtube" value={partner?.youtube} type={'url'} sx={{ color: '#FF0000' }} />
             )}
-            {partner?.LinkedIn && (
-              <IconWithoutText icon="mdi:linkedin" value={partner?.LinkedIn} type={'url'} sx={{ color: '#0077B5' }} />
+            {partner?.linkedin && (
+              <IconWithoutText icon="mdi:linkedin" value={partner?.linkedin} type={'url'} sx={{ color: '#0077B5' }} />
             )}
-            {partner?.Website && (
-              <IconWithoutText icon="mdi:web" value={partner?.Website} type={'url'} sx={{ color: '#4267B2' }} />
+            {partner?.website && (
+              <IconWithoutText icon="mdi:web" value={partner?.website} type={'url'} sx={{ color: '#4267B2' }} />
             )}
           </Stack>
 
@@ -92,7 +92,7 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
                 Audience
               </Typography>
               <Typography variant="h6">
-                {partner?.TotalAudience ? formatCompactNumber(partner.TotalAudience) : '-'}
+                {partner?.totalAudience ? formatCompactNumber(partner.totalAudience) : '-'}
               </Typography>
             </Grid>
             <Grid item xs={6}>
@@ -100,7 +100,7 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
                 Credits
               </Typography>
               <Typography variant="h6">
-                {partner?.RemainingCredits ? formatCompactNumber(partner.RemainingCredits) : '-'}
+                {partner?.remainingCredits ? formatCompactNumber(partner.remainingCredits) : '-'}
               </Typography>
             </Grid>
           </Grid>
@@ -111,7 +111,7 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
                 Rate (h)
               </Typography>
               <Typography variant="h6">
-                {partner?.HourlyRate ? '$' + formatCompactNumber(partner.HourlyRate) : '-'}
+                {partner?.hourlyRate ? '$' + formatCompactNumber(partner.hourlyRate) : '-'}
               </Typography>
             </Grid>
             <Grid item xs={6}>
@@ -119,7 +119,7 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
                 Views
               </Typography>
               <Typography variant="h6">
-                {partner?.PartnerPostViews ? formatCompactNumber(partner.PartnerPostViews) : '-'}
+                {partner?.partnerPostViews ? formatCompactNumber(partner.partnerPostViews) : '-'}
               </Typography>
             </Grid>
           </Grid>

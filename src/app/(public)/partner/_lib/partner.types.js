@@ -11,7 +11,10 @@ export const defaultPartner = (data) => {
     amazonReferralFee: data?.amazonReferralFee || 0,
     instagram: data?.instagram || '',
     instagramFollowing: data?.instagramFollowing || 0,
-    profileStatus: data?.profileStatus || [],
+    profileStatus: data?.profileStatus?.map((item) => ({
+      value: item,
+      label: item,
+    })) || [],
     linkedin: data?.linkedin || '',
     linkedinConnections: data?.linkedinConnections || 0,
     youtube: data?.youtube || '',
@@ -36,7 +39,10 @@ export const defaultPartner = (data) => {
     totalProductCOGExpense: data?.totalProductCOGExpense || 0,
     shippingExpense: data?.shippingExpense || 0,
     oneOffExpense: data?.oneOffExpense || 0,
-    currentStatus: data?.currentStatus || [],
+    currentStatus: data?.currentStatus?.map((item) => ({
+      value: item,
+      label: item,
+    })) || [],
     occupation: data?.occupation || '',
     paymentLink: data?.paymentLink || '',
     client: data?.client || '',
@@ -62,8 +68,14 @@ export const defaultPartner = (data) => {
     amountPaid: data?.amountPaid || 0,
     totalContributedEngagementByContent: data?.totalContributedEngagementByContent || 0,
     totalAudience: data?.totalAudience || 0,
-    platformDeliverables: data?.platformDeliverables || [],
-    platforms: data?.platforms || [],
+    platformDeliverables: data?.platformDeliverables?.map((item) => ({
+      value: item,
+      label: item,
+    })) || [],
+    platforms: data?.platforms?.map((item) => ({
+      value: item,
+      label: item,
+    })) || [],
     revosOffer: data?.revosOffer || '',
     remainingCredits: data?.remainingCredits || 0,
     ttPost: data?.ttPost || '',
@@ -75,15 +87,24 @@ export const defaultPartner = (data) => {
     whatsapp: data?.whatsapp || '',
     ytPost: data?.ytPost || '',
     partnerPostViews: data?.partnerPostViews || 0,
-    sourcedFrom: data?.sourcedFrom || [],
+    sourcedFrom: data?.sourcedFrom?.map((item) => ({
+      value: item,
+      label: item,
+    })) || [],
     estimatedTaxes: data?.estimatedTaxes || 0,
     amazonTax: data?.amazonTax || 0,
     amazonKickback: data?.amazonKickback || 0,
     monthSourced: data?.monthSourced || "",
     clientStatus: data?.clientStatus || '',
-    affiliatePlatform: data?.affiliatePlatform || [],
+    affiliatePlatform: data?.affiliatePlatform?.map((item) => ({
+      value: item,
+      label: item,
+    })) || [],
     bookingLink: data?.bookingLink || '',
-    ageBracket: data?.ageBracket || [],
+    ageBracket: data?.ageBracket?.map((item) => ({
+      value: item,
+      label: item,
+    })) || [],
     hourlyRate: data?.hourlyRate || 0,
     linktree: data?.linktree || '',
     partnerUGCRate: data?.partnerUGCRate || 0,
@@ -132,11 +153,11 @@ export const defaultPartner = (data) => {
     state: data?.state?.map((item) => ({
       value: item?.id,
       label: item?.name,
-    })) || [],
+    })) || [], // Came as states
     city: data?.city?.map((item) => ({
       value: item?.id,
       label: item?.name,
-    })) || [],
+    })) || [], // Came as cities
     services: data?.services?.map((item) => ({
       value: item?.id,
       label: item?.name,
@@ -156,23 +177,23 @@ export const defaultPartner = (data) => {
     contributedCampaigns: data?.contributedCampaigns?.map((item) => ({
       value: item?.id,
       label: item?.name,
-    })) || [],
+    })) || [], // do not come in the response
     country: data?.country?.map((item) => ({
       value: item?.id,
       label: item?.name,
-    })) || [],
+    })) || [], // Came as countries
     tags: data?.tags?.map((item) => ({
       value: item?.id,
       label: item?.name,
-    })) || [],
+    })) || [], // do not come in the response
     retailPartners: data?.retailPartners?.map((item) => ({
       value: item?.id,
       label: item?.name,
-    })) || [],
+    })) || [], // do not come in the response
     destinations: data?.destinations?.map((item) => ({
       value: item?.id,
       label: item?.name,
-    })) || [],
+    })) || [], // do not come in the response
     proposedCampaigns: data?.proposedCampaigns?.map((item) => ({
       value: item?.id,
       label: item?.name,

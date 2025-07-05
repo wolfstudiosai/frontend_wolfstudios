@@ -115,25 +115,21 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
                             </IconButton>
                         )
                     )}
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                size="small"
-                                checked={data?.isFeatured}
-                                onChange={(e) => handleFeatured(e.target.checked)}
-                                color="primary"
-                            />
-                        }
-                        label="Featured"
-                    />
+
                     {sidebarView === 'EDIT' && (
-                        <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+                        <Button size="small" variant="contained" color="primary" onClick={handleSubmit} disabled={loading}>
                             Save
                         </Button>
                     )}
+
                     {sidebarView === 'QUICK' && (
                         <>
-                            <IconButton as={Link} href={`/partner/${data?.id}`} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} title="Analytics">
+                            <IconButton
+                                as={Link}
+                                href={`/partner/${data?.id}`}
+                                sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                title="Analytics"
+                            >
                                 <Iconify icon="mdi:analytics" />
                             </IconButton>
                             <DeleteConfirmationPasswordPopover

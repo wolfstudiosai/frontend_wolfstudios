@@ -112,8 +112,9 @@ export const PartnerView = () => {
           setOpenPanel={setOpenPanel}
         />
 
-        {/* {filters.VIEW === 'list' ? (
-          <PartnerListView />
+        {filters.VIEW === 'list' ? (
+          <></>
+          // <PartnerListView />
         ) : (
           <Box>
             <PartnerGridView data={data || [defaultPartner]} fetchList={refreshListView} loading={loading} />
@@ -121,7 +122,7 @@ export const PartnerView = () => {
               {isFetching && <CircularProgress size="30px" />}
             </div>
           </Box>
-        )} */}
+        )}
       </PageLoader>
 
       {openPanel && (
