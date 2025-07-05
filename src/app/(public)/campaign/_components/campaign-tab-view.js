@@ -1,16 +1,16 @@
-import React from 'react';
 import { Box, Button, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import React from 'react';
 
 import { SectionLoader } from '/src/components/loaders/section-loader';
 import { TabContainer } from '/src/components/tabs/tab-container';
 
-import { CampaignTabCard } from '../_components/campaign-tab-card';
 import { useCampaignStatusCount } from '../../../../services/campaign/useCampaignStatusCount';
 import { useCampaignList } from '../../../../services/useCampaignList';
+import { CampaignTabCard } from '../_components/campaign-tab-card';
 
 export const CampaignTabView = () => {
-  const [selectedStatus, setSelectedStatus] = React.useState('');
+  const [selectedStatus, setSelectedStatus] = React.useState('ACTIVE');
 
   const {
     statusTabs,
@@ -26,17 +26,10 @@ export const CampaignTabView = () => {
     totalRecords,
     hasMore,
     loadMore,
-    refresh: refreshCampaigns,
+    mutate: refreshCampaigns,
   } = useCampaignList(selectedStatus);
 
-  React.useEffect(() => {
-    if (statusTabs.length > 0 && !selectedStatus) {
-      setSelectedStatus(statusTabs[0]?.value || '');
-    }
-  }, [statusTabs, selectedStatus]);
-
-  console.log(statusTabs, 'status tab....');
-  const handleTabChange = (_, index) => {
+  const handleTabChange = (e, index) => {
     const status = statusTabs[index]?.value;
     if (status !== selectedStatus) {
       setSelectedStatus(status);

@@ -30,7 +30,7 @@ export const useCampaignStatusCount = () => {
 
     return response.data.flatMap((obj) =>
       Object.entries(obj).map(([key, count]) => ({
-        label: key ? `${key.replace(/_/g, ' ')} (${count})` : null,
+        label: key ? `${key.replace(/_/g, ' ')} (${count})` : `Other (${count})`,
         value: key,
         count,
       }))
