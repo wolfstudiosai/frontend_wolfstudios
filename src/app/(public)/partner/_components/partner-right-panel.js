@@ -76,6 +76,8 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
         },
     });
 
+    console.log(data);
+
     // *****************Use Effects**********************************
     useEffect(() => {
         const getSingleData = async () => {

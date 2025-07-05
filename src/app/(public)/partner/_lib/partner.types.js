@@ -148,7 +148,7 @@ export const defaultPartner = (data) => {
     })) || [],
     portfolios: data?.portfolios?.map((item) => ({
       value: item?.id,
-      label: item?.name,
+      label: item?.projectTitle,
     })) || [],
     state: data?.state?.map((item) => ({
       value: item?.id,
