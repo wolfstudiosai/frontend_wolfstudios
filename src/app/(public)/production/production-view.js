@@ -135,14 +135,6 @@ export const ProductionView = () => {
             fetchList={refreshListView}
           />
         )}
-        {/* <ManageProductionRightPanel
-          view="EDIT"
-          width="70%"
-          data={null}
-          fetchList={refreshListView}
-          open={filters.ADD}
-          onClose={() => setFilters((prev) => ({ ...prev, ADD: false }))}
-        /> */}
       </PageLoader>
     </PageContainer>
   );

@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { getSearchQuery, validateFilters, buildQueryParams } from '/src/utils/helper';
+import { buildQueryParams, getSearchQuery, validateFilters } from '/src/utils/helper';
 import { uploadFileAsync } from '/src/utils/upload-file';
 
 export const getProductionListAsync = async (queryParams, filters, gate) => {
@@ -59,18 +59,11 @@ export const createProductionAsync = async (file, data) => {
   }
 };
 
-export const updateProductionAsync = async (file, data) => {
+export const updateProductionAsync = async (data) => {
+  const { id: production_id, ...rest } = data;
+
   try {
-    const { id, slug, user_id, created_by, created_at, updated_at, ...rest } = data;
-    let thumbnailPath = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      thumbnailPath = uploadResponse[0].path;
-    }
-    const res = await api.patch(`/production-HQ/${id}`, {
-      ...rest,
-      thumbnail: thumbnailPath ? thumbnailPath : data.thumbnail,
-    });
+    const res = await api.patch(`/production-HQ/${production_id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
@@ -119,7 +112,6 @@ export const getProductionCategoryListAsync = async (queryParams) => {
   }
 };
 
-
 export const getProductionViewsAsync = async () => {
   try {
     const res = await api.get(`/views?table=PRODUCTION`);
@@ -151,7 +143,6 @@ export const createProductionViewAsync = async (data) => {
   }
 };
 
-
 export const updateProductionViewAsync = async (id, data) => {
   try {
     const res = await api.patch(`/views/${id}`, data);
@@ -161,7 +152,6 @@ export const updateProductionViewAsync = async (id, data) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
-
 
 export const deleteProductionViewAsync = async (id) => {
   try {

@@ -69,24 +69,27 @@ export const ProductionRightPanel = ({ open, onClose, fetchList, id, view = 'QUI
         ),
       };
 
-      console.log('Formatted values: ', formattedValues);
+      console.log('formattedValues: ', formattedValues);
 
-      //   setLoading(true);
-      //   try {
-      //     const res = isUpdate ? await updateProductionAsync(file, values) : await createProductionAsync(file, values);
-      //     if (res.success) {
-      //       onClose?.();
-      //       fetchList?.();
-      //       resetForm();
-      //       router.refresh();
-      //     } else {
-      //       console.error('Operation failed:', res.message);
-      //     }
-      //   } catch (error) {
-      //     console.error('Error:', error);
-      //   } finally {
-      //     setLoading(false);
-      //   }
+      setLoading(true);
+      try {
+        const res = isUpdate
+          ? await updateProductionAsync(formattedValues)
+          : await createProductionAsync(file, formattedValues);
+        console.log('response: ', res);
+        if (res.success) {
+          onClose?.();
+          fetchList?.();
+          resetForm();
+          router.refresh();
+        } else {
+          console.error('Operation failed:', res.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
     },
   });
 
@@ -111,51 +114,45 @@ export const ProductionRightPanel = ({ open, onClose, fetchList, id, view = 'QUI
   };
 
   // *****************Action Buttons*******************************
-  //   const actionButtons = (
-  //     <>
-  //       {isLogin && (
-  //         <>
-  //           {sidebarView === 'QUICK' ? (
-  //             <>
-  //               <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
-  //                 <Iconify icon="mynaui:edit-one" />
-  //               </IconButton>
-  //             </>
-  //           ) : (
-  //             data !== null && (
-  //               <IconButton onClick={() => setSidebarView('QUICK')} title="Quick View">
-  //                 <Iconify icon="lets-icons:view-light" />
-  //               </IconButton>
-  //             )
-  //           )}
+  const actionButtons = isLogin && (
+    <>
+      {sidebarView === 'QUICK' ? (
+        <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
+          <Iconify icon="mynaui:edit-one" />
+        </IconButton>
+      ) : (
+        data && (
+          <IconButton onClick={() => setSidebarView('QUICK')} title="Quick View">
+            <Iconify icon="lets-icons:view-light" />
+          </IconButton>
+        )
+      )}
 
-  //           <FormControlLabel
-  //             control={
-  //               <Switch
-  //                 size="small"
-  //                 checked={values?.featured}
-  //                 onChange={() => handleFeatured(!values?.featured)}
-  //                 color="primary"
-  //               />
-  //             }
-  //             label="Featured"
-  //           />
+      <FormControlLabel
+        control={
+          <Switch
+            size="small"
+            checked={values?.featured}
+            onChange={() => handleFeatured(!values?.featured)}
+            color="primary"
+          />
+        }
+        label="Featured"
+      />
 
-  //           <DeleteConfirmationPasswordPopover
-  //             title={`Want to delete ${data?.project_title}?`}
-  //             onDelete={(password) => handleDelete(password)}
-  //             passwordInput
-  //           />
+      <DeleteConfirmationPasswordPopover
+        title={`Want to delete ${data?.project_title}?`}
+        onDelete={handleDelete}
+        passwordInput
+      />
 
-  //           {sidebarView === 'EDIT' && (
-  //             <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
-  //               Save
-  //             </Button>
-  //           )}
-  //         </>
-  //       )}
-  //     </>
-  //   );
+      {/* {sidebarView === 'EDIT' && (
+        <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+          Save
+        </Button>
+      )} */}
+    </>
+  );
 
   // *****************Use Effects*******************************
 
@@ -163,7 +160,7 @@ export const ProductionRightPanel = ({ open, onClose, fetchList, id, view = 'QUI
     const getSingleData = async () => {
       setLoading(true);
       try {
-        console.log(id, 'id');
+        console.log('production id in right panel: ', id);
         const response = await getProductionAsync(id);
         console.log(response.data, 'response.data');
         if (response.data) {
@@ -184,7 +181,7 @@ export const ProductionRightPanel = ({ open, onClose, fetchList, id, view = 'QUI
     <DrawerContainer open={open} handleDrawerClose={onClose}>
       {sidebarView === 'QUICK' ? (
         <PageLoader loading={loading}>
-          <ProductionQuickView data={data} />
+          <ProductionQuickView data={data} actionButtons={actionButtons} />
         </PageLoader>
       ) : (
         <ProductionForm
@@ -195,6 +192,8 @@ export const ProductionRightPanel = ({ open, onClose, fetchList, id, view = 'QUI
           onSetFile={setFile}
           onDeleteThumbnail={handleDeleteThumbnail}
           setFieldValue={setFieldValue}
+          loading={loading}
+          actionButtons={id && actionButtons}
         />
       )}
     </DrawerContainer>

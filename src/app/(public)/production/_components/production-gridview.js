@@ -17,7 +17,7 @@ import { ProductionSliderItem } from './production-slider-item';
 import { isVideoContent } from '/src/utils/helper';
 
 export const ProductionGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
-  console.log(data, 'data');
+  console.log('production data: ', data);
   const slider_data = data.filter((item) => item.featured);
   return (
     <Box>
@@ -42,7 +42,7 @@ export const ProductionGridView = ({ data, colums, fetchList, loading, handlePag
         </SliderWrapper>
       </Box>
       <PageLoader loading={loading} error={null}>
-        <Grid container spacing={.5} columns={{ xs: 36 }} >
+        <Grid container spacing={0.5} columns={{ xs: 36 }}>
           {data.map((production, index) => (
             <Grid item size={{ xs: 12, md: colums }} key={index}>
               <ProductionCard item={production} fetchList={fetchList} />
@@ -58,12 +58,12 @@ export const ProductionCard = ({ item, fetchList, sx, infoSx }) => {
   const [openProductionPanel, setopenProductionPanel] = React.useState(null);
   const [selectedItemId, setSelectedItemId] = React.useState(null);
 
-  const handleMenuOpen = () => { };
+  const handleMenuOpen = () => {};
   return (
     <>
       <Card
         sx={{
-          background: "var(--mui-palette-background-default)",
+          background: 'var(--mui-palette-background-default)',
           width: '100%',
           aspectRatio: '9 / 16',
           border: 'unset',
@@ -82,8 +82,8 @@ export const ProductionCard = ({ item, fetchList, sx, infoSx }) => {
           ...sx,
         }}
         onClick={() => {
-          setSelectedItemId(item.id)
-          setopenProductionPanel(true)
+          setSelectedItemId(item.id);
+          setopenProductionPanel(true);
         }}
       >
         {/* top menu icon button */}
@@ -106,7 +106,7 @@ export const ProductionCard = ({ item, fetchList, sx, infoSx }) => {
         </Box>
 
         <Box className="image-container" sx={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
-          {isVideoContent(item.thumbnail || '') ? (
+          {isVideoContent(item.videoInspiration?.[0] || '') ? (
             <Box
               component="video"
               src={item.thumbnail}
@@ -125,8 +125,8 @@ export const ProductionCard = ({ item, fetchList, sx, infoSx }) => {
           ) : (
             <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
               <Image
-                src={item?.ThumbnailImage?.at(0) || item?.Imagefield?.at(0) || '/assets/image-placeholder.jpg'}
-                alt={item.title || 'Production Image'}
+                src={item?.imageInspiration?.at(0) || '/assets/image-placeholder.jpg'}
+                alt={item.name || 'Production Image'}
                 draggable={false}
                 style={{
                   objectFit: 'cover',
@@ -156,8 +156,7 @@ export const ProductionCard = ({ item, fetchList, sx, infoSx }) => {
             }}
           >
             <Typography fontWeight={400} color="white" fontSize={{ xs: 12, md: 14 }} noWrap>
-              {(item.ProjectTitle || '').split(/\s+/).slice(0, 4).join(' ') +
-                (item.ProjectTitle?.split(/\s+/)?.length > 4 ? '...' : '')}
+              {item.name}
             </Typography>
             {/* Thin Line */}
             <Box
@@ -233,8 +232,8 @@ export const ProductionCard = ({ item, fetchList, sx, infoSx }) => {
             id={selectedItemId}
             open={openProductionPanel}
             onClose={() => {
-              setopenProductionPanel(false)
-              setSelectedItemId(null)
+              setopenProductionPanel(false);
+              setSelectedItemId(null);
             }}
           />
         )}

@@ -24,7 +24,17 @@ import { getCampaignListAsync } from '../../campaign/_lib/campaign.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
 
-export const ProductionForm = ({ values, onSubmit, onChange, errors, onSetFile, onDeleteThumbnail, setFieldValue }) => {
+export const ProductionForm = ({
+  values,
+  onSubmit,
+  onChange,
+  errors,
+  onSetFile,
+  onDeleteThumbnail,
+  setFieldValue,
+  loading,
+  actionButtons,
+}) => {
   const status = [
     { value: 'PLANNING', label: 'Planning' },
     { value: 'IN_PROGRESS', label: 'In Progress' },
@@ -113,7 +123,7 @@ export const ProductionForm = ({ values, onSubmit, onChange, errors, onSetFile, 
             container
             spacing={2}
             sx={{
-              height: 'calc(100vh - 142px)',
+              height: 'calc(100vh - 148px)',
               overflow: 'auto',
               scrollbarWidth: 'none',
               '&::-webkit-scrollbar': { display: 'none' },
@@ -512,11 +522,14 @@ export const ProductionForm = ({ values, onSubmit, onChange, errors, onSetFile, 
 
           <Stack
             direction="row"
-            justifyContent="flex-end"
+            justifyContent={actionButtons ? 'space-between' : 'flex-end'}
             sx={{ postion: 'absolute', bottom: 0, py: 1, backgroundColor: 'var(--mui-palette-background-paper)' }}
           >
-            <Button size="small" variant="contained" color="primary" type="submit">
-              Save
+            <Stack direction="row" gap={1}>
+              {actionButtons}
+            </Stack>
+            <Button size="small" variant="contained" color="primary" type="submit" disabled={loading}>
+              {loading ? 'Saving...' : 'Save'}
             </Button>
           </Stack>
         </Box>
