@@ -5,7 +5,8 @@ export const defaultCampaign = (data) => {
     name: data?.name || '',
     client: data?.client || '',
     guidelines: data?.guidelines || '',
-    campaignGoals: data?.campaignGoals.join(',') || [],
+    currentGoals: '',
+    campaignGoals: data?.campaignGoals || [],
     campaignDescription: data?.campaignDescription || '',
     totalContentEngagement: data?.totalContentEngagement || 0,
     campaignStatus: data?.campaignStatus || '',
@@ -18,7 +19,7 @@ export const defaultCampaign = (data) => {
     notes: data?.notes || '',
     imageInspirationGallery: data?.imageInspirationGallery || [],
     videoInspirationGallery: data?.videoInspirationGallery || [],
-    campaignImage: data?.campaignImage?.[0] || [],
+    campaignImage: data?.campaignImage || [],
     contentHQ:
       data?.contentHQ?.map((item) => ({
         value: item?.id,
@@ -53,7 +54,7 @@ export const defaultCampaign = (data) => {
       value: item?.id,
       label: item?.name,
     })) || [],
-    products: data?.product?.map((item) => ({
+    products: data?.products?.map((item) => ({
       value: item?.id,
       label: item?.name,
     })) || [],

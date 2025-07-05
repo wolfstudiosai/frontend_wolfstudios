@@ -1,10 +1,8 @@
 'use client';
 
-import { Button, FormControl, FormLabel, Stack } from '@mui/material';
+import { Box, Button, Chip, FormControl, FormLabel, InputAdornment, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import React from 'react';
-
-import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
 import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
 import { CustomSelect } from '/src/components/formFields/custom-select';
@@ -21,6 +19,7 @@ import { getContentList } from '/src/app/(private)/all-content/_lib/all-content.
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
 import { getProductionListAsync } from '../../production/_lib/production.action';
 import { campaignProgressStatus } from '../_lib/campaign.constants';
+import { CustomMultipleInputField } from '/src/components/formFields/custom-mulitple-input-field';
 
 export const CampaignForm = ({ handleChange, values, errors, loading, setFieldValue, onSubmit }) => {
   // *********************States*********************************
@@ -33,11 +32,6 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
   const [productionHQOptions, setProductionHQOptions] = React.useState([]);
   const [productOptions, setProductOptions] = React.useState([]);
   const [openImageUploadDialog, setOpenImageUploadDialog] = React.useState(false);
-  const [data, setData] = React.useState(null);
-
-  // ********************* Formik *******************************
-
-  // ******************** Use Effects****************************
 
   // --------------- Fetch Prerequisites Data -------------------
   React.useEffect(() => {
@@ -88,30 +82,20 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
     fetchPrerequisitesData();
   }, []);
 
-  // // --------------- Fetch campaign during update -------------------
-  // React.useEffect(() => {
-  //   const fetchSingleCampaign = async () => {
-  //     try {
-  //       const res = await getCampaignAsync(id);
-  //       if (res?.success) {
-  //         setData(res.data);
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
+  const handleAddGoal = () => {
+    if (values.currentGoals?.trim() && !values.campaignGoals.includes(values.currentGoals.trim())) {
+      setFieldValue("campaignGoals", [...values.campaignGoals, values.currentGoals.trim()], { shouldValidate: true });
+      setFieldValue("currentGoals", "");
+    }
+  };
 
-  //   if (id) {
-  //     fetchSingleCampaign();
-  //   }
-  // }, [values.id]);
-
-  // // --------------- Set values during update -------------------
-  // React.useEffect(() => {
-  //   if (data) {
-  //     setValues(defaultCampaign(data));
-  //   }
-  // }, [data, setValues]);
+  const handleRemoveGoal = (goalToRemove) => {
+    setFieldValue(
+      "campaignGoals",
+      values.campaignGoals.filter((goal) => goal !== goalToRemove),
+      { shouldValidate: true }
+    );
+  };
 
   return (
     <>
@@ -381,8 +365,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               defaultOptions={productOptions}
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
-                const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
-                const res = await getProductListAsync(paging, filters, 'and');
+                const res = await getProductListAsync(paging, debounceValue);
                 return res?.data?.map((item) => ({
                   label: item.name,
                   value: item.id,
@@ -401,9 +384,46 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               />
             </FormControl>
           </Grid>
+
           <Grid size={{ xs: 12 }}>
-            <CustomTextField name="campaignGoals" label="Goals" value={values.campaignGoals} onChange={handleChange} />
+            <CustomMultipleInputField
+              name="currentGoals"
+              label="Goals"
+              onchange={handleChange}
+              value={values.currentGoals}
+              isSubmitting={loading}
+              currentData={values.currentGoals}
+              handleAdd={handleAddGoal}
+              handleRemove={handleRemoveGoal}
+            />
+
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 1 }}>
+              {values.campaignGoals.map((goal, index) => (
+                <Chip
+                  key={index}
+                  label={goal}
+                  onDelete={() => handleRemoveGoal(goal)}
+                  disabled={loading}
+                  color="primary"
+                  size="small"
+                />
+              ))}
+            </Box>
+            {/* {errors.tags && (
+              <Typography
+                color="error"
+                variant="caption"
+                display="block"
+                sx={{ mt: 1 }}
+              >
+                {errors.goals.message}
+              </Typography>
+            )} */}
           </Grid>
+
+          {/* <Grid size={{ xs: 12 }}>
+            <CustomTextField name="campaignGoals" label="Goals" value={values.campaignGoals} onChange={handleChange} />
+          </Grid> */}
           <Grid size={{ xs: 12 }}>
             <CustomTextField name="notes" label="Notes " value={values.notes} onChange={handleChange} />
             <ErrorMessage error={errors.notes} />

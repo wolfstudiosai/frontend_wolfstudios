@@ -7,6 +7,10 @@ export default function SelectEditCell(props) {
 
     const handleSelectChange = (newValue) => {
         apiRef.current.setEditCellValue({ id, field, value: newValue });
+
+        setTimeout(() => {
+            apiRef.current.stopCellEditMode({ id, field });
+        }, 100);
     };
 
     return (

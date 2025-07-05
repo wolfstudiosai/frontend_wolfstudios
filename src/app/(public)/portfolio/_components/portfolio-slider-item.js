@@ -2,11 +2,11 @@ import React from 'react';
 import Image from 'next/image';
 import { getFancyColor, getRandomColor } from '/src/utils/helper';
 import { Avatar, AvatarGroup, Box, Card, Chip, Stack, Typography } from '@mui/material';
-
-import { ManagePortfolioRightPanel } from './manage-portfolio-right-panel';
+import { PortfolioRightPanel } from './portfolio-right-panel';
 
 export const PortfolioSliderItem = ({ item, index, fetchList }) => {
   const [openPortfolioRightPanel, setOpenPortfolioRightPanel] = React.useState(null);
+  const [selectedItem, setSelectedItem] = React.useState(null);
 
   const isVideoContent = (url) => {
     const videoKeywords = ['vimeo', 'playback', 'video'];
@@ -24,12 +24,15 @@ export const PortfolioSliderItem = ({ item, index, fetchList }) => {
         position: 'relative',
         cursor: 'pointer',
       }}
-      onClick={() => setOpenPortfolioRightPanel(item)}
+      onClick={() => {
+        setOpenPortfolioRightPanel(true);
+        setSelectedItem(item);
+      }}
     >
-      {isVideoContent(item.thumbnail) ? (
+      {isVideoContent(item.thumbnailImage) ? (
         <Box
           component="video"
-          src={item.thumbnail}
+          src={item.thumbnailImage}
           muted
           autoPlay
           loop
@@ -44,8 +47,8 @@ export const PortfolioSliderItem = ({ item, index, fetchList }) => {
         />
       ) : (
         <Image
-          src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnail}`}
-          alt={item.title}
+          src={`${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.thumbnailImage}`}
+          alt={item.projectTitle}
           draggable={false}
           style={{
             objectFit: 'cover',
@@ -76,7 +79,7 @@ export const PortfolioSliderItem = ({ item, index, fetchList }) => {
         }}
       >
         <Typography variant="h5" fontWeight={700} color="var(--mui-palette-common-white)">
-          {item.project_title}
+          {item.projectTitle}
         </Typography>
         <Box
           sx={{
@@ -86,10 +89,10 @@ export const PortfolioSliderItem = ({ item, index, fetchList }) => {
           }}
         >
           <Typography variant="body" color="var(--mui-palette-common-white)">
-            {item.state}
+            {item.states?.name}
           </Typography>
-          {item.category.split(',').map((category, index) => (
-            <Chip key={index} label={category.trim()} size="small" sx={{ backgroundColor: getFancyColor(index) }} />
+          {item.portfolioCategories.map((category, index) => (
+            <Chip key={index} label={category?.name} size="small" sx={{ backgroundColor: getFancyColor(index) }} />
           ))}
         </Box>
       </Stack>
@@ -108,14 +111,18 @@ export const PortfolioSliderItem = ({ item, index, fetchList }) => {
           <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
         </AvatarGroup>
       </Stack>
-      <ManagePortfolioRightPanel
-        view={'QUICK'}
-        fetchList={fetchList}
-        width="70%"
-        open={openPortfolioRightPanel ? true : false}
-        data={openPortfolioRightPanel}
-        onClose={() => setOpenPortfolioRightPanel(false)}
-      />
+
+      {openPortfolioRightPanel && (
+        <PortfolioRightPanel
+          fetchList={fetchList}
+          id={selectedItem?.id}
+          onClose={() => {
+            setSelectedItem(null);
+            setOpenPortfolioRightPanel(false);
+          }}
+          open={openPortfolioRightPanel}
+        />
+      )}
     </Card>
   );
 };

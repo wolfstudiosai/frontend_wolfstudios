@@ -79,6 +79,9 @@ export const EditableDataTable = ({
           '& .MuiDataGrid-cell': {
             border: (theme) => `1px solid ${theme.palette.divider}`,
           },
+          '& .MuiDataGrid-cell--editing': {
+            overflow: 'visible',
+          },
         }}
         editMode={editMode}
         onRowEditStart={onRowEditStart}

@@ -6,7 +6,7 @@ export const defaultPortfolio = (data) => {
     shortDescription: data?.shortDescription || '',
     fullDescription: data?.fullDescription || '',
     videoLink: data?.videoLink || '',
-    date: data?.date ? data?.date : null,
+    date: data?.date ? new Date(`${data?.date} 1`).toString() : null,
     horizontalImageGallery: data?.horizontalImageGallery || [],
     verticalImageGallery: data?.verticalImageGallery || [],
     singlePageHeroImage: data?.singlePageHeroImage || [],
@@ -34,7 +34,6 @@ export const defaultPortfolio = (data) => {
       label: item?.caseStudies?.name
     })) || [],
   }
-
 
   return defaultValue;
 }

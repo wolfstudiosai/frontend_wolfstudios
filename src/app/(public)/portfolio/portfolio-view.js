@@ -7,9 +7,9 @@ import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-import { ManagePortfolioRightPanel } from './_components/manage-portfolio-right-panel';
 import { PortfolioGridView } from './_components/portfolio-gridview';
 import { PortfolioListView } from './_components/portfolio-listview';
+import { PortfolioRightPanel } from './_components/portfolio-right-panel';
 import { portfolioFilters, portfolioSorting, portfolioTags } from './_lib/constants';
 import { getPortfolioListAsync } from './_lib/portfolio.actions';
 import { defaultPortfolio } from './_lib/portfolio.types';
@@ -46,6 +46,26 @@ export const PortfolioView = () => {
         setData((prev) => [...prev, ...response.data]);
         setTotalRecords(response.totalRecords);
         setPagination((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }));
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
+      setLoading(false);
+    }
+  }
+
+  async function refetchPortfolioList() {
+    try {
+      const response = await getPortfolioListAsync({
+        page: 1,
+        rowsPerPage: 20,
+      });
+
+      if (response.success) {
+        setData(response.data);
+        setTotalRecords(response.totalRecords);
+        setPagination({ pageNo: 1, limit: 20 });
       }
     } catch (error) {
       console.log(error);
@@ -110,8 +130,10 @@ export const PortfolioView = () => {
           setOpenPanel={setOpenPortfolioRightPanel}
         />
 
-        {/* {filters.VIEW === 'list' ? (
-          <PortfolioListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />
+        {filters.VIEW === 'list' ? (
+          <>
+            <PortfolioListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />
+          </>
         ) : (
           <Box>
             <PortfolioGridView
@@ -126,16 +148,19 @@ export const PortfolioView = () => {
               {isFetching && <CircularProgress size="30px" />}
             </div>
           </Box>
-        )} */}
+        )}
       </PageLoader>
 
-      <ManagePortfolioRightPanel
-        view={'EDIT'}
-        fetchList={fetchList}
-        width="70%"
-        open={openPortfolioRightPanel ? true : false}
-        onClose={() => setOpenPortfolioRightPanel(false)}
-      />
+      {openPortfolioRightPanel && (
+        <PortfolioRightPanel
+          view="ADD"
+          fetchList={refetchPortfolioList}
+          onClose={() => {
+            setOpenPortfolioRightPanel(false);
+          }}
+          open={openPortfolioRightPanel}
+        />
+      )}
     </PageContainer>
   );
 };
