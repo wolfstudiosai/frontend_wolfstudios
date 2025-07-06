@@ -10,6 +10,7 @@ import PageLoader from '/src/components/loaders/PageLoader';
 import { ManageProductionRightPanel } from './_components/manage-production-right-panel';
 import { ProductionGridView } from './_components/production-gridview';
 import { ProductionListView } from './_components/production-listview';
+import { ProductionRightPanel } from './_components/production-right-panel';
 import { productionFilters, productionSorting, productionTags } from './_lib/constant';
 import { getProductionListAsync } from './_lib/production.action';
 import { defaultProduction } from './_lib/production.types';
@@ -32,6 +33,7 @@ export const ProductionView = () => {
     VIEW: 'grid',
     ADD: false,
   });
+  const [openPanel, setOpenPanel] = React.useState(false);
 
   async function fetchList() {
     if (isFetching) return;
@@ -114,7 +116,10 @@ export const ProductionView = () => {
           sorting={productionSorting}
           totalRecords={totalRecords}
           onFilterChange={handleFilterChange}
+          showColSlider={false}
+          setOpenPanel={setOpenPanel}
         />
+
         {filters.VIEW === 'list' ? (
           <ProductionListView totalRecords1={totalRecords} fetchList1={fetchList} data={data} loading1={loading} />
         ) : (
@@ -130,14 +135,14 @@ export const ProductionView = () => {
             </div>
           </Box>
         )}
-        {/* <ManageProductionRightPanel
-          view="EDIT"
-          width="70%"
-          data={null}
-          fetchList={refreshListView}
-          open={filters.ADD}
-          onClose={() => setFilters((prev) => ({ ...prev, ADD: false }))}
-        /> */}
+        {openPanel && (
+          <ProductionRightPanel
+            open={openPanel}
+            onClose={() => setOpenPanel(false)}
+            view="ADD"
+            fetchList={refreshListView}
+          />
+        )}
       </PageLoader>
     </PageContainer>
   );

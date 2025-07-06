@@ -1,10 +1,10 @@
-import { Box, FormLabel, IconButton, Stack } from '@mui/material';
 import React from 'react';
-import { deleteFileAsync } from '/src/app/(public)/portfolio/_lib/portfolio.actions';
-import { isSupabaseUrl, isVideoContent } from '/src/utils/helper';
+import { Box, FormLabel, IconButton, Stack } from '@mui/material';
 
 import { Iconify } from '../iconify/iconify';
 import { MediaUploader } from './media-uploader';
+import { deleteFileAsync } from '/src/app/(public)/portfolio/_lib/portfolio.actions';
+import { isSupabaseUrl, isVideoContent } from '/src/utils/helper';
 
 export const MediaUploaderTrigger = ({
   open,
@@ -16,7 +16,7 @@ export const MediaUploaderTrigger = ({
   onDelete,
   hideImageUploader,
   hideVideoUploader,
-  folderName
+  folderName,
 }) => {
   const handleRemoveFile = async (item) => {
     if (isSupabaseUrl(item)) {

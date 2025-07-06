@@ -1,19 +1,19 @@
 'use client';
 
-import React from 'react';
 import { Box, Button } from '@mui/material';
+import React from 'react';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 
 import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import PageLoader from '../../../components/loaders/PageLoader';
+import { paths } from '../../../paths';
 import { useCampaignList } from '../../../services/useCampaignList';
 import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignRightPanel } from './_components/campaign-right-panel';
 import { CampaignTabView } from './_components/campaign-tab-view';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
-import { paths } from '../../../paths';
 
 export const CampaignView = () => {
   const [openPanel, setOpenPanel] = React.useState(false);
