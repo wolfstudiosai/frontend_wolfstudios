@@ -1,29 +1,29 @@
 'use client';
 
-import * as React from 'react';
-import RouterLink from 'next/link';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
+import RouterLink from 'next/link';
+import * as React from 'react';
 
-import { paths } from '/src/paths';
-import { dayjs } from '/src/lib/dayjs';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { DataTable } from '/src/components/data-table/data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
+import { useDebounce } from '/src/hooks/use-debounce';
+import { dayjs } from '/src/lib/dayjs';
+import { paths } from '/src/paths';
 
+import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import { deleteUserAsync, getUsers } from './_lib/user.actions';
 import { defaultUser } from './_lib/user.types';
 import { ManageUserDialog } from './manage-user-dialog';
-import { useDebounce } from '/src/hooks/use-debounce';
 
 export default function Page({ searchParams }) {
   const [users, setUsers] = React.useState([]);
@@ -64,7 +64,6 @@ export default function Page({ searchParams }) {
     setOpenModal(false);
     fetchList();
   };
-
 
   const onDelete = () => {
     fetchList();
@@ -141,6 +140,12 @@ export default function Page({ searchParams }) {
         width: 'var(--Content-width)',
       }}
     >
+      <CustomBreadcrumbs
+        items={[
+          { title: 'Dashboard', href: paths.private.overview },
+          { title: 'Users', href: '' },
+        ]}
+      />
       <Stack spacing={4}>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} sx={{ alignItems: 'flex-start' }}>
           <Box sx={{ flex: '1 1 auto' }}>
@@ -203,7 +208,6 @@ export default function Page({ searchParams }) {
             </React.Fragment>
           </Box>
         </Card>
-
       </Stack>
       {openModal && (
         <ManageUserDialog

@@ -8,6 +8,7 @@ export default function SocialLogin({ provider, children, type, style }) {
     const [loading, setLoading] = useState(false);
 
     const handleSignIn = async () => {
+        if (!provider) return;
         try {
             setLoading(true);
             await signIn(provider, {

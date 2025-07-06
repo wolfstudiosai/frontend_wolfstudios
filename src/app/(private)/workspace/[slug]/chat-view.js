@@ -7,6 +7,8 @@ import { Box, Fab, Menu, MenuItem, Stack, useMediaQuery } from '@mui/material';
 
 import { ChatContext } from '/src/contexts/chat';
 
+import { CustomBreadcrumbs } from '../../../../components/custom-breadcumbs';
+import { paths } from '../../../../paths';
 import { Content } from './components/content';
 import { LeftSidebar } from './components/left-sidebar';
 import { RepliesSection } from './components/replies-section';
@@ -150,10 +152,18 @@ export const ChatView = ({ slug }) => {
 
   // Desktop layout
   return (
-    <Stack direction="row" sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, width: '100%' }}>
-      <LeftSidebar isMobile={isMobile} />
-      {activeTab ? <Content isMobile={isMobile} /> : <ContentSkeleton isMobile={isMobile} />}
-      {showReplies ? <RepliesSection isMobile={isMobile} /> : <RightSidebar isMobile={isMobile} />}
-    </Stack>
+    <>
+      <CustomBreadcrumbs
+        items={[
+          { title: 'Dashboard', href: paths.private.overview },
+          { title: 'Chat', href: '' },
+        ]}
+      />
+      <Stack direction="row" sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, width: '100%', mt: 1 }}>
+        <LeftSidebar isMobile={isMobile} />
+        {activeTab ? <Content isMobile={isMobile} /> : <ContentSkeleton isMobile={isMobile} />}
+        {showReplies ? <RepliesSection isMobile={isMobile} /> : <RightSidebar isMobile={isMobile} />}
+      </Stack>
+    </>
   );
 };

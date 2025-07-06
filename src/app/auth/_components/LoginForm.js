@@ -62,7 +62,7 @@ export function LoginForm({ onLoginSuccess, redirectToHome = false }) {
           <Stack spacing={2}>
             <ErrorText error={error} />
             <FormControl error={Boolean(errors.email)}>
-              <InputLabel>Email address</InputLabel>
+              <InputLabel>Email</InputLabel>
               <OutlinedInput size="small" type="email" name="email" value={values.email} onChange={handleChange} />
               {errors.email ? <FormHelperText>{errors.email.message}</FormHelperText> : null}
             </FormControl>

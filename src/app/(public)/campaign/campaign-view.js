@@ -6,12 +6,14 @@ import { Box, Button } from '@mui/material';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 
+import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import PageLoader from '../../../components/loaders/PageLoader';
 import { useCampaignList } from '../../../services/useCampaignList';
 import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignRightPanel } from './_components/campaign-right-panel';
 import { CampaignTabView } from './_components/campaign-tab-view';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
+import { paths } from '../../../paths';
 
 export const CampaignView = () => {
   const [openPanel, setOpenPanel] = React.useState(false);
@@ -32,8 +34,14 @@ export const CampaignView = () => {
   };
 
   return (
-    <PageLoader loading={isLoading} error={error}>
-      <PageContainer>
+    <PageContainer>
+      <PageLoader loading={isLoading} error={error}>
+        <CustomBreadcrumbs
+          items={[
+            { title: 'Dashboard', href: paths.private.overview },
+            { title: 'Campaign', href: '' },
+          ]}
+        />
         <Box>
           <PageHeader
             title="Campaigns"
@@ -79,7 +87,7 @@ export const CampaignView = () => {
             view="ADD"
           />
         )}
-      </PageContainer>
-    </PageLoader>
+      </PageLoader>
+    </PageContainer>
   );
 };
