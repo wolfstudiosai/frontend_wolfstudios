@@ -12,6 +12,8 @@ import { ManageContentRightPanel } from './_component/manage-content-right-panel
 import { getContentList } from './_lib/all-content.actions';
 import { defaultContent } from './_lib/all-content.types';
 import { sliderToGridColsCoverter } from '/src/utils/helper';
+import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
+import { paths } from '../../../paths';
 
 export const AllContentView = () => {
   const observerRef = React.useRef(null);
@@ -100,6 +102,12 @@ export const AllContentView = () => {
 
   return (
     <PageContainer>
+      <CustomBreadcrumbs
+        items={[
+          { title: 'Dashboard', href: paths.private.overview },
+          { title: 'Content', href: '' },
+        ]}
+      />
       <PageHeader
         title="Contents"
         values={filters}

@@ -15,6 +15,7 @@ export const CustomAutoComplete = ({
   error,
   ...props
 }) => {
+
   return (
     <FormControl fullWidth error={Boolean(error)}>
       <InputLabel>{label}</InputLabel>
@@ -23,7 +24,7 @@ export const CustomAutoComplete = ({
         options={options}
         getOptionLabel={(option) => option.label || ''}
         value={value}
-        onChange={onChange}
+        onChange={(e, value) => onChange?.(value)}
         renderTags={(value, getTagProps) =>
           value.map((option, index) => {
             const tagProps = getTagProps({ index });
@@ -31,7 +32,14 @@ export const CustomAutoComplete = ({
             const label = options.find((o) => o.value === option)?.label || option;
             console.log(label);
             return (
-              <Chip key={key} size="small" color="inherit" label={label} {...rest} sx={{ borderRadius: '20px' }} />
+              <Chip
+                key={key}
+                size="small"
+                color="primary"
+                label={option?.label}
+                {...rest}
+                sx={{ borderRadius: '20px' }}
+              />
             );
           })
         }

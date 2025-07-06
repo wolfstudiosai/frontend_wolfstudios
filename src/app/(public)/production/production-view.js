@@ -15,6 +15,8 @@ import { productionFilters, productionSorting, productionTags } from './_lib/con
 import { getProductionListAsync } from './_lib/production.action';
 import { defaultProduction } from './_lib/production.types';
 import { sliderToGridColsCoverter } from '/src/utils/helper';
+import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
+import { paths } from '../../../paths';
 
 export const ProductionView = () => {
   const observerRef = useRef(null);
@@ -100,6 +102,12 @@ export const ProductionView = () => {
   return (
     <PageContainer>
       <PageLoader loading={loading}>
+        <CustomBreadcrumbs
+          items={[
+            { title: 'Dashboard', href: paths.private.overview },
+            { title: 'Production', href: '' },
+          ]}
+        />
         <PageHeader
           title="Production"
           values={filters}
