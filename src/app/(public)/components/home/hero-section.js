@@ -2,28 +2,58 @@
 
 import { useEffect, useState } from 'react';
 import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
 
 import { useSettings } from '/src/hooks/use-settings';
 import useAuth from '/src/hooks/useAuth';
 import { FadeIn } from '/src/components/animation/fade-in';
 
 import { Iconify } from '../../../../components/iconify/iconify';
+import { MediaUploader } from '../../../../components/uploaders/media-uploader';
 import { MediaUploaderTrigger } from '../../../../components/uploaders/media-uploader-trigger';
+import { updateHomepageContentAsync } from '../../../../lib/common.actions';
+import { useHomepageContent } from '../../../../services/home/useHomepageContent';
+import { getMediaTypeFromUrl } from '../../../../utils/get-media-type';
 
 export const HeroSection = () => {
   const theme = useTheme();
   const { isFeaturedCardVisible } = useSettings();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { isLogin, userInfo } = useAuth();
+  const { data, error, isLoading, mutate } = useHomepageContent();
 
   const isImageEditable = isLogin && userInfo?.role.toLowerCase() === 'super_admin';
 
   const [boxSize, setBoxSize] = useState(isMobile ? 100 : 50);
   const [boxHeight, setBoxHeight] = useState(isMobile ? 100 : 60);
-  const [changeImageOrder, setChangeImageOrder] = useState(0);
+  const [uploadImage, setUploadImage] = useState({
+    open: false,
+    order: 0,
+  });
 
-  const handleImageChange = (url) => {
-    console.log(url, 'handleImageChange');
+  const order1 = data?.data?.find((item) => item.order === 1);
+  const order2 = data?.data?.find((item) => item.order === 2);
+
+  const handleImageChange = async (url) => {
+    const id = uploadImage.order === 1 ? order1?.id : order2?.id;
+    try {
+      const mediaUrl = url[0];
+      const mediaType = await getMediaTypeFromUrl(mediaUrl);
+      const res = await updateHomepageContentAsync(id, {
+        id,
+        type: mediaType,
+        order: uploadImage.order,
+        url: url[0],
+      });
+
+      if (res.success) {
+        toast.success('Media uploaded successfully');
+        mutate();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -57,6 +87,10 @@ export const HeroSection = () => {
     setBoxHeight(isMobile ? 100 : 60);
   }, [isMobile]);
 
+  if (isLoading) {
+    return <Box>Loading...</Box>;
+  }
+
   return (
     <>
       <Box
@@ -67,22 +101,39 @@ export const HeroSection = () => {
           overflow: 'hidden',
         }}
       >
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          style={{
-            position: 'absolute',
-            top: '-50%',
-            width: '100%',
-            height: '200%',
-            objectFit: 'cover',
-            objectPosition: 'top center',
-          }}
-        >
-          <source src="https://cdn.wolfstudios.ai/homepage/hero_bg_v2.mp4" type="video/mp4" />
-        </video>
+        {order1?.type === 'IMAGE' ? (
+          // Image background
+          <Box
+            component="img"
+            src={order1?.url}
+            sx={{
+              position: 'absolute',
+              top: '-50%',
+              width: '100%',
+              height: '200%',
+              objectFit: 'cover',
+              objectPosition: 'top center',
+            }}
+          />
+        ) : (
+          // Video background
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{
+              position: 'absolute',
+              top: '-50%',
+              width: '100%',
+              height: '200%',
+              objectFit: 'cover',
+              objectPosition: 'top center',
+            }}
+          >
+            <source src={order1?.url || 'https://cdn.wolfstudios.ai/homepage/hero_bg_v2.mp4'} type="video/mp4" />
+          </video>
+        )}
 
         {/* Gradient Overlay */}
         <Box
@@ -114,7 +165,7 @@ export const HeroSection = () => {
             </Typography>
 
             {isImageEditable && (
-              <Button onClick={() => setChangeImageOrder(1)}>
+              <Button onClick={() => setUploadImage({ open: true, order: 1 })}>
                 <Iconify icon="iconamoon:edit-thin" />
               </Button>
             )}
@@ -190,16 +241,11 @@ export const HeroSection = () => {
         </Box>
       </Stack>
 
-      <MediaUploaderTrigger
-        open={changeImageOrder}
-        onClose={() => setChangeImageOrder(false)}
-        onSave={(urls) => handleImageChange(urls)}
-        value={''}
-        label="Image"
-        onAdd={() => setChangeImageOrder(true)}
-        onDelete={(filteredUrls) => setFieldValue('image', filteredUrls)}
-        folderName="content-HQ"
-        isMultiple={false}
+      <MediaUploader
+        open={uploadImage?.open}
+        onClose={() => setUploadImage((prev) => ({ ...prev, open: false }))}
+        onSave={(paths) => handleImageChange(paths)}
+        multiple={false}
       />
     </>
   );

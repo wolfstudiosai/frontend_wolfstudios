@@ -42,6 +42,8 @@ export const MediaUploader = ({
   const [url, setUrl] = React.useState('');
   const [videoUrls, setVideoUrls] = React.useState([]);
 
+  const shouldInputFieldDisabled = !multiple && (files.length > 0 || urls.length > 0 || videoUrls.length > 0);
+
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
   };
@@ -173,6 +175,7 @@ export const MediaUploader = ({
                 <Button
                   component="label"
                   variant="outlined"
+                  disabled={shouldInputFieldDisabled}
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -199,6 +202,7 @@ export const MediaUploader = ({
                   />
                 </Button>
                 <TextField
+                  disabled={shouldInputFieldDisabled}
                   value={url || ''}
                   onChange={(e) => setUrl(e.target.value)}
                   onKeyDown={(e) => handleKeyDown(e)}
@@ -252,6 +256,7 @@ export const MediaUploader = ({
             <>
               <TextField
                 value={url || ''}
+                disabled={shouldInputFieldDisabled}
                 onChange={(e) => setUrl(e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e)}
                 InputProps={{
