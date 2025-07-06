@@ -1,15 +1,17 @@
 'use client';
 
-import { Box, Divider, Drawer, MenuList } from '@mui/material';
 import { usePathname } from 'next/navigation';
+import { Box, Divider, Drawer, MenuList } from '@mui/material';
 
-import { Logo } from '/src/components/core/logo';
-import { NavSearch } from '/src/components/navbar/nav-search';
 import { useSettings } from '/src/hooks/use-settings';
 import useAuth from '/src/hooks/useAuth';
+import { Logo } from '/src/components/core/logo';
+import { NavSearch } from '/src/components/navbar/nav-search';
 
-import { privateRoutesV2 } from '/src/router';
+import { privateRoutesV3 } from '/src/router';
 import SidebarMenuItems, { getWorkspacesTab } from '/src/utils/nav-utils';
+import { SettingsPopover } from '../settings-popover';
+import { UserInfoPopover } from '../dashboard/layout/_components/user-info-popover';
 
 export function MobileSideNav({ open, onClose }) {
   const pathname = usePathname();
@@ -56,7 +58,7 @@ export function MobileSideNav({ open, onClose }) {
         <Divider sx={{ my: 1 }} />
         <MenuList>
           <SidebarMenuItems
-            items={privateRoutesV2}
+            items={privateRoutesV3}
             pathname={pathname}
             openMenus={openMenus}
             toggleMenuItem={toggleMenuItem}
@@ -64,6 +66,18 @@ export function MobileSideNav({ open, onClose }) {
             isOpen={open}
           />
         </MenuList>
+        <Box
+          sx={{
+            mt: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: `${open ? 'start' : 'center'}`,
+            gap: 2,
+          }}
+        >
+          <SettingsPopover isSidebarOpen={open} />
+          <UserInfoPopover isSidebarOpen={open} />
+        </Box>
       </Box>
     </Drawer>
   );
