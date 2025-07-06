@@ -25,6 +25,7 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
     const [data, setData] = React.useState(null);
     const [sidebarView, setSidebarView] = React.useState(view);
     const [loading, setLoading] = React.useState(false);
+    const [isFeatured, setIsFeatured] = React.useState(false);
 
     // *********************States*********************************
 
@@ -35,7 +36,7 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
     };
 
     const handleFeatured = async (featured) => {
-        setData({ ...data, isFeatured: featured });
+        setIsFeatured(featured);
         const payload = defaultPartner({ ...data, isFeatured: featured })
         const response = await updatePartnerAsync(payload)
         if (response.success) {
@@ -59,29 +60,7 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
         onSubmit: async (values) => {
             setLoading(true);
             try {
-                const finalData = { ...values };
-                const imageFields = ['profileImage', 'mediaKit', 'receipts'];
-                // Collect image files and their metadata
-                for (const field of imageFields) {
-                    const value = values[field];
-                    if (value instanceof File) {
-                        const res = await imageUploader(
-                            [
-                                {
-                                    file: value,
-                                    fileName: value.name.split('.').slice(0, -1).join('.'),
-                                    fileType: value.type.split('/')[1],
-                                },
-                            ],
-                            'partner-HQ'
-                        );
-
-                        finalData[field] = res;
-                    } else if (typeof value === 'string') {
-                        finalData[field] = [value];
-                    }
-                }
-                const res = id ? await updatePartnerAsync(finalData) : await createPartnerAsync(finalData);
+                const res = id ? await updatePartnerAsync(values) : await createPartnerAsync(values);
                 if (res.success) {
                     resetForm();
                     onClose?.();
@@ -106,6 +85,7 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
                 const response = await getPartnerAsync(id);
                 if (response.data) {
                     setData(response.data);
+                    setIsFeatured(response.data.isFeatured);
                     setValues(defaultPartner(response.data));
                 }
             } catch (error) {
@@ -115,7 +95,10 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
                 setLoading(false);
             }
         };
-        getSingleData();
+
+        if (id) {
+            getSingleData();
+        }
     }, [id]);
 
     // *****************Action Buttons*******************************
@@ -134,27 +117,35 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
                             </IconButton>
                         )
                     )}
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                size="small"
-                                checked={data?.isFeatured}
-                                onChange={(e) => handleFeatured(e.target.checked)}
-                                color="primary"
-                            />
-                        }
-                        label="Featured"
-                    />
+
                     {sidebarView === 'EDIT' && (
-                        <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+                        <Button size="small" variant="contained" color="primary" onClick={handleSubmit} disabled={loading}>
                             Save
                         </Button>
                     )}
+
                     {sidebarView === 'QUICK' && (
                         <>
-                            <IconButton as={Link} href={`/partner/${data?.id}`} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} title="Analytics">
+                            <IconButton
+                                as={Link}
+                                href={`/partner/${data?.id}`}
+                                sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                title="Analytics"
+                            >
                                 <Iconify icon="mdi:analytics" />
                             </IconButton>
+
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        size="small"
+                                        checked={isFeatured}
+                                        onChange={(e) => handleFeatured(e.target.checked)}
+                                        color="primary"
+                                    />
+                                }
+                                label="Featured"
+                            />
                             <DeleteConfirmationPasswordPopover
                                 id={data?.id}
                                 title="Are you sure you want to delete?"
@@ -180,6 +171,7 @@ export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK'
                         values={values}
                         errors={errors}
                         setFieldValue={setFieldValue}
+                        loading={loading}
                         onSubmit={handleSubmit}
                     />
                 )}

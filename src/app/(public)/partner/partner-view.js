@@ -1,18 +1,18 @@
 'use client';
 
-import React, { useRef } from 'react';
 import { Box, CircularProgress } from '@mui/material';
+import React, { useRef } from 'react';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-import { PartnerGridView } from './_components/partner-gridview';
-import { PartnerListView } from './_components/partner-listview';
-import { getPartnerListAsync } from './_lib/partner.actions';
-import { defaultPartner } from './_lib/partner.types';
 import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import { paths } from '../../../paths';
+import { PartnerGridView } from './_components/partner-gridview';
+import { PartnerRightPanel } from './_components/partner-right-panel';
+import { getPartnerListAsync } from './_lib/partner.actions';
+import { defaultPartner } from './_lib/partner.types';
 
 export const PartnerView = () => {
   const observerRef = useRef(null);
@@ -20,9 +20,8 @@ export const PartnerView = () => {
   const [openPanel, setOpenPanel] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [isFetching, setIsFetching] = React.useState(false);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
   const [totalRecords, setTotalRecords] = React.useState(0);
-  const [selectedContent, setSelectedContent] = React.useState(null);
   const [filters, setFilters] = React.useState({
     COL: 3,
     TAG: [],
@@ -56,9 +55,6 @@ export const PartnerView = () => {
   }, [isFetching, pagination]);
 
   const handleFilterChange = (type, value) => {
-    if (type === 'ADD') {
-      setSelectedContent(value ? defaultPartner : null);
-    }
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
@@ -70,7 +66,7 @@ export const PartnerView = () => {
   const refreshListView = async () => {
     const response = await getPartnerListAsync({
       page: 1,
-      rowsPerPage: 40,
+      rowsPerPage: 10,
     });
 
     if (response.success) {
@@ -115,6 +111,7 @@ export const PartnerView = () => {
         />
         <PageHeader
           title="Partners"
+          view={false}
           values={filters}
           totalRecords={totalRecords}
           onFilterChange={handleFilterChange}
@@ -124,7 +121,8 @@ export const PartnerView = () => {
         />
 
         {filters.VIEW === 'list' ? (
-          <PartnerListView />
+          <></>
+          // <PartnerListView />
         ) : (
           <Box>
             <PartnerGridView data={data || [defaultPartner]} fetchList={refreshListView} loading={loading} />
@@ -134,6 +132,18 @@ export const PartnerView = () => {
           </Box>
         )}
       </PageLoader>
+
+      {openPanel && (
+        <PartnerRightPanel
+          onClose={() => {
+            setOpenPanel(false)
+          }}
+          fetchList={refreshListView}
+          id={null}
+          open={openPanel}
+          view="ADD"
+        />
+      )}
     </PageContainer>
   );
 };

@@ -21,6 +21,7 @@ export const PageHeader = ({
   showColSlider = true,
   showAdd = true,
   setOpenPanel,
+  view = false,
 }) => {
   const {
     customSettings: { openSubNav },
@@ -106,12 +107,16 @@ export const PageHeader = ({
                 marginLeft: (theme) => theme.spacing(1),
               }}
             >
-              <ToggleButton value="grid" aria-label="grid view" sx={{ padding: '2px' }}>
-                <Iconify icon="ep:grid" width={20} height={20} />
-              </ToggleButton>
-              <ToggleButton value="list" aria-label="list view" sx={{ padding: '2px' }}>
-                <Iconify icon="solar:list-bold" width={20} height={20} />
-              </ToggleButton>
+              {view && (
+                <>
+                  <ToggleButton value="grid" aria-label="grid view" sx={{ padding: '2px' }}>
+                    <Iconify icon="ep:grid" width={20} height={20} />
+                  </ToggleButton>
+                  <ToggleButton value="list" aria-label="list view" sx={{ padding: '2px' }}>
+                    <Iconify icon="solar:list-bold" width={20} height={20} />
+                  </ToggleButton>
+                </>
+              )}
               {showAdd && (
                 <ToggleButton
                   value="add"

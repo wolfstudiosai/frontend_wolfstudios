@@ -92,16 +92,33 @@ export const deleteFileAsync = async (paths) => {
 
 const partnerPayload = (data) => {
   const { created_by, user_id, updated_at, ...rest } = data;
+
   return {
     ...rest,
-    platformDeliverables: rest.platformDeliverables.map((i) => i.value),
-    affiliatePlatform: rest.affiliatePlatform.map((i) => i.value),
-    ageBracket: rest.ageBracket.map((i) => i.value),
-    contracts: rest.contracts.map((i) => i.value),
-    currentStatus: rest.currentStatus.map((i) => i.value),
-    platforms: rest.platforms.url,
-    profileStatus: rest.profileStatus.url,
-    sourcedFrom: rest.sourcedFrom.url,
+    profileStatus: rest.profileStatus?.map((i) => i.value) || [],
+    currentStatus: rest.currentStatus?.map((i) => i.value) || [],
+    platformDeliverables: rest.platformDeliverables?.map((i) => i.value) || [],
+    platforms: rest.platforms?.map((i) => i.value) || [],
+    ageBracket: rest.ageBracket?.map((i) => i.value) || [],
+    affiliatePlatform: rest.affiliatePlatform?.map((i) => i.value) || [],
+    sourcedFrom: rest.sourcedFrom?.map((i) => i.value) || [],
+    stakeholders: rest.stakeholders?.map((i) => i.value) || [],
+    contentHQ: rest.contentHQ?.map((i) => i.value) || [],
+    profileCategory: rest.profileCategory?.map((i) => i.value) || [],
+    portfolios: rest.portfolios?.map((i) => i.value) || [],
+    state: rest.state?.map((i) => i.value) || [],
+    city: rest.city?.map((i) => i.value) || [],
+    services: rest.services?.map((i) => i.value) || [],
+    caseStudies: rest.caseStudies?.map((i) => i.value) || [],
+    productionHQ: rest.productionHQ?.map((i) => i.value) || [],
+    products: rest.products?.map((i) => i.value) || [],
+    contributedCampaigns: rest.contributedCampaigns?.map((i) => i.value) || [],
+    country: rest.country?.map((i) => i.value) || [],
+    tags: rest.tags?.map((i) => i.value) || [],
+    retailPartners: rest.retailPartners?.map((i) => i.value) || [],
+    destinations: rest.destinations?.map((i) => i.value) || [],
+    proposedCampaigns: rest.proposedCampaigns?.map((i) => i.value) || [],
+    productionHQ2: rest.productionHQ2?.map((i) => i.value) || [],
   };
 };
 
