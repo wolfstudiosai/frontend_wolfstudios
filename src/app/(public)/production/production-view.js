@@ -2,6 +2,7 @@
 
 import React, { useRef } from 'react';
 import { Box, CircularProgress } from '@mui/material';
+
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 import PageLoader from '/src/components/loaders/PageLoader';
@@ -13,6 +14,8 @@ import { productionFilters, productionSorting, productionTags } from './_lib/con
 import { getProductionListAsync } from './_lib/production.action';
 import { defaultProduction } from './_lib/production.types';
 import { sliderToGridColsCoverter } from '/src/utils/helper';
+import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
+import { paths } from '../../../paths';
 
 export const ProductionView = () => {
   const observerRef = useRef(null);
@@ -97,6 +100,12 @@ export const ProductionView = () => {
   return (
     <PageContainer>
       <PageLoader loading={loading}>
+        <CustomBreadcrumbs
+          items={[
+            { title: 'Dashboard', href: paths.private.overview },
+            { title: 'Production', href: '' },
+          ]}
+        />
         <PageHeader
           title="Production"
           values={filters}

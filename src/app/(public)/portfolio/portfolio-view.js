@@ -14,6 +14,8 @@ import { portfolioFilters, portfolioSorting, portfolioTags } from './_lib/consta
 import { getPortfolioListAsync } from './_lib/portfolio.actions';
 import { defaultPortfolio } from './_lib/portfolio.types';
 import { sliderToGridColsCoverter } from '/src/utils/helper';
+import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
+import { paths } from '../../../paths';
 
 export const PortfolioView = () => {
   const observerRef = useRef(null);
@@ -119,6 +121,12 @@ export const PortfolioView = () => {
   return (
     <PageContainer>
       <PageLoader loading={loading}>
+        <CustomBreadcrumbs
+          items={[
+            { title: 'Dashboard', href: paths.private.overview },
+            { title: 'Portfolio', href: '' },
+          ]}
+        />
         <PageHeader
           title="Portfolio"
           values={filters}

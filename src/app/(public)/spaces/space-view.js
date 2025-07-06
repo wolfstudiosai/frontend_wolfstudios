@@ -7,13 +7,14 @@ import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-import { ManageSpaceRightPanel } from './_components/manage-space-right-panel';
 import { SpaceGridView } from './_components/space-gridview';
 import { SpaceListView } from './_components/space-listview';
 import { spaceFilters, spaceSorting, spaceTags } from './_lib/constant';
 import { getSpaceListAsync } from './_lib/space.actions';
 import { defaultSpace } from './_lib/space.types';
 import { sliderToGridColsCoverter } from '/src/utils/helper';
+import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
+import { paths } from '../../../paths';
 
 export const SpaceView = () => {
   const observerRef = useRef(null);
@@ -98,6 +99,12 @@ export const SpaceView = () => {
   return (
     <PageContainer>
       <PageLoader loading={loading}>
+        <CustomBreadcrumbs
+          items={[
+            { title: 'Dashboard', href: paths.private.overview },
+            { title: 'Spaces', href: '' },
+          ]}
+        />
         <PageHeader
           title="Spaces"
           values={filters}

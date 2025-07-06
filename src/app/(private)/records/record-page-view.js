@@ -8,6 +8,7 @@ import { PageContainer } from '/src/components/container/PageContainer';
 
 import { CustomTab } from '../../../components/core/custom-tab';
 import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
+import { paths } from '../../../paths';
 import AllContentListView from '../../(private)/all-content/_component/all-content-list-view';
 import { CampaignListView } from '../../(public)/campaign/_components/campaign-listview';
 import { PartnerListView } from '../../(public)/partner/_components/partner-listview';
@@ -45,7 +46,7 @@ export default function RecordPageView() {
     <PageContainer>
       <CustomBreadcrumbs
         items={[
-          { title: 'Home', href: '/' },
+          { title: 'Dashboard', href: paths.private.overview },
           { title: 'Records', href: '' },
         ]}
       />

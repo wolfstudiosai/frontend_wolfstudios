@@ -6,7 +6,6 @@ export const paths = {
 
   dashboard: {
     root: '/dashboard',
-    overview: '/dashboard/overview',
     analytics: '/dashboard/analytics',
 
     // campaign
