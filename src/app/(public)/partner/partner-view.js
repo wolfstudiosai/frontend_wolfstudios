@@ -1,17 +1,18 @@
 'use client';
 
-import React, { useRef } from 'react';
 import { Box, CircularProgress } from '@mui/material';
+import React, { useRef } from 'react';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 import PageLoader from '/src/components/loaders/PageLoader';
 
+import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
+import { paths } from '../../../paths';
 import { PartnerGridView } from './_components/partner-gridview';
-import { PartnerListView } from './_components/partner-listview';
+import { PartnerRightPanel } from './_components/partner-right-panel';
 import { getPartnerListAsync } from './_lib/partner.actions';
 import { defaultPartner } from './_lib/partner.types';
-import { PartnerRightPanel } from './_components/partner-right-panel';
 
 export const PartnerView = () => {
   const observerRef = useRef(null);
@@ -58,7 +59,7 @@ export const PartnerView = () => {
   };
 
   const handleContentCreated = () => {
-    setFilters(prev => ({ ...prev, ADD: false }));
+    setFilters((prev) => ({ ...prev, ADD: false }));
     refreshListView();
   };
 
@@ -102,6 +103,12 @@ export const PartnerView = () => {
   return (
     <PageContainer>
       <PageLoader loading={loading}>
+        <CustomBreadcrumbs
+          items={[
+            { title: 'Dashboard', href: paths.private.overview },
+            { title: 'Partner', href: '' },
+          ]}
+        />
         <PageHeader
           title="Partners"
           values={filters}

@@ -6,7 +6,6 @@ export const paths = {
 
   dashboard: {
     root: '/dashboard',
-    overview: '/dashboard/overview',
     analytics: '/dashboard/analytics',
 
     // campaign
@@ -141,6 +140,7 @@ export const paths = {
     reporting: '/reporting',
     notification: '/notification',
     record: '/records',
+    users: '/users',
     archive_analytics: '/archive/analytics',
     expense: '/expense',
     contract: '/contract',

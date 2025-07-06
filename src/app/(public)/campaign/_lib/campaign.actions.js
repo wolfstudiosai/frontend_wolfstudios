@@ -4,7 +4,7 @@ import { api } from '/src/utils/api';
 import { validateFilters, buildQueryParams, getSearchQuery } from '/src/utils/helper';
 import { uploadFileAsync } from '/src/utils/upload-file';
 
-export const getCampainStatusListAsync = async () => {
+export const getCampaignStatusListAsync = async () => {
   try {
     const res = await api.get(`/campaign-HQ?groupBy=status`);
     return {

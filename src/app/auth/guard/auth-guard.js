@@ -1,15 +1,12 @@
 'use client';
 
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
-import { notFound, usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useColorScheme } from '@mui/material';
 
-import { paths } from '/src/paths';
-import { isValidToken } from '/src/contexts/auth/AuthContext';
-import useAuth from '/src/hooks/useAuth';
 import { SplashScreen } from '/src/components/splash-screen/splash-screen';
+import useAuth from '/src/hooks/useAuth';
+import { paths } from '/src/paths';
 
-import { additionalRoutes, dashboardItems, privateRoutes } from '/src/router';
 
 export function AuthGuard({ children }) {
   const router = useRouter();
@@ -53,33 +50,33 @@ export function AuthGuard({ children }) {
   return <>{children}</>;
 }
 
-const isUserAuthorizedToAccessThisRoute = (role, pathname) => {
-  //check if current path is in private routes
-  const isPathInPrivateRoutes = privateRoutes.some((section) =>
-    section.items?.some((item) => {
-      if (item.items) {
-        return item.items.some((subItem) => subItem.href === pathname);
-      }
-      return item.href === pathname;
-    })
-  );
+// const isUserAuthorizedToAccessThisRoute = (role, pathname) => {
+//   //check if current path is in private routes
+//   const isPathInPrivateRoutes = privateRoutes.some((section) =>
+//     section.items?.some((item) => {
+//       if (item.items) {
+//         return item.items.some((subItem) => subItem.href === pathname);
+//       }
+//       return item.href === pathname;
+//     })
+//   );
 
-  if (!isPathInPrivateRoutes) {
-    return true;
-  }
+//   if (!isPathInPrivateRoutes) {
+//     return true;
+//   }
 
-  // check if user has permission
-  const checkIfUserHasPermission = privateRoutes.some((section) =>
-    section.items.some((item) => {
-      if (item.items) {
-        return item.items.some(
-          (subItem) =>
-            Array.isArray(subItem.allowedRoles) && subItem.allowedRoles.includes(role) && subItem.href === pathname
-        );
-      }
-      return Array.isArray(item.allowedRoles) && item.allowedRoles.includes(role) && item.href === pathname;
-    })
-  );
+//   // check if user has permission
+//   const checkIfUserHasPermission = privateRoutes.some((section) =>
+//     section.items.some((item) => {
+//       if (item.items) {
+//         return item.items.some(
+//           (subItem) =>
+//             Array.isArray(subItem.allowedRoles) && subItem.allowedRoles.includes(role) && subItem.href === pathname
+//         );
+//       }
+//       return Array.isArray(item.allowedRoles) && item.allowedRoles.includes(role) && item.href === pathname;
+//     })
+//   );
 
-  return checkIfUserHasPermission;
-};
+//   return checkIfUserHasPermission;
+// };
