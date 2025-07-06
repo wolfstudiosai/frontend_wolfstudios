@@ -111,6 +111,7 @@ export const PartnerView = () => {
         />
         <PageHeader
           title="Partners"
+          view={false}
           values={filters}
           totalRecords={totalRecords}
           onFilterChange={handleFilterChange}
