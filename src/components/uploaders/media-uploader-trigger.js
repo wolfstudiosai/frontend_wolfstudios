@@ -17,6 +17,7 @@ export const MediaUploaderTrigger = ({
   hideImageUploader,
   hideVideoUploader,
   folderName,
+  isMultiple = false,
 }) => {
   const handleRemoveFile = async (item) => {
     if (isSupabaseUrl(item)) {
@@ -142,7 +143,7 @@ export const MediaUploaderTrigger = ({
         open={open}
         onClose={onClose}
         onSave={(paths) => onSave([...value, ...paths])}
-        multiple
+        multiple={isMultiple}
         hideImageUploader={hideImageUploader}
         hideVideoUploader={hideVideoUploader}
         folderName={folderName}

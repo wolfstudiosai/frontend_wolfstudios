@@ -1,18 +1,30 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 
-import { FadeIn } from '/src/components/animation/fade-in';
 import { useSettings } from '/src/hooks/use-settings';
+import useAuth from '/src/hooks/useAuth';
+import { FadeIn } from '/src/components/animation/fade-in';
+
+import { Iconify } from '../../../../components/iconify/iconify';
+import { MediaUploaderTrigger } from '../../../../components/uploaders/media-uploader-trigger';
 
 export const HeroSection = () => {
   const theme = useTheme();
   const { isFeaturedCardVisible } = useSettings();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { isLogin, userInfo } = useAuth();
+
+  const isImageEditable = isLogin && userInfo?.role.toLowerCase() === 'super_admin';
 
   const [boxSize, setBoxSize] = useState(isMobile ? 100 : 50);
   const [boxHeight, setBoxHeight] = useState(isMobile ? 100 : 60);
+  const [changeImageOrder, setChangeImageOrder] = useState(0);
+
+  const handleImageChange = (url) => {
+    console.log(url, 'handleImageChange');
+  };
 
   useEffect(() => {
     const scrollableContainer = document.getElementById('scrollable_container');
@@ -51,7 +63,7 @@ export const HeroSection = () => {
         sx={{
           position: 'relative',
           width: '100%',
-          height: "60vh",
+          height: '60vh',
           overflow: 'hidden',
         }}
       >
@@ -97,9 +109,15 @@ export const HeroSection = () => {
             </Typography>
 
             <Typography fontSize={{ xs: '1rem', sm: '1.2rem', md: '1.3rem' }}>
-              Driven by the art of storytelling gg, we collaborate with brands, creators, and agencies to craft compelling
-              visuals that captivate audiences, evoke emotion, and leave a lasting impact.
+              Driven by the art of storytelling gg, we collaborate with brands, creators, and agencies to craft
+              compelling visuals that captivate audiences, evoke emotion, and leave a lasting impact.
             </Typography>
+
+            {isImageEditable && (
+              <Button onClick={() => setChangeImageOrder(1)}>
+                <Iconify icon="iconamoon:edit-thin" />
+              </Button>
+            )}
           </FadeIn>
         </Box>
       </Box>
@@ -118,7 +136,7 @@ export const HeroSection = () => {
       >
         {/* Text Content */}
         <FadeIn>
-          <Box sx={{ p: { xs: .5, md: 2 } }}>
+          <Box sx={{ p: { xs: 0.5, md: 2 } }}>
             <Typography
               variant="h4"
               fontWeight="bold"
@@ -171,6 +189,18 @@ export const HeroSection = () => {
           </video>
         </Box>
       </Stack>
+
+      <MediaUploaderTrigger
+        open={changeImageOrder}
+        onClose={() => setChangeImageOrder(false)}
+        onSave={(urls) => handleImageChange(urls)}
+        value={''}
+        label="Image"
+        onAdd={() => setChangeImageOrder(true)}
+        onDelete={(filteredUrls) => setFieldValue('image', filteredUrls)}
+        folderName="content-HQ"
+        isMultiple={false}
+      />
     </>
   );
 };
