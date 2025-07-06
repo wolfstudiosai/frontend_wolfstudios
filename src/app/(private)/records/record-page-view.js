@@ -1,17 +1,18 @@
 'use client';
 
-import { Box } from '@mui/material';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Box } from '@mui/material';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 
+import { CustomTab } from '../../../components/core/custom-tab';
+import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import AllContentListView from '../../(private)/all-content/_component/all-content-list-view';
 import { CampaignListView } from '../../(public)/campaign/_components/campaign-listview';
 import { PartnerListView } from '../../(public)/partner/_components/partner-listview';
 import { PortfolioListView } from '../../(public)/portfolio/_components/portfolio-listview';
 import { ProductionListView } from '../../(public)/production/_components/production-listview';
-import { CustomTab } from '../../../components/core/custom-tab';
 
 const tabs = [
   { label: 'Campaign', value: 'campaign' },
@@ -24,7 +25,7 @@ const tabs = [
 export default function RecordPageView() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [tab, setTab] = useState("campaign");
+  const [tab, setTab] = useState('campaign');
 
   const handleChange = (event, newValue) => {
     setTab(newValue);
@@ -42,6 +43,12 @@ export default function RecordPageView() {
 
   return (
     <PageContainer>
+      <CustomBreadcrumbs
+        items={[
+          { title: 'Home', href: '/' },
+          { title: 'Records', href: '' },
+        ]}
+      />
       <Box mb={1}>
         <CustomTab tabs={tabs} handleChange={handleChange} value={tab} />
       </Box>
