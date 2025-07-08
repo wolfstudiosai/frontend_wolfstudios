@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Box, Button } from '@mui/material';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
@@ -12,17 +13,10 @@ import AllContentGridView from './_component/all-content-grid-view';
 import AllContentListView from './_component/all-content-list-view';
 import { ManageContentRightPanel } from './_component/manage-content-right-panel';
 import { defaultContent } from './_lib/all-content.types';
-import { Box, Button } from '@mui/material';
 
 export const AllContentView = () => {
-  const observerRef = React.useRef(null);
-  const [loading, setLoading] = React.useState(false);
-  const [isFetching, setIsFetching] = React.useState(false);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
   const [openPanel, setOpenPanel] = React.useState(false);
   const [selectedItemId, setSelectedItemId] = React.useState(null);
-  // const [totalRecords, setTotalRecords] = React.useState(0);
-  // const [data, setData] = React.useState([]);
   const [filters, setFilters] = React.useState({
     COL: 4,
     TAG: [],
@@ -54,10 +48,11 @@ export const AllContentView = () => {
         showColSlider={false}
         totalRecords={totalRecords}
         showAdd={true}
+        setOpenPanel={setOpenPanel}
       />
       {filters.VIEW === 'grid' ? (
         <>
-          <AllContentGridView data={data} loading={loading} fetchList={mutate} />
+          <AllContentGridView data={data} loading={isLoading} fetchList={mutate} />
           {hasMore && (
             <Box textAlign="center" mt={2}>
               <Button size="small" variant="contained" onClick={loadMore} disabled={isLoadingMore}>
@@ -72,22 +67,19 @@ export const AllContentView = () => {
           totalRecords={totalRecords}
           data={data}
           setData={setData}
-          loading={loading}
+          loading={isLoading}
           fetchList={fetchList}
         />
       )}
       <ManageContentRightPanel
-        view="ADD"
-        width="70%"
-        showAdd={false}
-        id={selectedItemId}
-        data={defaultContent}
         fetchList={mutate}
-        open={openPanel}
         onClose={() => {
           setSelectedItemId(null);
           setOpenPanel(false);
         }}
+        id={selectedItemId}
+        open={openPanel}
+        view="ADD"
       />
     </PageContainer>
   );

@@ -8,7 +8,7 @@ const getKey = (pageIndex, previousPageData, status) => {
   return [
     'content-groups',
     pageIndex + 1,
-    10, // page size
+    18, // page size
     status, // filter by status
   ];
 };

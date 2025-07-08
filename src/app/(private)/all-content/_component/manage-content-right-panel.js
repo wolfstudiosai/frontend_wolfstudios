@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
 
@@ -19,14 +21,17 @@ import { defaultContent } from '../_lib/all-content.types';
 import { ContentForm } from './content-form';
 import { ContentQuickView } from './content-quick-view';
 import { formConstants } from '/src/app/constants/form-constants';
-import Link from 'next/link';
 
-export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }) => {
-  const isUpdate = data?.id ? true : false;
+export const ManageContentRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK' }) => {
+  // const [sidebarView, setSidebarView] = React.useState(view); // QUICK // EDIT
+
+  // const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
+
   const { isLogin } = useAuth();
-  const [sidebarView, setSidebarView] = React.useState(view); // QUICK // EDIT
+  const router = useRouter();
+  const [panelView, setPanelView] = React.useState(view);
+  const [data, setData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
-  const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
 
   const { values, errors, handleChange, setFieldValue, resetForm, setValues, handleSubmit } = useFormik({
     initialValues: defaultContent(),
@@ -74,7 +79,53 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const res = isUpdate ? await updateContentAsync({ id: data?.id, ...values }) : await createContentAsync(values);
+        const finalData = {
+          ...values,
+        };
+
+        const imageFields = ['campaignImage', 'imageInspirationGallery'];
+        for (const field of imageFields) {
+          const value = values[field];
+          if (value instanceof File) {
+            const res = await imageUploader(
+              [
+                {
+                  file: value,
+                  fileName: value.name.split('.').slice(0, -1).join('.'),
+                  fileType: value.type.split('/')[1],
+                },
+              ],
+              'campaigns'
+            );
+
+            finalData[field] = res;
+          } else if (typeof value === 'string') {
+            finalData[field] = [value];
+          }
+        }
+
+        const arrayFields = [
+          'contentHQ',
+          'stakeholders',
+          'retailPartners',
+          'proposedPartners',
+          'contributedPartners',
+          'spaces',
+          'productionHQ',
+          'products',
+          'retailPartners2',
+          'retailPartners3',
+        ];
+
+        for (const field of arrayFields) {
+          const value = values[field];
+          if (value.length > 0) {
+            const arrOfStr = value.map((item) => item.value);
+            finalData[field] = arrOfStr;
+          }
+        }
+
+        const res = id ? await updateCampaignAsync(id, finalData) : await createCampaignAsync(finalData);
         if (res.success) {
           onClose?.();
           resetForm();
@@ -165,7 +216,12 @@ export const ManageContentRightPanel = ({ open, onClose, fetchList, data, view }
             </Button>
           )}
 
-          <IconButton sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} as={Link} href={`/all-content/${data?.id}`} title="Analytics">
+          <IconButton
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            as={Link}
+            href={`/all-content/${data?.id}`}
+            title="Analytics"
+          >
             <Iconify icon="mdi:analytics" />
           </IconButton>
 

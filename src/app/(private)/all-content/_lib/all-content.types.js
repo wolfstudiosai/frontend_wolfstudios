@@ -2,97 +2,120 @@ export const defaultContent = (data) => {
   const defaultData = {
     id: data?.id || null,
     name: data?.Name || '',
-    revoPinterest: data?.REVOPinterest || '',
-    pinAccountsUsed: data?.PINAccountsUsed || '',
-    postQuality: data?.PostingQuality?.join(', ') || '',
-    googleDriveFiles: data?.GoogleDriveFiles || '',
-    playbookLink: data?.PlaybookLink || '',
-    upPromoteConversion: data?.UpPromoteConversion || 0,
-    assetStatus: data?.AssetStatus || '',
-    monthUploaded: data?.MonthUploaded ? data.MonthUploaded : "",
-    revoInstagram: data?.REVOInstagram || '',
-    creatorStatus: data?.CreatorStatus || '',
+    thumbnailImage: data?.ThumbnailImage || '',
+    pinAccountsUsed: data?.pinAccountsUsed || '',
 
-    partner_IGLink: data?.PartnerIGLink || '',
-    partner_TikTokLink: data?.PartnerTikTokLink || '',
-    partner_TTShares: data?.PartnerTTShares || 0,
-    partner_TTSaves: data?.PartnerTTSaves || 0,
-    partner_TTViews: data?.PartnerTTViews || 0,
-    partner_TTLikes: data?.PartnerTTLikes || 0,
-    partner_TTComments: data?.PartnerTTComments || 0,
-    partner_YTLink: data?.PartnerYTLink || '',
+    googleDriveFiles: data?.googleDriveFiles || '',
+    playbookLink: data?.playbookLink || '',
+    uppromoteConversion: data?.uppromoteConversion || 0,
+    assetStatus: data?.assetStatus || '',
+    monthUploaded: data?.monthUploaded ? data.monthUploaded : '',
+    revoInstagram: data?.revoInstagram || '',
+    creatorStatus: data?.creatorStatus?.join(', ') || '',
 
-    ig_SocialSetsUsed: data?.IGSocialSetsUsed || '',
-    ig_TotalComments: data?.IGTotalComments || 0,
-    ig_TotalLikes: data?.IGTotalLikes || 0,
-    ig_TotalShares: data?.IGTotalShares || 0,
-    ig_TotalViews: data?.IGTotalViews || 0,
+    igPost4: data?.igPost4 || '',
+    igPost3: data?.igPost3 || '',
+    igPost2: data?.igPost2 || '',
+    platform: data?.platform?.join(', ') || '',
 
-    yt_ClubREVOTotalViews: data?.YTClubREVOTotalViews || 0,
-    yt_PartnerTotalSaves: data?.YTPartnerTotalSaves || 0,
-    yt_PartnerTotalViews: data?.YTPartnerTotalViews || 0,
-    yt_PartnerTotalComments: data?.YTPartnerTotalcomments || 0,
-    yt_PartnerTotalLikes: data?.YTPartnerTotallikes || 0,
-    yt_REVOMADICTotalShares: data?.YTREVOMADICTotalShares || 0,
-    yt_REVOMADICTotalViews: data?.YTREVOMADICTotalViews || 0,
-    yt_REVOMADICTotalLikes: data?.YTREVOMADICTotalLikes || 0,
-    yt_REVOMADICTotalComments: data?.YTREVOMADICTotalComments || 0,
-    yt_ClubREVOTotalLikes: data?.YTClubREVOTotalLikes || 0,
-    yt_AccountsUsed: data?.YTAccountsUsed || '',
+    partnerIGLink: data?.partnerIGLink || '',
+    partnerTikTokLink: data?.partnerTikTokLink || '',
+    partnerTTShares: data?.partnerTTShares || 0,
+    partnerTTSaves: data?.partnerTTSaves || 0,
+    partnerTTViews: data?.partnerTTViews || 0,
+    partnerTTLikes: data?.partnerTTLikes || 0,
+    partnerTTComments: data?.partnerTTComments || 0,
+    partnerYTLink: data?.partnerYTLink || '',
 
-    pinterest_TotalPinClicks: data?.PinterestTotalPinClicks || 0,
-    pinterest_TotalViews: data?.PinterestTotalViews || 0,
+    igSocialSetsUsed: data?.igSocialSetsUsed || '',
+    partnerIGTotalComments: data?.partnerIGTotalComments || 0,
+    partnerIGTotalLikes: data?.partnerIGTotalLikes || 0,
+    partnerIGTotalShares: data?.partnerIGTotalShares || 0,
+    partnerIGTotalViews: data?.partnerIGTotalViews || 0,
 
-    revo_Twitter: data?.REVOTwitter || '',
-    revo_TTViews: data?.REVOTTViews || 0,
-    revo_TikTok: data?.REVOTikTok || '',
-    revo_Youtube: data?.REVOYoutube || '',
-    revo_ClubRevoYoutube: data?.REVOClubrevoYoutube || '',
+    ytClubREVOTotalViews: data?.ytClubREVOTotalViews || 0,
+    ytPartnerTotalSaves: data?.ytPartnerTotalSaves || 0,
+    ytPartnerTotalViews: data?.ytPartnerTotalViews || 0,
+    ytPartnerTotalComments: data?.ytPartnerTotalComments || 0,
+    ytPartnerTotalLikes: data?.ytPartnerTotalLikes || 0,
+    ytREVOMADICTotalShares: data?.ytREVOMADICTotalShares || 0,
+    ytREVOMADICTotalViews: data?.ytREVOMADICTotalViews || 0,
+    ytREVOMADICTotalLikes: data?.ytREVOMADICTotalLikes || 0,
+    ytREVOMADICTotalComments: data?.ytREVOMADICTotalComments || 0,
+    ytClubREVOTotalLikes: data?.ytClubREVOTotalLikes || 0,
+    ytAccountsUsed: data?.ytAccountsUsed || '',
 
-    tikTokAccountsused: data?.TikTokAccountsused || '',
-    TTDummyAccountsUsed: data?.TTDummyAccountsUsed?.join(', ') || [],
+    pinterestTotalPinClicks: data?.pinterestTotalPinClicks || 0,
+    pinterestTotalViews: data?.pinterestTotalViews || 0,
 
-    postingStatus: data?.PostingStatus || '',
-    totalContributedEngagement: data?.TotalContributedEngagement || '',
+    revoPinterest: data?.revoPinterest || '',
+
+    revoTwitter: data?.revoTwitter || '',
+    revoTTViews: data?.revoTTViews || 0,
+    revoTTLikes: data?.revoTTLikes || 0,
+    revoTTComments: data?.revoTTComments || 0,
+    revoTTSaves: data?.revoTTSaves || 0,
+    revoTTShares: data?.revoTTShares || 0,
+
+    revoIGTotalViews: data?.revoIGTotalViews || 0,
+    revoIGTotalShares: data?.revoIGTotalShares || 0,
+    revoIGTotalComments: data?.revoIGTotalComments || 0,
+    revoIGTotalLikes: data?.revoIGTotalLikes || 0,
+
+    audited: data?.audited || false,
+
+    revoTikTok: data?.revoTikTok || '',
+    revoYoutube: data?.revoYoutube || '',
+    revoClubrevoYoutube: data?.revoClubrevoYoutube || '',
+
+    clubREVOIGHandle: data?.clubREVOIGHandle || '',
+    isFeatured: data?.isFeatured || false,
+
+    tiktokAccountsUsed: data?.tiktokAccountsUsed || '',
+    ttDummyAccountsUsed: data?.ttDummyAccountsUsed?.join(', ') || [],
+
+    postingStatus: data?.postingStatus || '',
+    postingQuality: data?.postingQuality?.join(', ') || '',
+    totalContributedEngagement: data?.totalContributedEngagement || '',
 
     campaigns:
-      data?.ByCampaignsContentHQ?.map((item) => ({
-        value: item?.ContentHQ?.id,
-        label: item?.ContentHQ?.Name,
+      data?.campaigns?.map((item) => ({
+        value: item?.id,
+        label: item?.name,
       })) || [],
     cities:
-      data?.ByCityContent?.map((item) => ({
-        value: item?.ByCity?.id,
-        label: item?.ByCity?.Name,
+      data?.cities?.map((item) => ({
+        value: item?.id,
+        label: item?.name,
       })) || [],
     products:
-      data?.ByProductContentHQ?.map((item) => ({
-        value: item?.ContentHQ?.id,
-        label: item?.ContentHQ?.Name,
+      data?.products?.map((item) => ({
+        value: item?.id,
+        label: item?.name,
       })) || [],
     tags:
-      data?.ByTagsContent?.map((item) => ({
-        value: item?.ByTags?.id,
-        label: item?.ByTags?.Name,
+      data?.tags?.map((item) => ({
+        value: item?.id,
+        label: item?.name,
       })) || [],
     stakeholders:
-      data?.ContentHQStakeholder?.map((item) => ({
-        value: item?.Stakeholder?.id,
-        label: item?.Stakeholder?.Name,
+      data?.stakeholders?.map((item) => ({
+        value: item?.id,
+        label: item?.name,
       })) || [],
     partners:
-      data?.ContentHQPartnerHQ?.map((item) => ({
-        value: item?.PartnerHQ?.id,
-        label: item?.PartnerHQ?.Name,
+      data?.map((item) => ({
+        value: item?.id,
+        label: item?.name,
       })) || [],
     retailPartners:
-      data?.ContentHQFacilitiesContributedContent?.map((item) => ({
-        value: item?.FacilitiesContributedContent?.id,
-        label: item?.FacilitiesContributedContent?.Name,
+      data?.retailPartners?.map((item) => ({
+        value: item?.id,
+        label: item?.name,
       })) || [],
 
-    image: data?.Image || [],
-    video: data?.Video || [],
+    images: data?.images || [],
+    video: data?.video || [],
   };
 
   return defaultData;

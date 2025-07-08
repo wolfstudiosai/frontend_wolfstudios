@@ -1,12 +1,12 @@
 'use client';
 
 import React from 'react';
+import { Icon } from '@iconify/react';
 import { Box, Chip, IconButton, Slider, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 
 import { SettingsContext } from '/src/contexts/settings';
 import useAuth from '/src/hooks/useAuth';
 
-import { Iconify } from '../iconify/iconify';
 import { pxToRem } from '/src/utils/helper';
 
 export const PageHeader = ({
@@ -70,12 +70,18 @@ export const PageHeader = ({
           </Typography>
           <Chip
             label={totalRecords}
-            color="inherit"
             size="small"
-            sx={{ ml: 1, color: 'text.secondary', fontSize: pxToRem(12), padding: 0 }}
+            sx={{
+              ml: 1,
+              color: 'text.secondary',
+              fontSize: pxToRem(12),
+              padding: 0,
+              bgcolor: 'background.paper',
+              border: '1px solid var(--mui-palette-divider)',
+            }}
           />
-          <IconButton size="small" variant="contained" color="error" sx={{ mr: 0.5 }}>
-            <Iconify icon="material-symbols-light:bookmark-outline" width={22} height={22} />
+          <IconButton size="small" color="error" sx={{ mr: 0.5 }}>
+            <Icon icon="material-symbols-light:bookmark-outline" width={22} height={22} />
           </IconButton>
           {showColSlider && (
             <Stack justifyContent={'center'} alignItems={'center'} sx={{ width: pxToRem(100) }}>
@@ -84,7 +90,6 @@ export const PageHeader = ({
                 aria-label="show-columns"
                 value={values.COL}
                 onChange={(e, value) => handleFilter('COL', value)}
-                color="#fff"
                 min={1}
                 max={7}
                 step={1}
@@ -104,16 +109,17 @@ export const PageHeader = ({
                 boxShadow: 'none',
                 gap: '6px',
                 padding: '4px',
-                marginLeft: (theme) => theme.spacing(1),
+                marginRight: (theme) => theme.spacing(1),
+            
               }}
             >
               {view && (
                 <>
                   <ToggleButton value="grid" aria-label="grid view" sx={{ padding: '2px' }}>
-                    <Iconify icon="ep:grid" width={20} height={20} />
+                    <Icon icon="ep:grid" width={20} height={20} />
                   </ToggleButton>
                   <ToggleButton value="list" aria-label="list view" sx={{ padding: '2px' }}>
-                    <Iconify icon="solar:list-bold" width={20} height={20} />
+                    <Icon icon="solar:list-bold" width={20} height={20} />
                   </ToggleButton>
                 </>
               )}
@@ -121,15 +127,15 @@ export const PageHeader = ({
                 <ToggleButton
                   value="add"
                   aria-label="add new"
-                  sx={{ padding: '2px', backgroundColor: values.ADD ? 'grey.200' : '' }}
+                  sx={{ padding: '0px', backgroundColor: values.ADD ? 'grey.200' : '',  }}
                   onClick={() => setOpenPanel(true)}
                 >
-                  <Iconify icon="mynaui:plus" width={20} height={20} />
+                  <Icon icon="mynaui:plus" width={18} height={18} />
                 </ToggleButton>
               )}
             </ToggleButtonGroup>
           )}
-          <Iconify icon="ri:more-line" width={20} height={20} sx={{ ml: 1 }} />
+          <Icon icon="ri:more-line" width={20} height={20} />
         </Stack>
         {showFilters && (
           <Box>
@@ -170,7 +176,6 @@ export const PageHeader = ({
                 {(currentSection === 'TAG' ? tags : currentSection === 'FILTER' ? filters : sorting).map((item) => (
                   <Chip
                     key={item.value}
-                    color="text.secondary"
                     size="small"
                     label={item.label}
                     onClick={() => handleFilter(currentSection, item.value)}
