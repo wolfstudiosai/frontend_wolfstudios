@@ -9,7 +9,7 @@ import { PageHeader } from '/src/components/core/page-header';
 import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import PageLoader from '../../../components/loaders/PageLoader';
 import { paths } from '../../../paths';
-import { useCampaignList } from '../../../services/useCampaignList';
+import { useCampaignList } from '../../../services/campaign/useCampaignList';
 import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignRightPanel } from './_components/campaign-right-panel';
 import { CampaignTabView } from './_components/campaign-tab-view';
@@ -27,7 +27,7 @@ export const CampaignView = () => {
     ADD: false,
   });
 
-  const { data, isLoading, isLoadingMore, error, totalRecords, hasMore, loadMore, refresh } = useCampaignList();
+  const { data, isLoading, isLoadingMore, error, totalRecords, hasMore, loadMore, mutate } = useCampaignList();
 
   const handleFilterChange = (type, value) => {
     setFilters((prev) => ({ ...prev, [type]: value }));
@@ -54,11 +54,12 @@ export const CampaignView = () => {
             showColSlider={false}
             totalRecords={totalRecords}
             setOpenPanel={setOpenPanel}
+            view={true}
           />
 
           {filters.VIEW === 'grid' ? (
             <Box>
-              <CampaignGridView loading={isLoading} data={data} fetchList={refresh} />
+              <CampaignGridView loading={isLoading} data={data} fetchList={mutate} />
 
               {hasMore && (
                 <Box textAlign="center" mt={2}>

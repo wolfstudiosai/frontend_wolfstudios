@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { api } from '/src/utils/api';
 import { validateFilters, buildQueryParams } from '/src/utils/helper';
 
-export const getContentList = async (queryParams, filters, gate) => {
+export const getContentListAsync = async (queryParams, filters, gate) => {
   try {
     let apiUrl = `/content-HQ?page=${queryParams.page}&size=${queryParams.rowsPerPage}`;
     if (filters && filters.length > 0) {

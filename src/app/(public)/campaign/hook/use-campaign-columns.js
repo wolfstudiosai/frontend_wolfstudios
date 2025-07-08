@@ -1,22 +1,20 @@
 
-import React from 'react';
+import AttachFile from "@mui/icons-material/AttachFile";
 import { Box } from '@mui/material';
 import Image from 'next/image';
-import AttachFile from "@mui/icons-material/AttachFile";
-import { dateFormatter } from '/src/utils/date-formatter';
-import { formatCompactNumber } from '/src/utils/helper';
-import Link from 'next/link';
-import DateEditCell from '/src/components/data-table/date-edit-cell';
-import SelectEditCell from '/src/components/data-table/select-edit-cell';
-import { renderAutoCompleteEditCell, renderAutoCompleteCell } from '/src/components/data-table/render-auto-complete-edit-cell';
-import { MultipleTextInputEditCell } from '/src/components/data-table/multiple-text-input-edit';
-import { campaignProgressStatus } from '/src/app/(public)/campaign/_lib/campaign.constants';
-import { useMemo } from 'react';
-import { getContentList } from '../../../(private)/all-content/_lib/all-content.actions';
+import React, { useMemo } from 'react';
+import { getContentListAsync } from '../../../(private)/all-content/_lib/all-content.actions';
 import { getProductListAsync, getRetailPartnerListAsync, getStakeHolderListAsync } from '../../../../lib/common.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
-import { getSpaceListAsync } from '../../spaces/_lib/space.actions';
 import { getProductionListAsync } from '../../production/_lib/production.action';
+import { getSpaceListAsync } from '../../spaces/_lib/space.actions';
+import { campaignProgressStatus } from '/src/app/(public)/campaign/_lib/campaign.constants';
+import DateEditCell from '/src/components/data-table/date-edit-cell';
+import { MultipleTextInputEditCell } from '/src/components/data-table/multiple-text-input-edit';
+import { renderAutoCompleteCell, renderAutoCompleteEditCell } from '/src/components/data-table/render-auto-complete-edit-cell';
+import SelectEditCell from '/src/components/data-table/select-edit-cell';
+import { dateFormatter } from '/src/utils/date-formatter';
+import { formatCompactNumber } from '/src/utils/helper';
 
 export const useCampaignColumns = (
     anchorEl,
@@ -36,7 +34,7 @@ export const useCampaignColumns = (
     React.useEffect(() => {
         const fetchPrerequisitesData = async () => {
             try {
-                const contentResponse = await getContentList({ page: 1, rowsPerPage: 20 });
+                const contentResponse = await getContentListAsync({ page: 1, rowsPerPage: 20 });
                 if (contentResponse?.success) {
                     const options = contentResponse.data.map((item) => ({ value: item.id, label: item.name }));
                     setContentOptions(options);
@@ -333,7 +331,7 @@ export const useCampaignColumns = (
                 fetchOptions: async (debounceValue) => {
                     const paging = { page: 1, rowsPerPage: 20 };
                     const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
-                    const res = await getContentList(paging, filters, 'and');
+                    const res = await getContentListAsync(paging, filters, 'and');
                     return res?.data?.map((item) => ({
                         label: item.name,
                         value: item.id,

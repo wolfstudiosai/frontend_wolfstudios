@@ -88,9 +88,9 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
     }
   }, [campaignProgress]);
 
-  const imageSrc = isSupabaseUrl(campaign.campaignImage[0])
-    ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${campaign.campaignImage[0]}`
-    : campaign.campaignImage[0];
+  const imageSrc = isSupabaseUrl(campaign.campaignImage?.[0])
+    ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${campaign.campaignImage?.[0]}`
+    : campaign.campaignImage?.[0];
 
   return (
     <>

@@ -1,18 +1,19 @@
+import React from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
-import React from 'react';
 
 import { CustomChip } from '/src/components/core/custom-chip';
 import { Iconify } from '/src/components/iconify/iconify';
-import { isSupabaseUrl } from '/src/utils/helper';
-import { CampaignRightPanel } from './campaign-right-panel';
 
-export const CampaignCard = ({ item, fetchList }) => {
+import { CampaignRightPanel } from './campaign-right-panel';
+import { isSupabaseUrl } from '/src/utils/helper';
+
+export const CampaignCard = ({ item, fetchList }) => { 
   const [openPanel, setOpenPanel] = React.useState(false);
   const [selectedItemId, setSelectedItemId] = React.useState(null);
-  const imageSrc = isSupabaseUrl(item.campaignImage[0])
+  const imageSrc = isSupabaseUrl(item?.campaignImage?.[0] ?? '')
     ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.campaignImage[0]}`
-    : item.campaignImage[0];
+    : item.campaignImage?.[0];
 
   return (
     <>
@@ -24,8 +25,8 @@ export const CampaignCard = ({ item, fetchList }) => {
           backgroundColor: 'background.paper',
         }}
         onClick={() => {
-          setSelectedItemId(item.id)
-          setOpenPanel(true)
+          setSelectedItemId(item.id);
+          setOpenPanel(true);
         }}
       >
         <Box
@@ -95,8 +96,8 @@ export const CampaignCard = ({ item, fetchList }) => {
       {openPanel && (
         <CampaignRightPanel
           onClose={() => {
-            setSelectedItemId(null)
-            setOpenPanel(false)
+            setSelectedItemId(null);
+            setOpenPanel(false);
           }}
           fetchList={fetchList}
           id={selectedItemId}

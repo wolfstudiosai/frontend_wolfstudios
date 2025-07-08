@@ -6,7 +6,7 @@ import { SectionLoader } from '/src/components/loaders/section-loader';
 import { TabContainer } from '/src/components/tabs/tab-container';
 
 import { useCampaignStatusCount } from '../../../../services/campaign/useCampaignStatusCount';
-import { useCampaignList } from '../../../../services/useCampaignList';
+import { useCampaignList } from '../../../../services/campaign/useCampaignList';
 import { CampaignTabCard } from '../_components/campaign-tab-card';
 
 export const CampaignTabView = () => {

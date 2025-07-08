@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import { Box, Button, Chip, FormControl, FormLabel, InputAdornment, Stack, Typography } from '@mui/material';
+import { Box, Button, Chip, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import React from 'react';
 
 import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
@@ -12,10 +12,9 @@ import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
 import { VideoLinkField } from '/src/components/formFields/video-link-field';
 import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-iframe-dialog';
-import { ImageUploader } from '/src/components/uploaders/image-uploader';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
-import { campaignProgressStatus } from '../_lib/campaign.constants';
+import { getContentListAsync } from '../../../(private)/all-content/_lib/all-content.actions';
 import {
   getProductListAsync,
   getRetailPartnerListAsync,
@@ -23,7 +22,7 @@ import {
 } from '../../../../lib/common.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getProductionListAsync } from '../../production/_lib/production.action';
-import { getContentList } from '/src/app/(private)/all-content/_lib/all-content.actions';
+import { campaignProgressStatus } from '../_lib/campaign.constants';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
 
 export const CampaignForm = ({ handleChange, values, errors, loading, setFieldValue, onSubmit }) => {
@@ -43,7 +42,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
   React.useEffect(() => {
     const fetchPrerequisitesData = async () => {
       try {
-        const contentResponse = await getContentList({ page: 1, rowsPerPage: 20 });
+        const contentResponse = await getContentListAsync({ page: 1, rowsPerPage: 20 });
         if (contentResponse?.success) {
           const options = contentResponse.data.map((item) => ({ value: item.id, label: item.name }));
           setContentOptions(options);
@@ -196,7 +195,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
-                const res = await getContentList(paging, filters, 'and');
+                const res = await getContentListAsync(paging, filters, 'and');
                 return (
                   res?.data?.map((item) => ({
                     label: item.name,

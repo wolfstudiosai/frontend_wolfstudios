@@ -1,25 +1,24 @@
 'use client'
 
 import { Autocomplete, Chip, TextField } from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
+import { getContentListAsync } from '/src/app/(private)/all-content/_lib/all-content.actions';
+import { getCampaignListAsync } from '/src/app/(public)/campaign/_lib/campaign.actions';
 import { getPartnerListAsync } from '/src/app/(public)/partner/_lib/partner.actions';
 import { getPortfolioCategoryListAsync } from '/src/app/(public)/portfolio/_lib/portfolio.actions';
-import { getCampaignListAsync } from '/src/app/(public)/campaign/_lib/campaign.actions';
-import { useEffect, useState } from 'react';
+import { getProductionListAsync } from '/src/app/(public)/production/_lib/production.action';
+import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
+import { useDebounce } from '/src/hooks/use-debounce';
 import {
-    getCountryListAsync,
-    getStateListAsync,
     getCaseStudyListAsync,
-    getStakeHolderListAsync,
-    getRetailPartnerListAsync,
-    getProductListAsync,
     getCityListAsync,
+    getCountryListAsync,
+    getProductListAsync,
+    getRetailPartnerListAsync,
+    getStakeHolderListAsync,
+    getStateListAsync,
     getTagListAsync
 } from '/src/lib/common.actions';
-import { useDebounce } from '/src/hooks/use-debounce';
-import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
-import { getContentList } from '/src/app/(private)/all-content/_lib/all-content.actions';
-import { getProductionListAsync } from '/src/app/(public)/production/_lib/production.action';
-import { useMemo } from 'react';
 
 const fetchOptions = async (key, searchValue) => {
     const getNameMapping = (item) => ({ value: item.id, label: item.name });
@@ -58,7 +57,7 @@ const fetchOptions = async (key, searchValue) => {
             fetch: getCountryListAsync
         },
         contentHQ: {
-            fetch: getContentList,
+            fetch: getContentListAsync,
             filterable: true
         },
         states: {

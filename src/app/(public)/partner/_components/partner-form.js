@@ -1,34 +1,34 @@
 'use client';
 
-import React from 'react';
-import { Box, Button, Checkbox, FormControl, FormControlLabel, FormLabel, Stack } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import React from 'react';
 
 import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
+import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
+import { CustomMultiDatePicker } from '/src/components/formFields/custom-multi-date-picker';
 import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
-import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
-import { CustomMultiDatePicker } from '/src/components/formFields/custom-multi-date-picker';
 
-import { affiliatePlatform, ageBracket, platformDeliverables, platforms, sourcedFrom, status } from '../_lib/partner.constants';
+import { getContentListAsync } from '../../../(private)/all-content/_lib/all-content.actions';
 import {
   getCaseStudyListAsync,
   getCityListAsync,
   getCountryListAsync,
+  getDestinationListAsync,
   getProductListAsync,
   getRetailPartnerListAsync,
   getStakeHolderListAsync,
   getStateListAsync,
   getTagListAsync,
-  getDestinationListAsync,
 } from '../../../../lib/common.actions';
-import { getContentList } from '/src/app/(private)/all-content/_lib/all-content.actions';
+import { getCampaignListAsync } from '../../campaign/_lib/campaign.actions';
 import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
 import { getProductionListAsync } from '../../production/_lib/production.action';
-import { getCampaignListAsync } from '../../campaign/_lib/campaign.actions';
+import { affiliatePlatform, ageBracket, platformDeliverables, platforms, sourcedFrom, status } from '../_lib/partner.constants';
 
 export const PartnerForm = ({ handleChange, values, errors, setFieldValue, loading, onSubmit }) => {
   // *********************States*********************************
@@ -68,7 +68,7 @@ export const PartnerForm = ({ handleChange, values, errors, setFieldValue, loadi
         }
 
         // Content HQs
-        const contentHQsResponse = await getContentList({ page: 1, rowsPerPage: 20 });
+        const contentHQsResponse = await getContentListAsync({ page: 1, rowsPerPage: 20 });
         if (contentHQsResponse?.success) {
           const options = contentHQsResponse.data.map((item) => ({ value: item.id, label: item.name }));
           setContentHQs(options);
@@ -750,7 +750,7 @@ export const PartnerForm = ({ handleChange, values, errors, setFieldValue, loadi
               defaultOptions={contentHQs}
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
-                const res = await getContentList(paging, debounceValue);
+                const res = await getContentListAsync(paging, debounceValue);
                 return res?.data?.map((item) => ({
                   label: item.name,
                   value: item.id,

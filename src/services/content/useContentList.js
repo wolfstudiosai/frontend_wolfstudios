@@ -1,19 +1,19 @@
 import useSWRInfinite from 'swr/infinite';
 
-import { getCampaignGroupListAsync } from '../app/(public)/campaign/_lib/campaign.actions';
+import { getContentListAsync } from '/src/app/(private)/all-content/_lib/all-content.actions';
 
 const getKey = (pageIndex, previousPageData, status) => {
   if (previousPageData && !previousPageData.data?.length) return null;
 
   return [
-    'campaign-groups',
+    'content-groups',
     pageIndex + 1,
     10, // page size
     status, // filter by status
   ];
 };
 
-export const useCampaignList = (status = '') => {
+export const useContentList = (status = '') => {
   const {
     data: pages,
     error,
@@ -24,18 +24,9 @@ export const useCampaignList = (status = '') => {
   } = useSWRInfinite(
     (pageIndex, previousPageData) => getKey(pageIndex, previousPageData, status),
     ([, pageNo, limit, statusFilter]) => {
-      const filters = statusFilter
-        ? [
-            {
-              key: 'campaignStatus',
-              operator: 'contains',
-              type: 'string',
-              value: statusFilter,
-            },
-          ]
-        : [];
+      const filters = [];
 
-      return getCampaignGroupListAsync({ page: pageNo, rowsPerPage: limit }, filters, 'and');
+      return getContentListAsync({ page: pageNo, rowsPerPage: limit }, filters, 'and');
     },
     {
       revalidateFirstPage: false,
