@@ -1,16 +1,13 @@
-import { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 import { Box, Card, Divider, IconButton, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
-import { SwiperSlide } from 'swiper/react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
 
-import useAuth from '/src/hooks/useAuth';
 import { CustomChip } from '/src/components/core/custom-chip';
 import { SectionTitle } from '/src/components/core/section-title';
 import { Iconify } from '/src/components/iconify/iconify';
-import { SliderWrapper } from '/src/components/slider/slider-wrapper';
+import useAuth from '/src/hooks/useAuth';
 
 import { SocialIconWithText } from './partner-gridview';
 import { formatCompactNumber, handleCopy, isVideoContent } from '/src/utils/helper';
@@ -26,6 +23,7 @@ const isValidNumber = (value) => {
 };
 
 export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
+  console.log(data, 'partner quick view data....>');
   const { isLogin } = useAuth();
 
   const mediaArr = [
@@ -79,8 +77,7 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
     Stakeholder: data?.stakeholders?.map((item) => item?.name)?.join(', ') || 'N/A',
     TotalAudience: data?.totalAudience?.toLocaleString() || 'N/A',
     Products: data?.products?.map((item) => item?.name)?.join(', ') || 'N/A',
-    ContributedCampaigns:
-      data?.contributedCampaigns?.map((item) => item?.name)?.join(', ') || 'N/A',
+    ContributedCampaigns: data?.contributedCampaigns?.map((item) => item?.name)?.join(', ') || 'N/A',
     LiveCampaign: 'N/A',
     // OpenToGifting: data?.openToGifting || 'N/A',
     // OpenToWhitelisting: data?.openToWhitelisting || 'N/A',
@@ -577,9 +574,7 @@ export const PartnerSliderCard = ({ item, sx = {} }) => {
 
 export const PartnerIframes = ({ profiles }) => {
   const getEmbedUrl = (url) => {
-
     if (url && url?.includes('instagram.com')) {
-
       const cleanUrl = url.split('?')[0];
 
       const postMatch = cleanUrl.match(/instagram\.com\/p\/([^\/]+)/);
@@ -589,7 +584,7 @@ export const PartnerIframes = ({ profiles }) => {
       }
       // Profile fallback
       const parts = cleanUrl.split('/').filter(Boolean);
-      const instagramIndex = parts.findIndex(part => part.includes('instagram.com'));
+      const instagramIndex = parts.findIndex((part) => part.includes('instagram.com'));
       const username = parts[instagramIndex + 1];
       return `https://www.instagram.com/${username}/embed`;
     }
@@ -647,8 +642,7 @@ export const EmbedCard = ({ platform, embedUrl }) => {
   })();
 
   const isFallback =
-    (!embedUrl || ['Not Found', 'Not found', 'unknown', 'Not Provided'].includes(embedUrl) || hasError) &&
-    !isInstagram;
+    (!embedUrl || ['Not Found', 'Not found', 'unknown', 'Not Provided'].includes(embedUrl) || hasError) && !isInstagram;
 
   const shouldShowInstagramFallback = isInstagram && isInstagramWithoutUsername;
 
@@ -725,7 +719,8 @@ export const EmbedCard = ({ platform, embedUrl }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: hasError || isFallback || shouldShowInstagramFallback || isUnsupportedEmbed ? '#f9f9f9' : 'white',
+        backgroundColor:
+          hasError || isFallback || shouldShowInstagramFallback || isUnsupportedEmbed ? '#f9f9f9' : 'white',
       }}
     >
       {isFallback || shouldShowInstagramFallback || isUnsupportedEmbed ? (

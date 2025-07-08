@@ -37,10 +37,10 @@ export const getContentAsync = async (id) => {
 };
 
 export const createContentAsync = async (data) => {
-  const payload = contentPayload(data);
+  // const payload = contentPayload(data);
 
   try {
-    let res = await api.post(`/content-HQ`, payload);
+    let res = await api.post(`/content-HQ`, data);
 
     if (!res.data.success) return;
     toast.success(res.data.message);
@@ -166,7 +166,7 @@ export const deleteContentView = async (viewId) => {
 const contentPayload = (data) => ({
   name: data.name || '',
   isFeatured: data.isFeatured || false,
-  revoPinterest: data.revoPinterest || '',
+  revoPinterest: data.revoPinterest || null,
   pinAccountsUsed: data.pinAccountsUsed || '',
   postQuality: data.postQuality ? data.postQuality.split(',').map((item) => item.trim()) : [],
   googleDriveFiles: data.googleDriveFiles || '',

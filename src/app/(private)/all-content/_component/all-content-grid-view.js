@@ -26,14 +26,14 @@ export default function AllContentGridView({ data, loading, fetchList }) {
           </Grid>
         ))}
       </Grid>
-      <ManageContentRightPanel
+      {/* <ManageContentRightPanel
         view={'QUICK'}
         width="70%"
         open={openRightPanel ? true : false}
         data={openRightPanel}
         fetchList={fetchList}
         onClose={() => setOpenRightPanel(false)}
-      />
+      /> */}
     </PageLoader>
   );
 }

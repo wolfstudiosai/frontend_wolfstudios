@@ -42,7 +42,7 @@ export const MediaUploader = ({
   const [url, setUrl] = React.useState('');
   const [videoUrls, setVideoUrls] = React.useState([]);
 
-  const shouldInputFieldDisabled = !multiple && (files.length > 0 || urls.length > 0 || videoUrls.length > 0);
+  const shouldInputFieldDisabled = !multiple && (files?.length > 0 || urls?.length > 0 || videoUrls?.length > 0);
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
@@ -90,7 +90,7 @@ export const MediaUploader = ({
         setUrls(urls.filter((url) => url !== item));
       }
     } else {
-      setFiles(files.filter((file) => file?.name !== item?.name));
+      setFiles(files?.filter((file) => file?.name !== item?.name));
       fileInputRef.current.value = null;
     }
   };
@@ -99,9 +99,9 @@ export const MediaUploader = ({
     setUploading(true);
     try {
       let uploadedPaths = [];
-      if (files.length > 0) {
+      if (files?.length > 0) {
         const formData = new FormData();
-        files.forEach((file) => {
+        files?.forEach((file) => {
           formData.append('files', file);
         });
 
@@ -157,14 +157,14 @@ export const MediaUploader = ({
     return new Promise((resolve) => setTimeout(() => resolve(URL.createObjectURL(file)), 1000));
   };
 
-  if (availableTabs.length === 0) return null;
+  if (availableTabs?.length === 0) return null;
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       <DialogTitle>Media Uploader</DialogTitle>
       <DialogContent>
         <Tabs value={tab} onChange={handleTabChange} centered>
-          {availableTabs.map((t, index) => (
+          {availableTabs?.map((t, index) => (
             <Tab key={index} label={t.label} />
           ))}
         </Tabs>

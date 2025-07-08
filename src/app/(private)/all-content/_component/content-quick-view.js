@@ -62,6 +62,7 @@ const fieldConfig = {
 };
 
 export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
+  
   const [comments, setComments] = useState([
     {
       id: 1,
@@ -101,33 +102,33 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const attachmentRef = useRef(null);
   const [contentInfo, setContentInfo] = useState({
-    InstagramLikes: data?.IGTotalLikes,
-    InstagramComments: data?.IGTotalComments,
-    InstagramShares: data?.IGTotalShares,
-    InstagramViews: data?.IGTotalViews,
-    InstagramSocialSetsUsed: data?.IGSocialSetsUsed,
-    RevoTwitter: data?.REVOTwitter,
-    RevoTiktok: data?.REVOTikTok,
-    RevoTiktokViews: data?.REVOTTViews,
-    TiktokAccountUsed: data?.TikTokAccountsused,
-    TiktokDummyAccountUsed: data?.TTDummyAccountsUsed?.at(0),
-    YoutubeTAccountUsed: data?.YTAccountsUsed,
-    YoutubeClubRevoTotalViews: data?.YTClubREVOTotalViews,
+    PartnerIGTotalLikes: data?.partnerIGTotalLikes,
+    PartnerIGTotalComments: data?.partnerIGTotalComments,
+    PartnerIGTotalShares: data?.partnerIGTotalShares,
+    PartnerIGTotalViews: data?.partnerIGTotalViews,
+    
+    RevoTwitter: data?.revoTwitter,
+    RevoTiktok: data?.revoTikTok,
+    RevoTTViews: data?.revoTTViews,
+    TiktokAccountsUsed: data?.tiktokAccountsUsed,
+    TiktokDummyAccountsUsed: data?.ttDummyAccountsUsed?.at(0),
+    YoutubeAccountsUsed: data?.ytAccountsUsed,
+    YoutubeClubREVOTotalViews: data?.ytClubREVOTotalViews,
   });
 
   const [partnerInfo, setPartnerInfo] = useState({
-    PartnerInstargramLink: data?.PartnerIGLink,
-    PartnerTiktokLink: data?.PartnerTikTokLink,
+    PartnerIGLink: data?.partnerIGLink,
+    PartnerTikTokLink: data?.partnerTikTokLink,
     PartnerTiktokComments: data?.PartnerTTComments,
-    PartnerTiktokLikes: data?.PartnerTTLikes,
-    PartnerTiktokShares: data?.PartnerTTShares,
-    PartnerTiktokViews: data?.PartnerTTViews,
-    PartnerTiktokSaves: data?.PartnerTTSaves,
-    PartnerYoutubeLink: data?.PartnerYTLink,
-    YoutubePartnerTotallikes: data?.YTPartnerTotallikes,
-    YoutubePartnerTotalcomments: data?.YTPartnerTotalcomments,
-    YoutubePartnerTotalSaves: data?.YTPartnerTotalSaves,
-    YoutubePartnerTotalViews: data?.YTPartnerTotalViews,
+    PartnerTTLikes: data?.partnerTTLikes,
+    PartnerTTShares: data?.partnerTTShares,
+    PartnerTTViews: data?.partnerTTViews,
+    PartnerTTSaves: data?.partnerTTSaves,
+    PartnerYTLink: data?.partnerYTLink,
+    YoutubePartnerTotalLikes: data?.ytPartnerTotalLikes,
+    YouTutbePartnerTotalComments: data?.ytPartnerTotalComments,
+    YoutubePartnerTotalSaves: data?.ytPartnerTotalSaves,
+    YoutubePartnerTotalViews: data?.ytPartnerTotalViews,
   });
 
   const handleAddComment = async () => {
@@ -244,8 +245,8 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
         <Stack sx={{ width: '50%' }}>
           <Box
             component="img"
-            src={data?.Image?.at(0) || '/assets/image-placeholder.jpg'}
-            alt={data?.Name}
+            src={data?.thumbnailImage || '/assets/image-placeholder.jpg'}
+            alt={data?.name}
             sx={{ height: '500px', objectFit: 'contain', border: '1px solid', borderColor: 'divider' }}
           />
           <Stack sx={{ mb: 4, pl: 1 }}>
@@ -376,24 +377,24 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
           </Stack>
         </Stack>
         <Stack sx={{ width: '50%' }}>
-          <Typography variant="h6">{data?.Name}</Typography>
+          <Typography variant="h6">{data?.name}</Typography>
           <Stack direction="row" alignItems="center" gap={1}>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {data?.MonthUploaded} by Combina key
+              {data?.monthUploaded} by Combina key
             </Typography>
-            {data?.PostingQuality?.map((p, i) => (
+            {data?.postingQuality?.map((p, i) => (
               <Chip key={i} size="small" variant="soft" label={p} />
             ))}
           </Stack>
           <Stack direction="row" alignItems="center">
             <IconButton
               size="small"
-              onClick={() => handleCopy(data?.GoogleDriveFiles || '')}
+              onClick={() => handleCopy(data?.googleDriveFiles || '')}
               sx={{ borderRadius: '50%' }}
             >
               <Iconify icon="mingcute:drive-fill" sx={{ color: 'text.secondary' }} />
             </IconButton>
-            <IconButton size="small" onClick={() => handleCopy(data?.PlaybookLink || '')} sx={{ borderRadius: '50%' }}>
+            <IconButton size="small" onClick={() => handleCopy(data?.playbookLink || '')} sx={{ borderRadius: '50%' }}>
               <Iconify icon="solar:book-bold" sx={{ color: 'text.secondary' }} />
             </IconButton>
           </Stack>

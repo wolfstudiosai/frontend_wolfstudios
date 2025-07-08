@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import { useFormik } from 'formik';
 
 import useAuth from '/src/hooks/useAuth';
@@ -22,57 +22,58 @@ import { ContentForm } from './content-form';
 import { ContentQuickView } from './content-quick-view';
 import { formConstants } from '/src/app/constants/form-constants';
 
-export const ManageContentRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK' }) => {
-  // const [sidebarView, setSidebarView] = React.useState(view); // QUICK // EDIT
-
-  // const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
-
+export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view = 'QUICK' }) => {
   const { isLogin } = useAuth();
   const router = useRouter();
   const [panelView, setPanelView] = React.useState(view);
-  const [data, setData] = React.useState(null);
+  // const [data, setData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
 
   const { values, errors, handleChange, setFieldValue, resetForm, setValues, handleSubmit } = useFormik({
     initialValues: defaultContent(),
     validate: (values) => {
       const errors = {};
-      if (!values.name) {
-        errors.name = formConstants.required;
-      }
-      if (!values.revoPinterest) {
-        errors.revoPinterest = formConstants.required;
-      }
-      if (!values.revoPinterest) {
-        errors.revoPinterest = formConstants.required;
-      }
-      if (!values.pinAccountsUsed) {
-        errors.pinAccountsUsed = formConstants.required;
-      }
-      if (!values.postQuality) {
-        errors.postQuality = formConstants.required;
-      }
-      if (!values.googleDriveFiles) {
-        errors.googleDriveFiles = formConstants.required;
-      }
-      if (!values.playbookLink) {
-        errors.playbookLink = formConstants.required;
-      }
-      if (!values.upPromoteConversion) {
-        errors.upPromoteConversion = formConstants.required;
-      }
-      if (!values.assetStatus) {
-        errors.assetStatus = formConstants.required;
-      }
-      if (!values.monthUploaded) {
-        errors.monthUploaded = formConstants.required;
-      }
-      if (!values.revoInstagram) {
-        errors.revoInstagram = formConstants.required;
-      }
-      if (!values.creatorStatus) {
-        errors.creatorStatus = formConstants.required;
-      }
+      const requiredFields = [
+        'name',
+        'revoPinterest',
+        'pinAccountsUsed',
+        'postingQuality',
+        'googleDriveFiles',
+        'playbookLink',
+        'assetStatus',
+        'monthUploaded',
+        'revoInstagram',
+        'partnerIGLink',
+        'igSocialSetsUsed',
+        'revoTwitter',
+        'tiktokAccountsUsed',
+        'revoTikTok',
+        'partnerTikTokLink',
+        'ytAccountsUsed',
+        'partnerYTLink',
+        'revoClubrevoYoutube',
+        'revoYoutube',
+        'postingStatus',
+        'totalContributedEngagement',
+        'creatorStatus',
+        'igPost4',
+        'igPost2',
+        'igPost3',
+        'platform',
+        'clubREVOIGHandle',
+        'thumbnailImage',
+        'ttDummyAccountsUsed',
+      ];
+
+      requiredFields.forEach((field) => {
+        if (
+          !values[field] ||
+          (Array.isArray(values[field]) && values[field].length === 0) ||
+          (typeof values[field] === 'string' && values[field].trim() === '')
+        ) {
+          errors[field] = formConstants.required;
+        }
+      });
 
       return errors;
     },
@@ -83,39 +84,7 @@ export const ManageContentRightPanel = ({ fetchList, onClose, id, open, view = '
           ...values,
         };
 
-        const imageFields = ['campaignImage', 'imageInspirationGallery'];
-        for (const field of imageFields) {
-          const value = values[field];
-          if (value instanceof File) {
-            const res = await imageUploader(
-              [
-                {
-                  file: value,
-                  fileName: value.name.split('.').slice(0, -1).join('.'),
-                  fileType: value.type.split('/')[1],
-                },
-              ],
-              'campaigns'
-            );
-
-            finalData[field] = res;
-          } else if (typeof value === 'string') {
-            finalData[field] = [value];
-          }
-        }
-
-        const arrayFields = [
-          'contentHQ',
-          'stakeholders',
-          'retailPartners',
-          'proposedPartners',
-          'contributedPartners',
-          'spaces',
-          'productionHQ',
-          'products',
-          'retailPartners2',
-          'retailPartners3',
-        ];
+        const arrayFields = ['campaigns', 'cities', 'products', 'tags', 'stakeholders', 'partners', 'retailPartners'];
 
         for (const field of arrayFields) {
           const value = values[field];
@@ -125,7 +94,28 @@ export const ManageContentRightPanel = ({ fetchList, onClose, id, open, view = '
           }
         }
 
-        const res = id ? await updateCampaignAsync(id, finalData) : await createCampaignAsync(finalData);
+        const splitArrayFields = ['postingQuality', 'creatorStatus', 'platform', 'ttDummyAccountsUsed'];
+
+        for (const field of splitArrayFields) {
+          const value = field?.split(',');
+          if (value.length > 0) {
+            finalData[field] = value;
+          }
+        }
+
+        const res = data?.id
+          ? await updateContentAsync(id, {
+              ...finalData,
+              thumbnailImage: Array.isArray(finalData.thumbnailImage)
+                ? finalData.thumbnailImage[0]
+                : finalData.thumbnailImage,
+            })
+          : await createContentAsync({
+              ...finalData,
+              thumbnailImage: Array.isArray(finalData.thumbnailImage)
+                ? finalData.thumbnailImage[0]
+                : finalData.thumbnailImage,
+            });
         if (res.success) {
           onClose?.();
           resetForm();
@@ -155,62 +145,52 @@ export const ManageContentRightPanel = ({ fetchList, onClose, id, open, view = '
     }
   };
 
+  // console.log(id, 'id....');
   // --------------- Fetch campaign during update -------------------
   React.useEffect(() => {
     const fetSingleData = async () => {
       try {
         const res = await getContentAsync(data?.id);
+
+        console.log(res, 'res....');
         if (res?.success) {
+          const modifiedData = defaultContent(res?.data);
+          console.log(modifiedData, 'modifiedData');
           setValues(defaultContent(res?.data));
+          // setData(res?.data?.data);
         }
       } catch (err) {
         console.error(err);
       }
     };
 
-    if (data?.id && sidebarView === 'EDIT') {
+    if (data?.id && panelView === 'EDIT') {
       fetSingleData();
     }
-  }, [data?.id, setValues, sidebarView]);
+  }, [data?.id, panelView]);
 
-  // --------------- Set values during update -------------------
-  React.useEffect(() => {
-    if (data) {
-      setValues(defaultContent(data));
-    }
-  }, [data, setValues]);
+  console.log(data?.id, 'data?.id');
+  console.log(panelView, 'panelView');
+  console.log(values, 'values....');
 
   // *****************Action Buttons*******************************
   const actionButtons = (
     <>
       {isLogin && (
         <>
-          {sidebarView === 'EDIT' && isUpdate ? (
-            <IconButton onClick={() => setSidebarView('QUICK')} title="Edit">
+          {panelView === 'EDIT' && data?.id ? (
+            <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
               <Iconify icon="solar:eye-broken" />
             </IconButton>
           ) : (
-            isUpdate && (
-              <IconButton onClick={() => setSidebarView('EDIT')} title="Quick">
+            data?.id && (
+              <IconButton onClick={() => setPanelView('EDIT')} title="Quick">
                 <Iconify icon="mynaui:edit-one" />
               </IconButton>
             )
           )}
 
-          <>
-            <FormControlLabel
-              control={
-                <Switch
-                  size="small"
-                  checked={isFeatured}
-                  onChange={(e) => handleFeatured(e.target.checked)}
-                  color="primary"
-                />
-              }
-              label="Featured"
-            />
-          </>
-          {sidebarView === 'EDIT' && (
+          {panelView === 'EDIT' && (
             <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
               Save
             </Button>
@@ -225,7 +205,7 @@ export const ManageContentRightPanel = ({ fetchList, onClose, id, open, view = '
             <Iconify icon="mdi:analytics" />
           </IconButton>
 
-          {sidebarView === 'QUICK' && (
+          {panelView === 'QUICK' && (
             <DeleteConfirmationPasswordPopover
               id={data?.id}
               title="Are you sure you want to delete?"
@@ -238,13 +218,12 @@ export const ManageContentRightPanel = ({ fetchList, onClose, id, open, view = '
       )}
     </>
   );
-
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-      {sidebarView === 'EDIT' ? (
-        <ContentForm formikProps={{ values, setValues, errors, handleChange, setFieldValue, handleSubmit }} />
-      ) : (
+      {panelView === 'QUICK' ? (
         <ContentQuickView data={data} isEdit={false} />
+      ) : (
+        <ContentForm formikProps={{ values, setValues, errors, handleChange, setFieldValue, handleSubmit }} />
       )}
     </DrawerContainer>
   );

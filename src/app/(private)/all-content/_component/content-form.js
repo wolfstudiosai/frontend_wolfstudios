@@ -1,14 +1,13 @@
 'use client';
 
 import React from 'react';
+import { Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
-import { CustomAutoComplete } from '/src/components/formFields/custom-auto-complete';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
 import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
-import { VideoLinkField } from '/src/components/formFields/video-link-field';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
 import {
@@ -27,6 +26,7 @@ export const ContentForm = ({ formikProps }) => {
     currentItem: '',
     prevItems: [],
   });
+  const [thumbnail, setThumbnail] = React.useState('');
   const [autoCompleteOptions, setAutoCompleteOptions] = React.useState({
     campaigns: [],
     cities: [],
@@ -39,6 +39,8 @@ export const ContentForm = ({ formikProps }) => {
   const [openImageUploadDialog, setOpenImageUploadDialog] = React.useState(false);
   // ********************* Formik *******************************
   const { values, errors, handleChange, setFieldValue, handleSubmit, setValues } = formikProps;
+
+  console.log(values, 'values from content form.....');
 
   // --------------- Fetch Prerequisites Data -------------------
   const fetchFunctionsMap = {
@@ -87,34 +89,48 @@ export const ContentForm = ({ formikProps }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Grid container spacing={2} sx={{ py: 2 }}>
-        {/* General Information Section */}
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          py: 2,
+          border: '1px solid var(--mui-palette-background-level2)',
+          borderRadius: '8px',
+          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
+          p: 2,
+        }}
+      >
+        <Grid size={12}>
+          <Typography variant="h5" sx={{ mb: 2, color: 'primary.main' }}>
+            Required Information
+          </Typography>
+        </Grid>
         <Grid size={{ xs: 12 }}>
           <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} />
           <ErrorMessage error={errors.name} />
         </Grid>
-
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="revoPinterest"
-            label="Revo Pinterest"
-            value={values.revoPinterest}
-            onChange={handleChange}
+        <Grid size={{ xs: 12, md: 6 }}>
+          <MediaUploaderTrigger
+            open={openImageUploadDialog}
+            onClose={() => setOpenImageUploadDialog(false)}
+            onSave={(urls) => setFieldValue('thumbnailImage', urls)}
+            value={values?.thumbnailImage}
+            label="Thumbnail Image"
+            onAdd={() => setOpenImageUploadDialog(true)}
+            onDelete={(filteredUrls) => setFieldValue('thumbnailImage', filteredUrls)}
+            folderName="campaigns"
+            hideVideoUploader
           />
-          <ErrorMessage error={errors.revoPinterest} />
+          <ErrorMessage error={errors.thumbnailImage} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="pinAccountsUsed"
-            label="Pin Accounts Used"
+            label="Pinterest Accounts Used"
             value={values.pinAccountsUsed}
             onChange={handleChange}
           />
           <ErrorMessage error={errors.pinAccountsUsed} />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField name="postQuality" label="Post Quality" value={values.postQuality} onChange={handleChange} />
-          <ErrorMessage error={errors.postQuality} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -136,28 +152,28 @@ export const ContentForm = ({ formikProps }) => {
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="upPromoteConversion"
-            type="number"
-            label="Up Promote Conversion"
-            value={values.upPromoteConversion}
+            name="partnerIGLink"
+            label="Partner IG Link"
+            value={values.partnerIGLink}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.upPromoteConversion} />
+          <ErrorMessage error={errors.partnerIGLink} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <CustomSelect
-            name="assetStatus"
-            label="Asset Status"
-            value={values.assetStatus}
-            onChange={(value) => setFieldValue('assetStatus', value)}
-            options={[
-              { value: 'Approved', label: 'Approved' },
-              { value: 'Pending', label: 'Pending' },
-              { value: 'Rejected', label: 'Rejected' },
-            ]}
+          <CustomTextField
+            name="uppromoteConversion"
+            label="Up Promote Conversion"
+            value={values.uppromoteConversion}
+            onChange={handleChange}
           />
+          <ErrorMessage error={errors.uppromoteConversion} />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField name="assetStatus" label="Asset Status" value={values.assetStatus} onChange={handleChange} />
           <ErrorMessage error={errors.assetStatus} />
         </Grid>
+
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomDatePicker
             label="Month Uploaded"
@@ -188,290 +204,109 @@ export const ContentForm = ({ formikProps }) => {
             value={values.creatorStatus}
             onChange={(value) => setFieldValue('creatorStatus', value)}
             options={[
-              { value: 'Contract Fulfilled', label: 'Contract Fulfilled' },
-              { value: 'Contract Not Fulfilled', label: 'Contract Not Fulfilled' },
+              { value: 'ACTIVE', label: 'Active' },
+              { value: 'INACTIVE', label: 'Inactive' },
             ]}
           />
           <ErrorMessage error={errors.creatorStatus} />
         </Grid>
-        {/* Partner Section */}
         <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="partner_IGLink"
-            label="Partner IG Link"
-            value={values.partner_IGLink}
-            onChange={handleChange}
-          />
+          <CustomTextField name="igPost4" label="Instagram Post 4" value={values.igPost4} onChange={handleChange} />
+          <ErrorMessage error={errors.igPost4} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField name="igPost3" label="Instagram Post 3" value={values.igPost3} onChange={handleChange} />
+          <ErrorMessage error={errors.igPost3} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField name="igPost2" label="Instagram Post 2" value={values.igPost2} onChange={handleChange} />
+          <ErrorMessage error={errors.igPost2} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField name="platform" label="Platform" value={values.platform} onChange={handleChange} />
+          <ErrorMessage error={errors.platform} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="partner_TikTokLink"
-            label="Partner TikTok Link"
-            value={values.partner_TikTokLink}
+            name="partnerTikTokLink"
+            label="Partner Tiktok Link"
+            value={values.partnerTikTokLink}
             onChange={handleChange}
           />
+          <ErrorMessage error={errors.partnerTikTokLink} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="partner_TTShares"
-            type="number"
-            label="Partner TT Shares"
-            value={values.partner_TTShares}
+            name="ytAccountsUsed"
+            label="YT Accounts Used"
+            value={values.ytAccountsUsed}
             onChange={handleChange}
           />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="partner_TTSaves"
-            type="number"
-            label="Partner TT Saves"
-            value={values.partner_TTSaves}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="partner_TTViews"
-            type="number"
-            label="Partner TT Views"
-            value={values.partner_TTViews}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="partner_TTLikes"
-            type="number"
-            label="Partner TT Likes"
-            value={values.partner_TTLikes}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="partner_TTComments"
-            type="number"
-            label="Partner TT Comments"
-            value={values.partner_TTComments}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="partner_YTLink"
-            label="Partner YT Link"
-            value={values.partner_YTLink}
-            onChange={handleChange}
-          />
-        </Grid>
-        {/* Instagram Metrics */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="ig_SocialSetsUsed"
-            label="IG Social Sets Used"
-            value={values.ig_SocialSetsUsed}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="ig_TotalComments"
-            type="number"
-            label="IG Total Comments"
-            value={values.ig_TotalComments}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="ig_TotalLikes"
-            type="number"
-            label="IG Total Likes"
-            value={values.ig_TotalLikes}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="ig_TotalShares"
-            type="number"
-            label="IG Total Shares"
-            value={values.ig_TotalShares}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="ig_TotalViews"
-            type="number"
-            label="IG Total Views"
-            value={values.ig_TotalViews}
-            onChange={handleChange}
-          />
-        </Grid>
-
-        {/* YouTube Section */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="yt_ClubREVOTotalViews"
-            type="number"
-            label="YT ClubREVO Views"
-            value={values.yt_ClubREVOTotalViews}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="yt_PartnerTotalSaves"
-            type="number"
-            label="YT Partner Saves"
-            value={values.yt_PartnerTotalSaves}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="yt_PartnerTotalViews"
-            type="number"
-            label="YT Partner Views"
-            value={values.yt_PartnerTotalViews}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="yt_PartnerTotalComments"
-            type="number"
-            label="YT Partner Comments"
-            value={values.yt_PartnerTotalComments}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="yt_PartnerTotalLikes"
-            type="number"
-            label="YT Partner Likes"
-            value={values.yt_PartnerTotalLikes}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="yt_REVOMADICTotalShares"
-            type="number"
-            label="YT REVO MADIC Shares"
-            value={values.yt_REVOMADICTotalShares}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="yt_REVOMADICTotalViews"
-            type="number"
-            label="YT REVO MADIC Views"
-            value={values.yt_REVOMADICTotalViews}
-            onChange={handleChange}
-          />
-        </Grid>
-        {/* <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="yt_REVOMADICTotalViews"
-            label="YT REVO MADIC Views"
-            value={values.yt_REVOMADICTotalLikes}
-            onChange={handleChange}
-          />
-        </Grid> */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="yt_REVOMADICTotalComments"
-            type="number"
-            label="YT REVO MADIC Comments"
-            value={values.yt_REVOMADICTotalComments}
-            onChange={handleChange}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomSelect
-            name="yt_AccountsUsed"
-            label="Revo Instagram"
-            value={values.yt_AccountsUsed}
-            onChange={(value) => setFieldValue('yt_AccountsUsed', value)}
-            options={[
-              { value: 'Posted', label: 'Posted' },
-              { value: 'Not Posted', label: 'Not Posted' },
-            ]}
-          />
-        </Grid>
-
-        {/* Pinterest Section */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="pinterest_TotalPinClicks"
-            type="number"
-            label="Pinterest Clicks"
-            value={values.pinterest_TotalPinClicks}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="pinterest_TotalViews"
-            type="number"
-            label="Pinterest Views"
-            value={values.pinterest_TotalViews}
-            onChange={handleChange}
-          />
-        </Grid>
-
-        {/* REVO Section */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="revo_Twitter"
-            label="REVO Twitter"
-            value={values.revo_Twitter}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="revo_TTViews"
-            type="number"
-            label="REVO TT Views"
-            value={values.revo_TTViews}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField name="revo_TikTok" label="REVO TikTok" value={values.revo_TikTok} onChange={handleChange} />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="revo_Youtube"
-            label="REVO Youtube"
-            value={values.revo_Youtube}
-            onChange={handleChange}
-          />
-        </Grid>
-
-        {/* Relations Section */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="tikTokAccountsused"
-            label="TikTok Accounts Used"
-            value={values.tikTokAccountsused}
-            onChange={handleChange}
-          />
+          <ErrorMessage error={errors.ytAccountsUsed} />
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
-            name="TTDummyAccountsUsed"
-            label="TT Dummy Accounts Used"
-            value={values.TTDummyAccountsUsed}
+            name="revoTikTok"
+            label="REVO Tiktok Views"
+            value={values.revoTikTok}
             onChange={handleChange}
           />
+          <ErrorMessage error={errors.revoTikTok} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField name="revoYoutube" label="REVO YouTube" value={values.revoYoutube} onChange={handleChange} />
+          <ErrorMessage error={errors.revoYoutube} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revoClubrevoYoutube"
+            label="Club REVO YouTube"
+            value={values.revoClubrevoYoutube}
+            onChange={handleChange}
+          />
+          <ErrorMessage error={errors.revoClubrevoYoutube} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="clubREVOIGHandle"
+            label="Club REVO IG Handle"
+            value={values.clubREVOIGHandle}
+            onChange={handleChange}
+          />
+          <ErrorMessage error={errors.clubREVOIGHandle} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="tiktokAccountsUsed"
+            label="Tiktok Accounts Used"
+            value={values.tiktokAccountsUsed}
+            onChange={handleChange}
+          />
+          <ErrorMessage error={errors.tiktokAccountsUsed} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerYTLink"
+            label="Partner Youtube Link"
+            value={values.partnerYTLink}
+            onChange={handleChange}
+          />
+          <ErrorMessage error={errors.partnerYTLink} />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revoPinterest"
+            label="REVO Pinterest"
+            value={values.revoPinterest}
+            onChange={handleChange}
+          />
+          <ErrorMessage error={errors.revoPinterest} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField name="revoTwitter" label="REVO Twitter" value={values.revoTwitter} onChange={handleChange} />
+          <ErrorMessage error={errors.revoTwitter} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomSelect
@@ -484,108 +319,324 @@ export const ContentForm = ({ formikProps }) => {
               { value: 'Not Posted', label: 'Not Posted' },
             ]}
           />
+          <ErrorMessage error={errors.postingStatus} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomSelect
+            name="igSocialSetsUsed"
+            label="Asset Status"
+            value={values.igSocialSetsUsed}
+            onChange={(value) => setFieldValue('igSocialSetsUsed', value)}
+            options={[
+              { value: 'Yes', label: 'Yes' },
+              { value: 'Noted', label: 'No' },
+            ]}
+          />
+          <ErrorMessage error={errors.igSocialSetsUsed} />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="postingQuality"
+            label="Posting Quality"
+            value={values.postingQuality}
+            onChange={handleChange}
+          />
+          <ErrorMessage error={errors.postingQuality} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="totalContributedEngagement"
+            type="number"
             label="Total Contributed Engagement"
             value={values.totalContributedEngagement}
             onChange={handleChange}
           />
+          <ErrorMessage error={errors.totalContributedEngagement} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <CustomAutoComplete
-            label="Campaigns"
-            name="campaigns"
-            value={values.campaigns}
-            onChange={(_, value) => setFieldValue('campaigns', value)}
-            options={autoCompleteOptions?.campaigns}
-            multiple
-            onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
+          <CustomTextField
+            name="ttDummyAccountsUsed"
+            label="Tiktok Dummy Accounts Used"
+            value={values.ttDummyAccountsUsed}
+            onChange={handleChange}
           />
+          <ErrorMessage error={errors.ttDummyAccountsUsed} />
+        </Grid>
+      </Grid>
+
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          py: 2,
+          border: '1px solid var(--mui-palette-background-level2)',
+          borderRadius: '8px',
+          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
+          p: 2,
+          mt: 4,
+        }}
+      >
+        <Grid size={12}>
+          <Typography variant="h5" sx={{ mb: 2, color: 'primary.main' }}>
+            Additional Information
+          </Typography>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <CustomAutoComplete
-            label="Cities"
-            name="cities"
-            value={values.cities}
-            onChange={(_, value) => setFieldValue('cities', value)}
-            options={autoCompleteOptions?.cities}
-            multiple
-            onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomAutoComplete
-            label="Products"
-            name="products"
-            value={values.products}
-            onChange={(_, value) => setFieldValue('products', value)}
-            options={autoCompleteOptions?.products}
-            multiple
-            onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomAutoComplete
-            label="Tags"
-            name="tags"
-            value={values.tags}
-            onChange={(_, value) => setFieldValue('tags', value)}
-            options={autoCompleteOptions?.tags}
-            multiple
-            onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomAutoComplete
-            label="Stakeholders"
-            name="stakeholders"
-            value={values.stakeholders}
-            onChange={(_, value) => setFieldValue('stakeholders', value)}
-            options={autoCompleteOptions?.stakeholders}
-            multiple
-            onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomAutoComplete
-            label="Partners"
-            name="partners"
-            value={values.partners}
-            onChange={(_, value) => setFieldValue('partners', value)}
-            options={autoCompleteOptions?.partners}
-            multiple
-            onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomAutoComplete
-            label="Retail Partners"
-            name="retailPartners"
-            value={values.retailPartners}
-            onChange={(_, value) => setFieldValue('retailPartners', value)}
-            options={autoCompleteOptions?.retailPartners}
-            multiple
-            onFocus={(name) => setAutocompleteFocus((prevState) => ({ ...prevState, currentItem: name }))}
+          <CustomTextField
+            name="partner_IGLink"
+            label="Partner IG Link"
+            value={values.partner_IGLink}
+            onChange={handleChange}
           />
         </Grid>
 
-        {/* media uploader */}
-        <Grid size={{ xs: 12 }}>
-          <VideoLinkField name="video" label="Videos" value={values.video} setFieldValue={setFieldValue} />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <MediaUploaderTrigger
-            open={openImageUploadDialog}
-            onClose={() => setOpenImageUploadDialog(false)}
-            onSave={(urls) => setFieldValue('image', urls)}
-            value={values?.image}
-            label="Image"
-            onAdd={() => setOpenImageUploadDialog(true)}
-            onDelete={(filteredUrls) => setFieldValue('image', filteredUrls)}
-            folderName="content-HQ"
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerTTShares"
+            label="Partner Tiktok Share"
+            value={values.partnerTTShares}
+            onChange={handleChange}
           />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerTTSaves"
+            label="Partner Tiktok Saves"
+            value={values.partnerTTSaves}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerTTViews"
+            label="Partner Tiktok Views"
+            value={values.partnerTTViews}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerTTComments"
+            label="Partner Tiktok Comments"
+            value={values.partnerTTComments}
+            onChange={handleChange}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerIGTotalComments"
+            label="Partner Instagram Total Comment"
+            value={values.partnerIGTotalComments}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerIGTotalLikes"
+            label="Partner Instagram Total Likes"
+            value={values.partnerIGTotalLikes}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerIGTotalShares"
+            label="Partner Instagram Total Shares"
+            value={values.partnerIGTotalShares}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerIGTotalViews"
+            label="Partner Instagram Total Views"
+            value={values.partnerIGTotalViews}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="ytClubREVOTotalViews"
+            label="YT Club REVO Total Views"
+            value={values.ytClubREVOTotalViews}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="ytPartnerTotalSaves"
+            label="YT Partner Total Saves"
+            value={values.ytPartnerTotalSaves}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="ytPartnerTotalViews"
+            label="YT Partner Total Views"
+            value={values.ytPartnerTotalViews}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="ytPartnerTotalComments"
+            label="YT Partner Total Comments"
+            value={values.ytPartnerTotalComments}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="ytPartnerTotalLikes"
+            label="YT Partner Total Comments"
+            value={values.ytPartnerTotalLikes}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="ytREVOMADICTotalShares"
+            label="YT REVO MADIC Total Shares"
+            value={values.ytREVOMADICTotalShares}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="ytREVOMADICTotalViews"
+            label="YT REVO MADIC Total Views"
+            value={values.ytREVOMADICTotalViews}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="ytREVOMADICTotalLikes"
+            label="YT REVO MADIC Total Likes"
+            value={values.ytREVOMADICTotalLikes}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="ytREVOMADICTotalComments"
+            label="YT REVO MADIC Total Comments"
+            value={values.ytREVOMADICTotalComments}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="ytClubREVOTotalLikes"
+            label="YT Club REVO Total Likes"
+            value={values.ytClubREVOTotalLikes}
+            onChange={handleChange}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="pinterestTotalPinClicks"
+            label="Pinterest Total Pin Clicks"
+            value={values.pinterestTotalPinClicks}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="pinterestTotalViews"
+            label="Pinterest Total Views"
+            value={values.pinterestTotalViews}
+            onChange={handleChange}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revoTTViews"
+            label="REVO Twitter Views"
+            value={values.revoTTViews}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revoTTLikes"
+            label="REVO Twitter Likes"
+            value={values.revoTTLikes}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revoTTComments"
+            label="REVO Twitter Comments"
+            value={values.revoTTComments}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revoTTSaves"
+            label="REVO Twitter Saves"
+            value={values.revoTTSaves}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revoTTShares"
+            label="REVO Twitter Shares"
+            value={values.revoTTShares}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revoIGTotalViews"
+            label="REVO Instagram Views"
+            value={values.revoIGTotalViews}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revoIGTotalShares"
+            label="REVO Instagram Total Shares"
+            value={values.revoIGTotalShares}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revoIGTotalComments"
+            label="REVO Instagram Total Comments"
+            value={values.revoIGTotalComments}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revoIGTotalLikes"
+            label="REVO Instagram Total Likes"
+            value={values.revoIGTotalLikes}
+            onChange={handleChange}
+          />
+        </Grid>
+
+        
+      </Grid>
+
+      <Grid container spacing={2} sx={{ py: 2 }}>
+        <Grid size={{ xs: 12 }}>
+          <Stack direction="row" justifyContent="flex-end">
+            <Button size="small" variant="contained" color="primary" disabled={loading} type="submit">
+              Save
+            </Button>
+          </Stack>
         </Grid>
       </Grid>
     </form>
