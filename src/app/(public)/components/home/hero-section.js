@@ -1,17 +1,15 @@
 'use client';
 
+import { Box, IconButton, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { toast } from 'sonner';
-import { mutate } from 'swr';
 
+import { FadeIn } from '/src/components/animation/fade-in';
 import { useSettings } from '/src/hooks/use-settings';
 import useAuth from '/src/hooks/useAuth';
-import { FadeIn } from '/src/components/animation/fade-in';
 
 import { Iconify } from '../../../../components/iconify/iconify';
 import { MediaUploader } from '../../../../components/uploaders/media-uploader';
-import { MediaUploaderTrigger } from '../../../../components/uploaders/media-uploader-trigger';
 import { updateHomepageContentAsync } from '../../../../lib/common.actions';
 import { useHomepageContent } from '../../../../services/home/useHomepageContent';
 import { getMediaTypeFromUrl } from '../../../../utils/get-media-type';
@@ -23,7 +21,8 @@ export const HeroSection = () => {
   const { isLogin, userInfo } = useAuth();
   const { data, error, isLoading, mutate } = useHomepageContent();
 
-  const isImageEditable = isLogin && userInfo?.role.toLowerCase() === 'super_admin';
+  // const isImageEditable = isLogin && userInfo?.role.toLowerCase() === 'super_admin';
+  const isImageEditable = isLogin;
 
   const [boxSize, setBoxSize] = useState(isMobile ? 100 : 50);
   const [boxHeight, setBoxHeight] = useState(isMobile ? 100 : 60);
@@ -93,6 +92,7 @@ export const HeroSection = () => {
 
   return (
     <>
+      {/* first part */}
       <Box
         sx={{
           position: 'relative',
@@ -101,6 +101,21 @@ export const HeroSection = () => {
           overflow: 'hidden',
         }}
       >
+        {isImageEditable && (
+          <IconButton
+            onClick={() => setUploadImage({ open: true, order: 1 })}
+            sx={{
+              position: 'absolute',
+              top: 16,
+              right: 16,
+              zIndex: 10,
+              bgcolor: 'rgba(255, 255, 255, 0.7)',
+              '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' },
+            }}
+          >
+            <Iconify icon="iconamoon:edit-thin" sx={{ color: 'var(--mui-palette-neutral-900)' }} />
+          </IconButton>
+        )}
         {order1?.type === 'IMAGE' ? (
           // Image background
           <Box
@@ -163,12 +178,6 @@ export const HeroSection = () => {
               Driven by the art of storytelling gg, we collaborate with brands, creators, and agencies to craft
               compelling visuals that captivate audiences, evoke emotion, and leave a lasting impact.
             </Typography>
-
-            {isImageEditable && (
-              <Button onClick={() => setUploadImage({ open: true, order: 1 })}>
-                <Iconify icon="iconamoon:edit-thin" />
-              </Button>
-            )}
           </FadeIn>
         </Box>
       </Box>
@@ -208,7 +217,7 @@ export const HeroSection = () => {
           </Box>
         </FadeIn>
 
-        {/* Video Container */}
+        {/* Video/Image Container */}
         <Box
           sx={{
             position: { xs: 'relative', md: 'absolute' },
@@ -224,20 +233,50 @@ export const HeroSection = () => {
             order: { xs: 1, md: 2 },
           }}
         >
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              objectPosition: 'top center',
-            }}
-          >
-            <source src="https://cdn.wolfstudios.ai/homepage/Sexy+Hair+Reel.mp4" type="video/mp4" />
-          </video>
+          {isImageEditable && (
+            <IconButton
+              onClick={() => setUploadImage({ open: true, order: 2 })}
+              sx={{
+                position: 'absolute',
+                top: 16,
+                right: 16,
+                zIndex: 10,
+                bgcolor: 'rgba(255, 255, 255, 0.7)',
+                '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' },
+              }}
+            >
+              <Iconify icon="iconamoon:edit-thin" sx={{ color: 'var(--mui-palette-neutral-900)' }} />
+            </IconButton>
+          )}
+          {order2?.type === 'IMAGE' ? (
+            // Image background
+            <Box
+              component="img"
+              src={order2?.url}
+              sx={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'top center',
+              }}
+            />
+          ) : (
+            // Video background
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'top center',
+              }}
+            >
+              <source src={order2?.url || 'https://cdn.wolfstudios.ai/homepage/Sexy+Hair+Reel.mp4'} type="video/mp4" />
+            </video>
+          )}
         </Box>
       </Stack>
 
