@@ -1,5 +1,5 @@
 'use client';
-
+import React from 'react';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 export const CustomSelect = ({ value, label, onChange, options, error, ...props }) => {

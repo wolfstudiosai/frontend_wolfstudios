@@ -1,7 +1,7 @@
 'use client';
 
-import { Box, Button } from '@mui/material';
 import React from 'react';
+import { Box, Button } from '@mui/material';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
@@ -59,7 +59,7 @@ export const CampaignView = () => {
 
           {filters.VIEW === 'grid' ? (
             <Box>
-              <CampaignGridView loading={isLoading} data={data} fetchList={mutate} />
+              <CampaignGridView data={data} fetchList={mutate} />
 
               {hasMore && (
                 <Box textAlign="center" mt={2}>
@@ -71,7 +71,7 @@ export const CampaignView = () => {
             </Box>
           ) : (
             <Box>
-              <CampaignTabView data={data} />
+              <CampaignTabView />
             </Box>
           )}
         </Box>
@@ -82,7 +82,7 @@ export const CampaignView = () => {
               setSelectedItemId(null);
               setOpenPanel(false);
             }}
-            fetchList={refresh}
+            fetchList={mutate}
             id={selectedItemId}
             open={openPanel}
             view="ADD"

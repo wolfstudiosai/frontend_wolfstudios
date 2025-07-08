@@ -1,8 +1,8 @@
 'use client';
 
+import React from 'react';
 import { Box, Button, Chip, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import React from 'react';
 
 import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
@@ -14,18 +14,19 @@ import { VideoLinkField } from '/src/components/formFields/video-link-field';
 import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-iframe-dialog';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
-import { getContentListAsync } from '../../../(private)/all-content/_lib/all-content.actions';
+import { campaignProgressStatus } from '../_lib/campaign.constants';
 import {
   getProductListAsync,
   getRetailPartnerListAsync,
   getStakeHolderListAsync,
 } from '../../../../lib/common.actions';
+import { getContentListAsync } from '../../../(private)/all-content/_lib/all-content.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getProductionListAsync } from '../../production/_lib/production.action';
-import { campaignProgressStatus } from '../_lib/campaign.constants';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
 
-export const CampaignForm = ({ handleChange, values, errors, loading, setFieldValue, onSubmit }) => {
+export const CampaignForm = ({ handleChange, values, errors, setFieldValue, onSubmit, loading }) => {
+
   // *********************States*********************************
   const [mediaPreview, setMediaPreview] = React.useState(null);
   const [contentOptions, setContentOptions] = React.useState([]);
@@ -107,11 +108,11 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
       <form onSubmit={onSubmit}>
         <Grid container spacing={2} pb={2}>
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} />
+            <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} error={undefined} />
             <ErrorMessage error={errors.name} />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField name="client" label="Client" value={values.client} onChange={handleChange} />
+            <CustomTextField name="client" label="Client" value={values.client} onChange={handleChange} error={undefined} />
             <ErrorMessage error={errors.client} />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
@@ -135,7 +136,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
             <ErrorMessage error={errors.endDate} />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField name="budget" label="Budget" value={values.budget} onChange={handleChange} type="number" />
+            <CustomTextField name="budget" label="Budget" value={values.budget} onChange={handleChange} type="number" error={undefined} />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
@@ -143,8 +144,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               label="Total Expense"
               value={values.totalExpense}
               onChange={handleChange}
-              type="number"
-            />
+              type="number" error={undefined}            />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
@@ -152,8 +152,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               label="Product Expense"
               value={values.productExpense}
               onChange={handleChange}
-              type="number"
-            />
+              type="number" error={undefined}            />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
@@ -161,8 +160,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               label="Total Content Engagement"
               value={values.totalContentEngagement}
               onChange={handleChange}
-              type="number"
-            />
+              type="number" error={undefined}            />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField
@@ -170,8 +168,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               label="Campaign ROI"
               value={values.campaignROI}
               onChange={handleChange}
-              type="number"
-            />
+              type="number" error={undefined}            />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomSelect
@@ -179,8 +176,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               label="Status"
               value={values.campaignStatus}
               onChange={(value) => setFieldValue('campaignStatus', value)}
-              options={campaignProgressStatus}
-            />
+              options={campaignProgressStatus} error={undefined}            />
             <ErrorMessage error={errors.campaignStatus} />
           </Grid>
 
@@ -202,8 +198,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                     value: item.id,
                   })) || []
                 );
-              }}
-            />
+              } } placeholder={undefined} onFocus={undefined} error={undefined}            />
           </Grid>
 
           {/* Stakeholder */}
@@ -223,8 +218,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                     value: item.id,
                   })) || []
                 );
-              }}
-            />
+              } } placeholder={undefined} onFocus={undefined} error={undefined}            />
           </Grid>
 
           {/* Proposed Partner */}
@@ -245,8 +239,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                     value: item.id,
                   })) || []
                 );
-              }}
-            />
+              } } placeholder={undefined} onFocus={undefined} error={undefined}            />
           </Grid>
 
           {/* Retail Partner */}
@@ -266,8 +259,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                     value: item.id,
                   })) || []
                 );
-              }}
-            />
+              } } placeholder={undefined} onFocus={undefined} error={undefined}            />
           </Grid>
 
           {/* Retail Partner 2 */}
@@ -287,8 +279,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                     value: item.id,
                   })) || []
                 );
-              }}
-            />
+              } } placeholder={undefined} onFocus={undefined} error={undefined}            />
           </Grid>
 
           {/* Retail Partner 3 */}
@@ -308,8 +299,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                     value: item.id,
                   })) || []
                 );
-              }}
-            />
+              } } placeholder={undefined} onFocus={undefined} error={undefined}            />
           </Grid>
 
           {/* Contributed Partner */}
@@ -330,8 +320,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                     value: item.id,
                   })) || []
                 );
-              }}
-            />
+              } } placeholder={undefined} onFocus={undefined} error={undefined}            />
           </Grid>
 
           {/* Space */}
@@ -352,8 +341,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                     value: item.id,
                   })) || []
                 );
-              }}
-            />
+              } } placeholder={undefined} onFocus={undefined} error={undefined}            />
           </Grid>
 
           {/* Production HQ */}
@@ -374,8 +362,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                     value: item.id,
                   })) || []
                 );
-              }}
-            />
+              } } placeholder={undefined} onFocus={undefined} error={undefined}            />
           </Grid>
 
           {/* Product */}
@@ -395,8 +382,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                     value: item.id,
                   })) || []
                 );
-              }}
-            />
+              } } placeholder={undefined} onFocus={undefined} error={undefined}            />
           </Grid>
 
           {/* <Grid size={{ xs: 12, md: 6 }}>
@@ -450,7 +436,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
             <CustomTextField name="campaignGoals" label="Goals" value={values.campaignGoals} onChange={handleChange} />
           </Grid> */}
           <Grid size={{ xs: 12 }}>
-            <CustomTextField name="notes" label="Notes " value={values.notes} onChange={handleChange} />
+            <CustomTextField name="notes" label="Notes " value={values.notes} onChange={handleChange} error={undefined} />
             <ErrorMessage error={errors.notes} />
           </Grid>
           <Grid size={{ xs: 12 }}>
@@ -458,8 +444,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               name="guidelines"
               label="Guidelines (Use commas to separate notes)"
               value={values.guidelines}
-              onChange={handleChange}
-            />
+              onChange={handleChange} error={undefined}            />
             <ErrorMessage error={errors.guidelines} />
           </Grid>
           <Grid size={{ xs: 12 }}>
@@ -469,8 +454,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               value={values.campaignDescription}
               onChange={handleChange}
               multiline
-              rows={4}
-            />
+              rows={4} error={undefined}            />
             <ErrorMessage error={errors.campaignDescription} />
           </Grid>
           <Grid size={{ xs: 12 }}>
@@ -490,8 +474,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               label="Campaign Image"
               onAdd={() => setOpenCampaignImage(true)}
               onDelete={(filteredUrls) => setFieldValue('campaignImage', filteredUrls)}
-              folderName="campaigns"
-            />
+              folderName="campaigns" hideImageUploader={undefined} hideVideoUploader={undefined}            />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <MediaUploaderTrigger
@@ -502,8 +485,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               label="Inspiration Images"
               onAdd={() => setOpenImageUploadDialog(true)}
               onDelete={(filteredUrls) => setFieldValue('imageInspirationGallery', filteredUrls)}
-              folderName="campaigns"
-            />
+              folderName="campaigns" hideImageUploader={undefined} hideVideoUploader={undefined}            />
           </Grid>
           <Grid size={{ xs: 12 }}>
             <Stack direction="row" justifyContent="flex-end">
@@ -515,7 +497,7 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
         </Grid>
       </form>
 
-      {mediaPreview && <MediaIframeDialog open={true} data={mediaPreview} onClose={() => setMediaPreview(null)} />}
+      {mediaPreview && <MediaIframeDialog open={true} data={mediaPreview} onClose={() => setMediaPreview(null)} onComplete={undefined} />}
     </>
   );
 };
