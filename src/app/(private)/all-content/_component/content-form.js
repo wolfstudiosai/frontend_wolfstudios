@@ -10,6 +10,7 @@ import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
+import { CustomMultipleInputFieldV2 } from '../../../../components/formFields/custom-multiple-input-field-v2';
 import {
   getCityListAsync,
   getProductListAsync,
@@ -211,7 +212,12 @@ export const ContentForm = ({ formikProps }) => {
           <CustomTextField name="igPost2" label="Instagram Post 2" value={values.igPost2} onChange={handleChange} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField name="platform" label="Platform" value={values.platform} onChange={handleChange} />
+          <CustomMultipleInputFieldV2
+            name={'platform'}
+            label="Platform"
+            value={values?.platform}
+            setFieldValue={setFieldValue}
+          />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField

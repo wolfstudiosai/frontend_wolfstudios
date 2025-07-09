@@ -1,12 +1,11 @@
 'use client';
 
-import { Box, Button, Chip, Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import React from 'react';
 
 import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
-import { CustomMultipleInputField } from '/src/components/formFields/custom-mulitple-input-field';
 import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
@@ -458,7 +457,7 @@ export const CampaignForm = ({ handleChange, values, errors, setFieldValue, onSu
             </FormControl>
           </Grid> */}
 
-          <Grid size={{ xs: 12 }}>
+          {/* <Grid size={{ xs: 12 }}>
             <CustomMultipleInputField
               name="currentGoals"
               label="Goals"
@@ -482,17 +481,7 @@ export const CampaignForm = ({ handleChange, values, errors, setFieldValue, onSu
                 />
               ))}
             </Box>
-            {/* {errors.tags && (
-              <Typography
-                color="error"
-                variant="caption"
-                display="block"
-                sx={{ mt: 1 }}
-              >
-                {errors.goals.message}
-              </Typography>
-            )} */}
-          </Grid>
+          </Grid> */}
 
           {/* <Grid size={{ xs: 12 }}>
             <CustomTextField name="campaignGoals" label="Goals" value={values.campaignGoals} onChange={handleChange} />

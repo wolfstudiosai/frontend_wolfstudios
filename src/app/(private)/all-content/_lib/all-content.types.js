@@ -16,7 +16,7 @@ export const defaultContent = (data) => {
     igPost4: data?.igPost4 || '',
     igPost3: data?.igPost3 || '',
     igPost2: data?.igPost2 || '',
-    platform: Array.isArray(data?.platform) ? data.platform.join(', ') : data?.platform || '',
+    platform: data?.platform || [],
 
     partnerIGLink: data?.partnerIGLink || '',
     partnerTikTokLink: data?.partnerTikTokLink || '',
