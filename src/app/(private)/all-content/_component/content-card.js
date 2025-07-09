@@ -1,5 +1,5 @@
-import React from 'react';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
+import React from 'react';
 
 import { IconWithText } from '/src/components/utils/icon-text';
 
@@ -47,7 +47,6 @@ export const ContentCard = ({ content, fetchList }) => {
       <ManageContentRightPanel
         fetchList={fetchList}
         onClose={() => setOpenRightPanel(false)}
-        id={openRightPanel?.id}
         open={openRightPanel ? true : false}
         data={content}
         view={'QUICK'}

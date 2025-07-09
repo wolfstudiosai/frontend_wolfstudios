@@ -71,16 +71,16 @@ export const AllContentView = () => {
           fetchList={fetchList}
         />
       )}
-      {/* <ManageContentRightPanel
+      <ManageContentRightPanel
         fetchList={mutate}
         onClose={() => {
           setSelectedItemId(null);
           setOpenPanel(false);
         }}
-        id={selectedItemId}
         open={openPanel}
+        data={defaultContent()}
         view="ADD"
-      /> */}
+      />
     </PageContainer>
   );
 };

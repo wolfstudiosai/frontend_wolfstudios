@@ -40,7 +40,7 @@ export const ContentForm = ({ formikProps }) => {
   // ********************* Formik *******************************
   const { values, errors, handleChange, setFieldValue, handleSubmit, setValues } = formikProps;
 
-  console.log(values, 'values from content form.....');
+  console.log(values, 'values....');
 
   // --------------- Fetch Prerequisites Data -------------------
   const fetchFunctionsMap = {
@@ -102,7 +102,7 @@ export const ContentForm = ({ formikProps }) => {
       >
         <Grid size={12}>
           <Typography variant="h5" sx={{ mb: 2, color: 'primary.main' }}>
-            Required Information
+            General Information
           </Typography>
         </Grid>
         <Grid size={{ xs: 12 }}>
@@ -130,7 +130,6 @@ export const ContentForm = ({ formikProps }) => {
             value={values.pinAccountsUsed}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.pinAccountsUsed} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -139,7 +138,6 @@ export const ContentForm = ({ formikProps }) => {
             value={values.googleDriveFiles}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.googleDriveFiles} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -148,7 +146,6 @@ export const ContentForm = ({ formikProps }) => {
             value={values.playbookLink}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.playbookLink} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -157,7 +154,6 @@ export const ContentForm = ({ formikProps }) => {
             value={values.partnerIGLink}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.partnerIGLink} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -166,12 +162,10 @@ export const ContentForm = ({ formikProps }) => {
             value={values.uppromoteConversion}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.uppromoteConversion} />
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="assetStatus" label="Asset Status" value={values.assetStatus} onChange={handleChange} />
-          <ErrorMessage error={errors.assetStatus} />
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
@@ -182,7 +176,6 @@ export const ContentForm = ({ formikProps }) => {
             format="YYYY-MM-DD"
             onChange={(value) => setFieldValue('monthUploaded', value)}
           />
-          <ErrorMessage error={errors.monthUploaded} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomSelect
@@ -195,7 +188,6 @@ export const ContentForm = ({ formikProps }) => {
               { value: 'Not Posted', label: 'Not Posted' },
             ]}
           />
-          <ErrorMessage error={errors.revoInstagram} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomSelect
@@ -208,23 +200,18 @@ export const ContentForm = ({ formikProps }) => {
               { value: 'INACTIVE', label: 'Inactive' },
             ]}
           />
-          <ErrorMessage error={errors.creatorStatus} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="igPost4" label="Instagram Post 4" value={values.igPost4} onChange={handleChange} />
-          <ErrorMessage error={errors.igPost4} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="igPost3" label="Instagram Post 3" value={values.igPost3} onChange={handleChange} />
-          <ErrorMessage error={errors.igPost3} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="igPost2" label="Instagram Post 2" value={values.igPost2} onChange={handleChange} />
-          <ErrorMessage error={errors.igPost2} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="platform" label="Platform" value={values.platform} onChange={handleChange} />
-          <ErrorMessage error={errors.platform} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -233,7 +220,6 @@ export const ContentForm = ({ formikProps }) => {
             value={values.partnerTikTokLink}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.partnerTikTokLink} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -242,7 +228,6 @@ export const ContentForm = ({ formikProps }) => {
             value={values.ytAccountsUsed}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.ytAccountsUsed} />
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
@@ -252,11 +237,9 @@ export const ContentForm = ({ formikProps }) => {
             value={values.revoTikTok}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.revoTikTok} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="revoYoutube" label="REVO YouTube" value={values.revoYoutube} onChange={handleChange} />
-          <ErrorMessage error={errors.revoYoutube} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -265,7 +248,6 @@ export const ContentForm = ({ formikProps }) => {
             value={values.revoClubrevoYoutube}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.revoClubrevoYoutube} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -274,7 +256,6 @@ export const ContentForm = ({ formikProps }) => {
             value={values.clubREVOIGHandle}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.clubREVOIGHandle} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -283,7 +264,6 @@ export const ContentForm = ({ formikProps }) => {
             value={values.tiktokAccountsUsed}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.tiktokAccountsUsed} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -292,7 +272,6 @@ export const ContentForm = ({ formikProps }) => {
             value={values.partnerYTLink}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.partnerYTLink} />
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
@@ -302,11 +281,9 @@ export const ContentForm = ({ formikProps }) => {
             value={values.revoPinterest}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.revoPinterest} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="revoTwitter" label="REVO Twitter" value={values.revoTwitter} onChange={handleChange} />
-          <ErrorMessage error={errors.revoTwitter} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomSelect
@@ -319,7 +296,6 @@ export const ContentForm = ({ formikProps }) => {
               { value: 'Not Posted', label: 'Not Posted' },
             ]}
           />
-          <ErrorMessage error={errors.postingStatus} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomSelect
@@ -332,7 +308,6 @@ export const ContentForm = ({ formikProps }) => {
               { value: 'Noted', label: 'No' },
             ]}
           />
-          <ErrorMessage error={errors.igSocialSetsUsed} />
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
@@ -342,7 +317,6 @@ export const ContentForm = ({ formikProps }) => {
             value={values.postingQuality}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.postingQuality} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -352,7 +326,6 @@ export const ContentForm = ({ formikProps }) => {
             value={values.totalContributedEngagement}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.totalContributedEngagement} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -361,7 +334,6 @@ export const ContentForm = ({ formikProps }) => {
             value={values.ttDummyAccountsUsed}
             onChange={handleChange}
           />
-          <ErrorMessage error={errors.ttDummyAccountsUsed} />
         </Grid>
       </Grid>
 
@@ -626,8 +598,6 @@ export const ContentForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-
-        
       </Grid>
 
       <Grid container spacing={2} sx={{ py: 2 }}>

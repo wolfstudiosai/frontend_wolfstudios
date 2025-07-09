@@ -1,13 +1,11 @@
-import React from 'react';
 import Grid from '@mui/material/Grid2';
 
 import PageLoader from '/src/components/loaders/PageLoader';
 
 import { ContentCard } from './content-card';
-import { ManageContentRightPanel } from './manage-content-right-panel';
 
 export default function AllContentGridView({ data, loading, fetchList }) {
-  const [openRightPanel, setOpenRightPanel] = React.useState(null);
+  
   return (
     <PageLoader loading={loading} error={null}>
       <Grid container spacing={0.5}>
@@ -26,14 +24,7 @@ export default function AllContentGridView({ data, loading, fetchList }) {
           </Grid>
         ))}
       </Grid>
-      {/* <ManageContentRightPanel
-        view={'QUICK'}
-        width="70%"
-        open={openRightPanel ? true : false}
-        data={openRightPanel}
-        fetchList={fetchList}
-        onClose={() => setOpenRightPanel(false)}
-      /> */}
+     
     </PageLoader>
   );
 }

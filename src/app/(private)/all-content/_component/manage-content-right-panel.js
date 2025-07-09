@@ -26,44 +26,13 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
   const { isLogin } = useAuth();
   const router = useRouter();
   const [panelView, setPanelView] = React.useState(view);
-  // const [data, setData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
 
   const { values, errors, handleChange, setFieldValue, resetForm, setValues, handleSubmit } = useFormik({
-    initialValues: defaultContent(),
+    initialValues: defaultContent(data),
     validate: (values) => {
       const errors = {};
-      const requiredFields = [
-        'name',
-        'revoPinterest',
-        'pinAccountsUsed',
-        'postingQuality',
-        'googleDriveFiles',
-        'playbookLink',
-        'assetStatus',
-        'monthUploaded',
-        'revoInstagram',
-        'partnerIGLink',
-        'igSocialSetsUsed',
-        'revoTwitter',
-        'tiktokAccountsUsed',
-        'revoTikTok',
-        'partnerTikTokLink',
-        'ytAccountsUsed',
-        'partnerYTLink',
-        'revoClubrevoYoutube',
-        'revoYoutube',
-        'postingStatus',
-        'totalContributedEngagement',
-        'creatorStatus',
-        'igPost4',
-        'igPost2',
-        'igPost3',
-        'platform',
-        'clubREVOIGHandle',
-        'thumbnailImage',
-        'ttDummyAccountsUsed',
-      ];
+      const requiredFields = ['name', 'thumbnailImage'];
 
       requiredFields.forEach((field) => {
         if (
@@ -103,19 +72,22 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
           }
         }
 
+        const { id, ...rest } = finalData;
+        const createPayload = {
+          ...rest,
+          thumbnailImage: Array.isArray(finalData.thumbnailImage)
+            ? finalData.thumbnailImage[0]
+            : finalData.thumbnailImage,
+        };
+
         const res = data?.id
-          ? await updateContentAsync(id, {
+          ? await updateContentAsync(data?.id, {
               ...finalData,
               thumbnailImage: Array.isArray(finalData.thumbnailImage)
                 ? finalData.thumbnailImage[0]
                 : finalData.thumbnailImage,
             })
-          : await createContentAsync({
-              ...finalData,
-              thumbnailImage: Array.isArray(finalData.thumbnailImage)
-                ? finalData.thumbnailImage[0]
-                : finalData.thumbnailImage,
-            });
+          : await createContentAsync(createPayload);
         if (res.success) {
           onClose?.();
           resetForm();
@@ -144,34 +116,6 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
       console.error('Error:', error);
     }
   };
-
-  // console.log(id, 'id....');
-  // --------------- Fetch campaign during update -------------------
-  React.useEffect(() => {
-    const fetSingleData = async () => {
-      try {
-        const res = await getContentAsync(data?.id);
-
-        console.log(res, 'res....');
-        if (res?.success) {
-          const modifiedData = defaultContent(res?.data);
-          console.log(modifiedData, 'modifiedData');
-          setValues(defaultContent(res?.data));
-          // setData(res?.data?.data);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    if (data?.id && panelView === 'EDIT') {
-      fetSingleData();
-    }
-  }, [data?.id, panelView]);
-
-  console.log(data?.id, 'data?.id');
-  console.log(panelView, 'panelView');
-  console.log(values, 'values....');
 
   // *****************Action Buttons*******************************
   const actionButtons = (
