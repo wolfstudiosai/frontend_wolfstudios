@@ -4,6 +4,7 @@ import React from 'react';
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
+import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
 import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
@@ -37,6 +38,7 @@ export const ContentForm = ({ formikProps }) => {
     retailPartners: [],
   });
   const [openImageUploadDialog, setOpenImageUploadDialog] = React.useState(false);
+
   // ********************* Formik *******************************
   const { values, errors, handleChange, setFieldValue, handleSubmit, setValues } = formikProps;
 
@@ -64,7 +66,7 @@ export const ContentForm = ({ formikProps }) => {
         if (response?.success) {
           const options = response.data.map((item) => ({
             value: item.id,
-            label: item.Name,
+            label: item.name,
           }));
 
           setAutoCompleteOptions((prevState) => ({
@@ -84,8 +86,6 @@ export const ContentForm = ({ formikProps }) => {
 
     fetchData();
   }, [autocompleteFocus]);
-
-  console.log(values, ' content form values........');
 
   return (
     <form onSubmit={handleSubmit}>
@@ -211,7 +211,7 @@ export const ContentForm = ({ formikProps }) => {
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="igPost2" label="Instagram Post 2" value={values.igPost2} onChange={handleChange} />
         </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid size={{ xs: 12, md: 12 }}>
           <CustomMultipleInputFieldV2
             name={'platform'}
             label="Platform"
@@ -602,6 +602,99 @@ export const ContentForm = ({ formikProps }) => {
             label="REVO Instagram Total Likes"
             value={values.revoIGTotalLikes}
             onChange={handleChange}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 6 }}>
+          <CustomAutoCompleteV2
+            multiple
+            label="Campaign"
+            name="campaigns"
+            value={values.campaigns}
+            onChange={(_, value) => setFieldValue('campaigns', value)}
+            defaultOptions={autoCompleteOptions?.campaigns}
+            fetchOptions={async (debounceValue) => {
+              const paging = { page: 1, rowsPerPage: 20 };
+              const res = await getCampaignListAsync(paging, debounceValue);
+              return (
+                res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || []
+              );
+            }}
+            placeholder={undefined}
+            error={undefined}
+            onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <CustomAutoCompleteV2
+            multiple
+            label="Cities"
+            name="cities"
+            value={values.products}
+            onChange={(_, value) => setFieldValue('cities', value)}
+            defaultOptions={autoCompleteOptions?.cities}
+            fetchOptions={async (debounceValue) => {
+              const paging = { page: 1, rowsPerPage: 20 };
+              const res = await getCityListAsync(paging, debounceValue);
+              return (
+                res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || []
+              );
+            }}
+            placeholder={undefined}
+            error={undefined}
+            onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <CustomAutoCompleteV2
+            multiple
+            label="Products"
+            name="products"
+            value={values.products}
+            onChange={(_, value) => setFieldValue('products', value)}
+            defaultOptions={autoCompleteOptions?.products}
+            fetchOptions={async (debounceValue) => {
+              const paging = { page: 1, rowsPerPage: 20 };
+              const res = await getProductListAsync(paging, debounceValue);
+              return (
+                res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || []
+              );
+            }}
+            placeholder={undefined}
+            error={undefined}
+            onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <CustomAutoCompleteV2
+            multiple
+            label="Tags"
+            name="tags"
+            value={values.products}
+            onChange={(_, value) => setFieldValue('tags', value)}
+            defaultOptions={autoCompleteOptions?.products}
+            fetchOptions={async (debounceValue) => {
+              const paging = { page: 1, rowsPerPage: 20 };
+              const res = await getTagListAsync(paging, debounceValue);
+              return (
+                res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || []
+              );
+            }}
+            placeholder={undefined}
+            error={undefined}
+            onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
         </Grid>
       </Grid>
