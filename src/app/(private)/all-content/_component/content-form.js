@@ -633,7 +633,7 @@ export const ContentForm = ({ formikProps }) => {
             multiple
             label="Cities"
             name="cities"
-            value={values.products}
+            value={values.cities}
             onChange={(_, value) => setFieldValue('cities', value)}
             defaultOptions={autoCompleteOptions?.cities}
             fetchOptions={async (debounceValue) => {
@@ -679,12 +679,35 @@ export const ContentForm = ({ formikProps }) => {
             multiple
             label="Tags"
             name="tags"
-            value={values.products}
+            value={values.tags}
             onChange={(_, value) => setFieldValue('tags', value)}
-            defaultOptions={autoCompleteOptions?.products}
+            defaultOptions={autoCompleteOptions?.tags}
             fetchOptions={async (debounceValue) => {
               const paging = { page: 1, rowsPerPage: 20 };
               const res = await getTagListAsync(paging, debounceValue);
+              return (
+                res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || []
+              );
+            }}
+            placeholder={undefined}
+            error={undefined}
+            onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <CustomAutoCompleteV2
+            multiple
+            label="Stakeholders"
+            name="stakeholders"
+            value={values.stakeholders}
+            onChange={(_, value) => setFieldValue('stakeholders', value)}
+            defaultOptions={autoCompleteOptions?.stakeholders}
+            fetchOptions={async (debounceValue) => {
+              const paging = { page: 1, rowsPerPage: 20 };
+              const res = await getStakeHolderListAsync(paging, debounceValue);
               return (
                 res?.data?.map((item) => ({
                   label: item.name,

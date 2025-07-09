@@ -3,10 +3,14 @@ import { toast } from 'sonner';
 import { api } from '../utils/api';
 import { getSearchQuery } from '../utils/helper';
 
-export const getCityListAsync = async (queryParams) => {
+export const getCityListAsync = async (queryParams, searchValue) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    const res = await api.get(`/cities${searchQuery}`);
+    let url = `/cities${searchQuery}`;
+    if (searchValue) {
+      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`;
+    }
+    const res = await api.get(url);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     toast.error(error.message);
@@ -29,10 +33,14 @@ export const getProductListAsync = async (queryParams, searchValue) => {
   }
 };
 
-export const getTagListAsync = async (queryParams) => {
+export const getTagListAsync = async (queryParams, searchValue) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    const res = await api.get(`/tags${searchQuery}`);
+    let url = `/tags${searchQuery}`;
+    if (searchValue) {
+      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`;
+    }
+    const res = await api.get(url);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     toast.error(error.message);
