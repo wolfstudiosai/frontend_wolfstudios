@@ -14,10 +14,10 @@ import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignRightPanel } from './_components/campaign-right-panel';
 import { CampaignTabView } from './_components/campaign-tab-view';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
+import { defaultCampaign } from './_lib/campaign.types';
 
 export const CampaignView = () => {
   const [openPanel, setOpenPanel] = React.useState(false);
-  const [selectedItemId, setSelectedItemId] = React.useState(null);
   const [filters, setFilters] = React.useState({
     COL: 4,
     TAG: [],
@@ -78,13 +78,12 @@ export const CampaignView = () => {
 
         {openPanel && (
           <CampaignRightPanel
+            fetchList={mutate}
             onClose={() => {
-              setSelectedItemId(null);
               setOpenPanel(false);
             }}
-            fetchList={mutate}
-            id={selectedItemId}
             open={openPanel}
+            data={defaultCampaign()}
             view="ADD"
           />
         )}

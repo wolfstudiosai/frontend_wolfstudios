@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import { Box, Button } from '@mui/material';
+import React from 'react';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
@@ -10,13 +10,11 @@ import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import { paths } from '../../../paths';
 import { useContentList } from '../../../services/content/useContentList';
 import AllContentGridView from './_component/all-content-grid-view';
-import AllContentListView from './_component/all-content-list-view';
 import { ManageContentRightPanel } from './_component/manage-content-right-panel';
 import { defaultContent } from './_lib/all-content.types';
 
 export const AllContentView = () => {
   const [openPanel, setOpenPanel] = React.useState(false);
-  const [selectedItemId, setSelectedItemId] = React.useState(null);
   const [filters, setFilters] = React.useState({
     COL: 4,
     TAG: [],
@@ -50,31 +48,21 @@ export const AllContentView = () => {
         showAdd={true}
         setOpenPanel={setOpenPanel}
       />
-      {filters.VIEW === 'grid' ? (
-        <>
-          <AllContentGridView data={data} loading={isLoading} fetchList={mutate} />
-          {hasMore && (
-            <Box textAlign="center" mt={2}>
-              <Button size="small" variant="contained" onClick={loadMore} disabled={isLoadingMore}>
-                {isLoadingMore ? 'Loading...' : 'Show More'}
-              </Button>
-            </Box>
-          )}
-        </>
-      ) : (
-        <AllContentListView
-          setPagination={setPagination}
-          totalRecords={totalRecords}
-          data={data}
-          setData={setData}
-          loading={isLoading}
-          fetchList={fetchList}
-        />
-      )}
+
+      <>
+        <AllContentGridView data={data} loading={isLoading} fetchList={mutate} />
+        {hasMore && (
+          <Box textAlign="center" mt={2}>
+            <Button size="small" variant="contained" onClick={loadMore} disabled={isLoadingMore}>
+              {isLoadingMore ? 'Loading...' : 'Show More'}
+            </Button>
+          </Box>
+        )}
+      </>
+
       <ManageContentRightPanel
         fetchList={mutate}
         onClose={() => {
-          setSelectedItemId(null);
           setOpenPanel(false);
         }}
         open={openPanel}

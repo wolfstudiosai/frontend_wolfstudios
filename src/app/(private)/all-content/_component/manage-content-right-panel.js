@@ -135,14 +135,14 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
             </Button>
           )}
 
-          <IconButton
+          {panelView !== 'ADD' && <IconButton
             sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             as={Link}
             href={`/all-content/${data?.id}`}
             title="Analytics"
           >
             <Iconify icon="mdi:analytics" />
-          </IconButton>
+          </IconButton>}
 
           {panelView === 'QUICK' && (
             <DeleteConfirmationPasswordPopover

@@ -4,7 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Button, IconButton } from '@mui/material';
+import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
 
 import useAuth from '/src/hooks/useAuth';
@@ -25,16 +25,16 @@ import { CampaignForm } from './campaign-form';
 import { formConstants } from '/src/app/constants/form-constants';
 import { imageUploader } from '/src/utils/upload-file';
 
-export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK' }) => {
+export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUICK' }) => {
   const { isLogin } = useAuth();
   const router = useRouter();
+  const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
   const [panelView, setPanelView] = React.useState(view);
-  const [data, setData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
 
   // *********************Formik*********************************
   const { values, errors, handleChange, handleSubmit, setFieldValue, resetForm, setValues } = useFormik({
-    initialValues: defaultCampaign(),
+    initialValues: defaultCampaign(data),
     validate: (values) => {
       const errors = {};
       if (!values.name) {
@@ -117,7 +117,7 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
           }
         }
 
-        const res = id ? await updateCampaignAsync(id, finalData) : await createCampaignAsync(finalData);
+        const res = data?.id ? await updateCampaignAsync(data?.id, finalData) : await createCampaignAsync(finalData);
         if (res.success) {
           onClose?.();
           resetForm();
@@ -133,76 +133,76 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
     },
   });
 
-  // *************fetch single data***********************
-  React.useEffect(() => {
-    const getSingleData = async () => {
-      setLoading(true);
-      try {
-        const response = await getCampaignAsync(id);
-        if (response.data) {
-          setData(response.data);
-          setValues(defaultCampaign(response.data));
-        }
-      } catch (error) {
-        console.error('Error fetching partner data:', error);
-        return null;
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      getSingleData();
-    }
-  }, [id]);
-
   const handleDelete = async () => {
     onClose?.();
     fetchList?.();
-    router.refresh();
   };
 
+  const handleFeatured = async (featured) => {
+    try {
+      setIsFeatured(featured);
+      await updateCampaignAsync(data?.id, { ...data, isFeatured: featured });
+      fetchList();
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
   // *****************Action Buttons*******************************
   const actionButtons = (
     <>
       {isLogin && (
         <>
-          {panelView === 'EDIT' && id ? (
+          {panelView === 'EDIT' && data?.id ? (
             <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
               <Iconify icon="solar:eye-broken" />
             </IconButton>
           ) : (
-            id && (
+            data?.id && (
               <IconButton onClick={() => setPanelView('EDIT')} title="Quick">
                 <Iconify icon="mynaui:edit-one" />
               </IconButton>
             )
           )}
 
-          {panelView === 'EDIT' && (
-            <Button size="small" variant="contained" color="primary" onClick={handleSubmit} disabled={loading}>
+          {panelView !== 'QUICK' && (
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
               Save
             </Button>
           )}
 
+          {panelView !== 'ADD' && (
+            <IconButton
+              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              as={Link}
+              href={`/campaign/${data?.id}`}
+              title="Analytics"
+            >
+              <Iconify icon="mdi:analytics" />
+            </IconButton>
+          )}
+
           {panelView === 'QUICK' && (
-            <>
-              <IconButton
-                as={Link}
-                href={`/campaign/${data?.id}`}
-                sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                title="Analytics"
-              >
-                <Iconify icon="mdi:analytics" />
-              </IconButton>
-              <DeleteConfirmationPasswordPopover
-                id={data?.id}
-                title="Are you sure you want to delete?"
-                deleteFn={deleteCampaignAsync}
-                passwordInput
-                onDelete={handleDelete}
-              />
-            </>
+            <DeleteConfirmationPasswordPopover
+              id={data?.id}
+              title="Are you sure you want to delete?"
+              deleteFn={deleteCampaignAsync}
+              passwordInput
+              onDelete={handleDelete}
+            />
+          )}
+
+          {panelView !== 'ADD' && (
+            <FormControlLabel
+              control={
+                <Switch
+                  size="small"
+                  checked={isFeatured}
+                  onChange={(e) => handleFeatured(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label="Featured"
+            />
           )}
         </>
       )}
@@ -211,20 +211,11 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-      <PageLoader loading={loading}>
-        {panelView === 'QUICK' ? (
-          <CampaignQuickView data={data} />
-        ) : (
-          <CampaignForm
-            handleChange={handleChange}
-            values={values}
-            errors={errors}
-            setFieldValue={setFieldValue}
-            onSubmit={handleSubmit}
-            loading={false}
-          />
-        )}
-      </PageLoader>
+      {panelView === 'QUICK' ? (
+        <CampaignQuickView data={data} isEdit={false} />
+      ) : (
+        <CampaignForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />
+      )}
     </DrawerContainer>
   );
 };

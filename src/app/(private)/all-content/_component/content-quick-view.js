@@ -62,8 +62,6 @@ const fieldConfig = {
 };
 
 export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
-  console.log(data, 'data from quick view....');
-
   const [comments, setComments] = useState([
     {
       id: 1,
