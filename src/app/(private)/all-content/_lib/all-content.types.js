@@ -2,7 +2,7 @@ export const defaultContent = (data) => {
   const defaultData = {
     id: data?.id || null,
     name: data?.name || '',
-    thumbnailImage: typeof data?.thumbnailImage === 'string' ? [data.thumbnailImage] : [''],
+    thumbnailImage: typeof data?.thumbnailImage === 'string' ? [data.thumbnailImage] : null,
     pinAccountsUsed: data?.pinAccountsUsed || '',
 
     googleDriveFiles: data?.googleDriveFiles || '',

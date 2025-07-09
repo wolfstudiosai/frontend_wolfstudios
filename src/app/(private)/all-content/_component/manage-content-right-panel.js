@@ -137,7 +137,7 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
             )
           )}
 
-          {panelView === 'EDIT' && (
+          {panelView !== 'QUICK' && (
             <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
               Save
             </Button>
