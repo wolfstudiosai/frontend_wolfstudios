@@ -1,8 +1,8 @@
 'use client';
 
+import React from 'react';
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import React from 'react';
 
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
 import { CustomSelect } from '/src/components/formFields/custom-select';
@@ -10,8 +10,6 @@ import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
-import { getCampaignListAsync } from '../../../(public)/campaign/_lib/campaign.actions';
-import { getPartnerListAsync } from '../../../(public)/partner/_lib/partner.actions';
 import {
   getCityListAsync,
   getProductListAsync,
@@ -19,6 +17,8 @@ import {
   getStakeHolderListAsync,
   getTagListAsync,
 } from '../../../../lib/common.actions';
+import { getCampaignListAsync } from '../../../(public)/campaign/_lib/campaign.actions';
+import { getPartnerListAsync } from '../../../(public)/partner/_lib/partner.actions';
 
 export const ContentForm = ({ formikProps }) => {
   const [autocompleteFocus, setAutocompleteFocus] = React.useState({
@@ -38,9 +38,6 @@ export const ContentForm = ({ formikProps }) => {
   const [openImageUploadDialog, setOpenImageUploadDialog] = React.useState(false);
   // ********************* Formik *******************************
   const { values, errors, handleChange, setFieldValue, handleSubmit, setValues } = formikProps;
-
-
-  console.log('values from content form: ', values);
 
   // --------------- Fetch Prerequisites Data -------------------
   const fetchFunctionsMap = {
@@ -87,6 +84,8 @@ export const ContentForm = ({ formikProps }) => {
     fetchData();
   }, [autocompleteFocus]);
 
+  console.log(values, ' content form values........');
+
   return (
     <form onSubmit={handleSubmit}>
       <Grid
@@ -106,10 +105,6 @@ export const ContentForm = ({ formikProps }) => {
           </Typography>
         </Grid>
         <Grid size={{ xs: 12 }}>
-          <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} />
-          <ErrorMessage error={errors.name} />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
           <MediaUploaderTrigger
             open={openImageUploadDialog}
             onClose={() => setOpenImageUploadDialog(false)}
@@ -122,6 +117,11 @@ export const ContentForm = ({ formikProps }) => {
             hideVideoUploader
           />
           <ErrorMessage error={errors.thumbnailImage} />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 8 }}>
+          <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} />
+          <ErrorMessage error={errors.name} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField

@@ -143,7 +143,7 @@ export const MediaUploaderTrigger = ({
       <MediaUploader
         open={open}
         onClose={onClose}
-        onSave={(paths) => onSave([...value, ...paths])}
+        onSave={(paths) => (isMultiple ? onSave([...value, ...paths]) : onSave([...paths]))}
         multiple={isMultiple}
         hideImageUploader={hideImageUploader}
         hideVideoUploader={hideVideoUploader}
