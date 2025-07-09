@@ -1,20 +1,16 @@
 'use client';
 
-import { Button, IconButton } from '@mui/material';
-import { useFormik } from 'formik';
-import Link from 'next/link';
 import React from 'react';
+import Link from 'next/link';
+import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
+import { useFormik } from 'formik';
 
+import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import { Iconify } from '/src/components/iconify/iconify';
-import useAuth from '/src/hooks/useAuth';
 
-import {
-  createContentAsync,
-  deleteContentAsync,
-  updateContentAsync
-} from '../_lib/all-content.actions';
+import { createContentAsync, deleteContentAsync, updateContentAsync } from '../_lib/all-content.actions';
 import { defaultContent } from '../_lib/all-content.types';
 import { ContentForm } from './content-form';
 import { ContentQuickView } from './content-quick-view';
@@ -22,6 +18,7 @@ import { formConstants } from '/src/app/constants/form-constants';
 
 export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view = 'QUICK' }) => {
   const { isLogin } = useAuth();
+  const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
   const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
 
@@ -107,18 +104,13 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
   const handleFeatured = async (featured) => {
     try {
       setIsFeatured(featured);
-      await updateContentAsync({ ...data, isFeatured: featured });
+      await updateContentAsync(data?.id, { ...data, isFeatured: featured });
       fetchList();
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
-  React.useEffect(() => {
-    if(data){
-      setValues(defaultContent(data));
-    }
-  }, [data]);
 
   // *****************Action Buttons*******************************
   const actionButtons = (
@@ -161,10 +153,30 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
               onDelete={handleDelete}
             />
           )}
+
+          {panelView !== 'ADD' && (
+            <FormControlLabel
+              control={
+                <Switch
+                  size="small"
+                  checked={isFeatured}
+                  onChange={(e) => handleFeatured(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label="Featured"
+            />
+          )}
         </>
       )}
     </>
   );
+
+  React.useEffect(() => {
+    if (data) {
+      setValues(defaultContent(data));
+    }
+  }, [data]);
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
       {panelView === 'QUICK' ? (
