@@ -1,21 +1,19 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Button, IconButton } from '@mui/material';
 import { useFormik } from 'formik';
+import Link from 'next/link';
+import React from 'react';
 
-import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import { Iconify } from '/src/components/iconify/iconify';
+import useAuth from '/src/hooks/useAuth';
 
 import {
   createContentAsync,
   deleteContentAsync,
-  getContentAsync,
-  updateContentAsync,
+  updateContentAsync
 } from '../_lib/all-content.actions';
 import { defaultContent } from '../_lib/all-content.types';
 import { ContentForm } from './content-form';
@@ -24,7 +22,6 @@ import { formConstants } from '/src/app/constants/form-constants';
 
 export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view = 'QUICK' }) => {
   const { isLogin } = useAuth();
-  const router = useRouter();
   const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
 
@@ -91,7 +88,7 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
         if (res.success) {
           onClose?.();
           resetForm();
-          fetchList();
+          await fetchList();
         } else {
           console.error('Operation failed:', res.message);
         }
@@ -116,6 +113,12 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
       console.error('Error:', error);
     }
   };
+
+  React.useEffect(() => {
+    if(data){
+      setValues(defaultContent(data));
+    }
+  }, [data]);
 
   // *****************Action Buttons*******************************
   const actionButtons = (
@@ -167,7 +170,7 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
       {panelView === 'QUICK' ? (
         <ContentQuickView data={data} isEdit={false} />
       ) : (
-        <ContentForm formikProps={{ values, setValues, errors, handleChange, setFieldValue, handleSubmit }} />
+        <ContentForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />
       )}
     </DrawerContainer>
   );

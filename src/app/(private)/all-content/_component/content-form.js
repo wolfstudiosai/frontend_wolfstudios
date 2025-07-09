@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import { Button, Stack, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import React from 'react';
 
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
 import { CustomSelect } from '/src/components/formFields/custom-select';
@@ -10,6 +10,8 @@ import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
+import { getCampaignListAsync } from '../../../(public)/campaign/_lib/campaign.actions';
+import { getPartnerListAsync } from '../../../(public)/partner/_lib/partner.actions';
 import {
   getCityListAsync,
   getProductListAsync,
@@ -17,16 +19,13 @@ import {
   getStakeHolderListAsync,
   getTagListAsync,
 } from '../../../../lib/common.actions';
-import { getCampaignListAsync } from '../../../(public)/campaign/_lib/campaign.actions';
-import { getPartnerListAsync } from '../../../(public)/partner/_lib/partner.actions';
 
 export const ContentForm = ({ formikProps }) => {
-  const [loading, setLoading] = React.useState(false);
   const [autocompleteFocus, setAutocompleteFocus] = React.useState({
     currentItem: '',
     prevItems: [],
   });
-  const [thumbnail, setThumbnail] = React.useState('');
+
   const [autoCompleteOptions, setAutoCompleteOptions] = React.useState({
     campaigns: [],
     cities: [],
@@ -40,7 +39,8 @@ export const ContentForm = ({ formikProps }) => {
   // ********************* Formik *******************************
   const { values, errors, handleChange, setFieldValue, handleSubmit, setValues } = formikProps;
 
-  console.log(values, 'values....');
+
+  console.log('values from content form: ', values);
 
   // --------------- Fetch Prerequisites Data -------------------
   const fetchFunctionsMap = {
@@ -597,16 +597,6 @@ export const ContentForm = ({ formikProps }) => {
             value={values.revoIGTotalLikes}
             onChange={handleChange}
           />
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={2} sx={{ py: 2 }}>
-        <Grid size={{ xs: 12 }}>
-          <Stack direction="row" justifyContent="flex-end">
-            <Button size="small" variant="contained" color="primary" disabled={loading} type="submit">
-              Save
-            </Button>
-          </Stack>
         </Grid>
       </Grid>
     </form>

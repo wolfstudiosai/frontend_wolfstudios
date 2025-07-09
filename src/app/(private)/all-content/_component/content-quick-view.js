@@ -62,7 +62,8 @@ const fieldConfig = {
 };
 
 export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
-  
+  console.log(data, 'data from quick view....');
+
   const [comments, setComments] = useState([
     {
       id: 1,
@@ -106,7 +107,7 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
     PartnerIGTotalComments: data?.partnerIGTotalComments,
     PartnerIGTotalShares: data?.partnerIGTotalShares,
     PartnerIGTotalViews: data?.partnerIGTotalViews,
-    
+
     RevoTwitter: data?.revoTwitter,
     RevoTiktok: data?.revoTikTok,
     RevoTTViews: data?.revoTTViews,
