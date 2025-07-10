@@ -1,26 +1,23 @@
-// @ts-nocheck
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React from 'react';
 
-import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { Iconify } from '/src/components/iconify/iconify';
-import PageLoader from '/src/components/loaders/PageLoader';
+import useAuth from '/src/hooks/useAuth';
 
+import { DrawerContainer } from '../../../../components/drawer/drawer';
 import { CampaignQuickView } from '../_components/campaign-quick-view';
 import {
   createCampaignAsync,
   deleteCampaignAsync,
-  getCampaignAsync,
-  updateCampaignAsync,
+  updateCampaignAsync
 } from '../_lib/campaign.actions';
 import { defaultCampaign } from '../_lib/campaign.types';
-import { DrawerContainer } from '../../../../components/drawer/drawer';
 import { CampaignForm } from './campaign-form';
 import { formConstants } from '/src/app/constants/form-constants';
 import { imageUploader } from '/src/utils/upload-file';

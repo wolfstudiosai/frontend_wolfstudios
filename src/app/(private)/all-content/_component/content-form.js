@@ -115,7 +115,9 @@ export const ContentForm = ({ formikProps }) => {
             onAdd={() => setOpenImageUploadDialog(true)}
             onDelete={(filteredUrls) => setFieldValue('thumbnailImage', filteredUrls)}
             folderName="campaigns"
+            isMultiple={false}
             hideVideoUploader
+            hideImageUploader={false}
           />
           <ErrorMessage error={errors.thumbnailImage} />
         </Grid>

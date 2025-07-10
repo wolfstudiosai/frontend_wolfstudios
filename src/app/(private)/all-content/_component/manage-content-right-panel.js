@@ -2,13 +2,14 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Icon } from '@iconify/react';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
 
 import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
-import { Iconify } from '/src/components/iconify/iconify';
 
 import { createContentAsync, deleteContentAsync, updateContentAsync } from '../_lib/all-content.actions';
 import { defaultContent } from '../_lib/all-content.types';
@@ -21,6 +22,7 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
   const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
   const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
+  const router = useRouter();
 
   const { values, errors, handleChange, setFieldValue, resetForm, setValues, handleSubmit } = useFormik({
     initialValues: defaultContent(data),
@@ -111,7 +113,6 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
     }
   };
 
-
   // *****************Action Buttons*******************************
   const actionButtons = (
     <>
@@ -119,30 +120,31 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
         <>
           {panelView === 'EDIT' && data?.id ? (
             <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
-              <Iconify icon="solar:eye-broken" />
+              <Icon icon="solar:eye-broken" />
             </IconButton>
           ) : (
             data?.id && (
               <IconButton onClick={() => setPanelView('EDIT')} title="Quick">
-                <Iconify icon="mynaui:edit-one" />
+                <Icon icon="mynaui:edit-one" />
               </IconButton>
             )
           )}
 
           {panelView !== 'QUICK' && (
-            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={() => handleSubmit()}>
               Save
             </Button>
           )}
 
-          {panelView !== 'ADD' && <IconButton
-            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            as={Link}
-            href={`/all-content/${data?.id}`}
-            title="Analytics"
-          >
-            <Iconify icon="mdi:analytics" />
-          </IconButton>}
+          {panelView !== 'ADD' && (
+            <IconButton
+              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              title="Analytics"
+              onClick={() => router.push(`/all-content/${data?.id}`)}
+            >
+              <Icon icon="mdi:analytics" />
+            </IconButton>
+          )}
 
           {panelView === 'QUICK' && (
             <DeleteConfirmationPasswordPopover
@@ -151,6 +153,7 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
               deleteFn={deleteContentAsync}
               passwordInput
               onDelete={handleDelete}
+              disabled={!data?.id}
             />
           )}
 

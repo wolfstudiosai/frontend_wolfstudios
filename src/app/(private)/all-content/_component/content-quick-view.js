@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { Icon } from '@iconify/react';
 import Timeline from '@mui/lab/Timeline';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
@@ -61,42 +62,7 @@ const fieldConfig = {
   },
 };
 
-export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      user: {
-        firstName: 'Combina',
-        lastName: 'Key',
-        avatar: '',
-      },
-      comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit...',
-      createdAt: new Date(Date.now() - 120000), // 2 minutes ago
-      files: [],
-    },
-    {
-      id: 2,
-      user: {
-        firstName: 'Fazly',
-        lastName: 'Alahi Nahid',
-        avatar: '',
-      },
-      comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit...',
-      createdAt: new Date(Date.now() - 60000), // 1 minute ago
-      files: [],
-    },
-    {
-      id: 3,
-      user: {
-        firstName: 'Riayazul',
-        lastName: 'Haque',
-        avatar: '',
-      },
-      comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit...',
-      createdAt: new Date(),
-      files: [],
-    },
-  ]);
+export const ContentQuickView = ({ data, isEdit }) => {
   const [newComment, setNewComment] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]);
   const attachmentRef = useRef(null);
@@ -177,15 +143,6 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
     } else {
       updatedData = { ...partnerInfo, [field]: value };
       setPartnerInfo(updatedData);
-    }
-
-    // Send updated data to parent
-    if (onUpdate) {
-      onUpdate({
-        ...contentInfo,
-        ...partnerInfo,
-        [field]: value,
-      });
     }
   };
 
@@ -268,7 +225,7 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
                       <TimelineDot sx={{ backgroundColor: 'transparent', p: 0 }}>
                         <Avatar sx={{ width: '30px', height: '30px' }} />
                       </TimelineDot>
-                      {index !== comments.length - 1 && <TimelineConnector />}
+                      {<TimelineConnector />}
                     </TimelineSeparator>
                     <TimelineContent sx={{ mt: 1 }}>
                       <Typography variant="h6">
@@ -320,7 +277,7 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
                           }}
                           onClick={() => handleRemoveFile(index)}
                         >
-                          <Iconify icon="mingcute:close-fill" sx={{ color: '#fff', width: '16px', height: '16px' }} />
+                          <Icon icon="mingcute:close-fill" style={{ color: '#fff', width: '16px', height: '16px' }} />
                         </IconButton>
                       </Box>
                     ))}
@@ -346,10 +303,10 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
                         sx={{ borderRadius: '50%' }}
                         onClick={() => attachmentRef?.current?.click()}
                       >
-                        <Iconify icon="mage:attachment" sx={{ color: 'grey.800' }} />
+                        <Icon icon="mage:attachment" style={{ color: 'grey.800' }} />
                       </IconButton>
                       <IconButton size="small" sx={{ borderRadius: '50%' }}>
-                        <Iconify icon="material-symbols-light:add-reaction-outline" sx={{ color: 'grey.800' }} />
+                        <Icon icon="material-symbols-light:add-reaction-outline" style={{ color: 'grey.800' }} />
                       </IconButton>
                       <IconButton
                         size="small"
@@ -362,9 +319,9 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
                         }}
                         onClick={handleAddComment}
                       >
-                        <Iconify
+                        <Icon
                           icon="mingcute:arrow-up-fill"
-                          sx={{ color: newComment.length > 0 || selectedFiles.length > 0 ? '#fff' : 'grey.800' }}
+                          style={{ color: newComment.length > 0 || selectedFiles.length > 0 ? '#fff' : 'grey.800' }}
                         />
                       </IconButton>
                     </InputAdornment>
@@ -382,7 +339,7 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
               {data?.monthUploaded} by Combina key
             </Typography>
             {data?.postingQuality?.map((p, i) => (
-              <Chip key={i} size="small" variant="soft" label={p} />
+              <Chip key={i} size="small" label={p} />
             ))}
           </Stack>
           <Stack direction="row" alignItems="center">
@@ -391,61 +348,21 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
               onClick={() => handleCopy(data?.googleDriveFiles || '')}
               sx={{ borderRadius: '50%' }}
             >
-              <Iconify icon="mingcute:drive-fill" sx={{ color: 'text.secondary' }} />
+              <Icon icon="mingcute:drive-fill" style={{ color: 'text.secondary' }} />
             </IconButton>
             <IconButton size="small" onClick={() => handleCopy(data?.playbookLink || '')} sx={{ borderRadius: '50%' }}>
-              <Iconify icon="solar:book-bold" sx={{ color: 'text.secondary' }} />
+              <Icon icon="solar:book-bold" style={{ color: 'text.secondary' }} />
             </IconButton>
           </Stack>
 
           <Stack direction="row" gap={1} sx={{ mt: 1 }}>
             <Box sx={{ width: '50%' }}>
               <SectionTitle title="Content Information" sx={{ px: 2, py: 1, fontSize: '0.9rem' }} />
-              <Box sx={{ ml: 1, mt: 1 }}>
-                {/* {Object.keys(contentInfo).map((key) => (
-                isEdit === 'EDIT' ? (
-                  <TextField
-                    key={key}
-                    fullWidth
-                    variant="outlined"
-                    size="small"
-                    label={key.replace(/([A-Z])/g, ' $1').trim()}
-                    value={contentInfo[key]}
-                    onChange={(e) => handleChange('content', key, e.target.value)}
-                    sx={{ mb: 1 }}
-                  />
-                ) : (
-                  <Typography key={key} variant="body2" sx={{ mb: 1 }}>
-                    <strong>{key.replace(/([A-Z])/g, ' $1').trim()}:</strong> {contentInfo[key]}
-                  </Typography>
-                )
-              ))} */}
-                {Object.keys(contentInfo).map((key) => renderField('content', key))}
-              </Box>
+              <Box sx={{ ml: 1, mt: 1 }}>{Object.keys(contentInfo).map((key) => renderField('content', key))}</Box>
             </Box>
             <Box sx={{ width: '50%' }}>
               <SectionTitle title="Partner Information" sx={{ px: 2, py: 1, fontSize: '0.9rem' }} />
-              <Box sx={{ ml: 1, mt: 1 }}>
-                {/* {Object.keys(partnerInfo).map((key) => (
-                isEdit === 'EDIT' ? (
-                  <TextField
-                    key={key}
-                    fullWidth
-                    variant="outlined"
-                    size="small"
-                    label={key.replace(/([A-Z])/g, ' $1').trim()}
-                    value={partnerInfo[key]}
-                    onChange={(e) => handleChange('partner', key, e.target.value)}
-                    sx={{ mb: 1 }}
-                  />
-                ) : (
-                  <Typography key={key} variant="body2" sx={{ mb: 1 }}>
-                    <strong>{key.replace(/([A-Z])/g, ' $1').trim()}:</strong> {partnerInfo[key]}
-                  </Typography>
-                )
-              ))} */}
-                {Object.keys(partnerInfo).map((key) => renderField('partner', key))}
-              </Box>
+              <Box sx={{ ml: 1, mt: 1 }}>{Object.keys(partnerInfo).map((key) => renderField('partner', key))}</Box>
             </Box>
           </Stack>
         </Stack>

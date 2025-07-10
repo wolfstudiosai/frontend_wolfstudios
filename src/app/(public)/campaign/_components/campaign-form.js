@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Button, Stack, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
@@ -15,12 +15,7 @@ import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-t
 
 import { campaignProgressStatus } from '../_lib/campaign.constants';
 import { CustomMultipleInputFieldV2 } from '../../../../components/formFields/custom-multiple-input-field-v2';
-import {
-  getCityListAsync,
-  getProductListAsync,
-  getRetailPartnerListAsync,
-  getStakeHolderListAsync,
-} from '../../../../lib/common.actions';
+import { getCityListAsync, getProductListAsync } from '../../../../lib/common.actions';
 import { getContentListAsync } from '../../../(private)/all-content/_lib/all-content.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getProductionListAsync } from '../../production/_lib/production.action';
@@ -32,14 +27,6 @@ export const CampaignForm = ({ formikProps }) => {
   const [openImageUploadDialog, setOpenImageUploadDialog] = React.useState(false);
   const [thumbnailImage, setThumbnailImage] = React.useState(false);
   const [openCampaignImage, setOpenCampaignImage] = React.useState(false);
-
-  // const [contentOptions, setContentOptions] = React.useState([]);
-  // const [stakeholderOptions, setStakeholderOptions] = React.useState([]);
-  // const [retailPartnerOptions, setRetailPartnerOptions] = React.useState([]);
-  // const [partnerOptions, setPartnerOptions] = React.useState([]);
-  // const [spaceOptions, setSpaceOptions] = React.useState([]);
-  // const [productionHQOptions, setProductionHQOptions] = React.useState([]);
-  // const [productOptions, setProductOptions] = React.useState([]);
 
   const [autocompleteFocus, setAutocompleteFocus] = React.useState({
     currentItem: '',
@@ -136,6 +123,7 @@ export const CampaignForm = ({ formikProps }) => {
               onDelete={(filteredUrls) => setFieldValue('thumbnailImage', filteredUrls)}
               folderName="campaigns"
               hideVideoUploader
+              hideImageUploader={false}
             />
             <ErrorMessage error={errors.thumbnailImage} />
           </Grid>
