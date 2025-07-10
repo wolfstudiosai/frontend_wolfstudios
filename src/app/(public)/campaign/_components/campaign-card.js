@@ -1,16 +1,15 @@
-import React from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
+import React from 'react';
 
 import { CustomChip } from '/src/components/core/custom-chip';
 import { Iconify } from '/src/components/iconify/iconify';
 
 import { CampaignRightPanel } from './campaign-right-panel';
-import { isSupabaseUrl } from '/src/utils/helper';
 
 export const CampaignCard = ({ content, fetchList }) => {
   const [openRightPanel, setOpenRightPanel] = React.useState(null);
-
+  console.log(content, 'content....');
   return (
     <>
       <Stack

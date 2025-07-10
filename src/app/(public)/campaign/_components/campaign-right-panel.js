@@ -117,7 +117,22 @@ export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUI
           }
         }
 
-        const res = data?.id ? await updateCampaignAsync(data?.id, finalData) : await createCampaignAsync(finalData);
+        const { id, ...rest } = finalData;
+        const createPayload = {
+          ...rest,
+          thumbnailImage: Array.isArray(finalData.thumbnailImage)
+            ? finalData.thumbnailImage[0]
+            : finalData.thumbnailImage,
+        };
+
+        const res = data?.id
+          ? await updateCampaignAsync(data?.id, {
+              ...finalData,
+              thumbnailImage: Array.isArray(finalData.thumbnailImage)
+                ? finalData.thumbnailImage[0]
+                : finalData.thumbnailImage,
+            })
+          : await createCampaignAsync(createPayload);
         if (res.success) {
           onClose?.();
           resetForm();
@@ -208,6 +223,12 @@ export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUI
       )}
     </>
   );
+
+  React.useEffect(() => {
+    if (data) {
+      setValues(defaultCampaign(data));
+    }
+  }, [data]);
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>

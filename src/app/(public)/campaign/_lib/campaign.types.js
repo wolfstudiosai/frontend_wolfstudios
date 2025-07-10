@@ -1,8 +1,8 @@
 export const defaultCampaign = (data) => {
-
   const defaultData = {
     id: data?.id || null,
     name: data?.name || '',
+    thumbnailImage: typeof data?.thumbnailImage === 'string' ? [data.thumbnailImage] : null,
     client: data?.client || '',
     guidelines: data?.guidelines || '',
     currentGoals: '',
@@ -50,22 +50,26 @@ export const defaultCampaign = (data) => {
         value: item?.id,
         label: item?.name,
       })) || [],
-    productionHQ: data?.productionHQ?.map((item) => ({
-      value: item?.id,
-      label: item?.name,
-    })) || [],
-    products: data?.products?.map((item) => ({
-      value: item?.id,
-      label: item?.name,
-    })) || [],
-    retailPartners2: data?.retailPartners2?.map((item) => ({
-      value: item?.id,
-      label: item?.name,
-    })) || [],
-    retailPartners3: data?.retailPartners3?.map((item) => ({
-      value: item?.id,
-      label: item?.name,
-    })) || [],
+    productionHQ:
+      data?.productionHQ?.map((item) => ({
+        value: item?.id,
+        label: item?.name,
+      })) || [],
+    products:
+      data?.products?.map((item) => ({
+        value: item?.id,
+        label: item?.name,
+      })) || [],
+    retailPartners2:
+      data?.retailPartners2?.map((item) => ({
+        value: item?.id,
+        label: item?.name,
+      })) || [],
+    retailPartners3:
+      data?.retailPartners3?.map((item) => ({
+        value: item?.id,
+        label: item?.name,
+      })) || [],
   };
 
   return defaultData;

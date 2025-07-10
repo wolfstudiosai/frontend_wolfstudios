@@ -264,6 +264,7 @@ export const CampaignForm = ({ formikProps }) => {
             <CustomAutoCompleteV2
               multiple
               label="Content HQ"
+              name="contentHQ"
               value={values.contentHQ}
               onChange={(_, value) => setFieldValue('contentHQ', value)}
               defaultOptions={autoCompleteOptions.contentHQ}
@@ -284,10 +285,11 @@ export const CampaignForm = ({ formikProps }) => {
           </Grid>
 
           {/* Stakeholder */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoCompleteV2
               multiple
               label="Stakeholder"
+              name="stakeholders"
               value={values.stakeholders}
               onChange={(_, value) => setFieldValue('stakeholders', value)}
               defaultOptions={autoCompleteOptions.stakeholders}
@@ -304,13 +306,14 @@ export const CampaignForm = ({ formikProps }) => {
               placeholder={undefined}
               onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
-          </Grid>
+          </Grid> */}
 
           {/* Proposed Partner */}
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoCompleteV2
               multiple
               label="Proposed Partner"
+              name="proposedPartners"
               value={values.proposedPartners}
               onChange={(_, value) => setFieldValue('proposedPartners', value)}
               defaultOptions={autoCompleteOptions.proposedPartners}
@@ -331,10 +334,11 @@ export const CampaignForm = ({ formikProps }) => {
           </Grid>
 
           {/* Retail Partner */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoCompleteV2
               multiple
               label="Retail Partner"
+              name="retailPartners"
               value={values.retailPartners}
               onChange={(_, value) => setFieldValue('retailPartners', value)}
               defaultOptions={autoCompleteOptions.retailPartners}
@@ -351,13 +355,14 @@ export const CampaignForm = ({ formikProps }) => {
               placeholder={undefined}
               onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
-          </Grid>
+          </Grid> */}
 
           {/* Retail Partner 2 */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoCompleteV2
               multiple
               label="Retail Partner 2"
+              name="retailPartners2"
               value={values.retailPartners2}
               onChange={(_, value) => setFieldValue('retailPartners2', value)}
               defaultOptions={autoCompleteOptions.retailPartners2}
@@ -374,13 +379,14 @@ export const CampaignForm = ({ formikProps }) => {
               placeholder={undefined}
               onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
-          </Grid>
+          </Grid> */}
 
           {/* Retail Partner 3 */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoCompleteV2
               multiple
               label="Retail Partner 3"
+              name="retailPartners3"
               value={values.retailPartners3}
               onChange={(_, value) => setFieldValue('retailPartners3', value)}
               defaultOptions={autoCompleteOptions.retailPartners3}
@@ -397,13 +403,14 @@ export const CampaignForm = ({ formikProps }) => {
               placeholder={undefined}
               onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
-          </Grid>
+          </Grid> */}
 
           {/* Contributed Partner */}
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoCompleteV2
               multiple
               label="Contributed Partner"
+              name="contributedPartners"
               value={values.contributedPartners}
               onChange={(_, value) => setFieldValue('contributedPartners', value)}
               defaultOptions={autoCompleteOptions.proposedPartners}
@@ -428,6 +435,7 @@ export const CampaignForm = ({ formikProps }) => {
             <CustomAutoCompleteV2
               multiple
               label="Space"
+              name="spaces"
               value={values.spaces}
               onChange={(_, value) => setFieldValue('spaces', value)}
               defaultOptions={autoCompleteOptions.spaces}
@@ -452,6 +460,7 @@ export const CampaignForm = ({ formikProps }) => {
             <CustomAutoCompleteV2
               multiple
               label="Production HQ"
+              name="productionHQ"
               value={values.productionHQ}
               onChange={(_, value) => setFieldValue('productionHQ', value)}
               defaultOptions={autoCompleteOptions.productionHQ}
@@ -472,10 +481,11 @@ export const CampaignForm = ({ formikProps }) => {
           </Grid>
 
           {/* Product */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoCompleteV2
               multiple
               label="Product"
+              name="products"
               value={values.products}
               onChange={(_, value) => setFieldValue('products', value)}
               defaultOptions={autoCompleteOptions.productionHQ}
@@ -492,7 +502,7 @@ export const CampaignForm = ({ formikProps }) => {
               placeholder={undefined}
               onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
-          </Grid>
+          </Grid> */}
           <Grid size={{ xs: 12, md: 12 }}>
             <CustomMultipleInputFieldV2
               name={'campaignGoals'}
