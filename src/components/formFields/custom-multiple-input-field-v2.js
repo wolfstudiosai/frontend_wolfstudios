@@ -6,7 +6,7 @@ export const CustomMultipleInputFieldV2 = ({ name, label, value, setFieldValue, 
   const [currentValue, setCurrentValue] = React.useState('');
   const handleAdd = () => {
     if (!value?.includes(currentValue)) {
-      setFieldValue(name, [...value, currentValue], { shouldValidate: true });
+      setFieldValue(name, [...value, currentValue]);
       setCurrentValue('');
     }
   };

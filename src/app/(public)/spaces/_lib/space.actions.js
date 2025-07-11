@@ -39,9 +39,7 @@ export const getSpaceAsync = async (slug) => {
 export const createSpaceAsync = async (data) => {
   try {
     const cleanedData = cleanPayload(data);
-    const res = await api.post('/spaces', {
-      name: data.name,
-    });
+    const res = await api.post('/spaces', data);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {

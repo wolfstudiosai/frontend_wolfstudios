@@ -1,7 +1,6 @@
 export const defaultSpace = (data) => {
   const defaultData = {
     id: data?.id || null,
-    isFeatured: Boolean(data?.isFeatured) || false,
     name: data?.name || '',
     startingRatehr: Number(data?.startingRatehr) || 0,
     bookingLink: data?.bookingLink || '',
@@ -37,17 +36,7 @@ export const defaultSpace = (data) => {
     squareFootage: Number(data?.squareFootage) || 0,
     availableHours: data?.availableHours || '',
     dateListed: data?.dateListed || '',
-    showcaseYourLastProjectHereWithUs: Array.isArray(data?.showcaseYourLastProjectHereWithUs)
-      ? data.showcaseYourLastProjectHereWithUs.join(', ')
-      : data?.showcaseYourLastProjectHereWithUs || '',
-    travelTimePlaceholderImageForGoogleMaps: Array.isArray(data?.travelTimePlaceholderImageForGoogleMaps)
-      ? data.travelTimePlaceholderImageForGoogleMaps.join(', ')
-      : data?.travelTimePlaceholderImageForGoogleMaps || '',
-    featuredGallery: Array.isArray(data?.featuredGallery)
-      ? data.featuredGallery.join(', ')
-      : data?.featuredGallery || '',
-    thumbnailImage: typeof data?.thumbnailImage === 'string' ? [data.thumbnailImage] : null,
-    mainGallery: Array.isArray(data?.mainGallery) ? data.mainGallery.join(', ') : data?.mainGallery || '',
+    isFeatured: Boolean(data?.isFeatured) || false,
 
     campaigns: Array.isArray(data?.campaigns)
       ? data.campaigns.map((item) => ({
@@ -99,6 +88,12 @@ export const defaultSpace = (data) => {
           label: item?.name || '',
         }))
       : [],
+
+    showcaseYourLastProjectHereWithUs: data?.showcaseYourLastProjectHereWithUs || [],
+    travelTimePlaceholderImageForGoogleMaps: data?.travelTimePlaceholderImageForGoogleMaps || [],
+    featuredGallery: data?.featuredGallery || [],
+    mainGallery: data?.mainGallery || [],
+    thumbnailImage: typeof data?.thumbnailImage === 'string' ? [data.thumbnailImage] : null,
   };
 
   return defaultData;

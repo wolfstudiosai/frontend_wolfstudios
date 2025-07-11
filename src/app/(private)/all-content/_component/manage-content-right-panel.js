@@ -45,45 +45,7 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const finalData = {
-          ...values,
-        };
-
-        const arrayFields = ['campaigns', 'cities', 'products', 'tags', 'stakeholders', 'partners', 'retailPartners'];
-
-        for (const field of arrayFields) {
-          const value = values[field];
-          if (value.length > 0) {
-            const arrOfStr = value.map((item) => item.value);
-            finalData[field] = arrOfStr;
-          }
-        }
-
-        const splitArrayFields = ['postingQuality', 'creatorStatus', 'platform', 'ttDummyAccountsUsed'];
-
-        for (const field of splitArrayFields) {
-          const value = field?.split(',');
-          if (value.length > 0) {
-            finalData[field] = value;
-          }
-        }
-
-        const { id, ...rest } = finalData;
-        const createPayload = {
-          ...rest,
-          thumbnailImage: Array.isArray(finalData.thumbnailImage)
-            ? finalData.thumbnailImage[0]
-            : finalData.thumbnailImage,
-        };
-
-        const res = data?.id
-          ? await updateContentAsync(data?.id, {
-              ...finalData,
-              thumbnailImage: Array.isArray(finalData.thumbnailImage)
-                ? finalData.thumbnailImage[0]
-                : finalData.thumbnailImage,
-            })
-          : await createContentAsync(createPayload);
+        const res = data?.id ? await updateContentAsync(data?.id, values) : await createContentAsync(values);
         if (res.success) {
           onClose?.();
           resetForm();
@@ -106,7 +68,11 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
   const handleFeatured = async (featured) => {
     try {
       setIsFeatured(featured);
-      await updateContentAsync(data?.id, { ...data, isFeatured: featured });
+
+      await updateContentAsync(data?.id, {
+        ...values,
+        isFeatured: featured,
+      });
       fetchList();
     } catch (error) {
       console.error('Error:', error);
