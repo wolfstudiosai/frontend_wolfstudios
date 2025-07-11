@@ -1,13 +1,12 @@
-import React from 'react';
 
-import { Box, Divider, Stack, Typography, useTheme, Card } from '@mui/material';
+import { Box, Card, Divider, Stack, Typography, useTheme } from '@mui/material';
+import Image from "next/image";
 import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
-import { SliderWrapper } from '/src/components/slider/slider-wrapper';
-import { isSupabaseUrl, isVideoContent, pxToRem } from '/src/utils/helper';
 import { CustomChip } from '/src/components/core/custom-chip';
-import Image from "next/image";
+import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 import useAuth from '/src/hooks/useAuth';
+import { isVideoContent } from '/src/utils/helper';
 
 export const SpaceQuickViewV2 = ({ data }) => {
   const theme = useTheme();

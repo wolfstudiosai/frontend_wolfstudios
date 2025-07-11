@@ -11,7 +11,6 @@ import { paths } from '../../../paths';
 import { usePortfolioList } from '../../../services/portfolio/usePortfolioList';
 import { PortfolioGridView } from './_components/portfolio-gridview';
 import { PortfolioRightPanel } from './_components/portfolio-right-panel';
-import { defaultPortfolio } from './_lib/portfolio.types';
 
 export const PortfolioView = () => {
   const [openPanel, setOpenPanel] = React.useState(false);

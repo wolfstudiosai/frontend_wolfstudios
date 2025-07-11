@@ -1,71 +1,99 @@
 'use client';
 
 import React from 'react';
-import useAuth from '/src/hooks/useAuth';
-import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
+import { Icon } from '@iconify/react';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
-import { createSpaceAsync, deleteSpaceAsync, getSpaceAsync, updateSpaceAsync } from '../_lib/space.actions';
-import { defaultSpace1 } from '../_lib/space.types';
+import { useFormik } from 'formik';
+
+import useAuth from '/src/hooks/useAuth';
+import { DrawerContainer } from '/src/components/drawer/drawer';
+
+import { createSpaceAsync, deleteSpaceAsync, updateSpaceAsync } from '../_lib/space.actions';
+import { defaultSpace } from '../_lib/space.types';
 import { SpaceForm } from './space-form';
-import { SpaceQuickView } from './space-quickview';
 import { SpaceQuickViewV2 } from './space-quickviewV2';
 import { formConstants } from '/src/app/constants/form-constants';
-import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { DrawerContainer } from '/src/components/drawer/drawer';
-import { Iconify } from '/src/components/iconify/iconify';
 
-export const ManageSpaceRightPanel = ({ open, onClose, fetchList, data, width, view }) => {
-  const isUpdate = data ? true : false;
+export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = 'QUICK' }) => {
   const { isLogin } = useAuth();
-
-  const [sidebarView, setSidebarView] = React.useState(view); //QUICK/ EDIT
-  const [file, setFile] = React.useState(null);
+  const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
+  const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
-  const [isFeatured, setIsFeatured] = React.useState(data.isFeatured);
+  const router = useRouter();
 
-  const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
-    useFormik({
-      initialValues: defaultSpace1,
-      validate: (values) => {
-        const errors = {};
-        if (!values.name) {
-          errors.name = formConstants.required;
-        }
+  const { values, errors, handleChange, handleSubmit, setValues, setFieldValue, resetForm } = useFormik({
+    initialValues: defaultSpace(data),
+    validate: (values) => {
+      const errors = {};
+      if (!values.thumbnailImage) {
+        errors.thumbnailImage = formConstants.required;
+      }
+      if (!values.name) {
+        errors.name = formConstants.required;
+      }
 
-        return errors;
-      },
-      onSubmit: async (values) => {
-        setLoading(true);
-        try {
-          const res = isUpdate ? await updateSpaceAsync(file, values) : await createSpaceAsync(file, values);
-          if (res.success) {
-            onClose?.();
-            fetchList();
-          } else {
-            console.error('Operation failed:', res.message);
+      return errors;
+    },
+    onSubmit: async (values) => {
+      setLoading(true);
+      try {
+        const finalData = {
+          ...values,
+        };
+
+        const arrayFields = [
+          'type',
+          'spaceStyle',
+          'props',
+          'theme',
+          'availableLighting',
+          'adons',
+          'cycwall',
+          'backdropSystem',
+          'features',
+        ];
+        for (const field of arrayFields) {
+          const value = values[field];
+          if (value.length > 0) {
+            const arrOfStr = value.map((item) => item.value);
+            finalData[field] = arrOfStr;
           }
-        } catch (error) {
-          console.error('Error:', error);
-        } finally {
-          setLoading(false);
         }
-      },
-    });
+
+
+        const { id, ...rest } = finalData;
+        const createPayload = {
+          ...rest,
+          thumbnailImage: Array.isArray(finalData.thumbnailImage)
+            ? finalData.thumbnailImage[0]
+            : finalData.thumbnailImage,
+        };
+
+        const res = data?.id
+          ? await updatePortfolioAsync(data?.id, {
+              ...finalData,
+              thumbnailImage: Array.isArray(finalData.thumbnailImage)
+                ? finalData.thumbnailImage[0]
+                : finalData.thumbnailImage,
+            })
+          : await createSpaceAsync(createPayload);
+        if (res.success) {
+          onClose?.();
+          resetForm();
+          fetchList();
+        } else {
+          console.error('Operation failed:', res.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
 
   // *********************States*********************************
-
-  const getSingleData = async () => {
-    setLoading(true);
-    try {
-      const response = await getSpaceAsync(id);
-      setValues(response.data);
-    } catch (error) {
-      console.error('Error fetching Space data:', error);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleDelete = async (password) => {
     const response = await deleteSpaceAsync([data.id]);
@@ -91,77 +119,70 @@ export const ManageSpaceRightPanel = ({ open, onClose, fetchList, data, width, v
     <>
       {isLogin && (
         <>
-          {sidebarView === 'QUICK' ? (
-            <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
-              <Iconify icon="mynaui:edit-one" />
+          {panelView === 'EDIT' && data?.id ? (
+            <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
+              <Icon icon="solar:eye-broken" />
             </IconButton>
           ) : (
-            data !== null && (
-              <IconButton onClick={() => setSidebarView('QUICK')} title="Quick View">
-                <Iconify icon="lets-icons:view-light" />
+            data?.id && (
+              <IconButton onClick={() => setPanelView('EDIT')} title="Quick">
+                <Icon icon="mynaui:edit-one" />
               </IconButton>
             )
           )}
 
-          <FormControlLabel
-            control={
-              <Switch
-                size="small"
-                checked={isFeatured}
-                onChange={(e) => handleFeatured(e.target.checked)}
-                color="primary"
-              />
-            }
-            label="Featured"
-          />
-
-          <DeleteConfirmationPasswordPopover title={`Want to delete ${data?.project_title}?`} onDelete={(password) => handleDelete(password)} passwordInput />
-
-          {sidebarView === 'EDIT' && (
-            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+          {panelView !== 'QUICK' && (
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={() => handleSubmit()}>
               Save
             </Button>
+          )}
+
+          {panelView !== 'ADD' && (
+            <IconButton
+              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              onClick={() => router.push(`/spaces/${data?.id}`)}
+              title="Analytics"
+            >
+              <Icon icon="mdi:analytics" />
+            </IconButton>
+          )}
+
+          {/* {panelView === 'QUICK' && (
+            <DeleteConfirmationPasswordPopover
+              id={data?.id}
+              title="Are you sure you want to delete?"
+              deleteFn={deletePortfolioAsync}
+              passwordInput
+              onDelete={handleDelete}
+              disabled={!data?.id}
+            />
+          )} */}
+
+          {panelView !== 'ADD' && (
+            <FormControlLabel
+              control={
+                <Switch
+                  size="small"
+                  checked={isFeatured}
+                  onChange={(e) => handleFeatured(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label="Featured"
+            />
           )}
         </>
       )}
     </>
   );
-  // *****************Use Effects*******************************
-
-  React.useEffect(() => {
-    return () => {
-      setValues(defaultSpace1);
-    };
-  }, []);
-
-  React.useEffect(() => {
-    if (data) {
-      setValues(data);
-    }
-  }, [data]);
-
-  React.useEffect(() => {
-    if (isUpdate) {
-      getSingleData();
-    }
-  }, []);
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-      {sidebarView === 'QUICK' ? (
-        // <SpaceQuickView data={values} />
-        <SpaceQuickViewV2 data={values} />
+      {panelView === 'QUICK' ? (
+        <SpaceQuickViewV2 data={values} isEdit={false} />
       ) : (
-        <SpaceForm
-          data={values}
-          errors={errors}
-          onSubmit={handleSubmit}
-          onChange={handleChange}
-          onSetFile={setFile}
-          onDeleteThumbnail={handleDeleteThumbnail}
-          setFieldValue={setFieldValue}
-        />
+        <SpaceForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />
       )}
     </DrawerContainer>
-  )
+  );
 };

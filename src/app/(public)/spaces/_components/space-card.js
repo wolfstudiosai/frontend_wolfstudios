@@ -1,10 +1,10 @@
 import React from 'react';
-import { Box, Card, Stack, Typography } from '@mui/material';
+import { Box, Card } from '@mui/material';
 
-import { isVideoContent } from '../../../../utils/helper';
-import { PortfolioRightPanel } from './portfolio-right-panel';
+import { ManageSpaceRightPanel } from './manage-space-right-panel';
+import { isVideoContent } from '/src/utils/helper';
 
-export const PortfolioCard = ({ content, fetchList }) => {
+export const SpaceCard = ({ content, fetchList }) => {
   const [openRightPanel, setOpenRightPanel] = React.useState(null);
 
   return (
@@ -12,12 +12,10 @@ export const PortfolioCard = ({ content, fetchList }) => {
       <Card
         sx={{
           width: '100%',
-          aspectRatio: '9 / 16',
           overflow: 'hidden',
           position: 'relative',
           backgroundColor: '#333',
           borderRadius: '0',
-          border: '.1px solid var(--mui-palette-divider)',
           display: 'flex',
           flexDirection: 'column',
           '&:hover .menu-icon': {
@@ -30,10 +28,10 @@ export const PortfolioCard = ({ content, fetchList }) => {
         onClick={() => setOpenRightPanel(content)}
       >
         <Box className="image-container" sx={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
-          {isVideoContent(content.thumbnailImage || '') ? (
+          {isVideoContent(content?.thumbnailImage || '') ? (
             <Box
               component="video"
-              src={content.thumbnailImage}
+              src={content?.thumbnailImage}
               muted
               autoPlay
               loop
@@ -62,36 +60,9 @@ export const PortfolioCard = ({ content, fetchList }) => {
               />
             </Box>
           )}
-
-          {/* Title Overlay */}
-          <Stack
-            direction="column"
-            sx={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              p: 1.5,
-              background: 'linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))',
-            }}
-          >
-            <Typography fontWeight={400} color="white" fontSize={{ xs: 12, md: 14 }} noWrap>
-              {(content.projectTitle || '').split(/\s+/).slice(0, 4).join(' ') +
-                (content.projectTitle?.split(/\s+/)?.length > 4 ? '...' : '')}
-            </Typography>
-            {/* Thin Line */}
-            <Box
-              sx={{
-                width: '100%',
-                height: '0.8px',
-                margin: '4px 0',
-                background: 'var(--mui-palette-divider)',
-              }}
-            />
-          </Stack>
         </Box>
 
-        <PortfolioRightPanel
+        <ManageSpaceRightPanel
           fetchList={fetchList}
           onClose={() => setOpenRightPanel(false)}
           open={openRightPanel ? true : false}

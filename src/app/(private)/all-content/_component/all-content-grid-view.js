@@ -2,6 +2,7 @@ import Grid from '@mui/material/Grid2';
 
 import PageLoader from '/src/components/loaders/PageLoader';
 
+import React from 'react';
 import { ContentCard } from './content-card';
 
 export default function AllContentGridView({ data, loading, fetchList }) {

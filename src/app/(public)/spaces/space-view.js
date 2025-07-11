@@ -1,28 +1,19 @@
 'use client';
 
-import React, { useRef } from 'react';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, Button } from '@mui/material';
+import React from 'react';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
-import PageLoader from '/src/components/loaders/PageLoader';
 
-import { SpaceGridView } from './_components/space-gridview';
-import { SpaceListView } from './_components/space-listview';
-import { spaceFilters, spaceSorting, spaceTags } from './_lib/constant';
-import { getSpaceListAsync } from './_lib/space.actions';
-import { defaultSpace } from './_lib/space.types';
-import { sliderToGridColsCoverter } from '/src/utils/helper';
 import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import { paths } from '../../../paths';
+import { useSpaceList } from '../../../services/space/useSpaceList';
+import { ManageSpaceRightPanel } from './_components/manage-space-right-panel';
+import { SpaceGridView } from './_components/space-gridview';
 
 export const SpaceView = () => {
-  const observerRef = useRef(null);
-  const [data, setData] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [isFetching, setIsFetching] = React.useState(false);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
-  const [totalRecords, setTotalRecords] = React.useState(0);
+  const [openPanel, setOpenPanel] = React.useState(false);
   const [filters, setFilters] = React.useState({
     COL: 4.5,
     TAG: [],
@@ -32,113 +23,51 @@ export const SpaceView = () => {
     ADD: false,
   });
 
-  async function fetchList() {
-    if (isFetching) return;
-    setIsFetching(true);
-
-    try {
-      const response = await getSpaceListAsync({
-        page: pagination.pageNo,
-        rowsPerPage: pagination.limit,
-      });
-
-      if (response.success) {
-        setData((prev) => [...prev, ...response.data]);
-        setTotalRecords(response.totalRecords);
-        setPagination((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }));
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsFetching(false);
-      setLoading(false);
-    }
-  }
-
-  React.useEffect(() => {
-    fetchList();
-  }, []);
-
-  React.useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !isFetching && data.length < totalRecords) {
-          fetchList();
-        }
-      },
-      { rootMargin: '100px' }
-    );
-
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
-      }
-    };
-  }, [data, isFetching, totalRecords]);
+  const { data, isLoading, isLoadingMore, error, totalRecords, hasMore, loadMore, mutate } = useSpaceList();
 
   const handleFilterChange = (type, value) => {
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
-  const refreshListView = async () => {
-    const response = await getSpaceListAsync({
-      page: 1,
-      rowsPerPage: 20,
-    });
-
-    if (response.success) {
-      setData(response.data);
-      setTotalRecords(response.totalRecords);
-    }
-  };
-
   return (
     <PageContainer>
-      <PageLoader loading={loading}>
-        <CustomBreadcrumbs
-          items={[
-            { title: 'Dashboard', href: paths.private.overview },
-            { title: 'Spaces', href: '' },
-          ]}
-        />
-        <PageHeader
-          title="Spaces"
-          values={filters}
-          tags={spaceTags}
-          filters={spaceFilters}
-          sorting={spaceSorting}
-          totalRecords={totalRecords}
-          onFilterChange={handleFilterChange}
-        />
-        {filters.VIEW === 'list' ? (
-          <SpaceListView totalRecords={totalRecords} fetchList={fetchList} data={data} loading={loading} />
-        ) : (
-          <Box>
-            <SpaceGridView
-              data={data || [defaultSpace]}
-              fetchList={refreshListView}
-              loading={loading}
-              colums={sliderToGridColsCoverter(filters.COL)}
-            />
+      <CustomBreadcrumbs
+        items={[
+          { title: 'Dashboard', href: paths.private.overview },
+          { title: 'Spaces', href: '' },
+        ]}
+      />
+      <PageHeader
+        title="Spaces"
+        values={filters}
+        onFilterChange={handleFilterChange}
+        showFilters={false}
+        showColSlider={false}
+        totalRecords={totalRecords}
+        showAdd={true}
+        setOpenPanel={setOpenPanel}
+      />
 
-            <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
-              {isFetching && <CircularProgress size="30px" />}
-            </div>
+      <Box>
+        <SpaceGridView data={data} loading={isLoading} fetchList={mutate} />
+        {hasMore && (
+          <Box textAlign="center" mt={2}>
+            <Button size="small" variant="contained" onClick={loadMore} disabled={isLoadingMore}>
+              {isLoadingMore ? 'Loading...' : 'Show More'}
+            </Button>
           </Box>
         )}
-        {/* <ManageSpaceRightPanel
-          view="EDIT"
-          width="70%"
-          data={null}
-          fetchList={refreshListView}
-          open={filters.ADD}
-          onClose={() => setFilters((prev) => ({ ...prev, ADD: false }))}
-        /> */}
-      </PageLoader>
+      </Box>
+
+      <ManageSpaceRightPanel
+        fetchList={mutate}
+        onClose={() => {
+          setOpenPanel(false);
+        }}
+        open={openPanel}
+        data={null}
+        view="ADD"
+      />
     </PageContainer>
   );
 };
