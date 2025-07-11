@@ -15,9 +15,9 @@ import { Button, CircularProgress, FormControl, FormLabel, InputAdornment, Input
 import Grid from '@mui/material/Grid2';
 import { useFormik } from 'formik';
 
-import { defaultCampaign } from '../_lib/campaign.types';
 import { formConstants } from '/src/app/constants/form-constants';
 import { ContentGuideline } from './content-guideline';
+import { defaultCampaign } from '../../../(public)/campaign/_lib/campaign.types';
 
 export const PartnerForm = ({ slug }) => {
   const isUpdate = slug ? true : false;
@@ -30,7 +30,7 @@ export const PartnerForm = ({ slug }) => {
 
   const { values, errors, handleChange, handleSubmit, handleBlur, setValues, setFieldValue, isValid, resetForm } =
     useFormik({
-      initialValues: defaultCampaign,
+      initialValues: defaultCampaign(),
       validate: (values) => {
         const errors = {};
         if (!values.name) {
