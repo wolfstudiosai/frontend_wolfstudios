@@ -13,6 +13,7 @@ import { DrawerContainer } from '/src/components/drawer/drawer';
 
 import { createContentAsync, deleteContentAsync, updateContentAsync } from '../_lib/all-content.actions';
 import { defaultContent } from '../_lib/all-content.types';
+import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
 import { ContentForm } from './content-form';
 import { ContentQuickView } from './content-quick-view';
 import { formConstants } from '/src/app/constants/form-constants';
@@ -45,7 +46,32 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const res = data?.id ? await updateContentAsync(data?.id, values) : await createContentAsync(values);
+        const finalData = convertArrayObjIntoArrOfStr(values, [
+          'campaigns',
+          'cities',
+          'products',
+          'tags',
+          'stakeholders',
+          'partners',
+          'retailPartners',
+        ]);
+
+        const { id, ...rest } = finalData;
+        const createPayload = {
+          ...rest,
+          thumbnailImage: Array.isArray(finalData.thumbnailImage)
+            ? finalData.thumbnailImage[0]
+            : finalData.thumbnailImage,
+        };
+
+        const res = data?.id
+          ? await updateContentAsync(data?.id, {
+              ...finalData,
+              thumbnailImage: Array.isArray(finalData.thumbnailImage)
+                ? finalData.thumbnailImage[0]
+                : finalData.thumbnailImage,
+            })
+          : await createContentAsync(createPayload);
         if (res.success) {
           onClose?.();
           resetForm();
@@ -68,10 +94,22 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
   const handleFeatured = async (featured) => {
     try {
       setIsFeatured(featured);
+      const finalData = convertArrayObjIntoArrOfStr(values, [
+        'campaigns',
+        'cities',
+        'products',
+        'tags',
+        'stakeholders',
+        'partners',
+        'retailPartners',
+      ]);
 
       await updateContentAsync(data?.id, {
-        ...values,
+        ...finalData,
         isFeatured: featured,
+        thumbnailImage: Array.isArray(finalData.thumbnailImage)
+          ? finalData.thumbnailImage[0]
+          : finalData.thumbnailImage,
       });
       fetchList();
     } catch (error) {

@@ -2,7 +2,7 @@ export const defaultContent = (data) => {
   const defaultData = {
     id: data?.id || null,
     name: data?.name || '',
-    revoPinterest: data?.revoPinterest || null,
+    revoPinterest: data?.revoPinterest || "",
     pinAccountsUsed: data?.pinAccountsUsed || '',
     postingQuality: Array.isArray(data?.postingQuality) ? data.postingQuality : [],
     googleDriveFiles: data?.googleDriveFiles || '',
@@ -46,7 +46,7 @@ export const defaultContent = (data) => {
     ytClubREVOTotalLikes: Number(data?.ytClubREVOTotalLikes) || 0,
     postingStatus: data?.postingStatus || '',
     totalContributedEngagement: Number(data?.totalContributedEngagement) || 0,
-    creatorStatus: Array.isArray(data?.creatorStatus) ? data.creatorStatus : data?.creatorStatus || '',
+    creatorStatus: Array.isArray(data?.creatorStatus) ? data.creatorStatus : [],
     igPost4: data?.igPost4 || '',
     igPost2: data?.igPost2 || '',
     igPost3: data?.igPost3 || '',

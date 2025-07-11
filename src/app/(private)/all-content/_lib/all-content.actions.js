@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import { toast } from 'sonner';
 
-import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
 import { api } from '/src/utils/api';
 import { buildQueryParams, validateFilters } from '/src/utils/helper';
 
@@ -39,13 +38,10 @@ export const getContentAsync = async (id) => {
 };
 
 export const createContentAsync = async (data) => {
-  const { id, ...rest } = data;
+  // const payload = contentPayload(data);
 
   try {
-    let res = await api.post(`/content-HQ`, {
-      ...rest,
-      thumbnailImage: Array.isArray(finalData.thumbnailImage) ? finalData.thumbnailImage[0] : finalData.thumbnailImage,
-    });
+    let res = await api.post(`/content-HQ`, data);
 
     if (!res.data.success) return;
     toast.success(res.data.message);
@@ -58,19 +54,8 @@ export const createContentAsync = async (data) => {
 
 export const updateContentAsync = async (id, data) => {
   try {
-    const finalData = convertArrayObjIntoArrOfStr(data, [
-      'campaigns',
-      'cities',
-      'products',
-      'tags',
-      'stakeholders',
-      'partners',
-      'retailPartners',
-    ]);
-    const res = await api.patch(`/content-HQ/${id}`, {
-      ...finalData,
-      thumbnailImage: Array.isArray(finalData.thumbnailImage) ? finalData.thumbnailImage[0] : finalData.thumbnailImage,
-    });
+    // const payload = contentPayload(data);
+    const res = await api.patch(`/content-HQ/${id}`, data);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
