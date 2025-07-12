@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { Avatar, Box, Card, CardContent, Divider, Grid, Stack, Typography } from '@mui/material';
 
 import { IconWithoutText } from '/src/components/utils/icon-text';
-import { PartnerRightPanel } from './partner-right-panel';
 
+import { PartnerRightPanel } from './partner-right-panel';
 import { formatCompactNumber } from '/src/utils/helper';
 
 export const PartnerCardTwo = ({ partner, fetchList }) => {
@@ -22,16 +22,16 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
           boxShadow: 2,
           borderRadius: 0,
           bgcolor: 'background.paper',
-          width: { xs: '100%', sm: '350px', md: '380px', lg: '408px' },
+          width: { xs: '400px', sm: '370px', md: '330px', lg: '234px' },
           maxWidth: '100%',
         }}
         onClick={() => {
-          setSelectedItemId(partner.id)
-          setOpenPartnerPanel(true)
+          setSelectedItemId(partner.id);
+          setOpenPartnerPanel(true);
         }}
       >
         {/* Large Profile Image */}
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Avatar
             src={partner.ProfileImage[0] ? partner.ProfileImage[0] : '/src/assets/images/placeholder.png'}
             variant="square"
@@ -130,8 +130,8 @@ export const PartnerCardTwo = ({ partner, fetchList }) => {
       {openPartnerPanel && (
         <PartnerRightPanel
           onClose={() => {
-            setSelectedItemId(null)
-            setOpenPartnerPanel(false)
+            setSelectedItemId(null);
+            setOpenPartnerPanel(false);
           }}
           fetchList={fetchList}
           id={selectedItemId}
