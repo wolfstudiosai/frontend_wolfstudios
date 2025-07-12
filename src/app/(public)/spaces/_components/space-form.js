@@ -36,11 +36,12 @@ export const SpaceForm = ({ formikProps }) => {
   });
   const [autoCompleteOptions, setAutoCompleteOptions] = React.useState({
     campaigns: [],
-    portfolioCategories: [],
-    partnerHQ: [],
+    cities: [],
+    tags: [],
     states: [],
     countries: [],
-    caseStudies: [],
+    productionHQ: [],
+    destinations: [],
   });
 
   const paging = { page: 1, rowsPerPage: 20 };
@@ -537,7 +538,7 @@ export const SpaceForm = ({ formikProps }) => {
             name="productionHQ2"
             value={values.productionHQ2}
             onChange={(_, value) => setFieldValue('productionHQ2', value)}
-            defaultOptions={autoCompleteOptions?.productionHQ2}
+            defaultOptions={autoCompleteOptions?.productionHQ}
             fetchOptions={async (debounceValue) => {
               const res = await getProductionListAsync(paging, debounceValue);
               return (

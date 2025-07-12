@@ -26,9 +26,9 @@ export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = '
     initialValues: defaultSpace(data),
     validate: (values) => {
       const errors = {};
-      if (!values.thumbnailImage) {
-        errors.thumbnailImage = formConstants.required;
-      }
+      // if (!values.thumbnailImage) {
+      //   errors.thumbnailImage = formConstants.required;
+      // }
       if (!values.name) {
         errors.name = formConstants.required;
       }
@@ -36,60 +36,60 @@ export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = '
       return errors;
     },
     onSubmit: async (values) => {
-      setLoading(true);
-      try {
-        const finalData = {
-          ...values,
-        };
+      console.log('submitted values: ', values);
+      // setLoading(true);
+      // try {
+      //   const finalData = {
+      //     ...values,
+      //   };
 
-        const arrayFields = [
-          'type',
-          'spaceStyle',
-          'props',
-          'theme',
-          'availableLighting',
-          'adons',
-          'cycwall',
-          'backdropSystem',
-          'features',
-        ];
-        for (const field of arrayFields) {
-          const value = values[field];
-          if (value.length > 0) {
-            const arrOfStr = value.map((item) => item.value);
-            finalData[field] = arrOfStr;
-          }
-        }
+      //   const arrayFields = [
+      //     'type',
+      //     'spaceStyle',
+      //     'props',
+      //     'theme',
+      //     'availableLighting',
+      //     'adons',
+      //     'cycwall',
+      //     'backdropSystem',
+      //     'features',
+      //   ];
+      //   for (const field of arrayFields) {
+      //     const value = values[field];
+      //     if (value.length > 0) {
+      //       const arrOfStr = value.map((item) => item.value);
+      //       finalData[field] = arrOfStr;
+      //     }
+      //   }
 
+      //   const { id, ...rest } = finalData;
+      //   const createPayload = {
+      //     ...rest,
+      //     thumbnailImage: Array.isArray(finalData.thumbnailImage)
+      //       ? finalData.thumbnailImage[0]
+      //       : finalData.thumbnailImage,
+      //   };
 
-        const { id, ...rest } = finalData;
-        const createPayload = {
-          ...rest,
-          thumbnailImage: Array.isArray(finalData.thumbnailImage)
-            ? finalData.thumbnailImage[0]
-            : finalData.thumbnailImage,
-        };
-
-        const res = data?.id
-          ? await updatePortfolioAsync(data?.id, {
-              ...finalData,
-              thumbnailImage: Array.isArray(finalData.thumbnailImage)
-                ? finalData.thumbnailImage[0]
-                : finalData.thumbnailImage,
-            })
-          : await createSpaceAsync(createPayload);
-        if (res.success) {
-          onClose?.();
-          resetForm();
-          fetchList();
-        } else {
-          console.error('Operation failed:', res.message);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      } finally {
-        setLoading(false);
-      }
+      //   const res = data?.id
+      //     ? await updatePortfolioAsync(data?.id, {
+      //         ...finalData,
+      //         thumbnailImage: Array.isArray(finalData.thumbnailImage)
+      //           ? finalData.thumbnailImage[0]
+      //           : finalData.thumbnailImage,
+      //       })
+      //     : await createSpaceAsync(createPayload);
+      //   if (res.success) {
+      //     onClose?.();
+      //     resetForm();
+      //     fetchList();
+      //   } else {
+      //     console.error('Operation failed:', res.message);
+      //   }
+      // } catch (error) {
+      //   console.error('Error:', error);
+      // } finally {
+      //   setLoading(false);
+      // }
     },
   });
 

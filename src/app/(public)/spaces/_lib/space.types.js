@@ -28,9 +28,7 @@ export const defaultSpace = (data) => {
     backdropSystem: Boolean(data?.backdropSystem) || false,
     features: Array.isArray(data?.features) ? data.features : [],
     minimumHourlyBooking: Number(data?.minimumHourlyBooking) || 0,
-
     attendeeLimit: data?.attendeeLimit || '',
-
     bedrooms: data?.bedrooms || '',
     bathrooms: data?.bathrooms || '',
     squareFootage: Number(data?.squareFootage) || 0,
@@ -38,7 +36,7 @@ export const defaultSpace = (data) => {
     dateListed: data?.dateListed || '',
     isFeatured: Boolean(data?.isFeatured) || false,
 
-    // Campaigns
+    // Relationships
     campaigns: Array.isArray(data?.campaigns)
       ? data.campaigns.map((item) => ({
           value: item?.id || null,
@@ -51,14 +49,12 @@ export const defaultSpace = (data) => {
           label: item?.name || '',
         }))
       : [],
-
     countries: Array.isArray(data?.countries)
       ? data.countries.map((item) => ({
           value: item?.id || null,
           label: item?.name || '',
         }))
       : [],
-
     states: Array.isArray(data?.states)
       ? data.states.map((item) => ({
           value: item?.id || null,
@@ -90,6 +86,7 @@ export const defaultSpace = (data) => {
         }))
       : [],
 
+    // Images
     showcaseYourLastProjectHereWithUs: data?.showcaseYourLastProjectHereWithUs || [],
     travelTimePlaceholderImageForGoogleMaps: data?.travelTimePlaceholderImageForGoogleMaps || [],
     featuredGallery: data?.featuredGallery || [],
