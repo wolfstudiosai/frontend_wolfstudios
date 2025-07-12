@@ -1,14 +1,12 @@
 import useSWRInfinite from 'swr/infinite';
 
-import { getContentListAsync } from '/src/app/(private)/all-content/_lib/all-content.actions';
-import { getProductListAsync } from '/src/lib/common.actions';
 import { getProductionListAsync } from '/src/app/(public)/production/_lib/production.action';
 
 const getKey = (pageIndex, previousPageData, status) => {
   if (previousPageData && !previousPageData.data?.length) return null;
 
   return [
-    'content-groups',
+    'production-groups',
     pageIndex + 1,
     18, // page size
     status, // filter by status

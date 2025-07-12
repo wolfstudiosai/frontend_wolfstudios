@@ -6,7 +6,7 @@ const getKey = (pageIndex, previousPageData, status) => {
   if (previousPageData && !previousPageData.data?.length) return null;
 
   return [
-    'content-groups',
+    'portfolio-groups',
     pageIndex + 1,
     18, // page size
     status, // filter by status

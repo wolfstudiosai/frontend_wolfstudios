@@ -11,7 +11,7 @@ import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-import { createProductionAsync, deleteProductionAsync, updateProductionAsync } from '../_lib/production.action';
+import { createProductionAsync, deleteSingleProductionAsync, updateProductionAsync } from '../_lib/production.action';
 import { defaultProduction } from '../_lib/production.types';
 import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
 import { ProductionForm } from './production-form';
@@ -92,18 +92,21 @@ export const ProductionRightPanel = ({ fetchList, onClose, data, open, view = 'Q
     try {
       setIsFeatured(featured);
       const finalData = convertArrayObjIntoArrOfStr(values, [
-        'portfolioCategories',
-        'states',
-        'countries',
-        'partnerHQ',
+        'spaces',
+        'stakeholders',
+        'contributingPartners',
+        'campaigns',
+        'products',
+        'proposedSpaces',
+        'proposedPartners',
       ]);
 
       await updateProductionAsync({
         ...finalData,
+        isFeatured: featured,
         thumbnailImage: Array.isArray(finalData.thumbnailImage)
           ? finalData.thumbnailImage[0] || ''
           : finalData.thumbnailImage || '',
-        videoLink: Array.isArray(finalData.videoLink) ? finalData.videoLink[0] || null : finalData.videoLink || null,
       });
       fetchList();
     } catch (error) {
@@ -147,7 +150,7 @@ export const ProductionRightPanel = ({ fetchList, onClose, data, open, view = 'Q
             <DeleteConfirmationPasswordPopover
               id={data?.id}
               title="Are you sure you want to delete?"
-              deleteFn={deleteProductionAsync}
+              deleteFn={deleteSingleProductionAsync}
               passwordInput
               onDelete={handleDelete}
               disabled={!data?.id}

@@ -80,6 +80,22 @@ export const deleteProductionAsync = async (ids, password) => {
   }
 };
 
+export const deleteSingleProductionAsync = async (id, password) => {
+  try {
+    const res = await api.delete(`/production-HQ/${id}`, {
+      data: null,
+      headers: {
+        Password: password,
+      },
+    });
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
 export const deleteFileAsync = async (paths) => {
   try {
     const res = await api.delete(`/file/delete-files`, {
