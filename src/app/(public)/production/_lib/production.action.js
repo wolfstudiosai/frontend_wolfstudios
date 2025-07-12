@@ -36,22 +36,14 @@ export const getProductionAsync = async (id) => {
   }
 };
 
-export const createProductionAsync = async (file, data) => {
+export const createProductionAsync = async (data) => {
   try {
-    // const { slug, id, created_by, user_id, updated_at, video_url, hero_image, field_image, thumbnail, vertical_gallery_images, horizontal_gallery_images, ...rest } = data;
-    const { slug, id, created_by, user_id, updated_at, ...rest } = data;
-    let thumbnailImage = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      thumbnailImage = uploadResponse[0].path;
-    }
-
-    const productionResponse = await api.post(`/production-HQ`, {
-      ...rest,
+    const campaignResponse = await api.post(`/production-HQ`, {
+      ...data,
     });
 
-    toast.success(productionResponse.data.message);
-    return { success: true, data: productionResponse.data.data };
+    toast.success(campaignResponse.data.message);
+    return { success: true, data: campaignResponse.data.data };
   } catch (error) {
     const errorMessage = error.response?.data?.message || error.message || 'An unknown error occurred';
     toast.error(errorMessage);

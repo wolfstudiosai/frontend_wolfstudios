@@ -1,41 +1,33 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Icon } from '@iconify/react';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
 
 import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
-import { Iconify } from '/src/components/iconify/iconify';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-import {
-  createProductionAsync,
-  deleteProductionAsync,
-  getProductionAsync,
-  updateProductionAsync,
-} from '../_lib/production.action';
+import { createProductionAsync, deleteProductionAsync, updateProductionAsync } from '../_lib/production.action';
 import { defaultProduction } from '../_lib/production.types';
+import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
 import { ProductionForm } from './production-form';
 import { ProductionQuickView } from './production-quickview';
 import { formConstants } from '/src/app/constants/form-constants';
 
-export const ProductionRightPanel = ({ open, onClose, fetchList, id, view = 'QUICK' }) => {
-  const isUpdate = id ? true : false;
+export const ProductionRightPanel = ({ fetchList, onClose, data, open, view = 'QUICK' }) => {
   const { isLogin } = useAuth();
+  const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
+  const [panelView, setPanelView] = React.useState(view);
+  const [loading, setLoading] = React.useState(false);
   const router = useRouter();
 
-  const [sidebarView, setSidebarView] = React.useState(view);
-  const [file, setFile] = React.useState(null);
-  const [loading, setLoading] = React.useState(false);
-  const [data, setData] = React.useState(null);
-
   // ***************** Formik *******************************
-  const { values, errors, handleChange, handleSubmit, setValues, setFieldValue, isValid, resetForm } = useFormik({
-    initialValues: defaultProduction(),
+  const { values, errors, handleChange, handleSubmit, setValues, setFieldValue, resetForm } = useFormik({
+    initialValues: defaultProduction(data),
     validate: (values) => {
       const errors = {};
       if (!values.name) {
@@ -45,43 +37,42 @@ export const ProductionRightPanel = ({ open, onClose, fetchList, id, view = 'QUI
       return errors;
     },
     onSubmit: async (values) => {
-      const fieldsToFormat = [
-        'status',
-        'cardsUsed',
-        'equipmentRentals',
-        'productionUsage',
-        'spaces',
-        'stakeholders',
-        'contributingPartners',
-        'campaigns',
-        'products',
-        'proposedSpaces',
-        'proposedPartners',
-      ];
-
-      const formattedValues = {
-        ...values,
-        ...Object.fromEntries(
-          fieldsToFormat.map((key) => [
-            key,
-            Array.isArray(values[key]) && values[key].length > 0 ? values[key].map((item) => item.value) : [],
-          ])
-        ),
-      };
-
-      console.log('formattedValues: ', formattedValues);
-
       setLoading(true);
       try {
-        const res = isUpdate
-          ? await updateProductionAsync(formattedValues)
-          : await createProductionAsync(file, formattedValues);
-        console.log('response: ', res);
+        const finalData = convertArrayObjIntoArrOfStr(values, [
+          'spaces',
+          'stakeholders',
+          'contributingPartners',
+          'campaigns',
+          'products',
+          'proposedSpaces',
+          'proposedPartners',
+        ]);
+
+        const { id, ...rest } = finalData;
+        const createPayload = {
+          ...rest,
+          thumbnailImage: Array.isArray(finalData.thumbnailImage)
+            ? finalData.thumbnailImage[0]
+            : finalData.thumbnailImage,
+          videoLink: Array.isArray(finalData.videoLink) ? finalData.videoLink[0] || null : finalData.videoLink || null,
+        };
+
+        const res = data?.id
+          ? await updateProductionAsync({
+              ...finalData,
+              thumbnailImage: Array.isArray(finalData.thumbnailImage)
+                ? finalData.thumbnailImage[0] || ''
+                : finalData.thumbnailImage || '',
+              videoLink: Array.isArray(finalData.videoLink)
+                ? finalData.videoLink[0] || null
+                : finalData.videoLink || null,
+            })
+          : await createProductionAsync(createPayload);
         if (res.success) {
           onClose?.();
-          fetchList?.();
           resetForm();
-          router.refresh();
+          fetchList();
         } else {
           console.error('Operation failed:', res.message);
         }
@@ -92,109 +83,109 @@ export const ProductionRightPanel = ({ open, onClose, fetchList, id, view = 'QUI
       }
     },
   });
-
-  const handleDelete = async (password) => {
-    const response = await deleteProductionAsync([id]);
-    if (response.success) {
-      fetchList?.();
-      onClose?.();
-      router.refresh();
-    }
-  };
-
-  const handleDeleteThumbnail = () => {
-    setFieldValue('thumbnail', '');
-    setFile(null);
+  const handleDelete = async () => {
+    fetchList();
+    onClose?.();
   };
 
   const handleFeatured = async (featured) => {
-    setFieldValue('featured', featured);
-    await updateProductionAsync(file, { ...values, featured });
-    fetchList?.();
+    try {
+      setIsFeatured(featured);
+      const finalData = convertArrayObjIntoArrOfStr(values, [
+        'portfolioCategories',
+        'states',
+        'countries',
+        'partnerHQ',
+      ]);
+
+      await updateProductionAsync({
+        ...finalData,
+        thumbnailImage: Array.isArray(finalData.thumbnailImage)
+          ? finalData.thumbnailImage[0] || ''
+          : finalData.thumbnailImage || '',
+        videoLink: Array.isArray(finalData.videoLink) ? finalData.videoLink[0] || null : finalData.videoLink || null,
+      });
+      fetchList();
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   // *****************Action Buttons*******************************
-  const actionButtons = isLogin && (
+  const actionButtons = (
     <>
-      {sidebarView === 'QUICK' ? (
-        <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
-          <Iconify icon="mynaui:edit-one" />
-        </IconButton>
-      ) : (
-        data && (
-          <IconButton onClick={() => setSidebarView('QUICK')} title="Quick View">
-            <Iconify icon="lets-icons:view-light" />
-          </IconButton>
-        )
+      {isLogin && (
+        <>
+          {panelView !== 'QUICK' && (
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={() => handleSubmit()}>
+              Save
+            </Button>
+          )}
+          {panelView === 'EDIT' && data?.id ? (
+            <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
+              <Icon icon="solar:eye-broken" />
+            </IconButton>
+          ) : (
+            data?.id && (
+              <IconButton onClick={() => setPanelView('EDIT')} title="Quick">
+                <Icon icon="mynaui:edit-one" />
+              </IconButton>
+            )
+          )}
+
+          {panelView !== 'ADD' && (
+            <IconButton
+              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              onClick={() => router.push(`/production/${data?.id}`)}
+              title="Analytics"
+            >
+              <Icon icon="mdi:analytics" />
+            </IconButton>
+          )}
+
+          {panelView !== 'ADD' && (
+            <DeleteConfirmationPasswordPopover
+              id={data?.id}
+              title="Are you sure you want to delete?"
+              deleteFn={deleteProductionAsync}
+              passwordInput
+              onDelete={handleDelete}
+              disabled={!data?.id}
+            />
+          )}
+
+          {panelView !== 'ADD' && (
+            <FormControlLabel
+              control={
+                <Switch
+                  size="small"
+                  checked={isFeatured}
+                  onChange={(e) => handleFeatured(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label="Featured"
+            />
+          )}
+        </>
       )}
-
-      <FormControlLabel
-        control={
-          <Switch
-            size="small"
-            checked={values?.featured}
-            onChange={() => handleFeatured(!values?.featured)}
-            color="primary"
-          />
-        }
-        label="Featured"
-      />
-
-      <DeleteConfirmationPasswordPopover
-        title={`Want to delete ${data?.project_title}?`}
-        onDelete={handleDelete}
-        passwordInput
-      />
-
-      {/* {sidebarView === 'EDIT' && (
-        <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
-          Save
-        </Button>
-      )} */}
     </>
   );
 
-  // *****************Use Effects*******************************
-
   React.useEffect(() => {
-    const getSingleData = async () => {
-      setLoading(true);
-      try {
-        console.log('production id in right panel: ', id);
-        const response = await getProductionAsync(id);
-        console.log(response.data, 'response.data');
-        if (response.data) {
-          setData(response.data);
-          setValues(defaultProduction(response.data));
-        }
-      } catch (error) {
-        console.error('Error fetching production data:', error);
-        return null;
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (id) getSingleData();
-  }, [id]);
+    if (data) {
+      setValues(defaultProduction(data));
+    }
+  }, [data]);
 
   return (
-    <DrawerContainer open={open} handleDrawerClose={onClose}>
-      {sidebarView === 'QUICK' ? (
+    <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
+      {panelView === 'QUICK' ? (
         <PageLoader loading={loading}>
-          <ProductionQuickView data={data} actionButtons={actionButtons} />
+          <ProductionQuickView data={data} isEdit={false} />
         </PageLoader>
       ) : (
-        <ProductionForm
-          values={values}
-          errors={errors}
-          onSubmit={handleSubmit}
-          onChange={handleChange}
-          onSetFile={setFile}
-          onDeleteThumbnail={handleDeleteThumbnail}
-          setFieldValue={setFieldValue}
-          loading={loading}
-          actionButtons={id && actionButtons}
-        />
+        <ProductionForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />
       )}
     </DrawerContainer>
   );

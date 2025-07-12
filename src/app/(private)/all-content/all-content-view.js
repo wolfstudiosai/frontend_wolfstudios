@@ -1,7 +1,7 @@
 'use client';
 
-import { Box, Button } from '@mui/material';
 import React from 'react';
+import { Box, Button } from '@mui/material';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
@@ -49,16 +49,14 @@ export const AllContentView = () => {
         setOpenPanel={setOpenPanel}
       />
 
-      <>
-        <AllContentGridView data={data} loading={isLoading} fetchList={mutate} />
-        {hasMore && (
-          <Box textAlign="center" mt={2}>
-            <Button size="small" variant="contained" onClick={loadMore} disabled={isLoadingMore}>
-              {isLoadingMore ? 'Loading...' : 'Show More'}
-            </Button>
-          </Box>
-        )}
-      </>
+      <AllContentGridView data={data} loading={isLoading} fetchList={mutate} />
+      {hasMore && (
+        <Box textAlign="center" mt={2}>
+          <Button size="small" variant="contained" onClick={loadMore} disabled={isLoadingMore}>
+            {isLoadingMore ? 'Loading...' : 'Show More'}
+          </Button>
+        </Box>
+      )}
 
       <ManageContentRightPanel
         fetchList={mutate}

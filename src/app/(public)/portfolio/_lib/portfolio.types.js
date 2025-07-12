@@ -6,7 +6,7 @@ export const defaultPortfolio = (data) => {
     projectSinglePageFullDescription: data?.projectSinglePageFullDescription || '',
     date: data?.date || '',
     horizontalImageGallery: Array.isArray(data?.horizontalImageGallery) ? data.horizontalImageGallery : [],
-    verticalImageGallery: data?.verticalImageGallery || [],
+    verticalImageGallery: Array.isArray(data?.verticalImageGallery) ? data?.verticalImageGallery : [],
     thumbnailImage: typeof data?.thumbnailImage === 'string' ? [data.thumbnailImage] : null,
     videoLink: typeof data?.videoLink === 'string' ? [data.videoLink] : null,
     singlePageHeroImage: data?.singlePageHeroImage || [],
