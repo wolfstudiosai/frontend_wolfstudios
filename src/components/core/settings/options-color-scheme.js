@@ -11,9 +11,11 @@ import { Option } from './option';
 
 export function OptionsColorScheme({ onChange, value }) {
   return (
-    <Stack spacing={1}>
+    <Stack spacing={1} sx={{
+      p: 2
+    }}>
       <InputLabel>Color scheme</InputLabel>
-      <Stack direction="row" spacing={2} sx={{ alignItems: 'center', flexWrap: 'wrap' }}>
+      <Stack direction="row" spacing={1} sx={{ alignItems: 'center', flexWrap: 'wrap' }}>
         {[
           { label: 'Light', value: 'light', icon: <SunIcon /> },
           { label: 'Dark', value: 'dark', icon: <MoonIcon /> },

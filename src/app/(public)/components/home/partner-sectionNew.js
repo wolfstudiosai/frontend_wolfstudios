@@ -7,8 +7,9 @@ import Grid from '@mui/material/Grid2';
 
 import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
+
+import { ManagePartnerRightPanel } from '../../partner/_components/manage-partner-right-panel';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
-import { PartnerRightPanel } from '../../partner/_components/partner-right-panel';
 
 export const PartnerSectionNew = () => {
   const [partners, setPartners] = useState([]);
@@ -17,11 +18,15 @@ export const PartnerSectionNew = () => {
 
   const fetchPartners = async () => {
     try {
-      const filters = [{ key: "isFeatured", type: "boolean", operator: "is", value: true }];
-      const response = await getPartnerListAsync({
-        page: 1,
-        rowsPerPage: 20,
-      }, filters, 'and');
+      const filters = [{ key: 'isFeatured', type: 'boolean', operator: 'is', value: true }];
+      const response = await getPartnerListAsync(
+        {
+          page: 1,
+          rowsPerPage: 20,
+        },
+        filters,
+        'and'
+      );
 
       if (response?.success) {
         setPartners(response.data);
@@ -80,13 +85,13 @@ export const PartnerSectionNew = () => {
         </Stack>
       </Grid>
       <Grid md={12} xs={12}>
-        <StaticGridView partners={partners} />
+        <StaticGridView partners={partners} fetchList={fetchPartners} />
       </Grid>
     </Grid>
   );
 };
 
-const StaticGridView = ({ partners }) => {
+const StaticGridView = ({ partners, fetchList }) => {
   return (
     <Box
       sx={{
@@ -117,7 +122,7 @@ const StaticGridView = ({ partners }) => {
             }}
           >
             <Stack spacing={0.5}>
-              <Card card={partner} fetchList={partners} />
+              <Card card={partner} fetchList={fetchList} />
             </Stack>
           </Box>
         ))}
@@ -129,6 +134,7 @@ const StaticGridView = ({ partners }) => {
 const Card = ({ card, fetchList }) => {
   const [openPartnerRightPanel, setOpenPartnerRightPanel] = useState(null);
   const [selectedItemId, setSelectedItemId] = useState(null);
+
   return (
     <>
       <Box
@@ -141,50 +147,24 @@ const Card = ({ card, fetchList }) => {
           transition: 'transform 300ms ease',
           border: '1px solid var(--mui-palette-divider)',
         }}
-        onClick={() => {
-          setSelectedItemId(card.id)
-          setOpenPartnerRightPanel(true)
-        }}
+        onClick={() => setOpenPartnerRightPanel(card)}
       >
-        {/* Background Image or Video */}
-        {card?.video ? (
-          <Box
-            component="video"
-            sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            }}
-            autoPlay
-            loop
-            muted
-          >
-            <source src={card.video} type="video/mp4" />
-            Your browser does not support the video tag.
-          </Box>
-        ) : (
-          <Box
-            className="image"
-            sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 0,
-              backgroundImage: `url(${card?.ProfileImage?.[0]})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              transition: 'transform 300ms ease',
-            }}
-          />
-        )}
+        {/* Background Image */}
+        <Box
+          className="image"
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backgroundImage: `url("${encodeURI(card?.thumbnailImage)}")`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            transition: 'transform 300ms ease',
+          }}
+        />
 
         {/* Gradient Overlay */}
         <Box
@@ -221,7 +201,7 @@ const Card = ({ card, fetchList }) => {
               marginBottom: '7px',
             }}
           >
-            {card?.Name?.split(' ').length > 4 ? card?.Name?.split(' ').slice(0, 4).join(' ') + '...' : card?.Name}
+            {card?.name?.split(' ').length > 4 ? card?.name?.split(' ').slice(0, 4).join(' ') + '...' : card?.name}
           </Typography>
 
           {/* Thin Line */}
@@ -249,28 +229,7 @@ const Card = ({ card, fetchList }) => {
                 marginRight: 'auto',
               }}
             >
-              {card.ByStatesPartnerHQ?.map((state) => state?.ByStates?.Name).join(', ')}
-            </Typography>
-            <Typography
-              sx={{
-                color: 'rgba(255, 255, 255, 0.8)',
-                fontSize: { xs: '0.675rem', md: '0.9rem' },
-                fontFamily: 'Crimson Text, serif',
-                lineHeight: 1.2,
-                marginRight: '10px',
-              }}
-            >
-              {card.subtext2}
-            </Typography>
-            <Typography
-              sx={{
-                color: 'rgba(255, 255, 255, 0.8)',
-                fontSize: { xs: '0.675rem', md: '0.9rem' },
-                fontFamily: 'Crimson Text, serif',
-                lineHeight: 1.2,
-              }}
-            >
-              {card.subtext2}
+              {card.states?.map((state) => state?.name).join(', ')}
             </Typography>
           </Stack>
 
@@ -284,44 +243,19 @@ const Card = ({ card, fetchList }) => {
                 marginRight: 'auto',
               }}
             >
-              {card.ByCityPartnerHQ?.map((country) => country?.ByCity?.Name).join(', ')}
-            </Typography>
-            <Typography
-              sx={{
-                color: 'rgba(255, 255, 255, 0.8)',
-                fontSize: { xs: '0.675rem', md: '0.9rem' },
-                fontFamily: 'Crimson Text, serif',
-                lineHeight: 1.2,
-                marginRight: '10px',
-              }}
-            >
-              {card.subtext2}
-            </Typography>
-            <Typography
-              sx={{
-                color: 'rgba(255, 255, 255, 0.8)',
-                fontSize: { xs: '0.675rem', md: '0.9rem' },
-                fontFamily: 'Crimson Text, serif',
-                lineHeight: 1.2,
-              }}
-            >
-              {card.subtext2}
+              {card.countries?.map((country) => country?.name).join(', ')}
             </Typography>
           </Stack>
           {/* Add new text elements here */}
         </Box>
       </Box>
-      {openPartnerRightPanel && (
-        <PartnerRightPanel
-          onClose={() => {
-            setSelectedItemId(null)
-            setOpenPartnerRightPanel(false)
-          }}
-          fetchList={fetchList}
-          id={selectedItemId}
-          open={openPartnerRightPanel}
-        />
-      )}
+      {/* <ManagePartnerRightPanel
+        view="QUICK"
+        fetchList={fetchList}
+        open={openPartnerRightPanel ? true : false}
+        data={openPartnerRightPanel}
+        onClose={() => setOpenPartnerRightPanel(false)}
+      /> */}
     </>
   );
 };

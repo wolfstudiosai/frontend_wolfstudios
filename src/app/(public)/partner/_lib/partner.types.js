@@ -1,134 +1,214 @@
-import { profileStatus, status } from './partner.constants';
-
 export const defaultPartner = (data) => {
   const formattedValue = {
     id: data?.id || null,
-    isFeatured: data?.isFeatured || false,
-    name: data?.Name || '',
-    email: data?.Email || '',
-    currentStatus:
-      data?.CurrentStatus?.length > 0
-        ? status.filter((i) => data.CurrentStatus.includes(i.value) || data.CurrentStatus.includes(i.label))
-        : [],
-    journeyStep: data?.JourneyStep || '',
-    profileStatus:
-      data?.ProfileStatus?.length > 0
-        ? profileStatus.filter((i) => data.ProfileStatus.includes(i.value) || data.ProfileStatus.includes(i.label))
-        : [],
-    notes: data?.Notes || '',
-    instagram: {
-      url: data?.Instagram || '',
-      following: data?.InstagramFollowing || 0,
-    },
-    tiktok: {
-      url: data?.Tiktok || '',
-      following: data?.TiktokFollowing || 0,
-    },
-    youtube: {
-      url: data?.Youtube || '',
-      following: data?.YoutubeFollowing || 0,
-    },
-    hourlyRate: data?.HourlyRate || '',
-    bookingLink: data?.BookingLink || '',
-    ageBracket: data?.AgeBracket?.length > 0 ? data?.AgeBracket.map((i) => ({ label: i, value: i })) : [],
-    snapchat: {
-      url: data?.Snapchat || '',
-      following: data?.SnapchatFollowing || 0,
-    },
-    linkedinConnections: data?.LinkedInConnections || 0,
-    X: {
-      url: data?.X || '',
-      following: data?.XFollowing || 0,
-    },
-    facebook: {
-      url: data?.Facebook || '',
-      following: data?.FacebookFollowing || 0,
-    },
-    website: data?.Website || '',
-    medium: data?.Medium || '',
-    soundcloud: data?.Soundcloud || '',
-    spotify: data?.Spotify || '',
-    opentoGifting: data?.OpentoGifting || '',
-    occupation: data?.Occupation || '',
-    client: data?.Client || '',
-    linkedin: data?.LinkedIn || '',
-    mailingAddress: data?.MailingAddress || '',
-    phone: data?.Phone || '',
-    pinterest: {
-      url: data?.Pinterest || '',
-      following: data?.PinterestFollowing || 0,
-    },
-    podcast: data?.Podcast || '',
-    refusalReason: data?.RefusalReason || '',
-    twitch: data?.Twitch || '',
-    revoAmazonOrderConfirmationNumber: data?.REVOAmazonOrderConfirmationNumber || '',
-    amazonReviewLink: data?.AmazonReviewLink || '',
-    amazonReviewCupper: data?.AmazonReviewCupper || '',
-    amazonReviewThePill: data?.AmazonReviewThePill || '',
-    amazonStorefront: data?.AmazonStorefront || '',
-    deliverables: data?.Deliverables || '',
-    googleDriveFiles: data?.GoogleDriveFiles || '',
-    revoIGPost: data?.REVOIGPost || '',
-    partnerIGRate: data?.PartnerIGRate || '',
-    partnerTTRate: data?.PartnerTTRate || '',
-    partnerYTRate: data?.PartnerYTRate || '',
-    amountPaid: data?.AmountPaid || '',
-    totalContributedEngagementByContent: data?.TotalContributedEngagementbyContent || '0',
-    totalAudience: data?.TotalAudience || '',
-    platformDeliverables:
-      data?.PlatformDeliverables?.length > 0 ? data?.PlatformDeliverables.map((i) => ({ label: i, value: i })) : [],
-    platforms: data?.Platforms?.length > 0 ? data?.Platforms.map((i) => ({ label: i, value: i })) : [],
-    previousCollabExpense: data?.PreviousCollabExpense || '',
-    revoOffer: data?.REVOsOffer || '',
-    remainingCredits: data?.RemainingCredits || 0,
-    ttPost: data?.TTPost || '',
-    totalROI: data?.TotalROI || '',
-    ugcPaymentStatus: data?.UGCPaymentStatus || '',
-    ugcRetainerAmount: data?.UGCRetainerAmount || 0,
-    ugcTikTokLink: data?.UGCTikTokLink || '',
-    revoUGCArmyTTUsernamePW: data?.REVOUGCArmyTTUsernamePW || '',
-    whatsApp: data?.WhatsApp || '',
-    ytPost: data?.YTPost || '',
-    partnerPostViews: data?.PartnerPostViews || 0,
-    sourcedFrom: data?.SourcedFrom?.length > 0 ? data?.SourcedFrom.map((i) => ({ label: i, value: i })) : [],
-    estimatedTaxes: data?.EstimatedTaxes || '',
-    fbaXLevanta: data?.FBAxLevanta || 0,
-    shippingFBAFeeGiftedPartners: data?.ShippingFBAFeeGiftedPartners || '',
-    levantaAffiliateFee: data?.LevantaAffiliateFee || '',
-    paypalFee: data?.PaypalFee || '',
-    shippingExpense: data?.ShippingExpense || '',
-    amazonReferralFee: data?.AmazonReferralFee || '',
-    amazonOrderTotal: data?.AmazonOrderTotal || '',
-    amazonTax: data?.AmazonTax || '',
-    amazonKickback: data?.AmazonKickback || '',
-    monthSourced: data?.MonthSourced || '',
-    secondPaymentDate: data?.SecondPaymentDate || '',
-    clientStatus: data?.ClientStatus || '',
-    linktree: data?.Linktree || '',
-    partnerUGCRate: data?.PartnerUGCRate || '',
-    partner360Rate: data?.Partner360Rate || '',
-    revoCounteroffer: data?.REVOsCounteroffer || '',
-    opentoWhitelisting: data?.OpentoWhitelisting || '',
-    conversionsBundleCupper: data?.ConversionsBundleCupper || 0,
-    conversionsMassageGun: data?.ConversionsMassageGun || 0,
-    conversionsCupper: data?.ConversionsCupper || 0,
-    conversionsOils: data?.ConversionsOils || 0,
-    conversionsWalkingPad: data?.ConversionsWalkingPad || 0,
-    amazonReviewWalkingPadPro: data?.AmazonReviewWalkingPadPro || '',
-    amazonReviewWalkingPadStandard: data?.AmazonReviewWalkingPadStandard || '',
-    amazonReviewOil: data?.AmazonReviewOil || '',
-    amazonReviewSoothingCream: data?.AmazonReviewSoothingCream || '',
-    amazonReviewBeautyWand: data?.AmazonReviewBeautyWand || '',
-    contracts: data?.Contracts?.length > 0 ? data?.Contracts.map((i) => ({ label: i, value: i })) : [],
-    paymentLink: data?.PaymentLink || '',
-    totalExpense: data?.TotalExpense || '0',
-    totalProductCOGExpense: data?.TotalProductCOGExpense || '0',
-    affiliatePlatform:
-      data?.AffiliatePlatform?.length > 0 ? data?.AffiliatePlatform.map((i) => ({ label: i, value: i })) : [],
-    profileImage: data?.ProfileImage || [],
-    mediaKit: data?.MediaKit || [],
-    receipts: data?.Receipts || [],
-  };
+    name: data?.name || '',
+    totalROI: Number(data?.totalROI) || 0,
+    totalExpense: Number(data?.totalExpense) || 0,
+    shippingFBAFeeGiftedPartners: Number(data?.shippingFBAFeeGiftedPartners) || 0,
+    paypalFee: Number(data?.paypalFee) || 0,
+    amazonReferralFee: Number(data?.amazonReferralFee) || 0,
+    instagram: data?.instagram || '',
+    profileStatus: Array.isArray(data?.profileStatus) ? data.profileStatus : [],
+    linkedinConnections: Number(data?.linkedinConnections) || 0,
+    youtubeFollowing: Number(data?.youtubeFollowing) || 0,
+    snapchatFollowing: Number(data?.snapchatFollowing) || 0,
+    xFollowing: Number(data?.xFollowing) || 0,
+    pinterestFollowing: Number(data?.pinterestFollowing) || 0,
+    tiktokFollowing: Number(data?.tiktokFollowing) || 0,
+    facebookFollowing: Number(data?.facebookFollowing) || 0,
+    instagramFollowing: Number(data?.instagramFollowing) || 0,
+    website: data?.website || '',
+    medium: data?.medium || '',
+    soundcloud: data?.soundcloud || '',
+    spotify: data?.spotify || '',
+    openToGifting: Boolean(data?.openToGifting) || false,
+    mailingAddress: data?.mailingAddress || '',
+    previousCollabExpense: Number(data?.previousCollabExpense) || 0,
+    totalProductCOGExpense: Number(data?.totalProductCOGExpense) || 0,
+    shippingExpense: Number(data?.shippingExpense) || 0,
+    oneOffExpense: Number(data?.oneOffExpense) || 0,
+    currentStatus: Array.isArray(data?.currentStatus) ? data.currentStatus : [],
+    occupation: data?.occupation || '',
+    paymentLink: data?.paymentLink || '',
+    client: data?.client || '',
+    notes: data?.notes || '',
+    facebook: data?.facebook || '',
+    linkedin: data?.linkedin || '',
+    phone: data?.phone || '',
+    pinterest: data?.pinterest || '',
+    podcast: data?.podcast || '',
+    partner360Rate: Number(data?.partner360Rate) || 0,
+    refusalReason: data?.refusalReason || '',
+    snapchat: data?.snapchat || '',
+    twitch: data?.twitch || '',
+    x: data?.x || '',
+    tiktok: data?.tiktok || '',
+    youtube: data?.youtube || '',
+    revoAmazonOrderConfirmationNumber: data?.revoAmazonOrderConfirmationNumber || '',
+    amazonReviewLink: data?.amazonReviewLink || '',
+    amazonReviewCupper: data?.amazonReviewCupper || '',
+    amazonReviewThePill: data?.amazonReviewThePill || '',
+    amazonStorefront: data?.amazonStorefront || '',
+    campaignMonth: Array.isArray(data?.campaignMonth) ? data.campaignMonth : [],
+    deliverables: data?.deliverables || '',
+    googleDriveFiles: data?.googleDriveFiles || '',
+    revoIGPost: data?.revoIGPost || '',
+    journeyStep: data?.journeyStep || '',
+    partnerIGRate: Number(data?.partnerIGRate) || 0,
+    partnerTTRate: Number(data?.partnerTTRate) || 0,
+    partnerYTRate: Number(data?.partnerYTRate) || 0,
+    amountPaid: Number(data?.amountPaid) || 0,
+    totalContributedEngagementByContent: Number(data?.totalContributedEngagementByContent) || 0,
+    totalAudience: Number(data?.totalAudience) || 0,
+    platformDeliverables: Array.isArray(data?.platformDeliverables) ? data.platformDeliverables : [],
+    platforms: Array.isArray(data?.platforms) ? data.platforms : [],
+    revosOffer: data?.revosOffer || '',
+    remainingCredits: Number(data?.remainingCredits) || 0,
+    ttPost: data?.ttPost || '',
+    ugcPaymentStatus: data?.ugcPaymentStatus || '',
+    email: data?.email || '',
+    ugcRetainerAmount: Number(data?.ugcRetainerAmount) || 0,
+    ugcTikTokLink: data?.ugcTikTokLink || '',
+    revoUGCArmyTTUsernameAndPW: data?.revoUGCArmyTTUsernameAndPW || '',
+    whatsapp: data?.whatsapp || '',
+    ytPost: data?.ytPost || '',
+    partnerPostViews: Number(data?.partnerPostViews) || 0,
+    sourcedFrom: Array.isArray(data?.sourcedFrom) ? data.sourcedFrom : [],
+    estimatedTaxes: Number(data?.estimatedTaxes) || 0,
+    fbaXLevanta: Number(data?.fbaXLevanta) || 0,
+    amazonOrderTotal: Number(data?.amazonOrderTotal) || 0,
+    amazonTax: Number(data?.amazonTax) || 0,
+    amazonKickback: Number(data?.amazonKickback) || 0,
+    monthSourced: data?.monthSourced || '',
+    secondPaymentDate: data?.secondPaymentDate || '',
+    clientStatus: data?.clientStatus || '',
+    affiliatePlatform: Array.isArray(data?.affiliatePlatform) ? data.affiliatePlatform : [],
+    bookingLink: data?.bookingLink || '',
+    ageBracket: Array.isArray(data?.ageBracket) ? data.ageBracket : [],
+    hourlyRate: Number(data?.hourlyRate) || 0,
+    linktree: data?.linktree || '',
+    partnerUGCRate: Number(data?.partnerUGCRate) || 0,
+    auditedJan2025: Boolean(data?.auditedJan2025) || false,
+    revosCounteroffer: data?.revosCounteroffer || '',
+    amazonReviewWalkingPadPro: data?.amazonReviewWalkingPadPro || '',
+    amazonReviewWalkingPadStandard: data?.amazonReviewWalkingPadStandard || '',
+    amazonReviewOil: data?.amazonReviewOil || '',
+    amazonReviewSoothingCream: data?.amazonReviewSoothingCream || '',
+    amazonReviewBeautyWand: data?.amazonReviewBeautyWand || '',
+    openToWhitelisting: Boolean(data?.openToWhitelisting) || false,
+    levantaID: Number(data?.levantaID) || 0,
+    impactID: Number(data?.impactID) || 0,
+    shareasaleID: Number(data?.shareasaleID) || 0,
+    auditedJune2025: Boolean(data?.auditedJune2025) || false,
+    isFeatured: Boolean(data?.isFeatured) || false,
+    mediaKit: Array.isArray(data?.mediaKit) ? data.mediaKit : [],
+    partnerGallery: Array.isArray(data?.partnerGallery) ? data.partnerGallery : [],
+    receipts: Array.isArray(data?.receipts) ? data.receipts : [],
+    contracts: Array.isArray(data?.contracts) ? data.contracts : [],
+    thumbnailImage: typeof data?.thumbnailImage === 'string' ? [data.thumbnailImage] : null,
 
+    stakeholders: Array.isArray(data?.stakeholders)
+      ? data.stakeholders.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    contentHQ: Array.isArray(data?.contentHQ)
+      ? data.contentHQ.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    profileCategory: Array.isArray(data?.profileCategory)
+      ? data.profileCategory.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    portfolios: Array.isArray(data?.portfolios)
+      ? data.portfolios.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    states: Array.isArray(data?.states)
+      ? data.states.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    cities: Array.isArray(data?.cities)
+      ? data.cities.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    services: Array.isArray(data?.services)
+      ? data.services.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    caseStudies: Array.isArray(data?.caseStudies)
+      ? data.caseStudies.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    productionHQ: Array.isArray(data?.productionHQ)
+      ? data.productionHQ.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    products: Array.isArray(data?.products)
+      ? data.products.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    contributedCampaigns: Array.isArray(data?.contributedCampaigns)
+      ? data.contributedCampaigns.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    countries: Array.isArray(data?.countries)
+      ? data.countries.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    tags: Array.isArray(data?.tags)
+      ? data.tags.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    retailPartners: Array.isArray(data?.retailPartners)
+      ? data.retailPartners.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    destinations: Array.isArray(data?.destinations)
+      ? data.destinations.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    proposedCampaigns: Array.isArray(data?.proposedCampaigns)
+      ? data.proposedCampaigns.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    productionHQ2: Array.isArray(data?.productionHQ2)
+      ? data.productionHQ2.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+  };
   return formattedValue;
 };

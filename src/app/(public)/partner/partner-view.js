@@ -1,28 +1,22 @@
 'use client';
 
-import React, { useRef } from 'react';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, Button } from '@mui/material';
+import React from 'react';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
-import PageLoader from '/src/components/loaders/PageLoader';
 
+import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
+import { paths } from '../../../paths';
+import { usePartnerList } from '../../../services/partner/usePartnerList';
 import { PartnerGridView } from './_components/partner-gridview';
-import { PartnerListView } from './_components/partner-listview';
-import { getPartnerListAsync } from './_lib/partner.actions';
+import { PartnerRightPanel } from './_components/partner-right-panel';
 import { defaultPartner } from './_lib/partner.types';
 
 export const PartnerView = () => {
-  const observerRef = useRef(null);
-  const [data, setData] = React.useState([]);
   const [openPanel, setOpenPanel] = React.useState(false);
-  const [loading, setLoading] = React.useState(true);
-  const [isFetching, setIsFetching] = React.useState(false);
-  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 40 });
-  const [totalRecords, setTotalRecords] = React.useState(0);
-  const [selectedContent, setSelectedContent] = React.useState(null);
   const [filters, setFilters] = React.useState({
-    COL: 3,
+    COL: 4,
     TAG: [],
     FILTER: [],
     SORTING: [],
@@ -30,102 +24,49 @@ export const PartnerView = () => {
     ADD: false,
   });
 
-  const fetchList = React.useCallback(async () => {
-    if (isFetching) return;
-    setIsFetching(true);
-
-    try {
-      const response = await getPartnerListAsync({
-        page: pagination.pageNo,
-        rowsPerPage: pagination.limit,
-      });
-
-      if (response.success) {
-        setData((prev) => [...prev, ...response.data]);
-        setTotalRecords(response.totalRecords);
-        setPagination((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }));
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsFetching(false);
-      setLoading(false);
-    }
-  }, [isFetching, pagination]);
+  const { data, isLoading, isLoadingMore, error, totalRecords, hasMore, loadMore, mutate } = usePartnerList();
 
   const handleFilterChange = (type, value) => {
-    if (type === 'ADD') {
-      setSelectedContent(value ? defaultPartner : null);
-    }
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
-  const handleContentCreated = () => {
-    setFilters(prev => ({ ...prev, ADD: false }));
-    refreshListView();
-  };
-
-  const refreshListView = async () => {
-    const response = await getPartnerListAsync({
-      page: 1,
-      rowsPerPage: 40,
-    });
-
-    if (response.success) {
-      setData(response.data);
-      setTotalRecords(response.totalRecords);
-    }
-  };
-
-  React.useEffect(() => {
-    fetchList();
-  }, []);
-  React.useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !isFetching && data.length < totalRecords) {
-          fetchList();
-        }
-      },
-      { rootMargin: '100px' }
-    );
-
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
-    }
-
-    return () => {
-      if (observerRef.current) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        observer.unobserve(observerRef.current);
-      }
-    };
-  }, [data, fetchList, isFetching, totalRecords]);
-
   return (
     <PageContainer>
-      <PageLoader loading={loading}>
-        <PageHeader
-          title="Partners"
-          values={filters}
-          totalRecords={totalRecords}
-          onFilterChange={handleFilterChange}
-          showFilters={false}
-          showColSlider={false}
-          setOpenPanel={setOpenPanel}
-        />
+      <CustomBreadcrumbs
+        items={[
+          { title: 'Dashboard', href: paths.private.overview },
+          { title: 'Partner', href: '' },
+        ]}
+      />
+      <PageHeader
+        title="Partners"
+        values={filters}
+        onFilterChange={handleFilterChange}
+        showFilters={false}
+        showColSlider={false}
+        totalRecords={totalRecords}
+        showAdd={true}
+        setOpenPanel={setOpenPanel}
+      />
 
-        {filters.VIEW === 'list' ? (
-          <PartnerListView />
-        ) : (
-          <Box>
-            <PartnerGridView data={data || [defaultPartner]} fetchList={refreshListView} loading={loading} />
-            <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
-              {isFetching && <CircularProgress size="30px" />}
-            </div>
-          </Box>
-        )}
-      </PageLoader>
+      <PartnerGridView data={data} loading={isLoading} fetchList={mutate} />
+      {hasMore && (
+        <Box textAlign="center" mt={2}>
+          <Button size="small" variant="contained" onClick={loadMore} disabled={isLoadingMore}>
+            {isLoadingMore ? 'Loading...' : 'Show More'}
+          </Button>
+        </Box>
+      )}
+
+      <PartnerRightPanel
+        fetchList={mutate}
+        onClose={() => {
+          setOpenPanel(false);
+        }}
+        open={openPanel}
+        data={defaultPartner()}
+        view="ADD"
+      />
     </PageContainer>
   );
 };

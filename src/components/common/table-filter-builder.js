@@ -176,7 +176,7 @@ export default function TableFilterBuilder({
           value={Array.isArray(filter.value) ? filter.value : filter.value ? [filter.value] : []}
           operator={filter.operator}
           filterKey={filter.key}
-          onChange={(_, val) => handleFilterChange(currentFilters.indexOf(filter), 'value', val ?? [])}
+          onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val ?? [])}
         />
       );
     } else if (meta.type === 'images') {
@@ -189,7 +189,7 @@ export default function TableFilterBuilder({
           options={meta?.values || []}
           value={Array.isArray(filter.value) ? filter.value : []}
           disabled={isEmpty}
-          onChange={(_, val) => handleFilterChange(currentFilters.indexOf(filter), 'value', val)}
+          onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
           renderInput={(params) => (
             <TextField size="small" {...params} sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
           )}
@@ -209,7 +209,7 @@ export default function TableFilterBuilder({
           options={['true', 'false']}
           value={filter.value}
           disabled={isEmpty}
-          onChange={(_, val) => handleFilterChange(currentFilters.indexOf(filter), 'value', val)}
+          onChange={(_, val) => handleFilterChange(filters.indexOf(filter), 'value', val)}
           renderInput={(params) => (
             <TextField size="small" {...params} sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
           )}
@@ -229,7 +229,7 @@ export default function TableFilterBuilder({
           format={meta.format.toUpperCase()}
           disabled={isEmpty}
           onChange={(e) =>
-            handleFilterChange(currentFilters.indexOf(filter), 'value', dayjs(e).format(meta.format.toUpperCase()))
+            handleFilterChange(filters.indexOf(filter), 'value', dayjs(e).format(meta.format.toUpperCase()))
           }
           sx={{ minWidth: 150, '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
         />
@@ -382,7 +382,7 @@ export default function TableFilterBuilder({
                   Clear All
                 </Button>
                 <Button
-                  disabled={filters?.length < 1  || loading}
+                  disabled={filters?.length < 1 || loading}
                   variant="contained"
                   onClick={handleClickApply}
                   size="small"

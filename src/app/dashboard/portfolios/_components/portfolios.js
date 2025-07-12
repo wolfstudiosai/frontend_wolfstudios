@@ -1,7 +1,5 @@
 'use client';
 
-import * as React from 'react';
-import Link from 'next/link';
 import { IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -11,6 +9,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
+import Link from 'next/link';
+import * as React from 'react';
 
 import { FilterButton } from '/src/components/core/filter-button';
 import { StatusFilterPopover } from '/src/components/core/filters/StatusFilterPopover';
@@ -19,7 +19,7 @@ import { DataTable } from '/src/components/data-table/data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-import { deletePortfolio, getPortfolios } from '../_lib/portfolio.action';
+import { deletePortfolioAsync, getPortfolioListAsync } from '../../../(public)/portfolio/_lib/portfolio.actions';
 
 export default function Portfolios() {
   const [portfolios, setPortfolios] = React.useState([]);
@@ -32,7 +32,7 @@ export default function Portfolios() {
   const fetchList = async () => {
     try {
       setLoading(true);
-      const response = await getPortfolios({
+      const response = await getPortfolioListAsync({
         page: pagination.pageNo,
         limit: pagination.limit,
         status: status,
@@ -51,13 +51,13 @@ export default function Portfolios() {
 
   const handleDelete = async (password) => {
     const idsToDelete = [];
-        selectedRows.forEach((row) => {
-          idsToDelete.push(row.id);
-        });
-        const response = await deletePortfolio(idsToDelete);
-        if (response.success) {
-          fetchList();
-        }
+    selectedRows.forEach((row) => {
+      idsToDelete.push(row.id);
+    });
+    const response = await deletePortfolioAsync(idsToDelete);
+    if (response.success) {
+      fetchList();
+    }
   };
 
   React.useEffect(() => {
@@ -234,7 +234,12 @@ export default function Portfolios() {
               }
               rightItems={
                 <>
-                  <DeleteConfirmationPasswordPopover title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}  onDelete={(password) => handleDelete(password)}  passwordInput disabled={selectedRows.length === 0} />
+                  <DeleteConfirmationPasswordPopover
+                    title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
+                    onDelete={(password) => handleDelete(password)}
+                    passwordInput
+                    disabled={selectedRows.length === 0}
+                  />
                 </>
               }
               onRowsPerPageChange={(pageNumber, rowsPerPage) =>

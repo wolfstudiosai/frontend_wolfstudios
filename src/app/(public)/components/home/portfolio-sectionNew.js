@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box, Button, Card, IconButton, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { SwiperSlide } from 'swiper/react';
@@ -10,22 +12,25 @@ import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
-import { getSpaceListAsync } from '../../spaces/_lib/space.actions';
-import { ManageSpaceRightPanel } from '../../spaces/_components/manage-space-right-panel';
 import { isVideoContent } from '../../../../utils/helper';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Image from 'next/image';
+import { ManageSpaceRightPanel } from '../../spaces/_components/manage-space-right-panel';
+import { SpaceCard } from '../../spaces/_components/space-card';
+import { getSpaceListAsync } from '../../spaces/_lib/space.actions';
 
 export const PortfolioSectionNew = () => {
   const [spaces, setSpaces] = useState([]);
   const router = useRouter();
 
   const fetchSpaces = async () => {
-    const filters = [{ key: "isFeatured", type: "boolean", operator: "is", value: true }];
-    const response = await getSpaceListAsync({
-      page: 1,
-      rowsPerPage: 20,
-    }, filters, 'and');
+    const filters = [{ key: 'isFeatured', type: 'boolean', operator: 'is', value: true }];
+    const response = await getSpaceListAsync(
+      {
+        page: 1,
+        rowsPerPage: 20,
+      },
+      filters,
+      'and'
+    );
 
     if (response?.success) {
       setSpaces(response.data);
@@ -118,7 +123,9 @@ export const PortfolioSectionNew = () => {
               {spaces.map((space) => (
                 <SwiperSlide key={space.id}>
                   <FadeIn>
-                    <SpaceCard item={space} fetchList={fetchSpaces} />
+                    <Box sx={{ height: '400px', width: '300px' }}>
+                      <SpaceCard content={space} fetchList={fetchSpaces} />
+                    </Box>
                   </FadeIn>
                 </SwiperSlide>
               ))}
@@ -129,140 +136,3 @@ export const PortfolioSectionNew = () => {
     </Box>
   );
 };
-
-export const SpaceCard = ({ item, fetchList, sx, infoSx }) => {
-  const [openSpaceRightPanel, setOpenSpaceRightPanel] = useState(null);
-
-  return (
-    <>
-      <Card
-        sx={{
-          background: "var(--mui-palette-background-default)",
-          height: '400px',
-          width: { xs: '300px', sm: '280px', md: '260px' },
-          border: 'unset',
-          overflow: 'hidden',
-          position: 'relative',
-          borderRadius: '0',
-          border: 'solid 1px var(--mui-palette-divider)',
-          display: 'flex',
-          flexDirection: 'column',
-          '&:hover .menu-icon': {
-            opacity: 1,
-          },
-          '&:hover .image-container': {
-            opacity: 0.8,
-          },
-          ...sx,
-        }}
-        onClick={() => setOpenSpaceRightPanel(item)}
-      >
-        {/* top menu icon button */}
-        <Box
-          className="menu-icon"
-          sx={{
-            position: 'absolute',
-            top: 8,
-            right: 8,
-            zIndex: 1,
-            opacity: 0,
-            transition: 'opacity 0.2s ease',
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            borderRadius: '50%',
-          }}
-        >
-          <IconButton size="small" sx={{ color: 'white' }}>
-            <MoreVertIcon fontSize="small" />
-          </IconButton>
-        </Box>
-
-        <Box className="image-container" sx={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
-          {isVideoContent(item.videoLink || '') ? (
-            <Box
-              component="video"
-              src={item?.videoLink || ''}
-              muted
-              autoPlay
-              loop
-              draggable={false}
-              playsInline
-              sx={{
-                height: '100%',
-                width: '100%',
-                objectFit: 'cover',
-                borderRadius: 1,
-              }}
-            />
-          ) : (
-            <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
-              <Image
-                src={item?.ThumbnailImage?.at(0) || item?.Imagefield?.at(0) || '/assets/image-placeholder.jpg'}
-                alt={item.title || 'Space Image'}
-                draggable={false}
-                style={{
-                  objectFit: 'cover',
-                  filter: 'blur(20px)',
-                  transition: 'filter 0.2s ease-out',
-                }}
-                loading="lazy"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                fill
-                onLoad={(e) => {
-                  e.target.style.filter = 'blur(0px)';
-                }}
-              />
-            </Box>
-          )}
-
-          {/* Title Overlay */}
-          <Stack
-            direction="column"
-            sx={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              p: 1.5,
-              background: 'linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))',
-            }}
-          >
-            <Typography fontWeight={400} color="white" fontSize={{ xs: 12, md: 14 }} noWrap>
-              {(item.Name || '').split(/\s+/).slice(0, 4).join(' ') +
-                (item.Name?.split(/\s+/)?.length > 4 ? '...' : '')}
-            </Typography>
-            {/* Thin Line */}
-            <Box
-              sx={{
-                width: '100%',
-                height: '0.8px',
-                margin: '4px 0',
-                background: 'var(--mui-palette-divider)',
-              }}
-            />
-          </Stack>
-        </Box>
-
-        <ManageSpaceRightPanel
-          view={'QUICK'}
-          fetchList={fetchList}
-          width="70%"
-          open={openSpaceRightPanel ? true : false}
-          data={item}
-          onClose={() => setOpenSpaceRightPanel(false)}
-        />
-      </Card>
-      <Box
-        sx={{
-          flex: 0.1,
-          p: 1,
-          backgroundColor: "var(--mui-palette-background-default)",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-        }}
-      >
-      </Box>
-    </>
-  );
-};
-

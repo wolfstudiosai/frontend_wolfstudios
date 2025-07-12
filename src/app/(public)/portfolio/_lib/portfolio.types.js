@@ -1,34 +1,48 @@
-
 export const defaultPortfolio = (data) => {
-  const defaultData = {
+  const defaultValue = {
     id: data?.id || null,
-    projectTitle: data?.ProjectTitle || '',
-    date: data?.Date ? data?.Date : null,
-    shortDescription: data?.Projectshortdescription || '',
-    fullDescription: data?.Projectsinglepagefulldescription || '',
-    portfolioCategories: data?.PortfolioCategoriesPortfolios?.map((item) => ({
-      value: item?.PortfolioCategories?.id,
-      label: item?.PortfolioCategories?.Name
-    })) || [],
-    states: data?.ByStatesPortfolios?.map((item) => ({
-      value: item?.ByStates?.id,
-      label: item?.ByStates?.Name
-    })) || [],
-    countries: data?.ByCountryPortfolios?.map((item) => ({
-      value: item?.ByCountry?.id,
-      label: item?.ByCountry?.Name
-    })) || [],
-    partnerHQ: data?.PartnerHQPortfolios?.map((item) => ({
-      value: item?.PartnerHQ?.id,
-      label: item?.PartnerHQ?.Name
-    })) || [],
-    videoLink: data?.VideoLink || '',
-    singlePageHeroImage: data?.SinglePageHeroImage || [],
-    imagefield: data?.Imagefield || [],
-    thumbnailImage: data?.ThumbnailImage || [],
-    verticalImageGallery: data?.VerticalImageGallery || [],
-    horizontalImageGallery: data?.HorizontalImageGallery || [],
-  }
+    projectTitle: data?.projectTitle || '',
+    projectShortDescription: data?.projectShortDescription || '',
+    projectSinglePageFullDescription: data?.projectSinglePageFullDescription || '',
+    date: data?.date || '',
+    horizontalImageGallery: Array.isArray(data?.horizontalImageGallery) ? data.horizontalImageGallery : [],
+    verticalImageGallery: Array.isArray(data?.verticalImageGallery) ? data?.verticalImageGallery : [],
+    thumbnailImage: typeof data?.thumbnailImage === 'string' ? [data.thumbnailImage] : null,
+    videoLink: typeof data?.videoLink === 'string' ? [data.videoLink] : null,
+    singlePageHeroImage: data?.singlePageHeroImage || [],
+    imageField: data?.imageField || [],
+    isFeatured: data?.isFeatured || false,
+    portfolioCategories: Array.isArray(data?.portfolioCategories)
+      ? data.portfolioCategories.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    partnerHQ: Array.isArray(data?.partnerHQ)
+      ? data.partnerHQ.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    states: Array.isArray(data?.states)
+      ? data.states.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    countries: Array.isArray(data?.countries)
+      ? data.countries.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    caseStudies: Array.isArray(data?.caseStudies)
+      ? data.caseStudies.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+  };
 
-  return defaultData;
-}
+  return defaultValue;
+};

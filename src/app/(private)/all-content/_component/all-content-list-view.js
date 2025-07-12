@@ -12,8 +12,8 @@ import * as React from 'react';
 import { toast } from 'sonner';
 
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
-import TableView from '/src/components/common/table-view';
 import TableSortBuilder from '/src/components/common/table-sort-builder';
+import TableView from '/src/components/common/table-view';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
@@ -24,11 +24,11 @@ import {
   createContentAsync,
   createContentView,
   deleteBulkContentAsync,
-  getContentList,
+  getContentListAsync,
   getContentViews,
   getSingleContentView,
   updateContentAsync,
-  updateContentView,
+  updateContentView
 } from '../_lib/all-content.actions';
 import { defaultContent } from '../_lib/all-content.types';
 import { getContentColumns } from '../_utils/get-content-columns';
@@ -53,7 +53,7 @@ export default function AllContentListView() {
     const paginationData = props ? props.pagination : pagination;
     try {
       setLoading(true);
-      const response = await getContentList(
+      const response = await getContentListAsync(
         {
           page: paginationData.pageNo,
           rowsPerPage: paginationData.limit,
@@ -371,7 +371,7 @@ export default function AllContentListView() {
   const initialize = async () => {
     try {
       setLoading(true);
-      const campaigns = await getContentList({
+      const campaigns = await getContentListAsync({
         page: 1,
         rowsPerPage: 1,
       });

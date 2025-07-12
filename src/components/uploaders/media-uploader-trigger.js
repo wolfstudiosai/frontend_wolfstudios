@@ -1,10 +1,10 @@
-import { Box, FormLabel, IconButton, Stack } from '@mui/material';
 import React from 'react';
+import { Icon } from '@iconify/react';
+import { Box, FormLabel, IconButton, Stack } from '@mui/material';
+
+import { MediaUploader } from './media-uploader';
 import { deleteFileAsync } from '/src/app/(public)/portfolio/_lib/portfolio.actions';
 import { isSupabaseUrl, isVideoContent } from '/src/utils/helper';
-
-import { Iconify } from '../iconify/iconify';
-import { MediaUploader } from './media-uploader';
 
 export const MediaUploaderTrigger = ({
   open,
@@ -16,7 +16,8 @@ export const MediaUploaderTrigger = ({
   onDelete,
   hideImageUploader,
   hideVideoUploader,
-  folderName
+  folderName,
+  isMultiple = false,
 }) => {
   const handleRemoveFile = async (item) => {
     if (isSupabaseUrl(item)) {
@@ -48,77 +49,78 @@ export const MediaUploaderTrigger = ({
             }}
             onClick={onAdd}
           >
-            <Iconify icon="icon-park-outline:upload-two" sx={{ width: 50, height: 50, color: 'grey.600' }} />
+            <Icon icon="icon-park-outline:upload-two" />
           </Stack>
-          {value?.map((path, index) => (
-            <Box key={index} sx={{ width: '24.3%', position: 'relative' }}>
-              {isVideoContent(path) ? (
-                <>
-                  <Box
-                    component="video"
-                    src={path}
-                    controls
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    sx={{
-                      height: '100px',
-                      width: '100%',
-                      objectFit: 'contain',
-                      border: '1px solid var(--mui-palette-divider)',
-                      borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-                    }}
-                  />
-                  <IconButton
-                    size="small"
-                    sx={{
-                      position: 'absolute',
-                      top: 5,
-                      right: 5,
-                      color: '#fff',
-                      backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                      borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-                      '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.6)' },
-                    }}
-                    onClick={() => handleRemoveFile(path)}
-                  >
-                    <Iconify icon="ic:round-close" width={18} height={18} />
-                  </IconButton>
-                </>
-              ) : (
-                <>
-                  <Box
-                    component="img"
-                    src={isSupabaseUrl(path) ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${path}` : path}
-                    sx={{
-                      width: '100%',
-                      height: '100px',
-                      aspectRatio: 1,
-                      objectFit: 'contain',
-                      borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-                      border: '1px solid var(--mui-palette-divider)',
-                    }}
-                  />
-                  <IconButton
-                    size="small"
-                    sx={{
-                      position: 'absolute',
-                      top: 5,
-                      right: 5,
-                      color: '#fff',
-                      backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                      borderRadius: '50%',
-                      '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.6)' },
-                    }}
-                    onClick={() => handleRemoveFile(path)}
-                  >
-                    <Iconify icon="ic:round-close" width={18} height={18} />
-                  </IconButton>
-                </>
-              )}
-            </Box>
-          ))}
+          {value &&
+            value?.map((path, index) => (
+              <Box key={index} sx={{ width: '24.3%', position: 'relative' }}>
+                {isVideoContent(path) ? (
+                  <>
+                    <Box
+                      component="video"
+                      src={path}
+                      controls
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      sx={{
+                        height: '100px',
+                        width: '100%',
+                        objectFit: 'contain',
+                        border: '1px solid var(--mui-palette-divider)',
+                        borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                      }}
+                    />
+                    <IconButton
+                      size="small"
+                      sx={{
+                        position: 'absolute',
+                        top: 5,
+                        right: 5,
+                        color: '#fff',
+                        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                        borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                        '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.6)' },
+                      }}
+                      onClick={() => handleRemoveFile(path)}
+                    >
+                      <Icon icon="ic:round-close" width={18} height={18} />
+                    </IconButton>
+                  </>
+                ) : (
+                  <>
+                    <Box
+                      component="img"
+                      src={isSupabaseUrl(path) ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${path}` : path}
+                      sx={{
+                        width: '100%',
+                        height: '100px',
+                        aspectRatio: 1,
+                        objectFit: 'contain',
+                        borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
+                        border: '1px solid var(--mui-palette-divider)',
+                      }}
+                    />
+                    <IconButton
+                      size="small"
+                      sx={{
+                        position: 'absolute',
+                        top: 5,
+                        right: 5,
+                        color: '#fff',
+                        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                        borderRadius: '50%',
+                        '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.6)' },
+                      }}
+                      onClick={() => handleRemoveFile(path)}
+                    >
+                      <Icon icon="ic:round-close" width={18} height={18} />
+                    </IconButton>
+                  </>
+                )}
+              </Box>
+            ))}
         </Stack>
       ) : (
         <Stack
@@ -134,15 +136,15 @@ export const MediaUploaderTrigger = ({
           }}
           onClick={onAdd}
         >
-          <Iconify icon="icon-park-outline:upload-two" sx={{ width: 50, height: 50, color: 'grey.600' }} />
+          <Icon icon="icon-park-outline:upload-two" />
         </Stack>
       )}
 
       <MediaUploader
         open={open}
         onClose={onClose}
-        onSave={(paths) => onSave([...value, ...paths])}
-        multiple
+        onSave={(paths) => (isMultiple ? onSave([...value, ...paths]) : onSave([...paths]))}
+        multiple={isMultiple}
         hideImageUploader={hideImageUploader}
         hideVideoUploader={hideVideoUploader}
         folderName={folderName}

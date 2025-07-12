@@ -1,11 +1,9 @@
 'use client'
 
 import { Box, Chip, Collapse, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Popover, Typography } from '@mui/material';
+import { usePathname, useRouter } from 'next/navigation';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Iconify } from '/src/components/iconify/iconify';
-import { Fragment } from 'react';
-import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
-import { useState, useRef, useEffect } from 'react';
 
 // Utility to generate workspaces tab
 export function getWorkspacesTab(userInfo) {

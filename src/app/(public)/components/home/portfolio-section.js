@@ -1,17 +1,17 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
+import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
 import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
-import { ManagePortfolioRightPanel } from '../../portfolio/_components/manage-portfolio-right-panel';
+import { PortfolioCard } from '../../portfolio/_components/portfolio-card';
 import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
 
 export const PortfolioSection = () => {
@@ -21,11 +21,15 @@ export const PortfolioSection = () => {
 
   const fetchPortfolios = async () => {
     try {
-      const filters = [{ key: "isFeatured", type: "boolean", operator: "is", value: true }];
-      const response = await getPortfolioListAsync({
-        page: 1,
-        rowsPerPage: 20,
-      }, filters, 'and');
+      const filters = [{ key: 'isFeatured', type: 'boolean', operator: 'is', value: true }];
+      const response = await getPortfolioListAsync(
+        {
+          page: 1,
+          rowsPerPage: 20,
+        },
+        filters,
+        'and'
+      );
 
       if (response?.success) {
         setPortfolios(response.data);
@@ -42,7 +46,7 @@ export const PortfolioSection = () => {
   return (
     <Grid container alignItems="center">
       <Grid item xs={12}>
-        <Stack direction="column" >
+        <Stack direction="column">
           <FadeIn>
             <Box sx={{ py: { xs: 1, md: 2 } }}>
               <Stack direction="row">
@@ -120,7 +124,10 @@ export const PortfolioSection = () => {
             {portfolios.map((portfolio) => (
               <SwiperSlide key={portfolio.id}>
                 <FadeIn>
-                  <Card card={portfolio} fetchList={fetchPortfolios} />
+                  <Box sx={{ height: '400px', width: '300px' }}>
+                    <PortfolioCard content={portfolio} fetchList={fetchPortfolios} />
+                  </Box>
+                  {/* <Card card={portfolio} fetchList={fetchPortfolios} /> */}
                 </FadeIn>
               </SwiperSlide>
             ))}
@@ -179,7 +186,7 @@ const Card = ({ card, fetchList }) => {
               right: 0,
               bottom: 0,
               zIndex: 0,
-              backgroundImage: `url(${card.ThumbnailImage?.[0] || '/assets/image-placeholder.jpg'})`,
+              backgroundImage: `url(${card.thumbnailImage || '/assets/image-placeholder.jpg'})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               transition: 'transform 300ms ease',
@@ -226,7 +233,7 @@ const Card = ({ card, fetchList }) => {
               whiteSpace: 'nowrap',
             }}
           >
-            {card.ProjectTitle}
+            {card.projectTitle}
           </Typography>
 
           <Box
@@ -261,7 +268,7 @@ const Card = ({ card, fetchList }) => {
                   maxWidth: index === 0 ? '40%' : '30%',
                 }}
               >
-                {card.ByCountryPortfolios?.map((country) => country?.ByCountry?.Name).join(', ')}
+                {card.ByCountryPortfolios?.map((country) => country?.name).join(', ')}
               </Typography>
             ))}
           </Stack>
@@ -294,14 +301,14 @@ const Card = ({ card, fetchList }) => {
           </Stack>
         </Box>
       </Box>
-      <ManagePortfolioRightPanel
+      {/* <ManagePortfolioRightPanel
         view="QUICK"
         fetchList={fetchList}
         width="70%"
         open={!!openPortfolioRightPanel}
         data={card}
         onClose={() => setOpenPortfolioRightPanel(false)}
-      />
+      /> */}
     </>
   );
 };

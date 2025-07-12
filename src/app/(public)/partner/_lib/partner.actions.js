@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { validateFilters, buildQueryParams } from '/src/utils/helper';
+import { buildQueryParams, validateFilters } from '/src/utils/helper';
 
 export const getPartnerListAsync = async (queryParams, filters, gate) => {
   try {
@@ -37,8 +37,7 @@ export const getPartnerAsync = async (id) => {
 
 export const createPartnerAsync = async (data) => {
   try {
-    const { id, ...rest } = partnerPayload(data);
-    const partnerResponse = await api.post('/partner-HQ', rest);
+    const partnerResponse = await api.post('/partner-HQ', data);
     toast.success(partnerResponse.data.message);
     return { success: true, data: partnerResponse.data.data };
   } catch (error) {
@@ -50,7 +49,7 @@ export const createPartnerAsync = async (data) => {
 
 export const updatePartnerAsync = async (data) => {
   try {
-    const { id, ...rest } = partnerPayload(data);
+    const { id, ...rest } = data;
     const res = await api.patch(`/partner-HQ/${id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
@@ -92,16 +91,33 @@ export const deleteFileAsync = async (paths) => {
 
 const partnerPayload = (data) => {
   const { created_by, user_id, updated_at, ...rest } = data;
+
   return {
     ...rest,
-    platformDeliverables: rest.platformDeliverables.map((i) => i.value),
-    affiliatePlatform: rest.affiliatePlatform.map((i) => i.value),
-    ageBracket: rest.ageBracket.map((i) => i.value),
-    contracts: rest.contracts.map((i) => i.value),
-    currentStatus: rest.currentStatus.map((i) => i.value),
-    platforms: rest.platforms.url,
-    profileStatus: rest.profileStatus.url,
-    sourcedFrom: rest.sourcedFrom.url,
+    profileStatus: rest.profileStatus?.map((i) => i.value) || [],
+    currentStatus: rest.currentStatus?.map((i) => i.value) || [],
+    platformDeliverables: rest.platformDeliverables?.map((i) => i.value) || [],
+    platforms: rest.platforms?.map((i) => i.value) || [],
+    ageBracket: rest.ageBracket?.map((i) => i.value) || [],
+    affiliatePlatform: rest.affiliatePlatform?.map((i) => i.value) || [],
+    sourcedFrom: rest.sourcedFrom?.map((i) => i.value) || [],
+    stakeholders: rest.stakeholders?.map((i) => i.value) || [],
+    contentHQ: rest.contentHQ?.map((i) => i.value) || [],
+    profileCategory: rest.profileCategory?.map((i) => i.value) || [],
+    portfolios: rest.portfolios?.map((i) => i.value) || [],
+    state: rest.state?.map((i) => i.value) || [],
+    city: rest.city?.map((i) => i.value) || [],
+    services: rest.services?.map((i) => i.value) || [],
+    caseStudies: rest.caseStudies?.map((i) => i.value) || [],
+    productionHQ: rest.productionHQ?.map((i) => i.value) || [],
+    products: rest.products?.map((i) => i.value) || [],
+    contributedCampaigns: rest.contributedCampaigns?.map((i) => i.value) || [],
+    country: rest.country?.map((i) => i.value) || [],
+    tags: rest.tags?.map((i) => i.value) || [],
+    retailPartners: rest.retailPartners?.map((i) => i.value) || [],
+    destinations: rest.destinations?.map((i) => i.value) || [],
+    proposedCampaigns: rest.proposedCampaigns?.map((i) => i.value) || [],
+    productionHQ2: rest.productionHQ2?.map((i) => i.value) || [],
   };
 };
 
@@ -147,7 +163,6 @@ export const updatePartnerView = async (id, data) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
-
 
 export const deletePartnerView = async (id) => {
   try {

@@ -19,8 +19,8 @@ import { ImageUploader } from '/src/components/uploaders/image-uploader';
 import { paths } from '/src/paths';
 
 import { createCampaignAsync, getCampaignAsync, updateUCampaignAsync } from '../_lib/partner-private.actions';
-import { defaultCampaign } from '../_lib/campaign.types';
 import { ContentGuideline } from './content-guideline';
+import { defaultCampaign } from '../../../(public)/campaign/_lib/campaign.types';
 
 export const ManagePartnerForm = ({ slug }) => {
   const isUpdate = slug ? true : false;

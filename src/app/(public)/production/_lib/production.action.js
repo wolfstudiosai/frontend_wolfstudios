@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { getSearchQuery, validateFilters, buildQueryParams } from '/src/utils/helper';
+import { buildQueryParams, getSearchQuery, validateFilters } from '/src/utils/helper';
 import { uploadFileAsync } from '/src/utils/upload-file';
 
 export const getProductionListAsync = async (queryParams, filters, gate) => {
@@ -36,22 +36,14 @@ export const getProductionAsync = async (id) => {
   }
 };
 
-export const createProductionAsync = async (file, data) => {
+export const createProductionAsync = async (data) => {
   try {
-    // const { slug, id, created_by, user_id, updated_at, video_url, hero_image, field_image, thumbnail, vertical_gallery_images, horizontal_gallery_images, ...rest } = data;
-    const { slug, id, created_by, user_id, updated_at, ...rest } = data;
-    let thumbnailImage = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      thumbnailImage = uploadResponse[0].path;
-    }
-
-    const productionResponse = await api.post(`/production-HQ`, {
-      ...rest,
+    const campaignResponse = await api.post(`/production-HQ`, {
+      ...data,
     });
 
-    toast.success(productionResponse.data.message);
-    return { success: true, data: productionResponse.data.data };
+    toast.success(campaignResponse.data.message);
+    return { success: true, data: campaignResponse.data.data };
   } catch (error) {
     const errorMessage = error.response?.data?.message || error.message || 'An unknown error occurred';
     toast.error(errorMessage);
@@ -59,18 +51,11 @@ export const createProductionAsync = async (file, data) => {
   }
 };
 
-export const updateProductionAsync = async (file, data) => {
+export const updateProductionAsync = async (data) => {
+  const { id: production_id, ...rest } = data;
+
   try {
-    const { id, slug, user_id, created_by, created_at, updated_at, ...rest } = data;
-    let thumbnailPath = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      thumbnailPath = uploadResponse[0].path;
-    }
-    const res = await api.patch(`/production-HQ/${id}`, {
-      ...rest,
-      thumbnail: thumbnailPath ? thumbnailPath : data.thumbnail,
-    });
+    const res = await api.patch(`/production-HQ/${production_id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
@@ -83,6 +68,22 @@ export const deleteProductionAsync = async (ids, password) => {
   try {
     const res = await api.delete(`/production-HQ/bulk`, {
       data: { IDs: ids },
+      headers: {
+        Password: password,
+      },
+    });
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
+export const deleteSingleProductionAsync = async (id, password) => {
+  try {
+    const res = await api.delete(`/production-HQ/${id}`, {
+      data: null,
       headers: {
         Password: password,
       },
@@ -119,7 +120,6 @@ export const getProductionCategoryListAsync = async (queryParams) => {
   }
 };
 
-
 export const getProductionViewsAsync = async () => {
   try {
     const res = await api.get(`/views?table=PRODUCTION`);
@@ -151,7 +151,6 @@ export const createProductionViewAsync = async (data) => {
   }
 };
 
-
 export const updateProductionViewAsync = async (id, data) => {
   try {
     const res = await api.patch(`/views/${id}`, data);
@@ -161,7 +160,6 @@ export const updateProductionViewAsync = async (id, data) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
-
 
 export const deleteProductionViewAsync = async (id) => {
   try {

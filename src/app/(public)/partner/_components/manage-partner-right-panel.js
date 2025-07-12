@@ -1,13 +1,14 @@
 'use client';
 
+import React, { useEffect } from 'react';
+import Link from 'next/link';
 import { Button, IconButton } from '@mui/material';
 import { useFormik } from 'formik';
-import React, { useEffect } from 'react';
 
+import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import { Iconify } from '/src/components/iconify/iconify';
-import useAuth from '/src/hooks/useAuth';
 
 import { createPartnerAsync, deletePartnerAsync, getPartnerAsync, updatePartnerAsync } from '../_lib/partner.actions';
 import { defaultPartner } from '../_lib/partner.types';
@@ -15,7 +16,6 @@ import { PartnerForm } from './partner-form';
 import { PartnerQuickView } from './partner-quickview';
 import { formConstants } from '/src/app/constants/form-constants';
 import { imageUploader } from '/src/utils/upload-file';
-import Link from 'next/link';
 
 export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width, view, isAdd }) => {
   const isUpdate = data?.id ? true : false;
@@ -127,7 +127,12 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
               Save
             </Button>
           )}
-          <IconButton as={Link} href={`/partner/${data?.id}`} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} title="Analytics">
+          <IconButton
+            as={Link}
+            href={`/partner/${data?.id}`}
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            title="Analytics"
+          >
             <Iconify icon="mdi:analytics" />
           </IconButton>
           {sidebarView === 'QUICK' && (
@@ -147,15 +152,9 @@ export const ManagePartnerRightPanel = ({ open, onClose, fetchList, data, width,
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons} width={width}>
       {sidebarView === 'QUICK' ? (
-        <PartnerQuickView data={data} />
+        <PartnerQuickView data={data} isEdit={false} />
       ) : (
-        <PartnerForm
-          handleChange={handleChange}
-          values={values}
-          errors={errors}
-          setFieldValue={setFieldValue}
-          onSubmit={handleSubmit}
-        />
+        <PartnerForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />
       )}
     </DrawerContainer>
   );

@@ -1,16 +1,15 @@
 'use client';
 
-
+import { useColorScheme } from '@mui/material/styles';
+import Tooltip from '@mui/material/Tooltip';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
+
+import { useSettings } from '/src/hooks/use-settings';
+import { setSettings as setPersistedSettings } from '/src/lib/settings/set-settings';
 // import { SettingsDrawer } from './settings-drawer';
 import { SettingsDrawer } from '/src/components/core/settings/settings-drawer';
 import { Iconify } from '/src/components/iconify/iconify';
-import { setSettings as setPersistedSettings } from '/src/lib/settings/set-settings';
-import { useColorScheme } from '@mui/material/styles';
-import Tooltip from '@mui/material/Tooltip';
-
-import { useSettings } from '/src/hooks/use-settings';
 
 export const SettingsGear = () => {
   const { settings } = useSettings();
