@@ -5,7 +5,6 @@ import { PageLoader } from '/src/components/loaders/PageLoader';
 import { SpaceCard } from './space-card';
 
 export const SpaceGridView = ({ data, fetchList, loading }) => {
-  console.log(data, 'data from space grid....');
   return (
     <PageLoader loading={loading} error={null}>
       <Grid container spacing={0.5}>

@@ -52,7 +52,7 @@ export const createContentAsync = async (data) => {
   }
 };
 
-export const updateContentAsync = async (id, data) => {
+export const updateContentAsync = async ( data) => {
   try {
     // const payload = contentPayload(data);
     const res = await api.patch(`/content-HQ/${id}`, data);

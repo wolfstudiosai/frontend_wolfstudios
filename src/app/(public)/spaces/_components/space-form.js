@@ -130,14 +130,14 @@ export const SpaceForm = ({ formikProps }) => {
           />
           <ErrorMessage error={errors.thumbnailImage} />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} />
           <ErrorMessage error={errors.name} />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="phoneNumber" label="Phone number" value={values.phoneNumber} onChange={handleChange} />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomDatePicker
             label="Date listed"
             error={errors.dateListed}
@@ -146,7 +146,7 @@ export const SpaceForm = ({ formikProps }) => {
             onChange={(value) => setFieldValue('dateListed', value)}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomMultipleSelect
             label="Type"
             value={values.type}
@@ -157,10 +157,10 @@ export const SpaceForm = ({ formikProps }) => {
             ]}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="colorTone" label="Color tone" value={values.colorTone} onChange={handleChange} />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             type="number"
             name="startingRatehr"
@@ -169,10 +169,10 @@ export const SpaceForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="bookingLink" label="Booking link" value={values.bookingLink} onChange={handleChange} />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             type="number"
             name="minimumHourlyBooking"
@@ -201,11 +201,11 @@ export const SpaceForm = ({ formikProps }) => {
             Additional Information
           </Typography>
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="intro" label="Intro" value={values.intro} onChange={handleChange} />
         </Grid>
 
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="aboutThisSpace"
             label="About this space"
@@ -213,7 +213,7 @@ export const SpaceForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="seeTheSpace"
             label="See the space"
@@ -221,7 +221,7 @@ export const SpaceForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="addToProject"
             label="Add to project"
@@ -229,7 +229,7 @@ export const SpaceForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="recentCreatorsWhoBookedHere"
             label="Recent creators who booked here"
@@ -237,7 +237,7 @@ export const SpaceForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="parkingInstructions"
             label="Parking instructions"
@@ -245,7 +245,7 @@ export const SpaceForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="lightingInformation"
             label="Lighting information"
@@ -253,7 +253,7 @@ export const SpaceForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="soundInformation"
             label="Sound information"
@@ -261,16 +261,16 @@ export const SpaceForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="spaceAccess" label="Space access" value={values.spaceAccess} onChange={handleChange} />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="hostRules" label="Host rules" value={values.hostRules} onChange={handleChange} />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="electrical" label="Electrical" value={values.electrical} onChange={handleChange} />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             name="permitDetails"
             label="Permit details"
@@ -278,7 +278,7 @@ export const SpaceForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             type="number"
             name="attendeeLimit"
@@ -287,7 +287,7 @@ export const SpaceForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
             type="number"
             name="squareFootage"
@@ -296,10 +296,10 @@ export const SpaceForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="bedrooms" label="Bedrooms" value={values.bedrooms} onChange={handleChange} />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField name="bathrooms" label="Bathrooms" value={values.bathrooms} onChange={handleChange} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
@@ -323,13 +323,25 @@ export const SpaceForm = ({ formikProps }) => {
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomSelect
-            name="cycWall"
-            label="cycwall"
+            label="Cyc wall"
+            name="cycwall"
             value={values.cycwall}
             onChange={(value) => setFieldValue('cycwall', value)}
             options={[
-              { value: 'Yes', label: 'Yes' },
-              { value: 'No', label: 'No' },
+              { value: 'true', label: 'Yes' },
+              { value: 'false', label: 'No' },
+            ]}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomSelect
+            label="backdropSystem"
+            name="backdropSystem"
+            value={values.backdropSystem}
+            onChange={(value) => setFieldValue('backdropSystem', value)}
+            options={[
+              { value: 'true', label: 'Yes' },
+              { value: 'false', label: 'No' },
             ]}
           />
         </Grid>
@@ -366,18 +378,8 @@ export const SpaceForm = ({ formikProps }) => {
             ]}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <CustomMultipleInputFieldV2 name="adons" label="Ad-ons" value={values?.adons} setFieldValue={setFieldValue} />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <CustomMultipleInputFieldV2
-            name="features"
-            label="Features"
-            value={values?.features}
-            setFieldValue={setFieldValue}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6, border: '1px solid red' }}>
+
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomAutoCompleteV2
             multiple
             label="Campaign"
@@ -399,7 +401,7 @@ export const SpaceForm = ({ formikProps }) => {
             onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomAutoCompleteV2
             multiple
             label="Cities"
@@ -421,7 +423,7 @@ export const SpaceForm = ({ formikProps }) => {
             onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomAutoCompleteV2
             multiple
             label="Countries"
@@ -443,7 +445,7 @@ export const SpaceForm = ({ formikProps }) => {
             onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomAutoCompleteV2
             multiple
             label="States"
@@ -465,7 +467,7 @@ export const SpaceForm = ({ formikProps }) => {
             onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomAutoCompleteV2
             multiple
             label="Tags"
@@ -487,7 +489,7 @@ export const SpaceForm = ({ formikProps }) => {
             onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomAutoCompleteV2
             multiple
             label="Destinations"
@@ -509,7 +511,8 @@ export const SpaceForm = ({ formikProps }) => {
             onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomAutoCompleteV2
             multiple
             label="Production HQs"
@@ -531,7 +534,7 @@ export const SpaceForm = ({ formikProps }) => {
             onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomAutoCompleteV2
             multiple
             label="Production HQs 2"
@@ -553,13 +556,25 @@ export const SpaceForm = ({ formikProps }) => {
             onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
         </Grid>
+        <Grid size={{ xs: 12, md: 12 }}>
+          <CustomMultipleInputFieldV2 name="adons" label="Ad-ons" value={values?.adons} setFieldValue={setFieldValue} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 12 }}>
+          <CustomMultipleInputFieldV2
+            name="features"
+            label="Features"
+            value={values?.features}
+            setFieldValue={setFieldValue}
+          />
+        </Grid>
+        <Grid size={12} />
         <Grid size={{ xs: 12, md: 6 }}>
           <MediaUploaderTrigger
             open={uploaderStates.showcaseYourLastProjectHereWithUs}
             onClose={() => setUploaderStates((prev) => ({ ...prev, showcaseYourLastProjectHereWithUs: false }))}
             onSave={(urls) => setFieldValue('showcaseYourLastProjectHereWithUs', urls)}
             value={values?.showcaseYourLastProjectHereWithUs}
-            label="Showcase Your Last Project Here With Us"
+            label="Last Project"
             onAdd={() => setUploaderStates((prev) => ({ ...prev, showcaseYourLastProjectHereWithUs: true }))}
             onDelete={(filteredUrls) => setFieldValue('showcaseYourLastProjectHereWithUs', filteredUrls)}
             folderName="campaigns"
@@ -574,7 +589,7 @@ export const SpaceForm = ({ formikProps }) => {
             onClose={() => setUploaderStates((prev) => ({ ...prev, travelTimePlaceholderImageForGoogleMaps: false }))}
             onSave={(urls) => setFieldValue('travelTimePlaceholderImageForGoogleMaps', urls)}
             value={values?.travelTimePlaceholderImageForGoogleMaps}
-            label="Travel Time Placeholder Image For Google Maps"
+            label="Google Maps"
             onAdd={() => setUploaderStates((prev) => ({ ...prev, travelTimePlaceholderImageForGoogleMaps: true }))}
             onDelete={(filteredUrls) => setFieldValue('travelTimePlaceholderImageForGoogleMaps', filteredUrls)}
             folderName="campaigns"

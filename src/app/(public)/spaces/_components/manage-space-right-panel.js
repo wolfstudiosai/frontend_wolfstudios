@@ -7,10 +7,12 @@ import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
 
 import useAuth from '/src/hooks/useAuth';
+import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
 
-import { createSpaceAsync, deleteSpaceAsync, updateSpaceAsync } from '../_lib/space.actions';
+import { createSpaceAsync, deleteSingleSpaceAsync, updateSpaceAsync } from '../_lib/space.actions';
 import { defaultSpace } from '../_lib/space.types';
+import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
 import { SpaceForm } from './space-form';
 import { SpaceQuickViewV2 } from './space-quickviewV2';
 import { formConstants } from '/src/app/constants/form-constants';
@@ -26,9 +28,6 @@ export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = '
     initialValues: defaultSpace(data),
     validate: (values) => {
       const errors = {};
-      // if (!values.thumbnailImage) {
-      //   errors.thumbnailImage = formConstants.required;
-      // }
       if (!values.name) {
         errors.name = formConstants.required;
       }
@@ -36,82 +35,81 @@ export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = '
       return errors;
     },
     onSubmit: async (values) => {
-      console.log('submitted values: ', values);
-      // setLoading(true);
-      // try {
-      //   const finalData = {
-      //     ...values,
-      //   };
+      setLoading(true);
+      try {
+        const finalData = convertArrayObjIntoArrOfStr(values, [
+          'campaigns',
+          'cities',
+          'countries',
+          'states',
+          'tags',
+          'destinations',
+          'productionHQ',
+          'productionHQ2',
+        ]);
 
-      //   const arrayFields = [
-      //     'type',
-      //     'spaceStyle',
-      //     'props',
-      //     'theme',
-      //     'availableLighting',
-      //     'adons',
-      //     'cycwall',
-      //     'backdropSystem',
-      //     'features',
-      //   ];
-      //   for (const field of arrayFields) {
-      //     const value = values[field];
-      //     if (value.length > 0) {
-      //       const arrOfStr = value.map((item) => item.value);
-      //       finalData[field] = arrOfStr;
-      //     }
-      //   }
+        const { id, ...rest } = finalData;
+        const createPayload = {
+          ...rest,
+          thumbnailImage: Array.isArray(finalData.thumbnailImage)
+            ? finalData.thumbnailImage[0]
+            : finalData.thumbnailImage,
+        };
 
-      //   const { id, ...rest } = finalData;
-      //   const createPayload = {
-      //     ...rest,
-      //     thumbnailImage: Array.isArray(finalData.thumbnailImage)
-      //       ? finalData.thumbnailImage[0]
-      //       : finalData.thumbnailImage,
-      //   };
-
-      //   const res = data?.id
-      //     ? await updatePortfolioAsync(data?.id, {
-      //         ...finalData,
-      //         thumbnailImage: Array.isArray(finalData.thumbnailImage)
-      //           ? finalData.thumbnailImage[0]
-      //           : finalData.thumbnailImage,
-      //       })
-      //     : await createSpaceAsync(createPayload);
-      //   if (res.success) {
-      //     onClose?.();
-      //     resetForm();
-      //     fetchList();
-      //   } else {
-      //     console.error('Operation failed:', res.message);
-      //   }
-      // } catch (error) {
-      //   console.error('Error:', error);
-      // } finally {
-      //   setLoading(false);
-      // }
+        const res = data?.id
+          ? await updateSpaceAsync({
+              ...finalData,
+              thumbnailImage: Array.isArray(finalData.thumbnailImage)
+                ? finalData.thumbnailImage[0]
+                : finalData.thumbnailImage,
+            })
+          : await createSpaceAsync(createPayload);
+        if (res.success) {
+          onClose?.();
+          resetForm();
+          await fetchList();
+        } else {
+          console.error('Operation failed:', res.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
     },
   });
 
   // *********************States*********************************
-
-  const handleDelete = async (password) => {
-    const response = await deleteSpaceAsync([data.id]);
-    if (response.success) {
-      fetchList();
-      onClose?.();
-    }
-  };
-
-  const handleDeleteThumbnail = () => {
-    setFieldValue('thumbnail', '');
-    setFile(null);
+  const handleDelete = async () => {
+    fetchList();
+    onClose?.();
   };
 
   const handleFeatured = async (featured) => {
-    setIsFeatured(featured);
-    await updateSpaceAsync(file, { ...values, isFeatured: featured });
-    fetchList();
+    try {
+      setIsFeatured(featured);
+      const finalData = convertArrayObjIntoArrOfStr(values, [
+        'campaigns',
+        'cities',
+        'countries',
+        'states',
+        'tags',
+        'destinations',
+        'productionHQ',
+        'productionHQ2',
+      ]);
+
+      await updateSpaceAsync({
+        ...finalData,
+        isFeatured: featured,
+        thumbnailImage: Array.isArray(finalData.thumbnailImage)
+          ? finalData.thumbnailImage[0]
+          : finalData.thumbnailImage,
+      });
+      fetchList();
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   // *****************Action Buttons*******************************
@@ -119,6 +117,11 @@ export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = '
     <>
       {isLogin && (
         <>
+          {panelView !== 'QUICK' && (
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={() => handleSubmit()}>
+              Save
+            </Button>
+          )}
           {panelView === 'EDIT' && data?.id ? (
             <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
               <Icon icon="solar:eye-broken" />
@@ -130,34 +133,25 @@ export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = '
               </IconButton>
             )
           )}
-
-          {panelView !== 'QUICK' && (
-            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={() => handleSubmit()}>
-              Save
-            </Button>
-          )}
-
           {panelView !== 'ADD' && (
             <IconButton
               sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              onClick={() => router.push(`/spaces/${data?.id}`)}
               title="Analytics"
+              onClick={() => router.push(`/analytics/${data?.id}`)}
             >
               <Icon icon="mdi:analytics" />
             </IconButton>
           )}
-
-          {/* {panelView === 'QUICK' && (
+          {panelView !== 'ADD' && (
             <DeleteConfirmationPasswordPopover
               id={data?.id}
               title="Are you sure you want to delete?"
-              deleteFn={deletePortfolioAsync}
+              deleteFn={deleteSingleSpaceAsync}
               passwordInput
               onDelete={handleDelete}
               disabled={!data?.id}
             />
-          )} */}
-
+          )}
           {panelView !== 'ADD' && (
             <FormControlLabel
               control={
@@ -175,6 +169,12 @@ export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = '
       )}
     </>
   );
+
+  React.useEffect(() => {
+    if (data) {
+      setValues(defaultSpace(data));
+    }
+  }, [data]);
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
