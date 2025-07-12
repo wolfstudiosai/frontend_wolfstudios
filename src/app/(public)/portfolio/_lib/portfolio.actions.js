@@ -66,6 +66,21 @@ export const updatePortfolioAsync = async (id, data) => {
   }
 };
 
+export const deleteSinglePortfolioAsync = async (id, password) => {
+  try {
+    const res = await api.delete(`/portfolios/${id}`, {
+      data: null,
+      headers: {
+        Password: password,
+      },
+    });
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
 export const deletePortfolioAsync = async (ids, password) => {
   try {
     const res = await api.delete(`/portfolios/bulk`, {

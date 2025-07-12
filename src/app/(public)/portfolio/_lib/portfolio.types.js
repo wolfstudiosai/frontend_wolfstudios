@@ -2,8 +2,8 @@ export const defaultPortfolio = (data) => {
   const defaultValue = {
     id: data?.id || null,
     projectTitle: data?.projectTitle || '',
-    shortDescription: data?.shortDescription || '',
-    fullDescription: data?.fullDescription || '',
+    projectShortDescription: data?.projectShortDescription || '',
+    projectSinglePageFullDescription: data?.projectSinglePageFullDescription || '',
     date: data?.date || '',
     horizontalImageGallery: Array.isArray(data?.horizontalImageGallery) ? data.horizontalImageGallery : [],
     verticalImageGallery: data?.verticalImageGallery || [],

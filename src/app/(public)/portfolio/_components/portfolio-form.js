@@ -82,8 +82,6 @@ export const PortfolioForm = ({ formikProps }) => {
     fetchData();
   }, [autocompleteFocus]);
 
-  console.log(values, 'values from portfolio form....');
-
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -265,9 +263,9 @@ export const PortfolioForm = ({ formikProps }) => {
           {/* short description */}
           <Grid size={{ xs: 12 }}>
             <CustomTextField
-              name="shortDescription"
+              name="projectShortDescription"
               label="Short Description"
-              value={values.shortDescription}
+              value={values.projectShortDescription}
               onChange={handleChange}
               multiline
               rows={2}
@@ -279,9 +277,9 @@ export const PortfolioForm = ({ formikProps }) => {
           {/* full description */}
           <Grid size={{ xs: 12 }}>
             <CustomTextField
-              name="fullDescription"
+              name="projectSinglePageFullDescription"
               label="Full Description"
-              value={values.fullDescription}
+              value={values.projectSinglePageFullDescription}
               onChange={handleChange}
               multiline
               rows={4}

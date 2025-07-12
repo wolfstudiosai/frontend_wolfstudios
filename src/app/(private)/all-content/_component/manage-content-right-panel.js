@@ -122,6 +122,11 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
     <>
       {isLogin && (
         <>
+          {panelView !== 'QUICK' && (
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={() => handleSubmit()}>
+              Save
+            </Button>
+          )}
           {panelView === 'EDIT' && data?.id ? (
             <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
               <Icon icon="solar:eye-broken" />
@@ -133,13 +138,6 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
               </IconButton>
             )
           )}
-
-          {panelView !== 'QUICK' && (
-            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={() => handleSubmit()}>
-              Save
-            </Button>
-          )}
-
           {panelView !== 'ADD' && (
             <IconButton
               sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -149,8 +147,7 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
               <Icon icon="mdi:analytics" />
             </IconButton>
           )}
-
-          {panelView === 'QUICK' && (
+          {panelView !== 'ADD' && (
             <DeleteConfirmationPasswordPopover
               id={data?.id}
               title="Are you sure you want to delete?"
@@ -160,7 +157,6 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
               disabled={!data?.id}
             />
           )}
-
           {panelView !== 'ADD' && (
             <FormControlLabel
               control={

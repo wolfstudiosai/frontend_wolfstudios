@@ -12,7 +12,7 @@ import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-import { createPortfolioAsync, deletePortfolioAsync, updatePortfolioAsync } from '../_lib/portfolio.actions';
+import { createPortfolioAsync, deletePortfolioAsync, deleteSinglePortfolioAsync, updatePortfolioAsync } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
 import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
 import { PortfolioForm } from './portfolio-form';
@@ -42,7 +42,6 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
       return errors;
     },
     onSubmit: async (values) => {
-      console.log('submitted values: ', values);
       setLoading(true);
       try {
         const finalData = convertArrayObjIntoArrOfStr(values, [
@@ -61,15 +60,15 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
           videoLink: Array.isArray(finalData.videoLink) ? finalData.videoLink[0] || null : finalData.videoLink || null,
         };
 
-        console.log(finalData, 'final data....');
-
         const res = data?.id
           ? await updatePortfolioAsync(data?.id, {
               ...finalData,
               thumbnailImage: Array.isArray(finalData.thumbnailImage)
                 ? finalData.thumbnailImage[0] || ''
                 : finalData.thumbnailImage || '',
-              videoLink: Array.isArray(finalData.videoLink) ? finalData.videoLink[0] || '' : finalData.videoLink || '',
+              videoLink: Array.isArray(finalData.videoLink)
+                ? finalData.videoLink[0] || null
+                : finalData.videoLink || null,
             })
           : await createPortfolioAsync(createPayload);
         if (res.success) {
@@ -86,7 +85,6 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
       }
     },
   });
-  console.log(values, 'values from right panel');
   const handleDelete = async () => {
     fetchList();
     onClose?.();
@@ -95,7 +93,20 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
   const handleFeatured = async (featured) => {
     try {
       setIsFeatured(featured);
-      await updatePortfolioAsync(data?.id, { ...data, isFeatured: featured });
+      const finalData = convertArrayObjIntoArrOfStr(values, [
+        'portfolioCategories',
+        'states',
+        'countries',
+        'partnerHQ',
+      ]);
+
+      await updatePortfolioAsync(data?.id, {
+        ...finalData,
+        thumbnailImage: Array.isArray(finalData.thumbnailImage)
+          ? finalData.thumbnailImage[0] || ''
+          : finalData.thumbnailImage || '',
+        videoLink: Array.isArray(finalData.videoLink) ? finalData.videoLink[0] || null : finalData.videoLink || null,
+      });
       fetchList();
     } catch (error) {
       console.error('Error:', error);
@@ -107,6 +118,11 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
     <>
       {isLogin && (
         <>
+          {panelView !== 'QUICK' && (
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={() => handleSubmit()}>
+              Save
+            </Button>
+          )}
           {panelView === 'EDIT' && data?.id ? (
             <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
               <Icon icon="solar:eye-broken" />
@@ -119,12 +135,6 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
             )
           )}
 
-          {panelView !== 'QUICK' && (
-            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={() => handleSubmit()}>
-              Save
-            </Button>
-          )}
-
           {panelView !== 'ADD' && (
             <IconButton
               sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -135,11 +145,11 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
             </IconButton>
           )}
 
-          {panelView === 'QUICK' && (
+          {panelView !== 'ADD' && (
             <DeleteConfirmationPasswordPopover
               id={data?.id}
               title="Are you sure you want to delete?"
-              deleteFn={deletePortfolioAsync}
+              deleteFn={deleteSinglePortfolioAsync}
               passwordInput
               onDelete={handleDelete}
               disabled={!data?.id}
