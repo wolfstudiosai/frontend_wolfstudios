@@ -307,6 +307,7 @@ export const ProductionForm = ({ formikProps }) => {
           borderRadius: '8px',
           boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
           p: 2,
+          mt: 4
         }}
       >
         <Grid size={12}>
