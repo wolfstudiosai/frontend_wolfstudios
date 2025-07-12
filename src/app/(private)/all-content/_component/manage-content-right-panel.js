@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Icon } from '@iconify/react';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
@@ -57,7 +56,7 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
         };
 
         const res = data?.id
-          ? await updateContentAsync(data?.id, {
+          ? await updateContentAsync({
               ...finalData,
               thumbnailImage: Array.isArray(finalData.thumbnailImage)
                 ? finalData.thumbnailImage[0]
@@ -96,7 +95,7 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
         'retailPartners',
       ]);
 
-      await updateContentAsync(data?.id, {
+      await updateContentAsync({
         ...finalData,
         isFeatured: featured,
         thumbnailImage: Array.isArray(finalData.thumbnailImage)

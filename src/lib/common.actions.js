@@ -149,6 +149,17 @@ export const getHomepageContentAsync = async () => {
   }
 };
 
+export const createHomepageContentAsync = async (payload) => {
+  try {
+    const res = await api.post(`/homepage-contents`, payload);
+
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
 export const updateHomepageContentAsync = async (order, payload) => {
   try {
     const res = await api.patch(`/homepage-contents/${order}`, payload);

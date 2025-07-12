@@ -22,7 +22,7 @@ const isValidNumber = (value) => {
   return !isNaN(value) && value !== '';
 };
 
-export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
+export const PartnerQuickView = ({ data, isEdit }) => {
   const { isLogin } = useAuth();
 
   const socialProfiles = [
@@ -386,7 +386,6 @@ export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
               objectFit: 'cover',
               borderBottom: '1px solid var(--mui-palette-divider)',
             }}
-            onClick={() => setOpenPartnerRightPanel(item)}
           />
         </Box>
         {socialProfiles.length > 0 && <PartnerIframes profiles={socialProfiles} />}

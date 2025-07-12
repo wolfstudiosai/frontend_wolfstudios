@@ -1,22 +1,21 @@
 'use client';
 
-import { Box, IconButton, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { Box, IconButton, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { toast } from 'sonner';
 
-import { FadeIn } from '/src/components/animation/fade-in';
-import { useSettings } from '/src/hooks/use-settings';
 import useAuth from '/src/hooks/useAuth';
+import { FadeIn } from '/src/components/animation/fade-in';
 
 import { Iconify } from '../../../../components/iconify/iconify';
 import { MediaUploader } from '../../../../components/uploaders/media-uploader';
-import { updateHomepageContentAsync } from '../../../../lib/common.actions';
+import { createHomepageContentAsync, updateHomepageContentAsync } from '../../../../lib/common.actions';
 import { useHomepageContent } from '../../../../services/home/useHomepageContent';
 import { getMediaTypeFromUrl } from '../../../../utils/get-media-type';
 
 export const HeroSection = () => {
   const theme = useTheme();
-  const { isFeaturedCardVisible } = useSettings();
+
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { isLogin, userInfo } = useAuth();
   const { data, error, isLoading, mutate } = useHomepageContent();
@@ -31,6 +30,8 @@ export const HeroSection = () => {
     order: 0,
   });
 
+  console.log(data, 'use homepage content....');
+
   const order1 = data?.data?.find((item) => item.order === 1);
   const order2 = data?.data?.find((item) => item.order === 2);
 
@@ -39,12 +40,19 @@ export const HeroSection = () => {
     try {
       const mediaUrl = url[0];
       const mediaType = await getMediaTypeFromUrl(mediaUrl);
-      const res = await updateHomepageContentAsync(id, {
-        id,
-        type: mediaType,
-        order: uploadImage.order,
-        url: url[0],
-      });
+      const isAlreadyExists = data?.data?.some((item) => item.order === uploadImage.order);
+      const res = isAlreadyExists
+        ? await updateHomepageContentAsync(id, {
+            id,
+            type: mediaType,
+            order: uploadImage.order,
+            url: url[0],
+          })
+        : await createHomepageContentAsync({
+            type: mediaType,
+            order: uploadImage.order,
+            url: url[0],
+          });
 
       if (res.success) {
         toast.success('Media uploaded successfully');

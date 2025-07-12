@@ -152,6 +152,7 @@ export const PartnerForm = ({ formikProps }) => {
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField label="Email" name="email" value={values.email} onChange={handleChange} />
+          <ErrorMessage error={errors.email} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField label="Phone" name="phone" value={values.phone} onChange={handleChange} />
@@ -547,8 +548,8 @@ export const PartnerForm = ({ formikProps }) => {
             value={values.openToGifting}
             onChange={(newValues) => setFieldValue('openToGifting', newValues)}
             options={[
-              { value: "true", label: 'Yes' },
-              { value: "false", label: 'No' },
+              { value: 'true', label: 'Yes' },
+              { value: 'false', label: 'No' },
             ]}
           />
         </Grid>
@@ -632,7 +633,7 @@ export const PartnerForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        
+
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomDatePicker
             label={'Month Sourced'}
@@ -868,7 +869,7 @@ export const PartnerForm = ({ formikProps }) => {
             onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
         </Grid>
-         <Grid size={{ xs: 12, md: 4 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomAutoCompleteV2
             label="Production HQ"
             name="productionHQ"
@@ -890,7 +891,7 @@ export const PartnerForm = ({ formikProps }) => {
             error={undefined}
             onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
-        </Grid> 
+        </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomAutoCompleteV2
             label="Production HQ2"

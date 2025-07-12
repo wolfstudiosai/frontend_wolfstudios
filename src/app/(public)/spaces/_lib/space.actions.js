@@ -48,18 +48,9 @@ export const createSpaceAsync = async (data) => {
   }
 };
 
-export const updateSpaceAsync = async (file, data) => {
+export const updateSpaceAsync = async (data) => {
   try {
-    const { id, slug, user_id, created_by, created_at, updated_at, ...rest } = data;
-    let thumbnailPath = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      thumbnailPath = uploadResponse[0].path;
-    }
-    const res = await api.patch(`/spaces/${id}`, {
-      ...rest,
-      thumbnail: thumbnailPath ? thumbnailPath : data.thumbnail,
-    });
+    const res = await api.patch(`/spaces/${data?.id}`, data);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
@@ -72,6 +63,22 @@ export const deleteSpaceAsync = async (ids) => {
   try {
     const res = await api.delete(`/spaces/bulk`, {
       data: { IDs: ids },
+    });
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
+export const deleteSingleSpaceAsync = async (id, password) => {
+  try {
+    const res = await api.delete(`/spaces/${id}`, {
+      data: null,
+      headers: {
+        Password: password,
+      },
     });
     toast.success(res.data.message);
     return { success: true, data: res.data.data };

@@ -30,10 +30,10 @@ export const PortfolioCard = ({ content, fetchList }) => {
         onClick={() => setOpenRightPanel(content)}
       >
         <Box className="image-container" sx={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
-          {isVideoContent(content.thumbnailImage || '') ? (
+          {isVideoContent(content?.thumbnailImage || '') ? (
             <Box
               component="video"
-              src={content.thumbnailImage}
+              src={content?.thumbnailImage}
               muted
               autoPlay
               loop

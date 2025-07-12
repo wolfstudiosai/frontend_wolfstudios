@@ -1,12 +1,11 @@
-import React from 'react';
 import { Box, Button, Divider, MenuItem, MenuList, Popover, Stack, Typography } from '@mui/material';
+import React from 'react';
 
-import { CustomChip } from '/src/components/core/custom-chip';
 import { Iconify } from '/src/components/iconify/iconify';
 import { IconWithoutText } from '/src/components/utils/icon-text';
 
 import { ManagePartnerRightPanel } from './manage-partner-right-panel';
-import { formatCompactNumber, formatViewCount, isSupabaseUrl } from '/src/utils/helper';
+import { formatCompactNumber } from '/src/utils/helper';
 
 export const PartnerCard = ({ item, fetchList }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
