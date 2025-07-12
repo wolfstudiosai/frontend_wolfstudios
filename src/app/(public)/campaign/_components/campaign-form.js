@@ -127,7 +127,7 @@ export const CampaignForm = ({ formikProps }) => {
             />
             <ErrorMessage error={errors.thumbnailImage} />
           </Grid>
-          <Grid size={{ xs: 12, md: 8 }}>
+          <Grid size={{ xs: 12 }}>
             <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} />
             <ErrorMessage error={errors.name} />
           </Grid>
@@ -135,31 +135,8 @@ export const CampaignForm = ({ formikProps }) => {
             <CustomTextField name="client" label="Client" value={values.client} onChange={handleChange} />
             <ErrorMessage error={errors.client} />
           </Grid>
-          <Grid size={{ xs: 12 }}>
-            <CustomTextField name="notes" label="Notes " value={values.notes} onChange={handleChange} />
-            <ErrorMessage error={errors.notes} />
-          </Grid>
-          <Grid size={{ xs: 12 }}>
-            <CustomTextField
-              name="guidelines"
-              label="Guidelines (Use commas to separate notes)"
-              value={values.guidelines}
-              onChange={handleChange}
-            />
-            <ErrorMessage error={errors.guidelines} />
-          </Grid>
-          <Grid size={{ xs: 12 }}>
-            <CustomTextField
-              name="campaignDescription"
-              label="Description"
-              value={values.campaignDescription}
-              onChange={handleChange}
-              multiline
-              rows={4}
-            />
-            <ErrorMessage error={errors.campaignDescription} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomDatePicker
               label="Start Date"
               error={errors.startDate}
@@ -169,7 +146,7 @@ export const CampaignForm = ({ formikProps }) => {
             />
             <ErrorMessage error={errors.startDate} />
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomDatePicker
               label="End Date"
               error={errors.endDate}
@@ -228,6 +205,30 @@ export const CampaignForm = ({ formikProps }) => {
             />
             <ErrorMessage error={errors.campaignStatus} />
           </Grid>
+          <Grid size={{ xs: 12 }}>
+            <CustomTextField
+              name="guidelines"
+              label="Guidelines (Use commas to separate notes)"
+              value={values.guidelines}
+              onChange={handleChange}
+            />
+            <ErrorMessage error={errors.guidelines} />
+          </Grid>
+          <Grid size={{ xs: 12 }}>
+            <CustomTextField name="notes" label="Notes " value={values.notes} onChange={handleChange} />
+            <ErrorMessage error={errors.notes} />
+          </Grid>
+          <Grid size={{ xs: 12 }}>
+            <CustomTextField
+              name="campaignDescription"
+              label="Description"
+              value={values.campaignDescription}
+              onChange={handleChange}
+              multiline
+              rows={4}
+            />
+            <ErrorMessage error={errors.campaignDescription} />
+          </Grid>
         </Grid>
         <Grid
           container
@@ -248,7 +249,7 @@ export const CampaignForm = ({ formikProps }) => {
           </Grid>
 
           {/* Content HQ */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomAutoCompleteV2
               multiple
               label="Content HQ"
@@ -297,7 +298,7 @@ export const CampaignForm = ({ formikProps }) => {
           </Grid> */}
 
           {/* Proposed Partner */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomAutoCompleteV2
               multiple
               label="Proposed Partner"
@@ -394,7 +395,7 @@ export const CampaignForm = ({ formikProps }) => {
           </Grid> */}
 
           {/* Contributed Partner */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomAutoCompleteV2
               multiple
               label="Contributed Partner"
@@ -419,7 +420,7 @@ export const CampaignForm = ({ formikProps }) => {
           </Grid>
 
           {/* Space */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomAutoCompleteV2
               multiple
               label="Space"
@@ -444,7 +445,7 @@ export const CampaignForm = ({ formikProps }) => {
           </Grid>
 
           {/* Production HQ */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomAutoCompleteV2
               multiple
               label="Production HQ"
