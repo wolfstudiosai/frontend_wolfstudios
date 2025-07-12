@@ -1,39 +1,48 @@
-
 export const defaultPortfolio = (data) => {
   const defaultValue = {
     id: data?.id || null,
     projectTitle: data?.projectTitle || '',
-    shortDescription: data?.shortDescription || '',
-    fullDescription: data?.fullDescription || '',
-    videoLink: data?.videoLink || '',
-    date: data?.date ? new Date(`${data?.date} 1`).toString() : null,
-    horizontalImageGallery: data?.horizontalImageGallery || [],
-    verticalImageGallery: data?.verticalImageGallery || [],
+    projectShortDescription: data?.projectShortDescription || '',
+    projectSinglePageFullDescription: data?.projectSinglePageFullDescription || '',
+    date: data?.date || '',
+    horizontalImageGallery: Array.isArray(data?.horizontalImageGallery) ? data.horizontalImageGallery : [],
+    verticalImageGallery: Array.isArray(data?.verticalImageGallery) ? data?.verticalImageGallery : [],
+    thumbnailImage: typeof data?.thumbnailImage === 'string' ? [data.thumbnailImage] : null,
+    videoLink: typeof data?.videoLink === 'string' ? [data.videoLink] : null,
     singlePageHeroImage: data?.singlePageHeroImage || [],
-    thumbnailImage: data?.thumbnailImage || [],
-    imagefield: data?.imagefield || [],
+    imageField: data?.imageField || [],
     isFeatured: data?.isFeatured || false,
-    portfolioCategories: data?.portfolioCategoriesPortfolios?.map((item) => ({
-      value: item?.portfolioCategories?.id,
-      label: item?.portfolioCategories?.name
-    })) || [],
-    partnerHQ: data?.partnerHQPortfolios?.map((item) => ({
-      value: item?.partnerHQ?.id,
-      label: item?.partnerHQ?.name
-    })) || [],
-    states: data?.statesPortfolios?.map((item) => ({
-      value: item?.states?.id,
-      label: item?.states?.name
-    })) || [],
-    countries: data?.countriesPortfolios?.map((item) => ({
-      value: item?.countries?.id,
-      label: item?.countries?.name
-    })) || [],
-    caseStudies: data?.caseStudiesPortfolios?.map((item) => ({
-      value: item?.caseStudies?.id,
-      label: item?.caseStudies?.name
-    })) || [],
-  }
+    portfolioCategories: Array.isArray(data?.portfolioCategories)
+      ? data.portfolioCategories.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    partnerHQ: Array.isArray(data?.partnerHQ)
+      ? data.partnerHQ.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    states: Array.isArray(data?.states)
+      ? data.states.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    countries: Array.isArray(data?.countries)
+      ? data.countries.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    caseStudies: Array.isArray(data?.caseStudies)
+      ? data.caseStudies.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+  };
 
   return defaultValue;
-}
+};

@@ -1,181 +1,205 @@
 'use client';
 
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { Icon } from '@iconify/react';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
-import React, { useEffect } from 'react';
 
+import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
-import { Iconify } from '/src/components/iconify/iconify';
-import useAuth from '/src/hooks/useAuth';
+import { PageLoader } from '/src/components/loaders/PageLoader';
 
-import { createPartnerAsync, deletePartnerAsync, getPartnerAsync, updatePartnerAsync } from '../_lib/partner.actions';
+import { createPartnerAsync, deletePartnerAsync, updatePartnerAsync } from '../_lib/partner.actions';
 import { defaultPartner } from '../_lib/partner.types';
+import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
 import { PartnerForm } from './partner-form';
 import { PartnerQuickView } from './partner-quickview';
 import { formConstants } from '/src/app/constants/form-constants';
-import { imageUploader } from '/src/utils/upload-file';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { PageLoader } from '/src/components/loaders/PageLoader';
 
-export const PartnerRightPanel = ({ open, fetchList, onClose, id, view = 'QUICK' }) => {
-    const { isLogin } = useAuth();
-    const router = useRouter()
-    const [data, setData] = React.useState(null);
-    const [sidebarView, setSidebarView] = React.useState(view);
-    const [loading, setLoading] = React.useState(false);
-    const [isFeatured, setIsFeatured] = React.useState(false);
+export const PartnerRightPanel = ({ fetchList, onClose, data, open, view = 'QUICK' }) => {
+  const { isLogin } = useAuth();
+  const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
+  const [panelView, setPanelView] = React.useState(view);
+  const [loading, setLoading] = React.useState(false);
+  const router = useRouter();
 
-    // *********************States*********************************
+  const { values, errors, handleChange, setFieldValue, resetForm, setValues, handleSubmit } = useFormik({
+    initialValues: defaultPartner(data),
+    validate: (values) => {
+      const errors = {};
+      if (!values.name) {
+        errors.name = formConstants.required;
+      }
 
-    const handleDelete = async () => {
-        fetchList();
-        onClose?.();
-        router.refresh()
-    };
+      return errors;
+    },
+    onSubmit: async (values) => {
+      setLoading(true);
+      try {
+        const finalData = convertArrayObjIntoArrOfStr(values, [
+          'stakeholders',
+          'contentHQ',
+          'profileCategory',
+          'portfolios',
+          'states',
+          'cities',
+          'services',
+          'caseStudies',
+          'productionHQ',
+          'products',
+          'contributedCampaigns',
+          'countries',
+          'tags',
+          'retailPartners',
+          'destinations',
+          'proposedCampaigns',
+          'productionHQ2',
+        ]);
 
-    const handleFeatured = async (featured) => {
-        setIsFeatured(featured);
-        const payload = defaultPartner({ ...data, isFeatured: featured })
-        const response = await updatePartnerAsync(payload)
-        if (response.success) {
-            fetchList();
-        }
-    };
-
-    const { values, errors, handleChange, handleSubmit, setFieldValue, setValues, resetForm } = useFormik({
-        initialValues: defaultPartner(),
-        validate: (values) => {
-            const errors = {};
-            if (!values.name) {
-                errors.name = formConstants.required;
-            }
-            if (!values.email) {
-                errors.email = formConstants.required;
-            }
-
-            return errors;
-        },
-        onSubmit: async (values) => {
-            setLoading(true);
-            try {
-                const res = id ? await updatePartnerAsync(values) : await createPartnerAsync(values);
-                if (res.success) {
-                    resetForm();
-                    onClose?.();
-                    fetchList?.();
-                    router.refresh()
-                } else {
-                    console.error('Operation failed:', res.message);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            } finally {
-                setLoading(false);
-            }
-        },
-    });
-
-    // *****************Use Effects**********************************
-    useEffect(() => {
-        const getSingleData = async () => {
-            setLoading(true);
-            try {
-                const response = await getPartnerAsync(id);
-                if (response.data) {
-                    setData(response.data);
-                    setIsFeatured(response.data.isFeatured);
-                    setValues(defaultPartner(response.data));
-                }
-            } catch (error) {
-                console.error('Error fetching partner data:', error);
-                return null;
-            } finally {
-                setLoading(false);
-            }
+        const { id, ...rest } = finalData;
+        const createPayload = {
+          ...rest,
+          thumbnailImage: Array.isArray(finalData.thumbnailImage)
+            ? finalData.thumbnailImage[0]
+            : finalData.thumbnailImage,
         };
 
-        if (id) {
-            getSingleData();
+        const res = data?.id
+          ? await updatePartnerAsync({
+              ...finalData,
+              thumbnailImage: Array.isArray(finalData.thumbnailImage)
+                ? finalData.thumbnailImage[0]
+                : finalData.thumbnailImage,
+            })
+          : await createPartnerAsync(createPayload);
+        if (res.success) {
+          onClose?.();
+          resetForm();
+          await fetchList();
+        } else {
+          console.error('Operation failed:', res.message);
         }
-    }, [id]);
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
+  const handleDelete = async () => {
+    fetchList();
+    onClose?.();
+  };
 
-    // *****************Action Buttons*******************************
-    const actionButtons = (
+  const handleFeatured = async (featured) => {
+    try {
+      setIsFeatured(featured);
+      const finalData = convertArrayObjIntoArrOfStr(values, [
+        'stakeholders',
+        'contentHQ',
+        'profileCategory',
+        'portfolios',
+        'states',
+        'cities',
+        'services',
+        'caseStudies',
+        'productionHQ',
+        'products',
+        'contributedCampaigns',
+        'countries',
+        'tags',
+        'retailPartners',
+        'destinations',
+        'proposedCampaigns',
+        'productionHQ2',
+      ]);
+
+      await updatePartnerAsync({
+        ...finalData,
+        isFeatured: featured,
+        thumbnailImage: Array.isArray(finalData.thumbnailImage)
+          ? finalData.thumbnailImage[0]
+          : finalData.thumbnailImage,
+      });
+      fetchList();
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  // *****************Action Buttons*******************************
+  const actionButtons = (
+    <>
+      {isLogin && (
         <>
-            {isLogin && (
-                <>
-                    {sidebarView === 'EDIT' && id ? (
-                        <IconButton onClick={() => setSidebarView('QUICK')} title="Edit">
-                            <Iconify icon="solar:eye-broken" />
-                        </IconButton>
-                    ) : (
-                        id && (
-                            <IconButton onClick={() => setSidebarView('EDIT')} title="Quick">
-                                <Iconify icon="mynaui:edit-one" />
-                            </IconButton>
-                        )
-                    )}
-
-                    {sidebarView === 'EDIT' && (
-                        <Button size="small" variant="contained" color="primary" onClick={handleSubmit} disabled={loading}>
-                            Save
-                        </Button>
-                    )}
-
-                    {sidebarView === 'QUICK' && (
-                        <>
-                            <IconButton
-                                as={Link}
-                                href={`/partner/${data?.id}`}
-                                sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                title="Analytics"
-                            >
-                                <Iconify icon="mdi:analytics" />
-                            </IconButton>
-
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        size="small"
-                                        checked={isFeatured}
-                                        onChange={(e) => handleFeatured(e.target.checked)}
-                                        color="primary"
-                                    />
-                                }
-                                label="Featured"
-                            />
-                            <DeleteConfirmationPasswordPopover
-                                id={data?.id}
-                                title="Are you sure you want to delete?"
-                                deleteFn={deletePartnerAsync}
-                                passwordInput
-                                onDelete={handleDelete}
-                            />
-                        </>
-                    )}
-                </>
-            )}
+          {panelView !== 'QUICK' && (
+            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={() => handleSubmit()}>
+              Save
+            </Button>
+          )}
+          {panelView === 'EDIT' && data?.id ? (
+            <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
+              <Icon icon="solar:eye-broken" />
+            </IconButton>
+          ) : (
+            data?.id && (
+              <IconButton onClick={() => setPanelView('EDIT')} title="Quick">
+                <Icon icon="mynaui:edit-one" />
+              </IconButton>
+            )
+          )}
+          {panelView !== 'ADD' && (
+            <IconButton
+              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              title="Analytics"
+              onClick={() => router.push(`/partner/${data?.id}`)}
+            >
+              <Icon icon="mdi:analytics" />
+            </IconButton>
+          )}
+          {panelView !== 'ADD' && (
+            <DeleteConfirmationPasswordPopover
+              id={data?.id}
+              title="Are you sure you want to delete?"
+              deleteFn={deletePartnerAsync}
+              passwordInput
+              onDelete={handleDelete}
+              disabled={!data?.id}
+            />
+          )}
+          {panelView !== 'ADD' && (
+            <FormControlLabel
+              control={
+                <Switch
+                  size="small"
+                  checked={isFeatured}
+                  onChange={(e) => handleFeatured(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label="Featured"
+            />
+          )}
         </>
-    );
+      )}
+    </>
+  );
 
-    return (
-        <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-            <PageLoader loading={loading}>
-                {sidebarView === 'QUICK' ? (
-                    <PartnerQuickView data={data} />
-                ) : (
-                    <PartnerForm
-                        handleChange={handleChange}
-                        values={values}
-                        errors={errors}
-                        setFieldValue={setFieldValue}
-                        loading={loading}
-                        onSubmit={handleSubmit}
-                    />
-                )}
-            </PageLoader>
-        </DrawerContainer>
-    );
+  React.useEffect(() => {
+    if (data) {
+      setValues(defaultPartner(data));
+    }
+  }, [data]);
+
+  return (
+    <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
+      {panelView === 'QUICK' ? (
+        <PartnerQuickView data={data} isEdit={false} />
+      ) : (
+        <PartnerForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />
+      )}
+    </DrawerContainer>
+  );
 };

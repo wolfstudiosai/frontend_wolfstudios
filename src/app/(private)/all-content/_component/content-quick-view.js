@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { Icon } from '@iconify/react';
 import Timeline from '@mui/lab/Timeline';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
@@ -61,73 +62,38 @@ const fieldConfig = {
   },
 };
 
-export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      user: {
-        firstName: 'Combina',
-        lastName: 'Key',
-        avatar: '',
-      },
-      comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit...',
-      createdAt: new Date(Date.now() - 120000), // 2 minutes ago
-      files: [],
-    },
-    {
-      id: 2,
-      user: {
-        firstName: 'Fazly',
-        lastName: 'Alahi Nahid',
-        avatar: '',
-      },
-      comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit...',
-      createdAt: new Date(Date.now() - 60000), // 1 minute ago
-      files: [],
-    },
-    {
-      id: 3,
-      user: {
-        firstName: 'Riayazul',
-        lastName: 'Haque',
-        avatar: '',
-      },
-      comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit...',
-      createdAt: new Date(),
-      files: [],
-    },
-  ]);
+export const ContentQuickView = ({ data, isEdit }) => {
   const [newComment, setNewComment] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]);
   const attachmentRef = useRef(null);
   const [contentInfo, setContentInfo] = useState({
-    InstagramLikes: data?.IGTotalLikes,
-    InstagramComments: data?.IGTotalComments,
-    InstagramShares: data?.IGTotalShares,
-    InstagramViews: data?.IGTotalViews,
-    InstagramSocialSetsUsed: data?.IGSocialSetsUsed,
-    RevoTwitter: data?.REVOTwitter,
-    RevoTiktok: data?.REVOTikTok,
-    RevoTiktokViews: data?.REVOTTViews,
-    TiktokAccountUsed: data?.TikTokAccountsused,
-    TiktokDummyAccountUsed: data?.TTDummyAccountsUsed?.at(0),
-    YoutubeTAccountUsed: data?.YTAccountsUsed,
-    YoutubeClubRevoTotalViews: data?.YTClubREVOTotalViews,
+    PartnerIGTotalLikes: data?.partnerIGTotalLikes,
+    PartnerIGTotalComments: data?.partnerIGTotalComments,
+    PartnerIGTotalShares: data?.partnerIGTotalShares,
+    PartnerIGTotalViews: data?.partnerIGTotalViews,
+
+    RevoTwitter: data?.revoTwitter,
+    RevoTiktok: data?.revoTikTok,
+    RevoTTViews: data?.revoTTViews,
+    TiktokAccountsUsed: data?.tiktokAccountsUsed,
+    TiktokDummyAccountsUsed: data?.ttDummyAccountsUsed?.at(0),
+    YoutubeAccountsUsed: data?.ytAccountsUsed,
+    YoutubeClubREVOTotalViews: data?.ytClubREVOTotalViews,
   });
 
   const [partnerInfo, setPartnerInfo] = useState({
-    PartnerInstargramLink: data?.PartnerIGLink,
-    PartnerTiktokLink: data?.PartnerTikTokLink,
+    PartnerIGLink: data?.partnerIGLink,
+    PartnerTikTokLink: data?.partnerTikTokLink,
     PartnerTiktokComments: data?.PartnerTTComments,
-    PartnerTiktokLikes: data?.PartnerTTLikes,
-    PartnerTiktokShares: data?.PartnerTTShares,
-    PartnerTiktokViews: data?.PartnerTTViews,
-    PartnerTiktokSaves: data?.PartnerTTSaves,
-    PartnerYoutubeLink: data?.PartnerYTLink,
-    YoutubePartnerTotallikes: data?.YTPartnerTotallikes,
-    YoutubePartnerTotalcomments: data?.YTPartnerTotalcomments,
-    YoutubePartnerTotalSaves: data?.YTPartnerTotalSaves,
-    YoutubePartnerTotalViews: data?.YTPartnerTotalViews,
+    PartnerTTLikes: data?.partnerTTLikes,
+    PartnerTTShares: data?.partnerTTShares,
+    PartnerTTViews: data?.partnerTTViews,
+    PartnerTTSaves: data?.partnerTTSaves,
+    PartnerYTLink: data?.partnerYTLink,
+    YoutubePartnerTotalLikes: data?.ytPartnerTotalLikes,
+    YouTutbePartnerTotalComments: data?.ytPartnerTotalComments,
+    YoutubePartnerTotalSaves: data?.ytPartnerTotalSaves,
+    YoutubePartnerTotalViews: data?.ytPartnerTotalViews,
   });
 
   const handleAddComment = async () => {
@@ -177,15 +143,6 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
     } else {
       updatedData = { ...partnerInfo, [field]: value };
       setPartnerInfo(updatedData);
-    }
-
-    // Send updated data to parent
-    if (onUpdate) {
-      onUpdate({
-        ...contentInfo,
-        ...partnerInfo,
-        [field]: value,
-      });
     }
   };
 
@@ -244,8 +201,8 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
         <Stack sx={{ width: '50%' }}>
           <Box
             component="img"
-            src={data?.Image?.at(0) || '/assets/image-placeholder.jpg'}
-            alt={data?.Name}
+            src={data?.thumbnailImage || '/assets/image-placeholder.jpg'}
+            alt={data?.name}
             sx={{ height: '500px', objectFit: 'contain', border: '1px solid', borderColor: 'divider' }}
           />
           <Stack sx={{ mb: 4, pl: 1 }}>
@@ -268,7 +225,7 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
                       <TimelineDot sx={{ backgroundColor: 'transparent', p: 0 }}>
                         <Avatar sx={{ width: '30px', height: '30px' }} />
                       </TimelineDot>
-                      {index !== comments.length - 1 && <TimelineConnector />}
+                      {<TimelineConnector />}
                     </TimelineSeparator>
                     <TimelineContent sx={{ mt: 1 }}>
                       <Typography variant="h6">
@@ -320,7 +277,7 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
                           }}
                           onClick={() => handleRemoveFile(index)}
                         >
-                          <Iconify icon="mingcute:close-fill" sx={{ color: '#fff', width: '16px', height: '16px' }} />
+                          <Icon icon="mingcute:close-fill" style={{ color: '#fff', width: '16px', height: '16px' }} />
                         </IconButton>
                       </Box>
                     ))}
@@ -346,10 +303,10 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
                         sx={{ borderRadius: '50%' }}
                         onClick={() => attachmentRef?.current?.click()}
                       >
-                        <Iconify icon="mage:attachment" sx={{ color: 'grey.800' }} />
+                        <Icon icon="mage:attachment" style={{ color: 'grey.800' }} />
                       </IconButton>
                       <IconButton size="small" sx={{ borderRadius: '50%' }}>
-                        <Iconify icon="material-symbols-light:add-reaction-outline" sx={{ color: 'grey.800' }} />
+                        <Icon icon="material-symbols-light:add-reaction-outline" style={{ color: 'grey.800' }} />
                       </IconButton>
                       <IconButton
                         size="small"
@@ -362,9 +319,9 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
                         }}
                         onClick={handleAddComment}
                       >
-                        <Iconify
+                        <Icon
                           icon="mingcute:arrow-up-fill"
-                          sx={{ color: newComment.length > 0 || selectedFiles.length > 0 ? '#fff' : 'grey.800' }}
+                          style={{ color: newComment.length > 0 || selectedFiles.length > 0 ? '#fff' : 'grey.800' }}
                         />
                       </IconButton>
                     </InputAdornment>
@@ -376,76 +333,36 @@ export const ContentQuickView = ({ data, isEdit, onUpdate }) => {
           </Stack>
         </Stack>
         <Stack sx={{ width: '50%' }}>
-          <Typography variant="h6">{data?.Name}</Typography>
+          <Typography variant="h6">{data?.name}</Typography>
           <Stack direction="row" alignItems="center" gap={1}>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {data?.MonthUploaded} by Combina key
+              {data?.monthUploaded} by Combina key
             </Typography>
-            {data?.PostingQuality?.map((p, i) => (
-              <Chip key={i} size="small" variant="soft" label={p} />
+            {data?.postingQuality?.map((p, i) => (
+              <Chip key={i} size="small" label={p} />
             ))}
           </Stack>
           <Stack direction="row" alignItems="center">
             <IconButton
               size="small"
-              onClick={() => handleCopy(data?.GoogleDriveFiles || '')}
+              onClick={() => handleCopy(data?.googleDriveFiles || '')}
               sx={{ borderRadius: '50%' }}
             >
-              <Iconify icon="mingcute:drive-fill" sx={{ color: 'text.secondary' }} />
+              <Icon icon="mingcute:drive-fill" style={{ color: 'text.secondary' }} />
             </IconButton>
-            <IconButton size="small" onClick={() => handleCopy(data?.PlaybookLink || '')} sx={{ borderRadius: '50%' }}>
-              <Iconify icon="solar:book-bold" sx={{ color: 'text.secondary' }} />
+            <IconButton size="small" onClick={() => handleCopy(data?.playbookLink || '')} sx={{ borderRadius: '50%' }}>
+              <Icon icon="solar:book-bold" style={{ color: 'text.secondary' }} />
             </IconButton>
           </Stack>
 
           <Stack direction="row" gap={1} sx={{ mt: 1 }}>
             <Box sx={{ width: '50%' }}>
               <SectionTitle title="Content Information" sx={{ px: 2, py: 1, fontSize: '0.9rem' }} />
-              <Box sx={{ ml: 1, mt: 1 }}>
-                {/* {Object.keys(contentInfo).map((key) => (
-                isEdit === 'EDIT' ? (
-                  <TextField
-                    key={key}
-                    fullWidth
-                    variant="outlined"
-                    size="small"
-                    label={key.replace(/([A-Z])/g, ' $1').trim()}
-                    value={contentInfo[key]}
-                    onChange={(e) => handleChange('content', key, e.target.value)}
-                    sx={{ mb: 1 }}
-                  />
-                ) : (
-                  <Typography key={key} variant="body2" sx={{ mb: 1 }}>
-                    <strong>{key.replace(/([A-Z])/g, ' $1').trim()}:</strong> {contentInfo[key]}
-                  </Typography>
-                )
-              ))} */}
-                {Object.keys(contentInfo).map((key) => renderField('content', key))}
-              </Box>
+              <Box sx={{ ml: 1, mt: 1 }}>{Object.keys(contentInfo).map((key) => renderField('content', key))}</Box>
             </Box>
             <Box sx={{ width: '50%' }}>
               <SectionTitle title="Partner Information" sx={{ px: 2, py: 1, fontSize: '0.9rem' }} />
-              <Box sx={{ ml: 1, mt: 1 }}>
-                {/* {Object.keys(partnerInfo).map((key) => (
-                isEdit === 'EDIT' ? (
-                  <TextField
-                    key={key}
-                    fullWidth
-                    variant="outlined"
-                    size="small"
-                    label={key.replace(/([A-Z])/g, ' $1').trim()}
-                    value={partnerInfo[key]}
-                    onChange={(e) => handleChange('partner', key, e.target.value)}
-                    sx={{ mb: 1 }}
-                  />
-                ) : (
-                  <Typography key={key} variant="body2" sx={{ mb: 1 }}>
-                    <strong>{key.replace(/([A-Z])/g, ' $1').trim()}:</strong> {partnerInfo[key]}
-                  </Typography>
-                )
-              ))} */}
-                {Object.keys(partnerInfo).map((key) => renderField('partner', key))}
-              </Box>
+              <Box sx={{ ml: 1, mt: 1 }}>{Object.keys(partnerInfo).map((key) => renderField('partner', key))}</Box>
             </Box>
           </Stack>
         </Stack>

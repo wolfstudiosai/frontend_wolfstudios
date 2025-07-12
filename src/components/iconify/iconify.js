@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import { Icon, disableCache } from '@iconify/react';

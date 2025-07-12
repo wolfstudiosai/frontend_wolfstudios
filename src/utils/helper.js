@@ -73,7 +73,7 @@ export const getSearchQueryPortfolio = (queryParams) => {
 
 export const isVideoContent = (url) => {
   const videoKeywords = ['vimeo', 'playback', 'video', 'mp4', 'webm', 'ogg'];
-  return videoKeywords.some((keyword) => url.includes(keyword));
+  return videoKeywords.some((keyword) => url?.includes(keyword));
 };
 
 export const sliderToGridColsCoverter = (sliderCols) => {

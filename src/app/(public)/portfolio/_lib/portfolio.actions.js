@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { validateFilters, buildQueryParams, getSearchQuery } from '/src/utils/helper';
+import { buildQueryParams, getSearchQuery, validateFilters } from '/src/utils/helper';
 
 export const getPortfolioListAsync = async (pagination, filters, gate) => {
   try {
@@ -39,7 +39,6 @@ export const getPortfolioAsync = async (id) => {
 
 export const createPortfolioAsync = async (data) => {
   try {
-
     const campaignResponse = await api.post(`/portfolios`, {
       ...data,
     });
@@ -54,8 +53,8 @@ export const createPortfolioAsync = async (data) => {
 };
 
 export const updatePortfolioAsync = async (id, data) => {
+  console.log('payload.......: ', data);
   try {
-
     const res = await api.patch(`/portfolios/${id}`, {
       ...data,
     });
@@ -67,6 +66,21 @@ export const updatePortfolioAsync = async (id, data) => {
   }
 };
 
+export const deleteSinglePortfolioAsync = async (id, password) => {
+  try {
+    const res = await api.delete(`/portfolios/${id}`, {
+      data: null,
+      headers: {
+        Password: password,
+      },
+    });
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
 export const deletePortfolioAsync = async (ids, password) => {
   try {
     const res = await api.delete(`/portfolios/bulk`, {
@@ -99,9 +113,9 @@ export const deleteFileAsync = async (paths) => {
 export const getPortfolioCategoryListAsync = async (queryParams, searchValue) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    let url = `/portfolio-categories${searchQuery}`
+    let url = `/portfolio-categories${searchQuery}`;
     if (searchValue) {
-      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
+      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`;
     }
     const res = await api.get(url);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
@@ -111,7 +125,6 @@ export const getPortfolioCategoryListAsync = async (queryParams, searchValue) =>
   }
 };
 
-
 export const getPortfolioViews = async () => {
   try {
     const res = await api.get(`/views?table=PORTFOLIO`);
@@ -120,18 +133,17 @@ export const getPortfolioViews = async () => {
     // toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
-}
-
+};
 
 export const getSinglePortfolioView = async (id, pagination) => {
   try {
-    const res = await api.get(`/views/${id}?page=${pagination.pageNo}&size=${pagination.limit}`)
-    return { success: true, data: res.data.data }
+    const res = await api.get(`/views/${id}?page=${pagination.pageNo}&size=${pagination.limit}`);
+    return { success: true, data: res.data.data };
   } catch (error) {
     // toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
-}
+};
 
 export const createPortfolioView = async (data) => {
   try {
@@ -142,7 +154,7 @@ export const createPortfolioView = async (data) => {
     toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
-}
+};
 
 export const updatePortfolioView = async (id, data) => {
   try {
@@ -153,8 +165,7 @@ export const updatePortfolioView = async (id, data) => {
     // toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
-}
-
+};
 
 export const deletePortfolioView = async (id) => {
   try {
@@ -165,4 +176,4 @@ export const deletePortfolioView = async (id) => {
     toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
-}
+};

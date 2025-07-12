@@ -9,7 +9,7 @@ import { campaignProgressStatus } from '../_lib/campaign.constants';
 import { isSupabaseUrl } from '/src/utils/helper';
 import { CampaignRightPanel } from './campaign-right-panel';
 
-export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, statusTabs, setStatusTabs }) => {
+export const CampaignTabCard = ({ campaign, fetchList }) => {
   const [openCampaignRightPanel, setOpenCampaignRightPanel] = React.useState(null);
   const [prevCampaignProgress, setPrevCampaignProgress] = React.useState(campaign.campaignStatus);
   const [campaignProgress, setCampaignProgress] = React.useState('');
@@ -47,34 +47,34 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
 
       if (res.success) {
         // fetchList();
-        const isCampaignStatusExist = statusTabs.some(tab => tab.value === campaignProgress);
+        // const isCampaignStatusExist = statusTabs.some(tab => tab.value === campaignProgress);
 
-        const modifiedTabs = statusTabs.map(tab => {
-          if (tab.value === prevCampaignProgress) {
-            const count = tab.count - 1;
-            return { ...tab, count, label: `${tab.value.replace(/_/g, ' ')} (${count})` };
-          }
-          if (tab.value === campaignProgress) {
-            const count = tab.count + 1;
-            return { ...tab, count, label: `${tab.value.replace(/_/g, ' ')} (${count})` };
-          }
-          return tab;
-        });
+        // const modifiedTabs = statusTabs.map(tab => {
+        //   if (tab.value === prevCampaignProgress) {
+        //     const count = tab.count - 1;
+        //     return { ...tab, count, label: `${tab.value.replace(/_/g, ' ')} (${count})` };
+        //   }
+        //   if (tab.value === campaignProgress) {
+        //     const count = tab.count + 1;
+        //     return { ...tab, count, label: `${tab.value.replace(/_/g, ' ')} (${count})` };
+        //   }
+        //   return tab;
+        // });
 
-        const updatedStatusTabs = isCampaignStatusExist
-          ? modifiedTabs
-          : [
-            ...modifiedTabs,
-            {
-              value: campaignProgress,
-              count: 1,
-              label: `${campaignProgress.replace(/_/g, ' ')} (1)`,
-            },
-          ];
+        // const updatedStatusTabs = isCampaignStatusExist
+        //   ? modifiedTabs
+        //   : [
+        //     ...modifiedTabs,
+        //     {
+        //       value: campaignProgress,
+        //       count: 1,
+        //       label: `${campaignProgress.replace(/_/g, ' ')} (1)`,
+        //     },
+        //   ];
 
-        setStatusTabs(updatedStatusTabs);
+        // setStatusTabs(updatedStatusTabs);
 
-        setCampaigns(campaigns.filter(c => c.id !== campaign.id));
+        // setCampaigns(campaigns.filter(c => c.id !== campaign.id));
 
       }
     } catch (e) {
@@ -88,9 +88,9 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
     }
   }, [campaignProgress]);
 
-  const imageSrc = isSupabaseUrl(campaign.campaignImage[0])
-    ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${campaign.campaignImage[0]}`
-    : campaign.campaignImage[0];
+  const imageSrc = isSupabaseUrl(campaign.campaignImage?.[0])
+    ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${campaign.campaignImage?.[0]}`
+    : campaign.campaignImage?.[0];
 
   return (
     <>
@@ -187,8 +187,7 @@ export const CampaignTabCard = ({ campaign, fetchList, campaigns, setCampaigns, 
             value={campaign?.campaignStatus}
             onChange={(value) => setCampaignProgress(value)}
             name="status"
-            options={campaignProgressStatus}
-          />
+            options={campaignProgressStatus} label={undefined} error={undefined}          />
         </Box>
       </Stack>
 

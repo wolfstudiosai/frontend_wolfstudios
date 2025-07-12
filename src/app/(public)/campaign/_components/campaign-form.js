@@ -1,121 +1,140 @@
 'use client';
 
 import React from 'react';
-import { Box, Button, Chip, FormControl, FormLabel, InputAdornment, Stack, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
-import { CustomMultipleInputField } from '/src/components/formFields/custom-mulitple-input-field';
 import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
 import { VideoLinkField } from '/src/components/formFields/video-link-field';
 import { MediaIframeDialog } from '/src/components/media-iframe-dialog/media-iframe-dialog';
-import { ImageUploader } from '/src/components/uploaders/image-uploader';
 import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-trigger';
 
 import { campaignProgressStatus } from '../_lib/campaign.constants';
-import {
-  getProductListAsync,
-  getRetailPartnerListAsync,
-  getStakeHolderListAsync,
-} from '../../../../lib/common.actions';
+import { CustomMultipleInputFieldV2 } from '../../../../components/formFields/custom-multiple-input-field-v2';
+import { getCityListAsync, getProductListAsync } from '../../../../lib/common.actions';
+import { getContentListAsync } from '../../../(private)/all-content/_lib/all-content.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getProductionListAsync } from '../../production/_lib/production.action';
-import { getContentList } from '/src/app/(private)/all-content/_lib/all-content.actions';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
 
-export const CampaignForm = ({ handleChange, values, errors, loading, setFieldValue, onSubmit }) => {
+export const CampaignForm = ({ formikProps }) => {
   // *********************States*********************************
   const [mediaPreview, setMediaPreview] = React.useState(null);
-  const [contentOptions, setContentOptions] = React.useState([]);
-  const [stakeholderOptions, setStakeholderOptions] = React.useState([]);
-  const [retailPartnerOptions, setRetailPartnerOptions] = React.useState([]);
-  const [partnerOptions, setPartnerOptions] = React.useState([]);
-  const [spaceOptions, setSpaceOptions] = React.useState([]);
-  const [productionHQOptions, setProductionHQOptions] = React.useState([]);
-  const [productOptions, setProductOptions] = React.useState([]);
   const [openImageUploadDialog, setOpenImageUploadDialog] = React.useState(false);
+  const [thumbnailImage, setThumbnailImage] = React.useState(false);
   const [openCampaignImage, setOpenCampaignImage] = React.useState(false);
 
+  const [autocompleteFocus, setAutocompleteFocus] = React.useState({
+    currentItem: '',
+    prevItems: [],
+  });
+
+  const [autoCompleteOptions, setAutoCompleteOptions] = React.useState({
+    contentHQ: [],
+    stakeholders: [],
+    proposedPartners: [],
+    retailPartners: [],
+    retailPartners2: [],
+    retailPartners3: [],
+    spaces: [],
+    productionHQ: [],
+    products: [],
+  });
+  const { values, errors, handleChange, setFieldValue, handleSubmit, setValues } = formikProps;
+
   // --------------- Fetch Prerequisites Data -------------------
+  const fetchFunctionsMap = {
+    contentHQ: getContentListAsync,
+    stakeholders: getCityListAsync,
+    proposedPartners: getPartnerListAsync,
+    retailPartners: getPartnerListAsync,
+    retailPartners2: getPartnerListAsync,
+    retailPartners3: getPartnerListAsync,
+    spaces: getSpaceListAsync,
+    productionHQ: getProductionListAsync,
+    products: getProductListAsync,
+  };
   React.useEffect(() => {
-    const fetchPrerequisitesData = async () => {
+    const fetchData = async () => {
+      if (!autocompleteFocus?.currentItem) return;
+      const { currentItem, prevItems } = autocompleteFocus;
+
+      if (prevItems.includes(currentItem)) return;
+      const fetchFunction = fetchFunctionsMap[currentItem];
+      if (!fetchFunction) return;
+
       try {
-        const contentResponse = await getContentList({ page: 1, rowsPerPage: 20 });
-        if (contentResponse?.success) {
-          const options = contentResponse.data.map((item) => ({ value: item.id, label: item.name }));
-          setContentOptions(options);
-        }
-        const stakeholderResponse = await getStakeHolderListAsync({ page: 1, rowsPerPage: 20 });
-        if (stakeholderResponse?.success) {
-          const options = stakeholderResponse.data.map((item) => ({ value: item.id, label: item.name }));
-          setStakeholderOptions(options);
-        }
-        const retailPartnerResponse = await getRetailPartnerListAsync({ page: 1, rowsPerPage: 20 });
-        if (retailPartnerResponse?.success) {
-          const options = retailPartnerResponse.data.map((item) => ({ value: item.id, label: item.name }));
-          setRetailPartnerOptions(options);
-        }
-        const partnerResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 20 });
-        if (partnerResponse?.success) {
-          const options = partnerResponse.data.map((item) => ({ value: item.id, label: item.name }));
-          setPartnerOptions(options);
-        }
-        const spaceResponse = await getSpaceListAsync({ page: 1, rowsPerPage: 20 });
-        if (spaceResponse?.success) {
-          const options = spaceResponse.data.map((item) => ({ value: item.id, label: item.name }));
-          setSpaceOptions(options);
-        }
+        const response = await fetchFunction({ page: 1, rowsPerPage: 100 });
+        if (response?.success) {
+          const options = response.data.map((item) => ({
+            value: item.id,
+            label: item.name,
+          }));
 
-        const productionHQResponse = await getProductionListAsync({ page: 1, rowsPerPage: 20 });
-        if (productionHQResponse?.success) {
-          const options = productionHQResponse.data.map((item) => ({ value: item.id, label: item.name }));
-          setProductionHQOptions(options);
-        }
+          setAutoCompleteOptions((prevState) => ({
+            ...prevState,
+            [currentItem]: options,
+          }));
 
-        const productResponse = await getProductListAsync({ page: 1, rowsPerPage: 20 });
-        if (productResponse?.success) {
-          const options = productResponse.data.map((item) => ({ value: item.id, label: item.name }));
-          setProductOptions(options);
+          setAutocompleteFocus((prevState) => ({
+            currentItem: '',
+            prevItems: [...prevState.prevItems, currentItem],
+          }));
         }
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error(error);
       }
     };
 
-    fetchPrerequisitesData();
-  }, []);
-
-  const handleAddGoal = () => {
-    if (values.currentGoals?.trim() && !values.campaignGoals.includes(values.currentGoals.trim())) {
-      setFieldValue('campaignGoals', [...values.campaignGoals, values.currentGoals.trim()], { shouldValidate: true });
-      setFieldValue('currentGoals', '');
-    }
-  };
-
-  const handleRemoveGoal = (goalToRemove) => {
-    setFieldValue(
-      'campaignGoals',
-      values.campaignGoals.filter((goal) => goal !== goalToRemove),
-      { shouldValidate: true }
-    );
-  };
+    fetchData();
+  }, [autocompleteFocus]);
 
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <Grid container spacing={2} pb={2}>
-          <Grid size={{ xs: 12, md: 6 }}>
+      <form onSubmit={handleSubmit}>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            py: 2,
+            border: '1px solid var(--mui-palette-background-level2)',
+            borderRadius: '8px',
+            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
+            p: 2,
+          }}
+        >
+          <Grid size={12}>
+            <Typography variant="h5" sx={{ mb: 2, color: 'primary.main' }}>
+              General Information
+            </Typography>
+          </Grid>
+          <Grid size={{ xs: 12 }}>
+            <MediaUploaderTrigger
+              open={thumbnailImage}
+              onClose={() => setThumbnailImage(false)}
+              onSave={(urls) => setFieldValue('thumbnailImage', urls)}
+              value={values?.thumbnailImage}
+              label="Thumbnail Image"
+              onAdd={() => setThumbnailImage(true)}
+              onDelete={(filteredUrls) => setFieldValue('thumbnailImage', filteredUrls)}
+              folderName="campaigns"
+              hideVideoUploader
+              hideImageUploader={false}
+            />
+          </Grid>
+          <Grid size={{ xs: 12 }}>
             <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} />
             <ErrorMessage error={errors.name} />
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField name="client" label="Client" value={values.client} onChange={handleChange} />
-            <ErrorMessage error={errors.client} />
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomDatePicker
               label="Start Date"
               error={errors.startDate}
@@ -123,9 +142,8 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               format="YYYY-MM-DD"
               onChange={(value) => setFieldValue('startDate', value)}
             />
-            <ErrorMessage error={errors.startDate} />
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomDatePicker
               label="End Date"
               error={errors.endDate}
@@ -133,7 +151,6 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               format="YYYY-MM-DD"
               onChange={(value) => setFieldValue('endDate', value)}
             />
-            <ErrorMessage error={errors.endDate} />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField name="budget" label="Budget" value={values.budget} onChange={handleChange} type="number" />
@@ -182,21 +199,60 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               onChange={(value) => setFieldValue('campaignStatus', value)}
               options={campaignProgressStatus}
             />
-            <ErrorMessage error={errors.campaignStatus} />
+          </Grid>
+          <Grid size={{ xs: 12 }}>
+            <CustomTextField
+              name="guidelines"
+              label="Guidelines (Use commas to separate notes)"
+              value={values.guidelines}
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid size={{ xs: 12 }}>
+            <CustomTextField name="notes" label="Notes " value={values.notes} onChange={handleChange} />
+          </Grid>
+          <Grid size={{ xs: 12 }}>
+            <CustomTextField
+              name="campaignDescription"
+              label="Description"
+              value={values.campaignDescription}
+              onChange={handleChange}
+              multiline
+              rows={4}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            py: 2,
+            border: '1px solid var(--mui-palette-background-level2)',
+            borderRadius: '8px',
+            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
+            p: 2,
+            mt: 4,
+          }}
+        >
+          <Grid size={12}>
+            <Typography variant="h5" sx={{ mb: 2, color: 'primary.main' }}>
+              Other Information
+            </Typography>
           </Grid>
 
           {/* Content HQ */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomAutoCompleteV2
               multiple
               label="Content HQ"
+              name="contentHQ"
               value={values.contentHQ}
               onChange={(_, value) => setFieldValue('contentHQ', value)}
-              defaultOptions={contentOptions}
+              defaultOptions={autoCompleteOptions.contentHQ}
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
-                const res = await getContentList(paging, filters, 'and');
+                const res = await getContentListAsync(paging, filters, 'and');
                 return (
                   res?.data?.map((item) => ({
                     label: item.name,
@@ -204,17 +260,20 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                   })) || []
                 );
               }}
+              placeholder={undefined}
+              onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
           </Grid>
 
           {/* Stakeholder */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoCompleteV2
               multiple
               label="Stakeholder"
+              name="stakeholders"
               value={values.stakeholders}
               onChange={(_, value) => setFieldValue('stakeholders', value)}
-              defaultOptions={stakeholderOptions}
+              defaultOptions={autoCompleteOptions.stakeholders}
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const res = await getStakeHolderListAsync(paging, debounceValue);
@@ -225,17 +284,20 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                   })) || []
                 );
               }}
+              placeholder={undefined}
+              onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
-          </Grid>
+          </Grid> */}
 
           {/* Proposed Partner */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomAutoCompleteV2
               multiple
               label="Proposed Partner"
+              name="proposedPartners"
               value={values.proposedPartners}
               onChange={(_, value) => setFieldValue('proposedPartners', value)}
-              defaultOptions={partnerOptions}
+              defaultOptions={autoCompleteOptions.proposedPartners}
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
@@ -247,17 +309,20 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                   })) || []
                 );
               }}
+              placeholder={undefined}
+              onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
           </Grid>
 
           {/* Retail Partner */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoCompleteV2
               multiple
               label="Retail Partner"
+              name="retailPartners"
               value={values.retailPartners}
               onChange={(_, value) => setFieldValue('retailPartners', value)}
-              defaultOptions={retailPartnerOptions}
+              defaultOptions={autoCompleteOptions.retailPartners}
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const res = await getRetailPartnerListAsync(paging, debounceValue);
@@ -268,17 +333,20 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                   })) || []
                 );
               }}
+              placeholder={undefined}
+              onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
-          </Grid>
+          </Grid> */}
 
           {/* Retail Partner 2 */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoCompleteV2
               multiple
               label="Retail Partner 2"
+              name="retailPartners2"
               value={values.retailPartners2}
               onChange={(_, value) => setFieldValue('retailPartners2', value)}
-              defaultOptions={retailPartnerOptions}
+              defaultOptions={autoCompleteOptions.retailPartners2}
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const res = await getRetailPartnerListAsync(paging, debounceValue);
@@ -289,17 +357,20 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                   })) || []
                 );
               }}
+              placeholder={undefined}
+              onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
-          </Grid>
+          </Grid> */}
 
           {/* Retail Partner 3 */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoCompleteV2
               multiple
               label="Retail Partner 3"
+              name="retailPartners3"
               value={values.retailPartners3}
               onChange={(_, value) => setFieldValue('retailPartners3', value)}
-              defaultOptions={retailPartnerOptions}
+              defaultOptions={autoCompleteOptions.retailPartners3}
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const res = await getRetailPartnerListAsync(paging, debounceValue);
@@ -310,17 +381,20 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                   })) || []
                 );
               }}
+              placeholder={undefined}
+              onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
-          </Grid>
+          </Grid> */}
 
           {/* Contributed Partner */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomAutoCompleteV2
               multiple
               label="Contributed Partner"
+              name="contributedPartners"
               value={values.contributedPartners}
               onChange={(_, value) => setFieldValue('contributedPartners', value)}
-              defaultOptions={partnerOptions}
+              defaultOptions={autoCompleteOptions.proposedPartners}
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
@@ -332,17 +406,20 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                   })) || []
                 );
               }}
+              placeholder={undefined}
+              onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
           </Grid>
 
           {/* Space */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomAutoCompleteV2
               multiple
               label="Space"
+              name="spaces"
               value={values.spaces}
               onChange={(_, value) => setFieldValue('spaces', value)}
-              defaultOptions={spaceOptions}
+              defaultOptions={autoCompleteOptions.spaces}
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
@@ -354,17 +431,20 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                   })) || []
                 );
               }}
+              placeholder={undefined}
+              onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
           </Grid>
 
           {/* Production HQ */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <CustomAutoCompleteV2
               multiple
               label="Production HQ"
+              name="productionHQ"
               value={values.productionHQ}
               onChange={(_, value) => setFieldValue('productionHQ', value)}
-              defaultOptions={productionHQOptions}
+              defaultOptions={autoCompleteOptions.productionHQ}
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const filters = [{ key: 'name', type: 'string', operator: 'contains', value: debounceValue }];
@@ -376,17 +456,20 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                   })) || []
                 );
               }}
+              placeholder={undefined}
+              onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
           </Grid>
 
           {/* Product */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
             <CustomAutoCompleteV2
               multiple
               label="Product"
+              name="products"
               value={values.products}
               onChange={(_, value) => setFieldValue('products', value)}
-              defaultOptions={productOptions}
+              defaultOptions={autoCompleteOptions.productionHQ}
               fetchOptions={async (debounceValue) => {
                 const paging = { page: 1, rowsPerPage: 20 };
                 const res = await getProductListAsync(paging, debounceValue);
@@ -397,83 +480,19 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
                   })) || []
                 );
               }}
+              placeholder={undefined}
+              onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
-          </Grid>
-
-          {/* <Grid size={{ xs: 12, md: 6 }}>
-            <FormControl fullWidth error={Boolean(errors.campaignImage)}>
-              <FormLabel sx={{ mb: 1 }}>Campaign Image</FormLabel>
-              <ImageUploader
-                value={values.campaignImage}
-                onFileSelect={(file) => setFieldValue('campaignImage', file)}
-                onDelete={() => setFieldValue('campaignImage', null)}
-              />
-            </FormControl>
           </Grid> */}
-
-          <Grid size={{ xs: 12 }}>
-            <CustomMultipleInputField
-              name="currentGoals"
+          <Grid size={{ xs: 12, md: 12 }}>
+            <CustomMultipleInputFieldV2
+              name={'campaignGoals'}
               label="Goals"
-              onchange={handleChange}
-              value={values.currentGoals}
-              isSubmitting={loading}
-              currentData={values.currentGoals}
-              handleAdd={handleAddGoal}
-              handleRemove={handleRemoveGoal}
+              value={values?.campaignGoals}
+              setFieldValue={setFieldValue}
             />
-
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
-              {values.campaignGoals.map((goal, index) => (
-                <Chip
-                  key={index}
-                  label={goal}
-                  onDelete={() => handleRemoveGoal(goal)}
-                  disabled={loading}
-                  color="primary"
-                  size="small"
-                />
-              ))}
-            </Box>
-            {/* {errors.tags && (
-              <Typography
-                color="error"
-                variant="caption"
-                display="block"
-                sx={{ mt: 1 }}
-              >
-                {errors.goals.message}
-              </Typography>
-            )} */}
           </Grid>
 
-          {/* <Grid size={{ xs: 12 }}>
-            <CustomTextField name="campaignGoals" label="Goals" value={values.campaignGoals} onChange={handleChange} />
-          </Grid> */}
-          <Grid size={{ xs: 12 }}>
-            <CustomTextField name="notes" label="Notes " value={values.notes} onChange={handleChange} />
-            <ErrorMessage error={errors.notes} />
-          </Grid>
-          <Grid size={{ xs: 12 }}>
-            <CustomTextField
-              name="guidelines"
-              label="Guidelines (Use commas to separate notes)"
-              value={values.guidelines}
-              onChange={handleChange}
-            />
-            <ErrorMessage error={errors.guidelines} />
-          </Grid>
-          <Grid size={{ xs: 12 }}>
-            <CustomTextField
-              name="campaignDescription"
-              label="Description"
-              value={values.campaignDescription}
-              onChange={handleChange}
-              multiline
-              rows={4}
-            />
-            <ErrorMessage error={errors.campaignDescription} />
-          </Grid>
           <Grid size={{ xs: 12 }}>
             <VideoLinkField
               name="videoInspirationGallery"
@@ -492,6 +511,8 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               onAdd={() => setOpenCampaignImage(true)}
               onDelete={(filteredUrls) => setFieldValue('campaignImage', filteredUrls)}
               folderName="campaigns"
+              hideImageUploader={undefined}
+              hideVideoUploader={undefined}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
@@ -504,19 +525,21 @@ export const CampaignForm = ({ handleChange, values, errors, loading, setFieldVa
               onAdd={() => setOpenImageUploadDialog(true)}
               onDelete={(filteredUrls) => setFieldValue('imageInspirationGallery', filteredUrls)}
               folderName="campaigns"
+              hideImageUploader={undefined}
+              hideVideoUploader={undefined}
             />
-          </Grid>
-          <Grid size={{ xs: 12 }}>
-            <Stack direction="row" justifyContent="flex-end">
-              <Button size="small" variant="contained" color="primary" disabled={loading} type="submit">
-                Save
-              </Button>
-            </Stack>
           </Grid>
         </Grid>
       </form>
 
-      {mediaPreview && <MediaIframeDialog open={true} data={mediaPreview} onClose={() => setMediaPreview(null)} />}
+      {mediaPreview && (
+        <MediaIframeDialog
+          open={true}
+          data={mediaPreview}
+          onClose={() => setMediaPreview(null)}
+          onComplete={undefined}
+        />
+      )}
     </>
   );
 };

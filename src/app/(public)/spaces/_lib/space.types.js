@@ -1,70 +1,98 @@
+export const defaultSpace = (data) => {
+  const defaultData = {
+    id: data?.id || null,
+    name: data?.name || '',
+    bookingLink: data?.bookingLink || '',
+    intro: data?.intro || '',
+    aboutThisSpace: data?.aboutThisSpace || '',
+    seeTheSpace: data?.seeTheSpace || '',
+    addToProject: data?.addToProject || '',
+    recentCreatorsWhoBookedHere: data?.recentCreatorsWhoBookedHere || '',
+    phoneNumber: data?.phoneNumber || '',
+    colorTone: data?.colorTone || '',
+    parkingInstructions: data?.parkingInstructions || '',
+    lightingInformation: data?.lightingInformation || '',
+    soundInformation: data?.soundInformation || '',
+    spaceAccess: data?.spaceAccess || '',
+    hostRules: data?.hostRules || '',
+    electrical: data?.electrical || '',
+    permitDetails: data?.permitDetails || '',
+    startingRatehr: data?.startingRatehr || 0,
+    type: Array.isArray(data?.type) ? data.type : [],
+    spaceStyle: Array.isArray(data?.spaceStyle) ? data.spaceStyle : [],
+    props: Array.isArray(data?.props) ? data.props : [],
+    theme: Array.isArray(data?.theme) ? data.theme : [],
+    availableLighting: Array.isArray(data?.availableLighting) ? data.availableLighting : [],
+    adons: Array.isArray(data?.adons) ? data.adons : [],
+    cycwall: data?.cycwall || '',
+    backdropSystem: Boolean(data?.backdropSystem) || false,
+    features: Array.isArray(data?.features) ? data.features : [],
+    minimumHourlyBooking: Number(data?.minimumHourlyBooking) || 0,
+    attendeeLimit: data?.attendeeLimit || '',
+    bedrooms: data?.bedrooms || '',
+    bathrooms: data?.bathrooms || '',
+    squareFootage: Number(data?.squareFootage) || 0,
+    availableHours: data?.availableHours || '',
+    dateListed: data?.dateListed || '',
+    isFeatured: Boolean(data?.isFeatured) || false,
 
-export const defaultSpace = {
-    id: '',
-    projectTitle: '',
-    portfolioCategories: [],
-    date: '',
-    shortDescription: '',
-    fullDescription: '',
-    states: [],
-    countries: [],
-    partnerHQ: [],
-  
-    slug: '',
-    video_url: '',
-    hero_image: '',
-    field_image: '',
-    thumbnail: '',
-    vertical_gallery_images: [],
-    horizontal_gallery_images: [],
-    user_id: '',
-    created_by: '',
-    updated_at: '',
+    // Relationships
+    campaigns: Array.isArray(data?.campaigns)
+      ? data.campaigns.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    cities: Array.isArray(data?.cities)
+      ? data.cities.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    countries: Array.isArray(data?.countries)
+      ? data.countries.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    states: Array.isArray(data?.states)
+      ? data.states.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    tags: Array.isArray(data?.tags)
+      ? data.tags.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    destinations: Array.isArray(data?.destinations)
+      ? data.destinations.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    productionHQ: Array.isArray(data?.productionHQ)
+      ? data.productionHQ.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    productionHQ2: Array.isArray(data?.productionHQ2)
+      ? data.productionHQ2.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+
+    // Images
+    showcaseYourLastProjectHereWithUs: data?.showcaseYourLastProjectHereWithUs || [],
+    travelTimePlaceholderImageForGoogleMaps: data?.travelTimePlaceholderImageForGoogleMaps || [],
+    featuredGallery: data?.featuredGallery || [],
+    mainGallery: data?.mainGallery || [],
+    thumbnailImage: typeof data?.thumbnailImage === 'string' ? [data.thumbnailImage] : null,
   };
 
-export const defaultSpace1 = {
-    id: '',
-    name: '',
-    startingRatehr: '',
-    bookingLink: '',
-    type: [],
-    spaceStyle: [],
-    props: [],
-    theme: [],
-    availableLighting: [],
-    adOns: [],
-  
-    cycWall:'',
-    backdropSystem:'',
-    features:[],
-    minimumHourlyBooking: '',
-    intro:'',
-    aboutThisSpace:'',
-    seeTheSpace:'',
-    addToProject:'',
-    recentCreatorsWhoBookedHere: '',
-	  phoneNumber: '',
-	  attendeeLimit: 15,
-	  colorTone: '',
-	  parkingInstructions: '',
-	  lightingInformation: '',
-	  soundInformation: '',
-	  spaceAccess: '',
-	  hostRules: '',
-	  electrical: '',
-	  permitDetails: '',
-	  bedrooms: '',
-	  bathrooms: '',
-	  squareFootage: 600,
-	  availableHours: "",
-	  dateListed: "",
-
-  //relations
-  campaigns: [],
-  cities:[],
-  countries:[],
-  states:[],
-  tags:[],
-  destinations:[],
-  productionHQ:[],
-  };
+  return defaultData;
+};

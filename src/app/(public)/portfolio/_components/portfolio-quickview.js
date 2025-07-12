@@ -2,16 +2,16 @@
 
 import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
+import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
 import { isSupabaseUrl, isVideoContent, pxToRem } from '/src/utils/helper';
 
-export const PortfolioQuickView = ({ data }) => {
+export const PortfolioQuickView = ({ data, isEdit }) => {
   const theme = useTheme();
-
+  const mediaArr = [data?.thumbnailImage];
   return (
     <Box sx={{ position: 'relative' }}>
       {/* Header Image with Overlay */}
@@ -19,51 +19,53 @@ export const PortfolioQuickView = ({ data }) => {
         Vertical Gallery
       </Typography>
       <SliderWrapper
-        modules={[Navigation, SwiperPagination, Scrollbar, A11y, Autoplay]}
-        autoplay={{ delay: 4000, disableOnInteraction: true }}
+        modules={[Navigation, SwiperPagination, Scrollbar, A11y]}
         breakpoints={{
           0: { slidesPerView: 1 },
-          768: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 },
+          768: { slidesPerView: 3 },
+          1024: { slidesPerView: 4 },
         }}
         pauseOnHover
-        // speed={2000}
-        spaceBetween={1.8}
+        spaceBetween={4}
       >
-        {/* {data?.SinglePageHeroImage?.map((item, index) => ( */}
-        {data?.verticalImageGallery?.map((item, index) => (
-          <SwiperSlide key={index}>
-            {isVideoContent(item) ? (
-              <Box
-                component="video"
-                src={item}
-                controls
-                autoPlay
-                loop
-                muted
-                playsInline
-                sx={{
-                  height: pxToRem(500),
-                  width: '100%',
-                  objectFit: 'contain',
-                  // borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-                  border: '1px solid var(--mui-palette-divider)',
-                }}
-              />
-            ) : (
-              <Box
-                component="img"
-                src={item}
-                sx={{
-                  height: pxToRem(500),
-                  width: '100%',
-                  objectFit: 'cover',
-                  // borderRadius: 'calc(1* var(--mui-shape-borderRadius))',
-                }}
-              />
-            )}
-          </SwiperSlide>
-        ))}
+        <SwiperSlide>
+          {mediaArr.length > 0 ? (
+            mediaArr?.map((item, index) => (
+              <SwiperSlide key={index}>
+                {isVideoContent(item) ? (
+                  <Box
+                    component="video"
+                    src={item}
+                    controls
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    sx={{
+                      height: pxToRem(500),
+                      width: '100%',
+                      objectFit: 'contain',
+                      border: '1px solid var(--mui-palette-divider)',
+                    }}
+                  />
+                ) : (
+                  <Box
+                    component="img"
+                    src={item || '/assets/image-placeholder.jpg'}
+                    sx={{
+                      height: pxToRem(500),
+                      width: '100%',
+                      objectFit: 'contain',
+                      border: '1px solid var(--mui-palette-divider)',
+                    }}
+                  />
+                )}
+              </SwiperSlide>
+            ))
+          ) : (
+            <Typography>No media available!</Typography>
+          )}
+        </SwiperSlide>
       </SliderWrapper>
 
       {/* Project Details */}
@@ -80,8 +82,7 @@ export const PortfolioQuickView = ({ data }) => {
         </Typography>
         <Stack direction="row" spacing={2} mb={2}>
           <Typography variant="subtitle1" color="text.secondary">
-            Category:{' '}
-            {data?.portfolioCategories?.map((item) => item?.portfolioCategories?.name)?.join(', ') || 'N/A'}
+            Category: {data?.portfolioCategories?.map((item) => item?.portfolioCategories?.name)?.join(', ') || 'N/A'}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
             State: {data?.states?.map((item) => item?.states?.name)?.join(', ') || 'N/A'}
@@ -103,7 +104,7 @@ export const PortfolioQuickView = ({ data }) => {
         </Typography>
         <Grid container spacing={1} sx={{ mt: 2, display: 'none' }} columns={{ xs: 10 }}>
           {data.verticalImageGallery?.map((item, index) => (
-            <Grid item size={{ xs: 2 }} key={index}>
+            <Grid size={{ xs: 2 }} key={index}>
               {isVideoContent(item) ? (
                 <Box
                   component="video"
@@ -145,7 +146,7 @@ export const PortfolioQuickView = ({ data }) => {
         </Typography>
         <Grid container spacing={0} sx={{ mt: 2 }} columns={{ xs: 10 }}>
           {data.horizontalImageGallery?.map((item, index) => (
-            <Grid item size={{ xs: 2 }} key={index}>
+            <Grid size={{ xs: 2 }} key={index}>
               {isVideoContent(item) ? (
                 <Box
                   component="video"

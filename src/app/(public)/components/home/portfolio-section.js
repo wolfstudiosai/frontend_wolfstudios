@@ -1,17 +1,16 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
 import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
-import { ManagePortfolioRightPanel } from '../../portfolio/_components/manage-portfolio-right-panel';
 import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
 
 export const PortfolioSection = () => {
@@ -294,14 +293,14 @@ const Card = ({ card, fetchList }) => {
           </Stack>
         </Box>
       </Box>
-      <ManagePortfolioRightPanel
+      {/* <ManagePortfolioRightPanel
         view="QUICK"
         fetchList={fetchList}
         width="70%"
         open={!!openPortfolioRightPanel}
         data={card}
         onClose={() => setOpenPortfolioRightPanel(false)}
-      />
+      /> */}
     </>
   );
 };

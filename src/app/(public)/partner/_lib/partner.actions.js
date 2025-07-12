@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { validateFilters, buildQueryParams } from '/src/utils/helper';
+import { buildQueryParams, validateFilters } from '/src/utils/helper';
 
 export const getPartnerListAsync = async (queryParams, filters, gate) => {
   try {
@@ -37,8 +37,7 @@ export const getPartnerAsync = async (id) => {
 
 export const createPartnerAsync = async (data) => {
   try {
-    const { id, ...rest } = partnerPayload(data);
-    const partnerResponse = await api.post('/partner-HQ', rest);
+    const partnerResponse = await api.post('/partner-HQ', data);
     toast.success(partnerResponse.data.message);
     return { success: true, data: partnerResponse.data.data };
   } catch (error) {
@@ -50,7 +49,7 @@ export const createPartnerAsync = async (data) => {
 
 export const updatePartnerAsync = async (data) => {
   try {
-    const { id, ...rest } = partnerPayload(data);
+    const { id, ...rest } = data;
     const res = await api.patch(`/partner-HQ/${id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
@@ -164,7 +163,6 @@ export const updatePartnerView = async (id, data) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
-
 
 export const deletePartnerView = async (id) => {
   try {

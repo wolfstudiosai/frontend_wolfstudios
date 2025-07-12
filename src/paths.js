@@ -137,7 +137,7 @@ export const paths = {
     reporting_by_product: '/reporting/by-product',
     reporting_by_campaign: '/reporting/by-campaign',
     reporting_by_production: '/reporting/by-production',
-    reporting: '/reporting',
+
     notification: '/notification',
     record: '/records',
     users: '/users',

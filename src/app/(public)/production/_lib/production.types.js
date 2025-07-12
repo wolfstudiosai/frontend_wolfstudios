@@ -3,40 +3,75 @@ export const defaultProduction = (data) => {
     id: data?.id || '',
     name: data?.name || '',
     internalNotes: data?.internalNotes || '',
-    status: data?.status?.length > 0 ? data?.status.map((item) => ({ value: item, label: item })) : [],
-    totalExpense: data?.totalExpense || '',
-    cardsUsed: data?.cardsUsed?.length > 0 ? data?.cardsUsed.map((item) => ({ value: item, label: item })) : [],
-    proposedDate: data?.proposedDate ? data?.proposedDate : null,
-    recordShootDate: data?.recordShootDate ? data?.recordShootDate : null,
-    spaceExpense: data?.spaceExpense || '',
-    talentExpense: data?.talentExpense || '',
-    crewExpense: data?.crewExpense || '',
-    foodExpense: data?.foodExpense || '',
-    equipmentRentals: data?.equipmentRentals?.map((item) => ({ value: item, label: item })) || [],
-    equipmentExpense: data?.equipmentExpense || '',
-    reimbursments: data?.reimbursments || '',
-    wardrobeExpense: data?.wardrobeExpense || '',
+    status: Array.isArray(data?.status) ? data.status : [],
+    totalExpense: Number(data?.totalExpense) || 0,
+    cardsUsed: Array.isArray(data?.cardsUsed) ? data.cardsUsed : [],
+    proposedDate: data?.proposedDate || '',
+    recordShootDate: data?.recordShootDate || '',
+    spaceExpense: Number(data?.spaceExpense) || 0,
+    talentExpense: Number(data?.talentExpense) || 0,
+    crewExpense: Number(data?.crewExpense) || 0,
+    foodExpense: Number(data?.foodExpense) || 0,
+    equipmentRentals: Array.isArray(data?.equipmentRentals) ? data.equipmentRentals : [],
+    equipmentExpense: Number(data?.equipmentExpense) || 0,
+    reimbursments: Number(data?.reimbursments) || 0,
+    wardrobeExpense: Number(data?.wardrobeExpense) || 0,
     playbookLink: data?.playbookLink || '',
-    productionUsage: data?.productionUsage.map((item) => ({ value: item, label: item })) || [],
-    directorExpense: data?.directorExpense || '',
-    producerExpense: data?.producerExpense || '',
+    productionUsage: Array.isArray(data?.productionUsage) ? data.productionUsage : [],
+    directorExpense: Number(data?.directorExpense) || 0,
+    producerExpense: Number(data?.producerExpense) || 0,
 
-    //relations
-    spaces: data?.spaces?.map((item) => ({ value: item?.id, label: item?.name })) || [],
-    stakeholders: data?.stakeholders?.map((item) => ({ value: item?.id, label: item?.name })) || [],
-    products: data?.products?.map((item) => ({ value: item?.id, label: item?.name })) || [],
-    contributingPartners: data?.contributingPartners?.map((item) => ({ value: item?.id, label: item?.name })) || [],
-    proposedPartners: data?.proposedPartners?.map((item) => ({ value: item?.id, label: item?.name })) || [],
-    proposedSpaces: data?.proposedSpaces?.map((item) => ({ value: item?.id, label: item?.name })) || [],
-    campaigns: data?.campaigns?.map((item) => ({ value: item?.id, label: item?.name })) || [],
+    contracts: Array.isArray(data?.contracts) ? data?.contracts : [],
+    receipts: Array.isArray(data?.receipts) ? data?.receipts : [],
+    shotlist: Array.isArray(data?.shotlist) ? data?.shotlist : [],
+    callSheet: Array.isArray(data?.callSheet) ? data?.callSheet : [],
+    proofingLibrary: Array.isArray(data?.proofingLibrary) ? data?.proofingLibrary : [],
+    imageInspiration: Array.isArray(data?.imageInspiration) ? data?.imageInspiration : [],
+    videoInspiration: Array.isArray(data?.videoInspiration) ? data?.videoInspiration : [],
+    thumbnailImage: typeof data?.thumbnailImage === 'string' ? [data.thumbnailImage] : null,
 
-    // images
-    receipts: data?.receipts || [],
-    contracts: data?.contracts || [],
-    shotlist: data?.shotlist || [],
-    callSheet: data?.callSheet || [],
-    proofingLibrary: data?.proofingLibrary || [],
-    imageInspiration: data?.imageInspiration || [],
+    spaces: Array.isArray(data?.spaces)
+      ? data.spaces.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    stakeholders: Array.isArray(data?.stakeholders)
+      ? data.stakeholders.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    contributingPartners: Array.isArray(data?.contributingPartners)
+      ? data.contributingPartners.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    campaigns: Array.isArray(data?.campaigns)
+      ? data.campaigns.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    products: Array.isArray(data?.products)
+      ? data.products.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    proposedSpaces: Array.isArray(data?.proposedSpaces)
+      ? data.proposedSpaces.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
+    proposedPartners: Array.isArray(data?.proposedPartners)
+      ? data.proposedPartners.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
   };
 
   return defaultData;

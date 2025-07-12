@@ -29,11 +29,12 @@ import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 import { formatCompactNumber } from '../../../../utils/helper';
 import { isVideoContent, pxToRem } from '/src/utils/helper';
 
-export const CampaignQuickView = ({ data }) => {
+export const CampaignQuickView = ({ data, isEdit, onUpdate }) => {
   const mediaArr = [
     ...(data?.imageInspirationGallery || []),
     ...(data?.videoInspirationGallery || []),
     ...(data?.campaignImage || []),
+    data?.thumbnailImage,
   ];
   const budgetUsed = data.budget === 0 ? 0 : (data.totalExpense / data.budget) * 100;
   const remainingBudget = data.budget - data.totalExpense;

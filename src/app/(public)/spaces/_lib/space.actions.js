@@ -1,7 +1,8 @@
 import { toast } from 'sonner';
 
+import { cleanPayload } from '../../../../utils/cleanPayload';
 import { api } from '/src/utils/api';
-import { getSearchQuery, validateFilters, buildQueryParams } from '/src/utils/helper';
+import { buildQueryParams, getSearchQuery, validateFilters } from '/src/utils/helper';
 import { uploadFileAsync } from '/src/utils/upload-file';
 
 export const getSpaceListAsync = async (queryParams, filters, gate) => {
@@ -35,25 +36,15 @@ export const getSpaceAsync = async (slug) => {
   }
 };
 
-export const createSpaceAsync = async (file, data) => {
+export const createSpaceAsync = async (data) => {
   try {
-    const { slug, id, created_by, user_id, updated_at, video_url, hero_image, field_image, thumbnail, vertical_gallery_images, horizontal_gallery_images, ...rest } = data;
-    let thumbnailImage = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      thumbnailImage = uploadResponse[0].path;
-    }
-
-    const spaceResponse = await api.post(`/spaces`, {
-      ...rest,
-    });
-
-    toast.success(spaceResponse.data.message);
-    return { success: true, data: spaceResponse.data.data };
+    const cleanedData = cleanPayload(data);
+    const res = await api.post('/spaces', data);
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
   } catch (error) {
-    const errorMessage = error.response?.data?.message || error.message || 'An unknown error occurred';
-    toast.error(errorMessage);
-    return { success: false, error: errorMessage };
+    toast.error(error.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
 

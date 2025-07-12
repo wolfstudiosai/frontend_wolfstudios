@@ -4,16 +4,12 @@ import React from 'react';
 
 import { CustomChip } from '/src/components/core/custom-chip';
 import { Iconify } from '/src/components/iconify/iconify';
-import { isSupabaseUrl } from '/src/utils/helper';
+
 import { CampaignRightPanel } from './campaign-right-panel';
 
-export const CampaignCard = ({ item, fetchList }) => {
-  const [openPanel, setOpenPanel] = React.useState(false);
-  const [selectedItemId, setSelectedItemId] = React.useState(null);
-  const imageSrc = isSupabaseUrl(item.campaignImage[0])
-    ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item.campaignImage[0]}`
-    : item.campaignImage[0];
-
+export const CampaignCard = ({ content, fetchList }) => {
+  const [openRightPanel, setOpenRightPanel] = React.useState(null);
+  console.log(content, 'content....');
   return (
     <>
       <Stack
@@ -23,15 +19,12 @@ export const CampaignCard = ({ item, fetchList }) => {
           minHeight: { lg: 600, md: 750, sm: 200, xs: 250 },
           backgroundColor: 'background.paper',
         }}
-        onClick={() => {
-          setSelectedItemId(item.id)
-          setOpenPanel(true)
-        }}
+        onClick={() => setOpenRightPanel(content)}
       >
         <Box
           component="img"
-          src={imageSrc || '/assets/image-placeholder.jpg'}
-          alt={item.name}
+          src={content?.thumbnailImage || '/assets/image-placeholder.jpg'}
+          alt={content?.name}
           sx={{
             width: '100%',
             height: { lg: 350, md: 400, sm: 300, xs: 300 },
@@ -57,10 +50,10 @@ export const CampaignCard = ({ item, fetchList }) => {
               component="h4"
               sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'secondary.main' }}
             >
-              {item?.name}
+              {content?.name}
             </Typography>
             <Typography sx={{ fontSize: '1rem', color: 'text.secondary' }}>
-              Content engagement: {item?.totalContentEngagement}
+              Content engagement: {content?.totalContentEngagement}
             </Typography>
             <Typography
               sx={{
@@ -74,7 +67,7 @@ export const CampaignCard = ({ item, fetchList }) => {
                 WebkitBoxOrient: 'vertical',
               }}
             >
-              {item?.campaignDescription || 'No description'}
+              {content?.campaignDescription || 'No description'}
             </Typography>
           </Box>
           <Stack
@@ -82,9 +75,9 @@ export const CampaignCard = ({ item, fetchList }) => {
             alignItems="center"
             divider={<Iconify icon="pepicons-pencil:line-y" sx={{ color: 'grey.400' }} />}
           >
-            <CustomChip label={item.campaignStatus ?? '-'} size="small" variant="soft" />
+            <CustomChip label={content?.campaignStatus ?? '-'} size="small" variant="soft" />
             <CustomChip
-              label={`${dayjs(item.startDate).isValid() ? dayjs(item.startDate).format('DD MMM YYYY') : '-/-'} : ${dayjs(item.endDate).isValid() ? dayjs(item.endDate).format('DD MMM YYYY') : '-/-'}`}
+              label={`${dayjs(content.startDate).isValid() ? dayjs(content.startDate).format('DD MMM YYYY') : '-/-'} : ${dayjs(content.endDate).isValid() ? dayjs(content.endDate).format('DD MMM YYYY') : '-/-'}`}
               size="small"
               variant="soft"
             />
@@ -92,15 +85,13 @@ export const CampaignCard = ({ item, fetchList }) => {
         </Stack>
       </Stack>
 
-      {openPanel && (
+      {openRightPanel && (
         <CampaignRightPanel
-          onClose={() => {
-            setSelectedItemId(null)
-            setOpenPanel(false)
-          }}
           fetchList={fetchList}
-          id={selectedItemId}
-          open={openPanel}
+          onClose={() => setOpenRightPanel(false)}
+          open={openRightPanel ? true : false}
+          data={content}
+          view={'QUICK'}
         />
       )}
     </>
