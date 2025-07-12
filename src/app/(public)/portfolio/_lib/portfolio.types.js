@@ -4,39 +4,40 @@ export const defaultPortfolio = (data) => {
     projectTitle: data?.projectTitle || '',
     shortDescription: data?.shortDescription || '',
     fullDescription: data?.fullDescription || '',
-    videoLink: data?.videoLink || '',
     date: data?.date || '',
-    horizontalImageGallery: data?.horizontalImageGallery || [],
+    horizontalImageGallery: Array.isArray(data?.horizontalImageGallery) ? data.horizontalImageGallery : [],
     verticalImageGallery: data?.verticalImageGallery || [],
     thumbnailImage: typeof data?.thumbnailImage === 'string' ? [data.thumbnailImage] : null,
+    videoLink: typeof data?.videoLink === 'string' ? [data.videoLink] : null,
     singlePageHeroImage: data?.singlePageHeroImage || [],
     imageField: data?.imageField || [],
     isFeatured: data?.isFeatured || false,
-    portfolioCategories:
-      data?.portfolioCategories?.map((item) => ({
-        value: item?.id,
-        label: item?.name,
-      })) || [],
+    portfolioCategories: Array.isArray(data?.portfolioCategories)
+      ? data.portfolioCategories.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
     partnerHQ: Array.isArray(data?.partnerHQ)
-      ? data?.partnerHQ?.map((item) => ({
+      ? data.partnerHQ.map((item) => ({
           value: item?.id || null,
           label: item?.name || '',
         }))
       : [],
-
     states: Array.isArray(data?.states)
-      ? data?.states?.map((item) => ({
+      ? data.states.map((item) => ({
           value: item?.id || null,
           label: item?.name || '',
         }))
       : [],
-    countries:
-      data?.countries?.map((item) => ({
-        value: item?.id || null,
-        label: item?.name || '',
-      })) || [],
+    countries: Array.isArray(data?.countries)
+      ? data.countries.map((item) => ({
+          value: item?.id || null,
+          label: item?.name || '',
+        }))
+      : [],
     caseStudies: Array.isArray(data?.caseStudies)
-      ? data?.caseStudies?.map((item) => ({
+      ? data.caseStudies.map((item) => ({
           value: item?.id || null,
           label: item?.name || '',
         }))

@@ -14,6 +14,7 @@ import PageLoader from '/src/components/loaders/PageLoader';
 
 import { createPortfolioAsync, deletePortfolioAsync, updatePortfolioAsync } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
+import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
 import { PortfolioForm } from './portfolio-form';
 import { PortfolioQuickView } from './portfolio-quickview';
 import { formConstants } from '/src/app/constants/form-constants';
@@ -38,38 +39,18 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
         errors.projectTitle = formConstants.required;
       }
 
-      if (!values.date) {
-        errors.date = formConstants.required;
-      }
-
       return errors;
     },
     onSubmit: async (values) => {
+      console.log('submitted values: ', values);
       setLoading(true);
       try {
-        const finalData = {
-          ...values,
-        };
-
-        const arrayFields = ['portfolioCategories', 'states', 'countries', 'partnerHQ'];
-        for (const field of arrayFields) {
-          const value = values[field];
-          if (value.length > 0) {
-            const arrOfStr = value.map((item) => item.value);
-            finalData[field] = arrOfStr;
-          }
-        }
-
-        if (finalData.videoLink.length === 0) {
-          delete finalData.videoLink;
-        }
-
-        const isValidFormat = dayjs(values.date, 'MMMM YYYY', true).isValid();
-        if (isValidFormat) {
-          finalData.date = values.date;
-        } else {
-          finalData.date = dayjs().format('MMMM YYYY');
-        }
+        const finalData = convertArrayObjIntoArrOfStr(values, [
+          'portfolioCategories',
+          'states',
+          'countries',
+          'partnerHQ',
+        ]);
 
         const { id, ...rest } = finalData;
         const createPayload = {
@@ -77,14 +58,18 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
           thumbnailImage: Array.isArray(finalData.thumbnailImage)
             ? finalData.thumbnailImage[0]
             : finalData.thumbnailImage,
+          videoLink: Array.isArray(finalData.videoLink) ? finalData.videoLink[0] || null : finalData.videoLink || null,
         };
+
+        console.log(finalData, 'final data....');
 
         const res = data?.id
           ? await updatePortfolioAsync(data?.id, {
               ...finalData,
               thumbnailImage: Array.isArray(finalData.thumbnailImage)
-                ? finalData.thumbnailImage[0]
-                : finalData.thumbnailImage,
+                ? finalData.thumbnailImage[0] || ''
+                : finalData.thumbnailImage || '',
+              videoLink: Array.isArray(finalData.videoLink) ? finalData.videoLink[0] || '' : finalData.videoLink || '',
             })
           : await createPortfolioAsync(createPayload);
         if (res.success) {
@@ -101,7 +86,7 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
       }
     },
   });
-
+  console.log(values, 'values from right panel');
   const handleDelete = async () => {
     fetchList();
     onClose?.();
@@ -178,6 +163,12 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
       )}
     </>
   );
+
+  React.useEffect(() => {
+    if (data) {
+      setValues(defaultPortfolio(data));
+    }
+  }, [data]);
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>

@@ -15,12 +15,18 @@ import { getCaseStudyListAsync, getCountryListAsync, getStateListAsync } from '.
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 
 export const PortfolioForm = ({ formikProps }) => {
+  // Single state object for all uploader triggers
+  const [uploaderStates, setUploaderStates] = React.useState({
+    thumbnailImage: false,
+    horizontalGallery: false,
+    verticalGallery: false,
+    videoLink: false,
+  });
+
   const [autocompleteFocus, setAutocompleteFocus] = React.useState({
     currentItem: '',
     prevItems: [],
   });
-  const [thumbnailImage, setThumbnailImage] = React.useState(false);
-  const [openImageUploadDialog, setOpenImageUploadDialog] = React.useState(false);
 
   const [autoCompleteOptions, setAutoCompleteOptions] = React.useState({
     portfolioCategories: [],
@@ -29,7 +35,7 @@ export const PortfolioForm = ({ formikProps }) => {
     countries: [],
     caseStudies: [],
   });
-  // ********************* Formik *******************************
+
   const { values, errors, handleChange, setFieldValue, handleSubmit, setValues } = formikProps;
 
   // --------------- Fetch Prerequisites Data -------------------
@@ -40,6 +46,7 @@ export const PortfolioForm = ({ formikProps }) => {
     partnerHQ: getPartnerListAsync,
     caseStudies: getCaseStudyListAsync,
   };
+
   React.useEffect(() => {
     const fetchData = async () => {
       if (!autocompleteFocus?.currentItem) return;
@@ -75,6 +82,8 @@ export const PortfolioForm = ({ formikProps }) => {
     fetchData();
   }, [autocompleteFocus]);
 
+  console.log(values, 'values from portfolio form....');
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -97,12 +106,12 @@ export const PortfolioForm = ({ formikProps }) => {
 
           <Grid size={{ xs: 12 }}>
             <MediaUploaderTrigger
-              open={thumbnailImage}
-              onClose={() => setThumbnailImage(false)}
+              open={uploaderStates.thumbnailImage}
+              onClose={() => setUploaderStates((prev) => ({ ...prev, thumbnailImage: false }))}
               onSave={(urls) => setFieldValue('thumbnailImage', urls)}
               value={values?.thumbnailImage}
               label="Thumbnail Image"
-              onAdd={() => setThumbnailImage(true)}
+              onAdd={() => setUploaderStates((prev) => ({ ...prev, thumbnailImage: true }))}
               onDelete={(filteredUrls) => setFieldValue('thumbnailImage', filteredUrls)}
               folderName="campaigns"
               hideVideoUploader
@@ -110,6 +119,7 @@ export const PortfolioForm = ({ formikProps }) => {
             />
             <ErrorMessage error={errors.thumbnailImage} />
           </Grid>
+
           <Grid size={{ xs: 12 }}>
             <CustomTextField
               name="projectTitle"
@@ -222,6 +232,7 @@ export const PortfolioForm = ({ formikProps }) => {
               onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
             />
           </Grid>
+
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomDatePicker
               label={'Date'}
@@ -230,32 +241,9 @@ export const PortfolioForm = ({ formikProps }) => {
               format="MMMM YYYY"
               onChange={(value) => setFieldValue('date', value)}
             />
-            <ErrorMessage error={errors.date} />
           </Grid>
-          {/* <Grid size={{ xs: 12, md: 6 }}>
-            <CustomAutoCompleteV2
-              label="Case Study"
-              name="caseStudies"
-              multiple
-              value={values.caseStudies}
-              defaultOptions={autoCompleteOptions.caseStudies}
-              onChange={(e, val) => setFieldValue('caseStudies', val)}
-              fetchOptions={async (debounceValue) => {
-                const paging = { page: 1, rowsPerPage: 100 };
-                const res = await getCaseStudyListAsync(paging, debounceValue);
-                return (
-                  res?.data?.map((item) => ({
-                    label: item.name,
-                    value: item.id,
-                  })) || []
-                );
-              }}
-              placeholder={undefined}
-              error={undefined}
-              onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
-            />
-          </Grid> */}
         </Grid>
+
         <Grid
           container
           spacing={2}
@@ -277,9 +265,9 @@ export const PortfolioForm = ({ formikProps }) => {
           {/* short description */}
           <Grid size={{ xs: 12 }}>
             <CustomTextField
-              name="projectShortDescription"
+              name="shortDescription"
               label="Short Description"
-              value={values.projectShortDescription}
+              value={values.shortDescription}
               onChange={handleChange}
               multiline
               rows={2}
@@ -291,9 +279,9 @@ export const PortfolioForm = ({ formikProps }) => {
           {/* full description */}
           <Grid size={{ xs: 12 }}>
             <CustomTextField
-              name="projectSinglePageFullDescription"
+              name="fullDescription"
               label="Full Description"
-              value={values.projectSinglePageFullDescription}
+              value={values.fullDescription}
               onChange={handleChange}
               multiline
               rows={4}
@@ -304,17 +292,48 @@ export const PortfolioForm = ({ formikProps }) => {
 
           <Grid size={{ xs: 12, md: 6 }}>
             <MediaUploaderTrigger
-              open={openImageUploadDialog}
-              onClose={() => setOpenImageUploadDialog(false)}
-              onSave={(urls) => setFieldValue('imageField', urls)}
-              value={values?.imageField}
-              label="Inspiration Images"
-              onAdd={() => setOpenImageUploadDialog(true)}
-              onDelete={(filteredUrls) => setFieldValue('imageField', filteredUrls)}
+              open={uploaderStates.horizontalGallery}
+              onClose={() => setUploaderStates((prev) => ({ ...prev, horizontalGallery: false }))}
+              onSave={(urls) => setFieldValue('horizontalImageGallery', urls)}
+              value={values?.horizontalImageGallery}
+              label="Horizontal Image Gallery"
+              onAdd={() => setUploaderStates((prev) => ({ ...prev, horizontalGallery: true }))}
+              onDelete={(filteredUrls) => setFieldValue('horizontalImageGallery', filteredUrls)}
               folderName="campaigns"
               hideImageUploader={undefined}
               hideVideoUploader
-              isMultiple
+              isMultiple={true}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 6 }}>
+            <MediaUploaderTrigger
+              open={uploaderStates.verticalGallery}
+              onClose={() => setUploaderStates((prev) => ({ ...prev, verticalGallery: false }))}
+              onSave={(urls) => setFieldValue('verticalImageGallery', urls)}
+              value={values?.verticalImageGallery}
+              label="Vertical Image Gallery"
+              onAdd={() => setUploaderStates((prev) => ({ ...prev, verticalGallery: true }))}
+              onDelete={(filteredUrls) => setFieldValue('verticalImageGallery', filteredUrls)}
+              folderName="campaigns"
+              hideImageUploader={false}
+              hideVideoUploader={true}
+              isMultiple={true}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 6 }}>
+            <MediaUploaderTrigger
+              open={uploaderStates.videoLink}
+              onClose={() => setUploaderStates((prev) => ({ ...prev, videoLink: false }))}
+              onSave={(urls) => setFieldValue('videoLink', urls)}
+              value={values?.videoLink}
+              label="Video Link"
+              onAdd={() => setUploaderStates((prev) => ({ ...prev, videoLink: true }))}
+              onDelete={(filteredUrls) => setFieldValue('videoLink', filteredUrls)}
+              folderName="campaigns"
+              hideImageUploader={true}
+              hideVideoUploader={undefined}
             />
           </Grid>
         </Grid>
