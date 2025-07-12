@@ -116,7 +116,7 @@ export const PartnerRightPanel = ({ fetchList, onClose, data, open, view = 'QUIC
         'productionHQ2',
       ]);
 
-      await updatePartnerAsync(data?.id, {
+      await updatePartnerAsync({
         ...finalData,
         isFeatured: featured,
         thumbnailImage: Array.isArray(finalData.thumbnailImage)
