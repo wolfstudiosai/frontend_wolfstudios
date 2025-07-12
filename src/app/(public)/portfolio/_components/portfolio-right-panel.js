@@ -31,9 +31,6 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
     initialValues: defaultPortfolio(data),
     validate: (values) => {
       const errors = {};
-      if (!values.thumbnailImage) {
-        errors.thumbnailImage = formConstants.required;
-      }
       if (!values.projectTitle) {
         errors.projectTitle = formConstants.required;
       }

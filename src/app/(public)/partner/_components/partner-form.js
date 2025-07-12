@@ -146,7 +146,7 @@ export const PartnerForm = ({ formikProps }) => {
             hideImageUploader={false}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid size={{ xs: 12 }}>
           <CustomTextField label="Name" name="name" value={values.name} onChange={handleChange} />
           <ErrorMessage error={errors.name} />
         </Grid>

@@ -37,31 +37,7 @@ export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUI
       if (!values.name) {
         errors.name = formConstants.required;
       }
-      if (!values.client) {
-        errors.client = formConstants.required;
-      }
-      if (!values.guidelines) {
-        errors.guidelines = formConstants.required;
-      }
-      if (!values.campaignDescription) {
-        errors.campaignDescription = formConstants.required;
-      }
-      if (!values.campaignStatus) {
-        errors.campaignStatus = formConstants.required;
-      }
-      if (!values.startDate) {
-        errors.startDate = formConstants.required;
-      }
-      if (!values.endDate) {
-        errors.endDate = formConstants.required;
-      }
-      if (!values.notes) {
-        errors.notes = formConstants.required;
-      }
-
-      if (values.startDate && values.endDate && new Date(values.startDate) > new Date(values.endDate)) {
-        errors.endDate = formConstants.endDate || 'End date must be after start date';
-      }
+     
 
       return errors;
     },

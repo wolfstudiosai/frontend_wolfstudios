@@ -114,7 +114,6 @@ export const PortfolioForm = ({ formikProps }) => {
             hideVideoUploader
             hideImageUploader={false}
           />
-          <ErrorMessage error={errors.thumbnailImage} />
         </Grid>
 
         <Grid size={{ xs: 12 }}>

@@ -125,7 +125,6 @@ export const CampaignForm = ({ formikProps }) => {
               hideVideoUploader
               hideImageUploader={false}
             />
-            <ErrorMessage error={errors.thumbnailImage} />
           </Grid>
           <Grid size={{ xs: 12 }}>
             <CustomTextField name="name" label="Name" value={values.name} onChange={handleChange} />
@@ -133,7 +132,6 @@ export const CampaignForm = ({ formikProps }) => {
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField name="client" label="Client" value={values.client} onChange={handleChange} />
-            <ErrorMessage error={errors.client} />
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
@@ -144,7 +142,6 @@ export const CampaignForm = ({ formikProps }) => {
               format="YYYY-MM-DD"
               onChange={(value) => setFieldValue('startDate', value)}
             />
-            <ErrorMessage error={errors.startDate} />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomDatePicker
@@ -154,7 +151,6 @@ export const CampaignForm = ({ formikProps }) => {
               format="YYYY-MM-DD"
               onChange={(value) => setFieldValue('endDate', value)}
             />
-            <ErrorMessage error={errors.endDate} />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <CustomTextField name="budget" label="Budget" value={values.budget} onChange={handleChange} type="number" />
@@ -203,7 +199,6 @@ export const CampaignForm = ({ formikProps }) => {
               onChange={(value) => setFieldValue('campaignStatus', value)}
               options={campaignProgressStatus}
             />
-            <ErrorMessage error={errors.campaignStatus} />
           </Grid>
           <Grid size={{ xs: 12 }}>
             <CustomTextField
@@ -212,11 +207,9 @@ export const CampaignForm = ({ formikProps }) => {
               value={values.guidelines}
               onChange={handleChange}
             />
-            <ErrorMessage error={errors.guidelines} />
           </Grid>
           <Grid size={{ xs: 12 }}>
             <CustomTextField name="notes" label="Notes " value={values.notes} onChange={handleChange} />
-            <ErrorMessage error={errors.notes} />
           </Grid>
           <Grid size={{ xs: 12 }}>
             <CustomTextField
@@ -227,7 +220,6 @@ export const CampaignForm = ({ formikProps }) => {
               multiline
               rows={4}
             />
-            <ErrorMessage error={errors.campaignDescription} />
           </Grid>
         </Grid>
         <Grid

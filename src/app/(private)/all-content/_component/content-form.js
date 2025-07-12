@@ -88,7 +88,6 @@ export const ContentForm = ({ formikProps }) => {
     fetchData();
   }, [autocompleteFocus]);
 
-
   return (
     <form onSubmit={handleSubmit}>
       <Grid
@@ -121,7 +120,6 @@ export const ContentForm = ({ formikProps }) => {
             hideVideoUploader
             hideImageUploader={false}
           />
-          <ErrorMessage error={errors.thumbnailImage} />
         </Grid>
 
         <Grid size={{ xs: 12, md: 8 }}>

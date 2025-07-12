@@ -29,17 +29,9 @@ export const ManageContentRightPanel = ({ fetchList, onClose, data, open, view =
     initialValues: defaultContent(data),
     validate: (values) => {
       const errors = {};
-      const requiredFields = ['name', 'thumbnailImage'];
-
-      requiredFields.forEach((field) => {
-        if (
-          !values[field] ||
-          (Array.isArray(values[field]) && values[field].length === 0) ||
-          (typeof values[field] === 'string' && values[field].trim() === '')
-        ) {
-          errors[field] = formConstants.required;
-        }
-      });
+      if (!values.name) {
+        errors.name = formConstants.required;
+      }
 
       return errors;
     },
