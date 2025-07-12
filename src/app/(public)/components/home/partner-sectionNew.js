@@ -7,8 +7,9 @@ import Grid from '@mui/material/Grid2';
 
 import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
+
+import { ManagePartnerRightPanel } from '../../partner/_components/manage-partner-right-panel';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
-import { PartnerRightPanel } from '../../partner/_components/partner-right-panel';
 
 export const PartnerSectionNew = () => {
   const [partners, setPartners] = useState([]);
@@ -17,11 +18,15 @@ export const PartnerSectionNew = () => {
 
   const fetchPartners = async () => {
     try {
-      const filters = [{ key: "isFeatured", type: "boolean", operator: "is", value: true }];
-      const response = await getPartnerListAsync({
-        page: 1,
-        rowsPerPage: 20,
-      }, filters, 'and');
+      const filters = [{ key: 'isFeatured', type: 'boolean', operator: 'is', value: true }];
+      const response = await getPartnerListAsync(
+        {
+          page: 1,
+          rowsPerPage: 20,
+        },
+        filters,
+        'and'
+      );
 
       if (response?.success) {
         setPartners(response.data);
@@ -142,10 +147,7 @@ const Card = ({ card, fetchList }) => {
           transition: 'transform 300ms ease',
           border: '1px solid var(--mui-palette-divider)',
         }}
-        onClick={() => {
-          setSelectedItemId(card.id)
-          setOpenPartnerRightPanel(true)
-        }}
+        onClick={() => setOpenPartnerRightPanel(card)}
       >
         {/* Background Image */}
         <Box
@@ -157,7 +159,7 @@ const Card = ({ card, fetchList }) => {
             right: 0,
             bottom: 0,
             zIndex: 0,
-            backgroundImage: `url("${encodeURI(card?.profileImage?.[0])}")`,
+            backgroundImage: `url("${encodeURI(card?.thumbnailImage)}")`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             transition: 'transform 300ms ease',
@@ -247,17 +249,13 @@ const Card = ({ card, fetchList }) => {
           {/* Add new text elements here */}
         </Box>
       </Box>
-      {openPartnerRightPanel && (
-        <PartnerRightPanel
-          onClose={() => {
-            setSelectedItemId(null)
-            setOpenPartnerRightPanel(false)
-          }}
-          fetchList={fetchList}
-          id={selectedItemId}
-          open={openPartnerRightPanel}
-        />
-      )}
+      {/* <ManagePartnerRightPanel
+        view="QUICK"
+        fetchList={fetchList}
+        open={openPartnerRightPanel ? true : false}
+        data={openPartnerRightPanel}
+        onClose={() => setOpenPartnerRightPanel(false)}
+      /> */}
     </>
   );
 };

@@ -15,7 +15,7 @@ export const MainView = () => {
       <PortfolioSection />
       <ContentSection />
       <PortfolioSectionNew />
-      <PartnerSectionNew isSecondHorizontal={true} />
+      <PartnerSectionNew  />
     </Box>
   );
 };

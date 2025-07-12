@@ -32,6 +32,9 @@ export const PartnerRightPanel = ({ fetchList, onClose, data, open, view = 'QUIC
       if (!values.name) {
         errors.name = formConstants.required;
       }
+      if (!values.email) {
+        errors.email = formConstants.required;
+      }
 
       return errors;
     },
