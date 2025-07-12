@@ -2,27 +2,13 @@ export const defaultSpace = (data) => {
   const defaultData = {
     id: data?.id || null,
     name: data?.name || '',
-    startingRatehr: Number(data?.startingRatehr) || 0,
     bookingLink: data?.bookingLink || '',
-    type: Array.isArray(data?.type) ? data.type.join(', ') : data?.type || '',
-    spaceStyle: Array.isArray(data?.spaceStyle) ? data.spaceStyle.join(', ') : data?.spaceStyle || '',
-    props: Array.isArray(data?.props) ? data.props.join(', ') : data?.props || '',
-    theme: Array.isArray(data?.theme) ? data.theme.join(', ') : data?.theme || '',
-    availableLighting: Array.isArray(data?.availableLighting)
-      ? data.availableLighting.join(', ')
-      : data?.availableLighting || '',
-    adons: Array.isArray(data?.adons) ? data.adons.join(', ') : data?.adons || '',
-    cycwall: Boolean(data?.cycwall) || false,
-    backdropSystem: Boolean(data?.backdropSystem) || false,
-    features: Array.isArray(data?.features) ? data.features.join(', ') : data?.features || '',
-    minimumHourlyBooking: Number(data?.minimumHourlyBooking) || 0,
     intro: data?.intro || '',
     aboutThisSpace: data?.aboutThisSpace || '',
     seeTheSpace: data?.seeTheSpace || '',
     addToProject: data?.addToProject || '',
     recentCreatorsWhoBookedHere: data?.recentCreatorsWhoBookedHere || '',
     phoneNumber: data?.phoneNumber || '',
-    attendeeLimit: data?.attendeeLimit || '',
     colorTone: data?.colorTone || '',
     parkingInstructions: data?.parkingInstructions || '',
     lightingInformation: data?.lightingInformation || '',
@@ -31,6 +17,18 @@ export const defaultSpace = (data) => {
     hostRules: data?.hostRules || '',
     electrical: data?.electrical || '',
     permitDetails: data?.permitDetails || '',
+    startingRatehr: data?.startingRatehr || 0,
+    type: Array.isArray(data?.type) ? data.type : [],
+    spaceStyle: Array.isArray(data?.spaceStyle) ? data.spaceStyle : [],
+    props: Array.isArray(data?.props) ? data.props : [],
+    theme: Array.isArray(data?.theme) ? data.theme : [],
+    availableLighting: Array.isArray(data?.availableLighting) ? data.availableLighting : [],
+    adons: Array.isArray(data?.adons) ? data.adons : [],
+    cycwall: data?.cycwall || '',
+    backdropSystem: Boolean(data?.backdropSystem) || false,
+    features: Array.isArray(data?.features) ? data.features : [],
+    minimumHourlyBooking: Number(data?.minimumHourlyBooking) || 0,
+    attendeeLimit: data?.attendeeLimit || '',
     bedrooms: data?.bedrooms || '',
     bathrooms: data?.bathrooms || '',
     squareFootage: Number(data?.squareFootage) || 0,
@@ -38,6 +36,7 @@ export const defaultSpace = (data) => {
     dateListed: data?.dateListed || '',
     isFeatured: Boolean(data?.isFeatured) || false,
 
+    // Relationships
     campaigns: Array.isArray(data?.campaigns)
       ? data.campaigns.map((item) => ({
           value: item?.id || null,
@@ -50,14 +49,12 @@ export const defaultSpace = (data) => {
           label: item?.name || '',
         }))
       : [],
-
     countries: Array.isArray(data?.countries)
       ? data.countries.map((item) => ({
           value: item?.id || null,
           label: item?.name || '',
         }))
       : [],
-
     states: Array.isArray(data?.states)
       ? data.states.map((item) => ({
           value: item?.id || null,
@@ -89,6 +86,7 @@ export const defaultSpace = (data) => {
         }))
       : [],
 
+    // Images
     showcaseYourLastProjectHereWithUs: data?.showcaseYourLastProjectHereWithUs || [],
     travelTimePlaceholderImageForGoogleMaps: data?.travelTimePlaceholderImageForGoogleMaps || [],
     featuredGallery: data?.featuredGallery || [],
