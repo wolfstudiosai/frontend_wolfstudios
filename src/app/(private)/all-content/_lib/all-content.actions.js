@@ -55,7 +55,7 @@ export const createContentAsync = async (data) => {
 export const updateContentAsync = async ( data) => {
   try {
     // const payload = contentPayload(data);
-    const res = await api.patch(`/content-HQ/${id}`, data);
+    const res = await api.patch(`/content-HQ/${data?.id}`, data);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
