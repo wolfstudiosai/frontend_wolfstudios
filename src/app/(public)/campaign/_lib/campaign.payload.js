@@ -56,5 +56,9 @@ export const campaignPayload = async (values, isFileUpload = false) => {
         }
     }
 
+    finalData.thumbnailImage = Array.isArray(finalData.thumbnailImage)
+        ? finalData.thumbnailImage[0]
+        : finalData.thumbnailImage;
+
     return finalData;
 };

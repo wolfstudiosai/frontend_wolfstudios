@@ -39,6 +39,7 @@ export const CampaignListView = () => {
   const theme = useTheme();
   const router = useRouter();
   const anchorEl = React.useRef(null);
+  const singleImageField = ['thumbnailImage'];
   const [anchorElHide, setAnchorElHide] = React.useState(null);
   const [isImageUploadOpen, setIsImageUploadOpen] = React.useState(false);
   const [mediaToShow, setMediaToShow] = React.useState({
@@ -76,10 +77,13 @@ export const CampaignListView = () => {
     try {
       const finalData = await campaignPayload(updatedRow, false);
 
-      const response = await updateCampaignAsync(updatedRow.id, {
-        ...finalData,
-        [imageUpdatedField]: [...updatedRow[imageUpdatedField], ...images],
-      });
+      if (singleImageField.includes(imageUpdatedField)) {
+        finalData[imageUpdatedField] = images[0];
+      } else {
+        finalData[imageUpdatedField] = [...finalData[imageUpdatedField], ...images];
+      }
+
+      const response = await updateCampaignAsync(updatedRow.id, finalData);
 
       if (response.success) {
         toast.success('Campaign updated successfully');
@@ -209,63 +213,9 @@ export const CampaignListView = () => {
       await createCampaignAsync(newRow);
       getSingleView(viewId);
     } else {
-      const finalData = {
-        ...newRow,
-      };
+      const finalData = await campaignPayload(newRow);
 
-      const imageFields = ['campaignImage', 'imageInspirationGallery'];
-      for (const field of imageFields) {
-        const value = newRow[field];
-        if (value instanceof File) {
-          const res = await imageUploader(
-            [
-              {
-                file: value,
-                fileName: value.name.split('.').slice(0, -1).join('.'),
-                fileType: value.type.split('/')[1],
-              },
-            ],
-            'campaigns'
-          );
-
-          finalData[field] = res;
-        } else if (typeof value === 'string') {
-          finalData[field] = [value];
-        }
-      }
-
-      const arrayFields = [
-        'contentHQ',
-        'stakeholders',
-        'retailPartners',
-        'proposedPartners',
-        'contributedPartners',
-        'spaces',
-        'productionHQ',
-        'products',
-        'retailPartners2',
-        'retailPartners3',
-      ];
-
-      // process array fields
-      for (const field of arrayFields) {
-        const value = newRow[field];
-        if (value.length > 0) {
-          const arrOfStr = value.map((item) => item.value);
-          finalData[field] = arrOfStr;
-        }
-      }
-
-      const numericFields = ['totalContentEngagement', 'budget', 'totalExpense', 'campaignROI', 'productExpense'];
-      for (const field of numericFields) {
-        const value = newRow[field];
-        if (value) {
-          finalData[field] = Number(value);
-        }
-      }
-
-      await updateCampaignAsync(newRow.id, finalData);
-      getSingleView(viewId);
+      await updateCampaignAsync(newRow.id, finalData).then(() => getSingleView(viewId));
     }
 
     return newRow;
@@ -700,7 +650,7 @@ export const CampaignListView = () => {
 
       {/* Image upload dialog */}
       <MediaUploader
-        multiple
+        multiple={singleImageField.includes(imageUpdatedField) ? false : true}
         open={open}
         onClose={() => setOpen(false)}
         onSave={(paths) => handleUploadImage([...paths])}

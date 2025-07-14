@@ -117,8 +117,8 @@ export const useCampaignColumns = (
             editable: true
         },
         {
-            field: "campaignImage",
-            headerName: "Campaign Image",
+            field: "thumbnailImage",
+            headerName: "Thumbnail Image",
             width: 150,
             renderCell: (params) => {
                 return (
@@ -135,24 +135,23 @@ export const useCampaignColumns = (
                             },
                         }}
                     >
-                        {params.row.campaignImage.length > 0 &&
-                            params.row.campaignImage.map((image, index) => (
-                                <Image
-                                    key={index}
-                                    src={image}
-                                    alt="Campaign Image"
-                                    width={22}
-                                    height={22}
-                                    style={{ objectFit: 'cover', borderRadius: '2px', cursor: 'pointer' }}
-                                    onClick={(event) => {
-                                        anchorEl.current = event.currentTarget;
-                                        setMediaToShow({
-                                            type: 'image',
-                                            url: image,
-                                        });
-                                    }}
-                                />
-                            ))}
+
+                        {params.row.thumbnailImage && (
+                            <Image
+                                src={params.row.thumbnailImage[0]}
+                                alt="Campaign Image"
+                                width={22}
+                                height={22}
+                                style={{ objectFit: 'cover', borderRadius: '2px', cursor: 'pointer' }}
+                                onClick={(event) => {
+                                    anchorEl.current = event.currentTarget;
+                                    setMediaToShow({
+                                        type: 'image',
+                                        url: params.row.thumbnailImage[0],
+                                    });
+                                }}
+                            />
+                        )}
 
                         <AttachFile
                             className="attach-icon"

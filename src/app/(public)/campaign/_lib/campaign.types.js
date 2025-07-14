@@ -19,7 +19,6 @@ export const defaultCampaign = (data) => {
     notes: data?.notes || '',
     imageInspirationGallery: Array.isArray(data?.imageInspirationGallery) ? data.imageInspirationGallery : [],
     videoInspirationGallery: Array.isArray(data?.videoInspirationGallery) ? data.videoInspirationGallery : [],
-    campaignImage: Array.isArray(data?.campaignImage) ? data.campaignImage : [],
 
     contentHQ: Array.isArray(data?.contentHQ)
       ? data.contentHQ.map((item) => ({

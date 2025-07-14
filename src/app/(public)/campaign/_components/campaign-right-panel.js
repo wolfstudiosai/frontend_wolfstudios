@@ -20,7 +20,7 @@ import {
 import { defaultCampaign } from '../_lib/campaign.types';
 import { CampaignForm } from './campaign-form';
 import { formConstants } from '/src/app/constants/form-constants';
-import { imageUploader } from '/src/utils/upload-file';
+import { campaignPayload } from '../_lib/campaign.payload';
 
 export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUICK' }) => {
   const { isLogin } = useAuth();
@@ -43,68 +43,11 @@ export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUI
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const finalData = {
-          ...values,
-        };
-
-        const imageFields = ['campaignImage', 'imageInspirationGallery'];
-        for (const field of imageFields) {
-          const value = values[field];
-          if (value instanceof File) {
-            const res = await imageUploader(
-              [
-                {
-                  file: value,
-                  fileName: value.name.split('.').slice(0, -1).join('.'),
-                  fileType: value.type.split('/')[1],
-                },
-              ],
-              'campaigns'
-            );
-
-            finalData[field] = res;
-          } else if (typeof value === 'string') {
-            finalData[field] = [value];
-          }
-        }
-
-        const arrayFields = [
-          'contentHQ',
-          'stakeholders',
-          'retailPartners',
-          'proposedPartners',
-          'contributedPartners',
-          'spaces',
-          'productionHQ',
-          'products',
-          'retailPartners2',
-          'retailPartners3',
-        ];
-
-        for (const field of arrayFields) {
-          const value = values[field];
-          if (value.length > 0) {
-            const arrOfStr = value.map((item) => item.value);
-            finalData[field] = arrOfStr;
-          }
-        }
-
-        const { id, ...rest } = finalData;
-        const createPayload = {
-          ...rest,
-          thumbnailImage: Array.isArray(finalData.thumbnailImage)
-            ? finalData.thumbnailImage[0]
-            : finalData.thumbnailImage,
-        };
+        const finalData = await campaignPayload(values, true);
 
         const res = data?.id
-          ? await updateCampaignAsync(data?.id, {
-            ...finalData,
-            thumbnailImage: Array.isArray(finalData.thumbnailImage)
-              ? finalData.thumbnailImage[0]
-              : finalData.thumbnailImage,
-          })
-          : await createCampaignAsync(createPayload);
+          ? await updateCampaignAsync(data?.id, finalData)
+          : await createCampaignAsync(finalData);
         if (res.success) {
           onClose?.();
           resetForm();
@@ -196,11 +139,11 @@ export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUI
     </>
   );
 
-  React.useEffect(() => {
-    if (data) {
-      setValues(defaultCampaign(data));
-    }
-  }, [data]);
+  // React.useEffect(() => {
+  //   if (data) {
+  //     setValues(defaultCampaign(data));
+  //   }
+  // }, [data]);
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
