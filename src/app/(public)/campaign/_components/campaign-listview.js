@@ -33,6 +33,7 @@ import {
 } from '../_lib/campaign.actions';
 import { defaultCampaign } from '../_lib/campaign.types';
 import { useCampaignColumns } from '../hook/use-campaign-columns';
+import { campaignPayload } from '../_lib/campaign.payload';
 
 export const CampaignListView = () => {
   const theme = useTheme();
@@ -73,35 +74,13 @@ export const CampaignListView = () => {
   // handle upload image
   const handleUploadImage = async (images) => {
     try {
-      const finalData = {
-        ...updatedRow,
-      };
-
-      const arrayFields = [
-        'contentHQ',
-        'stakeholders',
-        'retailPartners',
-        'proposedPartners',
-        'contributedPartners',
-        'spaces',
-        'productionHQ',
-        'products',
-        'retailPartners2',
-        'retailPartners3',
-      ];
-
-      for (const field of arrayFields) {
-        const value = updatedRow[field];
-        if (value.length > 0) {
-          const arrOfStr = value.map((item) => item.value);
-          finalData[field] = arrOfStr;
-        }
-      }
+      const finalData = await campaignPayload(updatedRow, false);
 
       const response = await updateCampaignAsync(updatedRow.id, {
         ...finalData,
         [imageUpdatedField]: [...updatedRow[imageUpdatedField], ...images],
       });
+
       if (response.success) {
         toast.success('Campaign updated successfully');
         setOpen(false);
@@ -428,6 +407,7 @@ export const CampaignListView = () => {
       // set views
       const viewsData = await getCampaignViews();
       setViews(viewsData.data);
+
       if (viewsData.success) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
         await getSingleView(firstView?.id, pagination);

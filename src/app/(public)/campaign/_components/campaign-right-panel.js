@@ -37,7 +37,6 @@ export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUI
       if (!values.name) {
         errors.name = formConstants.required;
       }
-     
 
       return errors;
     },
@@ -100,11 +99,11 @@ export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUI
 
         const res = data?.id
           ? await updateCampaignAsync(data?.id, {
-              ...finalData,
-              thumbnailImage: Array.isArray(finalData.thumbnailImage)
-                ? finalData.thumbnailImage[0]
-                : finalData.thumbnailImage,
-            })
+            ...finalData,
+            thumbnailImage: Array.isArray(finalData.thumbnailImage)
+              ? finalData.thumbnailImage[0]
+              : finalData.thumbnailImage,
+          })
           : await createCampaignAsync(createPayload);
         if (res.success) {
           onClose?.();
