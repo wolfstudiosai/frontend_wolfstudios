@@ -9,7 +9,7 @@ import { CampaignRightPanel } from './campaign-right-panel';
 
 export const CampaignCard = ({ content, fetchList }) => {
   const [openRightPanel, setOpenRightPanel] = React.useState(null);
-  console.log(content, 'content....');
+
   return (
     <>
       <Stack

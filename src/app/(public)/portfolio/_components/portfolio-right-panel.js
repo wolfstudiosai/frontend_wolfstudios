@@ -45,6 +45,7 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
           'states',
           'countries',
           'partnerHQ',
+          'caseStudies',
         ]);
 
         const { id, ...rest } = finalData;
@@ -58,14 +59,14 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
 
         const res = data?.id
           ? await updatePortfolioAsync(data?.id, {
-              ...finalData,
-              thumbnailImage: Array.isArray(finalData.thumbnailImage)
-                ? finalData.thumbnailImage[0] || ''
-                : finalData.thumbnailImage || '',
-              videoLink: Array.isArray(finalData.videoLink)
-                ? finalData.videoLink[0] || null
-                : finalData.videoLink || null,
-            })
+            ...finalData,
+            thumbnailImage: Array.isArray(finalData.thumbnailImage)
+              ? finalData.thumbnailImage[0] || ''
+              : finalData.thumbnailImage || '',
+            videoLink: Array.isArray(finalData.videoLink)
+              ? finalData.videoLink[0] || null
+              : finalData.videoLink || null,
+          })
           : await createPortfolioAsync(createPayload);
         if (res.success) {
           onClose?.();
@@ -171,11 +172,11 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
     </>
   );
 
-  React.useEffect(() => {
-    if (data) {
-      setValues(defaultPortfolio(data));
-    }
-  }, [data]);
+  // React.useEffect(() => {
+  //   if (data) {
+  //     setValues(defaultPortfolio(data));
+  //   }
+  // }, [data]);
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
