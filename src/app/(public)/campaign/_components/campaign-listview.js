@@ -175,6 +175,7 @@ export const CampaignListView = () => {
   };
 
   // process row update
+  // process row update
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
     const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
@@ -185,33 +186,7 @@ export const CampaignListView = () => {
         return newRow;
       }
 
-      if (!newRow.campaignStatus) {
-        toast.error('Please select campaign status');
-        return newRow;
-      }
-
-      if (!newRow.notes) {
-        toast.error('Please enter notes');
-        return newRow;
-      }
-
-      if (!newRow.campaignDescription) {
-        toast.error('Please enter description');
-        return newRow;
-      }
-
-      if (!newRow.client) {
-        toast.error('Please enter client');
-        return newRow;
-      }
-
-      if (!newRow.guidelines) {
-        toast.error('Please enter guidelines');
-        return newRow;
-      }
-
-      await createCampaignAsync(newRow);
-      getSingleView(viewId);
+      await createCampaignAsync(newRow).then(() => getSingleView(viewId));
     } else {
       const finalData = await campaignPayload(newRow);
 
@@ -220,6 +195,7 @@ export const CampaignListView = () => {
 
     return newRow;
   }, []);
+
 
   // handle row selection
   const handleRowSelection = (newRowSelectionModel) => {
@@ -334,6 +310,7 @@ export const CampaignListView = () => {
   // initialize
   const initialize = async () => {
     try {
+      if (searchParams.get('tab') !== 'campaign') return;
       setLoading(true);
       const campaigns = await getCampaignListAsync({
         page: 1,
@@ -361,9 +338,9 @@ export const CampaignListView = () => {
       if (viewsData.success) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
         await getSingleView(firstView?.id, pagination);
+
         if (!viewId) {
-          const currentTab = searchParams.get('tab') || 'campaign';
-          router.push(`?tab=${currentTab}&view=${firstView?.id}`);
+          router.push(`?tab=campaign&view=${firstView?.id}`);
         }
       } else {
         const payload = {
@@ -404,6 +381,12 @@ export const CampaignListView = () => {
     }
   };
 
+  // Watch for URL viewId change
+  React.useEffect(() => {
+    setPagination((prev) => ({ ...prev, pageNo: 1 }));
+    initialize();
+  }, [searchParams]);
+
   // store isView sidebar is open or not on local storage
   const handleOpenViewSidebar = () => {
     setShowView(!showView);
@@ -416,6 +399,9 @@ export const CampaignListView = () => {
     if (viewId && selectedViewData) {
       const selectedColumnNames = selectedViewData.meta?.columns || [];
       const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
+      console.log(allColumns, 'allColumns');
+      console.log(selectedColumnNames, 'selectedColumnNames');
+      console.log(filtered, 'filtered');
       setVisibleColumns(filtered);
       setNewVisibleColumns(filtered);
     } else {
@@ -424,12 +410,6 @@ export const CampaignListView = () => {
     }
     setSearchColumns(allColumns);
   }, [viewId, selectedViewData, allColumns]);
-
-  // Watch for URL viewId change
-  React.useEffect(() => {
-    setPagination((prev) => ({ ...prev, pageNo: 1 }));
-    initialize();
-  }, []);
 
   React.useEffect(() => {
     const isViewOpen = localStorage.getItem('isRecordViewOpen');

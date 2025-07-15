@@ -91,6 +91,7 @@ export const CampaignCard = ({ content, fetchList }) => {
           onClose={() => setOpenRightPanel(false)}
           open={openRightPanel ? true : false}
           data={content}
+          id={content?.id}
           view={'QUICK'}
         />
       )}

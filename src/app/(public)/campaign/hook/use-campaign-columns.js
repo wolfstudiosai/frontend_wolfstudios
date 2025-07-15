@@ -15,6 +15,32 @@ import { renderAutoCompleteCell, renderAutoCompleteEditCell } from '/src/compone
 import SelectEditCell from '/src/components/data-table/select-edit-cell';
 import { dateFormatter } from '/src/utils/date-formatter';
 import { formatCompactNumber } from '/src/utils/helper';
+import useSWR from "swr";
+
+// const fetchAllPrerequisiteOptions = async () => {
+//     const [content, stakeholder, retailPartner, partner, space, productionHQ, product] = await Promise.all([
+//         getContentListAsync({ page: 1, rowsPerPage: 20 }),
+//         getStakeHolderListAsync({ page: 1, rowsPerPage: 20 }),
+//         getRetailPartnerListAsync({ page: 1, rowsPerPage: 20 }),
+//         getPartnerListAsync({ page: 1, rowsPerPage: 20 }),
+//         getSpaceListAsync({ page: 1, rowsPerPage: 20 }),
+//         getProductionListAsync({ page: 1, rowsPerPage: 20 }),
+//         getProductListAsync({ page: 1, rowsPerPage: 20 }),
+//     ]);
+
+//     const mapOptions = (res) =>
+//         res?.success ? res.data.map((item) => ({ value: item.id, label: item.name })) : [];
+
+//     return {
+//         contentOptions: mapOptions(content),
+//         stakeholderOptions: mapOptions(stakeholder),
+//         retailPartnerOptions: mapOptions(retailPartner),
+//         partnerOptions: mapOptions(partner),
+//         spaceOptions: mapOptions(space),
+//         productionHQOptions: mapOptions(productionHQ),
+//         productOptions: mapOptions(product),
+//     };
+// };
 
 export const useCampaignColumns = (
     anchorEl,
@@ -79,6 +105,18 @@ export const useCampaignColumns = (
         fetchPrerequisitesData();
     }, []);
 
+    // const { data } = useSWR("campaign-prerequisites", fetchAllPrerequisiteOptions, {
+    //     revalidateOnFocus: false,
+    //     dedupingInterval: 1000 * 60 * 5,
+    // });
+
+    // const contentOptions = data?.contentOptions || [];
+    // const stakeholderOptions = data?.stakeholderOptions || [];
+    // const retailPartnerOptions = data?.retailPartnerOptions || [];
+    // const partnerOptions = data?.partnerOptions || [];
+    // const spaceOptions = data?.spaceOptions || [];
+    // const productionHQOptions = data?.productionHQOptions || [];
+    // const productOptions = data?.productOptions || [];
 
     const columns = useMemo(() => [
         { field: 'name', headerName: 'Name', width: 280, editable: true },
@@ -136,9 +174,9 @@ export const useCampaignColumns = (
                         }}
                     >
 
-                        {params.row.thumbnailImage && (
+                        {params.row?.thumbnailImage?.length > 0 && params?.row?.thumbnailImage?.[0] && (
                             <Image
-                                src={params.row.thumbnailImage[0]}
+                                src={params?.row?.thumbnailImage?.[0]}
                                 alt="Campaign Image"
                                 width={22}
                                 height={22}
@@ -147,7 +185,7 @@ export const useCampaignColumns = (
                                     anchorEl.current = event.currentTarget;
                                     setMediaToShow({
                                         type: 'image',
-                                        url: params.row.thumbnailImage[0],
+                                        url: params?.row?.thumbnailImage?.[0],
                                     });
                                 }}
                             />
@@ -186,7 +224,7 @@ export const useCampaignColumns = (
                             },
                         }}
                     >
-                        {params.row.imageInspirationGallery.length > 0 && params.row.imageInspirationGallery.map((image, index) => (
+                        {params?.row?.imageInspirationGallery?.length > 0 && params?.row?.imageInspirationGallery?.map((image, index) => (
                             <Image
                                 key={index}
                                 src={image}
@@ -219,19 +257,6 @@ export const useCampaignColumns = (
             }
         },
         {
-            field: 'budget',
-            headerName: 'Budget',
-            width: 200, editable: true,
-            valueFormatter: (value) => formatCompactNumber(value),
-        },
-        {
-            field: 'productExpense',
-            headerName: 'Product Expense',
-            width: 150,
-            editable: true,
-            valueFormatter: (value) => formatCompactNumber(value),
-        },
-        {
             field: 'videoInspirationGallery',
             headerName: 'Video Inspiration Gallery',
             width: 200,
@@ -249,7 +274,7 @@ export const useCampaignColumns = (
                     },
                 }}
             >
-                {params.row.videoInspirationGallery.length > 0 && params.row.videoInspirationGallery.map((video, index) => (
+                {params?.row?.videoInspirationGallery?.length > 0 && params?.row?.videoInspirationGallery?.map((video, index) => (
                     <Box
                         key={index}
                         sx={{
@@ -289,6 +314,19 @@ export const useCampaignColumns = (
                     }}
                 />
             </Box>
+        },
+        {
+            field: 'budget',
+            headerName: 'Budget',
+            width: 200, editable: true,
+            valueFormatter: (value) => formatCompactNumber(value),
+        },
+        {
+            field: 'productExpense',
+            headerName: 'Product Expense',
+            width: 150,
+            editable: true,
+            valueFormatter: (value) => formatCompactNumber(value),
         },
         {
             field: 'campaignROI',

@@ -95,6 +95,7 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
         'states',
         'countries',
         'partnerHQ',
+        'caseStudies'
       ]);
 
       await updatePortfolioAsync(data?.id, {
