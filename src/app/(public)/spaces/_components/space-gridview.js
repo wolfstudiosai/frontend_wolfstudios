@@ -3,8 +3,9 @@ import Grid from '@mui/material/Grid2';
 import { PageLoader } from '/src/components/loaders/PageLoader';
 
 import { SpaceCard } from './space-card';
+import React from 'react';
 
-export const SpaceGridView = ({ data, fetchList, loading }) => {
+export const SpaceGridView = ({ data, loading }) => {
   return (
     <PageLoader loading={loading} error={null}>
       <Grid container spacing={0.5}>
@@ -19,7 +20,7 @@ export const SpaceGridView = ({ data, fetchList, loading }) => {
               xl: 2,
             }}
           >
-            <SpaceCard content={space} fetchList={fetchList} />
+            <SpaceCard content={space} />
           </Grid>
         ))}
       </Grid>

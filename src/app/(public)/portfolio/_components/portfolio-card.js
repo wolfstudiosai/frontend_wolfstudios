@@ -27,7 +27,7 @@ export const PortfolioCard = ({ content }) => {
             opacity: 0.8,
           },
         }}
-        onClick={() => setOpenRightPanel(content)}
+        onClick={() => setOpenRightPanel(true)}
       >
         <Box className="image-container" sx={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
           {isVideoContent(content?.thumbnailImage || '') ? (

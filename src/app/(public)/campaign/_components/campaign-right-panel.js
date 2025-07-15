@@ -161,7 +161,6 @@ export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
     </>
   );
 
-
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
       <PageLoader loading={isLoading}>

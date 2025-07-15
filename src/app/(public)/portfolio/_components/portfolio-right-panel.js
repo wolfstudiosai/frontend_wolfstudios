@@ -19,9 +19,11 @@ import { PortfolioQuickView } from './portfolio-quickview';
 import { formConstants } from '/src/app/constants/form-constants';
 import { usePortfolioList } from '/src/services/portfolio/usePortfolioList';
 import { useGetPortfolioData } from '/src/services/portfolio/usePortfolioData';
+import { useFeaturedPortfolioList } from '/src/services/portfolio/useFeaturedPortfolio';
 
 export const PortfolioRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { mutate: mutatePortfolioList } = usePortfolioList();
+  const { mutate: mutateFeaturedPortfolioList } = useFeaturedPortfolioList();
   const { data: portfolioData, isLoading, mutate } = useGetPortfolioData(id);
   const { isLogin } = useAuth();
   const [isFeatured, setIsFeatured] = React.useState(portfolioData?.data?.isFeatured);
@@ -78,6 +80,7 @@ export const PortfolioRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
           resetForm();
           mutate();
           mutatePortfolioList();
+          mutateFeaturedPortfolioList();
 
         } else {
           console.error('Operation failed:', res.message);
@@ -99,6 +102,7 @@ export const PortfolioRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const handleDelete = async () => {
     onClose?.();
     mutatePortfolioList();
+    mutateFeaturedPortfolioList();
   };
 
   const handleFeatured = async (featured) => {
@@ -122,8 +126,10 @@ export const PortfolioRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
       });
 
       if (res.success) {
+        onClose?.();
         mutate();
         mutatePortfolioList();
+        mutateFeaturedPortfolioList();
       }
     } catch (error) {
       console.error('Error:', error);

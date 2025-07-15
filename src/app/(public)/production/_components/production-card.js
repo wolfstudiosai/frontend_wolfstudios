@@ -4,8 +4,8 @@ import { Box, Card, Stack, Typography } from '@mui/material';
 import { ProductionRightPanel } from './production-right-panel';
 import { isVideoContent } from '/src/utils/helper';
 
-export const ProductionCard = ({ content, fetchList }) => {
-  const [openProductionPanel, setOpenProductionPanel] = React.useState(null);
+export const ProductionCard = ({ content }) => {
+  const [openProductionPanel, setOpenProductionPanel] = React.useState(false);
 
   return (
     <>
@@ -27,7 +27,7 @@ export const ProductionCard = ({ content, fetchList }) => {
             opacity: 0.8,
           },
         }}
-        onClick={() => setOpenProductionPanel(content)}
+        onClick={() => setOpenProductionPanel(true)}
       >
         <Box className="image-container" sx={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
           {isVideoContent(content.thumbnailImage || '') ? (
@@ -90,13 +90,9 @@ export const ProductionCard = ({ content, fetchList }) => {
           </Stack>
         </Box>
 
-        <ProductionRightPanel
-          fetchList={fetchList}
-          onClose={() => setOpenProductionPanel(false)}
-          open={openProductionPanel ? true : false}
-          data={content}
-          view={'QUICK'}
-        />
+        {openProductionPanel && (
+          <ProductionRightPanel onClose={() => setOpenProductionPanel(false)} open={openProductionPanel} id={content.id} view={'QUICK'} />
+        )}
       </Card>
     </>
   );

@@ -10,8 +10,7 @@ import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import { paths } from '../../../paths';
 import { useContentList } from '../../../services/content/useContentList';
 import AllContentGridView from './_component/all-content-grid-view';
-import { ManageContentRightPanel } from './_component/manage-content-right-panel';
-import { defaultContent } from './_lib/all-content.types';
+import { AllContentRightPanel } from './_component/all-content-right-panel';
 
 export const AllContentView = () => {
   const [openPanel, setOpenPanel] = React.useState(false);
@@ -49,7 +48,7 @@ export const AllContentView = () => {
         setOpenPanel={setOpenPanel}
       />
 
-      <AllContentGridView data={data} loading={isLoading} fetchList={mutate} />
+      <AllContentGridView data={data} loading={isLoading} />
       {hasMore && (
         <Box textAlign="center" mt={2}>
           <Button size="small" variant="contained" onClick={loadMore} disabled={isLoadingMore}>
@@ -58,15 +57,9 @@ export const AllContentView = () => {
         </Box>
       )}
 
-      <ManageContentRightPanel
-        fetchList={mutate}
-        onClose={() => {
-          setOpenPanel(false);
-        }}
-        open={openPanel}
-        data={defaultContent()}
-        view="ADD"
-      />
+      {openPanel && (
+        <AllContentRightPanel onClose={() => setOpenPanel(false)} id={null} open={openPanel} view="ADD" />
+      )}
     </PageContainer>
   );
 };

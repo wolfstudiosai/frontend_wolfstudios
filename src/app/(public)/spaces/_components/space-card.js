@@ -1,11 +1,11 @@
 import React from 'react';
 import { Box, Card } from '@mui/material';
 
-import { ManageSpaceRightPanel } from './manage-space-right-panel';
+import { SpaceRightPanel } from './space-right-panel';
 import { isVideoContent } from '/src/utils/helper';
 
-export const SpaceCard = ({ content, fetchList }) => {
-  const [openRightPanel, setOpenRightPanel] = React.useState(null);
+export const SpaceCard = ({ content }) => {
+  const [openRightPanel, setOpenRightPanel] = React.useState(false);
 
   return (
     <>
@@ -25,7 +25,7 @@ export const SpaceCard = ({ content, fetchList }) => {
             opacity: 0.8,
           },
         }}
-        onClick={() => setOpenRightPanel(content)}
+        onClick={() => setOpenRightPanel(true)}
       >
         <Box className="image-container" sx={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
           {isVideoContent(content?.thumbnailImage || '') ? (
@@ -62,13 +62,14 @@ export const SpaceCard = ({ content, fetchList }) => {
           )}
         </Box>
 
-        <ManageSpaceRightPanel
-          fetchList={fetchList}
-          onClose={() => setOpenRightPanel(false)}
-          open={openRightPanel ? true : false}
-          data={content}
-          view={'QUICK'}
-        />
+        {openRightPanel && (
+          <SpaceRightPanel
+            onClose={() => setOpenRightPanel(false)}
+            open={openRightPanel}
+            id={content?.id}
+            view={'QUICK'}
+          />
+        )}
       </Card>
     </>
   );

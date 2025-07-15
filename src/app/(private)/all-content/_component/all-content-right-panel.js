@@ -10,22 +10,27 @@ import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
 
-import { createSpaceAsync, deleteSingleSpaceAsync, updateSpaceAsync } from '../_lib/space.actions';
-import { defaultSpace } from '../_lib/space.types';
+import { createContentAsync, deleteContentAsync, updateContentAsync } from '../_lib/all-content.actions';
+import { defaultContent } from '../_lib/all-content.types';
 import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
-import { SpaceForm } from './space-form';
-import { SpaceQuickViewV2 } from './space-quickviewV2';
+import { ContentForm } from './content-form';
+import { ContentQuickView } from './content-quick-view';
 import { formConstants } from '/src/app/constants/form-constants';
+import { useGetContentData } from '/src/services/content/useContentData';
+import { useContentList } from '/src/services/content/useContentList';
+import PageLoader from '/src/components/loaders/PageLoader';
 
-export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = 'QUICK' }) => {
+export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
+  const { mutate: mutateList } = useContentList();
+  const { data: contentData, isLoading, mutate } = useGetContentData(id);
   const { isLogin } = useAuth();
-  const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
+  const [isFeatured, setIsFeatured] = React.useState(contentData?.data?.isFeatured);
   const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
 
-  const { values, errors, handleChange, handleSubmit, setValues, setFieldValue, resetForm } = useFormik({
-    initialValues: defaultSpace(data),
+  const { values, errors, handleChange, setFieldValue, resetForm, setValues, handleSubmit } = useFormik({
+    initialValues: defaultContent(),
     validate: (values) => {
       const errors = {};
       if (!values.name) {
@@ -40,12 +45,11 @@ export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = '
         const finalData = convertArrayObjIntoArrOfStr(values, [
           'campaigns',
           'cities',
-          'countries',
-          'states',
+          'products',
           'tags',
-          'destinations',
-          'productionHQ',
-          'productionHQ2',
+          'stakeholders',
+          'partners',
+          'retailPartners',
         ]);
 
         const { id, ...rest } = finalData;
@@ -56,18 +60,19 @@ export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = '
             : finalData.thumbnailImage,
         };
 
-        const res = data?.id
-          ? await updateSpaceAsync({
-              ...finalData,
-              thumbnailImage: Array.isArray(finalData.thumbnailImage)
-                ? finalData.thumbnailImage[0]
-                : finalData.thumbnailImage,
-            })
-          : await createSpaceAsync(createPayload);
+        const res = id
+          ? await updateContentAsync({
+            ...finalData,
+            thumbnailImage: Array.isArray(finalData.thumbnailImage)
+              ? finalData.thumbnailImage[0]
+              : finalData.thumbnailImage,
+          })
+          : await createContentAsync(createPayload);
         if (res.success) {
           onClose?.();
           resetForm();
-          await fetchList();
+          mutate();
+          mutateList();
         } else {
           console.error('Operation failed:', res.message);
         }
@@ -79,10 +84,20 @@ export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = '
     },
   });
 
-  // *********************States*********************************
+
+  React.useEffect(() => {
+    if (contentData?.data) {
+      setValues(defaultContent(contentData?.data));
+    }
+  }, [contentData]);
+
   const handleDelete = async () => {
-    fetchList();
-    onClose?.();
+    try {
+      onClose?.();
+      mutateList();
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const handleFeatured = async (featured) => {
@@ -91,22 +106,22 @@ export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = '
       const finalData = convertArrayObjIntoArrOfStr(values, [
         'campaigns',
         'cities',
-        'countries',
-        'states',
+        'products',
         'tags',
-        'destinations',
-        'productionHQ',
-        'productionHQ2',
+        'stakeholders',
+        'partners',
+        'retailPartners',
       ]);
 
-      await updateSpaceAsync({
+      await updateContentAsync({
         ...finalData,
         isFeatured: featured,
         thumbnailImage: Array.isArray(finalData.thumbnailImage)
           ? finalData.thumbnailImage[0]
           : finalData.thumbnailImage,
       });
-      fetchList();
+      mutate();
+      mutateList();
     } catch (error) {
       console.error('Error:', error);
     }
@@ -122,12 +137,12 @@ export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = '
               Save
             </Button>
           )}
-          {panelView === 'EDIT' && data?.id ? (
+          {panelView === 'EDIT' && id ? (
             <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
               <Icon icon="solar:eye-broken" />
             </IconButton>
           ) : (
-            data?.id && (
+            id && (
               <IconButton onClick={() => setPanelView('EDIT')} title="Quick">
                 <Icon icon="mynaui:edit-one" />
               </IconButton>
@@ -137,19 +152,19 @@ export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = '
             <IconButton
               sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               title="Analytics"
-              onClick={() => router.push(`/analytics/${data?.id}`)}
+              onClick={() => router.push(`/all-content/${id}`)}
             >
               <Icon icon="mdi:analytics" />
             </IconButton>
           )}
           {panelView !== 'ADD' && (
             <DeleteConfirmationPasswordPopover
-              id={data?.id}
+              id={id}
               title="Are you sure you want to delete?"
-              deleteFn={deleteSingleSpaceAsync}
+              deleteFn={deleteContentAsync}
               passwordInput
               onDelete={handleDelete}
-              disabled={!data?.id}
+              disabled={!id}
             />
           )}
           {panelView !== 'ADD' && (
@@ -170,19 +185,16 @@ export const ManageSpaceRightPanel = ({ fetchList, onClose, data, open, view = '
     </>
   );
 
-  React.useEffect(() => {
-    if (data) {
-      setValues(defaultSpace(data));
-    }
-  }, [data]);
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-      {panelView === 'QUICK' ? (
-        <SpaceQuickViewV2 data={values} isEdit={false} />
-      ) : (
-        <SpaceForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />
-      )}
+      <PageLoader loading={isLoading}>
+        {panelView === 'QUICK' ? (
+          <ContentQuickView data={contentData?.data} isEdit={false} />
+        ) : (
+          <ContentForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />
+        )}
+      </PageLoader>
     </DrawerContainer>
   );
 };

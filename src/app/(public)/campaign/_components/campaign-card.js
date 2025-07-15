@@ -8,7 +8,7 @@ import { Iconify } from '/src/components/iconify/iconify';
 import { CampaignRightPanel } from './campaign-right-panel';
 
 export const CampaignCard = ({ content }) => {
-  const [openRightPanel, setOpenRightPanel] = React.useState(null);
+  const [openRightPanel, setOpenRightPanel] = React.useState(false);
 
   return (
     <>
@@ -19,7 +19,7 @@ export const CampaignCard = ({ content }) => {
           minHeight: { lg: 600, md: 750, sm: 200, xs: 250 },
           backgroundColor: 'background.paper',
         }}
-        onClick={() => setOpenRightPanel(content)}
+        onClick={() => setOpenRightPanel(true)}
       >
         <Box
           component="img"
