@@ -9,13 +9,11 @@ import { campaignProgressStatus } from '../_lib/campaign.constants';
 import { isSupabaseUrl } from '/src/utils/helper';
 import { CampaignRightPanel } from './campaign-right-panel';
 
-export const CampaignTabCard = ({ campaign, fetchList }) => {
+export const CampaignTabCard = ({ campaign, refreshCampaignsStatus, refreshCampaigns }) => {
   const [openCampaignRightPanel, setOpenCampaignRightPanel] = React.useState(null);
-  const [prevCampaignProgress, setPrevCampaignProgress] = React.useState(campaign.campaignStatus);
-  const [campaignProgress, setCampaignProgress] = React.useState('');
   const [selectedItemId, setSelectedItemId] = React.useState(null);
 
-  async function updateCampaign() {
+  async function updateCampaign(value) {
     try {
       const finalCampaign = { ...campaign };
 
@@ -42,55 +40,27 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
 
       const res = await updateCampaignAsync(campaign?.id, {
         ...finalCampaign,
-        campaignStatus: campaignProgress,
+        campaignStatus: value,
       });
 
       if (res.success) {
-        // fetchList();
-        // const isCampaignStatusExist = statusTabs.some(tab => tab.value === campaignProgress);
-
-        // const modifiedTabs = statusTabs.map(tab => {
-        //   if (tab.value === prevCampaignProgress) {
-        //     const count = tab.count - 1;
-        //     return { ...tab, count, label: `${tab.value.replace(/_/g, ' ')} (${count})` };
-        //   }
-        //   if (tab.value === campaignProgress) {
-        //     const count = tab.count + 1;
-        //     return { ...tab, count, label: `${tab.value.replace(/_/g, ' ')} (${count})` };
-        //   }
-        //   return tab;
-        // });
-
-        // const updatedStatusTabs = isCampaignStatusExist
-        //   ? modifiedTabs
-        //   : [
-        //     ...modifiedTabs,
-        //     {
-        //       value: campaignProgress,
-        //       count: 1,
-        //       label: `${campaignProgress.replace(/_/g, ' ')} (1)`,
-        //     },
-        //   ];
-
-        // setStatusTabs(updatedStatusTabs);
-
-        // setCampaigns(campaigns.filter(c => c.id !== campaign.id));
-
+        refreshCampaignsStatus();
+        refreshCampaigns();
       }
     } catch (e) {
       // console.log( e)
     }
   }
 
-  React.useEffect(() => {
-    if (campaign.campaignStatus !== campaignProgress && campaignProgress) {
-      updateCampaign();
-    }
-  }, [campaignProgress]);
+  const imageSrc = isSupabaseUrl(campaign?.campaignImage?.[0])
+    ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${campaign?.campaignImage?.[0]}`
+    : campaign?.campaignImage?.[0];
 
-  const imageSrc = isSupabaseUrl(campaign.campaignImage?.[0])
-    ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${campaign.campaignImage?.[0]}`
-    : campaign.campaignImage?.[0];
+  const handleCampaignStatusChange = (value) => {
+    if (campaign?.campaignStatus !== value) {
+      updateCampaign(value);
+    }
+  };
 
   return (
     <>
@@ -185,9 +155,9 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
           </Typography>
           <CustomSelect
             value={campaign?.campaignStatus}
-            onChange={(value) => setCampaignProgress(value)}
+            onChange={(value) => handleCampaignStatusChange(value)}
             name="status"
-            options={campaignProgressStatus} label={undefined} error={undefined}          />
+            options={campaignProgressStatus} label={undefined} error={undefined} />
         </Box>
       </Stack>
 
@@ -197,7 +167,6 @@ export const CampaignTabCard = ({ campaign, fetchList }) => {
             setSelectedItemId(null)
             setOpenCampaignRightPanel(false)
           }}
-          fetchList={fetchList}
           id={selectedItemId}
           open={openCampaignRightPanel}
           view="QUICK"

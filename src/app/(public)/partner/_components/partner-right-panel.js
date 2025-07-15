@@ -9,7 +9,7 @@ import { useFormik } from 'formik';
 import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
-import { PageLoader } from '/src/components/loaders/PageLoader';
+import PageLoader from '../../../../components/loaders/PageLoader';
 
 import { createPartnerAsync, deletePartnerAsync, updatePartnerAsync } from '../_lib/partner.actions';
 import { defaultPartner } from '../_lib/partner.types';
@@ -17,16 +17,22 @@ import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationAr
 import { PartnerForm } from './partner-form';
 import { PartnerQuickView } from './partner-quickview';
 import { formConstants } from '/src/app/constants/form-constants';
+import { useGetPartnerData } from '/src/services/partner/usePartnerData';
+import { usePartnerList } from '/src/services/partner/usePartnerList';
+import { useFeaturedPartnerList } from '/src/services/partner/useFeaturedPartner';
 
-export const PartnerRightPanel = ({ fetchList, onClose, data, open, view = 'QUICK' }) => {
+export const PartnerRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
+  const { mutate: mutatePartnerList } = usePartnerList();
+  const { data: partnerData, isLoading, mutate } = useGetPartnerData(id);
+  const { mutate: mutateFeaturedPartnerList } = useFeaturedPartnerList();
   const { isLogin } = useAuth();
-  const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
+  const [isFeatured, setIsFeatured] = React.useState(partnerData?.data?.isFeatured);
   const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
 
   const { values, errors, handleChange, setFieldValue, resetForm, setValues, handleSubmit } = useFormik({
-    initialValues: defaultPartner(data),
+    initialValues: defaultPartner(),
     validate: (values) => {
       const errors = {};
       if (!values.name) {
@@ -69,18 +75,21 @@ export const PartnerRightPanel = ({ fetchList, onClose, data, open, view = 'QUIC
             : finalData.thumbnailImage,
         };
 
-        const res = data?.id
+        const res = id
           ? await updatePartnerAsync({
-              ...finalData,
-              thumbnailImage: Array.isArray(finalData.thumbnailImage)
-                ? finalData.thumbnailImage[0]
-                : finalData.thumbnailImage,
-            })
+            ...finalData,
+            thumbnailImage: Array.isArray(finalData.thumbnailImage)
+              ? finalData.thumbnailImage[0]
+              : finalData.thumbnailImage,
+          })
           : await createPartnerAsync(createPayload);
         if (res.success) {
           onClose?.();
           resetForm();
-          await fetchList();
+          mutate();
+          mutatePartnerList();
+          mutateFeaturedPartnerList();
+
         } else {
           console.error('Operation failed:', res.message);
         }
@@ -91,9 +100,18 @@ export const PartnerRightPanel = ({ fetchList, onClose, data, open, view = 'QUIC
       }
     },
   });
+
+
+  React.useEffect(() => {
+    if (partnerData?.data) {
+      setValues(defaultPartner(partnerData?.data));
+    }
+  }, [partnerData?.data]);
+
   const handleDelete = async () => {
-    fetchList();
     onClose?.();
+    mutatePartnerList();
+    mutateFeaturedPartnerList();
   };
 
   const handleFeatured = async (featured) => {
@@ -119,14 +137,20 @@ export const PartnerRightPanel = ({ fetchList, onClose, data, open, view = 'QUIC
         'productionHQ2',
       ]);
 
-      await updatePartnerAsync({
+      const res = await updatePartnerAsync({
         ...finalData,
         isFeatured: featured,
         thumbnailImage: Array.isArray(finalData.thumbnailImage)
           ? finalData.thumbnailImage[0]
           : finalData.thumbnailImage,
       });
-      fetchList();
+
+      if (res.success) {
+        onClose?.();
+        mutate();
+        mutatePartnerList();
+        mutateFeaturedPartnerList();
+      }
     } catch (error) {
       console.error('Error:', error);
     }
@@ -142,12 +166,12 @@ export const PartnerRightPanel = ({ fetchList, onClose, data, open, view = 'QUIC
               Save
             </Button>
           )}
-          {panelView === 'EDIT' && data?.id ? (
+          {panelView === 'EDIT' && id ? (
             <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
               <Icon icon="solar:eye-broken" />
             </IconButton>
           ) : (
-            data?.id && (
+            id && (
               <IconButton onClick={() => setPanelView('EDIT')} title="Quick">
                 <Icon icon="mynaui:edit-one" />
               </IconButton>
@@ -157,19 +181,19 @@ export const PartnerRightPanel = ({ fetchList, onClose, data, open, view = 'QUIC
             <IconButton
               sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               title="Analytics"
-              onClick={() => router.push(`/partner/${data?.id}`)}
+              onClick={() => router.push(`/partner/${id}`)}
             >
               <Icon icon="mdi:analytics" />
             </IconButton>
           )}
           {panelView !== 'ADD' && (
             <DeleteConfirmationPasswordPopover
-              id={data?.id}
+              id={id}
               title="Are you sure you want to delete?"
               deleteFn={deletePartnerAsync}
               passwordInput
               onDelete={handleDelete}
-              disabled={!data?.id}
+              disabled={!id}
             />
           )}
           {panelView !== 'ADD' && (
@@ -190,19 +214,15 @@ export const PartnerRightPanel = ({ fetchList, onClose, data, open, view = 'QUIC
     </>
   );
 
-  React.useEffect(() => {
-    if (data) {
-      setValues(defaultPartner(data));
-    }
-  }, [data]);
-
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-      {panelView === 'QUICK' ? (
-        <PartnerQuickView data={data} isEdit={false} />
-      ) : (
-        <PartnerForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />
-      )}
+      <PageLoader loading={isLoading}>
+        {panelView === 'QUICK' ? (
+          <PartnerQuickView data={partnerData?.data} isEdit={false} />
+        ) : (
+          <PartnerForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />
+        )}
+      </PageLoader>
     </DrawerContainer>
   );
 };

@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid2';
 import PageLoader from '../../../../components/loaders/PageLoader';
 import { CampaignCard } from './campaign-card';
 
-export const CampaignGridView = ({ data, loading, fetchList }) => {
+export const CampaignGridView = ({ data, loading }) => {
   return (
     <PageLoader loading={loading} error={null}>
       <Grid container sx={{ position: 'relative' }} spacing={0.5}>
@@ -19,7 +19,7 @@ export const CampaignGridView = ({ data, loading, fetchList }) => {
               xl: 2,
             }}
           >
-            <CampaignCard content={item} fetchList={fetchList} />
+            <CampaignCard content={item} />
           </Grid>
         ))}
       </Grid>

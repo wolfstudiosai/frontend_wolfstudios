@@ -3,10 +3,11 @@
 import Grid from '@mui/material/Grid2';
 
 import { PageLoader } from '/src/components/loaders/PageLoader';
-import {PortfolioCard } from './portfolio-card';
+import { PortfolioCard } from './portfolio-card';
+import React from 'react';
 
 
-export const PortfolioGridView = ({ data, loading, fetchList }) => {
+export const PortfolioGridView = ({ data, loading }) => {
 
 
   return (
@@ -23,7 +24,7 @@ export const PortfolioGridView = ({ data, loading, fetchList }) => {
               xl: 2,
             }}
           >
-            <PortfolioCard content={content} fetchList={fetchList} />
+            <PortfolioCard content={content} />
           </Grid>
         ))}
       </Grid>

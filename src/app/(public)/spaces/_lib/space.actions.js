@@ -26,10 +26,10 @@ export const getSpaceListAsync = async (queryParams, filters, gate) => {
   }
 };
 
-export const getSpaceAsync = async (slug) => {
+export const getSpaceAsync = async (id) => {
   try {
-    const res = await api.get(`/spaces/${slug}`);
-    return { success: true, data: res.data.data[0], totalRecords: res.data.meta.total };
+    const res = await api.get(`/spaces/${id}`);
+    return { success: true, data: res.data.data };
   } catch (error) {
     toast.error(error.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };

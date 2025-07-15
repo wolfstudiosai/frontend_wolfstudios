@@ -5,8 +5,8 @@ import PageLoader from '/src/components/loaders/PageLoader';
 import React from 'react';
 import { ContentCard } from './content-card';
 
-export default function AllContentGridView({ data, loading, fetchList }) {
-  
+export default function AllContentGridView({ data, loading }) {
+
   return (
     <PageLoader loading={loading} error={null}>
       <Grid container spacing={0.5}>
@@ -21,11 +21,11 @@ export default function AllContentGridView({ data, loading, fetchList }) {
               xl: 2,
             }}
           >
-            <ContentCard content={content} fetchList={fetchList} />
+            <ContentCard content={content} />
           </Grid>
         ))}
       </Grid>
-     
+
     </PageLoader>
   );
 }
