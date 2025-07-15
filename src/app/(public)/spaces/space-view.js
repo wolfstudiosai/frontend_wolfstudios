@@ -9,7 +9,7 @@ import { PageHeader } from '/src/components/core/page-header';
 import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import { paths } from '../../../paths';
 import { useSpaceList } from '../../../services/space/useSpaceList';
-import { ManageSpaceRightPanel } from './_components/manage-space-right-panel';
+import { SpaceRightPanel } from './_components/space-right-panel';
 import { SpaceGridView } from './_components/space-gridview';
 
 export const SpaceView = () => {
@@ -49,7 +49,7 @@ export const SpaceView = () => {
       />
 
       <Box>
-        <SpaceGridView data={data} loading={isLoading} fetchList={mutate} />
+        <SpaceGridView data={data} loading={isLoading} />
         {hasMore && (
           <Box textAlign="center" mt={2}>
             <Button size="small" variant="contained" onClick={loadMore} disabled={isLoadingMore}>
@@ -59,15 +59,14 @@ export const SpaceView = () => {
         )}
       </Box>
 
-      <ManageSpaceRightPanel
-        fetchList={mutate}
-        onClose={() => {
-          setOpenPanel(false);
-        }}
-        open={openPanel}
-        data={null}
-        view="ADD"
-      />
+      {openPanel && (
+        <SpaceRightPanel
+          onClose={() => setOpenPanel(false)}
+          open={openPanel}
+          id={null}
+          view="ADD"
+        />
+      )}
     </PageContainer>
   );
 };

@@ -17,17 +17,21 @@ import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationAr
 import { ProductionForm } from './production-form';
 import { ProductionQuickView } from './production-quickview';
 import { formConstants } from '/src/app/constants/form-constants';
+import { useGetProductionData } from '/src/services/production/useProductionData';
+import { useProductionList } from '/src/services/production/useProductionList';
 
-export const ProductionRightPanel = ({ fetchList, onClose, data, open, view = 'QUICK' }) => {
+export const ProductionRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
+  const { mutate: mutateProductionList } = useProductionList();
+  const { data: productionData, isLoading, mutate } = useGetProductionData(id);
   const { isLogin } = useAuth();
-  const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
+  const [isFeatured, setIsFeatured] = React.useState(productionData?.data?.isFeatured);
   const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
 
   // ***************** Formik *******************************
   const { values, errors, handleChange, handleSubmit, setValues, setFieldValue, resetForm } = useFormik({
-    initialValues: defaultProduction(data),
+    initialValues: defaultProduction(),
     validate: (values) => {
       const errors = {};
       if (!values.name) {
@@ -58,21 +62,22 @@ export const ProductionRightPanel = ({ fetchList, onClose, data, open, view = 'Q
           videoLink: Array.isArray(finalData.videoLink) ? finalData.videoLink[0] || null : finalData.videoLink || null,
         };
 
-        const res = data?.id
+        const res = id
           ? await updateProductionAsync({
-              ...finalData,
-              thumbnailImage: Array.isArray(finalData.thumbnailImage)
-                ? finalData.thumbnailImage[0] || ''
-                : finalData.thumbnailImage || '',
-              videoLink: Array.isArray(finalData.videoLink)
-                ? finalData.videoLink[0] || null
-                : finalData.videoLink || null,
-            })
+            ...finalData,
+            thumbnailImage: Array.isArray(finalData.thumbnailImage)
+              ? finalData.thumbnailImage[0] || ''
+              : finalData.thumbnailImage || '',
+            videoLink: Array.isArray(finalData.videoLink)
+              ? finalData.videoLink[0] || null
+              : finalData.videoLink || null,
+          })
           : await createProductionAsync(createPayload);
         if (res.success) {
           onClose?.();
           resetForm();
-          fetchList();
+          mutate();
+          mutateProductionList();
         } else {
           console.error('Operation failed:', res.message);
         }
@@ -83,8 +88,15 @@ export const ProductionRightPanel = ({ fetchList, onClose, data, open, view = 'Q
       }
     },
   });
+
+  React.useEffect(() => {
+    if (productionData?.data) {
+      setValues(productionData?.data);
+    }
+  }, [productionData]);
+
   const handleDelete = async () => {
-    fetchList();
+    mutateProductionList();
     onClose?.();
   };
 
@@ -108,7 +120,8 @@ export const ProductionRightPanel = ({ fetchList, onClose, data, open, view = 'Q
           ? finalData.thumbnailImage[0] || ''
           : finalData.thumbnailImage || '',
       });
-      fetchList();
+      mutate();
+      mutateProductionList();
     } catch (error) {
       console.error('Error:', error);
     }
@@ -124,12 +137,12 @@ export const ProductionRightPanel = ({ fetchList, onClose, data, open, view = 'Q
               Save
             </Button>
           )}
-          {panelView === 'EDIT' && data?.id ? (
+          {panelView === 'EDIT' && id ? (
             <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
               <Icon icon="solar:eye-broken" />
             </IconButton>
           ) : (
-            data?.id && (
+            id && (
               <IconButton onClick={() => setPanelView('EDIT')} title="Quick">
                 <Icon icon="mynaui:edit-one" />
               </IconButton>
@@ -139,7 +152,7 @@ export const ProductionRightPanel = ({ fetchList, onClose, data, open, view = 'Q
           {panelView !== 'ADD' && (
             <IconButton
               sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              onClick={() => router.push(`/production/${data?.id}`)}
+              onClick={() => router.push(`/production/${id}`)}
               title="Analytics"
             >
               <Icon icon="mdi:analytics" />
@@ -148,12 +161,12 @@ export const ProductionRightPanel = ({ fetchList, onClose, data, open, view = 'Q
 
           {panelView !== 'ADD' && (
             <DeleteConfirmationPasswordPopover
-              id={data?.id}
+              id={id}
               title="Are you sure you want to delete?"
               deleteFn={deleteSingleProductionAsync}
               passwordInput
               onDelete={handleDelete}
-              disabled={!data?.id}
+              disabled={!id}
             />
           )}
 
@@ -175,17 +188,12 @@ export const ProductionRightPanel = ({ fetchList, onClose, data, open, view = 'Q
     </>
   );
 
-  React.useEffect(() => {
-    if (data) {
-      setValues(defaultProduction(data));
-    }
-  }, [data]);
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
       {panelView === 'QUICK' ? (
-        <PageLoader loading={loading}>
-          <ProductionQuickView data={data} isEdit={false} />
+        <PageLoader loading={isLoading}>
+          <ProductionQuickView data={productionData?.data} actionButtons={actionButtons} />
         </PageLoader>
       ) : (
         <ProductionForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />

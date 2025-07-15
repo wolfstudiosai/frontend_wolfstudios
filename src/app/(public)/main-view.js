@@ -6,7 +6,7 @@ import { ContentSection } from './components/home/content-section';
 import { HeroSection } from './components/home/hero-section';
 import { PartnerSectionNew } from './components/home/partner-sectionNew';
 import { PortfolioSection } from './components/home/portfolio-section';
-import { PortfolioSectionNew } from './components/home/portfolio-sectionNew';
+import { SpacesSection } from './components/home/spaces-section';
 
 export const MainView = () => {
   return (
@@ -14,8 +14,8 @@ export const MainView = () => {
       <HeroSection />
       <PortfolioSection />
       <ContentSection />
-      <PortfolioSectionNew />
-      <PartnerSectionNew  />
+      <SpacesSection />
+      <PartnerSectionNew />
     </Box>
   );
 };

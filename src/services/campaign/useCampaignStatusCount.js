@@ -1,16 +1,22 @@
 import React from 'react';
 import useSWR from 'swr';
+import { useSWRConfig } from 'swr';
 
 import { getCampaignStatusListAsync } from '../../app/(public)/campaign/_lib/campaign.actions';
 
 export const useCampaignStatusCount = () => {
+  const swrKey = 'campaign-status-count';
+  const { cache } = useSWRConfig();
+
+  const hasCache = cache.get(swrKey);
+
   const {
     data: response,
     error,
     isLoading,
     mutate,
   } = useSWR(
-    'campaign-status-count',
+    swrKey,
     async () => {
       const apiResponse = await getCampaignStatusListAsync();
       if (!apiResponse.success) {
@@ -20,8 +26,7 @@ export const useCampaignStatusCount = () => {
     },
     {
       revalidateOnFocus: false,
-      shouldRetryOnError: true,
-      errorRetryCount: 2,
+      revalidateOnMount: !hasCache,
     }
   );
 

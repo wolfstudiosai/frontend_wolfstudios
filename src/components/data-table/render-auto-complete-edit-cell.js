@@ -31,9 +31,11 @@ export const renderAutoCompleteCell = (value) => {
 
 export const renderAutoCompleteEditCell = ({
     label = '',
+    name = '',
     fetchOptions,
     defaultOptions = [],
     multiple = true,
+    onFocus, 
 }) => (params) => {
     const { id, field, value } = params;
     const apiRef = useGridApiContext();
@@ -62,10 +64,12 @@ export const renderAutoCompleteEditCell = ({
             <CustomAutoCompleteV2
                 multiple={multiple}
                 label={label}
+                name={name}
                 value={value}
                 onChange={handleChange}
                 defaultOptions={defaultOptions}
                 fetchOptions={fetchOptions}
+                onFocus={onFocus}
             />
         </Box>
     );

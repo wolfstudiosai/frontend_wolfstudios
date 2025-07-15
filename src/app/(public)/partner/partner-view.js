@@ -49,7 +49,7 @@ export const PartnerView = () => {
         setOpenPanel={setOpenPanel}
       />
 
-      <PartnerGridView data={data} loading={isLoading} fetchList={mutate} />
+      <PartnerGridView data={data} loading={isLoading} />
       {hasMore && (
         <Box textAlign="center" mt={2}>
           <Button size="small" variant="contained" onClick={loadMore} disabled={isLoadingMore}>
@@ -58,15 +58,14 @@ export const PartnerView = () => {
         </Box>
       )}
 
-      <PartnerRightPanel
-        fetchList={mutate}
-        onClose={() => {
-          setOpenPanel(false);
-        }}
-        open={openPanel}
-        data={defaultPartner()}
-        view="ADD"
-      />
+      {openPanel && (
+        <PartnerRightPanel
+          onClose={() => setOpenPanel(false)}
+          open={openPanel}
+          view="ADD"
+          id={null}
+        />
+      )}
     </PageContainer>
   );
 };

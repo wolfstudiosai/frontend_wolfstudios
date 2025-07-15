@@ -49,7 +49,7 @@ export const PortfolioView = () => {
       />
 
       <Box>
-        <PortfolioGridView data={data} loading={isLoading} fetchList={mutate} />
+        <PortfolioGridView data={data} loading={isLoading} />
         {hasMore && (
           <Box textAlign="center" mt={2}>
             <Button size="small" variant="contained" onClick={loadMore} disabled={isLoadingMore}>
@@ -59,15 +59,14 @@ export const PortfolioView = () => {
         )}
       </Box>
 
-      <PortfolioRightPanel
-        fetchList={mutate}
-        onClose={() => {
-          setOpenPanel(false);
-        }}
-        open={openPanel}
-        data={null}
-        view="ADD"
-      />
+      {openPanel && (
+        <PortfolioRightPanel
+          onClose={() => setOpenPanel(false)}
+          open={openPanel}
+          id={null}
+          view="ADD"
+        />
+      )}
     </PageContainer>
   );
 };

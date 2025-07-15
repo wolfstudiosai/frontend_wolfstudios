@@ -17,10 +17,16 @@ import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationAr
 import { PortfolioForm } from './portfolio-form';
 import { PortfolioQuickView } from './portfolio-quickview';
 import { formConstants } from '/src/app/constants/form-constants';
+import { usePortfolioList } from '/src/services/portfolio/usePortfolioList';
+import { useGetPortfolioData } from '/src/services/portfolio/usePortfolioData';
+import { useFeaturedPortfolioList } from '/src/services/portfolio/useFeaturedPortfolio';
 
-export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QUICK' }) => {
+export const PortfolioRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
+  const { mutate: mutatePortfolioList } = usePortfolioList();
+  const { mutate: mutateFeaturedPortfolioList } = useFeaturedPortfolioList();
+  const { data: portfolioData, isLoading, mutate } = useGetPortfolioData(id);
   const { isLogin } = useAuth();
-  const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
+  const [isFeatured, setIsFeatured] = React.useState(portfolioData?.data?.isFeatured);
   const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
@@ -28,7 +34,7 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
   // *********************States*********************************
 
   const { values, errors, handleChange, handleSubmit, setValues, setFieldValue, resetForm } = useFormik({
-    initialValues: defaultPortfolio(data),
+    initialValues: defaultPortfolio(),
     validate: (values) => {
       const errors = {};
       if (!values.projectTitle) {
@@ -57,8 +63,8 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
           videoLink: Array.isArray(finalData.videoLink) ? finalData.videoLink[0] || null : finalData.videoLink || null,
         };
 
-        const res = data?.id
-          ? await updatePortfolioAsync(data?.id, {
+        const res = id
+          ? await updatePortfolioAsync(id, {
             ...finalData,
             thumbnailImage: Array.isArray(finalData.thumbnailImage)
               ? finalData.thumbnailImage[0] || ''
@@ -68,10 +74,14 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
               : finalData.videoLink || null,
           })
           : await createPortfolioAsync(createPayload);
+
         if (res.success) {
           onClose?.();
           resetForm();
-          fetchList();
+          mutate();
+          mutatePortfolioList();
+          mutateFeaturedPortfolioList();
+
         } else {
           console.error('Operation failed:', res.message);
         }
@@ -82,9 +92,17 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
       }
     },
   });
+
+  React.useEffect(() => {
+    if (portfolioData?.data) {
+      setValues(defaultPortfolio(portfolioData?.data));
+    }
+  }, [portfolioData?.data]);
+
   const handleDelete = async () => {
-    fetchList();
     onClose?.();
+    mutatePortfolioList();
+    mutateFeaturedPortfolioList();
   };
 
   const handleFeatured = async (featured) => {
@@ -95,9 +113,10 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
         'states',
         'countries',
         'partnerHQ',
+        'caseStudies'
       ]);
 
-      await updatePortfolioAsync(data?.id, {
+      const res = await updatePortfolioAsync(id, {
         ...finalData,
         isFeatured: featured,
         thumbnailImage: Array.isArray(finalData.thumbnailImage)
@@ -105,7 +124,13 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
           : finalData.thumbnailImage || '',
         videoLink: Array.isArray(finalData.videoLink) ? finalData.videoLink[0] || null : finalData.videoLink || null,
       });
-      fetchList();
+
+      if (res.success) {
+        onClose?.();
+        mutate();
+        mutatePortfolioList();
+        mutateFeaturedPortfolioList();
+      }
     } catch (error) {
       console.error('Error:', error);
     }
@@ -121,12 +146,12 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
               Save
             </Button>
           )}
-          {panelView === 'EDIT' && data?.id ? (
+          {panelView === 'EDIT' && id ? (
             <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
               <Icon icon="solar:eye-broken" />
             </IconButton>
           ) : (
-            data?.id && (
+            id && (
               <IconButton onClick={() => setPanelView('EDIT')} title="Quick">
                 <Icon icon="mynaui:edit-one" />
               </IconButton>
@@ -136,7 +161,7 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
           {panelView !== 'ADD' && (
             <IconButton
               sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              onClick={() => router.push(`/portfolio/${data?.id}`)}
+              onClick={() => router.push(`/portfolio/${id}`)}
               title="Analytics"
             >
               <Icon icon="mdi:analytics" />
@@ -145,12 +170,12 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
 
           {panelView !== 'ADD' && (
             <DeleteConfirmationPasswordPopover
-              id={data?.id}
+              id={id}
               title="Are you sure you want to delete?"
               deleteFn={deleteSinglePortfolioAsync}
               passwordInput
               onDelete={handleDelete}
-              disabled={!data?.id}
+              disabled={!id}
             />
           )}
 
@@ -180,9 +205,9 @@ export const PortfolioRightPanel = ({ fetchList, onClose, data, open, view = 'QU
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-      <PageLoader loading={loading}>
+      <PageLoader loading={isLoading}>
         {panelView === 'QUICK' ? (
-          <PortfolioQuickView data={data} isEdit={false} />
+          <PortfolioQuickView data={portfolioData?.data} isEdit={false} />
         ) : (
           <PortfolioForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />
         )}

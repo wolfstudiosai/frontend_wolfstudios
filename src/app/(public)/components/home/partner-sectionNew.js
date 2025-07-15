@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -8,37 +7,15 @@ import Grid from '@mui/material/Grid2';
 import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
 
-import { ManagePartnerRightPanel } from '../../partner/_components/manage-partner-right-panel';
-import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
+import { useFeaturedPartnerList } from '../../../../services/partner/useFeaturedPartner';
+import { useState } from 'react';
+import { PartnerRightPanel } from '../../partner/_components/partner-right-panel';
 
 export const PartnerSectionNew = () => {
-  const [partners, setPartners] = useState([]);
-
+  const { data: partnersData, isLoading } = useFeaturedPartnerList();
   const router = useRouter();
 
-  const fetchPartners = async () => {
-    try {
-      const filters = [{ key: 'isFeatured', type: 'boolean', operator: 'is', value: true }];
-      const response = await getPartnerListAsync(
-        {
-          page: 1,
-          rowsPerPage: 20,
-        },
-        filters,
-        'and'
-      );
-
-      if (response?.success) {
-        setPartners(response.data);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchPartners();
-  }, []);
+  if (isLoading) return;
 
   return (
     <Grid container alignItems="center">
@@ -58,7 +35,7 @@ export const PartnerSectionNew = () => {
                 </Typography>
                 <Button
                   variant="text"
-                  onClick={() => router.push('/portfolio')}
+                  onClick={() => router.push('/partner')}
                   endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
                   sx={{
                     margin: 0,
@@ -85,13 +62,13 @@ export const PartnerSectionNew = () => {
         </Stack>
       </Grid>
       <Grid md={12} xs={12}>
-        <StaticGridView partners={partners} fetchList={fetchPartners} />
+        <StaticGridView partners={partnersData?.data} />
       </Grid>
     </Grid>
   );
 };
 
-const StaticGridView = ({ partners, fetchList }) => {
+const StaticGridView = ({ partners }) => {
   return (
     <Box
       sx={{
@@ -111,7 +88,7 @@ const StaticGridView = ({ partners, fetchList }) => {
           gap: { md: 0.5 },
         }}
       >
-        {partners.map((partner, index) => (
+        {partners?.length > 0 && partners?.map((partner, index) => (
           <Box
             key={partner.id}
             sx={{
@@ -122,7 +99,7 @@ const StaticGridView = ({ partners, fetchList }) => {
             }}
           >
             <Stack spacing={0.5}>
-              <Card card={partner} fetchList={fetchList} />
+              <Card card={partner} />
             </Stack>
           </Box>
         ))}
@@ -131,9 +108,8 @@ const StaticGridView = ({ partners, fetchList }) => {
   );
 };
 
-const Card = ({ card, fetchList }) => {
-  const [openPartnerRightPanel, setOpenPartnerRightPanel] = useState(null);
-  const [selectedItemId, setSelectedItemId] = useState(null);
+const Card = ({ card }) => {
+  const [openPartnerRightPanel, setOpenPartnerRightPanel] = useState(false);
 
   return (
     <>
@@ -147,7 +123,7 @@ const Card = ({ card, fetchList }) => {
           transition: 'transform 300ms ease',
           border: '1px solid var(--mui-palette-divider)',
         }}
-        onClick={() => setOpenPartnerRightPanel(card)}
+        onClick={() => setOpenPartnerRightPanel(true)}
       >
         {/* Background Image */}
         <Box
@@ -249,13 +225,16 @@ const Card = ({ card, fetchList }) => {
           {/* Add new text elements here */}
         </Box>
       </Box>
-      {/* <ManagePartnerRightPanel
-        view="QUICK"
-        fetchList={fetchList}
-        open={openPartnerRightPanel ? true : false}
-        data={openPartnerRightPanel}
-        onClose={() => setOpenPartnerRightPanel(false)}
-      /> */}
+
+      {openPartnerRightPanel && (
+        <PartnerRightPanel
+          view="QUICK"
+          open={openPartnerRightPanel}
+          id={card?.id}
+          onClose={() => setOpenPartnerRightPanel(false)}
+        />
+      )}
+
     </>
   );
 };

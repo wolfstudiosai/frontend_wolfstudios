@@ -3,10 +3,10 @@ import React from 'react';
 
 import { IconWithText } from '/src/components/utils/icon-text';
 
-import { ManageContentRightPanel } from './manage-content-right-panel';
+import { AllContentRightPanel } from './all-content-right-panel';
 
 export const ContentCard = ({ content, fetchList }) => {
-  const [openRightPanel, setOpenRightPanel] = React.useState(null);
+  const [openRightPanel, setOpenRightPanel] = React.useState(false);
   return (
     <>
       <Card
@@ -14,7 +14,7 @@ export const ContentCard = ({ content, fetchList }) => {
           border: '1px solid var(--mui-palette-divider)',
           borderRadius: '0',
         }}
-        onClick={() => setOpenRightPanel(content)}
+        onClick={() => setOpenRightPanel(true)}
       >
         <Box
           component="img"
@@ -44,13 +44,15 @@ export const ContentCard = ({ content, fetchList }) => {
           </Stack>
         </Stack>
       </Card>
-      <ManageContentRightPanel
-        fetchList={fetchList}
-        onClose={() => setOpenRightPanel(false)}
-        open={openRightPanel ? true : false}
-        data={content}
-        view={'QUICK'}
-      />
+
+      {openRightPanel && (
+        <AllContentRightPanel
+          onClose={() => setOpenRightPanel(false)}
+          open={openRightPanel}
+          id={content?.id}
+          view={'QUICK'}
+        />
+      )}
     </>
   );
 };
