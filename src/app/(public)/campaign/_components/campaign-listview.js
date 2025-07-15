@@ -1,14 +1,14 @@
 'use client';
 
-import * as React from 'react';
-import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
 import AddIcon from '@mui/icons-material/Add';
 import TableReorderIcon from '@mui/icons-material/Reorder';
 import { alpha, Button, Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import { useTheme } from '@mui/material/styles';
+import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import * as React from 'react';
 import { toast } from 'sonner';
 import useSWR from 'swr';
 
@@ -107,7 +107,7 @@ export const CampaignListView = () => {
   // View
   const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([]);
-  const [viewsLoading, setViewsLoading] = React.useState(false);
+  // const [viewsLoading, setViewsLoading] = React.useState(false);
   const [selectedViewId, setSelectedViewId] = React.useState(null);
   const [selectedViewData, setSelectedViewData] = React.useState(null);
 
@@ -130,6 +130,13 @@ export const CampaignListView = () => {
     error: campaignsError,
     isLoading: isCampaignsLoading,
   } = useSWR(['campaignList', { page: 1, rowsPerPage: 1 }], ([, params]) => getCampaignListAsync(params));
+
+  const {
+    data: viewsData,
+    isLoading: viewsLoading,
+    error: viewsError,
+    mutate: mutateViews,
+  } = useSWR('campaignViews', getCampaignViews);
 
   // get single view
   const getSingleView = async (viewId, paginationProps) => {
@@ -319,13 +326,8 @@ export const CampaignListView = () => {
   const initialize = async () => {
     try {
       if (searchParams.get('tab') !== 'campaign') return;
-      if (isCampaignsLoading) return;
+      if (isCampaignsLoading || viewsLoading) return;
       setLoading(true);
-      // const campaigns = await getCampaignListAsync({
-      //   page: 1,
-      //   rowsPerPage: 1,
-      // });
-
       // set meta data
       setMetaData(campaigns.meta);
       const columns = campaigns.meta.map((obj) => {
@@ -341,7 +343,6 @@ export const CampaignListView = () => {
       setAllColumns(columns);
 
       // set views
-      const viewsData = await getCampaignViews();
       setViews(viewsData.data);
 
       if (viewsData.success) {
@@ -394,7 +395,7 @@ export const CampaignListView = () => {
   React.useEffect(() => {
     setPagination((prev) => ({ ...prev, pageNo: 1 }));
     initialize();
-  }, [searchParams, isCampaignsLoading]);
+  }, [searchParams, isCampaignsLoading, viewsLoading]);
 
   // store isView sidebar is open or not on local storage
   const handleOpenViewSidebar = () => {
