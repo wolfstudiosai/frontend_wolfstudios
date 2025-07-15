@@ -1,14 +1,14 @@
 'use client';
 
+import * as React from 'react';
+import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
 import AddIcon from '@mui/icons-material/Add';
 import TableReorderIcon from '@mui/icons-material/Reorder';
 import { alpha, Button, Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import { useTheme } from '@mui/material/styles';
-import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
-import * as React from 'react';
 import { toast } from 'sonner';
 import useSWR from 'swr';
 
@@ -51,7 +51,7 @@ export const CampaignListView = () => {
   const [imageUpdatedField, setImageUpdatedField] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const searchParams = useSearchParams();
-  const viewId = searchParams.get('view');
+  const viewId = React.useMemo(() => searchParams.get('view'), [searchParams]);
 
   const handleUploadModalOpen = (data, field, uploadOpen) => {
     setOpen(true);
@@ -395,7 +395,7 @@ export const CampaignListView = () => {
   React.useEffect(() => {
     setPagination((prev) => ({ ...prev, pageNo: 1 }));
     initialize();
-  }, [searchParams, isCampaignsLoading, viewsLoading]);
+  }, [viewId, isCampaignsLoading, viewsLoading]);
 
   // store isView sidebar is open or not on local storage
   const handleOpenViewSidebar = () => {
