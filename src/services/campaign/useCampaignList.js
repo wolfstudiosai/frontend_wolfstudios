@@ -26,13 +26,13 @@ export const useCampaignList = (status = '') => {
     ([, pageNo, limit, statusFilter]) => {
       const filters = statusFilter
         ? [
-            {
-              key: 'campaignStatus',
-              operator: 'contains',
-              type: 'string',
-              value: statusFilter,
-            },
-          ]
+          {
+            key: 'campaignStatus',
+            operator: 'contains',
+            type: 'string',
+            value: statusFilter,
+          },
+        ]
         : [];
 
       return getCampaignGroupListAsync({ page: pageNo, rowsPerPage: limit }, filters, 'and');

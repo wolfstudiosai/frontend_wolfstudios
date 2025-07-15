@@ -18,7 +18,7 @@ import { PartnerForm } from './partner-form';
 import { PartnerQuickView } from './partner-quickview';
 import { formConstants } from '/src/app/constants/form-constants';
 
-export const PartnerRightPanel = ({ fetchList, onClose, data, open, view = 'QUICK' }) => {
+export const PartnerRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { isLogin } = useAuth();
   const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
   const [panelView, setPanelView] = React.useState(view);
@@ -71,11 +71,11 @@ export const PartnerRightPanel = ({ fetchList, onClose, data, open, view = 'QUIC
 
         const res = data?.id
           ? await updatePartnerAsync({
-              ...finalData,
-              thumbnailImage: Array.isArray(finalData.thumbnailImage)
-                ? finalData.thumbnailImage[0]
-                : finalData.thumbnailImage,
-            })
+            ...finalData,
+            thumbnailImage: Array.isArray(finalData.thumbnailImage)
+              ? finalData.thumbnailImage[0]
+              : finalData.thumbnailImage,
+          })
           : await createPartnerAsync(createPayload);
         if (res.success) {
           onClose?.();

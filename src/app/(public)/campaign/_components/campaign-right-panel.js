@@ -14,23 +14,20 @@ import { CampaignQuickView } from '../_components/campaign-quick-view';
 import {
   createCampaignAsync,
   deleteCampaignAsync,
-  getCampaignAsync,
   updateCampaignAsync
 } from '../_lib/campaign.actions';
 import { defaultCampaign } from '../_lib/campaign.types';
 import { CampaignForm } from './campaign-form';
 import { formConstants } from '/src/app/constants/form-constants';
 import { campaignPayload } from '../_lib/campaign.payload';
-import useSWR, { mutate } from 'swr';
 import PageLoader from '../../../../components/loaders/PageLoader';
+import { useGetCampaignData } from '/src/services/campaign/useCampaignData';
+import { useCampaignList } from '/src/services/campaign/useCampaignList';
 
-const useGetCampaign = (id) => {
-  const { data, isLoading } = useSWR(id ? `campaign-${id}` : null, () => getCampaignAsync(id));
-  return { data, isLoading };
-};
-
-export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK' }) => {
-  const { data: campaignData, isLoading } = useGetCampaign(id);
+export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
+  // To update campaign list cache
+  const { mutate: mutateCampaignList } = useCampaignList();
+  const { data: campaignData, isLoading, mutate } = useGetCampaignData(id);
   const { isLogin } = useAuth();
   const [isFeatured, setIsFeatured] = React.useState(campaignData?.data?.isFeatured);
   const [panelView, setPanelView] = React.useState(view);
@@ -38,7 +35,7 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
 
   // *********************Formik*********************************
   const { values, errors, handleChange, handleSubmit, setFieldValue, resetForm, setValues } = useFormik({
-    initialValues: defaultCampaign(campaignData?.data),
+    initialValues: defaultCampaign(),
     validate: (values) => {
       const errors = {};
       if (!values.name) {
@@ -58,8 +55,10 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
         if (res.success) {
           onClose?.();
           resetForm();
-          fetchList();
-          mutate(`campaign-${id}`);
+
+          // Update cache
+          mutate();
+          mutateCampaignList();
         } else {
           console.error('Operation failed:', res.message);
         }
@@ -71,16 +70,31 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
     },
   });
 
+  // Set form values
+  React.useEffect(() => {
+    if (campaignData?.data) {
+      setValues(defaultCampaign(campaignData?.data));
+    }
+  }, [campaignData?.data]);
+
   const handleDelete = async () => {
     onClose?.();
-    fetchList?.();
+
+    // Update cache
+    mutateCampaignList();
   };
 
   const handleFeatured = async (featured) => {
     try {
       setIsFeatured(featured);
-      await updateCampaignAsync(id, { ...campaignData?.data, isFeatured: featured });
-      fetchList();
+      const payload = await campaignPayload({ ...defaultCampaign(campaignData?.data), isFeatured: featured }, false);
+      const res = await updateCampaignAsync(id, payload);
+
+      if (res.success) {
+        // Update cache
+        mutateCampaignList();
+        mutate();
+      }
     } catch (error) {
       console.error('Error:', error);
     }
@@ -147,11 +161,6 @@ export const CampaignRightPanel = ({ fetchList, onClose, id, open, view = 'QUICK
     </>
   );
 
-  // React.useEffect(() => {
-  //   if (data) {
-  //     setValues(defaultCampaign(data));
-  //   }
-  // }, [data]);
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>

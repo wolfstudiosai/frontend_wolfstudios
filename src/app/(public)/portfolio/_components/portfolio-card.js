@@ -4,7 +4,7 @@ import { Box, Card, Stack, Typography } from '@mui/material';
 import { isVideoContent } from '../../../../utils/helper';
 import { PortfolioRightPanel } from './portfolio-right-panel';
 
-export const PortfolioCard = ({ content, fetchList }) => {
+export const PortfolioCard = ({ content }) => {
   const [openRightPanel, setOpenRightPanel] = React.useState(null);
 
   return (
@@ -90,15 +90,16 @@ export const PortfolioCard = ({ content, fetchList }) => {
             />
           </Stack>
         </Box>
+      </Card>
 
+      {openRightPanel && (
         <PortfolioRightPanel
-          fetchList={fetchList}
           onClose={() => setOpenRightPanel(false)}
-          open={openRightPanel ? true : false}
-          data={content}
+          open={openRightPanel}
+          id={content.id}
           view={'QUICK'}
         />
-      </Card>
+      )}
     </>
   );
 };

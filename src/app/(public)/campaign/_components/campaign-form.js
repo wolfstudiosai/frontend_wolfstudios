@@ -93,7 +93,6 @@ export const CampaignForm = ({ formikProps }) => {
     fetchData();
   }, [autocompleteFocus]);
 
-  console.log(values);
 
   return (
     <>

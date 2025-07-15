@@ -7,7 +7,7 @@ import { Iconify } from '/src/components/iconify/iconify';
 
 import { CampaignRightPanel } from './campaign-right-panel';
 
-export const CampaignCard = ({ content, fetchList }) => {
+export const CampaignCard = ({ content }) => {
   const [openRightPanel, setOpenRightPanel] = React.useState(null);
 
   return (
@@ -87,10 +87,8 @@ export const CampaignCard = ({ content, fetchList }) => {
 
       {openRightPanel && (
         <CampaignRightPanel
-          fetchList={fetchList}
           onClose={() => setOpenRightPanel(false)}
           open={openRightPanel ? true : false}
-          data={content}
           id={content?.id}
           view={'QUICK'}
         />
