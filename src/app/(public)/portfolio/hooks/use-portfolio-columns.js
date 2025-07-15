@@ -68,7 +68,7 @@ export const usePortfolioColumns = (anchorEl, visibleColumns, setMediaToShow, ha
                         display: 'inline-block',
                     },
                 }}>
-                    {params.row.thumbnailImage.length > 0 && params.row.thumbnailImage[0] && <Image
+                    {Array.isArray(params.row.thumbnailImage) && params.row.thumbnailImage.length > 0 && params.row.thumbnailImage[0] && <Image
                         src={params.row.thumbnailImage[0]}
                         alt="Image"
                         width={22}

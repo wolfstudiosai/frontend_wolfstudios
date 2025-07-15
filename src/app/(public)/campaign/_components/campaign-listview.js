@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import { useTheme } from '@mui/material/styles';
 import { toast } from 'sonner';
+import useSWR from 'swr';
 
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
 import TableSortBuilder from '/src/components/common/table-sort-builder';
@@ -31,11 +32,12 @@ import {
   updateCampaignAsync,
   updateCampaignView,
 } from '../_lib/campaign.actions';
+import { campaignPayload } from '../_lib/campaign.payload';
 import { defaultCampaign } from '../_lib/campaign.types';
 import { useCampaignColumns } from '../hook/use-campaign-columns';
-import { campaignPayload } from '../_lib/campaign.payload';
 
 export const CampaignListView = () => {
+  console.log('rendering CampaignListView......');
   const theme = useTheme();
   const router = useRouter();
   const anchorEl = React.useRef(null);
@@ -122,6 +124,13 @@ export const CampaignListView = () => {
   const [searchColumns, setSearchColumns] = React.useState([]);
   const columns = useCampaignColumns(anchorEl, visibleColumns, setMediaToShow, handleUploadModalOpen);
 
+  // swr
+  const {
+    data: campaigns,
+    error: campaignsError,
+    isLoading: isCampaignsLoading,
+  } = useSWR(['campaignList', { page: 1, rowsPerPage: 1 }], ([, params]) => getCampaignListAsync(params));
+
   // get single view
   const getSingleView = async (viewId, paginationProps) => {
     try {
@@ -195,7 +204,6 @@ export const CampaignListView = () => {
 
     return newRow;
   }, []);
-
 
   // handle row selection
   const handleRowSelection = (newRowSelectionModel) => {
@@ -311,11 +319,12 @@ export const CampaignListView = () => {
   const initialize = async () => {
     try {
       if (searchParams.get('tab') !== 'campaign') return;
+      if (isCampaignsLoading) return;
       setLoading(true);
-      const campaigns = await getCampaignListAsync({
-        page: 1,
-        rowsPerPage: 1,
-      });
+      // const campaigns = await getCampaignListAsync({
+      //   page: 1,
+      //   rowsPerPage: 1,
+      // });
 
       // set meta data
       setMetaData(campaigns.meta);
@@ -385,7 +394,7 @@ export const CampaignListView = () => {
   React.useEffect(() => {
     setPagination((prev) => ({ ...prev, pageNo: 1 }));
     initialize();
-  }, [searchParams]);
+  }, [searchParams, isCampaignsLoading]);
 
   // store isView sidebar is open or not on local storage
   const handleOpenViewSidebar = () => {
@@ -399,9 +408,7 @@ export const CampaignListView = () => {
     if (viewId && selectedViewData) {
       const selectedColumnNames = selectedViewData.meta?.columns || [];
       const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
-      console.log(allColumns, 'allColumns');
-      console.log(selectedColumnNames, 'selectedColumnNames');
-      console.log(filtered, 'filtered');
+
       setVisibleColumns(filtered);
       setNewVisibleColumns(filtered);
     } else {
@@ -545,7 +552,7 @@ export const CampaignListView = () => {
       >
         <Box sx={{ p: 1.5 }}>
           {mediaToShow?.type === 'image' && (
-            <Image src={mediaToShow?.url} alt="Preview" width={300} height={300} style={{ borderRadius: 8, }} />
+            <Image src={mediaToShow?.url} alt="Preview" width={300} height={300} style={{ borderRadius: 8 }} />
           )}
           {mediaToShow?.type === 'video' && (
             <video src={mediaToShow?.url} controls style={{ height: 300, width: 300, borderRadius: 8 }} />
