@@ -59,56 +59,57 @@ export const defaultContent = (data) => {
     revoIGTotalShares: Number(data?.revoIGTotalShares) || 0,
     revoIGTotalComments: Number(data?.revoIGTotalComments) || 0,
     revoIGTotalLikes: Number(data?.revoIGTotalLikes) || 0,
-    audited: Boolean(data?.audited) || false,
+    audited: Boolean(data?.audited) || false, // missing in form
     clubREVOIGHandle: data?.clubREVOIGHandle || '',
     isFeatured: Boolean(data?.isFeatured) || false,
     thumbnailImage: typeof data?.thumbnailImage === 'string' ? [data.thumbnailImage] : null,
     video: Array.isArray(data?.video) ? data.video : [],
     images: Array.isArray(data?.images) ? data.images : [],
+
     campaigns: Array.isArray(data?.campaigns)
       ? data.campaigns.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
 
     cities: Array.isArray(data?.cities)
       ? data.cities.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
 
     products: Array.isArray(data?.products)
       ? data.products.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
 
     tags: Array.isArray(data?.tags)
       ? data.tags.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     stakeholders: Array.isArray(data?.stakeholders)
       ? data.stakeholders.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     partners: Array.isArray(data?.partners)
       ? data.partners.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     retailPartners: Array.isArray(data?.retailPartners)
       ? data.retailPartners.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
   };
 

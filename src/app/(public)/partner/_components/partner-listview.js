@@ -40,78 +40,91 @@ import {
   updatePartnerView,
 } from '../_lib/partner.actions';
 import { defaultPartner } from '../_lib/partner.types';
-import { getPartnerColumns } from '../_utils/get-partner-columns';
+import { usePartnerColumns } from '../hooks/use-partner-columns';
+import useSWR from 'swr';
+import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
 
 export const PartnerListView = () => {
   const theme = useTheme();
   const router = useRouter();
   const anchorEl = React.useRef(null);
   const [anchorElHide, setAnchorElHide] = React.useState(null);
-  const [imageToShow, setImageToShow] = React.useState(null);
+  const singleImageField = ['thumbnailImage'];
+  const [isImageUploadOpen, setIsImageUploadOpen] = React.useState(false);
+  const [mediaToShow, setMediaToShow] = React.useState({
+    type: '',
+    url: '',
+  });
+  const [imageUpdatedField, setImageUpdatedField] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const searchParams = useSearchParams();
   const viewId = searchParams.get('view');
 
-  const handleUploadModalOpen = (data) => {
+  const handleUploadModalOpen = (data, field, uploadOpen) => {
     setOpen(true);
     setUpdatedRow(data);
+    setImageUpdatedField(field);
+    setIsImageUploadOpen(uploadOpen);
   };
 
   const handleClosePopover = () => {
     anchorEl.current = null;
-    setImageToShow(null);
+    setMediaToShow({
+      type: '',
+      url: '',
+    });
   };
 
   const handleClosePopoverHide = () => {
     setAnchorElHide(null);
+    setNewVisibleColumns(visibleColumns);
     setSearchColumns(allColumns);
   };
 
   // update partner after images uploaded
   const handleUploadImage = async (images) => {
     try {
-      const newData = {
-        ...updatedRow,
-        profileImage: [...updatedRow.profileImage, ...images],
-      };
-      await updatePartnerAsync(newData);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      fetchList();
-    }
-  };
+      const finalData = convertArrayObjIntoArrOfStr(updatedRow, [
+        'stakeholders',
+        'contentHQ',
+        'profileCategory',
+        'portfolios',
+        'states',
+        'cities',
+        'services',
+        'caseStudies',
+        'productionHQ',
+        'products',
+        'contributedCampaigns',
+        'countries',
+        'tags',
+        'retailPartners',
+        'destinations',
+        'proposedCampaigns',
+        'productionHQ2',
+      ]);
 
-
-  async function fetchList(props) {
-    const filter = props ? props : filters;
-    const paginationData = props ? props.pagination : pagination;
-    try {
-      setLoading(true);
-      const response = await getPartnerListAsync(
-        {
-          page: paginationData.pageNo,
-          rowsPerPage: paginationData.limit,
-        },
-        filter,
-        gate
-      );
-
-      if (response?.success) {
-        if (viewId) {
-          setMetaData(response.meta);
-        } else {
-          setRecords(response.data.map((row) => defaultPartner(row)) || []);
-          setTotalRecords(response.totalRecords);
-          setMetaData(response.meta);
+      if (singleImageField.includes(imageUpdatedField)) {
+        finalData[imageUpdatedField] = images[0];
+      } else {
+        finalData[imageUpdatedField] = [...finalData[imageUpdatedField], ...images];
+        for (const key of singleImageField) {
+          finalData[key] = Array.isArray(finalData[key]) ? finalData[key][0] : finalData[key];
         }
+      }
+
+      const response = await updatePartnerAsync(finalData);
+      if (response.success) {
+        setOpen(false);
+        getSingleView(viewId);
       }
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false);
+      getSingleView(viewId);
     }
-  }
+  };
+
 
   // Partner data handler
   const [records, setRecords] = React.useState([]);
@@ -124,7 +137,6 @@ export const PartnerListView = () => {
   // View
   const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([]);
-  const [viewsLoading, setViewsLoading] = React.useState(false);
   const [selectedViewId, setSelectedViewId] = React.useState(null);
   const [selectedViewData, setSelectedViewData] = React.useState(null);
 
@@ -137,13 +149,23 @@ export const PartnerListView = () => {
   // table columns
   const [allColumns, setAllColumns] = React.useState([]);
   const [visibleColumns, setVisibleColumns] = React.useState([]);
+  const [newVisibleColumns, setNewVisibleColumns] = React.useState([]);
   const [searchColumns, setSearchColumns] = React.useState([]);
-  const columns = getPartnerColumns({
-    anchorEl,
-    setImageToShow,
-    handleUploadModalOpen,
-    visibleColumns,
-  });
+  const columns = usePartnerColumns(anchorEl, setMediaToShow, handleUploadModalOpen, visibleColumns);
+
+  // SWR
+  const {
+    data: partners,
+    error: partnersError,
+    isLoading: isPartnersLoading,
+  } = useSWR(['partnerList', { page: 1, rowsPerPage: 20 }], ([, params]) => getPartnerListAsync(params));
+
+  const {
+    data: viewsData,
+    isLoading: viewsLoading,
+    error: viewsError,
+    mutate: mutateViews,
+  } = useSWR('partnerViews', getPartnerViews);
 
   // get single view
   const getSingleView = async (viewId, paginationProps) => {
@@ -191,8 +213,6 @@ export const PartnerListView = () => {
     setPagination(newPagination);
     if (viewId) {
       getSingleView(viewId, newPagination);
-    } else {
-      fetchList({ pagination: newPagination });
     }
   };
 
@@ -208,20 +228,86 @@ export const PartnerListView = () => {
         return newRow;
       }
 
-      if (!newRow.email) {
-        toast.error('Please enter email');
-        return newRow;
+      const res = await createPartnerAsync(newRow);
+      if (res.success) {
+        getSingleView(viewId);
       }
-
-      await createPartnerAsync(newRow);
-      fetchList();
     } else {
-      await updatePartnerAsync(newRow);
-      fetchList();
+      const finalData = convertArrayObjIntoArrOfStr(newRow, [
+        'stakeholders',
+        'contentHQ',
+        'profileCategory',
+        'portfolios',
+        'states',
+        'cities',
+        'services',
+        'caseStudies',
+        'productionHQ',
+        'products',
+        'contributedCampaigns',
+        'countries',
+        'tags',
+        'retailPartners',
+        'destinations',
+        'proposedCampaigns',
+        'productionHQ2',
+      ]);
+
+      const numberFields = [
+        'totalROI',
+        'totalExpense',
+        'shippingFBAFeeGiftedPartners',
+        'paypalFee',
+        'amazonReferralFee',
+        'linkedinConnections',
+        'youtubeFollowing',
+        'snapchatFollowing',
+        'xFollowing',
+        'pinterestFollowing',
+        'tiktokFollowing',
+        'facebookFollowing',
+        'instagramFollowing',
+        'previousCollabExpense',
+        'totalProductCOGExpense',
+        'shippingExpense',
+        'oneOffExpense',
+        'partner360Rate',
+        'partnerIGRate',
+        'partnerTTRate',
+        'partnerYTRate',
+        'amountPaid',
+        'totalContributedEngagementByContent',
+        'totalAudience',
+        'remainingCredits',
+        'ugcRetainerAmount',
+        'partnerPostViews',
+        'estimatedTaxes',
+        'fbaXLevanta',
+        'amazonOrderTotal',
+        'amazonTax',
+        'amazonKickback',
+        'hourlyRate',
+        'partnerUGCRate',
+        'levantaID',
+        'impactID',
+        'shareasaleID'
+      ];
+
+      numberFields.forEach((field) => {
+        finalData[field] = Number(finalData[field]) || 0;
+      });
+
+      finalData.thumbnailImage = Array.isArray(finalData.thumbnailImage)
+        ? finalData.thumbnailImage[0]
+        : finalData.thumbnailImage;
+      const res = await updatePartnerAsync(finalData);
+      if (res.success) {
+        getSingleView(viewId);
+      }
     }
 
     return newRow;
-  }, []);
+  }, [viewId]);
 
   const handleProcessRowUpdateError = React.useCallback((error) => {
     console.log({ children: error.message, severity: 'error' });
@@ -237,124 +323,46 @@ export const PartnerListView = () => {
   // new column added
   const handleAddNewItem = () => {
     const tempId = `temp_${Date.now()}`;
-    const newPartner = {
-      id: tempId,
-      name: '',
-      email: '',
-      currentStatus: [],
-      journeyStep: '',
-      profileStatus: [],
-      notes: '',
-      hourlyRate: '',
-      bookingLink: '',
-      ageBracket: [],
-      linkedinConnections: 0,
-      X: '',
-      XFollowing: 0,
-      website: '',
-      medium: '',
-      soundcloud: '',
-      spotify: '',
-      opentoGifting: '',
-      occupation: '',
-      client: '',
-      linkedin: '',
-      mailingAddress: '',
-      phone: '',
-      pinterest: '',
-      podcast: '',
-      refusalReason: '',
-      twitch: '',
-      revoAmazonOrderConfirmationNumber: '',
-      amazonReviewLink: '',
-      amazonReviewCupper: '',
-      amazonReviewThePill: '',
-      amazonStorefront: '',
-      deliverables: '',
-      googleDriveFiles: '',
-      revoIGPost: '',
-      partnerIGRate: '',
-      partnerTTRate: '',
-      partnerYTRate: '',
-      amountPaid: '',
-      totalContributedEngagementByContent: '0',
-      totalAudience: '',
-      platformDeliverables: [],
-      platforms: [],
-      previousCollabExpense: '',
-      revoOffer: '',
-      remainingCredits: 0,
-      ttPost: '',
-      totalROI: '',
-      ugcPaymentStatus: '',
-      ugcRetainerAmount: 0,
-      ugcTikTokLink: '',
-      revoUGCArmyTTUsernamePW: '',
-      whatsApp: '',
-      ytPost: '',
-      partnerPostViews: 0,
-      sourcedFrom: [],
-      estimatedTaxes: '',
-      fbaXLevanta: 0,
-      shippingFBAFeeGiftedPartners: '',
-      levantaAffiliateFee: '',
-      paypalFee: '',
-      shippingExpense: '',
-      amazonReferralFee: '',
-      amazonOrderTotal: '',
-      amazonTax: '',
-      amazonKickback: '',
-      monthSourced: '',
-      secondPaymentDate: '',
-      clientStatus: '',
-      linktree: '',
-      partnerUGCRate: '',
-      partner360Rate: '',
-      revoCounteroffer: '',
-      opentoWhitelisting: '',
-      conversionsBundleCupper: 0,
-      conversionsMassageGun: 0,
-      conversionsCupper: 0,
-      conversionsOils: 0,
-      conversionsWalkingPad: 0,
-      amazonReviewWalkingPadPro: '',
-      amazonReviewWalkingPadStandard: '',
-      amazonReviewOil: '',
-      amazonReviewSoothingCream: '',
-      amazonReviewBeautyWand: '',
-      contracts: [],
-      paymentLink: '',
-      totalExpense: '0',
-      totalProductCOGExpense: '0',
-      affiliatePlatform: [],
-      profileImage: [],
-      mediaKit: [],
-      receipts: [],
-    };
+    const newPartner = { ...defaultPartner(), id: tempId };
 
-    setPartners((prev) => [newPartner, ...prev]);
+    setRecords((prev) => [newPartner, ...prev]);
   };
 
   // Column delete
-  const handleDelete = async () => {
-    fetchList();
-  };
-
+  const handleDelete = async () => getSingleView(viewId);
 
   // handle column change
   const handleColumnChange = async (e, col) => {
-    let newVisibleColumns = [];
+    let columns = [...newVisibleColumns];
     if (e.target.checked) {
-      // Add column
-      const exists = visibleColumns.some((c) => c.columnName === col.columnName);
+      const exists = columns.some((c) => c.columnName === col.columnName);
       if (exists) return;
-      newVisibleColumns = [...visibleColumns, col];
+      columns = [...columns, col];
     } else {
-      // Remove column
-      newVisibleColumns = visibleColumns.filter((c) => c.columnName !== col.columnName);
+      columns = columns.filter((c) => c.columnName !== col.columnName);
     }
-    setVisibleColumns(newVisibleColumns);
+    setNewVisibleColumns(columns);
+  };
 
+  // handle Column Search
+  const handleColumnSearch = (e) => {
+    const searchValue = e.target.value.toLowerCase();
+    setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
+  };
+
+  // handle show all columns
+  const showAllColumns = async () => {
+    const newVisibleColumns = allColumns;
+    setNewVisibleColumns(newVisibleColumns);
+  };
+
+  // handle hide all columns
+  const hideAllColumns = async () => {
+    const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
+    setNewVisibleColumns(newVisibleColumns);
+  };
+
+  const handleSaveColumns = async () => {
     if (viewId) {
       const data = {
         columns: newVisibleColumns.map((c) => c.columnName),
@@ -371,64 +379,11 @@ export const PartnerListView = () => {
       const res = await updatePartnerView(viewId, data);
       if (res.success) {
         getSingleView(viewId);
+        handleClosePopoverHide();
       }
     }
   };
 
-  // handle Column Search
-  const handleColumnSearch = (e) => {
-    const searchValue = e.target.value.toLowerCase();
-    setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
-  };
-
-
-  const showAllColumns = async () => {
-    const newVisibleColumns = allColumns;
-    setVisibleColumns(newVisibleColumns);
-
-    if (viewId) {
-      const data = {
-        columns: allColumns.map((c) => c.columnName),
-        label: selectedViewData?.meta?.label,
-        description: selectedViewData?.meta?.description,
-        table: selectedViewData?.meta?.table,
-        isPublic: selectedViewData?.meta?.isPublic,
-        gate,
-        filters,
-        sort,
-        groups: selectedViewData?.meta?.groups,
-      };
-
-      const res = await updatePartnerView(viewId, data);
-      if (res.success) {
-        getSingleView(viewId);
-      }
-    }
-  };
-
-  const hideAllColumns = async () => {
-    const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
-    setVisibleColumns(newVisibleColumns);
-
-    if (viewId) {
-      const data = {
-        columns: ['id'],
-        label: selectedViewData?.meta?.label,
-        description: selectedViewData?.meta?.description,
-        table: selectedViewData?.meta?.table,
-        isPublic: selectedViewData?.meta?.isPublic,
-        gate,
-        filters,
-        sort,
-        groups: selectedViewData?.meta?.groups,
-      };
-
-      const res = await updatePartnerView(viewId, data);
-      if (res.success) {
-        getSingleView(viewId);
-      }
-    }
-  };
 
   // FILTERS
   // handle filter apply
@@ -437,8 +392,6 @@ export const PartnerListView = () => {
       updateView({ filters }).then(() => {
         getSingleView(viewId);
       });
-    } else {
-      fetchList(filters);
     }
   };
 
@@ -450,8 +403,6 @@ export const PartnerListView = () => {
       updateView({ filters: newFilters }).then(() => {
         getSingleView(viewId);
       });
-    } else {
-      fetchList(newFilters);
     }
   };
 
@@ -462,19 +413,14 @@ export const PartnerListView = () => {
       updateView({ filters: [] }).then(() => {
         getSingleView(viewId);
       });
-    } else {
-      fetchList([]);
     }
   };
+
 
   // initialize
   const initialize = async () => {
     try {
       setLoading(true);
-      const partners = await getPartnerListAsync({
-        page: 1,
-        rowsPerPage: 1,
-      });
 
       // set meta data
       setMetaData(partners.meta);
@@ -491,13 +437,15 @@ export const PartnerListView = () => {
       setAllColumns(columns);
 
       // set views
-      const viewsData = await getPartnerViews();
       setViews(viewsData.data);
 
       if (viewsData.success) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
         await getSingleView(firstView?.id, pagination);
-        router.push(`?tab=partner&view=${firstView?.id}`);
+
+        if (!viewId) {
+          router.push(`?tab=partner&view=${firstView?.id}`);
+        }
       } else {
         const payload = {
           label: 'Default View',
@@ -537,6 +485,15 @@ export const PartnerListView = () => {
     }
   };
 
+  // Watch for URL viewId change
+  React.useEffect(() => {
+    setPagination((prev) => ({ ...prev, pageNo: 1 }));
+    if (searchParams.get('tab') !== 'partner') return;
+    if (!isPartnersLoading && !viewsLoading) {
+      initialize();
+    }
+  }, [viewId, isPartnersLoading, viewsLoading]);
+
 
   // update visible columns
   React.useEffect(() => {
@@ -544,18 +501,16 @@ export const PartnerListView = () => {
     if (viewId && selectedViewData) {
       const selectedColumnNames = selectedViewData.meta?.columns || [];
       const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
+
       setVisibleColumns(filtered);
+      setNewVisibleColumns(filtered);
     } else {
       setVisibleColumns(allColumns);
+      setNewVisibleColumns(allColumns);
     }
     setSearchColumns(allColumns);
   }, [viewId, selectedViewData, allColumns]);
 
-  // Watch for URL viewId change
-  React.useEffect(() => {
-    setPagination((prev) => ({ ...prev, pageNo: 1 }));
-    initialize();
-  }, []);
 
   React.useEffect(() => {
     if (selectedViewId) {
@@ -607,7 +562,6 @@ export const PartnerListView = () => {
               sort={sort}
               setSort={setSort}
               updateView={updateView}
-              fetchList={fetchList}
               getSingleView={getSingleView}
             />
           </Box>
@@ -616,7 +570,7 @@ export const PartnerListView = () => {
             <IconButton onClick={handleAddNewItem}>
               <AddIcon />
             </IconButton>
-            <RefreshPlugin onClick={fetchList} />
+            <RefreshPlugin onClick={() => getSingleView(viewId)} />
             <DeleteConfirmationPasswordPopover
               title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
               onDelete={handleDelete}
@@ -680,8 +634,11 @@ export const PartnerListView = () => {
         disablePortal
       >
         <Box sx={{ p: 1.5 }}>
-          {imageToShow && (
-            <Image src={imageToShow} alt="Preview" width={300} height={300} style={{ borderRadius: 8 }} />
+          {mediaToShow?.type === 'image' && (
+            <Image src={mediaToShow?.url} alt="Preview" width={300} height={300} style={{ borderRadius: 8 }} />
+          )}
+          {mediaToShow?.type === 'video' && (
+            <video src={mediaToShow?.url} controls style={{ height: 300, width: 300, borderRadius: 8 }} />
           )}
         </Box>
       </Popover>
@@ -736,7 +693,7 @@ export const PartnerListView = () => {
                     key={col.field}
                     control={
                       <Checkbox
-                        checked={visibleColumns.some((c) => c.columnName === col.columnName)}
+                        checked={newVisibleColumns.some((c) => c.columnName === col.columnName)}
                         onChange={(e) => handleColumnChange(e, col)}
                       />
                     }
@@ -746,11 +703,16 @@ export const PartnerListView = () => {
               })}
           </FormGroup>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }}>
-            <Button variant="outlined" size="small" onClick={hideAllColumns}>
-              Hide all
-            </Button>
-            <Button variant="contained" size="small" onClick={showAllColumns}>
-              Show all
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Button variant="outlined" size="small" onClick={hideAllColumns}>
+                Hide all
+              </Button>
+              <Button variant="outlined" size="small" onClick={showAllColumns}>
+                Show all
+              </Button>
+            </Box>
+            <Button variant="contained" size="small" onClick={handleSaveColumns}>
+              Save
             </Button>
           </Box>
         </Box>
@@ -761,8 +723,9 @@ export const PartnerListView = () => {
         open={open}
         onClose={() => setOpen(false)}
         onSave={(paths) => handleUploadImage([...paths])}
-        multiple
-        hideVideoUploader={true}
+        multiple={!singleImageField.includes(imageUpdatedField)}
+        hideVideoUploader={isImageUploadOpen}
+        hideImageUploader={!isImageUploadOpen}
         folderName="partner-HQ"
       />
     </PageContainer>

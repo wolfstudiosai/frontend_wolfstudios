@@ -51,7 +51,7 @@ export const CampaignListView = () => {
   const [imageUpdatedField, setImageUpdatedField] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const searchParams = useSearchParams();
-  const viewId = React.useMemo(() => searchParams.get('view'), [searchParams]);
+  const viewId = searchParams.get('view');
 
   const handleUploadModalOpen = (data, field, uploadOpen) => {
     setOpen(true);
@@ -129,7 +129,7 @@ export const CampaignListView = () => {
     data: campaigns,
     error: campaignsError,
     isLoading: isCampaignsLoading,
-  } = useSWR(['campaignList', { page: 1, rowsPerPage: 1 }], ([, params]) => getCampaignListAsync(params));
+  } = useSWR(['campaignList', { page: 1, rowsPerPage: 20 }], ([, params]) => getCampaignListAsync(params));
 
   const {
     data: viewsData,
@@ -190,7 +190,7 @@ export const CampaignListView = () => {
     }
   };
 
-  // process row update
+
   // process row update
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
@@ -210,7 +210,7 @@ export const CampaignListView = () => {
     }
 
     return newRow;
-  }, []);
+  }, [viewId]);
 
   // handle row selection
   const handleRowSelection = (newRowSelectionModel) => {
@@ -325,8 +325,6 @@ export const CampaignListView = () => {
   // initialize
   const initialize = async () => {
     try {
-      if (searchParams.get('tab') !== 'campaign') return;
-      if (isCampaignsLoading || viewsLoading) return;
       setLoading(true);
       // set meta data
       setMetaData(campaigns.meta);
@@ -344,6 +342,8 @@ export const CampaignListView = () => {
 
       // set views
       setViews(viewsData.data);
+
+      console.log('viewsData.success', viewsData.success);
 
       if (viewsData.success) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
@@ -394,7 +394,10 @@ export const CampaignListView = () => {
   // Watch for URL viewId change
   React.useEffect(() => {
     setPagination((prev) => ({ ...prev, pageNo: 1 }));
-    initialize();
+    if (searchParams.get('tab') !== 'campaign') return;
+    if (!isCampaignsLoading && !viewsLoading) {
+      initialize();
+    }
   }, [viewId, isCampaignsLoading, viewsLoading]);
 
   // store isView sidebar is open or not on local storage
@@ -638,7 +641,7 @@ export const CampaignListView = () => {
 
       {/* Image upload dialog */}
       <MediaUploader
-        multiple={singleImageField.includes(imageUpdatedField) ? false : true}
+        multiple={!singleImageField.includes(imageUpdatedField)}
         open={open}
         onClose={() => setOpen(false)}
         onSave={(paths) => handleUploadImage([...paths])}

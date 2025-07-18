@@ -49,7 +49,7 @@ export const defaultPartner = (data) => {
     amazonReviewCupper: data?.amazonReviewCupper || '',
     amazonReviewThePill: data?.amazonReviewThePill || '',
     amazonStorefront: data?.amazonStorefront || '',
-    campaignMonth: Array.isArray(data?.campaignMonth) ? data.campaignMonth : [],
+    campaignMonth: Array.isArray(data?.campaignMonth) ? data.campaignMonth : [], // Remaining this field
     deliverables: data?.deliverables || '',
     googleDriveFiles: data?.googleDriveFiles || '',
     revoIGPost: data?.revoIGPost || '',
@@ -60,8 +60,8 @@ export const defaultPartner = (data) => {
     amountPaid: Number(data?.amountPaid) || 0,
     totalContributedEngagementByContent: Number(data?.totalContributedEngagementByContent) || 0,
     totalAudience: Number(data?.totalAudience) || 0,
-    platformDeliverables: Array.isArray(data?.platformDeliverables) ? data.platformDeliverables : [],
-    platforms: Array.isArray(data?.platforms) ? data.platforms : [],
+    platformDeliverables: Array.isArray(data?.platformDeliverables) ? data.platformDeliverables : [], // Remaining this field in form
+    platforms: Array.isArray(data?.platforms) ? data.platforms : [], // Remaining this field in form
     revosOffer: data?.revosOffer || '',
     remainingCredits: Number(data?.remainingCredits) || 0,
     ttPost: data?.ttPost || '',
@@ -101,6 +101,7 @@ export const defaultPartner = (data) => {
     shareasaleID: Number(data?.shareasaleID) || 0,
     auditedJune2025: Boolean(data?.auditedJune2025) || false,
     isFeatured: Boolean(data?.isFeatured) || false,
+
     mediaKit: Array.isArray(data?.mediaKit) ? data.mediaKit : [],
     partnerGallery: Array.isArray(data?.partnerGallery) ? data.partnerGallery : [],
     receipts: Array.isArray(data?.receipts) ? data.receipts : [],
@@ -109,105 +110,105 @@ export const defaultPartner = (data) => {
 
     stakeholders: Array.isArray(data?.stakeholders)
       ? data.stakeholders.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     contentHQ: Array.isArray(data?.contentHQ)
       ? data.contentHQ.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     profileCategory: Array.isArray(data?.profileCategory)
       ? data.profileCategory.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
-      : [],
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
+      : [], // missing
     portfolios: Array.isArray(data?.portfolios)
       ? data.portfolios.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || item?.projectTitle || '',
+      }))
       : [],
     states: Array.isArray(data?.states)
       ? data.states.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     cities: Array.isArray(data?.cities)
       ? data.cities.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     services: Array.isArray(data?.services)
       ? data.services.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
-      : [],
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
+      : [], // missing
     caseStudies: Array.isArray(data?.caseStudies)
       ? data.caseStudies.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     productionHQ: Array.isArray(data?.productionHQ)
       ? data.productionHQ.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     products: Array.isArray(data?.products)
       ? data.products.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
-      : [],
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
+      : [], // missing in form
     contributedCampaigns: Array.isArray(data?.contributedCampaigns)
       ? data.contributedCampaigns.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
-      : [],
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
+      : [], // missing in form
     countries: Array.isArray(data?.countries)
       ? data.countries.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     tags: Array.isArray(data?.tags)
       ? data.tags.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     retailPartners: Array.isArray(data?.retailPartners)
       ? data.retailPartners.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     destinations: Array.isArray(data?.destinations)
       ? data.destinations.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     proposedCampaigns: Array.isArray(data?.proposedCampaigns)
       ? data.proposedCampaigns.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     productionHQ2: Array.isArray(data?.productionHQ2)
       ? data.productionHQ2.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
   };
   return formattedValue;

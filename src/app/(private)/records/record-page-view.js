@@ -26,21 +26,23 @@ const tabs = [
 export default function RecordPageView() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [tab, setTab] = useState('campaign');
+  const [tab, setTab] = useState('');
 
-  const handleChange = (event, newValue) => {
+  useEffect(() => {
+    const urlTab = searchParams.get('tab');
+
+    if (!urlTab && tab === '') {
+      setTab('campaign');
+      router.push('?tab=campaign');
+    } else if (urlTab && urlTab !== tab) {
+      setTab(urlTab);
+    }
+  }, [searchParams]);
+
+  const handleChange = (_event, newValue) => {
     setTab(newValue);
     router.push(`?tab=${newValue}`);
   };
-
-  useEffect(() => {
-    const tab = searchParams.get('tab');
-    if (!tab) {
-      setTab('campaign');
-      router.push(`?tab=campaign`);
-    }
-    setTab(tab);
-  }, [searchParams]);
 
   return (
     <PageContainer>
@@ -50,17 +52,15 @@ export default function RecordPageView() {
           { title: 'Records', href: '' },
         ]}
       />
+
       <Box mb={1}>
         <CustomTab tabs={tabs} handleChange={handleChange} value={tab} />
       </Box>
 
       {tab === 'campaign' && <CampaignListView />}
       {tab === 'portfolio' && <PortfolioListView />}
-
       {tab === 'production' && <ProductionListView />}
-
       {tab === 'partner' && <PartnerListView />}
-
       {tab === 'content' && <AllContentListView />}
     </PageContainer>
   );

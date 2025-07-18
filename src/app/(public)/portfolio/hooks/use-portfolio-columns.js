@@ -11,47 +11,62 @@ import { getPortfolioCategoryListAsync } from '../_lib/portfolio.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 
 export const usePortfolioColumns = (anchorEl, visibleColumns, setMediaToShow, handleUploadModalOpen) => {
+    const [autocompleteFocus, setAutocompleteFocus] = React.useState({
+        currentItem: '',
+        prevItems: [],
+    });
 
-    const [portfolioCategories, setPortfolioCategories] = React.useState([]);
-    const [states, setStates] = React.useState([]);
-    const [countries, setCountries] = React.useState([]);
-    const [partnerHQ, setPartnerHQ] = React.useState([]);
-    const [caseStudies, setCaseStudies] = React.useState([]);
+    const [autoCompleteOptions, setAutoCompleteOptions] = React.useState({
+        portfolioCategories: [],
+        partnerHQ: [],
+        states: [],
+        countries: [],
+        caseStudies: [],
+    });
+
+    // --------------- Fetch Prerequisites Data -------------------
+    const fetchFunctionsMap = {
+        countries: getCountryListAsync,
+        states: getStateListAsync,
+        portfolioCategories: getPortfolioCategoryListAsync,
+        partnerHQ: getPartnerListAsync,
+        caseStudies: getCaseStudyListAsync,
+    };
 
     React.useEffect(() => {
-        const fetchPrerequisitesData = async () => {
+        const fetchData = async () => {
+            if (!autocompleteFocus?.currentItem) return;
+            const { currentItem, prevItems } = autocompleteFocus;
+
+            if (prevItems.includes(currentItem)) return;
+            const fetchFunction = fetchFunctionsMap[currentItem];
+            if (!fetchFunction) return;
+
             try {
-                const portfolioCategoriesResponse = await getPortfolioCategoryListAsync({ page: 1, rowsPerPage: 20 });
-                if (portfolioCategoriesResponse?.success) {
-                    const options = portfolioCategoriesResponse.data.map((item) => ({ value: item.id, label: item.name }));
-                    setPortfolioCategories(options);
-                }
-                const statesResponse = await getStateListAsync({ page: 1, rowsPerPage: 20 });
-                if (statesResponse?.success) {
-                    const options = statesResponse.data.map((item) => ({ value: item.id, label: item.name }));
-                    setStates(options);
-                }
-                const countriesResponse = await getCountryListAsync({ page: 1, rowsPerPage: 20 });
-                if (countriesResponse?.success) {
-                    const options = countriesResponse.data.map((item) => ({ value: item.id, label: item.name }));
-                    setCountries(options);
-                }
-                const partnerHQResponse = await getPartnerListAsync({ page: 1, rowsPerPage: 20 });
-                if (partnerHQResponse?.success) {
-                    const options = partnerHQResponse.data.map((item) => ({ value: item.id, label: item.name }));
-                    setPartnerHQ(options);
-                }
-                const caseStudiesResponse = await getCaseStudyListAsync({ page: 1, rowsPerPage: 20 });
-                if (caseStudiesResponse?.success) {
-                    const options = caseStudiesResponse.data.map((item) => ({ value: item.id, label: item.name }));
-                    setCaseStudies(options);
+                const response = await fetchFunction({ page: 1, rowsPerPage: 100 });
+                if (response?.success) {
+                    const options = response.data.map((item) => ({
+                        value: item.id,
+                        label: item.name,
+                    }));
+
+                    setAutoCompleteOptions((prevState) => ({
+                        ...prevState,
+                        [currentItem]: options,
+                    }));
+
+                    setAutocompleteFocus((prevState) => ({
+                        currentItem: '',
+                        prevItems: [...prevState.prevItems, currentItem],
+                    }));
                 }
             } catch (error) {
-                console.error('Error fetching prerequisites data:', error);
+                console.error(error);
             }
         };
-        fetchPrerequisitesData();
-    }, [])
+
+        fetchData();
+    }, [autocompleteFocus]);
 
     const columns = useMemo(() => [
         { field: 'projectTitle', headerName: 'Project Title', width: 280, editable: true },
@@ -358,7 +373,9 @@ export const usePortfolioColumns = (anchorEl, visibleColumns, setMediaToShow, ha
                     const response = await getPortfolioCategoryListAsync(paging, filters);
                     return response.data;
                 },
-                defaultOptions: portfolioCategories,
+                defaultOptions: autoCompleteOptions.portfolioCategories,
+                onFocus: (name) => setAutocompleteFocus({ currentItem: name, prevItems: [] }),
+                name: 'portfolioCategories',
                 multiple: true,
             }),
         },
@@ -375,7 +392,9 @@ export const usePortfolioColumns = (anchorEl, visibleColumns, setMediaToShow, ha
                     const response = await getPartnerListAsync(paging, filters);
                     return response.data;
                 },
-                defaultOptions: partnerHQ,
+                defaultOptions: autoCompleteOptions.partnerHQ,
+                onFocus: (name) => setAutocompleteFocus({ currentItem: name, prevItems: [] }),
+                name: 'partnerHQ',
                 multiple: true,
             }),
         },
@@ -395,7 +414,9 @@ export const usePortfolioColumns = (anchorEl, visibleColumns, setMediaToShow, ha
                         value: item.id,
                     })) || [];
                 },
-                defaultOptions: states,
+                defaultOptions: autoCompleteOptions.states,
+                onFocus: (name) => setAutocompleteFocus({ currentItem: name, prevItems: [] }),
+                name: 'states',
                 multiple: true,
             })
         },
@@ -415,7 +436,9 @@ export const usePortfolioColumns = (anchorEl, visibleColumns, setMediaToShow, ha
                         value: item.id,
                     })) || [];
                 },
-                defaultOptions: countries,
+                defaultOptions: autoCompleteOptions.countries,
+                onFocus: (name) => setAutocompleteFocus({ currentItem: name, prevItems: [] }),
+                name: 'country',
                 multiple: true,
             })
         },
@@ -435,13 +458,13 @@ export const usePortfolioColumns = (anchorEl, visibleColumns, setMediaToShow, ha
                         value: item.id,
                     })) || [];
                 },
-                defaultOptions: caseStudies,
+                defaultOptions: autoCompleteOptions.caseStudies,
+                onFocus: (name) => setAutocompleteFocus({ currentItem: name, prevItems: [] }),
+                name: 'caseStudies',
                 multiple: true,
             })
         },
     ], [anchorEl, setMediaToShow, handleUploadModalOpen])
-
-    // const hiddenFields = columns.filter(col => !visibleColumns.some(visibleCol => visibleCol.columnName.charAt(0).toLowerCase() + visibleCol.columnName.slice(1) === col.field));
 
     const visibleFields = useMemo(() =>
         columns.filter(col =>

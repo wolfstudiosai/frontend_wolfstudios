@@ -21,6 +21,7 @@ import { EditableDataTable } from '/src/components/data-table/editable-data-tabl
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { Iconify } from '/src/components/iconify/iconify';
 import { MediaUploader } from '/src/components/uploaders/media-uploader';
+import useSWR from 'swr';
 
 import {
   createPortfolioAsync,
@@ -83,15 +84,13 @@ export const PortfolioListView = () => {
         finalData[imageUpdatedField] = images[0];
       } else {
         finalData[imageUpdatedField] = [...finalData[imageUpdatedField], ...images];
-      }
-
-      for (const key of singleImageField) {
-        finalData[key] = Array.isArray(finalData[key]) ? finalData[key][0] : finalData[key];
+        for (const key of singleImageField) {
+          finalData[key] = Array.isArray(finalData[key]) ? finalData[key][0] : finalData[key];
+        }
       }
 
       const response = await updatePortfolioAsync(updatedRow.id, finalData);
       if (response.success) {
-        toast.success('Portfolio updated successfully');
         setOpen(false);
         getSingleView(viewId);
       }
@@ -111,7 +110,6 @@ export const PortfolioListView = () => {
   // View
   const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([]);
-  const [viewsLoading, setViewsLoading] = React.useState(false);
   const [selectedViewId, setSelectedViewId] = React.useState(null);
   const [selectedViewData, setSelectedViewData] = React.useState(null);
 
@@ -128,13 +126,27 @@ export const PortfolioListView = () => {
   const [searchColumns, setSearchColumns] = React.useState([]);
   const columns = usePortfolioColumns(anchorEl, visibleColumns, setMediaToShow, handleUploadModalOpen);
 
+  // SWR
+  const {
+    data: portfolios,
+    error: portfoliosError,
+    isLoading: isPortfoliosLoading,
+  } = useSWR(['portfolioList', { page: 1, rowsPerPage: 20 }], ([, params]) => getPortfolioListAsync(params));
+
+  const {
+    data: viewsData,
+    isLoading: viewsLoading,
+    error: viewsError,
+    mutate: mutateViews,
+  } = useSWR('portfolioViews', getPortfolioViews);
+
   // get single view
   const getSingleView = async (viewId, paginationProps) => {
     try {
       setLoading(true);
       const viewPagination = paginationProps ? paginationProps : pagination;
       const res = await getSinglePortfolioView(viewId, viewPagination);
-      console.log(res.data)
+
       if (res.success) {
         setRecords(res.data.data.map((row) => defaultPortfolio(row)) || []);
         setTotalRecords(res.data.count);
@@ -225,7 +237,7 @@ export const PortfolioListView = () => {
     }
 
     return newRow;
-  }, []);
+  }, [viewId]);
 
   const handleRowSelection = (newRowSelectionModel) => {
     const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
@@ -336,10 +348,6 @@ export const PortfolioListView = () => {
   const initialize = async () => {
     try {
       setLoading(true);
-      const portfolios = await getPortfolioListAsync({
-        page: 1,
-        rowsPerPage: 1,
-      });
 
       // set meta data
       setMetaData(portfolios.meta);
@@ -355,8 +363,6 @@ export const PortfolioListView = () => {
 
       setAllColumns(columns);
 
-      // set views
-      const viewsData = await getPortfolioViews();
       setViews(viewsData.data);
       if (viewsData.success) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
@@ -419,8 +425,11 @@ export const PortfolioListView = () => {
   // Watch for URL viewId change
   React.useEffect(() => {
     setPagination((prev) => ({ ...prev, pageNo: 1 }));
-    initialize();
-  }, []);
+    if (searchParams.get('tab') !== 'portfolio') return;
+    if (!isPortfoliosLoading && !viewsLoading) {
+      initialize();
+    }
+  }, [viewId, isPortfoliosLoading, viewsLoading]);
 
   React.useEffect(() => {
     if (selectedViewId) {
