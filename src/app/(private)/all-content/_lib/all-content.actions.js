@@ -52,7 +52,7 @@ export const createContentAsync = async (data) => {
   }
 };
 
-export const updateContentAsync = async ( data) => {
+export const updateContentAsync = async (data) => {
   try {
     // const payload = contentPayload(data);
     const res = await api.patch(`/content-HQ/${data?.id}`, data);
@@ -124,9 +124,9 @@ export const getContentViews = async () => {
   }
 };
 
-export const getSingleContentView = async (viewId) => {
+export const getSingleContentView = async (viewId, pagination) => {
   try {
-    const res = await api.get(`/views/${viewId}`);
+    const res = await api.get(`/views/${viewId}?page=${pagination.pageNo}&size=${pagination.limit}`);
     return { success: true, data: res.data.data };
   } catch (error) {
     toast.error(error.response.data.message);

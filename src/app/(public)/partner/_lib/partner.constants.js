@@ -18,7 +18,7 @@ export const sourcedFrom = [
   { value: 'Referral', label: 'Referral' },
 ];
 
-export const status = [
+export const profileStatus = [
   { value: 'Active', label: 'Active' },
   { value: 'Inactive', label: 'Inactive' },
   { value: 'Pending', label: 'Pending' },

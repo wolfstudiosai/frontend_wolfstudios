@@ -16,6 +16,7 @@ import { getProductListAsync, getStakeHolderListAsync } from '../../../../lib/co
 import { getCampaignListAsync } from '../../campaign/_lib/campaign.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
+import { productionStatus } from '../_lib/constant';
 
 export const ProductionForm = ({ formikProps }) => {
   // *********************States*********************************
@@ -146,11 +147,7 @@ export const ProductionForm = ({ formikProps }) => {
             label="Status"
             value={values.status}
             onChange={(value) => setFieldValue('status', value)}
-            options={[
-              { value: 'IN_PROGRESS', label: 'In Progress' },
-              { value: 'REJECTED', label: 'Rejected' },
-              { value: 'ACCEPTED', label: 'Accepted' },
-            ]}
+            options={productionStatus}
           />
         </Grid>
 
