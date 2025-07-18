@@ -1,10 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box, Button, Card, IconButton, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { SwiperSlide } from 'swiper/react';
 
@@ -12,34 +9,14 @@ import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
-import { isVideoContent } from '../../../../utils/helper';
-import { ManageSpaceRightPanel } from '../../spaces/_components/manage-space-right-panel';
 import { SpaceCard } from '../../spaces/_components/space-card';
-import { getSpaceListAsync } from '../../spaces/_lib/space.actions';
+import { useFeaturedSpacesList } from '../../../../services/space/useFeaturedSpaces';
 
-export const PortfolioSectionNew = () => {
-  const [spaces, setSpaces] = useState([]);
+export const SpacesSection = () => {
+  const { data: spacesData, isLoading } = useFeaturedSpacesList();
   const router = useRouter();
 
-  const fetchSpaces = async () => {
-    const filters = [{ key: 'isFeatured', type: 'boolean', operator: 'is', value: true }];
-    const response = await getSpaceListAsync(
-      {
-        page: 1,
-        rowsPerPage: 20,
-      },
-      filters,
-      'and'
-    );
-
-    if (response?.success) {
-      setSpaces(response.data);
-    }
-  };
-
-  useEffect(() => {
-    fetchSpaces();
-  }, []);
+  if (isLoading) return;
 
   return (
     <Box>
@@ -120,11 +97,11 @@ export const PortfolioSectionNew = () => {
                 },
               }}
             >
-              {spaces.map((space) => (
+              {spacesData?.data?.length > 0 && spacesData?.data?.map((space) => (
                 <SwiperSlide key={space.id}>
                   <FadeIn>
                     <Box sx={{ height: '400px', width: '300px' }}>
-                      <SpaceCard content={space} fetchList={fetchSpaces} />
+                      <SpaceCard content={space} />
                     </Box>
                   </FadeIn>
                 </SwiperSlide>

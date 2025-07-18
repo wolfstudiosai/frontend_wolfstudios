@@ -11,7 +11,6 @@ import { paths } from '../../../paths';
 import { useProductionList } from '../../../services/production/useProductionList';
 import { ProductionGridView } from './_components/production-gridview';
 import { ProductionRightPanel } from './_components/production-right-panel';
-import { defaultProduction } from './_lib/production.types';
 
 export const ProductionView = () => {
   const [openPanel, setOpenPanel] = React.useState(false);
@@ -58,15 +57,7 @@ export const ProductionView = () => {
         </Box>
       )}
 
-      <ProductionRightPanel
-        fetchList={mutate}
-        onClose={() => {
-          setOpenPanel(false);
-        }}
-        open={openPanel}
-        data={defaultProduction()}
-        view="ADD"
-      />
+      {openPanel && <ProductionRightPanel onClose={() => setOpenPanel(false)} open={openPanel} view="ADD" />}
     </PageContainer>
   );
 };

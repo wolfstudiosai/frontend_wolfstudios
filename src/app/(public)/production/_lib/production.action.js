@@ -130,9 +130,9 @@ export const getProductionViewsAsync = async () => {
   }
 };
 
-export const getSingleProductionViewAsync = async (id) => {
+export const getSingleProductionViewAsync = async (id, pagination) => {
   try {
-    const res = await api.get(`/views/${id}`);
+    const res = await api.get(`/views/${id}?page=${pagination.pageNo}&size=${pagination.limit}`);
     return { success: true, data: res.data.data };
   } catch (error) {
     // toast.error(error.message);

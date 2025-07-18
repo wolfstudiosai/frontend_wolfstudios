@@ -30,8 +30,6 @@ export const HeroSection = () => {
     order: 0,
   });
 
-  console.log(data, 'use homepage content....');
-
   const order1 = data?.data?.find((item) => item.order === 1);
   const order2 = data?.data?.find((item) => item.order === 2);
 
@@ -43,16 +41,16 @@ export const HeroSection = () => {
       const isAlreadyExists = data?.data?.some((item) => item.order === uploadImage.order);
       const res = isAlreadyExists
         ? await updateHomepageContentAsync(id, {
-            id,
-            type: mediaType,
-            order: uploadImage.order,
-            url: url[0],
-          })
+          id,
+          type: mediaType,
+          order: uploadImage.order,
+          url: url[0],
+        })
         : await createHomepageContentAsync({
-            type: mediaType,
-            order: uploadImage.order,
-            url: url[0],
-          });
+          type: mediaType,
+          order: uploadImage.order,
+          url: url[0],
+        });
 
       if (res.success) {
         toast.success('Media uploaded successfully');

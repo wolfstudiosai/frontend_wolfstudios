@@ -11,6 +11,11 @@ export const UserInfoPopover = ({ isSidebarOpen = false }) => {
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
   const avatarSize = isSidebarOpen ? 35 : 28;
 
+  const handleLogout = () => {
+    setMenuAnchorEl(null);
+    logout();
+  };
+
   return (
     <>
       <Box
@@ -49,13 +54,13 @@ export const UserInfoPopover = ({ isSidebarOpen = false }) => {
               </ListItemIcon>
               Profile
             </MenuItem>
-            
+
           </List>
           <Divider />
           <Box sx={{ p: 1 }}>
             <MenuItem
               component="div"
-              onClick={logout}
+              onClick={handleLogout}
               sx={{
                 justifyContent: 'center',
                 py: 0,

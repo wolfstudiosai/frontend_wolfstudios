@@ -7,9 +7,9 @@ import { Iconify } from '/src/components/iconify/iconify';
 
 import { CampaignRightPanel } from './campaign-right-panel';
 
-export const CampaignCard = ({ content, fetchList }) => {
-  const [openRightPanel, setOpenRightPanel] = React.useState(null);
-  console.log(content, 'content....');
+export const CampaignCard = ({ content }) => {
+  const [openRightPanel, setOpenRightPanel] = React.useState(false);
+
   return (
     <>
       <Stack
@@ -19,7 +19,7 @@ export const CampaignCard = ({ content, fetchList }) => {
           minHeight: { lg: 600, md: 750, sm: 200, xs: 250 },
           backgroundColor: 'background.paper',
         }}
-        onClick={() => setOpenRightPanel(content)}
+        onClick={() => setOpenRightPanel(true)}
       >
         <Box
           component="img"
@@ -87,10 +87,9 @@ export const CampaignCard = ({ content, fetchList }) => {
 
       {openRightPanel && (
         <CampaignRightPanel
-          fetchList={fetchList}
           onClose={() => setOpenRightPanel(false)}
           open={openRightPanel ? true : false}
-          data={content}
+          id={content?.id}
           view={'QUICK'}
         />
       )}

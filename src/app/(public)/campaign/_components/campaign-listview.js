@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import { useTheme } from '@mui/material/styles';
 import { toast } from 'sonner';
+import useSWR from 'swr';
 
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
 import TableSortBuilder from '/src/components/common/table-sort-builder';
@@ -31,13 +32,16 @@ import {
   updateCampaignAsync,
   updateCampaignView,
 } from '../_lib/campaign.actions';
+import { campaignPayload } from '../_lib/campaign.payload';
 import { defaultCampaign } from '../_lib/campaign.types';
 import { useCampaignColumns } from '../hook/use-campaign-columns';
 
 export const CampaignListView = () => {
+  console.log('rendering CampaignListView......');
   const theme = useTheme();
   const router = useRouter();
   const anchorEl = React.useRef(null);
+  const singleImageField = ['thumbnailImage'];
   const [anchorElHide, setAnchorElHide] = React.useState(null);
   const [isImageUploadOpen, setIsImageUploadOpen] = React.useState(false);
   const [mediaToShow, setMediaToShow] = React.useState({
@@ -73,35 +77,16 @@ export const CampaignListView = () => {
   // handle upload image
   const handleUploadImage = async (images) => {
     try {
-      const finalData = {
-        ...updatedRow,
-      };
+      const finalData = await campaignPayload(updatedRow, false);
 
-      const arrayFields = [
-        'contentHQ',
-        'stakeholders',
-        'retailPartners',
-        'proposedPartners',
-        'contributedPartners',
-        'spaces',
-        'productionHQ',
-        'products',
-        'retailPartners2',
-        'retailPartners3',
-      ];
-
-      for (const field of arrayFields) {
-        const value = updatedRow[field];
-        if (value.length > 0) {
-          const arrOfStr = value.map((item) => item.value);
-          finalData[field] = arrOfStr;
-        }
+      if (singleImageField.includes(imageUpdatedField)) {
+        finalData[imageUpdatedField] = images[0];
+      } else {
+        finalData[imageUpdatedField] = [...finalData[imageUpdatedField], ...images];
       }
 
-      const response = await updateCampaignAsync(updatedRow.id, {
-        ...finalData,
-        [imageUpdatedField]: [...updatedRow[imageUpdatedField], ...images],
-      });
+      const response = await updateCampaignAsync(updatedRow.id, finalData);
+
       if (response.success) {
         toast.success('Campaign updated successfully');
         setOpen(false);
@@ -122,7 +107,7 @@ export const CampaignListView = () => {
   // View
   const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([]);
-  const [viewsLoading, setViewsLoading] = React.useState(false);
+  // const [viewsLoading, setViewsLoading] = React.useState(false);
   const [selectedViewId, setSelectedViewId] = React.useState(null);
   const [selectedViewData, setSelectedViewData] = React.useState(null);
 
@@ -138,6 +123,20 @@ export const CampaignListView = () => {
   const [newVisibleColumns, setNewVisibleColumns] = React.useState(visibleColumns);
   const [searchColumns, setSearchColumns] = React.useState([]);
   const columns = useCampaignColumns(anchorEl, visibleColumns, setMediaToShow, handleUploadModalOpen);
+
+  // swr
+  const {
+    data: campaigns,
+    error: campaignsError,
+    isLoading: isCampaignsLoading,
+  } = useSWR(['campaignList', { page: 1, rowsPerPage: 20 }], ([, params]) => getCampaignListAsync(params));
+
+  const {
+    data: viewsData,
+    isLoading: viewsLoading,
+    error: viewsError,
+    mutate: mutateViews,
+  } = useSWR('campaignViews', getCampaignViews);
 
   // get single view
   const getSingleView = async (viewId, paginationProps) => {
@@ -191,6 +190,7 @@ export const CampaignListView = () => {
     }
   };
 
+
   // process row update
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
@@ -202,95 +202,15 @@ export const CampaignListView = () => {
         return newRow;
       }
 
-      if (!newRow.campaignStatus) {
-        toast.error('Please select campaign status');
-        return newRow;
-      }
-
-      if (!newRow.notes) {
-        toast.error('Please enter notes');
-        return newRow;
-      }
-
-      if (!newRow.campaignDescription) {
-        toast.error('Please enter description');
-        return newRow;
-      }
-
-      if (!newRow.client) {
-        toast.error('Please enter client');
-        return newRow;
-      }
-
-      if (!newRow.guidelines) {
-        toast.error('Please enter guidelines');
-        return newRow;
-      }
-
-      await createCampaignAsync(newRow);
-      getSingleView(viewId);
+      await createCampaignAsync(newRow).then(() => getSingleView(viewId));
     } else {
-      const finalData = {
-        ...newRow,
-      };
+      const finalData = await campaignPayload(newRow);
 
-      const imageFields = ['campaignImage', 'imageInspirationGallery'];
-      for (const field of imageFields) {
-        const value = newRow[field];
-        if (value instanceof File) {
-          const res = await imageUploader(
-            [
-              {
-                file: value,
-                fileName: value.name.split('.').slice(0, -1).join('.'),
-                fileType: value.type.split('/')[1],
-              },
-            ],
-            'campaigns'
-          );
-
-          finalData[field] = res;
-        } else if (typeof value === 'string') {
-          finalData[field] = [value];
-        }
-      }
-
-      const arrayFields = [
-        'contentHQ',
-        'stakeholders',
-        'retailPartners',
-        'proposedPartners',
-        'contributedPartners',
-        'spaces',
-        'productionHQ',
-        'products',
-        'retailPartners2',
-        'retailPartners3',
-      ];
-
-      // process array fields
-      for (const field of arrayFields) {
-        const value = newRow[field];
-        if (value.length > 0) {
-          const arrOfStr = value.map((item) => item.value);
-          finalData[field] = arrOfStr;
-        }
-      }
-
-      const numericFields = ['totalContentEngagement', 'budget', 'totalExpense', 'campaignROI', 'productExpense'];
-      for (const field of numericFields) {
-        const value = newRow[field];
-        if (value) {
-          finalData[field] = Number(value);
-        }
-      }
-
-      await updateCampaignAsync(newRow.id, finalData);
-      getSingleView(viewId);
+      await updateCampaignAsync(newRow.id, finalData).then(() => getSingleView(viewId));
     }
 
     return newRow;
-  }, []);
+  }, [viewId]);
 
   // handle row selection
   const handleRowSelection = (newRowSelectionModel) => {
@@ -406,11 +326,6 @@ export const CampaignListView = () => {
   const initialize = async () => {
     try {
       setLoading(true);
-      const campaigns = await getCampaignListAsync({
-        page: 1,
-        rowsPerPage: 1,
-      });
-
       // set meta data
       setMetaData(campaigns.meta);
       const columns = campaigns.meta.map((obj) => {
@@ -426,14 +341,16 @@ export const CampaignListView = () => {
       setAllColumns(columns);
 
       // set views
-      const viewsData = await getCampaignViews();
       setViews(viewsData.data);
+
+      console.log('viewsData.success', viewsData.success);
+
       if (viewsData.success) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
         await getSingleView(firstView?.id, pagination);
+
         if (!viewId) {
-          const currentTab = searchParams.get('tab') || 'campaign';
-          router.push(`?tab=${currentTab}&view=${firstView?.id}`);
+          router.push(`?tab=campaign&view=${firstView?.id}`);
         }
       } else {
         const payload = {
@@ -474,6 +391,15 @@ export const CampaignListView = () => {
     }
   };
 
+  // Watch for URL viewId change
+  React.useEffect(() => {
+    setPagination((prev) => ({ ...prev, pageNo: 1 }));
+    if (searchParams.get('tab') !== 'campaign') return;
+    if (!isCampaignsLoading && !viewsLoading) {
+      initialize();
+    }
+  }, [viewId, isCampaignsLoading, viewsLoading]);
+
   // store isView sidebar is open or not on local storage
   const handleOpenViewSidebar = () => {
     setShowView(!showView);
@@ -486,6 +412,7 @@ export const CampaignListView = () => {
     if (viewId && selectedViewData) {
       const selectedColumnNames = selectedViewData.meta?.columns || [];
       const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
+
       setVisibleColumns(filtered);
       setNewVisibleColumns(filtered);
     } else {
@@ -494,12 +421,6 @@ export const CampaignListView = () => {
     }
     setSearchColumns(allColumns);
   }, [viewId, selectedViewData, allColumns]);
-
-  // Watch for URL viewId change
-  React.useEffect(() => {
-    setPagination((prev) => ({ ...prev, pageNo: 1 }));
-    initialize();
-  }, []);
 
   React.useEffect(() => {
     const isViewOpen = localStorage.getItem('isRecordViewOpen');
@@ -635,7 +556,7 @@ export const CampaignListView = () => {
       >
         <Box sx={{ p: 1.5 }}>
           {mediaToShow?.type === 'image' && (
-            <Image src={mediaToShow?.url} alt="Preview" width={300} height={300} style={{ borderRadius: 8, }} />
+            <Image src={mediaToShow?.url} alt="Preview" width={300} height={300} style={{ borderRadius: 8 }} />
           )}
           {mediaToShow?.type === 'video' && (
             <video src={mediaToShow?.url} controls style={{ height: 300, width: 300, borderRadius: 8 }} />
@@ -720,7 +641,7 @@ export const CampaignListView = () => {
 
       {/* Image upload dialog */}
       <MediaUploader
-        multiple
+        multiple={!singleImageField.includes(imageUpdatedField)}
         open={open}
         onClose={() => setOpen(false)}
         onSave={(paths) => handleUploadImage([...paths])}

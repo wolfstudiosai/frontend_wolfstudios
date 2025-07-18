@@ -27,7 +27,7 @@ export const CampaignView = () => {
     ADD: false,
   });
 
-  const { data, isLoading, isLoadingMore, error, totalRecords, hasMore, loadMore, mutate } = useCampaignList();
+  const { data, isLoading, isLoadingMore, error, totalRecords, hasMore, loadMore } = useCampaignList();
 
   const handleFilterChange = (type, value) => {
     setFilters((prev) => ({ ...prev, [type]: value }));
@@ -59,7 +59,7 @@ export const CampaignView = () => {
 
           {filters.VIEW === 'grid' ? (
             <Box>
-              <CampaignGridView data={data} fetchList={mutate} />
+              <CampaignGridView data={data} />
 
               {hasMore && (
                 <Box textAlign="center" mt={2}>
@@ -78,13 +78,10 @@ export const CampaignView = () => {
 
         {openPanel && (
           <CampaignRightPanel
-            fetchList={mutate}
-            onClose={() => {
-              setOpenPanel(false);
-            }}
+            onClose={() => setOpenPanel(false)}
             open={openPanel}
-            data={defaultCampaign()}
-            view="ADD"
+            id={null}
+            view={'ADD'}
           />
         )}
       </PageLoader>

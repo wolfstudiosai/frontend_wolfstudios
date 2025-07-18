@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress } from '@mui/material';
-import {Grid2 as Grid} from '@mui/material';
+import { Grid2 as Grid } from '@mui/material';
 import React from 'react';
 
 import { SectionLoader } from '/src/components/loaders/section-loader';
@@ -16,7 +16,7 @@ export const CampaignTabView = () => {
     statusTabs,
     isLoading: isStatusLoading,
     error: statusError,
-    mutate: refreshStatus,
+    mutate: refreshCampaignsStatus,
   } = useCampaignStatusCount();
 
   const {
@@ -57,14 +57,7 @@ export const CampaignTabView = () => {
             <Grid container spacing={0.5} mt={1}>
               {campaigns.map((campaign) => (
                 <Grid key={campaign.id} size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
-                  <CampaignTabCard
-                    campaign={campaign}
-                    fetchList={refreshCampaigns}
-                    // refreshData={() => {
-                    //   refreshCampaigns();
-                    //   refreshStatus();
-                    // }}
-                  />
+                  <CampaignTabCard campaign={campaign} refreshCampaignsStatus={refreshCampaignsStatus} refreshCampaigns={refreshCampaigns} />
                 </Grid>
               ))}
 

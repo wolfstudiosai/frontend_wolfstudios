@@ -58,7 +58,7 @@ export default function SidebarChatProfiles({ isOpen }) {
                         display: 'flex',
                         flexDirection: 'column',
                         gap: isOpen ? 0 : 0.5,
-                        minHeight: 200,
+                        minHeight: 180,
                         overflowY: 'auto',
                         scrollbarWidth: 'none',
                         '&::-webkit-scrollbar': {

@@ -93,6 +93,7 @@ export const CampaignForm = ({ formikProps }) => {
     fetchData();
   }, [autocompleteFocus]);
 
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -501,7 +502,7 @@ export const CampaignForm = ({ formikProps }) => {
               setFieldValue={setFieldValue}
             />
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
             <MediaUploaderTrigger
               open={openCampaignImage}
               onClose={() => setOpenCampaignImage(false)}
@@ -514,8 +515,8 @@ export const CampaignForm = ({ formikProps }) => {
               hideImageUploader={undefined}
               hideVideoUploader={undefined}
             />
-          </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+          </Grid> */}
+          <Grid size={{ xs: 12 }}>
             <MediaUploaderTrigger
               open={openImageUploadDialog}
               onClose={() => setOpenImageUploadDialog(false)}
@@ -527,6 +528,7 @@ export const CampaignForm = ({ formikProps }) => {
               folderName="campaigns"
               hideImageUploader={undefined}
               hideVideoUploader={undefined}
+              isMultiple={true}
             />
           </Grid>
         </Grid>

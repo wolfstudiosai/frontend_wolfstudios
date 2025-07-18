@@ -7,10 +7,9 @@ import Grid from '@mui/material/Grid2';
 import { Iconify } from '/src/components/iconify/iconify';
 import { PageLoader } from '/src/components/loaders/PageLoader';
 
-import { PartnerCard } from './partner-card';
 import { PartnerCardTwo } from './partner-card-two';
 
-export const PartnerGridView = ({ data, loading, fetchList }) => {
+export const PartnerGridView = ({ data, loading }) => {
   return (
     <PageLoader loading={loading} error={null}>
       <Grid container spacing={0.5}>
@@ -25,7 +24,7 @@ export const PartnerGridView = ({ data, loading, fetchList }) => {
               xl: 2,
             }}
           >
-            <PartnerCardTwo content={content} fetchList={fetchList} />
+            <PartnerCardTwo content={content} />
           </Grid>
         ))}
       </Grid>

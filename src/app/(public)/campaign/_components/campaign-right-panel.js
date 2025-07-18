@@ -3,7 +3,6 @@
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import React from 'react';
 
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
@@ -20,96 +19,46 @@ import {
 import { defaultCampaign } from '../_lib/campaign.types';
 import { CampaignForm } from './campaign-form';
 import { formConstants } from '/src/app/constants/form-constants';
-import { imageUploader } from '/src/utils/upload-file';
+import { campaignPayload } from '../_lib/campaign.payload';
+import PageLoader from '../../../../components/loaders/PageLoader';
+import { useGetCampaignData } from '/src/services/campaign/useCampaignData';
+import { useCampaignList } from '/src/services/campaign/useCampaignList';
 
-export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUICK' }) => {
+export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
+  // To update campaign list cache
+  const { mutate: mutateCampaignList } = useCampaignList();
+  const { data: campaignData, isLoading, mutate } = useGetCampaignData(id);
   const { isLogin } = useAuth();
-  const router = useRouter();
-  const [isFeatured, setIsFeatured] = React.useState(data?.isFeatured);
+  const [isFeatured, setIsFeatured] = React.useState(campaignData?.data?.isFeatured);
   const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
 
   // *********************Formik*********************************
   const { values, errors, handleChange, handleSubmit, setFieldValue, resetForm, setValues } = useFormik({
-    initialValues: defaultCampaign(data),
+    initialValues: defaultCampaign(),
     validate: (values) => {
       const errors = {};
       if (!values.name) {
         errors.name = formConstants.required;
       }
-     
 
       return errors;
     },
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const finalData = {
-          ...values,
-        };
+        const finalData = await campaignPayload(values, true);
 
-        const imageFields = ['campaignImage', 'imageInspirationGallery'];
-        for (const field of imageFields) {
-          const value = values[field];
-          if (value instanceof File) {
-            const res = await imageUploader(
-              [
-                {
-                  file: value,
-                  fileName: value.name.split('.').slice(0, -1).join('.'),
-                  fileType: value.type.split('/')[1],
-                },
-              ],
-              'campaigns'
-            );
-
-            finalData[field] = res;
-          } else if (typeof value === 'string') {
-            finalData[field] = [value];
-          }
-        }
-
-        const arrayFields = [
-          'contentHQ',
-          'stakeholders',
-          'retailPartners',
-          'proposedPartners',
-          'contributedPartners',
-          'spaces',
-          'productionHQ',
-          'products',
-          'retailPartners2',
-          'retailPartners3',
-        ];
-
-        for (const field of arrayFields) {
-          const value = values[field];
-          if (value.length > 0) {
-            const arrOfStr = value.map((item) => item.value);
-            finalData[field] = arrOfStr;
-          }
-        }
-
-        const { id, ...rest } = finalData;
-        const createPayload = {
-          ...rest,
-          thumbnailImage: Array.isArray(finalData.thumbnailImage)
-            ? finalData.thumbnailImage[0]
-            : finalData.thumbnailImage,
-        };
-
-        const res = data?.id
-          ? await updateCampaignAsync(data?.id, {
-              ...finalData,
-              thumbnailImage: Array.isArray(finalData.thumbnailImage)
-                ? finalData.thumbnailImage[0]
-                : finalData.thumbnailImage,
-            })
-          : await createCampaignAsync(createPayload);
+        const res = id
+          ? await updateCampaignAsync(id, finalData)
+          : await createCampaignAsync(finalData);
         if (res.success) {
           onClose?.();
           resetForm();
-          fetchList();
+
+          // Update cache
+          mutate();
+          mutateCampaignList();
         } else {
           console.error('Operation failed:', res.message);
         }
@@ -121,16 +70,31 @@ export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUI
     },
   });
 
+  // Set form values
+  React.useEffect(() => {
+    if (campaignData?.data) {
+      setValues(defaultCampaign(campaignData?.data));
+    }
+  }, [campaignData?.data]);
+
   const handleDelete = async () => {
     onClose?.();
-    fetchList?.();
+
+    // Update cache
+    mutateCampaignList();
   };
 
   const handleFeatured = async (featured) => {
     try {
       setIsFeatured(featured);
-      await updateCampaignAsync(data?.id, { ...data, isFeatured: featured });
-      fetchList();
+      const payload = await campaignPayload({ ...defaultCampaign(campaignData?.data), isFeatured: featured }, false);
+      const res = await updateCampaignAsync(id, payload);
+
+      if (res.success) {
+        // Update cache
+        mutateCampaignList();
+        mutate();
+      }
     } catch (error) {
       console.error('Error:', error);
     }
@@ -140,12 +104,12 @@ export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUI
     <>
       {isLogin && (
         <>
-          {panelView === 'EDIT' && data?.id ? (
+          {panelView === 'EDIT' && id ? (
             <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
               <Iconify icon="solar:eye-broken" />
             </IconButton>
           ) : (
-            data?.id && (
+            id && (
               <IconButton onClick={() => setPanelView('EDIT')} title="Quick">
                 <Iconify icon="mynaui:edit-one" />
               </IconButton>
@@ -162,7 +126,7 @@ export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUI
             <IconButton
               sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               as={Link}
-              href={`/campaign/${data?.id}`}
+              href={`/campaign/${id}`}
               title="Analytics"
             >
               <Iconify icon="mdi:analytics" />
@@ -171,7 +135,7 @@ export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUI
 
           {panelView === 'QUICK' && (
             <DeleteConfirmationPasswordPopover
-              id={data?.id}
+              id={id}
               title="Are you sure you want to delete?"
               deleteFn={deleteCampaignAsync}
               passwordInput
@@ -197,19 +161,15 @@ export const CampaignRightPanel = ({ fetchList, onClose, data, open, view = 'QUI
     </>
   );
 
-  React.useEffect(() => {
-    if (data) {
-      setValues(defaultCampaign(data));
-    }
-  }, [data]);
-
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-      {panelView === 'QUICK' ? (
-        <CampaignQuickView data={data} isEdit={false} />
-      ) : (
-        <CampaignForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />
-      )}
+      <PageLoader loading={isLoading}>
+        {panelView === 'QUICK' ? (
+          <CampaignQuickView data={campaignData?.data} isEdit={false} />
+        ) : (
+          <CampaignForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />
+        )}
+      </PageLoader>
     </DrawerContainer>
   );
 };

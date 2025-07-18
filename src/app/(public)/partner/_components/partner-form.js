@@ -27,6 +27,7 @@ import {
 import { getContentListAsync } from '../../../(private)/all-content/_lib/all-content.actions';
 import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
 import { getProductionAsync, getProductionListAsync } from '../../production/_lib/production.action';
+import { profileStatus } from '../_lib/partner.constants';
 
 export const PartnerForm = ({ formikProps }) => {
   // *********************States*********************************
@@ -523,11 +524,7 @@ export const PartnerForm = ({ formikProps }) => {
             label="Profile Status"
             value={values.profileStatus}
             onChange={(newValues) => setFieldValue('profileStatus', newValues)}
-            options={[
-              { value: 'Active', label: 'Active' },
-              { value: 'Inactive', label: 'Inactive' },
-              { value: 'Verified', label: 'Verified' },
-            ]}
+            options={profileStatus}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
@@ -535,11 +532,7 @@ export const PartnerForm = ({ formikProps }) => {
             label="Current Status"
             value={values.currentStatus}
             onChange={(newValues) => setFieldValue('currentStatus', newValues)}
-            options={[
-              { value: 'Active', label: 'Active' },
-              { value: 'Inactive', label: 'Inactive' },
-              { value: 'Verified', label: 'Verified' },
-            ]}
+            options={profileStatus}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>

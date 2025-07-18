@@ -20,6 +20,8 @@ export const PortfolioForm = ({ formikProps }) => {
     thumbnailImage: false,
     horizontalGallery: false,
     verticalGallery: false,
+    singlePageHeroImage: false,
+    imageField: false,
     videoLink: false,
   });
 
@@ -314,6 +316,38 @@ export const PortfolioForm = ({ formikProps }) => {
             folderName="campaigns"
             hideImageUploader={false}
             hideVideoUploader={true}
+            isMultiple={true}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 6 }}>
+          <MediaUploaderTrigger
+            open={uploaderStates.imageField}
+            onClose={() => setUploaderStates((prev) => ({ ...prev, imageField: false }))}
+            onSave={(urls) => setFieldValue('imageField', urls)}
+            value={values?.imageField}
+            label="Image Field"
+            onAdd={() => setUploaderStates((prev) => ({ ...prev, imageField: true }))}
+            onDelete={(filteredUrls) => setFieldValue('imageField', filteredUrls)}
+            folderName="campaigns"
+            hideImageUploader={undefined}
+            hideVideoUploader
+            isMultiple={true}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 6 }}>
+          <MediaUploaderTrigger
+            open={uploaderStates.singlePageHeroImage}
+            onClose={() => setUploaderStates((prev) => ({ ...prev, singlePageHeroImage: false }))}
+            onSave={(urls) => setFieldValue('singlePageHeroImage', urls)}
+            value={values?.singlePageHeroImage}
+            label="Single Page Hero Image"
+            onAdd={() => setUploaderStates((prev) => ({ ...prev, singlePageHeroImage: true }))}
+            onDelete={(filteredUrls) => setFieldValue('singlePageHeroImage', filteredUrls)}
+            folderName="campaigns"
+            hideImageUploader={undefined}
+            hideVideoUploader
             isMultiple={true}
           />
         </Grid>

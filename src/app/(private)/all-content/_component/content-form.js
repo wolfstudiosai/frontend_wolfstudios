@@ -210,7 +210,6 @@ export const ContentForm = ({ formikProps }) => {
               { value: 'Approved', label: 'Approved' },
               { value: 'Active', label: 'Active' },
               { value: 'Inactive', label: 'Inactive' },
-              { value: 'creatorStatus', label: 'Creator Status' },
             ]}
           />
         </Grid>
@@ -322,12 +321,14 @@ export const ContentForm = ({ formikProps }) => {
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomSelect
             name="postingStatus"
-            label="Asset Status"
+            label="Posting Status"
             value={values.postingStatus}
             onChange={(value) => setFieldValue('postingStatus', value)}
             options={[
-              { value: 'Posted', label: 'Posted' },
-              { value: 'Not Posted', label: 'Not Posted' },
+              { value: 'Active', label: 'Active' },
+              { value: 'Rejected', label: 'Rejected' },
+              { value: 'Pending', label: 'Pending' },
+              { value: 'Approved', label: 'Approved' },
             ]}
           />
         </Grid>

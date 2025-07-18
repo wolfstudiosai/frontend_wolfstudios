@@ -9,10 +9,8 @@ import { IconWithoutText } from '/src/components/utils/icon-text';
 import { PartnerRightPanel } from './partner-right-panel';
 import { formatCompactNumber } from '/src/utils/helper';
 
-export const PartnerCardTwo = ({ content, fetchList }) => {
-  const [openRightPanel, setOpenRightPanel] = React.useState(null);
-
-  console.log(content, 'content from sidebar......');
+export const PartnerCardTwo = ({ content }) => {
+  const [openRightPanel, setOpenRightPanel] = React.useState(false);
 
   return (
     <Box>
@@ -27,7 +25,7 @@ export const PartnerCardTwo = ({ content, fetchList }) => {
           width: { xs: '100%', sm: '350px', md: '380px', lg: '408px' },
           maxWidth: '100%',
         }}
-        onClick={() => setOpenRightPanel(content)}
+        onClick={() => setOpenRightPanel(true)}
       >
         <Box
           component="img"
@@ -116,13 +114,15 @@ export const PartnerCardTwo = ({ content, fetchList }) => {
           </Grid>
         </CardContent>
       </Card>
-      <PartnerRightPanel
-        fetchList={fetchList}
-        onClose={() => setOpenRightPanel(null)}
-        open={openRightPanel ? true : false}
-        data={content}
-        view={'QUICK'}
-      />
+
+      {openRightPanel && (
+        <PartnerRightPanel
+          onClose={() => setOpenRightPanel(false)}
+          open={openRightPanel}
+          view={'QUICK'}
+          id={content?.id}
+        />
+      )}
     </Box>
   );
 };
