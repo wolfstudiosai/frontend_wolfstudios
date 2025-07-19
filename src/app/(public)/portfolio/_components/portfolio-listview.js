@@ -141,6 +141,7 @@ export const PortfolioListView = () => {
     mutate: mutateViews,
   } = useSWR('portfolioViews', getPortfolioViews);
 
+
   // get single view
   const getSingleView = async (viewId, paginationProps) => {
     try {
@@ -231,7 +232,6 @@ export const PortfolioListView = () => {
 
       const response = await updatePortfolioAsync(newRow.id, finalData);
       if (response.success) {
-        toast.success('Portfolio updated successfully');
         setOpen(false);
         getSingleView(viewId);
       }

@@ -26,9 +26,6 @@ import {
   createCampaignAsync,
   createCampaignView,
   deleteCampaignBulkAsync,
-  getCampaignListAsync,
-  getCampaignViews,
-  getSingleCampaignView,
   updateCampaignAsync,
   updateCampaignView,
 } from '../_lib/campaign.actions';
@@ -40,7 +37,7 @@ import { useCampaignViews } from '../hook/use-campaign-views';
 import { useCampaignView } from '../hook/use-campaign-view';
 
 export const CampaignListView = () => {
-  console.log('rendering CampaignListView......');
+  console.log('rendering campaign list view...');
   const theme = useTheme();
   const router = useRouter();
   const anchorEl = React.useRef(null);
@@ -127,28 +124,9 @@ export const CampaignListView = () => {
   const columns = useCampaignColumns(anchorEl, visibleColumns, setMediaToShow, handleUploadModalOpen);
 
   // swr
-  const { viewsData, viewsError, isViewsLoading } = useCampaignViews();
+  const { viewsData, isViewsLoading } = useCampaignViews();
   const { campaignMeta, columns: campaignColumns, isCampaignsLoading } = useRecordCampaignList();
-  const { singleView, singleViewError, isSingleViewLoading, refreshAllCampaignView } = useCampaignView(selectedViewId, pagination);
-
-  // get single view
-  const getSingleView = async (viewId, paginationProps) => {
-    try {
-      const viewPagination = paginationProps ? paginationProps : pagination;
-      const res = await getSingleCampaignView(viewId, viewPagination);
-
-      if (res.success) {
-        setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
-        setTotalRecords(res.data.count);
-        setSelectedViewData(res.data);
-        setFilters(res.data.meta?.filters || []);
-        setGate(res.data.meta?.gate || 'and');
-        setSort(res.data.meta?.sort || []);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { singleView, isSingleViewLoading, refreshViewData, refreshAllCampaignView } = useCampaignView(selectedViewId, pagination);
 
   async function updateView(props) {
     const viewFilters = props.filters ? props.filters : filters;
@@ -200,9 +178,9 @@ export const CampaignListView = () => {
     if (res.success) {
       refreshAllCampaignView();
       return newRow;
-    } else {
-      return oldRow;
     }
+
+    return oldRow;
   }, [viewId]);
 
   // handle row selection
@@ -277,7 +255,7 @@ export const CampaignListView = () => {
 
       const res = await updateCampaignView(viewId, data);
       if (res.success) {
-        refreshAllCampaignView();
+        refreshViewData();
         handleClosePopoverHide();
       }
     }
@@ -287,24 +265,33 @@ export const CampaignListView = () => {
   // handle filter apply
   const handleFilterApply = async () => {
     if (viewId) {
-      updateView({ filters }).then(() => refreshAllCampaignView());
+      const res = await updateView({ filters });
+      if (res.success) {
+        refreshViewData();
+      }
     }
   };
 
   // handle remove filter condition
-  const handleRemoveFilterCondition = (index) => {
+  const handleRemoveFilterCondition = async (index) => {
     const newFilters = filters.filter((_, i) => i !== index);
     setFilters(newFilters);
     if (viewId) {
-      updateView({ filters: newFilters }).then(() => refreshAllCampaignView());
+      const res = await updateView({ filters: newFilters });
+      if (res.success) {
+        refreshViewData();
+      }
     }
   };
 
   // handle clear filters
-  const handleClearFilters = () => {
+  const handleClearFilters = async () => {
     setFilters([]);
     if (viewId) {
-      updateView({ filters: [] }).then(() => refreshAllCampaignView());
+      const res = await updateView({ filters: [] });
+      if (res.success) {
+        refreshViewData();
+      }
     }
   };
 
@@ -318,8 +305,8 @@ export const CampaignListView = () => {
       // set views
       setViews(viewsData.data);
 
-      if (viewsData.success && viewsData.data.length > 0) {
-        const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
+      if (viewsData.success && viewsData?.data?.length > 0) {
+        const firstView = viewsData?.data?.find((view) => view?.id === viewId) || viewsData?.data[0];
         setSelectedViewId(firstView?.id);
 
         if (!viewId) {
@@ -333,7 +320,7 @@ export const CampaignListView = () => {
           gate: 'and',
           isPublic: true,
           filters: [],
-          columns: columns.map((col) => col.columnName),
+          columns: campaignColumns.map((col) => col.columnName),
           sort: [],
           groups: [],
         };
@@ -353,8 +340,10 @@ export const CampaignListView = () => {
               createdAt: createViewData?.createdAt,
             },
           ]);
+
+          mutate('campaignViews');
           setSelectedViewId(res.data.id);
-          router.push(`?tab=campaign&view=${res.data.id}`);
+          router.replace(`?tab=campaign&view=${res.data.id}`);
         }
       }
     } catch (error) {
@@ -371,6 +360,18 @@ export const CampaignListView = () => {
       initialize();
     }
   }, [campaignMeta, viewsData, searchParams]);
+
+
+  // WILL TEST IT LATER
+  // React.useEffect(() => {
+  //   if (searchParams.get('tab') === 'campaign') {
+  //     if (campaignMeta && viewsData && !hasInitialized.current) {
+  //       hasInitialized.current = true;
+  //       setPagination({ pageNo: 1, limit: 20 });
+  //       initialize();
+  //     }
+  //   }
+  // }, [campaignMeta, viewsData]);
 
   // store isView sidebar is open or not on local storage
   const handleOpenViewSidebar = () => {
@@ -449,7 +450,7 @@ export const CampaignListView = () => {
               sort={sort}
               setSort={setSort}
               updateView={updateView}
-              getSingleView={getSingleView}
+              refreshViewData={refreshViewData}
             />
           </Box>
 

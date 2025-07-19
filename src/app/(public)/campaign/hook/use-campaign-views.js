@@ -5,7 +5,7 @@ import { useSWRConfig } from 'swr';
 export const useCampaignViews = () => {
     const swrKey = 'campaignViews';
     const { cache } = useSWRConfig();
-    const hasCache = cache.get(swrKey);
+    const hasCache = cache.has(swrKey);
 
     const {
         data: viewsData,

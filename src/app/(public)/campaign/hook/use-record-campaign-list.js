@@ -1,12 +1,11 @@
-import useSWR, { useSWRConfig, unstable_serialize } from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import { getCampaignListAsync } from '../_lib/campaign.actions';
 
 export const useRecordCampaignList = () => {
     const pagination = { page: 1, rowsPerPage: 1 };
     const swrKey = ['recordCampaignList', JSON.stringify(pagination)];
     const { cache } = useSWRConfig();
-    const serializedKey = unstable_serialize(swrKey);
-    const hasCache = cache.get(serializedKey);
+    const hasCache = cache.has(swrKey);
 
     const {
         data: campaigns,

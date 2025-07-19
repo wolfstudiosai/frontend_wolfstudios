@@ -353,6 +353,8 @@ const SingleView = ({
       const nextAvailableView =
         viewsWithoutDeleted.find((v) => v.id === selectedView?.meta?.id) || viewsWithoutDeleted[0];
       setSelectedViewId(nextAvailableView?.id);
+      const mutateViews = tab === 'campaign' ? 'campaignViews' : null;
+      mutate(mutateViews);
       router.push(`?tab=${tab}&view=${nextAvailableView.id}`);
     }
   };
@@ -370,6 +372,8 @@ const SingleView = ({
     const res = await updateCampaignView(view.id, { label: viewLabel });
     if (res.success) {
       setViews(views.map((v) => (v.id === view.id ? { ...v, label: viewLabel } : v)));
+      const mutateViews = tab === 'campaign' ? 'campaignViews' : null;
+      mutate(mutateViews);
       setLoading(false);
       toast.success('View renamed successfully');
     }
