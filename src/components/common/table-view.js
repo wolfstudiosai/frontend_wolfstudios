@@ -38,6 +38,7 @@ import {
   deleteCampaignView,
   updateCampaignView,
 } from '/src/app/(public)/campaign/_lib/campaign.actions';
+import { mutate } from 'swr';
 
 export default function TableView({
   views,
@@ -89,10 +90,11 @@ export default function TableView({
       groups: [],
     };
     const res = await createCampaignView(data);
-    console.log(res);
+
     if (res.success) {
       setAnchorEl(null);
       setViews([...views, res.data]);
+      // mutate('campaignViews');
     }
   };
 
