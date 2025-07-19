@@ -91,7 +91,7 @@ export const SpaceRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
 
   React.useEffect(() => {
     if (spaceData?.data) {
-      setValues(spaceData?.data);
+      setValues(defaultSpace(spaceData?.data));
     }
   }, [spaceData?.data]);
 
