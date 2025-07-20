@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Grid2 as Grid, Typography, useColorScheme } from '@mui/material';
+import { Box, FormHelperText, Grid2 as Grid, Typography, useColorScheme } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import FormControl from '@mui/material/FormControl';
@@ -121,12 +121,15 @@ export function AccountDetailsForm({ isEditing, values, errors, handleChange, ha
                       <FormControl fullWidth error={Boolean(errors.contactNumber)}>
                         <InputLabel>Contact No.</InputLabel>
                         {isEditing ? (
-                          <OutlinedInput
-                            name="contactNumber"
-                            value={values.contactNumber}
-                            onChange={handleChange}
-                            type="number"
-                          />
+                          <>
+                            <OutlinedInput
+                              name="contactNumber"
+                              value={values.contactNumber}
+                              onChange={handleChange}
+                              type="text"
+                            />
+                            <FormHelperText>{errors.contactNumber}</FormHelperText>
+                          </>
                         ) : (
                           <Typography color="text.secondary">{values.contactNumber || 'N/A'}</Typography>
                         )}

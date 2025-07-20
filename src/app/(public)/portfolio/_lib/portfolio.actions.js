@@ -53,7 +53,6 @@ export const createPortfolioAsync = async (data) => {
 };
 
 export const updatePortfolioAsync = async (id, data) => {
-  console.log('payload.......: ', data);
   try {
     const res = await api.patch(`/portfolios/${id}`, {
       ...data,

@@ -197,12 +197,6 @@ export const PortfolioRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
     </>
   );
 
-  // React.useEffect(() => {
-  //   if (data) {
-  //     setValues(defaultPortfolio(data));
-  //   }
-  // }, [data]);
-
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
       <PageLoader loading={isLoading}>

@@ -1,17 +1,17 @@
 'use client';
 
-import { Box, Button, Divider, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { A11y, Autoplay, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
+import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
-import { isSupabaseUrl, isVideoContent, pxToRem } from '/src/utils/helper';
+import { isVideoContent, pxToRem } from '/src/utils/helper';
+import { isSupabaseUrl } from '../../../../utils/helper';
 
-export const ProductionQuickView = ({ data, actionButtons }) => {
-  const theme = useTheme();
-
+export const ProductionQuickView = ({ data }) => {
+  console.log(data)
   return (
     <Box sx={{ position: 'relative' }}>
       <Box
@@ -25,7 +25,7 @@ export const ProductionQuickView = ({ data, actionButtons }) => {
       >
         <Box sx={{ backgroundColor: 'var(--mui-palette-background-paper)', mb: 1, p: 2 }}>
           <Typography variant="h6" fontWeight={600} gutterBottom>
-            Vertical Gallery
+            Image Inspiration
           </Typography>
           <Box sx={{ px: 2 }}>
             <SliderWrapper
@@ -49,7 +49,7 @@ export const ProductionQuickView = ({ data, actionButtons }) => {
                 mx: { xs: -1.5, md: -2 },
               }}
             >
-              {data?.VerticalImageGallery?.map((item, index) => (
+              {data?.imageInspiration?.map((item, index) => (
                 <SwiperSlide key={index}>
                   {isVideoContent(item) ? (
                     <Box
@@ -98,7 +98,7 @@ export const ProductionQuickView = ({ data, actionButtons }) => {
           <Typography variant="subtitle1" color="text.secondary" fontWeight={'bold'}>
             {data?.name}
           </Typography>
-          <Stack direction="row" spacing={2}>
+          {/* <Stack direction="row" spacing={2}>
             <Typography variant="subtitle1" color="text.secondary">
               Category:{' '}
               {data?.PortfolioCategoriesPortfolios?.map((item) => item?.PortfolioCategories?.Name)?.join(', ') || 'N/A'}
@@ -109,56 +109,19 @@ export const ProductionQuickView = ({ data, actionButtons }) => {
             <Typography variant="subtitle1" color="text.secondary">
               Partner HQ: {data?.PartnerHQPortfolios?.map((item) => item?.PartnerHQ?.Name)?.join(', ') || 'N/A'}
             </Typography>
-          </Stack>
+          </Stack> */}
 
           <Typography variant="body1">
-            {data?.Projectsinglepagefulldescription || 'No description available.'}
+            {data?.internalNotes || 'No internal notes available.'}
           </Typography>
         </Box>
-        <Typography variant="subtitle1" fontWeight="bold" mt={3} color="text.secondary" sx={{ display: 'none' }}>
-          Vertical Gallery
-        </Typography>
-        <Grid container spacing={1} sx={{ mt: 2, display: 'none' }} columns={{ xs: 10 }}>
-          {data?.VerticalImageGallery?.map((item, index) => (
-            <Grid item size={{ xs: 2 }} key={index}>
-              {isVideoContent(item) ? (
-                <Box
-                  component="video"
-                  src={item}
-                  controls
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  sx={{
-                    height: pxToRem(300),
-                    width: '100%',
-                    objectFit: 'contain',
-                    border: '1px solid var(--mui-palette-divider)',
-                  }}
-                />
-              ) : (
-                <Box
-                  component="img"
-                  src={isSupabaseUrl(item) ? `${process.env.NEXT_PUBLIC_SUPABASE_PREVIEW_PREFIX}${item}` : item}
-                  sx={{
-                    height: pxToRem(300),
-                    width: '100%',
-                    objectFit: 'contain',
-                    border: '1px solid var(--mui-palette-divider)',
-                  }}
-                />
-              )}
-            </Grid>
-          ))}
-        </Grid>
 
         <Box sx={{ backgroundColor: 'var(--mui-palette-background-paper)', my: 1, p: 2 }}>
           <Typography variant="h6" fontWeight={600} gutterBottom>
-            Horizontal Gallery
+            Video Inspiration
           </Typography>
           <Grid container spacing={0} sx={{ mt: 1 }}>
-            {data?.HorizontalImageGallery?.map((item, index) => (
+            {data?.videoInspiration?.map((item, index) => (
               <Grid item size={{ xs: 2 }} key={index}>
                 {isVideoContent(item) ? (
                   <Box
@@ -193,14 +156,6 @@ export const ProductionQuickView = ({ data, actionButtons }) => {
           </Grid>
         </Box>
       </Box>
-      <Stack
-        direction="row"
-        justifyContent="flex-start"
-        gap={1}
-        sx={{ postion: 'absolute', bottom: 0, py: 1, backgroundColor: 'var(--mui-palette-background-paper)' }}
-      >
-        {actionButtons}
-      </Stack>
     </Box>
   );
 };

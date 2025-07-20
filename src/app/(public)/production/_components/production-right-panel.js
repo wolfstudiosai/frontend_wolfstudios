@@ -91,7 +91,7 @@ export const ProductionRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
 
   React.useEffect(() => {
     if (productionData?.data) {
-      setValues(productionData?.data);
+      setValues(defaultProduction(productionData?.data));
     }
   }, [productionData]);
 
@@ -193,7 +193,7 @@ export const ProductionRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
       {panelView === 'QUICK' ? (
         <PageLoader loading={isLoading}>
-          <ProductionQuickView data={productionData?.data} actionButtons={actionButtons} />
+          <ProductionQuickView data={productionData?.data} />
         </PageLoader>
       ) : (
         <ProductionForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />

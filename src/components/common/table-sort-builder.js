@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
     Button,
     IconButton,
@@ -15,7 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Iconify } from '/src/components/iconify/iconify';
 import { useSearchParams } from 'next/navigation';
 
-const TableSortBuilder = ({ allColumns, sort, setSort, updateView, getSingleView }) => {
+const TableSortBuilder = ({ allColumns, sort, setSort, updateView, refreshViewData }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [searchText, setSearchText] = useState('');
     const searchParams = useSearchParams();
@@ -34,26 +34,28 @@ const TableSortBuilder = ({ allColumns, sort, setSort, updateView, getSingleView
     const handleOpen = (event) => setAnchorEl(event.currentTarget);
     const handleClose = () => setAnchorEl(null);
 
-    const handleSortChange = (value, key) => {
+    const handleSortChange = async (value, key) => {
         if (!sort[0]) return;
         const updated = { ...sort[0], [key]: key === 'key' ? value.columnName : value.value };
         setSort([updated]);
 
         const view = searchParams.get('view');
         if (view) {
-            updateView({ sort: [updated] }).then(() => {
-                getSingleView(view)
-            });
+            const res = await updateView({ sort: [updated] });
+            if (res.success) {
+                refreshViewData();
+            }
         }
     };
 
-    const handleRemoveSort = () => {
+    const handleRemoveSort = async () => {
         setSort([]);
         const view = searchParams.get('view');
         if (view) {
-            updateView({ sort: [] }).then(() => {
-                getSingleView(view)
-            });
+            const res = await updateView({ sort: [] });
+            if (res.success) {
+                refreshViewData();
+            }
         }
     };
 

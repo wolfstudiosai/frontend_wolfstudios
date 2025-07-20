@@ -97,6 +97,7 @@ export const useCampaignColumns = (anchorEl, visibleColumns, setMediaToShow, han
         headerName: 'Campaign Status',
         width: 150,
         editable: true,
+        valueFormatter: (value) => value.toLowerCase().charAt(0).toUpperCase() + value.toLowerCase().slice(1),
         renderEditCell: (params) => <SelectEditCell {...params} options={campaignProgressStatus} />,
       },
       {
