@@ -38,7 +38,6 @@ import { usePortfolioColumns } from '../hooks/use-portfolio-columns';
 import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
 
 export const PortfolioListView = () => {
-  console.log('rendering PortfolioListView......');
   const theme = useTheme();
   const router = useRouter();
   const anchorEl = React.useRef(null);

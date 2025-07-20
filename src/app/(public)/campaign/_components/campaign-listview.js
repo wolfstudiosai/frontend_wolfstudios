@@ -37,7 +37,6 @@ import { useCampaignViews } from '../hook/use-campaign-views';
 import { useCampaignView } from '../hook/use-campaign-view';
 
 export const CampaignListView = () => {
-  console.log('rendering campaign list view...');
   const theme = useTheme();
   const router = useRouter();
   const anchorEl = React.useRef(null);
