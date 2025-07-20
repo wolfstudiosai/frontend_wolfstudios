@@ -38,6 +38,7 @@ import {
   deleteCampaignView,
   updateCampaignView,
 } from '/src/app/(public)/campaign/_lib/campaign.actions';
+import { mutate } from 'swr';
 
 export default function TableView({
   views,
@@ -89,10 +90,11 @@ export default function TableView({
       groups: [],
     };
     const res = await createCampaignView(data);
-    console.log(res);
+
     if (res.success) {
       setAnchorEl(null);
       setViews([...views, res.data]);
+      // mutate('campaignViews');
     }
   };
 
@@ -351,6 +353,8 @@ const SingleView = ({
       const nextAvailableView =
         viewsWithoutDeleted.find((v) => v.id === selectedView?.meta?.id) || viewsWithoutDeleted[0];
       setSelectedViewId(nextAvailableView?.id);
+      const mutateViews = tab === 'campaign' ? 'campaignViews' : null;
+      mutate(mutateViews);
       router.push(`?tab=${tab}&view=${nextAvailableView.id}`);
     }
   };
@@ -368,6 +372,8 @@ const SingleView = ({
     const res = await updateCampaignView(view.id, { label: viewLabel });
     if (res.success) {
       setViews(views.map((v) => (v.id === view.id ? { ...v, label: viewLabel } : v)));
+      const mutateViews = tab === 'campaign' ? 'campaignViews' : null;
+      mutate(mutateViews);
       setLoading(false);
       toast.success('View renamed successfully');
     }

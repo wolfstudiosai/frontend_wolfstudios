@@ -421,8 +421,8 @@ export const usePortfolioColumns = (anchorEl, visibleColumns, setMediaToShow, ha
             })
         },
         {
-            field: 'country',
-            headerName: 'Country',
+            field: 'countries',
+            headerName: 'Countries',
             width: 300,
             editable: true,
             renderCell: (params) => renderAutoCompleteCell(params.value),
@@ -438,7 +438,7 @@ export const usePortfolioColumns = (anchorEl, visibleColumns, setMediaToShow, ha
                 },
                 defaultOptions: autoCompleteOptions.countries,
                 onFocus: (name) => setAutocompleteFocus({ currentItem: name, prevItems: [] }),
-                name: 'country',
+                name: 'countries',
                 multiple: true,
             })
         },

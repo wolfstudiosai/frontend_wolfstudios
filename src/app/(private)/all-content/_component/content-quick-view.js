@@ -104,9 +104,9 @@ export const ContentQuickView = ({ data, isEdit }) => {
         comment: newComment,
         files: selectedFiles, // Add this if API accepts files
       });
-      if (response.success) {
-        window.location.reload();
-      }
+      // if (response.success) {
+      //   window.location.reload();
+      // }
     } catch (error) {
       console.error('Error:', error);
     }
@@ -194,6 +194,8 @@ export const ContentQuickView = ({ data, isEdit }) => {
       </Typography>
     );
   };
+
+  console.log(data)
 
   return (
     <>

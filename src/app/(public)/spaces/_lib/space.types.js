@@ -39,51 +39,51 @@ export const defaultSpace = (data) => {
     // Relationships
     campaigns: Array.isArray(data?.campaigns)
       ? data.campaigns.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     cities: Array.isArray(data?.cities)
       ? data.cities.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     countries: Array.isArray(data?.countries)
       ? data.countries.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     states: Array.isArray(data?.states)
       ? data.states.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     tags: Array.isArray(data?.tags)
       ? data.tags.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     destinations: Array.isArray(data?.destinations)
       ? data.destinations.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     productionHQ: Array.isArray(data?.productionHQ)
       ? data.productionHQ.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
     productionHQ2: Array.isArray(data?.productionHQ2)
       ? data.productionHQ2.map((item) => ({
-          value: item?.id || null,
-          label: item?.name || '',
-        }))
+        value: item?.id || null,
+        label: item?.name || '',
+      }))
       : [],
 
     // Images

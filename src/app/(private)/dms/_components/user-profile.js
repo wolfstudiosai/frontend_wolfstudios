@@ -1,3 +1,6 @@
+"use client";
+
+import React from 'react';
 import { Avatar, Box, Divider, IconButton, Stack, Typography } from "@mui/material";
 import { useContext } from "react";
 import { StyledBadge } from "./avatar-badge";

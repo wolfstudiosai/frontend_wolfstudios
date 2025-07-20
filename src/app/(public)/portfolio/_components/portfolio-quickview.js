@@ -82,19 +82,19 @@ export const PortfolioQuickView = ({ data, isEdit }) => {
         </Typography>
         <Stack direction="row" spacing={2} mb={2}>
           <Typography variant="subtitle1" color="text.secondary">
-            Category: {data?.portfolioCategories?.map((item) => item?.portfolioCategories?.name)?.join(', ') || 'N/A'}
+            Category: {data?.portfolioCategories?.map((item) => item?.name)?.join(', ') || 'N/A'}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
-            State: {data?.states?.map((item) => item?.states?.name)?.join(', ') || 'N/A'}
+            State: {data?.states?.map((item) => item?.name)?.join(', ') || 'N/A'}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
-            Partner HQ: {data?.partnerHO?.map((item) => item?.partnerHQ?.name)?.join(', ') || 'N/A'}
+            Partner HQ: {data?.partnerHQ?.map((item) => item?.name)?.join(', ') || 'N/A'}
           </Typography>
         </Stack>
 
         <Divider sx={{ my: 2 }} />
 
-        <Typography variant="body1">{data?.Projectsinglepagefulldescription || 'No description available.'}</Typography>
+        <Typography variant="body1">{data?.projectSinglePageFullDescription || 'No description available.'}</Typography>
         <Divider sx={{ my: 2 }} />
       </Box>
       {/* Gallery Images */}
