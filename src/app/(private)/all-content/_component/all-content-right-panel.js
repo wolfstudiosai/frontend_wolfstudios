@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Icon } from '@iconify/react';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
+import { mutate as globalMutate } from 'swr';
 
 import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
@@ -20,11 +21,19 @@ import { useGetContentData } from '/src/services/content/useContentData';
 import { useContentList } from '/src/services/content/useContentList';
 import PageLoader from '/src/components/loaders/PageLoader';
 
+const revalidateAllContentLists = () => {
+  globalMutate(
+    (key) => Array.isArray(key) && key[0] === 'content-groups',
+    undefined, // let SWR re-fetch
+    { revalidate: true }
+  );
+};
+
 export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { mutate: mutateList } = useContentList();
   const { data: contentData, isLoading, mutate } = useGetContentData(id);
   const { isLogin } = useAuth();
-  const [isFeatured, setIsFeatured] = React.useState(contentData?.data?.isFeatured);
+  const [isFeatured, setIsFeatured] = React.useState(false);
   const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
@@ -56,23 +65,26 @@ export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
         const createPayload = {
           ...rest,
           thumbnailImage: Array.isArray(finalData.thumbnailImage)
-            ? finalData.thumbnailImage[0]
-            : finalData.thumbnailImage,
+            ? finalData.thumbnailImage[0] || ''
+            : finalData.thumbnailImage || '',
         };
+
+        console.log(finalData.thumbnailImage, 'finalData.thumbnailImage');
+        console.log(createPayload, 'createPayload');
 
         const res = id
           ? await updateContentAsync({
             ...finalData,
             thumbnailImage: Array.isArray(finalData.thumbnailImage)
-              ? finalData.thumbnailImage[0]
-              : finalData.thumbnailImage,
+              ? finalData.thumbnailImage[0] || ''
+              : finalData.thumbnailImage || '',
           })
           : await createContentAsync(createPayload);
         if (res.success) {
           onClose?.();
           resetForm();
           mutate();
-          mutateList();
+          revalidateAllContentLists();
         } else {
           console.error('Operation failed:', res.message);
         }
@@ -88,13 +100,14 @@ export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   React.useEffect(() => {
     if (contentData?.data) {
       setValues(defaultContent(contentData?.data));
+      setIsFeatured(contentData?.data?.isFeatured);
     }
   }, [contentData]);
 
   const handleDelete = async () => {
     try {
       onClose?.();
-      mutateList();
+      revalidateAllContentLists();
     } catch (error) {
       console.error('Error:', error);
     }
@@ -121,7 +134,7 @@ export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
           : finalData.thumbnailImage,
       });
       mutate();
-      mutateList();
+      revalidateAllContentLists();
     } catch (error) {
       console.error('Error:', error);
     }

@@ -19,6 +19,7 @@ import {
 
 import { Iconify } from '/src/components/iconify/iconify';
 import { FadeIn } from '/src/components/animation/fade-in';
+import Link from 'next/link';
 
 export function ContentSection() {
   const theme = useTheme();
@@ -40,7 +41,8 @@ export function ContentSection() {
             </Typography>
             <Button
               variant="text"
-              // onClick={() => router.push('/portfolio')}
+              as={Link}
+              href="/all-content"
               endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
               sx={{
                 margin: 0,
