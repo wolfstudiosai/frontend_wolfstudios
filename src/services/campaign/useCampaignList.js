@@ -2,7 +2,7 @@ import useSWRInfinite from 'swr/infinite';
 
 import { getCampaignGroupListAsync } from '../../app/(public)/campaign/_lib/campaign.actions';
 
-const getKey = (pageIndex, previousPageData, status) => {
+const getKey = (pageIndex, previousPageData, status, featured) => {
   if (previousPageData && !previousPageData.data?.length) return null;
 
   return [
@@ -10,10 +10,11 @@ const getKey = (pageIndex, previousPageData, status) => {
     pageIndex + 1,
     18, // page size
     status, // filter by status
+    featured, // filter by featured
   ];
 };
 
-export const useCampaignList = (status = '') => {
+export const useCampaignList = (status = '', featured = '') => {
   const {
     data: pages,
     error,
@@ -22,19 +23,26 @@ export const useCampaignList = (status = '') => {
     isValidating,
     mutate,
   } = useSWRInfinite(
-    (pageIndex, previousPageData) => getKey(pageIndex, previousPageData, status),
-    ([, pageNo, limit, statusFilter]) => {
-      const filters = statusFilter
-        ? [
-          {
-            key: 'campaignStatus',
-            operator: 'contains',
-            type: 'string',
-            value: statusFilter,
-          },
-        ]
-        : [];
+    (pageIndex, previousPageData) => getKey(pageIndex, previousPageData, status, featured),
+    ([, pageNo, limit, statusFilter, featuredFilter]) => {
+      const filters = [];
+      if (featuredFilter) {
+        filters.push({
+          key: 'isFeatured',
+          type: 'boolean',
+          operator: 'is',
+          value: true,
+        });
+      }
 
+      if (statusFilter) {
+        filters.push({
+          key: 'campaignStatus',
+          operator: 'contains',
+          type: 'string',
+          value: statusFilter,
+        });
+      }
       return getCampaignGroupListAsync({ page: pageNo, rowsPerPage: limit }, filters, 'and');
     },
     {
