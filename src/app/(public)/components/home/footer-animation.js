@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -26,10 +26,10 @@ export const FooterAnimation = () => {
     // }, []);
     return (
         <>
-            <div id="page1" style={{ backgroundColor: 'var(--mui-palette-background-paper)', zIndex: 100 }}>
-                <Typography variant="h1" fontWeight={600}>
+            <Box id="page1" sx={{ backgroundColor: 'background.secondaryBackground', zIndex: 100 }}>
+                <Typography variant="h1" fontWeight={600} sx={{ color: 'text.primary' }}>
                     {letter.map((letter, index) => (
-                        <span key={index} className="letter a" style={{ color: 'var(--mui-palette-text-primary)' }}>
+                        <span key={index} className="letter a">
                             {letter === ' ' ? '\u00A0' : letter}
                         </span>
                     ))}
@@ -41,7 +41,7 @@ export const FooterAnimation = () => {
             </span>
           ))}
         </Typography> */}
-            </div>
+            </Box>
         </>
     );
 };

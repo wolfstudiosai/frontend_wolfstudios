@@ -41,7 +41,7 @@ export function colorSchemes() {
           level1: darken(baseDarkColor, 0.05),
           level2: darken(baseDarkColor, 0.1),
           level3: darken(baseDarkColor, 0.15),
-          secondaryBackground: '#0B0B0B',
+          secondaryBackground: '#302c29',
         },
         common: { black: '#f7f7f7', white: '#ffffff' },
         divider: 'var(--mui-palette-neutral-700)',

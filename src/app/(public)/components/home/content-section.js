@@ -89,7 +89,7 @@ export function ContentSection() {
             order: { xs: 2, md: 1, lg: 1 },
             alignSelf: { md: 'flex-start' },
             height: { md: 'auto' },
-            backgroundColor: 'var(--mui-palette-background-paper)',
+            backgroundColor: 'background.secondaryBackground',
           }}
         >
           <Stack direction="column" gap={1}>
@@ -337,7 +337,7 @@ export function ContentSection() {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            backgroundColor: 'var(--mui-palette-background-paper)',
+            backgroundColor: 'background.secondaryBackground',
           }}
         >
           <Typography

@@ -3,6 +3,9 @@ import { Box, Typography } from '@mui/material';
 import { Stack } from '@mui/material';
 import { useState } from 'react';
 import { AllContentRightPanel } from './all-content-right-panel';
+import { SliderWrapper } from '/src/components/slider/slider-wrapper';
+import { SwiperSlide } from 'swiper/react';
+import { FadeIn } from '/src/components/animation/fade-in';
 
 const AllContentFeaturedView = ({ data }) => {
     return (
@@ -20,30 +23,47 @@ const AllContentFeaturedView = ({ data }) => {
                     <Typography variant="h6" sx={{ marginBottom: '16px' }}>
                         Featured Content
                     </Typography>
-                    <Box
-                        sx={{
-                            display: 'inline-flex',
-                            width: 'auto',
-                            minWidth: '100%',
-                            alignItems: 'flex-start',
-                            gap: { md: 0.5 },
-                        }}
-                    >
-                        {data?.length > 0 && data?.map((content, index) => (
-                            <Box
-                                key={content.id}
-                                sx={{
-                                    display: 'inline-block',
-                                    width: '180px',
-                                    flexShrink: 0,
-                                }}
-                            >
-                                <Stack spacing={0.5}>
-                                    <ContentFeaturedCard content={content} />
-                                </Stack>
-                            </Box>
-                        ))}
-                    </Box>
+                    <Stack spacing={2}>
+                        <SliderWrapper
+                            loop={false}
+                            breakpoints={{
+                                0: {
+                                    slidesPerView: 1,
+                                    spaceBetween: 16,
+                                },
+                                768: {
+                                    slidesPerView: 2,
+                                    spaceBetween: 20,
+                                },
+                                1024: {
+                                    slidesPerView: 3,
+                                    spaceBetween: 24,
+                                },
+                                1440: {
+                                    slidesPerView: 4,
+                                    spaceBetween: 28,
+                                },
+                            }}
+                            sx={{
+                                '& .swiper-wrapper': {
+                                    gap: '5px',
+                                },
+                                '& .swiper-slide': {
+                                    width: 'auto !important',
+                                    marginRight: '0 !important',
+                                    height: 'auto',
+                                },
+                            }}
+                        >
+                            {data?.length > 0 && data[0] !== undefined && data?.map((content) => (
+                                <SwiperSlide key={content.id}>
+                                    <FadeIn>
+                                        <ContentFeaturedCard content={content} />
+                                    </FadeIn>
+                                </SwiperSlide>
+                            ))}
+                        </SliderWrapper>
+                    </Stack>
                 </Box>
             )}
         </>
@@ -60,8 +80,8 @@ const ContentFeaturedCard = ({ content }) => {
                 key={content.id}
                 sx={{
                     position: 'relative',
-                    height: '250px',
-                    width: '180px',
+                    height: '240px',
+                    width: '160px',
                     overflow: 'hidden',
                     borderRadius: '8px',
                     transition: 'transform 300ms ease',
