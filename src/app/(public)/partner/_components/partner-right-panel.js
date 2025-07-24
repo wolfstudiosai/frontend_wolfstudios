@@ -26,7 +26,7 @@ export const PartnerRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { data: partnerData, isLoading, mutate } = useGetPartnerData(id);
   const { mutate: mutateFeaturedPartnerList } = useFeaturedPartnerList();
   const { isLogin } = useAuth();
-  const [isFeatured, setIsFeatured] = React.useState(partnerData?.data?.isFeatured);
+  const [isFeatured, setIsFeatured] = React.useState(false);
   const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
@@ -104,6 +104,7 @@ export const PartnerRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
 
   React.useEffect(() => {
     if (partnerData?.data) {
+      setIsFeatured(partnerData?.data?.isFeatured);
       setValues(defaultPartner(partnerData?.data));
     }
   }, [partnerData?.data]);

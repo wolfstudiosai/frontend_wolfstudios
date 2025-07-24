@@ -29,7 +29,7 @@ export function ContentSection() {
     <Stack direction="column" gap={1}>
       <FadeIn>
         <Box sx={{ py: { xs: 1, md: 2 } }}>
-          <Stack direction="row">
+          <Stack direction="row" alignItems="center">
             <Typography
               variant="h4"
               fontWeight="bold"
@@ -89,6 +89,7 @@ export function ContentSection() {
             order: { xs: 2, md: 1, lg: 1 },
             alignSelf: { md: 'flex-start' },
             height: { md: 'auto' },
+            backgroundColor: 'var(--mui-palette-background-paper)',
           }}
         >
           <Stack direction="column" gap={1}>
@@ -336,6 +337,7 @@ export function ContentSection() {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
+            backgroundColor: 'var(--mui-palette-background-paper)',
           }}
         >
           <Typography
@@ -356,6 +358,7 @@ export function ContentSection() {
                 label={step}
                 variant={index === 0 ? 'filled' : 'soft'}
                 size="small"
+                color="primary"
                 sx={{
                   borderRadius: '20px',
                   px: 1,
