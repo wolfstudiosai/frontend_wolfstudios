@@ -21,13 +21,26 @@ import { useGetContentData } from '/src/services/content/useContentData';
 import { useContentList } from '/src/services/content/useContentList';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-const revalidateAllContentLists = () => {
-  globalMutate(
-    (key) => Array.isArray(key) && key[0] === 'content-groups',
-    undefined, // let SWR re-fetch
-    { revalidate: true }
-  );
-};
+// const revalidateAllContentLists = () => {
+//   globalMutate(
+//     (key) => {
+//       if (typeof key === 'string') {
+//         return key.toLowerCase().includes('content');
+//       }
+
+//       if (Array.isArray(key)) {
+//         return key.some(
+//           (part) => typeof part === 'string' && part.toLowerCase().includes('content')
+//         );
+//       }
+
+//       return false;
+//     },
+//     undefined,
+//     { revalidate: true }
+//   );
+// };
+
 
 export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { mutate: mutateList } = useContentList();
@@ -69,9 +82,6 @@ export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
             : finalData.thumbnailImage || '',
         };
 
-        console.log(finalData.thumbnailImage, 'finalData.thumbnailImage');
-        console.log(createPayload, 'createPayload');
-
         const res = id
           ? await updateContentAsync({
             ...finalData,
@@ -84,7 +94,7 @@ export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
           onClose?.();
           resetForm();
           mutate();
-          revalidateAllContentLists();
+          mutateList();
         } else {
           console.error('Operation failed:', res.message);
         }
@@ -107,7 +117,7 @@ export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const handleDelete = async () => {
     try {
       onClose?.();
-      revalidateAllContentLists();
+      mutateList();
     } catch (error) {
       console.error('Error:', error);
     }
@@ -134,7 +144,7 @@ export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
           : finalData.thumbnailImage,
       });
       mutate();
-      revalidateAllContentLists();
+      mutateList();
     } catch (error) {
       console.error('Error:', error);
     }

@@ -5,7 +5,7 @@ import { ContentCard } from './content-card';
 export default function AllContentGridView({ data }) {
 
   return (
-    <Grid container spacing={0.5}>
+    <Grid container spacing={0.5} mt={2}>
       {data?.map((content) => (
         <Grid
           key={content.id}

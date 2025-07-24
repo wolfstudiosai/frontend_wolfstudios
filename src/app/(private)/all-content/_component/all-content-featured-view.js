@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { Stack } from '@mui/material';
 import { useState } from 'react';
 import { AllContentRightPanel } from './all-content-right-panel';
@@ -16,6 +16,10 @@ const AllContentFeaturedView = ({ data }) => {
                         '&::-webkit-scrollbar': { display: 'none' },
                     }}
                 >
+
+                    <Typography variant="h6" sx={{ marginBottom: '16px' }}>
+                        Featured Content
+                    </Typography>
                     <Box
                         sx={{
                             display: 'inline-flex',
@@ -30,7 +34,7 @@ const AllContentFeaturedView = ({ data }) => {
                                 key={content.id}
                                 sx={{
                                     display: 'inline-block',
-                                    width: '220px',
+                                    width: '180px',
                                     flexShrink: 0,
                                 }}
                             >
@@ -56,9 +60,10 @@ const ContentFeaturedCard = ({ content }) => {
                 key={content.id}
                 sx={{
                     position: 'relative',
-                    height: '300px',
-                    width: '220px',
+                    height: '250px',
+                    width: '180px',
                     overflow: 'hidden',
+                    borderRadius: '8px',
                     transition: 'transform 300ms ease',
                     border: '1px solid var(--mui-palette-divider)',
                 }}
@@ -74,6 +79,7 @@ const ContentFeaturedCard = ({ content }) => {
                         right: 0,
                         bottom: 0,
                         zIndex: 0,
+                        borderRadius: '8px',
                         backgroundImage: `url("${encodeURI(content?.thumbnailImage)}")`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
@@ -88,7 +94,7 @@ const ContentFeaturedCard = ({ content }) => {
                         left: 0,
                         bottom: 0,
                         width: '100%',
-                        height: '40%',
+                        height: '30%',
                         background: 'linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))',
                         zIndex: 5,
                     }}

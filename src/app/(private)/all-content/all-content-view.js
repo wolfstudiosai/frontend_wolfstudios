@@ -6,7 +6,6 @@ import { Box, Button } from '@mui/material';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 
-import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import { paths } from '../../../paths';
 import { useContentList } from '../../../services/content/useContentList';
 import AllContentGridView from './_component/all-content-grid-view';
@@ -15,8 +14,10 @@ import ContentTags from './_component/content-tags';
 import PageLoader from '/src/components/loaders/PageLoader';
 import { Typography } from '@mui/material';
 import AllContentFeaturedView from './_component/all-content-featured-view';
+import { useSettings } from '/src/hooks/use-settings';
 
 export const AllContentView = () => {
+  const { setBreadcrumbs } = useSettings();
   const [selectedTag, setSelectedTag] = React.useState(null);
   const [openPanel, setOpenPanel] = React.useState(false);
   const [filters, setFilters] = React.useState({
@@ -35,14 +36,15 @@ export const AllContentView = () => {
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
+  React.useEffect(() => {
+    setBreadcrumbs([
+      { title: 'Dashboard', href: paths.private.overview },
+      { title: 'All Content', href: paths.private.all_content },
+    ]);
+  }, []);
+
   return (
     <PageContainer>
-      <CustomBreadcrumbs
-        items={[
-          { title: 'Dashboard', href: paths.private.overview },
-          { title: 'Content', href: '' },
-        ]}
-      />
       <PageHeader
         title="Contents"
         values={filters}
@@ -54,7 +56,7 @@ export const AllContentView = () => {
         setOpenPanel={setOpenPanel}
       />
 
-      <Box sx={{ display: 'flex', gap: 2 }}>
+      <Box sx={{ display: 'flex', gap: 2, overflow: 'auto' }}>
         <ContentTags selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
         <PageLoader loading={isLoading} error={error}>
           <Box sx={{ flex: 1, overflowX: 'hidden' }}>

@@ -11,7 +11,7 @@ const ContentTags = ({ selectedTag, setSelectedTag }) => {
     const theme = useTheme();
 
     return (
-        <Box sx={{ width: '180px' }}>
+        <Box sx={{ width: '180px', overflowY: 'auto', overflowX: 'hidden', position: 'sticky', top: 0, zIndex: 1 }}>
             <Typography variant="h6">Tags</Typography>
             <Divider sx={{ my: 1 }} />
             {isLoading ? <ContentTagSkeleton /> : (

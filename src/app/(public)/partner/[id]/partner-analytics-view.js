@@ -43,7 +43,11 @@ export default function PartnerAnalyticsView() {
     return (
         <PageLoader loading={loading}>
             <Grid container spacing={1} sx={{
-                pb: 2, alignItems: "start", height: isFeaturedCardVisible ? "calc(100vh - 78px)" : "calc(100vh - 62px)", overflow: "auto", '&::-webkit-scrollbar': { display: 'none' },
+                pb: 2,
+                alignItems: "start",
+                height: isFeaturedCardVisible ? "calc(100vh - 78px)" : "calc(100vh - 62px)",
+                overflow: "auto",
+                '&::-webkit-scrollbar': { display: 'none' },
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none'
             }}>

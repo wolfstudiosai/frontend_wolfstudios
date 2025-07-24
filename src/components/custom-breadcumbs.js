@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 
 export const CustomBreadcrumbs = ({ items }) => {
   return (
-    <Stack direction="column" sx={{ width: '100%', bgcolor: 'background.paper', p: 2 }} spacing={2}>
+    <Stack direction="column" sx={{ width: '100%', p: 2 }} spacing={2}>
       <Breadcrumbs aria-label="breadcrumb" separator="›">
         {items?.map((item, index) =>
           item.href ? (

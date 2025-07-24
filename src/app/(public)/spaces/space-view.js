@@ -6,13 +6,14 @@ import React from 'react';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 
-import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import { paths } from '../../../paths';
 import { useSpaceList } from '../../../services/space/useSpaceList';
 import { SpaceRightPanel } from './_components/space-right-panel';
 import { SpaceGridView } from './_components/space-gridview';
+import { useSettings } from '/src/hooks/use-settings';
 
 export const SpaceView = () => {
+  const { setBreadcrumbs } = useSettings();
   const [openPanel, setOpenPanel] = React.useState(false);
   const [filters, setFilters] = React.useState({
     COL: 4.5,
@@ -29,14 +30,15 @@ export const SpaceView = () => {
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
+  React.useEffect(() => {
+    setBreadcrumbs([
+      { title: 'Dashboard', href: paths.private.overview },
+      { title: 'Spaces', href: '' },
+    ]);
+  }, []);
+
   return (
     <PageContainer>
-      <CustomBreadcrumbs
-        items={[
-          { title: 'Dashboard', href: paths.private.overview },
-          { title: 'Spaces', href: '' },
-        ]}
-      />
       <PageHeader
         title="Spaces"
         values={filters}

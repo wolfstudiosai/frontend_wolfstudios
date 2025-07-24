@@ -27,6 +27,8 @@ import { MobileSideNav } from './mobile-side-nav';
 import { LoginForm } from '/src/app/auth/_components/LoginForm';
 import { publicRoutes } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
+import { useSettings } from '/src/hooks/use-settings';
+import { CustomBreadcrumbs } from '../custom-breadcumbs';
 
 export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const {
@@ -37,6 +39,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const [chatOpen, setChatOpen] = React.useState(false);
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false);
+  const { breadcrumbs } = useSettings();
   const router = useRouter();
 
   const { isLogin } = useAuth();
@@ -189,6 +192,11 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
               <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
                 <Logo height={40} width={120} />
               </Box>
+
+              {breadcrumbs.length > 0 && (
+                <CustomBreadcrumbs items={breadcrumbs} />
+              )}
+
               {/* nav items */}
               {/* <Stack
                 component="ul"
@@ -306,7 +314,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
           </Typography>
 
           <Stack spacing={2} direction="row" alignItems="center" justifyContent="space-between">
-            <SocialLogin  type="LOGIN|OTP" style={{ paddingY: '10px' }}>
+            <SocialLogin type="LOGIN|OTP" style={{ paddingY: '10px' }}>
               <Iconify icon="meteor-icons:message" />
             </SocialLogin>
             <SocialLogin provider="google" type="LOGIN|GOOGLE" style={{ paddingY: '10px' }}>
@@ -331,24 +339,24 @@ export function NavItem({ item, disabled, external, href, matcher, pathname, tit
       <Box
         {...(hasPopover
           ? {
-              onClick: (event) => {
-                if (disabled) {
-                  event.preventDefault();
-                  return;
-                }
-              },
-              role: 'button',
-            }
+            onClick: (event) => {
+              if (disabled) {
+                event.preventDefault();
+                return;
+              }
+            },
+            role: 'button',
+          }
           : {
-              ...(href && !disabled
-                ? {
-                    component: external ? 'a' : RouterLink,
-                    href,
-                    target: external ? '_blank' : undefined,
-                    rel: external ? 'noreferrer' : undefined,
-                  }
-                : { role: 'button' }),
-            })}
+            ...(href && !disabled
+              ? {
+                component: external ? 'a' : RouterLink,
+                href,
+                target: external ? '_blank' : undefined,
+                rel: external ? 'noreferrer' : undefined,
+              }
+              : { role: 'button' }),
+          })}
         sx={{
           alignItems: 'center',
           borderRadius: 1,

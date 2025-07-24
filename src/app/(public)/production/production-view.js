@@ -6,13 +6,14 @@ import { Box, Button } from '@mui/material';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 
-import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import { paths } from '../../../paths';
 import { useProductionList } from '../../../services/production/useProductionList';
 import { ProductionGridView } from './_components/production-gridview';
 import { ProductionRightPanel } from './_components/production-right-panel';
+import { useSettings } from '/src/hooks/use-settings';
 
 export const ProductionView = () => {
+  const { setBreadcrumbs } = useSettings();
   const [openPanel, setOpenPanel] = React.useState(false);
   const [filters, setFilters] = React.useState({
     COL: 4,
@@ -29,14 +30,16 @@ export const ProductionView = () => {
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
+  React.useEffect(() => {
+    setBreadcrumbs([
+      { title: 'Dashboard', href: paths.private.overview },
+      { title: 'Production', href: '' },
+    ]);
+  }, []);
+
   return (
     <PageContainer>
-      <CustomBreadcrumbs
-        items={[
-          { title: 'Dashboard', href: paths.private.overview },
-          { title: 'Production', href: '' },
-        ]}
-      />
+
       <PageHeader
         title="Production"
         values={filters}
@@ -57,7 +60,7 @@ export const ProductionView = () => {
         </Box>
       )}
 
-      {openPanel && <ProductionRightPanel onClose={() => setOpenPanel(false)} open={openPanel} view="ADD" />}
+      {openPanel && <ProductionRightPanel id={null} onClose={() => setOpenPanel(false)} open={openPanel} view="ADD" />}
     </PageContainer>
   );
 };

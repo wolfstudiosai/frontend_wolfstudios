@@ -1,5 +1,4 @@
 import useSWRInfinite from 'swr/infinite';
-
 import { getContentListAsync } from '/src/app/(private)/all-content/_lib/all-content.actions';
 
 const getKey = (pageIndex, previousPageData, featured, tag) => {
@@ -39,6 +38,10 @@ export const useContentList = (featured = '', tag = '') => {
       return getContentListAsync({ page: pageNo, rowsPerPage: limit }, filters, 'and');
     },
     {
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+      shouldRetryOnError: true,
+      errorRetryCount: 3,
       revalidateFirstPage: false,
       parallel: true,
     }
