@@ -239,7 +239,7 @@ export function buildQueryParams(filters, gate) {
     // Handle value based on type
     if (filter.type === 'relation' && Array.isArray(filter.value)) {
       filter.value.forEach((item, itemIndex) => {
-        params.append(`fields[${index}][value][${itemIndex}]`, item.value);
+        params.append(`fields[${index}][value][${itemIndex}]`, item?.value || item);
       });
     } else if (filter.type === 'array' && Array.isArray(filter.value)) {
       filter.value.forEach((item, itemIndex) => {

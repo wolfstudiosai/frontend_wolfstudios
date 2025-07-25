@@ -6,14 +6,14 @@ import React from 'react';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 
-import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import { paths } from '../../../paths';
 import { usePartnerList } from '../../../services/partner/usePartnerList';
 import { PartnerGridView } from './_components/partner-gridview';
 import { PartnerRightPanel } from './_components/partner-right-panel';
-import { defaultPartner } from './_lib/partner.types';
+import { useSettings } from '/src/hooks/use-settings';
 
 export const PartnerView = () => {
+  const { setBreadcrumbs } = useSettings();
   const [openPanel, setOpenPanel] = React.useState(false);
   const [filters, setFilters] = React.useState({
     COL: 4,
@@ -30,14 +30,15 @@ export const PartnerView = () => {
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
+  React.useEffect(() => {
+    setBreadcrumbs([
+      { title: 'Dashboard', href: paths.private.overview },
+      { title: 'Partner', href: '' },
+    ]);
+  }, []);
+
   return (
     <PageContainer>
-      <CustomBreadcrumbs
-        items={[
-          { title: 'Dashboard', href: paths.private.overview },
-          { title: 'Partner', href: '' },
-        ]}
-      />
       <PageHeader
         title="Partners"
         values={filters}

@@ -26,7 +26,7 @@ export const SpaceRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { data: spaceData, isLoading, mutate } = useGetSpaceData(id);
   const { mutate: muteFeaturedSpaceList } = useFeaturedSpacesList();
   const { isLogin } = useAuth();
-  const [isFeatured, setIsFeatured] = React.useState(spaceData?.data?.isFeatured);
+  const [isFeatured, setIsFeatured] = React.useState(false);
   const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
@@ -91,6 +91,7 @@ export const SpaceRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
 
   React.useEffect(() => {
     if (spaceData?.data) {
+      setIsFeatured(spaceData?.data?.isFeatured);
       setValues(defaultSpace(spaceData?.data));
     }
   }, [spaceData?.data]);

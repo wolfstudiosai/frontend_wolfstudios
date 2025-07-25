@@ -29,7 +29,7 @@ export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { mutate: mutateCampaignList } = useCampaignList();
   const { data: campaignData, isLoading, mutate } = useGetCampaignData(id);
   const { isLogin } = useAuth();
-  const [isFeatured, setIsFeatured] = React.useState(campaignData?.data?.isFeatured);
+  const [isFeatured, setIsFeatured] = React.useState(false);
   const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
 
@@ -73,6 +73,7 @@ export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   // Set form values
   React.useEffect(() => {
     if (campaignData?.data) {
+      setIsFeatured(campaignData?.data?.isFeatured);
       setValues(defaultCampaign(campaignData?.data));
     }
   }, [campaignData?.data]);

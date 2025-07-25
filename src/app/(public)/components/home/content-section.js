@@ -19,6 +19,7 @@ import {
 
 import { Iconify } from '/src/components/iconify/iconify';
 import { FadeIn } from '/src/components/animation/fade-in';
+import Link from 'next/link';
 
 export function ContentSection() {
   const theme = useTheme();
@@ -28,7 +29,7 @@ export function ContentSection() {
     <Stack direction="column" gap={1}>
       <FadeIn>
         <Box sx={{ py: { xs: 1, md: 2 } }}>
-          <Stack direction="row">
+          <Stack direction="row" alignItems="center">
             <Typography
               variant="h4"
               fontWeight="bold"
@@ -40,7 +41,8 @@ export function ContentSection() {
             </Typography>
             <Button
               variant="text"
-              // onClick={() => router.push('/portfolio')}
+              as={Link}
+              href="/all-content"
               endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
               sx={{
                 margin: 0,
@@ -87,6 +89,7 @@ export function ContentSection() {
             order: { xs: 2, md: 1, lg: 1 },
             alignSelf: { md: 'flex-start' },
             height: { md: 'auto' },
+            backgroundColor: 'background.secondaryBackground',
           }}
         >
           <Stack direction="column" gap={1}>
@@ -334,6 +337,7 @@ export function ContentSection() {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
+            backgroundColor: 'background.secondaryBackground',
           }}
         >
           <Typography
@@ -354,6 +358,7 @@ export function ContentSection() {
                 label={step}
                 variant={index === 0 ? 'filled' : 'soft'}
                 size="small"
+                color="primary"
                 sx={{
                   borderRadius: '20px',
                   px: 1,

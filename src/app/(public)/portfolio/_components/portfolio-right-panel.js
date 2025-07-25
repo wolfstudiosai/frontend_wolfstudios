@@ -26,7 +26,7 @@ export const PortfolioRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { mutate: mutateFeaturedPortfolioList } = useFeaturedPortfolioList();
   const { data: portfolioData, isLoading, mutate } = useGetPortfolioData(id);
   const { isLogin } = useAuth();
-  const [isFeatured, setIsFeatured] = React.useState(portfolioData?.data?.isFeatured);
+  const [isFeatured, setIsFeatured] = React.useState(false);
   const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
@@ -95,6 +95,7 @@ export const PortfolioRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
 
   React.useEffect(() => {
     if (portfolioData?.data) {
+      setIsFeatured(portfolioData?.data?.isFeatured);
       setValues(defaultPortfolio(portfolioData?.data));
     }
   }, [portfolioData?.data]);
