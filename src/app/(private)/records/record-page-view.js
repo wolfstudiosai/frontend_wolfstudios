@@ -7,13 +7,13 @@ import { Box } from '@mui/material';
 import { PageContainer } from '/src/components/container/PageContainer';
 
 import { CustomTab } from '../../../components/core/custom-tab';
-import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import { paths } from '../../../paths';
 import AllContentListView from '../../(private)/all-content/_component/all-content-list-view';
 import { CampaignListView } from '../../(public)/campaign/_components/campaign-listview';
 import { PartnerListView } from '../../(public)/partner/_components/partner-listview';
 import { PortfolioListView } from '../../(public)/portfolio/_components/portfolio-listview';
 import { ProductionListView } from '../../(public)/production/_components/production-listview';
+import { useSettings } from '/src/hooks/use-settings';
 
 const tabs = [
   { label: 'Campaign', value: 'campaign' },
@@ -25,6 +25,7 @@ const tabs = [
 
 export default function RecordPageView() {
   const router = useRouter();
+  const { setBreadcrumbs } = useSettings();
   const searchParams = useSearchParams();
   const [tab, setTab] = useState('');
 
@@ -44,15 +45,15 @@ export default function RecordPageView() {
     router.push(`?tab=${newValue}`);
   };
 
+  useEffect(() => {
+    setBreadcrumbs([
+      { title: 'Dashboard', href: paths.private.overview },
+      { title: 'Records', href: '' },
+    ]);
+  }, []);
+
   return (
     <PageContainer>
-      <CustomBreadcrumbs
-        items={[
-          { title: 'Dashboard', href: paths.private.overview },
-          { title: 'Records', href: '' },
-        ]}
-      />
-
       <Box mb={1}>
         <CustomTab tabs={tabs} handleChange={handleChange} value={tab} />
       </Box>

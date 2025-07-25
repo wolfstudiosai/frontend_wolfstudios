@@ -195,8 +195,6 @@ export const ContentQuickView = ({ data, isEdit }) => {
     );
   };
 
-  console.log(data)
-
   return (
     <>
       <Stack direction="row" gap={1}>

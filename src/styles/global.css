@@ -191,7 +191,7 @@ body {
 #page1 {
   height: 200px;
   width: 100%;
-  background-color: #181818;
+  /* background-color: var(--mui-palette-background-default); */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -203,7 +203,7 @@ body {
   display: inline-block;
   font-size: 10rem;
   font-weight: 100;
-  color: #fff;
+  /* color: #fff; */
   font-family: 'Salvalyn, sans-serif';
 }
 

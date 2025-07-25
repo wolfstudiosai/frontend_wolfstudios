@@ -28,8 +28,13 @@ import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
 import { formatCompactNumber } from '../../../../utils/helper';
 import { isVideoContent, pxToRem } from '/src/utils/helper';
+import useAuth from '/src/hooks/useAuth';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 export const CampaignQuickView = ({ data, isEdit, onUpdate }) => {
+  const { isLogin } = useAuth();
+  const router = useRouter()
   const mediaArr = [
     ...(data?.imageInspirationGallery || []),
     ...(data?.videoInspirationGallery || []),
@@ -38,6 +43,13 @@ export const CampaignQuickView = ({ data, isEdit, onUpdate }) => {
   ];
   const budgetUsed = data.budget === 0 ? 0 : (data.totalExpense / data.budget) * 100;
   const remainingBudget = data.budget - data.totalExpense;
+
+  const handleJoin = () => {
+    if (!isLogin) {
+      toast.error('Please login to join the campaign');
+      router.push('/auth/sign-in');
+    }
+  };
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -56,7 +68,7 @@ export const CampaignQuickView = ({ data, isEdit, onUpdate }) => {
               {data?.campaignDescription || 'No description available.'}
             </Typography>
           </Box>
-          <Button variant="contained">Join</Button>
+          <Button variant="contained" onClick={handleJoin}>Join</Button>
         </Stack>
       </Box>
 

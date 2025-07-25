@@ -6,7 +6,6 @@ import React from 'react';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 
-import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import PageLoader from '../../../components/loaders/PageLoader';
 import { paths } from '../../../paths';
 import { useCampaignList } from '../../../services/campaign/useCampaignList';
@@ -14,9 +13,10 @@ import { CampaignGridView } from './_components/campaign-grid-view';
 import { CampaignRightPanel } from './_components/campaign-right-panel';
 import { CampaignTabView } from './_components/campaign-tab-view';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
-import { defaultCampaign } from './_lib/campaign.types';
+import { useSettings } from '/src/hooks/use-settings';
 
 export const CampaignView = () => {
+  const { setBreadcrumbs } = useSettings();
   const [openPanel, setOpenPanel] = React.useState(false);
   const [filters, setFilters] = React.useState({
     COL: 4,
@@ -33,15 +33,16 @@ export const CampaignView = () => {
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
+  React.useEffect(() => {
+    setBreadcrumbs([
+      { title: 'Dashboard', href: paths.private.overview },
+      { title: 'Campaign', href: '' },
+    ]);
+  }, []);
+
   return (
     <PageContainer>
       <PageLoader loading={isLoading} error={error}>
-        <CustomBreadcrumbs
-          items={[
-            { title: 'Dashboard', href: paths.private.overview },
-            { title: 'Campaign', href: '' },
-          ]}
-        />
         <Box>
           <PageHeader
             title="Campaigns"

@@ -24,7 +24,7 @@ export const ProductionRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { mutate: mutateProductionList } = useProductionList();
   const { data: productionData, isLoading, mutate } = useGetProductionData(id);
   const { isLogin } = useAuth();
-  const [isFeatured, setIsFeatured] = React.useState(productionData?.data?.isFeatured);
+  const [isFeatured, setIsFeatured] = React.useState(false);
   const [panelView, setPanelView] = React.useState(view);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
@@ -91,6 +91,7 @@ export const ProductionRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
 
   React.useEffect(() => {
     if (productionData?.data) {
+      setIsFeatured(productionData?.data?.isFeatured);
       setValues(defaultProduction(productionData?.data));
     }
   }, [productionData]);
