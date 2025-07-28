@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Card } from '@mui/material';
+import { Box, Card, Stack, Typography } from '@mui/material';
 
 import { SpaceRightPanel } from './space-right-panel';
 import { isVideoContent } from '/src/utils/helper';
@@ -12,6 +12,7 @@ export const SpaceCard = ({ content }) => {
       <Card
         sx={{
           width: '100%',
+          aspectRatio: '9 / 13',
           overflow: 'hidden',
           position: 'relative',
           backgroundColor: '#333',
@@ -52,12 +53,35 @@ export const SpaceCard = ({ content }) => {
                 alt={content?.name}
                 sx={{
                   width: '100%',
-                  height: { lg: 350, md: 400, sm: 300, xs: 300 },
+                  height: '100%',
                   objectFit: 'cover',
-                  borderRadius: 'calc(2* var(--mui-shape-borderRadius))',
-                  padding: 1.5,
                 }}
               />
+              {/* Title Overlay */}
+              <Stack
+                direction="column"
+                sx={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  p: 1.5,
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0))',
+                }}
+              >
+                <Typography fontWeight={400} color="white" fontSize={{ xs: 12, md: 14 }} noWrap>
+                  {content.name || ''}
+                </Typography>
+                {/* Thin Line */}
+                <Box
+                  sx={{
+                    width: '100%',
+                    height: '0.8px',
+                    margin: '4px 0',
+                    background: 'var(--mui-palette-divider)',
+                  }}
+                />
+              </Stack>
             </Box>
           )}
         </Box>
