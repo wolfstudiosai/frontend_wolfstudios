@@ -61,10 +61,21 @@ export const AllContentView = () => {
         <Button variant="contained" size="small" sx={{ display: { lg: 'none' } }} onClick={() => setShowTags(true)}>Tags</Button>
       </Box>
 
-      <Box sx={{ display: 'flex', gap: 2, height: 'calc(100vh - 170px)', overflow: 'auto' }}>
+      <Box sx={{
+        display: 'flex',
+        gap: 2,
+        height: {
+          xs: '100%',
+          lg: 'calc(100vh - 170px)',
+        },
+        overflow: 'auto',
+        '&::-webkit-scrollbar': { display: 'none' },
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none'
+      }}>
         <ContentTags showTags={showTags} setShowTags={setShowTags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
         <PageLoader loading={isLoading} error={error}>
-          <Box sx={{ flex: 1, overflowX: 'hidden' }}>
+          <Box sx={{ flex: 1 }}>
             {featuredData?.length > 0 && featuredData[0] !== undefined && (
               <AllContentFeaturedView data={featuredData} />
             )}
