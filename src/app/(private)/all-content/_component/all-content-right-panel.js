@@ -21,29 +21,9 @@ import { useGetContentData } from '/src/services/content/useContentData';
 import { useContentList } from '/src/services/content/useContentList';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-// const revalidateAllContentLists = () => {
-//   globalMutate(
-//     (key) => {
-//       if (typeof key === 'string') {
-//         return key.toLowerCase().includes('content');
-//       }
-
-//       if (Array.isArray(key)) {
-//         return key.some(
-//           (part) => typeof part === 'string' && part.toLowerCase().includes('content')
-//         );
-//       }
-
-//       return false;
-//     },
-//     undefined,
-//     { revalidate: true }
-//   );
-// };
-
-
 export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { mutate: mutateList } = useContentList();
+  const { mutate: mutateFeatured } = useContentList('featured');
   const { data: contentData, isLoading, mutate } = useGetContentData(id);
   const { isLogin } = useAuth();
   const [isFeatured, setIsFeatured] = React.useState(false);
@@ -95,6 +75,7 @@ export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
           resetForm();
           mutate();
           mutateList();
+          mutateFeatured();
         } else {
           console.error('Operation failed:', res.message);
         }
@@ -118,6 +99,7 @@ export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
     try {
       onClose?.();
       mutateList();
+      mutateFeatured();
     } catch (error) {
       console.error('Error:', error);
     }
@@ -145,6 +127,7 @@ export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
       });
       mutate();
       mutateList();
+      mutateFeatured();
     } catch (error) {
       console.error('Error:', error);
     }

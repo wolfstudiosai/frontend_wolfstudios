@@ -1,10 +1,10 @@
 import useSWR from 'swr';
-import { getSingleCampaignView } from '../_lib/campaign.actions';
+import { getSingleContentView } from '../_lib/all-content.actions';
 import { useSWRConfig } from 'swr';
 
-export const useCampaignView = (id, pagination) => {
+export const useContentView = (id, pagination) => {
     // const swrKey = id ? ['campaignView', id, JSON.stringify(pagination)] : null;
-    const swrKey = id ? ['campaignView', id, pagination] : null;
+    const swrKey = id ? ['contentView', id, pagination] : null;
     const { cache, mutate: globalMutate } = useSWRConfig();
     const hasCache = swrKey ? cache.get(JSON.stringify(swrKey)) : false;
 
@@ -15,7 +15,7 @@ export const useCampaignView = (id, pagination) => {
         mutate: localMutate,
     } = useSWR(
         swrKey,
-        ([, id, pagination]) => getSingleCampaignView(id, pagination),
+        ([, id, pagination]) => getSingleContentView(id, pagination),
         {
             revalidateOnFocus: false,
             revalidateIfStale: false,
@@ -27,9 +27,9 @@ export const useCampaignView = (id, pagination) => {
 
     const refreshViewData = () => localMutate();
 
-    const refreshAllCampaignView = () => {
+    const refreshAllContentView = () => {
         return globalMutate(
-            key => Array.isArray(key) && key[0] === 'campaignView',
+            key => Array.isArray(key) && key[0] === 'contentView',
             undefined,
             { revalidate: true }
         );
@@ -40,6 +40,6 @@ export const useCampaignView = (id, pagination) => {
         singleViewError,
         isSingleViewLoading,
         refreshViewData,
-        refreshAllCampaignView,
+        refreshAllContentView,
     };
 };

@@ -27,6 +27,7 @@ import { useCampaignList } from '/src/services/campaign/useCampaignList';
 export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   // To update campaign list cache
   const { mutate: mutateCampaignList } = useCampaignList();
+  const { mutate: mutateFeatured } = useCampaignList('', 'featured');
   const { data: campaignData, isLoading, mutate } = useGetCampaignData(id);
   const { isLogin } = useAuth();
   const [isFeatured, setIsFeatured] = React.useState(false);
@@ -59,6 +60,7 @@ export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
           // Update cache
           mutate();
           mutateCampaignList();
+          mutateFeatured();
         } else {
           console.error('Operation failed:', res.message);
         }
@@ -83,6 +85,7 @@ export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
 
     // Update cache
     mutateCampaignList();
+    mutateFeatured();
   };
 
   const handleFeatured = async (featured) => {
@@ -95,6 +98,8 @@ export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
         // Update cache
         mutateCampaignList();
         mutate();
+        mutateFeatured();
+        onClose?.();
       }
     } catch (error) {
       console.error('Error:', error);

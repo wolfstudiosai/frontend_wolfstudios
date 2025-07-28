@@ -94,7 +94,14 @@ export default function TableView({
     if (res.success) {
       setAnchorEl(null);
       setViews([...views, res.data]);
-      // mutate('campaignViews');
+      const mutateViews = {
+        campaign: 'campaignViews',
+        portfolio: 'portfolioViews',
+        production: 'productionViews',
+        partner: 'partnerViews',
+        content: "contentViews"
+      }[tab] ?? null;
+      mutate(mutateViews);
     }
   };
 
@@ -353,7 +360,13 @@ const SingleView = ({
       const nextAvailableView =
         viewsWithoutDeleted.find((v) => v.id === selectedView?.meta?.id) || viewsWithoutDeleted[0];
       setSelectedViewId(nextAvailableView?.id);
-      const mutateViews = tab === 'campaign' ? 'campaignViews' : null;
+      const mutateViews = {
+        campaign: 'campaignViews',
+        portfolio: 'portfolioViews',
+        production: 'productionViews',
+        partner: 'partnerViews',
+        content: 'contentViews',
+      }[tab] ?? null;
       mutate(mutateViews);
       router.push(`?tab=${tab}&view=${nextAvailableView.id}`);
     }
@@ -372,7 +385,13 @@ const SingleView = ({
     const res = await updateCampaignView(view.id, { label: viewLabel });
     if (res.success) {
       setViews(views.map((v) => (v.id === view.id ? { ...v, label: viewLabel } : v)));
-      const mutateViews = tab === 'campaign' ? 'campaignViews' : null;
+      const mutateViews = {
+        campaign: 'campaignViews',
+        portfolio: 'portfolioViews',
+        production: 'productionViews',
+        partner: 'partnerViews',
+        content: 'contentViews',
+      }[tab] ?? null;
       mutate(mutateViews);
       setLoading(false);
       toast.success('View renamed successfully');

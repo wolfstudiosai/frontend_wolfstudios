@@ -1,12 +1,11 @@
 import useSWR from 'swr';
-import { getSingleCampaignView } from '../_lib/campaign.actions';
 import { useSWRConfig } from 'swr';
+import { getSinglePartnerView } from '../_lib/partner.actions';
 
-export const useCampaignView = (id, pagination) => {
-    // const swrKey = id ? ['campaignView', id, JSON.stringify(pagination)] : null;
-    const swrKey = id ? ['campaignView', id, pagination] : null;
+export const usePartnerView = (id, pagination) => {
+    const swrKey = id ? ['partnerView', id, pagination] : null;
     const { cache, mutate: globalMutate } = useSWRConfig();
-    const hasCache = swrKey ? cache.get(JSON.stringify(swrKey)) : false;
+    const hasCache = cache.get(swrKey) ? true : false;
 
     const {
         data: singleView,
@@ -15,7 +14,7 @@ export const useCampaignView = (id, pagination) => {
         mutate: localMutate,
     } = useSWR(
         swrKey,
-        ([, id, pagination]) => getSingleCampaignView(id, pagination),
+        ([, id, pagination]) => getSinglePartnerView(id, pagination),
         {
             revalidateOnFocus: false,
             revalidateIfStale: false,
@@ -27,9 +26,9 @@ export const useCampaignView = (id, pagination) => {
 
     const refreshViewData = () => localMutate();
 
-    const refreshAllCampaignView = () => {
+    const refreshAllPartnerView = () => {
         return globalMutate(
-            key => Array.isArray(key) && key[0] === 'campaignView',
+            key => Array.isArray(key) && key[0] === 'partnerView',
             undefined,
             { revalidate: true }
         );
@@ -40,6 +39,6 @@ export const useCampaignView = (id, pagination) => {
         singleViewError,
         isSingleViewLoading,
         refreshViewData,
-        refreshAllCampaignView,
+        refreshAllPartnerView,
     };
 };

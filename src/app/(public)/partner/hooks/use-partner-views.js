@@ -1,9 +1,9 @@
 import useSWR from 'swr';
-import { getCampaignViews } from '../_lib/campaign.actions';
 import { useSWRConfig } from 'swr';
+import { getPartnerViews } from '../_lib/partner.actions';
 
-export const useCampaignViews = () => {
-    const swrKey = 'campaignViews';
+export const usePartnerViews = () => {
+    const swrKey = 'partnerViews';
     const { cache } = useSWRConfig();
     const hasCache = cache.get(swrKey) ? true : false;
 
@@ -11,9 +11,8 @@ export const useCampaignViews = () => {
         data: viewsData,
         error: viewsError,
         isLoading: isViewsLoading,
-    } = useSWR(swrKey, getCampaignViews, {
+    } = useSWR(swrKey, getPartnerViews, {
         revalidateOnFocus: false,
-        // revalidateOnMount: true
         revalidateOnMount: !hasCache,
     });
 

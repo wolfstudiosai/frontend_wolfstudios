@@ -77,7 +77,7 @@ export const CampaignCard = ({ content }) => {
           >
             <CustomChip label={content?.campaignStatus ?? '-'} size="small" variant="soft" />
             <CustomChip
-              label={`${dayjs(content.startDate).isValid() ? dayjs(content.startDate).format('DD MMM YYYY') : '-/-'} : ${dayjs(content.endDate).isValid() ? dayjs(content.endDate).format('DD MMM YYYY') : '-/-'}`}
+              label={`${dayjs(content?.startDate).isValid() ? dayjs(content?.startDate).format('DD MMM YYYY') : '-/-'} : ${dayjs(content?.endDate).isValid() ? dayjs(content?.endDate).format('DD MMM YYYY') : '-/-'}`}
               size="small"
               variant="soft"
             />
