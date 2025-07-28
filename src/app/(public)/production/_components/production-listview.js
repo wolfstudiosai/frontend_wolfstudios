@@ -46,6 +46,7 @@ import { useProductionViews } from '../hooks/use-production-views';
 import { useProductionView } from '../hooks/use-production-view';
 import { defaultProduction } from '../../production/_lib/production.types';
 import { convertArrayObjIntoArrOfStr } from '/src/utils/convertRelationArrays';
+import { mutate } from 'swr';
 
 export const ProductionListView = () => {
   const theme = useTheme();
@@ -497,7 +498,7 @@ export const ProductionListView = () => {
               <AddIcon />
             </IconButton>
             <Box>
-              <RefreshPlugin onClick={() => refreshAllProductionView()} />
+              <RefreshPlugin onClick={() => mutate(['productionView', viewId, pagination])} />
             </Box>
             <DeleteConfirmationPasswordPopover
               title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}

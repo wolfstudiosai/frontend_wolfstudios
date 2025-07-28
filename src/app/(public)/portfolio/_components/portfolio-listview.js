@@ -35,6 +35,7 @@ import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationAr
 import { useRecordPortfolioList } from '../hooks/use-record-portfolio-list';
 import { usePortfolioView } from '../hooks/use-portfolio-view';
 import { usePortfolioViews } from '../hooks/use-portfolio-views';
+import { mutate } from 'swr';
 
 export const PortfolioListView = () => {
   const theme = useTheme();

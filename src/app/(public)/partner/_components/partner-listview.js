@@ -41,13 +41,17 @@ import {
 } from '../_lib/partner.actions';
 import { defaultPartner } from '../_lib/partner.types';
 import { usePartnerColumns } from '../hooks/use-partner-columns';
-import useSWR from 'swr';
+import { useRecordPartnerList } from '../hooks/use-record-partner-list';
+import { usePartnerViews } from '../hooks/use-partner-views';
+import { usePartnerView } from '../hooks/use-partner-view';
 import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
+import { mutate } from 'swr';
 
 export const PartnerListView = () => {
   const theme = useTheme();
   const router = useRouter();
   const anchorEl = React.useRef(null);
+  const hasInitialized = React.useRef(false);
   const [anchorElHide, setAnchorElHide] = React.useState(null);
   const singleImageField = ['thumbnailImage'];
   const [isImageUploadOpen, setIsImageUploadOpen] = React.useState(false);
@@ -60,12 +64,12 @@ export const PartnerListView = () => {
   const searchParams = useSearchParams();
   const viewId = searchParams.get('view');
 
-  const handleUploadModalOpen = (data, field, uploadOpen) => {
+  const handleUploadModalOpen = React.useCallback((data, field, uploadOpen) => {
     setOpen(true);
     setUpdatedRow(data);
     setImageUpdatedField(field);
     setIsImageUploadOpen(uploadOpen);
-  };
+  }, []);
 
   const handleClosePopover = () => {
     anchorEl.current = null;
@@ -116,12 +120,10 @@ export const PartnerListView = () => {
       const response = await updatePartnerAsync(finalData);
       if (response.success) {
         setOpen(false);
-        getSingleView(viewId);
+        refreshAllPartnerView();
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      getSingleView(viewId);
     }
   };
 
@@ -154,18 +156,9 @@ export const PartnerListView = () => {
   const columns = usePartnerColumns(anchorEl, setMediaToShow, handleUploadModalOpen, visibleColumns);
 
   // SWR
-  const {
-    data: partners,
-    error: partnersError,
-    isLoading: isPartnersLoading,
-  } = useSWR(['partnerList', { page: 1, rowsPerPage: 20 }], ([, params]) => getPartnerListAsync(params));
-
-  const {
-    data: viewsData,
-    isLoading: viewsLoading,
-    error: viewsError,
-    mutate: mutateViews,
-  } = useSWR('partnerViews', getPartnerViews);
+  const { viewsData, isViewsLoading } = usePartnerViews();
+  const { partnerMeta, columns: partnerColumns, isPartnersLoading } = useRecordPartnerList();
+  const { singleView, isSingleViewLoading, refreshViewData, refreshAllPartnerView } = usePartnerView(selectedViewId, pagination);
 
   // get single view
   const getSingleView = async (viewId, paginationProps) => {
@@ -207,20 +200,19 @@ export const PartnerListView = () => {
   }
   // ******************************data grid handler starts*********************
 
-  const handlePaginationModelChange = (newPaginationModel) => {
+  const handlePaginationModelChange = React.useCallback((newPaginationModel) => {
     const { page, pageSize } = newPaginationModel;
     const newPagination = { pageNo: page + 1, limit: pageSize };
     setPagination(newPagination);
-    if (viewId) {
-      getSingleView(viewId, newPagination);
-    }
-  };
+  }, []);
+
 
   // update or create partner
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
 
     const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
+    let res;
 
     if (isTemporaryId) {
       if (!newRow.name) {
@@ -228,10 +220,7 @@ export const PartnerListView = () => {
         return newRow;
       }
 
-      const res = await createPartnerAsync(newRow);
-      if (res.success) {
-        getSingleView(viewId);
-      }
+      res = await createPartnerAsync(newRow);
     } else {
       const finalData = convertArrayObjIntoArrOfStr(newRow, [
         'stakeholders',
@@ -300,13 +289,15 @@ export const PartnerListView = () => {
       finalData.thumbnailImage = Array.isArray(finalData.thumbnailImage)
         ? finalData.thumbnailImage[0]
         : finalData.thumbnailImage;
-      const res = await updatePartnerAsync(finalData);
-      if (res.success) {
-        getSingleView(viewId);
-      }
+      res = await updatePartnerAsync(finalData);
     }
 
-    return newRow;
+    if (res.success) {
+      refreshAllPartnerView();
+      return newRow;
+    }
+
+    return oldRow;
   }, [viewId]);
 
   const handleProcessRowUpdateError = React.useCallback((error) => {
@@ -315,10 +306,11 @@ export const PartnerListView = () => {
 
   // ******************************data grid handler ends*********************
 
-  const handleRowSelection = (newRowSelectionModel) => {
+  // handle row selection
+  const handleRowSelection = React.useCallback((newRowSelectionModel) => {
     const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
     setSelectedRows(selectedData);
-  };
+  }, [records]);
 
   // new column added
   const handleAddNewItem = () => {
@@ -329,8 +321,9 @@ export const PartnerListView = () => {
   };
 
   // Column delete
-  const handleDelete = async () => getSingleView(viewId);
+  const handleDelete = async () => refreshAllPartnerView();
 
+  // Column handler
   // handle column change
   const handleColumnChange = async (e, col) => {
     let columns = [...newVisibleColumns];
@@ -362,6 +355,7 @@ export const PartnerListView = () => {
     setNewVisibleColumns(newVisibleColumns);
   };
 
+  // handle save columns
   const handleSaveColumns = async () => {
     if (viewId) {
       const data = {
@@ -378,7 +372,7 @@ export const PartnerListView = () => {
 
       const res = await updatePartnerView(viewId, data);
       if (res.success) {
-        getSingleView(viewId);
+        refreshViewData();
         handleClosePopoverHide();
       }
     }
@@ -389,30 +383,33 @@ export const PartnerListView = () => {
   // handle filter apply
   const handleFilterApply = async () => {
     if (viewId) {
-      updateView({ filters }).then(() => {
-        getSingleView(viewId);
-      });
+      const res = await updateView({ filters });
+      if (res.success) {
+        refreshViewData();
+      }
     }
   };
 
   // handle remove filter condition
-  const handleRemoveFilterCondition = (index) => {
+  const handleRemoveFilterCondition = async (index) => {
     const newFilters = filters.filter((_, i) => i !== index);
     setFilters(newFilters);
     if (viewId) {
-      updateView({ filters: newFilters }).then(() => {
-        getSingleView(viewId);
-      });
+      const res = await updateView({ filters: newFilters });
+      if (res.success) {
+        refreshViewData();
+      }
     }
   };
 
   // handle clear filters
-  const handleClearFilters = () => {
+  const handleClearFilters = async () => {
     setFilters([]);
     if (viewId) {
-      updateView({ filters: [] }).then(() => {
-        getSingleView(viewId);
-      });
+      const res = await updateView({ filters: [] });
+      if (res.success) {
+        refreshViewData();
+      }
     }
   };
 
@@ -420,28 +417,16 @@ export const PartnerListView = () => {
   // initialize
   const initialize = async () => {
     try {
-      setLoading(true);
-
       // set meta data
-      setMetaData(partners.meta);
-      const columns = partners.meta.map((obj) => {
-        const key = Object.keys(obj)[0];
-        return {
-          label: obj[key].label,
-          columnName: key,
-          type: obj[key].type,
-          depth: obj[key].depth,
-        };
-      });
-
-      setAllColumns(columns);
+      setMetaData(partnerMeta);
+      setAllColumns(partnerColumns);
 
       // set views
       setViews(viewsData.data);
 
-      if (viewsData.success) {
+      if (viewsData.success && viewsData?.data?.length > 0) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
-        await getSingleView(firstView?.id, pagination);
+        setSelectedViewId(firstView?.id);
 
         if (!viewId) {
           router.push(`?tab=partner&view=${firstView?.id}`);
@@ -454,7 +439,7 @@ export const PartnerListView = () => {
           gate: 'and',
           isPublic: true,
           filters: [],
-          columns: columns.map((col) => col.columnName),
+          columns: partnerColumns.map((col) => col.columnName),
           sort: [],
           groups: [],
         };
@@ -474,8 +459,10 @@ export const PartnerListView = () => {
               createdAt: createViewData?.createdAt,
             },
           ]);
-          await getSingleView(res.data.id, pagination);
-          router.push(`?tab=partner&view=${res.data.id}`);
+
+          mutate('partnerViews');
+          setSelectedViewId(res.data.id);
+          router.replace(`?tab=partner&view=${res.data.id}`);
         }
       }
     } catch (error) {
@@ -489,34 +476,43 @@ export const PartnerListView = () => {
   React.useEffect(() => {
     setPagination((prev) => ({ ...prev, pageNo: 1 }));
     if (searchParams.get('tab') !== 'partner') return;
-    if (!isPartnersLoading && !viewsLoading) {
+    if (partnerMeta && viewsData && !hasInitialized.current) {
+      hasInitialized.current = true;
       initialize();
     }
-  }, [viewId, isPartnersLoading, viewsLoading]);
+  }, [partnerMeta, viewsData, searchParams]);
 
 
-  // update visible columns
+  // store isView sidebar is open or not on local storage
+  const handleOpenViewSidebar = () => {
+    setShowView(!showView);
+    localStorage.setItem('isRecordViewOpen', !showView);
+  };
+
   React.useEffect(() => {
-    if (allColumns.length === 0) return;
-    if (viewId && selectedViewData) {
-      const selectedColumnNames = selectedViewData.meta?.columns || [];
+    if (singleView) {
+      setRecords(singleView?.data?.data?.map((row) => defaultPartner(row)) || []);
+      setTotalRecords(singleView?.data?.count);
+      setSelectedViewData(singleView?.data);
+      setFilters(singleView?.data?.meta?.filters || []);
+      setGate(singleView?.data?.meta?.gate || 'and');
+      setSort(singleView?.data?.meta?.sort || []);
+
+      const selectedColumnNames = singleView?.data?.meta?.columns || [];
       const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
 
       setVisibleColumns(filtered);
       setNewVisibleColumns(filtered);
-    } else {
-      setVisibleColumns(allColumns);
-      setNewVisibleColumns(allColumns);
+      setSearchColumns(allColumns);
     }
-    setSearchColumns(allColumns);
-  }, [viewId, selectedViewData, allColumns]);
-
+  }, [singleView]);
 
   React.useEffect(() => {
-    if (selectedViewId) {
-      getSingleView(selectedViewId, pagination);
+    const isViewOpen = localStorage.getItem('isRecordViewOpen');
+    if (isViewOpen === 'true') {
+      setShowView(true);
     }
-  }, [selectedViewId]);
+  }, [showView]);
 
   return (
     <PageContainer>
@@ -551,18 +547,19 @@ export const PartnerListView = () => {
               handleFilterApply={handleFilterApply}
               handleRemoveFilterCondition={handleRemoveFilterCondition}
               handleClearFilters={handleClearFilters}
-              loading={loading}
+              loading={isSingleViewLoading || isPartnersLoading || isViewsLoading}
             />
 
             <Button startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />} variant="text" size="small">
               Group
             </Button>
+
             <TableSortBuilder
               allColumns={allColumns}
               sort={sort}
               setSort={setSort}
               updateView={updateView}
-              getSingleView={getSingleView}
+              refreshViewData={refreshViewData}
             />
           </Box>
 
@@ -570,7 +567,7 @@ export const PartnerListView = () => {
             <IconButton onClick={handleAddNewItem}>
               <AddIcon />
             </IconButton>
-            <RefreshPlugin onClick={() => getSingleView(viewId)} />
+            <RefreshPlugin onClick={() => mutate(['partnerView', viewId, pagination])} />
             <DeleteConfirmationPasswordPopover
               title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
               onDelete={handleDelete}
@@ -595,7 +592,7 @@ export const PartnerListView = () => {
             columns={allColumns}
             selectedView={selectedViewData}
             setSelectedViewId={setSelectedViewId}
-            viewsLoading={viewsLoading}
+            viewsLoading={isViewsLoading}
           />
 
           <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
@@ -604,7 +601,7 @@ export const PartnerListView = () => {
               rows={records}
               processRowUpdate={processRowUpdate}
               onProcessRowUpdateError={handleProcessRowUpdateError}
-              loading={loading}
+              loading={isSingleViewLoading || isPartnersLoading || isViewsLoading}
               rowCount={totalRecords}
               checkboxSelection
               pageSizeOptions={[20, 30, 50]}
