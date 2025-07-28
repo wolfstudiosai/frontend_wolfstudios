@@ -34,9 +34,6 @@ import {
   createProductionAsync,
   createProductionViewAsync,
   deleteProductionAsync,
-  getProductionListAsync,
-  getProductionViewsAsync,
-  getSingleProductionViewAsync,
   updateProductionAsync,
   updateProductionViewAsync,
 } from '../_lib/production.action';

@@ -24,8 +24,6 @@ import {
   createContentAsync,
   createContentView,
   deleteBulkContentAsync,
-  getContentListAsync,
-  getContentViews,
   getSingleContentView,
   updateContentAsync,
   updateContentView
@@ -36,7 +34,7 @@ import { useRecordContentList } from '../hooks/use-record-content-list';
 import { useContentViews } from '../hooks/use-content-views';
 import { useContentView } from '../hooks/use-content-view';
 import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
-import useSWR, { mutate } from 'swr';
+import { mutate } from 'swr';
 import { MediaUploader } from '../../../../components/uploaders/media-uploader';
 
 export default function AllContentListView() {
@@ -110,7 +108,6 @@ export default function AllContentListView() {
   };
 
   const [records, setRecords] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -139,27 +136,6 @@ export default function AllContentListView() {
   const { viewsData, isViewsLoading } = useContentViews();
   const { contentMeta, columns: contentColumns, isContentLoading } = useRecordContentList();
   const { singleView, isSingleViewLoading, refreshViewData, refreshAllContentView } = useContentView(selectedViewId, pagination);
-
-  // get single view
-  const getSingleView = async (viewId, paginationProps) => {
-    try {
-      setLoading(true);
-      const viewPagination = paginationProps ? paginationProps : pagination;
-      const res = await getSingleContentView(viewId, viewPagination);
-      if (res.success) {
-        setRecords(res.data.data.map((row) => defaultContent(row)) || []);
-        setTotalRecords(res.data.count);
-        setSelectedViewData(res.data);
-        setFilters(res.data.meta?.filters || []);
-        setGate(res.data.meta?.gate || 'and');
-        setSort(res.data.meta?.sort || []);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   async function updateView(props) {
     const viewFilters = props.filters ? props.filters : filters;
@@ -427,8 +403,6 @@ export default function AllContentListView() {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
   };
 

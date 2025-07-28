@@ -33,8 +33,6 @@ import {
   createPartnerAsync,
   createPartnerView,
   deletePartnerAsync,
-  getPartnerListAsync,
-  getPartnerViews,
   getSinglePartnerView,
   updatePartnerAsync,
   updatePartnerView,
@@ -130,7 +128,6 @@ export const PartnerListView = () => {
 
   // Partner data handler
   const [records, setRecords] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -159,27 +156,6 @@ export const PartnerListView = () => {
   const { viewsData, isViewsLoading } = usePartnerViews();
   const { partnerMeta, columns: partnerColumns, isPartnersLoading } = useRecordPartnerList();
   const { singleView, isSingleViewLoading, refreshViewData, refreshAllPartnerView } = usePartnerView(selectedViewId, pagination);
-
-  // get single view
-  const getSingleView = async (viewId, paginationProps) => {
-    try {
-      setLoading(true);
-      const viewPagination = paginationProps ? paginationProps : pagination;
-      const res = await getSinglePartnerView(viewId, viewPagination);
-      if (res.success) {
-        setRecords(res.data.data.map((row) => defaultPartner(row)) || []);
-        setTotalRecords(res.data.count);
-        setSelectedViewData(res.data);
-        setFilters(res.data.meta?.filters || []);
-        setGate(res.data.meta?.gate || 'and');
-        setSort(res.data.meta?.sort || []);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   async function updateView(props) {
     const viewFilters = props.filters ? props.filters : filters;
@@ -467,8 +443,6 @@ export const PartnerListView = () => {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
   };
 
