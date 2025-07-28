@@ -12,7 +12,7 @@ export const ProductionCard = ({ content }) => {
       <Card
         sx={{
           width: '100%',
-          aspectRatio: '9 / 16',
+          aspectRatio: '9 / 13',
           overflow: 'hidden',
           position: 'relative',
           backgroundColor: '#333',
@@ -54,10 +54,8 @@ export const ProductionCard = ({ content }) => {
                 alt={content?.name}
                 sx={{
                   width: '100%',
-                  height: { lg: 350, md: 400, sm: 300, xs: 300 },
+                  height: '100%',
                   objectFit: 'cover',
-                  borderRadius: 'calc(2* var(--mui-shape-borderRadius))',
-                  padding: 1.5,
                 }}
               />
             </Box>
