@@ -13,7 +13,7 @@ const getKey = (pageIndex, previousPageData, featured, tag) => {
   ];
 };
 
-export const useContentList = (featured = '', tag = '') => {
+export const useContentList = (featured = '', tag = []) => {
   const {
     data: pages,
     error,
@@ -27,11 +27,11 @@ export const useContentList = (featured = '', tag = '') => {
       const filters = [];
 
       if (featuredFilter) filters.push({ key: 'isFeatured', type: 'boolean', operator: 'is', value: true });
-      if (tagFilter) filters.push({
+      if (tagFilter.length > 0) filters.push({
         key: "tags",
         type: "relation",
         operator: "has any of",
-        value: [tag],
+        value: tagFilter.map((tag) => tag.id),
         depth: "ContentHQByTags.secondId"
       });
 

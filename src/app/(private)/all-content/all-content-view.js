@@ -18,7 +18,8 @@ import { useSettings } from '/src/hooks/use-settings';
 
 export const AllContentView = () => {
   const { setBreadcrumbs } = useSettings();
-  const [selectedTag, setSelectedTag] = React.useState(null);
+  const [selectedTag, setSelectedTag] = React.useState([]);
+  const [showTags, setShowTags] = React.useState(false);
   const [openPanel, setOpenPanel] = React.useState(false);
   const [filters, setFilters] = React.useState({
     COL: 4,
@@ -45,19 +46,23 @@ export const AllContentView = () => {
 
   return (
     <PageContainer>
-      <PageHeader
-        title="Contents"
-        values={filters}
-        onFilterChange={handleFilterChange}
-        showFilters={false}
-        showColSlider={false}
-        totalRecords={totalRecords}
-        showAdd={true}
-        setOpenPanel={setOpenPanel}
-      />
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <PageHeader
+          title="Contents"
+          values={filters}
+          onFilterChange={handleFilterChange}
+          showFilters={false}
+          showColSlider={false}
+          totalRecords={totalRecords}
+          showAdd={true}
+          setOpenPanel={setOpenPanel}
+        />
 
-      <Box sx={{ display: 'flex', gap: 2, overflow: 'auto' }}>
-        <ContentTags selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
+        <Button variant="contained" size="small" sx={{ display: { lg: 'none' } }} onClick={() => setShowTags(true)}>Tags</Button>
+      </Box>
+
+      <Box sx={{ display: 'flex', gap: 2, height: 'calc(100vh - 170px)', overflow: 'auto' }}>
+        <ContentTags showTags={showTags} setShowTags={setShowTags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
         <PageLoader loading={isLoading} error={error}>
           <Box sx={{ flex: 1, overflowX: 'hidden' }}>
             {featuredData?.length > 0 && featuredData[0] !== undefined && (
