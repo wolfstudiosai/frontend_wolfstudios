@@ -65,6 +65,7 @@ export const AuthProvider = ({ children }) => {
     let payload = {
       authType: authType,
       authId: user.id,
+      email: user.email,
     }
 
     if (type === 'SIGNUP') {
@@ -129,7 +130,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const payload = authType === 'EMAIL_PASSWORD'
         ? { email, password, authType }
-        : { authId, authType };
+        : { authId, authType, email };
 
       const res = await server_base_api.post('/auth/login', payload);
       const userData = extractUserData(res.data.data);

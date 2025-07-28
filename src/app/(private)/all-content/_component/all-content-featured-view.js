@@ -9,7 +9,7 @@ import { FadeIn } from '/src/components/animation/fade-in';
 
 const AllContentFeaturedView = ({ data }) => {
     return (
-        <>
+        <Box>
             {data?.length > 0 && data[0] !== undefined && (
                 <Box
                     sx={{
@@ -65,7 +65,7 @@ const AllContentFeaturedView = ({ data }) => {
                     </Stack>
                 </Box>
             )}
-        </>
+        </Box>
     );
 };
 
@@ -82,7 +82,7 @@ const ContentFeaturedCard = ({ content }) => {
                     height: '240px',
                     width: '160px',
                     overflow: 'hidden',
-                    borderRadius: '10px',
+                    borderRadius: '8px',
                     transition: 'transform 300ms ease',
                     border: '1px solid var(--mui-palette-divider)',
                     cursor: 'pointer',
@@ -99,7 +99,7 @@ const ContentFeaturedCard = ({ content }) => {
                         right: 0,
                         bottom: 0,
                         zIndex: 0,
-                        borderRadius: '10px',
+                        borderRadius: '8px',
                         backgroundImage: `url("${encodeURI(content?.thumbnailImage)}")`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
@@ -129,7 +129,6 @@ const ContentFeaturedCard = ({ content }) => {
                         zIndex: 10,
                         width: '100%',
                         padding: 1,
-                        overflow: 'hidden',
                     }}
                 >
                     {/* Add new text elements here */}
@@ -147,7 +146,7 @@ const ContentFeaturedCard = ({ content }) => {
                             WebkitBoxOrient: 'vertical',
                         }}
                     >
-                        {content?.name}sadfsfsdd
+                        {content?.name}
                     </Typography>
                 </Box>
             </Box>
