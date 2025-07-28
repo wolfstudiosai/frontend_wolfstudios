@@ -5,7 +5,7 @@ import { IconWithText } from '/src/components/utils/icon-text';
 
 import { AllContentRightPanel } from './all-content-right-panel';
 
-export const ContentCard = ({ content, fetchList }) => {
+export const ContentCard = ({ content }) => {
   const [openRightPanel, setOpenRightPanel] = React.useState(false);
   return (
     <>

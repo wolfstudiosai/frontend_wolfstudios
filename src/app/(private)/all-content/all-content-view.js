@@ -138,13 +138,13 @@ export const AllContentView = () => {
           {featuredLoading ? (
             <FeaturedSkeleton />
           ) : featuredData?.length > 0 && featuredData[0] !== undefined ? (
-            <AllContentFeaturedView loading={featuredLoading} data={featuredData} />
+            <AllContentFeaturedView data={featuredData} />
           ) : null}
 
           <PageLoader loading={isLoading} error={error}>
             {data?.length > 0 && data[0] !== undefined ? (
               <>
-                <AllContentGridView data={data} loading={isLoading} />
+                <AllContentGridView data={data} />
                 {/* Infinite Scroll Trigger Element */}
                 {hasMore && <div ref={bottomRef} style={{ height: '1px' }} />}
                 {isLoadingMore && (

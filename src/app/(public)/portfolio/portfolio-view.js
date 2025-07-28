@@ -63,8 +63,8 @@ export const PortfolioView = () => {
     if (!current) return;
 
     const observer = new IntersectionObserver(handleObserver, {
-      root: null, // uses viewport
-      rootMargin: '300px', // pre-load buffer
+      root: null,
+      rootMargin: '300px',
       threshold: 0,
     });
 
