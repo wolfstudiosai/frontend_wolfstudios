@@ -99,7 +99,7 @@ export const CampaignView = () => {
                 <Box ref={bottomRef} sx={{ height: '1px' }} />
               )}
 
-              {isLoadingMore && (
+              {isLoadingMore && !isLoading && (
                 <Box textAlign="center" mt={2}>
                   <Typography variant="body2" color="textSecondary">
                     Loading more...

@@ -22,7 +22,7 @@ export const SettingsContext = React.createContext({
   debouncedSearch: '',
   setSearch: () => { },
   breadcrumbs: [],
-  setBreadcrumbs: () => { },
+  setBreadcrumbs: (newBreadcrumbs) => { },
 });
 
 export function SettingsProvider({ children, settings: initialSettings }) {
