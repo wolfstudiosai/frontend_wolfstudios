@@ -47,6 +47,7 @@ export const useCampaignList = (status = '', featured = '') => {
     },
     {
       revalidateFirstPage: false,
+      revalidateOnMount: true,
       parallel: true,
     }
   );

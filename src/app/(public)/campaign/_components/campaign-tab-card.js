@@ -8,6 +8,7 @@ import { updateCampaignAsync } from '../_lib/campaign.actions';
 import { campaignProgressStatus } from '../_lib/campaign.constants';
 import { isSupabaseUrl } from '/src/utils/helper';
 import { CampaignRightPanel } from './campaign-right-panel';
+import { mutate as globalMutate } from 'swr';
 
 export const CampaignTabCard = ({ campaign, refreshCampaignsStatus, refreshCampaigns }) => {
   const [openCampaignRightPanel, setOpenCampaignRightPanel] = React.useState(null);
@@ -91,6 +92,11 @@ export const CampaignTabCard = ({ campaign, refreshCampaignsStatus, refreshCampa
           }}
         />
 
+        <Box>
+          <Typography sx={{ fontWeight: 600 }}>
+            {campaign?.name || '-'}
+          </Typography>
+        </Box>
         <Box>
           <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color="text.primary">
             Stakeholder

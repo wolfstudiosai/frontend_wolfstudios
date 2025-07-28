@@ -55,8 +55,8 @@ export const CampaignTabView = () => {
         <SectionLoader loading={isLoading} height="350px">
           {campaigns?.length > 0 ? (
             <Grid container spacing={0.5} mt={1}>
-              {campaigns.map((campaign) => (
-                <Grid key={campaign.id} size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
+              {campaigns?.map((campaign) => (
+                <Grid key={campaign?.id} size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
                   <CampaignTabCard campaign={campaign} refreshCampaignsStatus={refreshCampaignsStatus} refreshCampaigns={refreshCampaigns} />
                 </Grid>
               ))}

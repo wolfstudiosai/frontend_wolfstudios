@@ -21,27 +21,6 @@ import { useGetContentData } from '/src/services/content/useContentData';
 import { useContentList } from '/src/services/content/useContentList';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-// const revalidateAllContentLists = () => {
-//   globalMutate(
-//     (key) => {
-//       if (typeof key === 'string') {
-//         return key.toLowerCase().includes('content');
-//       }
-
-//       if (Array.isArray(key)) {
-//         return key.some(
-//           (part) => typeof part === 'string' && part.toLowerCase().includes('content')
-//         );
-//       }
-
-//       return false;
-//     },
-//     undefined,
-//     { revalidate: true }
-//   );
-// };
-
-
 export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { mutate: mutateList } = useContentList();
   const { mutate: mutateFeatured } = useContentList('featured');
