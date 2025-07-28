@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
@@ -25,6 +25,8 @@ export const ProductionView = () => {
   });
 
   const { data, isLoading, isLoadingMore, error, totalRecords, hasMore, loadMore, mutate } = useProductionList();
+  const observerRef = React.useRef(null);
+  const bottomRef = React.useRef(null);
 
   const handleFilterChange = (type, value) => {
     setFilters((prev) => ({ ...prev, [type]: value }));
@@ -36,6 +38,34 @@ export const ProductionView = () => {
       { title: 'Production', href: '' },
     ]);
   }, []);
+
+  const handleObserver = React.useCallback(
+    (entries) => {
+      const target = entries[0];
+      if (target.isIntersecting && hasMore && !isLoadingMore) {
+        loadMore();
+      }
+    },
+    [hasMore, isLoadingMore, loadMore]
+  );
+
+  React.useEffect(() => {
+    const current = bottomRef.current;
+    if (!current) return;
+
+    const observer = new IntersectionObserver(handleObserver, {
+      root: null,
+      rootMargin: '300px',
+      threshold: 0,
+    });
+
+    observer.observe(current);
+    observerRef.current = observer;
+
+    return () => {
+      if (observerRef.current) observerRef.current.disconnect();
+    };
+  }, [handleObserver]);
 
   return (
     <PageContainer>
@@ -51,14 +81,21 @@ export const ProductionView = () => {
         setOpenPanel={setOpenPanel}
       />
 
-      <ProductionGridView data={data} loading={isLoading} fetchList={mutate} />
-      {hasMore && (
-        <Box textAlign="center" mt={2}>
-          <Button size="small" variant="contained" onClick={loadMore} disabled={isLoadingMore}>
-            {isLoadingMore ? 'Loading...' : 'Show More'}
-          </Button>
-        </Box>
-      )}
+      <Box>
+        <ProductionGridView data={data} loading={isLoading} fetchList={mutate} />
+        {/* Infinite Scroll Trigger */}
+        {hasMore && (
+          <Box ref={bottomRef} sx={{ height: '1px' }} />
+        )}
+
+        {isLoadingMore && !isLoading && (
+          <Box textAlign="center" mt={2}>
+            <Typography variant="body2" color="textSecondary">
+              Loading more...
+            </Typography>
+          </Box>
+        )}
+      </Box>
 
       {openPanel && <ProductionRightPanel id={null} onClose={() => setOpenPanel(false)} open={openPanel} view="ADD" />}
     </PageContainer>

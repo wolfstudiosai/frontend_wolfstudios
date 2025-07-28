@@ -46,9 +46,9 @@ export const PageHeader = ({
   return (
     <Box
       sx={{
-        width: '100%',
-        position: 'sticky',
-        top: 0,
+        width: '50%',
+        // position: 'sticky',
+        // top: 0,
         background: 'var(--mui-palette-background-default)',
       }}
     >
@@ -110,7 +110,7 @@ export const PageHeader = ({
                 gap: '6px',
                 padding: '4px',
                 marginRight: (theme) => theme.spacing(1),
-            
+
               }}
             >
               {view && (
@@ -127,7 +127,7 @@ export const PageHeader = ({
                 <ToggleButton
                   value="add"
                   aria-label="add new"
-                  sx={{ padding: '0px', backgroundColor: values.ADD ? 'grey.200' : '',  }}
+                  sx={{ padding: '0px', backgroundColor: values.ADD ? 'grey.200' : '', }}
                   onClick={() => setOpenPanel(true)}
                 >
                   <Icon icon="mynaui:plus" width={18} height={18} />

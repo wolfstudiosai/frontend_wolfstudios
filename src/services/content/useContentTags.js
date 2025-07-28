@@ -1,11 +1,14 @@
-import useSWR, { useSWRConfig } from "swr"
+import useSWR from "swr"
 import { getTagListAsync } from "/src/lib/common.actions"
+import { useSWRConfig } from "swr"
 
-export const useContentTags = () => {
+export const useContentTags = (search = '') => {
+    const swrKey = `content-tags-${search}`;
     const { cache } = useSWRConfig();
-    const hasCache = cache.get("content-tags");
 
-    const { data, isLoading, error, mutate } = useSWR(["content-tags"], () => getTagListAsync({ page: 1, rowsPerPage: 100 }), {
+    const hasCache = cache.get(swrKey);
+
+    const { data, isLoading, error, mutate } = useSWR(swrKey, () => getTagListAsync({ page: 1, rowsPerPage: 15 }, search), {
         revalidateOnFocus: false,
         revalidateOnMount: !hasCache,
         shouldRetryOnError: true,

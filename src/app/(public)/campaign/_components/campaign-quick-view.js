@@ -41,8 +41,8 @@ export const CampaignQuickView = ({ data, isEdit, onUpdate }) => {
     ...(data?.campaignImage || []),
     data?.thumbnailImage,
   ];
-  const budgetUsed = data.budget === 0 ? 0 : (data.totalExpense / data.budget) * 100;
-  const remainingBudget = data.budget - data.totalExpense;
+  const budgetUsed = data?.budget === 0 ? 0 : (data?.totalExpense / data?.budget) * 100;
+  const remainingBudget = data?.budget - data?.totalExpense;
 
   const handleJoin = () => {
     if (!isLogin) {
@@ -132,7 +132,7 @@ export const CampaignQuickView = ({ data, isEdit, onUpdate }) => {
           <Grid item xs={12} sm={6} md={3}>
             <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default' }}>
               <Typography variant="h4" sx={{ color: 'primary', fontWeight: 700 }}>
-                {formatCompactNumber(data.budget)}
+                {formatCompactNumber(data?.budget)}
               </Typography>
               <Typography variant="body2" sx={{ color: 'primary' }}>
                 Total Budget
@@ -142,7 +142,7 @@ export const CampaignQuickView = ({ data, isEdit, onUpdate }) => {
           <Grid item xs={12} sm={6} md={3}>
             <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default' }}>
               <Typography variant="h4" sx={{ color: 'warning', fontWeight: 700 }}>
-                {formatCompactNumber(data.totalExpense)}
+                {formatCompactNumber(data?.totalExpense)}
               </Typography>
               <Typography variant="body2" sx={{ color: 'warning' }}>
                 Total Spent
@@ -152,7 +152,7 @@ export const CampaignQuickView = ({ data, isEdit, onUpdate }) => {
           <Grid item xs={12} sm={6} md={3}>
             <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default' }}>
               <Typography variant="h4" sx={{ color: 'success', fontWeight: 700 }}>
-                {formatCompactNumber(data.campaignROI)}x
+                {formatCompactNumber(data?.campaignROI)}x
               </Typography>
               <Typography variant="body2" sx={{ color: 'success' }}>
                 ROI
@@ -162,7 +162,7 @@ export const CampaignQuickView = ({ data, isEdit, onUpdate }) => {
           <Grid item xs={12} sm={6} md={3}>
             <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default' }}>
               <Typography variant="h4" sx={{ color: 'info', fontWeight: 700 }}>
-                {formatCompactNumber(data.totalContentEngagement)}
+                {formatCompactNumber(data?.totalContentEngagement)}
               </Typography>
               <Typography variant="body2" sx={{ color: 'info' }}>
                 Engagement
@@ -215,18 +215,18 @@ export const CampaignQuickView = ({ data, isEdit, onUpdate }) => {
             <TableBody>
               <TableRow>
                 <TableCell>Total Budget</TableCell>
-                <TableCell align="right">{formatCompactNumber(data.budget)}</TableCell>
+                <TableCell align="right">{formatCompactNumber(data?.budget)}</TableCell>
                 <TableCell align="right">100%</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Total Expense</TableCell>
-                <TableCell align="right">{formatCompactNumber(data.totalExpense)}</TableCell>
+                <TableCell align="right">{formatCompactNumber(data?.totalExpense)}</TableCell>
                 <TableCell align="right">{budgetUsed.toFixed(1)}%</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Product Expense</TableCell>
-                <TableCell align="right">{formatCompactNumber(data.productExpense)}</TableCell>
-                <TableCell align="right">{((data.productExpense / data.budget) * 100).toFixed(1)}%</TableCell>
+                <TableCell align="right">{formatCompactNumber(data?.productExpense)}</TableCell>
+                <TableCell align="right">{((data?.productExpense / data?.budget) * 100).toFixed(1)}%</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell sx={{ fontWeight: 'bold' }}>Remaining Budget</TableCell>

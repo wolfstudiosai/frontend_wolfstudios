@@ -27,7 +27,7 @@ export const MainView = () => {
       <CampaignSection />
       <SpacesSection />
       <PartnerSectionNew />
-      <FooterAnimation />
+      {/* <FooterAnimation /> */}
     </Box>
   );
 };

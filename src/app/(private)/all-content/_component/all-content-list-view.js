@@ -24,22 +24,24 @@ import {
   createContentAsync,
   createContentView,
   deleteBulkContentAsync,
-  getContentListAsync,
-  getContentViews,
   getSingleContentView,
   updateContentAsync,
   updateContentView
 } from '../_lib/all-content.actions';
 import { defaultContent } from '../_lib/all-content.types';
 import { useContentColumns } from '../hooks/use-content-columns';
+import { useRecordContentList } from '../hooks/use-record-content-list';
+import { useContentViews } from '../hooks/use-content-views';
+import { useContentView } from '../hooks/use-content-view';
 import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
-import useSWR from 'swr';
+import { mutate } from 'swr';
 import { MediaUploader } from '../../../../components/uploaders/media-uploader';
 
 export default function AllContentListView() {
   const theme = useTheme();
   const router = useRouter();
   const anchorEl = React.useRef(null);
+  const hasInitialized = React.useRef(false);
   const singleImageField = ['thumbnailImage'];
   const [anchorElHide, setAnchorElHide] = React.useState(null);
   const [isImageUploadOpen, setIsImageUploadOpen] = React.useState(false);
@@ -52,12 +54,12 @@ export default function AllContentListView() {
   const searchParams = useSearchParams();
   const viewId = searchParams.get('view');
 
-  const handleUploadModalOpen = (data, field, uploadOpen) => {
+  const handleUploadModalOpen = React.useCallback((data, field, uploadOpen) => {
     setOpen(true);
     setImageUpdatedField(field);
     setUpdatedRow(data);
     setIsImageUploadOpen(uploadOpen);
-  };
+  }, []);
 
   const handleClosePopover = () => {
     anchorEl.current = null;
@@ -98,17 +100,14 @@ export default function AllContentListView() {
       const response = await updateContentAsync(finalData);
       if (response.success) {
         setOpen(false);
-        getSingleView(viewId);
+        refreshAllContentView();
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      getSingleView(viewId);
     }
   };
 
   const [records, setRecords] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -134,39 +133,9 @@ export default function AllContentListView() {
   const columns = useContentColumns(anchorEl, visibleColumns, setMediaToShow, handleUploadModalOpen);
 
   // swr
-  const {
-    data: contentList,
-    error: contentListError,
-    isLoading: isContentListLoading,
-  } = useSWR(['contentList', { page: 1, rowsPerPage: 20 }], ([, params]) => getContentListAsync(params));
-
-  const {
-    data: viewsData,
-    isLoading: viewsLoading,
-    error: viewsError,
-    mutate: mutateViews,
-  } = useSWR('contentViews', getContentViews);
-
-  // get single view
-  const getSingleView = async (viewId, paginationProps) => {
-    try {
-      setLoading(true);
-      const viewPagination = paginationProps ? paginationProps : pagination;
-      const res = await getSingleContentView(viewId, viewPagination);
-      if (res.success) {
-        setRecords(res.data.data.map((row) => defaultContent(row)) || []);
-        setTotalRecords(res.data.count);
-        setSelectedViewData(res.data);
-        setFilters(res.data.meta?.filters || []);
-        setGate(res.data.meta?.gate || 'and');
-        setSort(res.data.meta?.sort || []);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { viewsData, isViewsLoading } = useContentViews();
+  const { contentMeta, columns: contentColumns, isContentLoading } = useRecordContentList();
+  const { singleView, isSingleViewLoading, refreshViewData, refreshAllContentView } = useContentView(selectedViewId, pagination);
 
   async function updateView(props) {
     const viewFilters = props.filters ? props.filters : filters;
@@ -188,28 +157,23 @@ export default function AllContentListView() {
 
   // ******************************data grid handler starts*********************
 
-  const handlePaginationModelChange = (newPaginationModel) => {
+  const handlePaginationModelChange = React.useCallback((newPaginationModel) => {
     const { page, pageSize } = newPaginationModel;
     const newPagination = { pageNo: page + 1, limit: pageSize };
     setPagination(newPagination);
-    if (viewId) {
-      getSingleView(viewId, newPagination);
-    }
-  };
+  }, []);
 
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
 
     const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
+    let res;
     if (isTemporaryId) {
       if (!newRow.name) {
         toast.error('Please enter name');
         return newRow;
       }
-      const res = await createContentAsync(newRow);
-      if (res.success) {
-        getSingleView(viewId);
-      }
+      res = await createContentAsync(newRow);
     } else {
       const finalData = convertArrayObjIntoArrOfStr(newRow, [
         'campaigns',
@@ -264,13 +228,15 @@ export default function AllContentListView() {
         finalData[key] = Number(finalData[key]);
       }
 
-      const res = await updateContentAsync(finalData);
-      if (res.success) {
-        getSingleView(viewId);
-      }
+      res = await updateContentAsync(finalData);
     }
 
-    return newRow;
+    if (res.success) {
+      refreshAllContentView();
+      return newRow;
+    }
+
+    return oldRow;
   }, [viewId]);
 
   // console.log(data)
@@ -279,10 +245,10 @@ export default function AllContentListView() {
     console.log({ children: error.message, severity: 'error' });
   }, []);
 
-  const handleRowSelection = (newRowSelectionModel) => {
+  const handleRowSelection = React.useCallback((newRowSelectionModel) => {
     const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
     setSelectedRows(selectedData);
-  };
+  }, [records]);
 
   // ******************************data grid handler ends*********************
 
@@ -292,7 +258,7 @@ export default function AllContentListView() {
     setRecords([newRecord, ...records]);
   };
 
-  const handleDelete = async () => getSingleView(viewId);
+  const handleDelete = async () => refreshAllContentView();
 
   // Column handler
   // handle column change
@@ -342,7 +308,7 @@ export default function AllContentListView() {
 
       const res = await updateProductionViewAsync(viewId, data);
       if (res.success) {
-        getSingleView(viewId);
+        refreshViewData();
         handleClosePopoverHide();
       }
     }
@@ -353,30 +319,33 @@ export default function AllContentListView() {
   // handle filter apply
   const handleFilterApply = async () => {
     if (viewId) {
-      updateView({ filters }).then(() => {
-        getSingleView(viewId);
-      });
+      const res = await updateView({ filters })
+      if (res.success) {
+        refreshViewData();
+      }
     }
   };
 
   // handle remove filter condition
-  const handleRemoveFilterCondition = (index) => {
+  const handleRemoveFilterCondition = async (index) => {
     const newFilters = filters.filter((_, i) => i !== index);
     setFilters(newFilters);
     if (viewId) {
-      updateView({ filters: newFilters }).then(() => {
-        getSingleView(viewId);
-      });
+      const res = await updateView({ filters: newFilters })
+      if (res.success) {
+        refreshViewData();
+      }
     }
   };
 
   // handle clear filters
-  const handleClearFilters = () => {
+  const handleClearFilters = async () => {
     setFilters([]);
     if (viewId) {
-      updateView({ filters: [] }).then(() => {
-        getSingleView(viewId);
-      });
+      const res = await updateView({ filters: [] })
+      if (res.success) {
+        refreshViewData();
+      }
     }
   };
 
@@ -384,28 +353,16 @@ export default function AllContentListView() {
   // initialize
   const initialize = async () => {
     try {
-      setLoading(true);
-
       // set meta data
-      setMetaData(contentList.meta);
-      const columns = contentList.meta.map((obj) => {
-        const key = Object.keys(obj)[0];
-        return {
-          label: obj[key].label,
-          columnName: key,
-          type: obj[key].type,
-          depth: obj[key].depth,
-        };
-      });
-
-      setAllColumns(columns);
+      setMetaData(contentMeta);
+      setAllColumns(contentColumns);
 
       // set views
       setViews(viewsData.data);
 
       if (viewsData.success) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
-        await getSingleView(firstView?.id, pagination);
+        setSelectedViewId(firstView?.id);
 
         if (!viewId) {
           router.push(`?tab=content&view=${firstView?.id}`);
@@ -418,7 +375,7 @@ export default function AllContentListView() {
           gate: 'and',
           isPublic: true,
           filters: [],
-          columns: columns.map((col) => col.columnName),
+          columns: contentColumns.map((col) => col.columnName),
           sort: [],
           groups: [],
         };
@@ -438,47 +395,57 @@ export default function AllContentListView() {
               createdAt: createViewData?.createdAt,
             },
           ]);
-          await getSingleView(res.data.id, pagination);
-          router.push(`?tab=content&view=${res.data.id}`);
+
+          mutate('contentViews');
+          setSelectedViewId(res.data.id);
+          router.replace(`?tab=content&view=${res.data.id}`);
         }
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
   };
 
-  // update visible columns
+  /// Watch for URL viewId change
   React.useEffect(() => {
-    if (allColumns.length === 0) return;
-    if (viewId && selectedViewData) {
-      const selectedColumnNames = selectedViewData.meta?.columns || [];
+    setPagination((prev) => ({ ...prev, pageNo: 1 }));
+    if (searchParams.get('tab') !== 'content') return;
+    if (contentMeta && viewsData && !hasInitialized.current) {
+      hasInitialized.current = true;
+      initialize();
+    }
+  }, [contentMeta, viewsData, searchParams]);
+
+  // store isView sidebar is open or not on local storage
+  const handleOpenViewSidebar = () => {
+    setShowView(!showView);
+    localStorage.setItem('isRecordViewOpen', !showView);
+  };
+
+  React.useEffect(() => {
+    if (singleView) {
+      setRecords(singleView?.data?.data?.map((row) => defaultContent(row)) || []);
+      setTotalRecords(singleView?.data?.count);
+      setSelectedViewData(singleView?.data);
+      setFilters(singleView?.data?.meta?.filters || []);
+      setGate(singleView?.data?.meta?.gate || 'and');
+      setSort(singleView?.data?.meta?.sort || []);
+
+      const selectedColumnNames = singleView?.data?.meta?.columns || [];
       const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
 
       setVisibleColumns(filtered);
       setNewVisibleColumns(filtered);
-    } else {
-      setVisibleColumns(allColumns);
-      setNewVisibleColumns(allColumns);
+      setSearchColumns(allColumns);
     }
-    setSearchColumns(allColumns);
-  }, [viewId, selectedViewData, allColumns]);
-
-  // Watch for URL viewId change
-  React.useEffect(() => {
-    setPagination((prev) => ({ ...prev, pageNo: 1 }));
-    if (searchParams.get('tab') !== 'content') return;
-    if (!isContentListLoading && !viewsLoading) {
-      initialize();
-    }
-  }, [viewId, isContentListLoading, viewsLoading]);
+  }, [singleView]);
 
   React.useEffect(() => {
-    if (selectedViewId) {
-      getSingleView(selectedViewId, pagination);
+    const isViewOpen = localStorage.getItem('isRecordViewOpen');
+    if (isViewOpen === 'true') {
+      setShowView(true);
     }
-  }, [selectedViewId]);
+  }, [showView]);
 
 
   return (
@@ -514,18 +481,19 @@ export default function AllContentListView() {
               handleFilterApply={handleFilterApply}
               handleRemoveFilterCondition={handleRemoveFilterCondition}
               handleClearFilters={handleClearFilters}
-              loading={loading}
+              loading={isSingleViewLoading || isContentLoading || isViewsLoading}
             />
 
             <Button startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />} variant="text" size="small">
               Group
             </Button>
+
             <TableSortBuilder
               allColumns={allColumns}
               sort={sort}
               setSort={setSort}
               updateView={updateView}
-              getSingleView={getSingleView}
+              refreshViewData={refreshViewData}
             />
           </Box>
 
@@ -534,7 +502,7 @@ export default function AllContentListView() {
               <AddIcon />
             </IconButton>
             <Box>
-              <RefreshPlugin onClick={() => getSingleView(viewId)} />
+              <RefreshPlugin onClick={() => mutate(['contentView', viewId, pagination])} />
             </Box>
             <DeleteConfirmationPasswordPopover
               title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
@@ -560,7 +528,7 @@ export default function AllContentListView() {
             columns={allColumns}
             selectedView={selectedViewData}
             setSelectedViewId={setSelectedViewId}
-            viewsLoading={viewsLoading}
+            viewsLoading={isViewsLoading}
           />
 
           <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
@@ -569,13 +537,13 @@ export default function AllContentListView() {
               rows={records}
               processRowUpdate={processRowUpdate}
               onProcessRowUpdateError={handleProcessRowUpdateError}
-              loading={loading}
+              loading={isSingleViewLoading || isContentLoading || isViewsLoading}
               rowCount={totalRecords}
-              pageSizeOptions={[20, 50, 100]}
+              checkboxSelection
+              pageSizeOptions={[20, 30, 50]}
               paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
               onPageChange={handlePaginationModelChange}
               onRowSelectionModelChange={handleRowSelection}
-              checkboxSelection
             />
           </Box>
         </Box>

@@ -9,13 +9,12 @@ import { FadeIn } from '/src/components/animation/fade-in';
 
 const AllContentFeaturedView = ({ data }) => {
     return (
-        <>
+        <Box>
             {data?.length > 0 && data[0] !== undefined && (
                 <Box
                     sx={{
                         overflowX: 'auto',
                         whiteSpace: 'nowrap',
-                        // py: 2,
                         '&::-webkit-scrollbar': { display: 'none' },
                     }}
                 >
@@ -66,7 +65,7 @@ const AllContentFeaturedView = ({ data }) => {
                     </Stack>
                 </Box>
             )}
-        </>
+        </Box>
     );
 };
 
@@ -86,6 +85,7 @@ const ContentFeaturedCard = ({ content }) => {
                     borderRadius: '8px',
                     transition: 'transform 300ms ease',
                     border: '1px solid var(--mui-palette-divider)',
+                    cursor: 'pointer',
                 }}
                 onClick={() => setOpenRightPanel(true)}
             >
@@ -119,6 +119,36 @@ const ContentFeaturedCard = ({ content }) => {
                         zIndex: 5,
                     }}
                 />
+
+                {/* Title & Description */}
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        left: 0,
+                        bottom: 0,
+                        zIndex: 10,
+                        width: '100%',
+                        padding: 1,
+                    }}
+                >
+                    {/* Add new text elements here */}
+                    <Typography
+                        sx={{
+                            color: 'white',
+                            fontSize: { xs: '0.875rem' },
+                            fontWeight: 500,
+                            textTransform: 'uppercase',
+                            marginBottom: '7px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                        }}
+                    >
+                        {content?.name}
+                    </Typography>
+                </Box>
             </Box>
 
             {openRightPanel && (

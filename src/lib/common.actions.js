@@ -144,7 +144,7 @@ export const getHomepageContentAsync = async () => {
 
     return { success: true, data: res.data.data?.data, count: res.data.data.count };
   } catch (error) {
-    toast.error(error.response.data.message);
+    // toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };

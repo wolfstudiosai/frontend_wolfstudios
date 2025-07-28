@@ -14,6 +14,7 @@ import { CampaignRightPanel } from './_components/campaign-right-panel';
 import { CampaignTabView } from './_components/campaign-tab-view';
 import { campaignFilters, campaignSorting, campaignTags } from './_lib/campaign.constants';
 import { useSettings } from '/src/hooks/use-settings';
+import { Typography } from '@mui/material';
 
 export const CampaignView = () => {
   const { setBreadcrumbs } = useSettings();
@@ -27,6 +28,9 @@ export const CampaignView = () => {
     ADD: false,
   });
 
+  const observerRef = React.useRef(null);
+  const bottomRef = React.useRef(null);
+
   const { data, isLoading, isLoadingMore, error, totalRecords, hasMore, loadMore } = useCampaignList();
 
   const handleFilterChange = (type, value) => {
@@ -39,6 +43,34 @@ export const CampaignView = () => {
       { title: 'Campaign', href: '' },
     ]);
   }, []);
+
+  const handleObserver = React.useCallback(
+    (entries) => {
+      const target = entries[0];
+      if (target.isIntersecting && hasMore && !isLoadingMore) {
+        loadMore();
+      }
+    },
+    [hasMore, isLoadingMore, loadMore]
+  );
+
+  React.useEffect(() => {
+    const current = bottomRef.current;
+    if (!current) return;
+
+    const observer = new IntersectionObserver(handleObserver, {
+      root: null,
+      rootMargin: '300px',
+      threshold: 0,
+    });
+
+    observer.observe(current);
+    observerRef.current = observer;
+
+    return () => {
+      if (observerRef.current) observerRef.current.disconnect();
+    };
+  }, [handleObserver]);
 
   return (
     <PageContainer>
@@ -60,13 +92,18 @@ export const CampaignView = () => {
 
           {filters.VIEW === 'grid' ? (
             <Box>
-              <CampaignGridView data={data} />
+              <CampaignGridView data={data} loading={isLoading} />
 
+              {/* Infinite Scroll Trigger */}
               {hasMore && (
+                <Box ref={bottomRef} sx={{ height: '1px' }} />
+              )}
+
+              {isLoadingMore && !isLoading && (
                 <Box textAlign="center" mt={2}>
-                  <Button size="small" variant="contained" onClick={loadMore} disabled={isLoadingMore}>
-                    {isLoadingMore ? 'Loading...' : 'Show More'}
-                  </Button>
+                  <Typography variant="body2" color="textSecondary">
+                    Loading more...
+                  </Typography>
                 </Box>
               )}
             </Box>

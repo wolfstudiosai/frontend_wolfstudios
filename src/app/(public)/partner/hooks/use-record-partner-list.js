@@ -1,26 +1,26 @@
 import useSWR, { useSWRConfig } from 'swr';
-import { getCampaignListAsync } from '../_lib/campaign.actions';
+import { getPartnerListAsync } from '../_lib/partner.actions';
 
-export const useRecordCampaignList = () => {
+export const useRecordPartnerList = () => {
     const pagination = { page: 1, rowsPerPage: 1 };
-    const swrKey = ['recordCampaignList', pagination];
+    const swrKey = ['recordPartnerList', pagination];
     const { cache } = useSWRConfig();
     const hasCache = cache.get(JSON.stringify(swrKey)) ? true : false;
 
     const {
-        data: campaigns,
-        error: campaignsError,
-        isLoading: isCampaignsLoading,
+        data: partners,
+        error: partnersError,
+        isLoading: isPartnersLoading,
     } = useSWR(
         swrKey,
-        ([, pagination]) => getCampaignListAsync(pagination),
+        ([, pagination]) => getPartnerListAsync(pagination),
         {
             revalidateOnFocus: false,
             revalidateOnMount: !hasCache,
         }
     );
 
-    const columns = campaigns?.meta?.map((obj) => {
+    const columns = partners?.meta?.map((obj) => {
         const key = Object.keys(obj)[0];
         return {
             label: obj[key].label,
@@ -31,9 +31,9 @@ export const useRecordCampaignList = () => {
     });
 
     return {
-        campaignMeta: campaigns?.meta,
+        partnerMeta: partners?.meta,
         columns,
-        campaignsError,
-        isCampaignsLoading,
+        partnersError,
+        isPartnersLoading,
     };
 };

@@ -34,21 +34,22 @@ import {
   createProductionAsync,
   createProductionViewAsync,
   deleteProductionAsync,
-  getProductionListAsync,
-  getProductionViewsAsync,
-  getSingleProductionViewAsync,
   updateProductionAsync,
   updateProductionViewAsync,
 } from '../_lib/production.action';
 import { useProductionColumns } from '../hooks/use-production-columns';
+import { useRecordProductionList } from '../hooks/use-record-production-list';
+import { useProductionViews } from '../hooks/use-production-views';
+import { useProductionView } from '../hooks/use-production-view';
 import { defaultProduction } from '../../production/_lib/production.types';
 import { convertArrayObjIntoArrOfStr } from '/src/utils/convertRelationArrays';
-import useSWR from 'swr';
+import { mutate } from 'swr';
 
 export const ProductionListView = () => {
   const theme = useTheme();
   const anchorEl = React.useRef(null);
   const router = useRouter();
+  const hasInitialized = React.useRef(false);
   const [anchorElHide, setAnchorElHide] = React.useState(null);
   const singleImageField = ['thumbnailImage'];
   const [isImageUploadOpen, setIsImageUploadOpen] = React.useState(false);
@@ -61,12 +62,12 @@ export const ProductionListView = () => {
   const searchParams = useSearchParams();
   const viewId = searchParams.get('view');
 
-  const handleUploadModalOpen = (data, field, uploadOpen) => {
+  const handleUploadModalOpen = React.useCallback((data, field, uploadOpen) => {
     setOpen(true);
     setImageUpdatedField(field);
     setUpdatedRow(data);
     setIsImageUploadOpen(uploadOpen);
-  };
+  }, []);
 
   const handleClosePopover = () => {
     anchorEl.current = null;
@@ -106,7 +107,7 @@ export const ProductionListView = () => {
 
       if (res.success) {
         setOpen(false);
-        getSingleView(viewId);
+        refreshAllProductionView();
       }
     } catch (error) {
       console.log(error);
@@ -114,7 +115,6 @@ export const ProductionListView = () => {
   };
 
   const [records, setRecords] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -140,40 +140,9 @@ export const ProductionListView = () => {
   const columns = useProductionColumns(anchorEl, visibleColumns, setMediaToShow, handleUploadModalOpen);
 
   // SWR
-  const {
-    data: productions,
-    error: productionsError,
-    isLoading: isProductionsLoading,
-  } = useSWR(['productionList', { page: 1, rowsPerPage: 20 }], ([, params]) => getProductionListAsync(params));
-
-  const {
-    data: viewsData,
-    isLoading: viewsLoading,
-    error: viewsError,
-    mutate: mutateViews,
-  } = useSWR('productionViews', getProductionViewsAsync);
-
-  // get single view
-  const getSingleView = async (viewId, paginationProps) => {
-    try {
-      setLoading(true);
-      const viewPagination = paginationProps ? paginationProps : pagination;
-      const response = await getSingleProductionViewAsync(viewId, viewPagination);
-
-      if (response.success) {
-        setRecords(response.data.data.map((row) => defaultProduction(row)) || []);
-        setTotalRecords(response.data.count);
-        setSelectedViewData(response.data);
-        setFilters(response.data.meta?.filters || []);
-        setGate(response.data.meta?.gate || 'and');
-        setSort(response.data.meta?.sort || []);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { viewsData, isViewsLoading } = useProductionViews();
+  const { productionMeta, columns: productionsColumns, isProductionsLoading } = useRecordProductionList();
+  const { singleView, isSingleViewLoading, refreshViewData, refreshAllProductionView } = useProductionView(selectedViewId, pagination);
 
   async function updateView(props) {
     const viewFilters = props.filters ? props.filters : filters;
@@ -190,24 +159,24 @@ export const ProductionListView = () => {
       sort: viewSort,
       groups: selectedViewData?.meta?.groups,
     };
-    await updateProductionViewAsync(viewId, data);
+    const result = await updateProductionViewAsync(viewId, data);
+    return result;
   }
 
   // ******************************data grid handler starts*********************
 
-  const handlePaginationModelChange = (newPaginationModel) => {
+  // handle pagination model change
+  const handlePaginationModelChange = React.useCallback((newPaginationModel) => {
     const { page, pageSize } = newPaginationModel;
     const newPagination = { pageNo: page + 1, limit: pageSize };
     setPagination(newPagination);
-    if (viewId) {
-      getSingleView(viewId, newPagination);
-    }
-  };
+  }, []);
 
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
 
     const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
+    let res;
 
     if (isTemporaryId) {
       if (!newRow.name) {
@@ -215,7 +184,7 @@ export const ProductionListView = () => {
         return newRow;
       }
 
-      await createProductionAsync(newRow).then(() => getSingleView(viewId));
+      res = await createProductionAsync(newRow);
     } else {
       const finalData = convertArrayObjIntoArrOfStr(newRow, [
         'spaces',
@@ -251,21 +220,28 @@ export const ProductionListView = () => {
         ? finalData.thumbnailImage[0]
         : finalData.thumbnailImage;
 
-      await updateProductionAsync(finalData).then(() => getSingleView(viewId));
+      res = await updateProductionAsync(finalData);
     }
 
-    return newRow;
+    if (res.success) {
+      refreshAllProductionView();
+      return newRow;
+    }
+
+    return oldRow;
   }, [viewId]);
 
-  const handleRowSelection = (newRowSelectionModel) => {
+  // handle row selection
+  const handleRowSelection = React.useCallback((newRowSelectionModel) => {
     const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
     setSelectedRows(selectedData);
-  };
+  }, [records]);
 
+
+  // handle process row update error
   const handleProcessRowUpdateError = React.useCallback((error) => {
     console.log({ children: error.message, severity: 'error' });
   }, []);
-
   // ******************************data grid handler ends*********************
 
   const handleAddNewItem = () => {
@@ -274,8 +250,10 @@ export const ProductionListView = () => {
     setRecords([newRow, ...records]);
   };
 
-  const handleDelete = async () => getSingleView(viewId);
+  const handleDelete = async () => refreshAllProductionView();
 
+  // Column handler
+  // handle column change
   const handleColumnChange = async (e, col) => {
     let columns = [...newVisibleColumns];
     if (e.target.checked) {
@@ -306,6 +284,7 @@ export const ProductionListView = () => {
     setNewVisibleColumns(newVisibleColumns);
   };
 
+  // handle save columns
   const handleSaveColumns = async () => {
     if (viewId) {
       const data = {
@@ -322,7 +301,7 @@ export const ProductionListView = () => {
 
       const res = await updateProductionViewAsync(viewId, data);
       if (res.success) {
-        getSingleView(viewId);
+        refreshViewData();
         handleClosePopoverHide();
       }
     }
@@ -332,56 +311,51 @@ export const ProductionListView = () => {
   // handle filter apply
   const handleFilterApply = async () => {
     if (viewId) {
-      updateView({ filters }).then(() => {
-        getSingleView(viewId);
-      });
+      const res = await updateView({ filters });
+      if (res.success) {
+        refreshViewData();
+      }
     }
   };
 
   // handle remove filter condition
-  const handleRemoveFilterCondition = (index) => {
+  const handleRemoveFilterCondition = async (index) => {
     const newFilters = filters.filter((_, i) => i !== index);
     setFilters(newFilters);
     if (viewId) {
-      updateView({ filters: newFilters }).then(() => {
-        getSingleView(viewId);
-      });
+      const res = await updateView({ filters: newFilters });
+      if (res.success) {
+        refreshViewData();
+      }
     }
   };
 
   // handle clear filters
-  const handleClearFilters = () => {
+  const handleClearFilters = async () => {
     setFilters([]);
     if (viewId) {
-      updateView({ filters: [] }).then(() => {
-        getSingleView(viewId);
-      });
+      const res = await updateView({ filters: [] });
+      if (res.success) {
+        refreshViewData();
+      }
     }
   };
 
 
   const initialize = async () => {
     try {
-      setLoading(true);
       // set meta data
-      setMetaData(productions.meta);
-      const columns = productions.meta.map((obj) => {
-        const key = Object.keys(obj)[0];
-        return {
-          label: obj[key].label,
-          columnName: key,
-          type: obj[key].type,
-          depth: obj[key].depth,
-        };
-      });
-
-      setAllColumns(columns);
+      setMetaData(productionMeta);
+      setAllColumns(productionsColumns);
 
       // set views
       setViews(viewsData.data);
-      if (viewsData.success) {
+      console.log(viewsData.data, 'viewsData.data')
+
+      if (viewsData.success && viewsData?.data?.length > 0) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
-        await getSingleView(firstView?.id, pagination);
+        console.log(firstView)
+        setSelectedViewId(firstView?.id);
 
         if (!viewId) {
           router.push(`?tab=production&view=${firstView?.id}`);
@@ -394,7 +368,7 @@ export const ProductionListView = () => {
           gate: 'and',
           isPublic: true,
           filters: [],
-          columns: columns.map((col) => col.columnName),
+          columns: productionsColumns.map((col) => col.columnName),
           sort: [],
           groups: [],
         };
@@ -414,47 +388,58 @@ export const ProductionListView = () => {
               createdAt: createViewData?.createdAt,
             },
           ]);
-          await getSingleView(res.data.id, pagination);
+
+          mutate('productionViews');
+          setSelectedViewId(res.data.id);
           router.push(`?tab=production&view=${res.data.id}`);
         }
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
   };
-
-  // update visible columns
-  React.useEffect(() => {
-    if (allColumns.length === 0) return;
-    if (viewId && selectedViewData) {
-      const selectedColumnNames = selectedViewData.meta?.columns || [];
-      const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
-
-      setVisibleColumns(filtered);
-      setNewVisibleColumns(filtered);
-    } else {
-      setVisibleColumns(allColumns);
-      setNewVisibleColumns(allColumns);
-    }
-    setSearchColumns(allColumns);
-  }, [viewId, selectedViewData, allColumns]);
 
   // Watch for URL viewId change
   React.useEffect(() => {
     setPagination((prev) => ({ ...prev, pageNo: 1 }));
     if (searchParams.get('tab') !== 'production') return;
-    if (!isProductionsLoading && !viewsLoading) {
+    if (productionMeta && viewsData && !hasInitialized.current) {
+      hasInitialized.current = true;
       initialize();
+      console.log('initialize')
     }
-  }, [viewId, isProductionsLoading, viewsLoading]);
+  }, [productionMeta, viewsData, searchParams]);
+
+  // store isView sidebar is open or not on local storage
+  const handleOpenViewSidebar = () => {
+    setShowView(!showView);
+    localStorage.setItem('isRecordViewOpen', !showView);
+  };
 
   React.useEffect(() => {
-    if (selectedViewId) {
-      getSingleView(selectedViewId, pagination);
+    if (singleView) {
+      setRecords(singleView?.data?.data?.map((row) => defaultProduction(row)) || []);
+      setTotalRecords(singleView?.data?.count);
+      setSelectedViewData(singleView?.data);
+      setFilters(singleView?.data?.meta?.filters || []);
+      setGate(singleView?.data?.meta?.gate || 'and');
+      setSort(singleView?.data?.meta?.sort || []);
+
+      const selectedColumnNames = singleView?.data?.meta?.columns || [];
+      const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
+
+      setVisibleColumns(filtered);
+      setNewVisibleColumns(filtered);
+      setSearchColumns(allColumns);
     }
-  }, [selectedViewId]);
+  }, [singleView]);
+
+  React.useEffect(() => {
+    const isViewOpen = localStorage.getItem('isRecordViewOpen');
+    if (isViewOpen === 'true') {
+      setShowView(true);
+    }
+  }, [showView])
 
   return (
     <PageContainer>
@@ -489,17 +474,19 @@ export const ProductionListView = () => {
               handleFilterApply={handleFilterApply}
               handleRemoveFilterCondition={handleRemoveFilterCondition}
               handleClearFilters={handleClearFilters}
+              loading={isSingleViewLoading || isProductionsLoading || isViewsLoading}
             />
 
             <Button startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />} variant="text" size="small">
               Group
             </Button>
+
             <TableSortBuilder
               allColumns={allColumns}
               sort={sort}
               setSort={setSort}
               updateView={updateView}
-              getSingleView={getSingleView}
+              refreshViewData={refreshViewData}
             />
           </Box>
 
@@ -508,7 +495,7 @@ export const ProductionListView = () => {
               <AddIcon />
             </IconButton>
             <Box>
-              <RefreshPlugin onClick={() => getSingleView(viewId)} />
+              <RefreshPlugin onClick={() => mutate(['productionView', viewId, pagination])} />
             </Box>
             <DeleteConfirmationPasswordPopover
               title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
@@ -534,7 +521,7 @@ export const ProductionListView = () => {
             columns={allColumns}
             selectedView={selectedViewData}
             setSelectedViewId={setSelectedViewId}
-            viewsLoading={viewsLoading}
+            viewsLoading={isViewsLoading}
           />
 
           <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
@@ -543,12 +530,12 @@ export const ProductionListView = () => {
               rows={records}
               processRowUpdate={processRowUpdate}
               onProcessRowUpdateError={handleProcessRowUpdateError}
-              loading={loading}
+              loading={isSingleViewLoading || isProductionsLoading || isViewsLoading}
               rowCount={totalRecords}
+              checkboxSelection
               pageSizeOptions={[20, 30, 50]}
               paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
               onPageChange={handlePaginationModelChange}
-              checkboxSelection={true}
               onRowSelectionModelChange={handleRowSelection}
             />
           </Box>
