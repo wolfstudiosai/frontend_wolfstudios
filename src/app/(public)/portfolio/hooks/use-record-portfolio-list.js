@@ -3,9 +3,9 @@ import { getPortfolioListAsync } from '../_lib/portfolio.actions';
 
 export const useRecordPortfolioList = () => {
     const pagination = { page: 1, rowsPerPage: 1 };
-    const swrKey = ['recordPortfolioList', JSON.stringify(pagination)];
+    const swrKey = ['recordPortfolioList', pagination];
     const { cache } = useSWRConfig();
-    const hasCache = cache.has(swrKey);
+    const hasCache = cache.get(JSON.stringify(swrKey)) ? true : false;
 
     const {
         data: portfolios,
@@ -13,7 +13,7 @@ export const useRecordPortfolioList = () => {
         isLoading: isPortfoliosLoading,
     } = useSWR(
         swrKey,
-        ([, paginationStr]) => getPortfolioListAsync(JSON.parse(paginationStr)),
+        ([, pagination]) => getPortfolioListAsync(pagination),
         {
             revalidateOnFocus: false,
             revalidateOnMount: !hasCache,

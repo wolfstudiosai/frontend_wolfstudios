@@ -1,10 +1,10 @@
 import useSWR from 'swr';
-import { getSingleCampaignView } from '../_lib/campaign.actions';
 import { useSWRConfig } from 'swr';
+import { getSingleProductionViewAsync } from '../_lib/production.action';
 
-export const useCampaignView = (id, pagination) => {
+export const useProductionView = (id, pagination) => {
     // const swrKey = id ? ['campaignView', id, JSON.stringify(pagination)] : null;
-    const swrKey = id ? ['campaignView', id, pagination] : null;
+    const swrKey = id ? ['productionView', id, pagination] : null;
     const { cache, mutate: globalMutate } = useSWRConfig();
     const hasCache = swrKey ? cache.get(JSON.stringify(swrKey)) : false;
 
@@ -15,7 +15,7 @@ export const useCampaignView = (id, pagination) => {
         mutate: localMutate,
     } = useSWR(
         swrKey,
-        ([, id, pagination]) => getSingleCampaignView(id, pagination),
+        ([, id, pagination]) => getSingleProductionViewAsync(id, pagination),
         {
             revalidateOnFocus: false,
             revalidateIfStale: false,
@@ -27,19 +27,21 @@ export const useCampaignView = (id, pagination) => {
 
     const refreshViewData = () => localMutate();
 
-    const refreshAllCampaignView = () => {
+    const refreshAllProductionView = () => {
         return globalMutate(
-            key => Array.isArray(key) && key[0] === 'campaignView',
+            key => Array.isArray(key) && key[0] === 'productionView',
             undefined,
             { revalidate: true }
         );
     };
+
+    console.log(singleView)
 
     return {
         singleView,
         singleViewError,
         isSingleViewLoading,
         refreshViewData,
-        refreshAllCampaignView,
+        refreshAllProductionView,
     };
 };

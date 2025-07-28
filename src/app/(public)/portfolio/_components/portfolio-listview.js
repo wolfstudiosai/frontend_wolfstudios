@@ -318,7 +318,7 @@ export const PortfolioListView = () => {
       // set views
       setViews(viewsData.data);
 
-      if (viewsData.success) {
+      if (viewsData.success && viewsData?.data?.length > 0) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
         setSelectedViewId(firstView?.id);
 
