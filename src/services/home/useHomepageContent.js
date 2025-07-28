@@ -15,8 +15,8 @@ export const useHomepageContent = () => {
 
     {
       revalidateOnFocus: false,
-      shouldRetryOnError: true,
-      errorRetryCount: 2,
+      // shouldRetryOnError: true,
+      // errorRetryCount: 2,
     }
   );
   return {

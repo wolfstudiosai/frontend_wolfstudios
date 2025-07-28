@@ -360,18 +360,6 @@ export const CampaignListView = () => {
     }
   }, [campaignMeta, viewsData, searchParams]);
 
-
-  // WILL TEST IT LATER
-  // React.useEffect(() => {
-  //   if (searchParams.get('tab') === 'campaign') {
-  //     if (campaignMeta && viewsData && !hasInitialized.current) {
-  //       hasInitialized.current = true;
-  //       setPagination({ pageNo: 1, limit: 20 });
-  //       initialize();
-  //     }
-  //   }
-  // }, [campaignMeta, viewsData]);
-
   // store isView sidebar is open or not on local storage
   const handleOpenViewSidebar = () => {
     setShowView(!showView);
