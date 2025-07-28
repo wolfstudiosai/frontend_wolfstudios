@@ -1,7 +1,7 @@
 'use client';
 
-import { Box, Button } from '@mui/material';
-import React from 'react';
+import { Box, Button, Typography } from '@mui/material';
+import React, { useEffect, useRef, useCallback } from 'react';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
@@ -24,18 +24,57 @@ export const PortfolioView = () => {
     ADD: false,
   });
 
-  const { data, isLoading, isLoadingMore, error, totalRecords, hasMore, loadMore, mutate } = usePortfolioList();
+  const {
+    data,
+    isLoading,
+    isLoadingMore,
+    error,
+    totalRecords,
+    hasMore,
+    loadMore,
+  } = usePortfolioList();
+
+  const observerRef = useRef(null);
+  const bottomRef = useRef(null);
 
   const handleFilterChange = (type, value) => {
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setBreadcrumbs([
       { title: 'Dashboard', href: paths.private.overview },
       { title: 'Portfolio', href: '' },
     ]);
   }, []);
+
+  const handleObserver = useCallback(
+    (entries) => {
+      const target = entries[0];
+      if (target.isIntersecting && hasMore && !isLoadingMore) {
+        loadMore();
+      }
+    },
+    [hasMore, isLoadingMore, loadMore]
+  );
+
+  useEffect(() => {
+    const current = bottomRef.current;
+    if (!current) return;
+
+    const observer = new IntersectionObserver(handleObserver, {
+      root: null, // uses viewport
+      rootMargin: '300px', // pre-load buffer
+      threshold: 0,
+    });
+
+    observer.observe(current);
+    observerRef.current = observer;
+
+    return () => {
+      if (observerRef.current) observerRef.current.disconnect();
+    };
+  }, [handleObserver]);
 
   return (
     <PageContainer>
@@ -52,11 +91,17 @@ export const PortfolioView = () => {
 
       <Box>
         <PortfolioGridView data={data} loading={isLoading} />
+
+        {/* Infinite Scroll Trigger */}
         {hasMore && (
+          <Box ref={bottomRef} sx={{ height: '1px' }} />
+        )}
+
+        {isLoadingMore && (
           <Box textAlign="center" mt={2}>
-            <Button size="small" variant="contained" onClick={loadMore} disabled={isLoadingMore}>
-              {isLoadingMore ? 'Loading...' : 'Show More'}
-            </Button>
+            <Typography variant="body2" color="textSecondary">
+              Loading...
+            </Typography>
           </Box>
         )}
       </Box>
