@@ -90,7 +90,7 @@ export const PartnerView = () => {
         {isLoadingMore && (
           <Box textAlign="center" mt={2}>
             <Typography variant="body2" color="textSecondary">
-              Loading...
+              Loading more...
             </Typography>
           </Box>
         )}
