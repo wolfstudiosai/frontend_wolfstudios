@@ -147,7 +147,7 @@ export const SpaceSliderCard = ({ item, sx = {} }) => {
     <Card
       sx={{
         width: '100%',
-        aspectRatio: '9 / 16',
+        aspectRatio: '9 / 13',
         border: 'unset',
         overflow: 'hidden',
         position: 'relative',
