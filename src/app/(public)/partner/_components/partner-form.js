@@ -380,6 +380,24 @@ export const PartnerForm = ({ formikProps }) => {
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
+            name="partnerPostViews"
+            type="number"
+            label="Partner Post Views"
+            value={values.partnerPostViews}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="totalContributedEngagementByContent"
+            type="number"
+            label="Total Contributed Engagement By Content"
+            value={values.totalContributedEngagementByContent}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
             name="totalExpense"
             type="number"
             label="Total Expense"
@@ -1031,8 +1049,8 @@ export const PartnerForm = ({ formikProps }) => {
             value={values.auditedJan2025}
             onChange={(value) => setFieldValue('auditedJan2025', value)}
             options={[
-              { value: 'True', label: 'Yes' },
-              { value: 'False', label: 'No' },
+              { value: 'true', label: 'Yes' },
+              { value: 'false', label: 'No' },
             ]}
           />
         </Grid>
@@ -1043,8 +1061,8 @@ export const PartnerForm = ({ formikProps }) => {
             value={values.auditedJune2025}
             onChange={(value) => setFieldValue('auditedJune2025', value)}
             options={[
-              { value: 'True', label: 'Yes' },
-              { value: 'False', label: 'No' },
+              { value: 'true', label: 'Yes' },
+              { value: 'false', label: 'No' },
             ]}
           />
         </Grid>
@@ -1059,7 +1077,7 @@ export const PartnerForm = ({ formikProps }) => {
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomSelect
             name="journeyStep"
-            label="Audited Jan 2025?"
+            label="Journey Step?"
             value={values.journeyStep}
             onChange={(value) => setFieldValue('journeyStep', value)}
             options={[

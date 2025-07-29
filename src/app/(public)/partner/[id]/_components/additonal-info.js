@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Box, Card, CardContent, CardHeader, Chip, Grid2, Stack, Typography } from '@mui/material';
 
 import { Iconify } from '/src/components/iconify/iconify';
+import { Person } from '@mui/icons-material';
 
 export const AdditionalInfo = ({ partner }) => {
   return (
