@@ -1,17 +1,16 @@
 'use client';
 
-import * as React from 'react';
-import { usePathname, useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
+import { usePathname, useRouter } from 'next/navigation';
+import * as React from 'react';
 
-import { paths } from '/src/paths';
 import { useMediaQuery } from '/src/hooks/use-media-query';
+import { paths } from '/src/paths';
 
 import { ChatContext } from './chat-context';
 import { Sidebar } from './sidebar';
-import {ChatFooter} from './footer'
 export function ChatView({ children }) {
   const {
     contacts,

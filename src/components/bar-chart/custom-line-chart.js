@@ -1,8 +1,18 @@
 'use client';
 
-import { CartesianGrid, LabelList, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import {
+  CartesianGrid,
+  LabelList,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
-export const CustomLineChart = ({ data }) => {
+export const CustomLineChart = ({ data, hideLegend = false }) => {
   return (
     <ResponsiveContainer width={'100%'} height={300}>
       <LineChart data={data} margin={{ top: 20 }}>
@@ -10,7 +20,7 @@ export const CustomLineChart = ({ data }) => {
         <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
         <YAxis />
         <Tooltip />
-        <Legend />
+        {!hideLegend && <Legend />}
         <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }}>
           <LabelList position="top" offset={10} />
         </Line>
