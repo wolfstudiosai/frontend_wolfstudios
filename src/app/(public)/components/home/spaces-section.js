@@ -100,7 +100,7 @@ export const SpacesSection = () => {
               {spacesData?.data?.length > 0 && spacesData?.data?.map((space) => (
                 <SwiperSlide key={space.id}>
                   <FadeIn>
-                    <Box sx={{ height: '400px', width: '300px' }}>
+                    <Box sx={{ height: '400px', width: '100%' }}>
                       <SpaceCard content={space} />
                     </Box>
                   </FadeIn>

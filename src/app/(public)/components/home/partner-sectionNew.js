@@ -1,18 +1,24 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { SwiperSlide } from 'swiper/react';
 
 import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
+import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
 import { useFeaturedPartnerList } from '../../../../services/partner/useFeaturedPartner';
-import { useState } from 'react';
 import { PartnerRightPanel } from '../../partner/_components/partner-right-panel';
 
 export const PartnerSectionNew = () => {
   const { data: partnersData, isLoading } = useFeaturedPartnerList();
+  const count = 12;
+  const shouldDisplaySecondRow = partnersData?.data?.length > count;
+  const firstRowData = partnersData?.data?.slice(0, count);
+  const secondRowData = partnersData?.data?.slice(count);
   const router = useRouter();
 
   if (isLoading) return;
@@ -61,50 +67,102 @@ export const PartnerSectionNew = () => {
           </FadeIn>
         </Stack>
       </Grid>
-      <Grid md={12} xs={12}>
-        <StaticGridView partners={partnersData?.data} />
-      </Grid>
-    </Grid>
-  );
-};
 
-const StaticGridView = ({ partners }) => {
-  return (
-    <Box
-      sx={{
-        overflowX: 'auto',
-        whiteSpace: 'nowrap',
-        // py: 2,
-        '&::-webkit-scrollbar': { display: 'none' },
-      }}
-    >
-      <Box
-        sx={{
-          display: 'inline-flex',
-          gap: '0px',
-          width: 'auto',
-          minWidth: '100%',
-          alignItems: 'flex-start',
-          gap: { md: 0.5 },
-        }}
-      >
-        {partners?.length > 0 && partners?.map((partner, index) => (
-          <Box
-            key={partner.id}
+      <Grid size={12}>
+        <Stack>
+          <SliderWrapper
+            loop={false}
+            breakpoints={{
+              0: {
+                slidesPerView: 1,
+                spaceBetween: 16,
+              },
+              768: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 24,
+              },
+              1440: {
+                slidesPerView: 4,
+                spaceBetween: 28,
+              },
+            }}
             sx={{
-              display: 'inline-block',
-              minWidth: { xs: '300px', sm: '280px', md: '260px' },
-              width: { xs: '300px', sm: '280px', md: '260px' },
-              flexShrink: 0,
+              '& .swiper-wrapper': {
+                gap: '5px',
+              },
+              '& .swiper-slide': {
+                width: 'auto !important',
+                marginRight: '0 !important',
+                height: 'auto',
+              },
             }}
           >
-            <Stack spacing={0.5}>
-              <Card card={partner} />
-            </Stack>
-          </Box>
-        ))}
-      </Box>
-    </Box>
+            {firstRowData?.length > 0 &&
+              firstRowData?.map((partner) => (
+                <SwiperSlide key={partner.id}>
+                  <FadeIn>
+                    <Box sx={{ height: { xs: '300px', md: '400px' }, width: '100%' }}>
+                      <Card card={partner} />
+                    </Box>
+                  </FadeIn>
+                </SwiperSlide>
+              ))}
+          </SliderWrapper>
+        </Stack>
+      </Grid>
+      {shouldDisplaySecondRow && (
+        <Grid size={12} sx={{ mt: 0.5 }}>
+          <Stack>
+            <SliderWrapper
+              loop={false}
+              breakpoints={{
+                0: {
+                  slidesPerView: 1,
+                  spaceBetween: 16,
+                },
+                768: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                1024: {
+                  slidesPerView: 3,
+                  spaceBetween: 24,
+                },
+                1440: {
+                  slidesPerView: 4,
+                  spaceBetween: 28,
+                },
+              }}
+              sx={{
+                '& .swiper-wrapper': {
+                  gap: '5px',
+                },
+                '& .swiper-slide': {
+                  width: 'auto !important',
+                  marginRight: '0 !important',
+                  height: 'auto',
+                },
+              }}
+            >
+              {secondRowData.length > 0 &&
+                secondRowData.map((partner) => (
+                  <SwiperSlide key={partner.id}>
+                    <FadeIn>
+                      <Box sx={{ height: { xs: '300px', md: '400px' }, width: '100%' }}>
+                        <Card card={partner} />
+                      </Box>
+                    </FadeIn>
+                  </SwiperSlide>
+                ))}
+            </SliderWrapper>
+          </Stack>
+        </Grid>
+      )}
+    </Grid>
   );
 };
 
@@ -234,7 +292,6 @@ const Card = ({ card }) => {
           onClose={() => setOpenPartnerRightPanel(false)}
         />
       )}
-
     </>
   );
 };
