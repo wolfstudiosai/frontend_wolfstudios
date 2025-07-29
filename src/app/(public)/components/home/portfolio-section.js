@@ -101,7 +101,7 @@ export const PortfolioSection = () => {
             {portfoliosData?.data?.length > 0 && portfoliosData?.data?.map((portfolio) => (
               <SwiperSlide key={portfolio?.id}>
                 <FadeIn>
-                  <Box sx={{ height: '400px', width: '300px' }}>
+                  <Box sx={{ height: { xs: '300px', md: '400px' }, maxWidth: '300px', width: '100%' }}>
                     <PortfolioCard content={portfolio} />
                   </Box>
                   {/* <Card card={portfolio} fetchList={fetchPortfolios} /> */}
