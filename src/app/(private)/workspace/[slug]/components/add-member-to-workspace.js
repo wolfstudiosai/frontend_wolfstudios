@@ -24,7 +24,7 @@ export const AddMemberToWorkspace = (props) => {
       validate: (values) => {
         const errors = {};
 
-        if (values.type === 'PRIVATE' && values.members.length === 0) {
+        if (values.type === 'PRIVATE' && values.members?.length === 0) {
           errors.members = formConstants.required;
         }
 
