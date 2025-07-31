@@ -38,7 +38,7 @@ export function MobileSideNav({ open, onClose }) {
         '& .MuiDrawer-paper': {
           width: 250,
           p: 2,
-          bgcolor: 'background.default',
+          bgcolor: '#5C6954',
         },
       }}
     >

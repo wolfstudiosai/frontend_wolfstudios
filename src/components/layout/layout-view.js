@@ -56,7 +56,7 @@ export function LayoutView({ children }) {
           alignItems="center"
           width="auto"
           bgcolor="#5C6954"
-          sx={{ border: '1px solid var(--mui-palette-divider)', p: { xs: 0, lg: 1 } }}
+          sx={{ p: { xs: 0, lg: 1 } }}
         >
           <DesktopSideNav color={settings.navColor} open={openSidebar} isFeaturedCardVisible={isFeaturedCardVisible} />
         </Box>
