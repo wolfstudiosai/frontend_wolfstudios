@@ -11,8 +11,6 @@ import { SocialMediaGraph } from './social-media-graph';
 import { SocialMediaStates } from './social-media-states';
 
 export const RightPartnerAnalytics = ({ partner }) => {
-  console.log('partner right panel....', partner);
-
   const socialProfiles = [
     partner?.instagram && { platform: 'Instagram', url: partner.instagram },
     partner?.tiktok && { platform: 'TikTok', url: partner.tiktok },

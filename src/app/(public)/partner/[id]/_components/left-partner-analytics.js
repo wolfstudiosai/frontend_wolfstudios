@@ -7,7 +7,6 @@ import { formatCompactNumber } from '/src/utils/helper';
 
 export const LeftPartnerAnalytics = ({ partner }) => {
 
-
   return (
     <Grid2 item xs={12} md={4}>
       <Card elevation={0} sx={{ borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
