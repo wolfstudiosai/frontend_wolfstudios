@@ -25,13 +25,13 @@ export const UserInfoPopover = ({ isSidebarOpen = false }) => {
         sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
       >
         <Stack direction={'row'} alignItems={'center'} justifyContent={'center'} spacing={1}>
-          <Avatar sx={{ width: avatarSize, height: avatarSize }} src={userInfo.profile_pic} />
+          <Avatar sx={{ width: avatarSize, height: avatarSize, bgcolor: 'white', color: 'black' }} src={userInfo.profile_pic} />
           {isSidebarOpen && (
             <Box sx={{ textAlign: 'start' }}>
-              <Typography color="text.secondary" variant="body2">
+              <Typography color="white" variant="body2">
                 {userInfo.name || 'Unknown'}
               </Typography>
-              <Typography color="text.secondary" variant="body2">
+              <Typography color="white" variant="body2">
                 {userInfo.email}
               </Typography>
             </Box>
