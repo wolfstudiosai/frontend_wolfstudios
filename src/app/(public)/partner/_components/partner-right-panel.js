@@ -20,6 +20,7 @@ import { formConstants } from '/src/app/constants/form-constants';
 import { useGetPartnerData } from '/src/services/partner/usePartnerData';
 import { usePartnerList } from '/src/services/partner/usePartnerList';
 import { useFeaturedPartnerList } from '/src/services/partner/useFeaturedPartner';
+import Link from 'next/link';
 
 export const PartnerRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { mutate: mutatePartnerList } = usePartnerList();
@@ -180,9 +181,11 @@ export const PartnerRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
           )}
           {panelView !== 'ADD' && (
             <IconButton
+              as={Link}
+              href={`/partner/${id}`}
+              size="small"
               sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               title="Analytics"
-              onClick={() => router.push(`/partner/${id}`)}
             >
               <Icon icon="mdi:analytics" />
             </IconButton>
