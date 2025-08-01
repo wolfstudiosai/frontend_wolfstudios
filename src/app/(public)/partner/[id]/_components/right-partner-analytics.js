@@ -4,7 +4,6 @@ import { PartnerIframes } from '../../_components/partner-quickview';
 import { AdditionalInfo } from './additonal-info';
 import { AmazonInfo } from './amazon-info';
 import { CampaignDetails } from './campign-details';
-import { ConversionInfo } from './conversion-info';
 import { FinancialInfo } from './financial-info';
 import { FinancialPerformanceChart } from './financial-performance-chart';
 import { SocialMediaGraph } from './social-media-graph';

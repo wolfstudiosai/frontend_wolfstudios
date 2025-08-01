@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid2';
 
 import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
+import { CustomMultiDatePicker } from '/src/components/formFields/custom-multi-date-picker';
 import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
@@ -28,6 +29,7 @@ import { getContentListAsync } from '../../../(private)/all-content/_lib/all-con
 import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
 import { getProductionAsync, getProductionListAsync } from '../../production/_lib/production.action';
 import { profileStatus } from '../_lib/partner.constants';
+import { getCampaignListAsync } from '../../campaign/_lib/campaign.actions';
 
 export const PartnerForm = ({ formikProps }) => {
   // *********************States*********************************
@@ -58,6 +60,8 @@ export const PartnerForm = ({ formikProps }) => {
     caseStudies: [],
     tags: [],
     destinations: [],
+    proposedCampaigns: [],
+    products: [],
   });
 
   const { values, errors, handleChange, setFieldValue, handleSubmit, setValues } = formikProps;
@@ -77,6 +81,8 @@ export const PartnerForm = ({ formikProps }) => {
     caseStudies: getCaseStudyListAsync,
     tags: getTagListAsync,
     destinations: getDestinationListAsync,
+    proposedCampaigns: getCampaignListAsync,
+    products: getProductListAsync,
   };
 
   React.useEffect(() => {
@@ -731,6 +737,14 @@ export const PartnerForm = ({ formikProps }) => {
             setFieldValue={setFieldValue}
           />
         </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <CustomMultiDatePicker
+            name="campaignMonth"
+            label="Campaign Month"
+            value={values.campaignMonth}
+            onChange={(value) => setFieldValue('campaignMonth', value)} />
+        </Grid>
       </Grid>
 
       <Grid
@@ -926,17 +940,17 @@ export const PartnerForm = ({ formikProps }) => {
             onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
         </Grid>
-        {/* <Grid size={{ xs: 12, md: 4 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomAutoCompleteV2
-            label="Portfolios"
-            name="portfolios"
+            label="Proposed Campaigns"
+            name="proposedCampaigns"
             multiple
-            value={values.portfolios}
-            defaultOptions={autoCompleteOptions.portfolios}
-            onChange={(e, val) => setFieldValue('portfolios', val)}
+            value={values.proposedCampaigns}
+            defaultOptions={autoCompleteOptions.proposedCampaigns}
+            onChange={(e, val) => setFieldValue('proposedCampaigns', val)}
             fetchOptions={async (debounceValue) => {
               const paging = { page: 1, rowsPerPage: 100 };
-              const res = await getPortfolioListAsync(paging, debounceValue);
+              const res = await getCampaignListAsync(paging, debounceValue);
               return (
                 res?.data?.map((item) => ({
                   label: item.projectTitle,
@@ -948,7 +962,32 @@ export const PartnerForm = ({ formikProps }) => {
             error={undefined}
             onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
-        </Grid>  */}
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomAutoCompleteV2
+            label="Products"
+            name="products"
+            multiple
+            value={values.products}
+            defaultOptions={autoCompleteOptions.products}
+            onChange={(e, val) => setFieldValue('products', val)}
+            fetchOptions={async (debounceValue) => {
+              const paging = { page: 1, rowsPerPage: 100 };
+              const res = await getProductListAsync(paging, debounceValue);
+              return (
+                res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || []
+              );
+            }}
+            placeholder={undefined}
+            error={undefined}
+            onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
+          />
+        </Grid>
+
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomAutoCompleteV2
             label="Stakeholders"
