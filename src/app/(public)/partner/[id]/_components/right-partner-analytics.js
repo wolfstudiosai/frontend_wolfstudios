@@ -1,4 +1,4 @@
-import { Box, Grid2, Stack } from '@mui/material';
+import { Box, Grid2, Stack, Typography } from '@mui/material';
 
 import { PartnerIframes } from '../../_components/partner-quickview';
 import { AdditionalInfo } from './additonal-info';
@@ -9,6 +9,7 @@ import { FinancialInfo } from './financial-info';
 import { FinancialPerformanceChart } from './financial-performance-chart';
 import { SocialMediaGraph } from './social-media-graph';
 import { SocialMediaStates } from './social-media-states';
+import { PartnerGallery } from './partner-gallery';
 
 export const RightPartnerAnalytics = ({ partner }) => {
   const socialProfiles = [
@@ -21,13 +22,21 @@ export const RightPartnerAnalytics = ({ partner }) => {
     partner?.linkedIn && { platform: 'LinkedIn', url: partner.linkedIn },
   ].filter(Boolean);
 
+  const partnerGallery = [...partner?.partnerGallery, ...partner?.mediaKit, ...partner?.contracts, ...partner?.receipts]
+
   return (
     <Box>
       {socialProfiles.length > 0 && (
-        <Stack direction="row" sx={{ mb: 4 }}>
-          <PartnerIframes profiles={socialProfiles} />
-        </Stack>
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="h6">
+            Social Profiles
+          </Typography>
+          <Stack direction="row">
+            <PartnerIframes profiles={socialProfiles} />
+          </Stack>
+        </Box>
       )}
+      <PartnerGallery partnerGallery={partnerGallery} />
 
       <Grid2 container spacing={1}>
         {/* Social Media Graph */}
