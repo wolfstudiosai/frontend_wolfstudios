@@ -61,7 +61,7 @@ export const LeftPartnerAnalytics = ({ partner }) => {
               <Stack direction="row" spacing={2}>
                 <Iconify icon="mdi:location" />
                 <Typography variant="body2" color="text.secondary">
-                  {partner?.cities?.map((city) => city).join(', ') || 'N/A'}
+                  {partner?.cities?.map((city) => city.name).join(', ') || 'N/A'}
                 </Typography>
               </Stack>
             </Stack>

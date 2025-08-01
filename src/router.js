@@ -190,7 +190,7 @@ export const privateRoutesV3 = [
   {
     key: 'overview',
     title: 'Dashboard ',
-    icon: 'material-symbols:space-dashboard-outline',
+    icon: 'heroicons:home-modern-solid',
     href: paths.private.overview,
     items: [
       {
@@ -205,7 +205,7 @@ export const privateRoutesV3 = [
   {
     key: 'favorites',
     title: 'Favorites',
-    icon: 'iconamoon:heart-light',
+    icon: 'ic:baseline-star',
     href: paths.private.favorites,
     items: [
       {
@@ -220,27 +220,27 @@ export const privateRoutesV3 = [
   {
     key: 'chat',
     title: 'Chat',
-    icon: 'fluent:chat-12-regular',
+    icon: 'jam:messages-f',
     href: paths.private.chat,
     allowedRoles: ['admin', 'user', 'super_admin'],
   },
   {
     key: 'workspaces',
     title: 'Workspaces',
-    icon: 'carbon:workspace',
+    icon: 'heroicons:rocket-launch-20-solid',
     items: workspacesItems,
   },
   {
     key: 'records',
     title: 'Records',
-    icon: 'material-symbols-light:data-table-outline',
+    icon: 'material-symbols-light:table-outline-sharp',
     href: paths.private.record,
     allowedRoles: ['admin', 'user', 'super_admin'],
   },
   {
     key: 'analytics',
     title: 'Analytics',
-    icon: 'mdi:analytics',
+    icon: 'streamline:money-graph-arrow-increase-ascend-growth-up-arrow-stats-graph-right-grow',
     href: paths.private.analytics,
     items: [
       {

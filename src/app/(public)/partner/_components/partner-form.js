@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid2';
 
 import { CustomAutoCompleteV2 } from '/src/components/formFields/custom-auto-complete-v2';
 import { CustomDatePicker } from '/src/components/formFields/custom-date-picker';
+import { CustomMultiDatePicker } from '/src/components/formFields/custom-multi-date-picker';
 import { CustomSelect } from '/src/components/formFields/custom-select';
 import { CustomTextField } from '/src/components/formFields/custom-textfield';
 import { ErrorMessage } from '/src/components/formFields/error-message';
@@ -28,6 +29,7 @@ import { getContentListAsync } from '../../../(private)/all-content/_lib/all-con
 import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
 import { getProductionAsync, getProductionListAsync } from '../../production/_lib/production.action';
 import { profileStatus } from '../_lib/partner.constants';
+import { getCampaignListAsync } from '../../campaign/_lib/campaign.actions';
 
 export const PartnerForm = ({ formikProps }) => {
   // *********************States*********************************
@@ -58,6 +60,8 @@ export const PartnerForm = ({ formikProps }) => {
     caseStudies: [],
     tags: [],
     destinations: [],
+    proposedCampaigns: [],
+    products: [],
   });
 
   const { values, errors, handleChange, setFieldValue, handleSubmit, setValues } = formikProps;
@@ -77,6 +81,8 @@ export const PartnerForm = ({ formikProps }) => {
     caseStudies: getCaseStudyListAsync,
     tags: getTagListAsync,
     destinations: getDestinationListAsync,
+    proposedCampaigns: getCampaignListAsync,
+    products: getProductListAsync,
   };
 
   React.useEffect(() => {
@@ -113,6 +119,8 @@ export const PartnerForm = ({ formikProps }) => {
 
     fetchData();
   }, [autocompleteFocus]);
+
+  console.log(values.monthSourced)
 
   return (
     <form onSubmit={handleSubmit}>
@@ -248,6 +256,9 @@ export const PartnerForm = ({ formikProps }) => {
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField label="Linktree" name="linktree" value={values.linktree} onChange={handleChange} />
         </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField label="Deliverables" name="deliverables" value={values.deliverables} onChange={handleChange} />
+        </Grid>
       </Grid>
 
       <Grid
@@ -349,6 +360,190 @@ export const PartnerForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerIGRate"
+            type="number"
+            label="Partner IG Rate"
+            value={values.partnerIGRate}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerTTRate"
+            type="number"
+            label="Partner TT Rate"
+            value={values.partnerTTRate}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerYTRate"
+            type="number"
+            label="Partner YT Rate"
+            value={values.partnerYTRate}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerUGCRate"
+            type="number"
+            label="Partner UGC Rate"
+            value={values.partnerUGCRate}
+            onChange={handleChange}
+          />
+        </Grid>
+      </Grid>
+
+      {/* Amazon */}
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          py: 2,
+          border: '1px solid var(--mui-palette-background-level2)',
+          borderRadius: '8px',
+          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
+          p: 2,
+          mt: 4,
+        }}
+      >
+        <Grid size={12}>
+          <Typography variant="h5" sx={{ mb: 2, color: 'primary.main' }}>
+            Amazon
+          </Typography>
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonKickback"
+            type="number"
+            label="Amazon Kickback"
+            value={values.amazonKickback}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonOrderTotal"
+            type="number"
+            label="Amazon Order Total"
+            value={values.amazonOrderTotal}
+            onChange={handleChange}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReferralFee"
+            type="number"
+            label="Amazon Referral Fees"
+            value={values.amazonReferralFee}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonTax"
+            type="number"
+            label="Amazon Tax"
+            value={values.amazonTax}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewBeautyWand"
+            type="text"
+            label="Amazon Review Beauty Wand"
+            value={values.amazonReviewBeautyWand}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewCupper"
+            type="text"
+            label="Amazon Review Cupper"
+            value={values.amazonReviewCupper}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewOil"
+            type="text"
+            label="Amazon Review Oil"
+            value={values.amazonReviewOil}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewSoothingCream"
+            type="text"
+            label="Amazon Review Soothing Cream"
+            value={values.amazonReviewSoothingCream}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewWalkingPadPro"
+            type="text"
+            label="Amazon Review Walking Pad Pro"
+            value={values.amazonReviewWalkingPadPro}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewWalkingPadStandard"
+            type="text"
+            label="Amazon Review Walking Pad Standard"
+            value={values.amazonReviewWalkingPadStandard}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewLink"
+            type="text"
+            label="Amazon Review Link"
+            value={values.amazonReviewLink}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonStorefront"
+            type="text"
+            label="Amazon Storefront"
+            value={values.amazonStorefront}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revoAmazonOrderConfirmationNumber"
+            type="text"
+            label="REVO Amazon Order Confirmation Number"
+            value={values.revoAmazonOrderConfirmationNumber}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewThePill"
+            type="text"
+            label="Amazon Review The Pill"
+            value={values.amazonReviewThePill}
+            onChange={handleChange}
+          />
+        </Grid>
       </Grid>
 
       <Grid
@@ -443,15 +638,6 @@ export const PartnerForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="amazonReferralFee"
-            type="number"
-            label="Amazon Referral Fees"
-            value={values.amazonReferralFee}
-            onChange={handleChange}
-          />
-        </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -515,6 +701,24 @@ export const PartnerForm = ({ formikProps }) => {
             type="number"
             label="Remaining Credits"
             value={values.remainingCredits}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="fbaXLevanta"
+            type="number"
+            label="FBA X Levanta"
+            value={values.fbaXLevanta}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="totalAudience"
+            type="number"
+            label="Total Audience"
+            value={values.totalAudience}
             onChange={handleChange}
           />
         </Grid>
@@ -731,6 +935,14 @@ export const PartnerForm = ({ formikProps }) => {
             setFieldValue={setFieldValue}
           />
         </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <CustomMultiDatePicker
+            name="campaignMonth"
+            label="Campaign Month"
+            value={values.campaignMonth}
+            onChange={(value) => setFieldValue('campaignMonth', value)} />
+        </Grid>
       </Grid>
 
       <Grid
@@ -926,17 +1138,17 @@ export const PartnerForm = ({ formikProps }) => {
             onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
         </Grid>
-        {/* <Grid size={{ xs: 12, md: 4 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <CustomAutoCompleteV2
-            label="Portfolios"
-            name="portfolios"
+            label="Proposed Campaigns"
+            name="proposedCampaigns"
             multiple
-            value={values.portfolios}
-            defaultOptions={autoCompleteOptions.portfolios}
-            onChange={(e, val) => setFieldValue('portfolios', val)}
+            value={values.proposedCampaigns}
+            defaultOptions={autoCompleteOptions.proposedCampaigns}
+            onChange={(e, val) => setFieldValue('proposedCampaigns', val)}
             fetchOptions={async (debounceValue) => {
               const paging = { page: 1, rowsPerPage: 100 };
-              const res = await getPortfolioListAsync(paging, debounceValue);
+              const res = await getCampaignListAsync(paging, debounceValue);
               return (
                 res?.data?.map((item) => ({
                   label: item.projectTitle,
@@ -948,7 +1160,32 @@ export const PartnerForm = ({ formikProps }) => {
             error={undefined}
             onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
           />
-        </Grid>  */}
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomAutoCompleteV2
+            label="Products"
+            name="products"
+            multiple
+            value={values.products}
+            defaultOptions={autoCompleteOptions.products}
+            onChange={(e, val) => setFieldValue('products', val)}
+            fetchOptions={async (debounceValue) => {
+              const paging = { page: 1, rowsPerPage: 100 };
+              const res = await getProductListAsync(paging, debounceValue);
+              return (
+                res?.data?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                })) || []
+              );
+            }}
+            placeholder={undefined}
+            error={undefined}
+            onFocus={(name) => setAutocompleteFocus({ currentItem: name, prevItems: [] })}
+          />
+        </Grid>
+
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomAutoCompleteV2
             label="Stakeholders"
