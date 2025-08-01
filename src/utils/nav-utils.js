@@ -150,8 +150,8 @@ const SidebarMenuItems = ({
                 <ListItemIcon sx={iconStyles} title={isDesktop && !isOpen ? item.title : ''}>
                   <Iconify
                     icon={item.icon}
-                    width={isDesktop && !isOpen ? 24 : 20}
-                    height={isDesktop && !isOpen ? 24 : 20}
+                    width={20}
+                    height={20}
                     color="white"
                   />
                 </ListItemIcon>

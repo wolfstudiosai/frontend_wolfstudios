@@ -41,7 +41,7 @@ export function LayoutView({ children }) {
           body: {
             '--MainNav-height': '56px',
             '--MainNav-zIndex': 1000,
-            '--SideNav-width': openSidebar ? pxToRem(250) : pxToRem(50),
+            '--SideNav-width': openSidebar ? pxToRem(250) : pxToRem(40),
             '--SideNav-zIndex': 1100,
             '--MobileNav-width': '320px',
             '--MobileNav-zIndex': 1100,
