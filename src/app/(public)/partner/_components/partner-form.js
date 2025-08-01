@@ -120,6 +120,8 @@ export const PartnerForm = ({ formikProps }) => {
     fetchData();
   }, [autocompleteFocus]);
 
+  console.log(values.monthSourced)
+
   return (
     <form onSubmit={handleSubmit}>
       <Grid
@@ -254,6 +256,9 @@ export const PartnerForm = ({ formikProps }) => {
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField label="Linktree" name="linktree" value={values.linktree} onChange={handleChange} />
         </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField label="Deliverables" name="deliverables" value={values.deliverables} onChange={handleChange} />
+        </Grid>
       </Grid>
 
       <Grid
@@ -355,6 +360,190 @@ export const PartnerForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerIGRate"
+            type="number"
+            label="Partner IG Rate"
+            value={values.partnerIGRate}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerTTRate"
+            type="number"
+            label="Partner TT Rate"
+            value={values.partnerTTRate}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerYTRate"
+            type="number"
+            label="Partner YT Rate"
+            value={values.partnerYTRate}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="partnerUGCRate"
+            type="number"
+            label="Partner UGC Rate"
+            value={values.partnerUGCRate}
+            onChange={handleChange}
+          />
+        </Grid>
+      </Grid>
+
+      {/* Amazon */}
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          py: 2,
+          border: '1px solid var(--mui-palette-background-level2)',
+          borderRadius: '8px',
+          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
+          p: 2,
+          mt: 4,
+        }}
+      >
+        <Grid size={12}>
+          <Typography variant="h5" sx={{ mb: 2, color: 'primary.main' }}>
+            Amazon
+          </Typography>
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonKickback"
+            type="number"
+            label="Amazon Kickback"
+            value={values.amazonKickback}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonOrderTotal"
+            type="number"
+            label="Amazon Order Total"
+            value={values.amazonOrderTotal}
+            onChange={handleChange}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReferralFee"
+            type="number"
+            label="Amazon Referral Fees"
+            value={values.amazonReferralFee}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonTax"
+            type="number"
+            label="Amazon Tax"
+            value={values.amazonTax}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewBeautyWand"
+            type="text"
+            label="Amazon Review Beauty Wand"
+            value={values.amazonReviewBeautyWand}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewCupper"
+            type="text"
+            label="Amazon Review Cupper"
+            value={values.amazonReviewCupper}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewOil"
+            type="text"
+            label="Amazon Review Oil"
+            value={values.amazonReviewOil}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewSoothingCream"
+            type="text"
+            label="Amazon Review Soothing Cream"
+            value={values.amazonReviewSoothingCream}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewWalkingPadPro"
+            type="text"
+            label="Amazon Review Walking Pad Pro"
+            value={values.amazonReviewWalkingPadPro}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewWalkingPadStandard"
+            type="text"
+            label="Amazon Review Walking Pad Standard"
+            value={values.amazonReviewWalkingPadStandard}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewLink"
+            type="text"
+            label="Amazon Review Link"
+            value={values.amazonReviewLink}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonStorefront"
+            type="text"
+            label="Amazon Storefront"
+            value={values.amazonStorefront}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="revoAmazonOrderConfirmationNumber"
+            type="text"
+            label="REVO Amazon Order Confirmation Number"
+            value={values.revoAmazonOrderConfirmationNumber}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="amazonReviewThePill"
+            type="text"
+            label="Amazon Review The Pill"
+            value={values.amazonReviewThePill}
+            onChange={handleChange}
+          />
+        </Grid>
       </Grid>
 
       <Grid
@@ -449,15 +638,6 @@ export const PartnerForm = ({ formikProps }) => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <CustomTextField
-            name="amazonReferralFee"
-            type="number"
-            label="Amazon Referral Fees"
-            value={values.amazonReferralFee}
-            onChange={handleChange}
-          />
-        </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
           <CustomTextField
@@ -521,6 +701,24 @@ export const PartnerForm = ({ formikProps }) => {
             type="number"
             label="Remaining Credits"
             value={values.remainingCredits}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="fbaXLevanta"
+            type="number"
+            label="FBA X Levanta"
+            value={values.fbaXLevanta}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <CustomTextField
+            name="totalAudience"
+            type="number"
+            label="Total Audience"
+            value={values.totalAudience}
             onChange={handleChange}
           />
         </Grid>

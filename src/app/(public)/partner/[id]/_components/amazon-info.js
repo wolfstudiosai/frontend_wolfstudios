@@ -52,7 +52,7 @@ export const AmazonInfo = ({ partner }) => {
                     Amazon Tax
                   </Typography>
                   <Typography variant="body2" fontWeight="500">
-                    ${partner?.AmazonTax ? partner?.AmazonTax : '0'}
+                    ${partner?.amazonTax ? partner?.amazonTax : '0'}
                   </Typography>
                 </Box>
 
@@ -62,6 +62,15 @@ export const AmazonInfo = ({ partner }) => {
                   </Typography>
                   <Typography variant="body2" fontWeight="500">
                     ${partner?.shippingFBAFeeGiftedPartners ? partner?.shippingFBAFeeGiftedPartners : '0'}
+                  </Typography>
+                </Box>
+
+                <Box display="flex" justifyContent="space-between">
+                  <Typography variant="body2" color="text.secondary">
+                    REVO Order Confirmation
+                  </Typography>
+                  <Typography variant="body2" fontWeight="500">
+                    {partner?.revoAmazonOrderConfirmationNumber ? partner?.revoAmazonOrderConfirmationNumber : '-'}
                   </Typography>
                 </Box>
               </Stack>
@@ -170,34 +179,6 @@ export const AmazonInfo = ({ partner }) => {
                     </Typography>
                   )}
                 </Box>
-                <Box display="flex" justifyContent="space-between">
-                  <Typography variant="body2" color="text.secondary">
-                    Walking Pad Pro Review
-                  </Typography>
-                  {partner?.amazonReviewWalkingPadPro ? (
-                    <Link href={partner?.amazonReviewWalkingPadPro} target="_blank" rel="noopener noreferrer">
-                      View
-                    </Link>
-                  ) : (
-                    <Typography variant="body2" fontWeight="500">
-                      -
-                    </Typography>
-                  )}
-                </Box>
-                <Box display="flex" justifyContent="space-between">
-                  <Typography variant="body2" color="text.secondary">
-                    Walking Pad Standard Review
-                  </Typography>
-                  {partner?.amazonReviewWalkingPadStandard ? (
-                    <Link href={partner?.amazonReviewWalkingPadStandard} target="_blank" rel="noopener noreferrer">
-                      View
-                    </Link>
-                  ) : (
-                    <Typography variant="body2" fontWeight="500">
-                      -
-                    </Typography>
-                  )}
-                </Box>
               </Stack>
             </Box>
 
@@ -234,15 +215,6 @@ export const AmazonInfo = ({ partner }) => {
                       -
                     </Typography>
                   )}
-                </Box>
-
-                <Box display="flex" justifyContent="space-between">
-                  <Typography variant="body2" color="text.secondary">
-                    REVO Order Confirmation
-                  </Typography>
-                  <Typography variant="body2" fontWeight="500">
-                    {partner?.revoAmazonOrderConfirmationNumber ? partner?.revoAmazonOrderConfirmationNumber : '-'}
-                  </Typography>
                 </Box>
               </Stack>
             </Box>
