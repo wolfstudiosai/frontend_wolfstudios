@@ -1,10 +1,19 @@
 export const getDirtyFields = (oldData, newData) => {
+  console.log('original old data', oldData);
+  console.log('original new data', newData);
+
   const dirtyFields = {};
 
   for (const key in newData) {
     if (key === 'id') continue;
 
-    const oldValue = oldData[key];
+    const oldValue =
+      key === 'thumbnailImage'
+        ? Array.isArray(oldData[key])
+          ? oldData[key][0] || ''
+          : oldData[key] || ''
+        : oldData[key];
+
     const newValue = newData[key];
 
     if (Array.isArray(oldValue) && Array.isArray(newValue)) {
