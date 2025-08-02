@@ -350,11 +350,9 @@ export const ProductionListView = () => {
 
       // set views
       setViews(viewsData.data);
-      console.log(viewsData.data, 'viewsData.data')
-
+=
       if (viewsData.success && viewsData?.data?.length > 0) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
-        console.log(firstView)
         setSelectedViewId(firstView?.id);
 
         if (!viewId) {
@@ -406,7 +404,6 @@ export const ProductionListView = () => {
     if (productionMeta && viewsData && !hasInitialized.current) {
       hasInitialized.current = true;
       initialize();
-      console.log('initialize')
     }
   }, [productionMeta, viewsData, searchParams]);
 

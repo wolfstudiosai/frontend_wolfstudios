@@ -35,8 +35,6 @@ export const useProductionView = (id, pagination) => {
         );
     };
 
-    console.log(singleView)
-
     return {
         singleView,
         singleViewError,

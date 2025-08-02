@@ -1,7 +1,4 @@
 export const getDirtyFields = (oldData, newData) => {
-  console.log('original old data', oldData);
-  console.log('original new data', newData);
-
   const dirtyFields = {};
 
   for (const key in newData) {

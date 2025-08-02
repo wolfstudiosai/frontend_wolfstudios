@@ -1,5 +1,7 @@
 'use client';
 
+import * as React from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import AddIcon from '@mui/icons-material/Add';
 import TableReorderIcon from '@mui/icons-material/Reorder';
 import { Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField } from '@mui/material';
@@ -7,9 +9,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import { alpha, useTheme } from '@mui/material/styles';
-import { useRouter, useSearchParams } from 'next/navigation';
-import * as React from 'react';
 import { toast } from 'sonner';
+import { mutate } from 'swr';
 
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
 import TableSortBuilder from '/src/components/common/table-sort-builder';
@@ -26,16 +27,15 @@ import {
   deleteBulkContentAsync,
   getSingleContentView,
   updateContentAsync,
-  updateContentView
+  updateContentView,
 } from '../_lib/all-content.actions';
 import { defaultContent } from '../_lib/all-content.types';
-import { useContentColumns } from '../hooks/use-content-columns';
-import { useRecordContentList } from '../hooks/use-record-content-list';
-import { useContentViews } from '../hooks/use-content-views';
-import { useContentView } from '../hooks/use-content-view';
-import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
-import { mutate } from 'swr';
 import { MediaUploader } from '../../../../components/uploaders/media-uploader';
+import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
+import { useContentColumns } from '../hooks/use-content-columns';
+import { useContentView } from '../hooks/use-content-view';
+import { useContentViews } from '../hooks/use-content-views';
+import { useRecordContentList } from '../hooks/use-record-content-list';
 
 export default function AllContentListView() {
   const theme = useTheme();
@@ -69,7 +69,6 @@ export default function AllContentListView() {
     });
   };
 
-
   const handleClosePopoverHide = () => {
     setAnchorElHide(null);
     setSearchColumns(allColumns);
@@ -97,7 +96,7 @@ export default function AllContentListView() {
         }
       }
 
-      const response = await updateContentAsync(finalData);
+      const response = await updateContentAsync(updatedRow, finalData);
       if (response.success) {
         setOpen(false);
         refreshAllContentView();
@@ -135,7 +134,10 @@ export default function AllContentListView() {
   // swr
   const { viewsData, isViewsLoading } = useContentViews();
   const { contentMeta, columns: contentColumns, isContentLoading } = useRecordContentList();
-  const { singleView, isSingleViewLoading, refreshViewData, refreshAllContentView } = useContentView(selectedViewId, pagination);
+  const { singleView, isSingleViewLoading, refreshViewData, refreshAllContentView } = useContentView(
+    selectedViewId,
+    pagination
+  );
 
   async function updateView(props) {
     const viewFilters = props.filters ? props.filters : filters;
@@ -163,81 +165,84 @@ export default function AllContentListView() {
     setPagination(newPagination);
   }, []);
 
-  const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
-    if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
+  const processRowUpdate = React.useCallback(
+    async (newRow, oldRow) => {
+      if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
 
-    const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
-    let res;
-    if (isTemporaryId) {
-      if (!newRow.name) {
-        toast.error('Please enter name');
+      const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
+      let res;
+      if (isTemporaryId) {
+        if (!newRow.name) {
+          toast.error('Please enter name');
+          return newRow;
+        }
+        res = await createContentAsync(newRow);
+      } else {
+        const finalData = convertArrayObjIntoArrOfStr(newRow, [
+          'campaigns',
+          'cities',
+          'products',
+          'tags',
+          'stakeholders',
+          'partners',
+          'retailPartners',
+        ]);
+
+        finalData.thumbnailImage = Array.isArray(finalData.thumbnailImage)
+          ? finalData.thumbnailImage[0]
+          : finalData.thumbnailImage;
+
+        const numberFields = [
+          'uppromoteConversion',
+          'partnerIGTotalComments',
+          'partnerIGTotalLikes',
+          'partnerIGTotalShares',
+          'partnerIGTotalViews',
+          'pinterestTotalPinClicks',
+          'pinterestTotalViews',
+          'partnerTTShares',
+          'partnerTTSaves',
+          'partnerTTViews',
+          'partnerTTLikes',
+          'revoTTViews',
+          'partnerTTComments',
+          'ytClubREVOTotalViews',
+          'ytPartnerTotalSaves',
+          'ytPartnerTotalViews',
+          'ytPartnerTotalComments',
+          'ytPartnerTotalLikes',
+          'ytREVOMADICTotalShares',
+          'ytREVOMADICTotalViews',
+          'ytREVOMADICTotalLikes',
+          'ytREVOMADICTotalComments',
+          'ytClubREVOTotalLikes',
+          'totalContributedEngagement',
+          'revoTTLikes',
+          'revoTTComments',
+          'revoTTSaves',
+          'revoTTShares',
+          'revoIGTotalViews',
+          'revoIGTotalShares',
+          'revoIGTotalComments',
+          'revoIGTotalLikes',
+        ];
+
+        for (const key of numberFields) {
+          finalData[key] = Number(finalData[key]);
+        }
+
+        res = await updateContentAsync(oldRow, finalData);
+      }
+
+      if (res.success) {
+        refreshAllContentView();
         return newRow;
       }
-      res = await createContentAsync(newRow);
-    } else {
-      const finalData = convertArrayObjIntoArrOfStr(newRow, [
-        'campaigns',
-        'cities',
-        'products',
-        'tags',
-        'stakeholders',
-        'partners',
-        'retailPartners',
-      ]);
 
-      finalData.thumbnailImage = Array.isArray(finalData.thumbnailImage)
-        ? finalData.thumbnailImage[0]
-        : finalData.thumbnailImage;
-
-      const numberFields = [
-        "uppromoteConversion",
-        "partnerIGTotalComments",
-        "partnerIGTotalLikes",
-        "partnerIGTotalShares",
-        "partnerIGTotalViews",
-        "pinterestTotalPinClicks",
-        "pinterestTotalViews",
-        "partnerTTShares",
-        "partnerTTSaves",
-        "partnerTTViews",
-        "partnerTTLikes",
-        "revoTTViews",
-        "partnerTTComments",
-        "ytClubREVOTotalViews",
-        "ytPartnerTotalSaves",
-        "ytPartnerTotalViews",
-        "ytPartnerTotalComments",
-        "ytPartnerTotalLikes",
-        "ytREVOMADICTotalShares",
-        "ytREVOMADICTotalViews",
-        "ytREVOMADICTotalLikes",
-        "ytREVOMADICTotalComments",
-        "ytClubREVOTotalLikes",
-        "totalContributedEngagement",
-        "revoTTLikes",
-        "revoTTComments",
-        "revoTTSaves",
-        "revoTTShares",
-        "revoIGTotalViews",
-        "revoIGTotalShares",
-        "revoIGTotalComments",
-        "revoIGTotalLikes"
-      ];
-
-      for (const key of numberFields) {
-        finalData[key] = Number(finalData[key]);
-      }
-
-      res = await updateContentAsync(finalData);
-    }
-
-    if (res.success) {
-      refreshAllContentView();
-      return newRow;
-    }
-
-    return oldRow;
-  }, [viewId]);
+      return oldRow;
+    },
+    [viewId]
+  );
 
   // console.log(data)
 
@@ -245,10 +250,13 @@ export default function AllContentListView() {
     console.log({ children: error.message, severity: 'error' });
   }, []);
 
-  const handleRowSelection = React.useCallback((newRowSelectionModel) => {
-    const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
-    setSelectedRows(selectedData);
-  }, [records]);
+  const handleRowSelection = React.useCallback(
+    (newRowSelectionModel) => {
+      const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
+      setSelectedRows(selectedData);
+    },
+    [records]
+  );
 
   // ******************************data grid handler ends*********************
 
@@ -314,12 +322,11 @@ export default function AllContentListView() {
     }
   };
 
-
   // FILTERS
   // handle filter apply
   const handleFilterApply = async () => {
     if (viewId) {
-      const res = await updateView({ filters })
+      const res = await updateView({ filters });
       if (res.success) {
         refreshViewData();
       }
@@ -331,7 +338,7 @@ export default function AllContentListView() {
     const newFilters = filters.filter((_, i) => i !== index);
     setFilters(newFilters);
     if (viewId) {
-      const res = await updateView({ filters: newFilters })
+      const res = await updateView({ filters: newFilters });
       if (res.success) {
         refreshViewData();
       }
@@ -342,13 +349,12 @@ export default function AllContentListView() {
   const handleClearFilters = async () => {
     setFilters([]);
     if (viewId) {
-      const res = await updateView({ filters: [] })
+      const res = await updateView({ filters: [] });
       if (res.success) {
         refreshViewData();
       }
     }
   };
-
 
   // initialize
   const initialize = async () => {
@@ -446,7 +452,6 @@ export default function AllContentListView() {
       setShowView(true);
     }
   }, [showView]);
-
 
   return (
     <PageContainer>
@@ -662,7 +667,6 @@ export default function AllContentListView() {
         hideImageUploader={!isImageUploadOpen}
         folderName="content-HQ"
       />
-
     </PageContainer>
   );
 }

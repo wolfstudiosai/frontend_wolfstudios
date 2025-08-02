@@ -51,8 +51,6 @@ export const createPartnerAsync = async (data) => {
 export const updatePartnerAsync = async (oldData, newData) => {
   try {
     const modifiedDataOnly = getDirtyFields(oldData, newData);
-    console.log('modifiedDataOnly', modifiedDataOnly);
-
     const { id, ...rest } = modifiedDataOnly;
     const res = await api.patch(`/partner-HQ/${id}`, rest);
     toast.success(res.data.message);
