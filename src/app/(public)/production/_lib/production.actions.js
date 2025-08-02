@@ -55,7 +55,7 @@ export const updateProductionAsync = async (oldData, newData) => {
   try {
     const modifiedDataOnly = getDirtyFields(oldData, newData);
     const { id, ...rest } = modifiedDataOnly;
-    const res = await api.patch(`/production-HQ/${production_id}`, rest);
+    const res = await api.patch(`/production-HQ/${id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {
