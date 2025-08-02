@@ -64,7 +64,7 @@ export const PortfolioRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
         };
 
         const res = id
-          ? await updatePortfolioAsync(id, {
+          ? await updatePortfolioAsync(portfolioData.data, {
             ...finalData,
             thumbnailImage: Array.isArray(finalData.thumbnailImage)
               ? finalData.thumbnailImage[0] || ''
@@ -117,7 +117,7 @@ export const PortfolioRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
         'caseStudies'
       ]);
 
-      const res = await updatePortfolioAsync(id, {
+      const res = await updatePortfolioAsync(portfolioData.data, {
         ...finalData,
         isFeatured: featured,
         thumbnailImage: Array.isArray(finalData.thumbnailImage)
