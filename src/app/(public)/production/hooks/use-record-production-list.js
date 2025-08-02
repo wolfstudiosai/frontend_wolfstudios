@@ -1,5 +1,5 @@
 import useSWR, { useSWRConfig } from 'swr';
-import { getProductionListAsync } from '../_lib/production.action';
+import { getProductionListAsync } from '../_lib/production.actions';
 
 export const useRecordProductionList = () => {
     const pagination = { page: 1, rowsPerPage: 1 };

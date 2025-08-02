@@ -1,8 +1,8 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
+import { getDirtyFields } from '/src/utils/get-dirty-fields';
 import { buildQueryParams, getSearchQuery, validateFilters } from '/src/utils/helper';
-import { uploadFileAsync } from '/src/utils/upload-file';
 
 export const getProductionListAsync = async (queryParams, filters, gate) => {
   try {
@@ -51,10 +51,10 @@ export const createProductionAsync = async (data) => {
   }
 };
 
-export const updateProductionAsync = async (data) => {
-  const { id: production_id, ...rest } = data;
-
+export const updateProductionAsync = async (oldData, newData) => {
   try {
+    const modifiedDataOnly = getDirtyFields(oldData, newData);
+    const { id, ...rest } = modifiedDataOnly;
     const res = await api.patch(`/production-HQ/${production_id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
@@ -133,7 +133,7 @@ export const getProductionViewsAsync = async () => {
 export const getSingleProductionViewAsync = async (id, pagination) => {
   try {
     const res = await api.get(`/views/${id}?page=${pagination.pageNo}&size=${pagination.limit}`);
-    console.log(res)
+    console.log(res);
     return { success: true, data: res.data.data };
   } catch (error) {
     // toast.error(error.message);

@@ -19,7 +19,7 @@ import {
   getTagListAsync,
 } from '../../../../lib/common.actions';
 import { getCampaignListAsync } from '../../campaign/_lib/campaign.actions';
-import { getProductionListAsync } from '../../production/_lib/production.action';
+import { getProductionListAsync } from '../../production/_lib/production.actions';
 
 export const SpaceForm = ({ formikProps }) => {
   // ------------------------------------------- State ------------------------------------------

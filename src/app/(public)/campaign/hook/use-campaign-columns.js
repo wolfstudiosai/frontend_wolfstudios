@@ -20,7 +20,7 @@ import {
 } from '../../../../lib/common.actions';
 import { getContentListAsync } from '../../../(private)/all-content/_lib/all-content.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
-import { getProductionListAsync } from '../../production/_lib/production.action';
+import { getProductionListAsync } from '../../production/_lib/production.actions';
 import { getSpaceListAsync } from '../../spaces/_lib/space.actions';
 import { campaignProgressStatus } from '/src/app/(public)/campaign/_lib/campaign.constants';
 import { formatCompactNumber } from '/src/utils/helper';

@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { useSWRConfig } from 'swr';
-import { getProductionViewsAsync } from '../_lib/production.action';
+import { getProductionViewsAsync } from '../_lib/production.actions';
 
 export const useProductionViews = () => {
     const swrKey = 'productionViews';

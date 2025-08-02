@@ -27,7 +27,7 @@ import {
 } from '../../../../lib/common.actions';
 import { getContentListAsync } from '../../../(private)/all-content/_lib/all-content.actions';
 import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
-import { getProductionAsync, getProductionListAsync } from '../../production/_lib/production.action';
+import { getProductionAsync, getProductionListAsync } from '../../production/_lib/production.actions';
 import { profileStatus } from '../_lib/partner.constants';
 import { getCampaignListAsync } from '../../campaign/_lib/campaign.actions';
 

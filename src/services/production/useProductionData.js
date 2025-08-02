@@ -1,5 +1,5 @@
 import useSWR, { useSWRConfig } from 'swr';
-import { getProductionAsync } from '/src/app/(public)/production/_lib/production.action';
+import { getProductionAsync } from '../../app/(public)/production/_lib/production.actions';
 
 export const useGetProductionData = (id) => {
     const swrKey = id ? `production-${id}` : null;
