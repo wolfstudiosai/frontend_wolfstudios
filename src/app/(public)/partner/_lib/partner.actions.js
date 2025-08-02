@@ -1,6 +1,7 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
+import { getDirtyFields } from '/src/utils/get-dirty-fields';
 import { buildQueryParams, validateFilters } from '/src/utils/helper';
 
 export const getPartnerListAsync = async (queryParams, filters, gate) => {
@@ -47,9 +48,11 @@ export const createPartnerAsync = async (data) => {
   }
 };
 
-export const updatePartnerAsync = async (data) => {
+export const updatePartnerAsync = async (oldData, newData) => {
   try {
-    const { id, ...rest } = data;
+    const modifiedDataOnly = getDirtyFields(oldData, newData);
+
+    const { id, ...rest } = modifiedDataOnly;
     const res = await api.patch(`/partner-HQ/${id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
