@@ -51,7 +51,7 @@ export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
         const finalData = await campaignPayload(values, true);
 
         const res = id
-          ? await updateCampaignAsync(id, finalData)
+          ? await updateCampaignAsync(campaignData?.data, finalData)
           : await createCampaignAsync(finalData);
         if (res.success) {
           onClose?.();
@@ -92,7 +92,7 @@ export const CampaignRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
     try {
       setIsFeatured(featured);
       const payload = await campaignPayload({ ...defaultCampaign(campaignData?.data), isFeatured: featured }, false);
-      const res = await updateCampaignAsync(id, payload);
+      const res = await updateCampaignAsync(campaignData?.data, payload);
 
       if (res.success) {
         // Update cache

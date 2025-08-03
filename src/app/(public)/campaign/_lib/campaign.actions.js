@@ -1,8 +1,8 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { validateFilters, buildQueryParams, getSearchQuery } from '/src/utils/helper';
-import { uploadFileAsync } from '/src/utils/upload-file';
+import { getDirtyFields } from '/src/utils/get-dirty-fields';
+import { buildQueryParams, validateFilters } from '/src/utils/helper';
 
 export const getCampaignStatusListAsync = async () => {
   try {
@@ -15,7 +15,7 @@ export const getCampaignStatusListAsync = async () => {
     toast.error(error.message);
     return {
       success: false,
-      error: error.response ? error.response.data : 'An unknown error occurred'
+      error: error.response ? error.response.data : 'An unknown error occurred',
     };
   }
 };
@@ -114,9 +114,10 @@ export const createCampaignGroupAsync = async (data) => {
   }
 };
 
-export const updateCampaignAsync = async (id, data) => {
-  const { id: campaign_id, ...rest } = data;
+export const updateCampaignAsync = async (oldData, newData) => {
   try {
+    const modifiedDataOnly = getDirtyFields(oldData, newData);
+    const { id, ...rest } = modifiedDataOnly;
     const res = await api.patch(`/campaign-HQ/${id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
@@ -126,36 +127,6 @@ export const updateCampaignAsync = async (id, data) => {
   }
 };
 
-export const updateUCampaignAsync = async (file, data) => {
-  try {
-    const { id, slug, user_id, created_by, created_at, updated_at, ...rest } = data;
-    let thumbnailPath = '';
-    if (file) {
-      const uploadResponse = await uploadFileAsync(file);
-      thumbnailPath = uploadResponse[0].path;
-    }
-    const res = await api.patch(`/campaign/update/${id}`, {
-      ...rest,
-      thumbnail: thumbnailPath ? thumbnailPath : data.thumbnail,
-    });
-    toast.success(res.data.message);
-    return { success: true, data: res.data.data };
-  } catch (error) {
-    toast.error(error.response.data.message);
-    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
-  }
-};
-
-export const updateCampaignGroupAsync = async (data) => {
-  try {
-    const res = await api.patch(`/campaign-group/update/${data.id}`, data);
-    toast.success(res.data.message);
-    return { success: true, data: res.data.data };
-  } catch (error) {
-    toast.error(error.response.data.message);
-    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
-  }
-};
 export const deleteCampaignAsync = async (id, password) => {
   try {
     const res = await api.delete(`/campaign-HQ/${id}`, {
@@ -188,7 +159,7 @@ export const deleteCampaignBulkAsync = async (ids, password) => {
     toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
-}
+};
 
 export const deleteFileAsync = async (paths) => {
   try {
@@ -203,27 +174,26 @@ export const deleteFileAsync = async (paths) => {
   }
 };
 
-
 // Views
 export const getCampaignViews = async () => {
   try {
-    const res = await api.get(`/views?table=CAMPAIGN`)
-    return { success: true, data: res.data.data }
+    const res = await api.get(`/views?table=CAMPAIGN`);
+    return { success: true, data: res.data.data };
   } catch (error) {
     // toast.error(error.response.data.message);
     return { success: false, data: [], error: error.response ? error.response.data : 'An unknown error occurred' };
   }
-}
+};
 
 export const getSingleCampaignView = async (id, pagination) => {
   try {
-    const res = await api.get(`/views/${id}?page=${pagination.pageNo}&size=${pagination.limit}`)
-    return { success: true, data: res.data.data }
+    const res = await api.get(`/views/${id}?page=${pagination.pageNo}&size=${pagination.limit}`);
+    return { success: true, data: res.data.data };
   } catch (error) {
     // toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
-}
+};
 
 export const createCampaignView = async (data) => {
   try {
@@ -234,7 +204,7 @@ export const createCampaignView = async (data) => {
     toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
-}
+};
 
 export const updateCampaignView = async (id, data) => {
   try {
@@ -244,7 +214,7 @@ export const updateCampaignView = async (id, data) => {
     toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
-}
+};
 
 export const deleteCampaignView = async (id) => {
   try {
@@ -255,4 +225,4 @@ export const deleteCampaignView = async (id) => {
     toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
-}
+};
