@@ -39,7 +39,7 @@ export const CampaignTabCard = ({ campaign, refreshCampaignsStatus, refreshCampa
         }
       }
 
-      const res = await updateCampaignAsync(campaign?.id, {
+      const res = await updateCampaignAsync(finalCampaign, {
         ...finalCampaign,
         campaignStatus: value,
       });

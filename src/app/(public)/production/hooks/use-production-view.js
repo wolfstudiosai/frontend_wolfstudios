@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { useSWRConfig } from 'swr';
-import { getSingleProductionViewAsync } from '../_lib/production.action';
+import { getSingleProductionViewAsync } from '../_lib/production.actions';
 
 export const useProductionView = (id, pagination) => {
     // const swrKey = id ? ['campaignView', id, JSON.stringify(pagination)] : null;
@@ -34,8 +34,6 @@ export const useProductionView = (id, pagination) => {
             { revalidate: true }
         );
     };
-
-    console.log(singleView)
 
     return {
         singleView,

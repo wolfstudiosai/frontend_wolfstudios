@@ -7,7 +7,6 @@ import { formatCompactNumber } from '/src/utils/helper';
 
 export const LeftPartnerAnalytics = ({ partner }) => {
 
-
   return (
     <Grid2 item xs={12} md={4}>
       <Card elevation={0} sx={{ borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
@@ -62,7 +61,7 @@ export const LeftPartnerAnalytics = ({ partner }) => {
               <Stack direction="row" spacing={2}>
                 <Iconify icon="mdi:location" />
                 <Typography variant="body2" color="text.secondary">
-                  {partner?.cities?.map((city) => city).join(', ') || 'N/A'}
+                  {partner?.cities?.map((city) => city.name).join(', ') || 'N/A'}
                 </Typography>
               </Stack>
             </Stack>

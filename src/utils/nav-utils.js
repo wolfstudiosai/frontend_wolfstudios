@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { Box, Chip, Collapse, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Popover, Typography } from '@mui/material';
 import { usePathname, useRouter } from 'next/navigation';
 import { Fragment, useEffect, useRef, useState } from 'react';
@@ -116,7 +117,7 @@ const SidebarMenuItems = ({
     : { minWidth: 40 };
 
   const textStyles = {
-    color: 'text.primary',
+    color: 'white',
     fontWeight: isDesktop ? 800 : 700,
   };
 
@@ -149,9 +150,9 @@ const SidebarMenuItems = ({
                 <ListItemIcon sx={iconStyles} title={isDesktop && !isOpen ? item.title : ''}>
                   <Iconify
                     icon={item.icon}
-                    width={isDesktop && !isOpen ? 24 : 20}
-                    height={isDesktop && !isOpen ? 24 : 20}
-                    color="text.primary"
+                    width={20}
+                    height={20}
+                    color="white"
                   />
                 </ListItemIcon>
                 {(isDesktop ? isOpen : true) && <ListItemText primary={item.title} sx={textStyles} />}
@@ -170,7 +171,7 @@ const SidebarMenuItems = ({
                     icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
                     width={10}
                     height={10}
-                    color="text.secondary"
+                    color="white"
                   />
                 </IconButton>
               )}

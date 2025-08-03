@@ -18,7 +18,7 @@ import { CustomMultipleInputFieldV2 } from '../../../../components/formFields/cu
 import { getCityListAsync, getProductListAsync } from '../../../../lib/common.actions';
 import { getContentListAsync } from '../../../(private)/all-content/_lib/all-content.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
-import { getProductionListAsync } from '../../production/_lib/production.action';
+import { getProductionListAsync } from '../../production/_lib/production.actions';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
 
 export const CampaignForm = ({ formikProps }) => {

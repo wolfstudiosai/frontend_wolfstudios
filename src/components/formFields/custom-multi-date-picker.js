@@ -47,7 +47,7 @@ export const CustomMultiDatePicker = ({
                         <Box key={idx} display="flex" alignItems="center" gap={1}>
                             <DatePicker
                                 format={format}
-                                value={dayjs(val)}
+                                value={dayjs(val, format)}
                                 onChange={(newDate) => handleDateChange(newDate, idx)}
                                 slotProps={{
                                     textField: {

@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Divider, MenuList } from '@mui/material';
+import { Box, MenuList } from '@mui/material';
 import { useColorScheme } from '@mui/material/styles';
 
 import { useSettings } from '/src/hooks/use-settings';
@@ -16,7 +16,7 @@ import SidebarMenuItems, { getWorkspacesTab } from '/src/utils/nav-utils';
 export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible }) {
   const { colorScheme = 'light' } = useColorScheme();
   const styles = navColorStyles[colorScheme][color];
-  const { userInfo, logout } = useAuth();
+  const { userInfo } = useAuth();
   const { openMenus, toggleMenuItem } = useSettings();
 
   const workspacesTab = getWorkspacesTab(userInfo);
@@ -40,7 +40,6 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
       }}
     >
       <SidebarChatProfiles isOpen={open} />
-      <Divider />
       <MenuList>
         <SidebarMenuItems
           items={privateRoutesV3}

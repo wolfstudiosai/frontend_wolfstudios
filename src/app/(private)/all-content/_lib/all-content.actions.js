@@ -1,7 +1,7 @@
-import dayjs from 'dayjs';
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
+import { getDirtyFields } from '/src/utils/get-dirty-fields';
 import { buildQueryParams, validateFilters } from '/src/utils/helper';
 
 export const getContentListAsync = async (queryParams, filters, gate) => {
@@ -26,7 +26,6 @@ export const getContentListAsync = async (queryParams, filters, gate) => {
 };
 
 export const getContentAsync = async (id) => {
-  console.log(id, 'id from action....');
   try {
     const res = await api.get(`/content-HQ/${id}`);
     if (!res.data.success) return;
@@ -52,10 +51,11 @@ export const createContentAsync = async (data) => {
   }
 };
 
-export const updateContentAsync = async (data) => {
+export const updateContentAsync = async (oldData, newData) => {
   try {
-    // const payload = contentPayload(data);
-    const res = await api.patch(`/content-HQ/${data?.id}`, data);
+    const modifiedDataOnly = getDirtyFields(oldData, newData);
+    const { id, ...rest } = modifiedDataOnly;
+    const res = await api.patch(`/content-HQ/${id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {

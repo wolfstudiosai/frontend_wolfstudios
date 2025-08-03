@@ -2,6 +2,7 @@ import { toast } from 'sonner';
 
 import { buildQueryParams, getSearchQuery, validateFilters } from '../../../../utils/helper';
 import { api } from '/src/utils/api';
+import { getDirtyFields } from '/src/utils/get-dirty-fields';
 
 export const getPortfolioListAsync = async (pagination, filters, gate) => {
   try {
@@ -52,11 +53,11 @@ export const createPortfolioAsync = async (data) => {
   }
 };
 
-export const updatePortfolioAsync = async (id, data) => {
+export const updatePortfolioAsync = async (oldData, newData) => {
   try {
-    const res = await api.patch(`/portfolios/${id}`, {
-      ...data,
-    });
+    const modifiedDataOnly = getDirtyFields(oldData, newData);
+    const { id, ...rest } = modifiedDataOnly;
+    const res = await api.patch(`/portfolios/${id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {

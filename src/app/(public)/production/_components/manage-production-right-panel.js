@@ -9,7 +9,7 @@ import {
   deleteProductionAsync,
   getProductionAsync,
   updateProductionAsync
-} from '../_lib/production.action';
+} from '../_lib/production.actions';
 import { defaultProduction } from '../_lib/production.types';
 import { ProductionForm } from './production-form';
 import { ProductionQuickView } from './production-quickview';

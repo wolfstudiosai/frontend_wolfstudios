@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { toast } from 'sonner';
+import { mutate } from 'swr';
 
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
 import TableSortBuilder from '/src/components/common/table-sort-builder';
@@ -36,14 +37,13 @@ import {
   deleteProductionAsync,
   updateProductionAsync,
   updateProductionViewAsync,
-} from '../_lib/production.action';
-import { useProductionColumns } from '../hooks/use-production-columns';
-import { useRecordProductionList } from '../hooks/use-record-production-list';
-import { useProductionViews } from '../hooks/use-production-views';
-import { useProductionView } from '../hooks/use-production-view';
+} from '../_lib/production.actions';
 import { defaultProduction } from '../../production/_lib/production.types';
+import { useProductionColumns } from '../hooks/use-production-columns';
+import { useProductionView } from '../hooks/use-production-view';
+import { useProductionViews } from '../hooks/use-production-views';
+import { useRecordProductionList } from '../hooks/use-record-production-list';
 import { convertArrayObjIntoArrOfStr } from '/src/utils/convertRelationArrays';
-import { mutate } from 'swr';
 
 export const ProductionListView = () => {
   const theme = useTheme();
@@ -83,7 +83,6 @@ export const ProductionListView = () => {
     setSearchColumns(allColumns);
   };
 
-
   // update partner after images uploaded
   const handleUploadImage = async (images) => {
     try {
@@ -103,7 +102,7 @@ export const ProductionListView = () => {
         finalData[imageUpdatedField] = [...finalData[imageUpdatedField], ...images];
       }
 
-      const res = await updateProductionAsync(finalData);
+      const res = await updateProductionAsync(updatedRow, finalData);
 
       if (res.success) {
         setOpen(false);
@@ -142,7 +141,10 @@ export const ProductionListView = () => {
   // SWR
   const { viewsData, isViewsLoading } = useProductionViews();
   const { productionMeta, columns: productionsColumns, isProductionsLoading } = useRecordProductionList();
-  const { singleView, isSingleViewLoading, refreshViewData, refreshAllProductionView } = useProductionView(selectedViewId, pagination);
+  const { singleView, isSingleViewLoading, refreshViewData, refreshAllProductionView } = useProductionView(
+    selectedViewId,
+    pagination
+  );
 
   async function updateView(props) {
     const viewFilters = props.filters ? props.filters : filters;
@@ -172,71 +174,76 @@ export const ProductionListView = () => {
     setPagination(newPagination);
   }, []);
 
-  const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
-    if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
+  const processRowUpdate = React.useCallback(
+    async (newRow, oldRow) => {
+      if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
 
-    const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
-    let res;
+      const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
+      let res;
 
-    if (isTemporaryId) {
-      if (!newRow.name) {
-        toast.error('Please enter name');
+      if (isTemporaryId) {
+        if (!newRow.name) {
+          toast.error('Please enter name');
+          return newRow;
+        }
+
+        res = await createProductionAsync(newRow);
+      } else {
+        const finalData = convertArrayObjIntoArrOfStr(newRow, [
+          'spaces',
+          'stakeholders',
+          'contributingPartners',
+          'campaigns',
+          'products',
+          'proposedSpaces',
+          'proposedPartners',
+        ]);
+
+        const numericFields = [
+          'totalExpense',
+          'spaceExpense',
+          'talentExpense',
+          'crewExpense',
+          'foodExpense',
+          'equipmentExpense',
+          'reimbursments',
+          'wardrobeExpense',
+          'directorExpense',
+          'producerExpense',
+        ];
+
+        for (const field of numericFields) {
+          const value = newRow[field];
+          if (value) {
+            finalData[field] = Number(value);
+          }
+        }
+
+        finalData.thumbnailImage = Array.isArray(finalData.thumbnailImage)
+          ? finalData.thumbnailImage[0]
+          : finalData.thumbnailImage;
+
+        res = await updateProductionAsync(oldRow, finalData);
+      }
+
+      if (res.success) {
+        refreshAllProductionView();
         return newRow;
       }
 
-      res = await createProductionAsync(newRow);
-    } else {
-      const finalData = convertArrayObjIntoArrOfStr(newRow, [
-        'spaces',
-        'stakeholders',
-        'contributingPartners',
-        'campaigns',
-        'products',
-        'proposedSpaces',
-        'proposedPartners',
-      ]);
-
-      const numericFields = [
-        'totalExpense',
-        'spaceExpense',
-        'talentExpense',
-        'crewExpense',
-        'foodExpense',
-        'equipmentExpense',
-        'reimbursments',
-        'wardrobeExpense',
-        'directorExpense',
-        'producerExpense',
-      ];
-
-      for (const field of numericFields) {
-        const value = newRow[field];
-        if (value) {
-          finalData[field] = Number(value);
-        }
-      }
-
-      finalData.thumbnailImage = Array.isArray(finalData.thumbnailImage)
-        ? finalData.thumbnailImage[0]
-        : finalData.thumbnailImage;
-
-      res = await updateProductionAsync(finalData);
-    }
-
-    if (res.success) {
-      refreshAllProductionView();
-      return newRow;
-    }
-
-    return oldRow;
-  }, [viewId]);
+      return oldRow;
+    },
+    [viewId]
+  );
 
   // handle row selection
-  const handleRowSelection = React.useCallback((newRowSelectionModel) => {
-    const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
-    setSelectedRows(selectedData);
-  }, [records]);
-
+  const handleRowSelection = React.useCallback(
+    (newRowSelectionModel) => {
+      const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
+      setSelectedRows(selectedData);
+    },
+    [records]
+  );
 
   // handle process row update error
   const handleProcessRowUpdateError = React.useCallback((error) => {
@@ -341,7 +348,6 @@ export const ProductionListView = () => {
     }
   };
 
-
   const initialize = async () => {
     try {
       // set meta data
@@ -350,11 +356,8 @@ export const ProductionListView = () => {
 
       // set views
       setViews(viewsData.data);
-      console.log(viewsData.data, 'viewsData.data')
-
       if (viewsData.success && viewsData?.data?.length > 0) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
-        console.log(firstView)
         setSelectedViewId(firstView?.id);
 
         if (!viewId) {
@@ -406,7 +409,6 @@ export const ProductionListView = () => {
     if (productionMeta && viewsData && !hasInitialized.current) {
       hasInitialized.current = true;
       initialize();
-      console.log('initialize')
     }
   }, [productionMeta, viewsData, searchParams]);
 
@@ -439,7 +441,7 @@ export const ProductionListView = () => {
     if (isViewOpen === 'true') {
       setShowView(true);
     }
-  }, [showView])
+  }, [showView]);
 
   return (
     <PageContainer>

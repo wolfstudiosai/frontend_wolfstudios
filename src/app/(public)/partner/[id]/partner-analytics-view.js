@@ -16,6 +16,7 @@ export const PartnerAnalyticsView = () => {
   const { isFeaturedCardVisible } = useSettings();
 
   const { data: partnerData, isLoading, mutate } = useGetPartnerData(id);
+
   return (
     <PageLoader loading={isLoading}>
       <Grid

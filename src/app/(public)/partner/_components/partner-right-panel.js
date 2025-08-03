@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Icon } from '@iconify/react';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
@@ -9,17 +10,17 @@ import { useFormik } from 'formik';
 import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
-import PageLoader from '../../../../components/loaders/PageLoader';
 
 import { createPartnerAsync, deletePartnerAsync, updatePartnerAsync } from '../_lib/partner.actions';
 import { defaultPartner } from '../_lib/partner.types';
+import PageLoader from '../../../../components/loaders/PageLoader';
 import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
 import { PartnerForm } from './partner-form';
 import { PartnerQuickView } from './partner-quickview';
 import { formConstants } from '/src/app/constants/form-constants';
+import { useFeaturedPartnerList } from '/src/services/partner/useFeaturedPartner';
 import { useGetPartnerData } from '/src/services/partner/usePartnerData';
 import { usePartnerList } from '/src/services/partner/usePartnerList';
-import { useFeaturedPartnerList } from '/src/services/partner/useFeaturedPartner';
 
 export const PartnerRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { mutate: mutatePartnerList } = usePartnerList();
@@ -76,12 +77,12 @@ export const PartnerRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
         };
 
         const res = id
-          ? await updatePartnerAsync({
-            ...finalData,
-            thumbnailImage: Array.isArray(finalData.thumbnailImage)
-              ? finalData.thumbnailImage[0]
-              : finalData.thumbnailImage,
-          })
+          ? await updatePartnerAsync(partnerData?.data, {
+              ...finalData,
+              thumbnailImage: Array.isArray(finalData.thumbnailImage)
+                ? finalData.thumbnailImage[0]
+                : finalData.thumbnailImage,
+            })
           : await createPartnerAsync(createPayload);
         if (res.success) {
           onClose?.();
@@ -89,7 +90,6 @@ export const PartnerRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
           mutate();
           mutatePartnerList();
           mutateFeaturedPartnerList();
-
         } else {
           console.error('Operation failed:', res.message);
         }
@@ -100,7 +100,6 @@ export const PartnerRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
       }
     },
   });
-
 
   React.useEffect(() => {
     if (partnerData?.data) {
@@ -138,7 +137,7 @@ export const PartnerRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
         'productionHQ2',
       ]);
 
-      const res = await updatePartnerAsync({
+      const res = await updatePartnerAsync(partnerData?.data, {
         ...finalData,
         isFeatured: featured,
         thumbnailImage: Array.isArray(finalData.thumbnailImage)
@@ -180,9 +179,11 @@ export const PartnerRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
           )}
           {panelView !== 'ADD' && (
             <IconButton
+              as={Link}
+              href={`/partner/${id}`}
+              size="small"
               sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               title="Analytics"
-              onClick={() => router.push(`/partner/${id}`)}
             >
               <Icon icon="mdi:analytics" />
             </IconButton>

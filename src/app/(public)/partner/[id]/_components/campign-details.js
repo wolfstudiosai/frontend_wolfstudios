@@ -3,6 +3,7 @@ import { Box, Card, CardContent, CardHeader, Chip, Grid2, Paper, Stack, Typograp
 import { Iconify } from '/src/components/iconify/iconify';
 
 export const CampaignDetails = ({ partner }) => {
+
   return (
     <Grid2 item size={{ xs: 12, md: 6 }}>
       <Card
@@ -58,16 +59,16 @@ export const CampaignDetails = ({ partner }) => {
 
             <Box>
               <Typography variant="subtitle2" gutterBottom color="text.secondary">
-                Campaign Month
+                Campaign Months
               </Typography>
               <Typography variant="body2">
                 {partner?.campaignMonth?.length > 0
                   ? partner?.campaignMonth?.map((month, index) => (
-                      <Box key={index} display="flex" alignItems="center" gap={1}>
-                        <Iconify icon="mdi:calendar-blank-outline" />
-                        <Typography variant="body2">{month}</Typography>
-                      </Box>
-                    ))
+                    <Box key={index} display="flex" alignItems="center" gap={1}>
+                      <Iconify icon="mdi:calendar-blank-outline" />
+                      <Typography variant="body2">{month}</Typography>
+                    </Box>
+                  ))
                   : 'N/A'}
               </Typography>
             </Box>
@@ -83,8 +84,9 @@ export const CampaignDetails = ({ partner }) => {
                       key={i}
                       label={tag?.name}
                       size="small"
+                      color="primary"
+                      variant="outlined"
                       icon={<Iconify icon="mdi:tag-outline" fontSize="small" />}
-                      sx={{ backgroundColor: (theme) => theme.palette.grey[100], color: 'text.secondary' }}
                     />
                   ))
                 ) : (

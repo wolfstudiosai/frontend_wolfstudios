@@ -94,7 +94,7 @@ export const PortfolioListView = () => {
         }
       }
 
-      const response = await updatePortfolioAsync(updatedRow.id, finalData);
+      const response = await updatePortfolioAsync(updatedRow, finalData);
       if (response.success) {
         setOpen(false);
         refreshAllPortfolioView();
@@ -189,7 +189,7 @@ export const PortfolioListView = () => {
         finalData[key] = Array.isArray(finalData[key]) ? finalData[key][0] : finalData[key];
       }
 
-      res = await updatePortfolioAsync(newRow.id, finalData);
+      res = await updatePortfolioAsync(oldRow, finalData);
     }
 
     if (res.success) {
