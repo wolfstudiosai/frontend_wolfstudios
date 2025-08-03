@@ -11,7 +11,7 @@ import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete
 import { DrawerContainer } from '/src/components/drawer/drawer';
 import PageLoader from '/src/components/loaders/PageLoader';
 
-import { createProductionAsync, deleteSingleProductionAsync, updateProductionAsync } from '../_lib/production.action';
+import { createProductionAsync, deleteSingleProductionAsync, updateProductionAsync } from '../_lib/production.actions';
 import { defaultProduction } from '../_lib/production.types';
 import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
 import { ProductionForm } from './production-form';
@@ -63,7 +63,7 @@ export const ProductionRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
         };
 
         const res = id
-          ? await updateProductionAsync({
+          ? await updateProductionAsync(productionData?.data, {
             ...finalData,
             thumbnailImage: Array.isArray(finalData.thumbnailImage)
               ? finalData.thumbnailImage[0] || ''
@@ -114,7 +114,7 @@ export const ProductionRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
         'proposedPartners',
       ]);
 
-      await updateProductionAsync({
+      await updateProductionAsync(productionData?.data, {
         ...finalData,
         isFeatured: featured,
         thumbnailImage: Array.isArray(finalData.thumbnailImage)

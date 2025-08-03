@@ -2,8 +2,8 @@ import { toast } from 'sonner';
 
 import { cleanPayload } from '../../../../utils/cleanPayload';
 import { api } from '/src/utils/api';
+import { getDirtyFields } from '/src/utils/get-dirty-fields';
 import { buildQueryParams, getSearchQuery, validateFilters } from '/src/utils/helper';
-import { uploadFileAsync } from '/src/utils/upload-file';
 
 export const getSpaceListAsync = async (queryParams, filters, gate) => {
   try {
@@ -48,9 +48,11 @@ export const createSpaceAsync = async (data) => {
   }
 };
 
-export const updateSpaceAsync = async (data) => {
+export const updateSpaceAsync = async (oldData, newData) => {
   try {
-    const res = await api.patch(`/spaces/${data?.id}`, data);
+    const modifiedDataOnly = getDirtyFields(oldData, newData);
+    const { id, ...rest } = modifiedDataOnly;
+    const res = await api.patch(`/spaces/${id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
   } catch (error) {

@@ -86,7 +86,7 @@ export const CampaignListView = () => {
         finalData[imageUpdatedField] = [...finalData[imageUpdatedField], ...images];
       }
 
-      const response = await updateCampaignAsync(updatedRow.id, finalData);
+      const response = await updateCampaignAsync(updatedRow, finalData);
 
       if (response.success) {
         setOpen(false);
@@ -171,7 +171,7 @@ export const CampaignListView = () => {
     } else {
       const finalData = await campaignPayload(newRow);
 
-      res = await updateCampaignAsync(newRow.id, finalData);
+      res = await updateCampaignAsync(oldRow, finalData);
     }
 
     if (res.success) {

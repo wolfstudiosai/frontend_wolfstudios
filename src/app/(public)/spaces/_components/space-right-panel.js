@@ -12,14 +12,14 @@ import { DrawerContainer } from '/src/components/drawer/drawer';
 
 import { createSpaceAsync, deleteSingleSpaceAsync, updateSpaceAsync } from '../_lib/space.actions';
 import { defaultSpace } from '../_lib/space.types';
+import PageLoader from '../../../../components/loaders/PageLoader';
 import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
 import { SpaceForm } from './space-form';
 import { SpaceQuickViewV2 } from './space-quickviewV2';
 import { formConstants } from '/src/app/constants/form-constants';
+import { useFeaturedSpacesList } from '/src/services/space/useFeaturedSpaces';
 import { useGetSpaceData } from '/src/services/space/useSpaceData';
 import { useSpaceList } from '/src/services/space/useSpaceList';
-import PageLoader from '../../../../components/loaders/PageLoader';
-import { useFeaturedSpacesList } from '/src/services/space/useFeaturedSpaces';
 
 export const SpaceRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { mutate: muteSpaceList } = useSpaceList();
@@ -64,12 +64,12 @@ export const SpaceRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
         };
 
         const res = id
-          ? await updateSpaceAsync({
-            ...finalData,
-            thumbnailImage: Array.isArray(finalData.thumbnailImage)
-              ? finalData.thumbnailImage[0]
-              : finalData.thumbnailImage,
-          })
+          ? await updateSpaceAsync(spaceData?.data, {
+              ...finalData,
+              thumbnailImage: Array.isArray(finalData.thumbnailImage)
+                ? finalData.thumbnailImage[0]
+                : finalData.thumbnailImage,
+            })
           : await createSpaceAsync(createPayload);
         if (res.success) {
           onClose?.();
@@ -88,7 +88,6 @@ export const SpaceRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
     },
   });
 
-
   React.useEffect(() => {
     if (spaceData?.data) {
       setIsFeatured(spaceData?.data?.isFeatured);
@@ -99,7 +98,7 @@ export const SpaceRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   // *********************States*********************************
   const handleDelete = async () => {
     onClose?.();
-    muteSpaceList()
+    muteSpaceList();
     muteFeaturedSpaceList();
   };
 
@@ -117,7 +116,7 @@ export const SpaceRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
         'productionHQ2',
       ]);
 
-      const res = await updateSpaceAsync({
+      const res = await updateSpaceAsync(spaceData?.data, {
         ...finalData,
         isFeatured: featured,
         thumbnailImage: Array.isArray(finalData.thumbnailImage)

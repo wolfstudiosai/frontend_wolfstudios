@@ -18,10 +18,11 @@ import {
 } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 import { toast } from 'sonner';
+import { mutate } from 'swr';
 
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
-import TableView from '/src/components/common/table-view';
 import TableSortBuilder from '/src/components/common/table-sort-builder';
+import TableView from '/src/components/common/table-view';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
@@ -38,12 +39,11 @@ import {
   updatePartnerView,
 } from '../_lib/partner.actions';
 import { defaultPartner } from '../_lib/partner.types';
-import { usePartnerColumns } from '../hooks/use-partner-columns';
-import { useRecordPartnerList } from '../hooks/use-record-partner-list';
-import { usePartnerViews } from '../hooks/use-partner-views';
-import { usePartnerView } from '../hooks/use-partner-view';
 import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
-import { mutate } from 'swr';
+import { usePartnerColumns } from '../hooks/use-partner-columns';
+import { usePartnerView } from '../hooks/use-partner-view';
+import { usePartnerViews } from '../hooks/use-partner-views';
+import { useRecordPartnerList } from '../hooks/use-record-partner-list';
 
 export const PartnerListView = () => {
   const theme = useTheme();
@@ -115,7 +115,7 @@ export const PartnerListView = () => {
         }
       }
 
-      const response = await updatePartnerAsync(finalData);
+      const response = await updatePartnerAsync(updatedRow, finalData);
       if (response.success) {
         setOpen(false);
         refreshAllPartnerView();
@@ -124,7 +124,6 @@ export const PartnerListView = () => {
       console.log(error);
     }
   };
-
 
   // Partner data handler
   const [records, setRecords] = React.useState([]);
@@ -155,7 +154,10 @@ export const PartnerListView = () => {
   // SWR
   const { viewsData, isViewsLoading } = usePartnerViews();
   const { partnerMeta, columns: partnerColumns, isPartnersLoading } = useRecordPartnerList();
-  const { singleView, isSingleViewLoading, refreshViewData, refreshAllPartnerView } = usePartnerView(selectedViewId, pagination);
+  const { singleView, isSingleViewLoading, refreshViewData, refreshAllPartnerView } = usePartnerView(
+    selectedViewId,
+    pagination
+  );
 
   async function updateView(props) {
     const viewFilters = props.filters ? props.filters : filters;
@@ -182,99 +184,101 @@ export const PartnerListView = () => {
     setPagination(newPagination);
   }, []);
 
-
   // update or create partner
-  const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
-    if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
+  const processRowUpdate = React.useCallback(
+    async (newRow, oldRow) => {
+      if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
 
-    const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
-    let res;
+      const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
+      let res;
 
-    if (isTemporaryId) {
-      if (!newRow.name) {
-        toast.error('Please enter name');
+      if (isTemporaryId) {
+        if (!newRow.name) {
+          toast.error('Please enter name');
+          return newRow;
+        }
+
+        res = await createPartnerAsync(newRow);
+      } else {
+        const finalData = convertArrayObjIntoArrOfStr(newRow, [
+          'stakeholders',
+          'contentHQ',
+          'profileCategory',
+          'portfolios',
+          'states',
+          'cities',
+          'services',
+          'caseStudies',
+          'productionHQ',
+          'products',
+          'contributedCampaigns',
+          'countries',
+          'tags',
+          'retailPartners',
+          'destinations',
+          'proposedCampaigns',
+          'productionHQ2',
+        ]);
+
+        const numberFields = [
+          'totalROI',
+          'totalExpense',
+          'shippingFBAFeeGiftedPartners',
+          'paypalFee',
+          'amazonReferralFee',
+          'linkedinConnections',
+          'youtubeFollowing',
+          'snapchatFollowing',
+          'xFollowing',
+          'pinterestFollowing',
+          'tiktokFollowing',
+          'facebookFollowing',
+          'instagramFollowing',
+          'previousCollabExpense',
+          'totalProductCOGExpense',
+          'shippingExpense',
+          'oneOffExpense',
+          'partner360Rate',
+          'partnerIGRate',
+          'partnerTTRate',
+          'partnerYTRate',
+          'amountPaid',
+          'totalContributedEngagementByContent',
+          'totalAudience',
+          'remainingCredits',
+          'ugcRetainerAmount',
+          'partnerPostViews',
+          'estimatedTaxes',
+          'fbaXLevanta',
+          'amazonOrderTotal',
+          'amazonTax',
+          'amazonKickback',
+          'hourlyRate',
+          'partnerUGCRate',
+          'levantaID',
+          'impactID',
+          'shareasaleID',
+        ];
+
+        numberFields.forEach((field) => {
+          finalData[field] = Number(finalData[field]) || 0;
+        });
+
+        finalData.thumbnailImage = Array.isArray(finalData.thumbnailImage)
+          ? finalData.thumbnailImage[0]
+          : finalData.thumbnailImage;
+        res = await updatePartnerAsync(oldRow, finalData);
+      }
+
+      if (res.success) {
+        refreshAllPartnerView();
         return newRow;
       }
 
-      res = await createPartnerAsync(newRow);
-    } else {
-      const finalData = convertArrayObjIntoArrOfStr(newRow, [
-        'stakeholders',
-        'contentHQ',
-        'profileCategory',
-        'portfolios',
-        'states',
-        'cities',
-        'services',
-        'caseStudies',
-        'productionHQ',
-        'products',
-        'contributedCampaigns',
-        'countries',
-        'tags',
-        'retailPartners',
-        'destinations',
-        'proposedCampaigns',
-        'productionHQ2',
-      ]);
-
-      const numberFields = [
-        'totalROI',
-        'totalExpense',
-        'shippingFBAFeeGiftedPartners',
-        'paypalFee',
-        'amazonReferralFee',
-        'linkedinConnections',
-        'youtubeFollowing',
-        'snapchatFollowing',
-        'xFollowing',
-        'pinterestFollowing',
-        'tiktokFollowing',
-        'facebookFollowing',
-        'instagramFollowing',
-        'previousCollabExpense',
-        'totalProductCOGExpense',
-        'shippingExpense',
-        'oneOffExpense',
-        'partner360Rate',
-        'partnerIGRate',
-        'partnerTTRate',
-        'partnerYTRate',
-        'amountPaid',
-        'totalContributedEngagementByContent',
-        'totalAudience',
-        'remainingCredits',
-        'ugcRetainerAmount',
-        'partnerPostViews',
-        'estimatedTaxes',
-        'fbaXLevanta',
-        'amazonOrderTotal',
-        'amazonTax',
-        'amazonKickback',
-        'hourlyRate',
-        'partnerUGCRate',
-        'levantaID',
-        'impactID',
-        'shareasaleID'
-      ];
-
-      numberFields.forEach((field) => {
-        finalData[field] = Number(finalData[field]) || 0;
-      });
-
-      finalData.thumbnailImage = Array.isArray(finalData.thumbnailImage)
-        ? finalData.thumbnailImage[0]
-        : finalData.thumbnailImage;
-      res = await updatePartnerAsync(finalData);
-    }
-
-    if (res.success) {
-      refreshAllPartnerView();
-      return newRow;
-    }
-
-    return oldRow;
-  }, [viewId]);
+      return oldRow;
+    },
+    [viewId]
+  );
 
   const handleProcessRowUpdateError = React.useCallback((error) => {
     console.log({ children: error.message, severity: 'error' });
@@ -283,10 +287,13 @@ export const PartnerListView = () => {
   // ******************************data grid handler ends*********************
 
   // handle row selection
-  const handleRowSelection = React.useCallback((newRowSelectionModel) => {
-    const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
-    setSelectedRows(selectedData);
-  }, [records]);
+  const handleRowSelection = React.useCallback(
+    (newRowSelectionModel) => {
+      const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
+      setSelectedRows(selectedData);
+    },
+    [records]
+  );
 
   // new column added
   const handleAddNewItem = () => {
@@ -354,7 +361,6 @@ export const PartnerListView = () => {
     }
   };
 
-
   // FILTERS
   // handle filter apply
   const handleFilterApply = async () => {
@@ -388,7 +394,6 @@ export const PartnerListView = () => {
       }
     }
   };
-
 
   // initialize
   const initialize = async () => {
@@ -455,7 +460,6 @@ export const PartnerListView = () => {
       initialize();
     }
   }, [partnerMeta, viewsData, searchParams]);
-
 
   // store isView sidebar is open or not on local storage
   const handleOpenViewSidebar = () => {

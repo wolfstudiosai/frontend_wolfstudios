@@ -10,6 +10,7 @@ import { mutate as globalMutate } from 'swr';
 import useAuth from '/src/hooks/useAuth';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
 import { DrawerContainer } from '/src/components/drawer/drawer';
+import PageLoader from '/src/components/loaders/PageLoader';
 
 import { createContentAsync, deleteContentAsync, updateContentAsync } from '../_lib/all-content.actions';
 import { defaultContent } from '../_lib/all-content.types';
@@ -19,7 +20,6 @@ import { ContentQuickView } from './content-quick-view';
 import { formConstants } from '/src/app/constants/form-constants';
 import { useGetContentData } from '/src/services/content/useContentData';
 import { useContentList } from '/src/services/content/useContentList';
-import PageLoader from '/src/components/loaders/PageLoader';
 
 export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
   const { mutate: mutateList } = useContentList();
@@ -63,12 +63,12 @@ export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
         };
 
         const res = id
-          ? await updateContentAsync({
-            ...finalData,
-            thumbnailImage: Array.isArray(finalData.thumbnailImage)
-              ? finalData.thumbnailImage[0] || ''
-              : finalData.thumbnailImage || '',
-          })
+          ? await updateContentAsync(contentData?.data, {
+              ...finalData,
+              thumbnailImage: Array.isArray(finalData.thumbnailImage)
+                ? finalData.thumbnailImage[0] || ''
+                : finalData.thumbnailImage || '',
+            })
           : await createContentAsync(createPayload);
         if (res.success) {
           onClose?.();
@@ -86,7 +86,6 @@ export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
       }
     },
   });
-
 
   React.useEffect(() => {
     if (contentData?.data) {
@@ -118,7 +117,7 @@ export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
         'retailPartners',
       ]);
 
-      await updateContentAsync({
+      await updateContentAsync(contentData, {
         ...finalData,
         isFeatured: featured,
         thumbnailImage: Array.isArray(finalData.thumbnailImage)
@@ -190,7 +189,6 @@ export const AllContentRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
       )}
     </>
   );
-
 
   return (
     <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>

@@ -12,7 +12,7 @@ import DateEditCell from '/src/components/data-table/date-edit-cell';
 import { dateFormatter } from '/src/utils/date-formatter';
 import { getCaseStudyListAsync, getCityListAsync, getCountryListAsync, getDestinationListAsync, getProductListAsync, getRetailPartnerListAsync, getStakeHolderListAsync, getStateListAsync, getTagListAsync } from "../../../../lib/common.actions";
 import { getContentListAsync } from "../../../(private)/all-content/_lib/all-content.actions";
-import { getProductionListAsync } from "../../production/_lib/production.action";
+import { getProductionListAsync } from "../../production/_lib/production.actions";
 import { getPortfolioListAsync } from "../../portfolio/_lib/portfolio.actions";
 import { renderAutoCompleteCell, renderAutoCompleteEditCell } from "../../../../components/data-table/render-auto-complete-edit-cell";
 import { getCampaignListAsync } from "../../campaign/_lib/campaign.actions";

@@ -6,7 +6,7 @@ import { getContentListAsync } from '/src/app/(private)/all-content/_lib/all-con
 import { getCampaignListAsync } from '/src/app/(public)/campaign/_lib/campaign.actions';
 import { getPartnerListAsync } from '/src/app/(public)/partner/_lib/partner.actions';
 import { getPortfolioCategoryListAsync } from '/src/app/(public)/portfolio/_lib/portfolio.actions';
-import { getProductionListAsync } from '/src/app/(public)/production/_lib/production.action';
+import { getProductionListAsync } from '../../app/(public)/production/_lib/production.actions';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
 import { useDebounce } from '/src/hooks/use-debounce';
 import {

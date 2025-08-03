@@ -3,10 +3,6 @@ import { Box, Card, CardContent, CardHeader, Chip, Grid2, Paper, Stack, Typograp
 import { Iconify } from '/src/components/iconify/iconify';
 
 export const CampaignDetails = ({ partner }) => {
-  console.log(partner?.proposedCampaigns);
-  console.log(partner?.products);
-  console.log(partner?.campaignMonth);
-  console.log(partner?.tags);
 
   return (
     <Grid2 item size={{ xs: 12, md: 6 }}>

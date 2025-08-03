@@ -1,6 +1,6 @@
 import useSWRInfinite from 'swr/infinite';
 
-import { getProductionListAsync } from '/src/app/(public)/production/_lib/production.action';
+import { getProductionListAsync } from '../../app/(public)/production/_lib/production.actions';
 
 const getKey = (pageIndex, previousPageData, status) => {
   if (previousPageData && !previousPageData.data?.length) return null;
