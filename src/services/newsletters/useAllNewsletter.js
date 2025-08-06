@@ -1,11 +1,12 @@
 import useSWR from 'swr';
 
 import { getUsers } from '/src/app/(private)/users/_lib/user.actions';
+import { getAllNewsletterSignupAsync } from '/src/actions/common.actions';
 
-export const useAllUser = (queryParams = {}) => {
-  const swrKey = queryParams ? ['users', queryParams.page, queryParams.rowsPerPage, queryParams.search] : null;
+export const useAllNewsletter = (queryParams = {}) => {
+  const swrKey = queryParams ? ['newsletters', queryParams.page, queryParams.rowsPerPage, queryParams.search] : null;
 
-  const fetcher = () => getUsers(queryParams);
+  const fetcher = () => getAllNewsletterSignupAsync(queryParams);
 
   const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, {
     revalidateOnFocus: false,
