@@ -1,28 +1,24 @@
 import { useContext, useEffect, useRef, useState } from 'react';
+import { MailOutline } from '@mui/icons-material';
 import {
   Avatar,
   Box,
+  Button,
+  ButtonGroup,
   Divider,
   FormControl,
   IconButton,
   Input,
   InputAdornment,
-  List,
-  ListItem,
-  Paper,
-  Popper,
   Stack,
 } from '@mui/material';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 import { ChatContext } from '/src/contexts/chat';
 import useAuth from '/src/hooks/useAuth';
 import { Iconify } from '/src/components/iconify/iconify';
 import EmojiPicker from '/src/components/widgets/emoji-picker';
-import { imageUploader, getImageType } from '/src/utils/upload-file';
 
-
-import { MemberInfo, MemberName } from '../../workspace/[slug]/components/custom-component';
+import { getImageType, imageUploader } from '/src/utils/upload-file';
 
 const allUsers = [
   { id: 1, name: 'John Doe', profile_pic: '' },
@@ -57,6 +53,7 @@ export const MessageForm = ({ sx = {} }) => {
 
   const attachmentRef = useRef(null);
   const inputRef = useRef(null);
+  const [notifyMethod, setNotifyMethod] = useState({ email: true, sms: false });
 
   const handleFileSelect = (event) => {
     if (event.target.files?.length) {
@@ -73,37 +70,37 @@ export const MessageForm = ({ sx = {} }) => {
     try {
       setLoader(true);
       if (!messageContent.trim()) return;
-      const attachments = []
+      const attachments = [];
       if (selectedFiles?.length > 0) {
-        const res = await imageUploader(selectedFiles.map((f) => ({
-          file: f,
-          fileName: f.name.split('.').slice(0, -1).join('.'),
-          fileType: f.type.split('/')[1],
-        })), 'chat');
+        const res = await imageUploader(
+          selectedFiles.map((f) => ({
+            file: f,
+            fileName: f.name.split('.').slice(0, -1).join('.'),
+            fileType: f.type.split('/')[1],
+          })),
+          'chat'
+        );
 
-        attachments.push(...res.map((item) => ({
-          url: item,
-          type: getImageType(item?.split('/chat/')?.join('')?.split('.')?.at(-1))
-        })));
+        attachments.push(
+          ...res.map((item) => ({
+            url: item,
+            type: getImageType(item?.split('/chat/')?.join('')?.split('.')?.at(-1)),
+          }))
+        );
         setSelectedFiles([]);
       }
       if (activeTab?.type === 'channel') {
-
         createChannelMessage(messageContent, undefined, attachments);
       } else {
         createDirectMessage(messageContent, undefined, attachments);
       }
 
       setMessageContent('');
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
-    }
-    finally {
+    } finally {
       setLoader(false);
     }
-
-
   };
 
   const handleUpdateMessage = (id) => {
@@ -197,7 +194,11 @@ export const MessageForm = ({ sx = {} }) => {
     };
   }, [messageContent]);
 
+  const handleNotifyUser = (method) => {
+    console.log('method', method);
 
+    setNotifyMethod((prev) => ({ ...prev, [method]: !prev[method] }));
+  };
 
   return (
     <Stack sx={{ ...sx }}>
@@ -249,9 +250,32 @@ export const MessageForm = ({ sx = {} }) => {
           }
           endAdornment={
             <InputAdornment position="end" sx={{ display: 'flex', gap: 0.2 }}>
-              {!messageIdToEdit && (<IconButton size="small" sx={{ borderRadius: '50%' }} onClick={() => attachmentRef?.current?.click()}>
-                <Iconify icon="mage:attachment" sx={{ color: 'grey.800' }} />
-              </IconButton>)}
+              <Stack direction="row">
+                <IconButton
+                  color="inherit"
+                  title="Notify user by email"
+                  onClick={() => handleNotifyUser('email')}
+                  sx={{ borderRadius: '50%' }}
+                >
+                  <Iconify icon="mdi-light:email" sx={{ color: notifyMethod.email ? 'primary.main' : 'grey.800' }} />
+                </IconButton>
+                <IconButton
+                  color="inherit"
+                  title="Notify user by SMS"
+                  onClick={() => handleNotifyUser('sms')}
+                  sx={{ borderRadius: '50%' }}
+                >
+                  <Iconify
+                    icon="fa6-solid:comment-sms"
+                    sx={{ color: notifyMethod.sms ? 'primary.main' : 'grey.800' }}
+                  />
+                </IconButton>
+              </Stack>
+              {!messageIdToEdit && (
+                <IconButton size="small" sx={{ borderRadius: '50%' }} onClick={() => attachmentRef?.current?.click()}>
+                  <Iconify icon="mage:attachment" sx={{ color: 'grey.800' }} />
+                </IconButton>
+              )}
               <IconButton
                 size="small"
                 sx={{ borderRadius: '50%' }}

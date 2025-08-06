@@ -244,6 +244,12 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
             transition: 'opacity 0.2s ease-in-out',
           }}
         >
+          <IconButton color="inherit" title="Notify user by email" sx={{ borderRadius: '50%' }}>
+            <Iconify icon="mdi-light:email" />
+          </IconButton>
+          <IconButton color="inherit" title="Notify user by SMS">
+            <Iconify icon="fa6-solid:comment-sms" />
+          </IconButton>
           {isYourMessage && (
             <IconButton title="Edit" onClick={() => handleEditMessage(message || null)}>
               <Iconify icon="material-symbols:edit-outline-rounded" />
