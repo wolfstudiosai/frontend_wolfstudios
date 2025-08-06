@@ -3,8 +3,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Box, Button, Container, Popover, Stack, TextField, Typography } from '@mui/material';
+import { toast } from 'sonner';
 
 import { paths } from '/src/paths';
+import { createNewsletterSignup } from '/src/actions/common.actions';
 
 import { PageContainer } from '../container/PageContainer';
 import { footerRoutes } from '/src/router';
@@ -36,6 +38,7 @@ export const ThinnerFooter = () => {
   const [isHoveringPopover, setIsHoveringPopover] = useState(false);
 
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setOpen(isHoveringButton || isHoveringPopover);
@@ -56,6 +59,20 @@ export const ThinnerFooter = () => {
     setIsHoveringPopover(false);
   };
 
+  const handleSubscribe = async () => {
+    try {
+      setLoading(true);
+      const res = await createNewsletterSignup(email);
+      if (res.success) {
+        setEmail('');
+        toast.success("You've successfully subscribed to our newsletter");
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Box
       sx={{
@@ -76,7 +93,6 @@ export const ThinnerFooter = () => {
           sx={{
             maxWidth: 600,
             mx: 'auto',
-            // px: 2,
           }}
         >
           <Typography
@@ -127,6 +143,11 @@ export const ThinnerFooter = () => {
                   borderRadius: 1,
                 },
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && email) {
+                  handleSubscribe();
+                }
+              }}
             />
             <Button
               variant="contained"
@@ -146,7 +167,8 @@ export const ThinnerFooter = () => {
                   boxShadow: '0 6px 24px 0 rgba(59,130,246,0.22)',
                 },
               }}
-              disabled={!email}
+              onClick={handleSubscribe}
+              disabled={!email || loading}
             >
               Subscribe
             </Button>

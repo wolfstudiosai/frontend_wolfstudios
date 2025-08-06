@@ -15,7 +15,7 @@ import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-t
 
 import { campaignProgressStatus } from '../_lib/campaign.constants';
 import { CustomMultipleInputFieldV2 } from '../../../../components/formFields/custom-multiple-input-field-v2';
-import { getCityListAsync, getProductListAsync } from '../../../../lib/common.actions';
+import { getCityListAsync, getProductListAsync } from '../../../../actions/common.actions';
 import { getContentListAsync } from '../../../(private)/all-content/_lib/all-content.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getProductionListAsync } from '../../production/_lib/production.actions';

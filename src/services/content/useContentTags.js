@@ -1,5 +1,5 @@
 import useSWR from "swr"
-import { getTagListAsync } from "/src/lib/common.actions"
+import { getTagListAsync } from "../../actions/common.actions"
 import { useSWRConfig } from "swr"
 
 export const useContentTags = (search = '') => {

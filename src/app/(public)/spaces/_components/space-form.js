@@ -17,7 +17,7 @@ import {
   getDestinationListAsync,
   getStateListAsync,
   getTagListAsync,
-} from '../../../../lib/common.actions';
+} from '../../../../actions/common.actions';
 import { getCampaignListAsync } from '../../campaign/_lib/campaign.actions';
 import { getProductionListAsync } from '../../production/_lib/production.actions';
 

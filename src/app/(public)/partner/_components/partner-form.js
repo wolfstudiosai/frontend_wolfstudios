@@ -24,7 +24,7 @@ import {
   getStakeHolderListAsync,
   getStateListAsync,
   getTagListAsync,
-} from '../../../../lib/common.actions';
+} from '../../../../actions/common.actions';
 import { getContentListAsync } from '../../../(private)/all-content/_lib/all-content.actions';
 import { getPortfolioListAsync } from '../../portfolio/_lib/portfolio.actions';
 import { getProductionAsync, getProductionListAsync } from '../../production/_lib/production.actions';

@@ -1,42 +1,40 @@
 'use client';
 
+import * as React from 'react';
+import RouterLink from 'next/link';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
-import RouterLink from 'next/link';
-import * as React from 'react';
 
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
+import { useDebounce } from '/src/hooks/use-debounce';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { DataTable } from '/src/components/data-table/data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { useDebounce } from '/src/hooks/use-debounce';
-import { dayjs } from '/src/lib/dayjs';
-import { paths } from '/src/paths';
 
-
-import { deleteUserAsync } from './_lib/user.actions';
+import { deleteNewsletterAsync } from '../../../actions/common.actions';
+import { useAllNewsletter } from '../../../services/newsletters/useAllNewsletter';
 import { defaultUser } from './_lib/user.types';
-import { ManageUserDialog } from './manage-user-dialog';
-import {useAllUser} from "../../../services//users/useAllUser"
+import { ManageNewsletterDialog } from './manage-user-dialog';
 
-
-export default function Page({  }) {
+export default function Page({}) {
   const [openModal, setOpenModal] = React.useState(false);
   const [modalData, setModalData] = React.useState(null);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
   const [selectedRows, setSelectedRows] = React.useState([]);
+  console.log('selectedRows', selectedRows);
+
   const [status, setStatus] = React.useState('');
   const [searchValue, setSearchValue] = React.useState('');
   const debounceSearch = useDebounce(searchValue, 500);
 
-  const { users, totalRecords, isLoading, mutate } = useAllUser({
+  const { users, totalRecords, isLoading, mutate } = useAllNewsletter({
     page: pagination.pageNo,
     rowsPerPage: pagination.limit,
     status: status,
@@ -50,24 +48,14 @@ export default function Page({  }) {
 
   const handleConfirm = () => {
     setOpenModal(false);
-    mutate(); // Revalidate the data
+    mutate();
   };
 
   const onDelete = () => {
-    mutate(); // Revalidate the data after deletion
+    mutate();
   };
 
   const columns = [
-    {
-      formatter: (row) => (
-        <Stack direction="row">
-          <IconButton onClick={() => handleOpenModal(row)}>
-            <PencilSimpleIcon />
-          </IconButton>
-        </Stack>
-      ),
-      name: 'Actions',
-    },
     {
       formatter: (row) => (
         <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
@@ -87,29 +75,7 @@ export default function Page({  }) {
           </div>
         </Stack>
       ),
-      name: 'Name',
-    },
-    {
-      formatter: (row) => (
-        <Typography color="text.secondary" variant="body2">
-          {row.contactNumber}
-        </Typography>
-      ),
-      name: 'Phone',
-    },
-    {
-      formatter: (row) => (
-        <Typography color="text.secondary" variant="body2">
-          {row.role}
-        </Typography>
-      ),
-      name: 'Role',
-    },
-    {
-      formatter(row) {
-        return dayjs(row.createdAt).format('MMM D, YYYY h:mm A');
-      },
-      name: 'Created at',
+      name: 'Email',
     },
   ];
 
@@ -125,7 +91,7 @@ export default function Page({  }) {
       <Stack spacing={4}>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} sx={{ alignItems: 'flex-start' }}>
           <Box sx={{ flex: '1 1 auto' }}>
-            <Typography variant="h4">Users</Typography>
+            <Typography variant="h4">Newsletters</Typography>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button startIcon={<PlusIcon />} variant="contained" onClick={() => handleOpenModal(defaultUser)}>
@@ -144,14 +110,14 @@ export default function Page({  }) {
                 pageNo={pagination.pageNo}
                 columns={columns}
                 rows={users}
-                uniqueRowId="id"
-                selectionMode="multiple"
+                // uniqueRowId="id"
+                selectionMode="single"
                 leftItems={
                   <>
                     <TextField
                       value={searchValue}
                       onChange={(e) => setSearchValue(e.target.value)}
-                      placeholder="Search users..."
+                      placeholder="Search..."
                     />
                     <RefreshPlugin onClick={mutate} />
                   </>
@@ -159,10 +125,10 @@ export default function Page({  }) {
                 rightItems={
                   <>
                     <DeleteConfirmationPasswordPopover
-                      title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
-                      id={selectedRows.map((row) => row.id)}
+                      title={`Are you sure you want to delete?`}
+                      id={selectedRows[0]?.id}
                       onDelete={onDelete}
-                      deleteFn={deleteUserAsync}
+                      deleteFn={deleteNewsletterAsync}
                       passwordInput
                       disabled={selectedRows.length === 0}
                     />
@@ -186,7 +152,7 @@ export default function Page({  }) {
         </Card>
       </Stack>
       {openModal && (
-        <ManageUserDialog
+        <ManageNewsletterDialog
           open={openModal}
           onClose={() => setOpenModal(false)}
           onConfirm={handleConfirm}

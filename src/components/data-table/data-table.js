@@ -27,7 +27,7 @@ export function DataTable({
   pageNo,
   totalRecords,
   rowsPerPage,
-  paginationList = [5, 10, 25, 50, 100, 200],
+  paginationList = [5, 10, 25, 50, 100],
   rowsPerPageOptions = 5,
   onRowsPerPageChange,
   onPageChange,

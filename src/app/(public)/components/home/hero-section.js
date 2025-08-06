@@ -9,7 +9,7 @@ import { FadeIn } from '/src/components/animation/fade-in';
 
 import { Iconify } from '../../../../components/iconify/iconify';
 import { MediaUploader } from '../../../../components/uploaders/media-uploader';
-import { createHomepageContentAsync, updateHomepageContentAsync } from '../../../../lib/common.actions';
+import { createHomepageContentAsync, updateHomepageContentAsync } from '../../../../actions/common.actions';
 import { useHomepageContent } from '../../../../services/home/useHomepageContent';
 import { getMediaTypeFromUrl } from '../../../../utils/get-media-type';
 

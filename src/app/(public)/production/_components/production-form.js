@@ -12,7 +12,7 @@ import { MediaUploaderTrigger } from '/src/components/uploaders/media-uploader-t
 import { CustomAutoCompleteV2 } from '../../../../components/formFields/custom-auto-complete-v2';
 import { CustomMultipleInputFieldV2 } from '../../../../components/formFields/custom-multiple-input-field-v2';
 import { CustomMultipleSelect } from '../../../../components/formFields/custom-multiple-select';
-import { getProductListAsync, getStakeHolderListAsync } from '../../../../lib/common.actions';
+import { getProductListAsync, getStakeHolderListAsync } from '../../../../actions/common.actions';
 import { getCampaignListAsync } from '../../campaign/_lib/campaign.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';

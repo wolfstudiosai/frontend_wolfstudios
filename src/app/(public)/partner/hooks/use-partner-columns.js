@@ -10,7 +10,7 @@ import { platformDeliverables, platforms } from "../_lib/partner.constants";
 import { MultipleTextInputEditCell } from '/src/components/data-table/multiple-text-input-edit';
 import DateEditCell from '/src/components/data-table/date-edit-cell';
 import { dateFormatter } from '/src/utils/date-formatter';
-import { getCaseStudyListAsync, getCityListAsync, getCountryListAsync, getDestinationListAsync, getProductListAsync, getRetailPartnerListAsync, getStakeHolderListAsync, getStateListAsync, getTagListAsync } from "../../../../lib/common.actions";
+import { getCaseStudyListAsync, getCityListAsync, getCountryListAsync, getDestinationListAsync, getProductListAsync, getRetailPartnerListAsync, getStakeHolderListAsync, getStateListAsync, getTagListAsync } from "../../../../actions/common.actions";
 import { getContentListAsync } from "../../../(private)/all-content/_lib/all-content.actions";
 import { getProductionListAsync } from "../../production/_lib/production.actions";
 import { getPortfolioListAsync } from "../../portfolio/_lib/portfolio.actions";

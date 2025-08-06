@@ -1,7 +1,6 @@
+import { Icon } from '@iconify/react';
 import { Box, Button, IconButton, Popover, Typography } from '@mui/material';
 import React from 'react';
-import { Iconify } from '../iconify/iconify';
-import { Icon } from '@iconify/react';
 
 export const DeleteConfirmationPopover = ({ onDelete, title, disabled = false }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);

@@ -170,3 +170,50 @@ export const updateHomepageContentAsync = async (order, payload) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
+
+// homepage newsletter signup
+export const createNewsletterSignup = async (email) => {
+  try {
+    const res = await api.post(`/newsletters`, { email });
+
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
+export const getAllNewsletterSignupAsync = async (queryParams) => {
+  try {
+    const query = new URLSearchParams();
+    if (queryParams.page) {
+      query.append('page', queryParams.page);
+    }
+    if (queryParams.rowsPerPage) {
+      query.append('size', queryParams.rowsPerPage);
+    }
+    if (queryParams.search) {
+      query.append('search', queryParams.search);
+    }
+    const res = await api.get(`/newsletters?${query.toString()}`);
+    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
+  } catch (error) {
+    toast.error(error.message);
+    return { success: false, data: [], error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
+
+export const deleteNewsletterAsync = async (id, password) => {
+  try {
+    const res = await api.delete(`/newsletters/${id}`, {
+      headers: {
+        password: password,
+      },
+    });
+    toast.success(res.data.message);
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};
