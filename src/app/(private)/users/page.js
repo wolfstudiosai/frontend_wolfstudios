@@ -12,6 +12,7 @@ import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import RouterLink from 'next/link';
 import * as React from 'react';
+import useSWR from 'swr';
 
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { DataTable } from '/src/components/data-table/data-table';
@@ -20,40 +21,44 @@ import { useDebounce } from '/src/hooks/use-debounce';
 import { dayjs } from '/src/lib/dayjs';
 import { paths } from '/src/paths';
 
-import { CustomBreadcrumbs } from '../../../components/custom-breadcumbs';
 import { deleteUserAsync, getUsers } from './_lib/user.actions';
 import { defaultUser } from './_lib/user.types';
 import { ManageUserDialog } from './manage-user-dialog';
 
+export const useAllUser = (queryParams = {}) => {
+  const swrKey = queryParams 
+    ? ['users', queryParams.page, queryParams.rowsPerPage, queryParams.search, queryParams.status] 
+    : null;
+
+  const { data, error, isLoading, mutate } = useSWR(swrKey, () => getUsers(queryParams), {
+    revalidateOnFocus: false,
+    keepPreviousData: true,
+  });
+
+  return {
+    users: data?.data || [],
+    totalRecords: data?.totalRecords || 0,
+    isLoading,
+    error: data?.success === false ? data.error : error,
+    mutate,
+  };
+};
+
 export default function Page({ searchParams }) {
-  const [users, setUsers] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
   const [openModal, setOpenModal] = React.useState(false);
   const [modalData, setModalData] = React.useState(null);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
-  const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [status, setStatus] = React.useState('');
   const [searchValue, setSearchValue] = React.useState('');
   const debounceSearch = useDebounce(searchValue, 500);
 
-  async function fetchList() {
-    try {
-      setLoading(true);
-      const response = await getUsers({
-        page: pagination.pageNo,
-        rowsPerPage: pagination.limit,
-        status: status,
-        search: debounceSearch,
-      });
-      setUsers(response.data);
-      setTotalRecords(response.totalRecords);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const { users, totalRecords, isLoading, mutate } = useAllUser({
+    page: pagination.pageNo,
+    rowsPerPage: pagination.limit,
+    status: status,
+    search: debounceSearch,
+  });
 
   const handleOpenModal = (data) => {
     setOpenModal(true);
@@ -62,16 +67,12 @@ export default function Page({ searchParams }) {
 
   const handleConfirm = () => {
     setOpenModal(false);
-    fetchList();
+    mutate(); // Revalidate the data
   };
 
   const onDelete = () => {
-    fetchList();
+    mutate(); // Revalidate the data after deletion
   };
-
-  React.useEffect(() => {
-    fetchList();
-  }, [pagination, status, debounceSearch]);
 
   const columns = [
     {
@@ -83,8 +84,6 @@ export default function Page({ searchParams }) {
         </Stack>
       ),
       name: 'Actions',
-      // hideName: true,
-      // align: 'right',
     },
     {
       formatter: (row) => (
@@ -140,12 +139,6 @@ export default function Page({ searchParams }) {
         width: 'var(--Content-width)',
       }}
     >
-      <CustomBreadcrumbs
-        items={[
-          { title: 'Dashboard', href: paths.private.overview },
-          { title: 'Users', href: '' },
-        ]}
-      />
       <Stack spacing={4}>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} sx={{ alignItems: 'flex-start' }}>
           <Box sx={{ flex: '1 1 auto' }}>
@@ -161,7 +154,7 @@ export default function Page({ searchParams }) {
           <Box sx={{ overflowX: 'auto' }}>
             <React.Fragment>
               <DataTable
-                loading={loading}
+                loading={isLoading}
                 isPagination={true}
                 totalRecords={totalRecords}
                 rowsPerPageOptions={pagination.limit}
@@ -177,7 +170,7 @@ export default function Page({ searchParams }) {
                       onChange={(e) => setSearchValue(e.target.value)}
                       placeholder="Search users..."
                     />
-                    <RefreshPlugin onClick={fetchList} />
+                    <RefreshPlugin onClick={mutate} />
                   </>
                 }
                 rightItems={
@@ -198,7 +191,7 @@ export default function Page({ searchParams }) {
                 onPageChange={(newPageNumber) => setPagination({ ...pagination, pageNo: newPageNumber })}
                 onSelection={(selectedRows) => setSelectedRows?.(selectedRows)}
               />
-              {!users?.length ? (
+              {!users?.length && !isLoading ? (
                 <Box sx={{ p: 3 }}>
                   <Typography color="text.secondary" sx={{ textAlign: 'center' }} variant="body2">
                     No customers found
