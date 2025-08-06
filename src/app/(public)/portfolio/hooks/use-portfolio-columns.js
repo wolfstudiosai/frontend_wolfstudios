@@ -5,7 +5,7 @@ import AttachFile from "@mui/icons-material/AttachFile";
 import Link from 'next/link';
 import React from 'react';
 import { useMemo } from 'react';
-import { getStateListAsync, getCountryListAsync, getCaseStudyListAsync } from '../../../../lib/common.actions';
+import { getStateListAsync, getCountryListAsync, getCaseStudyListAsync } from '../../../../actions/common.actions';
 import { renderAutoCompleteCell, renderAutoCompleteEditCell } from '/src/components/data-table/render-auto-complete-edit-cell';
 import { getPortfolioCategoryListAsync } from '../_lib/portfolio.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';

@@ -19,7 +19,7 @@ import {
   getRetailPartnerListAsync,
   getStakeHolderListAsync,
   getTagListAsync,
-} from '../../../../lib/common.actions';
+} from '../../../../actions/common.actions';
 import { getCampaignListAsync } from '../../../(public)/campaign/_lib/campaign.actions';
 import { getPartnerListAsync } from '../../../(public)/partner/_lib/partner.actions';
 

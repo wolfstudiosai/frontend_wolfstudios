@@ -11,7 +11,7 @@ import { ErrorMessage } from '/src/components/formFields/error-message';
 
 import { getPortfolioCategoryListAsync } from '../_lib/portfolio.actions';
 import { MediaUploaderTrigger } from '../../../../components/uploaders/media-uploader-trigger';
-import { getCaseStudyListAsync, getCountryListAsync, getStateListAsync } from '../../../../lib/common.actions';
+import { getCaseStudyListAsync, getCountryListAsync, getStateListAsync } from '../../../../actions/common.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 
 export const PortfolioForm = ({ formikProps }) => {

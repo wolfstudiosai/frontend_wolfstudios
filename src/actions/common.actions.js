@@ -170,3 +170,15 @@ export const updateHomepageContentAsync = async (order, payload) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
+
+// homepage newsletter signup
+export const createNewsletterSignup = async (email) => {
+  try {
+    const res = await api.post(`/newsletters`, { email });
+
+    return { success: true, data: res.data.data };
+  } catch (error) {
+    toast.error(error.response.data.message);
+    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
+  }
+};

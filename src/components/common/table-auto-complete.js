@@ -18,7 +18,7 @@ import {
     getStakeHolderListAsync,
     getStateListAsync,
     getTagListAsync
-} from '/src/lib/common.actions';
+} from '../../actions/common.actions';
 
 const fetchOptions = async (key, searchValue) => {
     const getNameMapping = (item) => ({ value: item.id, label: item.name });
