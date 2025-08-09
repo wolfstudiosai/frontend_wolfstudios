@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Box, Icon, IconButton, Typography } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import { GoogleMap, InfoWindow, LoadScript, Marker } from '@react-google-maps/api';
+import { useState } from 'react';
 
 import { config } from '/src/config';
 
