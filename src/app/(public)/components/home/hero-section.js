@@ -1,65 +1,28 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import EditIcon from '@mui/icons-material/Edit';
 import { Box, IconButton, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { toast } from 'sonner';
 
+import { useSettings } from '/src/hooks/use-settings';
 import useAuth from '/src/hooks/useAuth';
 import { FadeIn } from '/src/components/animation/fade-in';
 
-import { Iconify } from '../../../../components/iconify/iconify';
-import { MediaUploader } from '../../../../components/uploaders/media-uploader';
-import { createHomepageContentAsync, updateHomepageContentAsync } from '../../../../lib/common.actions';
-import { useHomepageContent } from '../../../../services/home/useHomepageContent';
-import { getMediaTypeFromUrl } from '../../../../utils/get-media-type';
+import { VideoUploadModal } from '../modals/VideoUploadModal';
 
 export const HeroSection = () => {
   const theme = useTheme();
-
+  const { isFeaturedCardVisible } = useSettings();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { isLogin, userInfo } = useAuth();
-  const { data, error, isLoading, mutate } = useHomepageContent();
+  const { userInfo } = useAuth();
 
-  // const isImageEditable = isLogin && userInfo?.role.toLowerCase() === 'super_admin';
-  const isImageEditable = isLogin;
+  const isAdmin = userInfo?.role === 'SUPER_ADMIN';
 
   const [boxSize, setBoxSize] = useState(isMobile ? 100 : 50);
   const [boxHeight, setBoxHeight] = useState(isMobile ? 100 : 60);
-  const [uploadImage, setUploadImage] = useState({
-    open: false,
-    order: 0,
-  });
 
-  const order1 = data?.data?.find((item) => item.order === 1);
-  const order2 = data?.data?.find((item) => item.order === 2);
-
-  const handleImageChange = async (url) => {
-    const id = uploadImage.order === 1 ? order1?.id : order2?.id;
-    try {
-      const mediaUrl = url[0];
-      const mediaType = await getMediaTypeFromUrl(mediaUrl);
-      const isAlreadyExists = data?.data?.some((item) => item.order === uploadImage.order);
-      const res = isAlreadyExists
-        ? await updateHomepageContentAsync(id, {
-          id,
-          type: mediaType,
-          order: uploadImage.order,
-          url: url[0],
-        })
-        : await createHomepageContentAsync({
-          type: mediaType,
-          order: uploadImage.order,
-          url: url[0],
-        });
-
-      if (res.success) {
-        toast.success('Media uploaded successfully');
-        mutate();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [activeVideo, setActiveVideo] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const scrollableContainer = document.getElementById('scrollable_container');
@@ -92,13 +55,14 @@ export const HeroSection = () => {
     setBoxHeight(isMobile ? 100 : 60);
   }, [isMobile]);
 
-  if (isLoading) {
-    return <Box>Loading...</Box>;
-  }
+  const handleEditVideo = (type) => {
+    setActiveVideo(type);
+    setModalOpen(true);
+  };
 
   return (
     <>
-      {/* first part */}
+      {/* Top Video Section */}
       <Box
         sx={{
           position: 'relative',
@@ -107,54 +71,22 @@ export const HeroSection = () => {
           overflow: 'hidden',
         }}
       >
-        {isImageEditable && (
-          <IconButton
-            onClick={() => setUploadImage({ open: true, order: 1 })}
-            sx={{
-              position: 'absolute',
-              top: 16,
-              right: 16,
-              zIndex: 10,
-              bgcolor: 'rgba(255, 255, 255, 0.7)',
-              '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' },
-            }}
-          >
-            <Iconify icon="iconamoon:edit-thin" sx={{ color: 'var(--mui-palette-neutral-900)' }} />
-          </IconButton>
-        )}
-        {order1?.type === 'IMAGE' ? (
-          // Image background
-          <Box
-            component="img"
-            src={order1?.url}
-            sx={{
-              position: 'absolute',
-              top: '-50%',
-              width: '100%',
-              height: '200%',
-              objectFit: 'cover',
-              objectPosition: 'top center',
-            }}
-          />
-        ) : (
-          // Video background
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={{
-              position: 'absolute',
-              top: '-50%',
-              width: '100%',
-              height: '200%',
-              objectFit: 'cover',
-              objectPosition: 'top center',
-            }}
-          >
-            <source src={order1?.url || 'https://cdn.wolfstudios.ai/homepage/hero_bg_v2.mp4'} type="video/mp4" />
-          </video>
-        )}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            position: 'absolute',
+            top: '-50%',
+            width: '100%',
+            height: '200%',
+            objectFit: 'cover',
+            objectPosition: 'top center',
+          }}
+        >
+          <source src="https://cdn.wolfstudios.ai/homepage/hero_bg_v2.mp4" type="video/mp4" />
+        </video>
 
         {/* Gradient Overlay */}
         <Box
@@ -164,6 +96,25 @@ export const HeroSection = () => {
             background: 'linear-gradient(to bottom, rgba(45, 45, 45, 0.1), rgba(78, 64, 57, 0.6))',
           }}
         />
+
+        {/* Admin Edit Icon for Top Video */}
+        {isAdmin && (
+          <IconButton
+            onClick={() => handleEditVideo('hero')}
+            sx={{
+              position: 'absolute',
+              top: 16,
+              right: 16,
+              zIndex: 10,
+              bgcolor: 'rgba(255, 255, 255, 0.7)',
+              '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' },
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+        )}
+
+        {/* Text Overlay */}
         <Box
           sx={{
             position: 'absolute',
@@ -181,8 +132,8 @@ export const HeroSection = () => {
             </Typography>
 
             <Typography fontSize={{ xs: '1rem', sm: '1.2rem', md: '1.3rem' }}>
-              Driven by the art of storytelling gg, we collaborate with brands, creators, and agencies to craft
-              compelling visuals that captivate audiences, evoke emotion, and leave a lasting impact.
+              Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
+              visuals that captivate audiences, evoke emotion, and leave a lasting impact.
             </Typography>
           </FadeIn>
         </Box>
@@ -214,7 +165,7 @@ export const HeroSection = () => {
             </Typography>
             <Typography
               fontSize={{ xs: '1rem', md: '1.3rem' }}
-              fontWeight={'semibold'}
+              fontWeight="semibold"
               sx={{ color: 'text.primary', width: { xs: '100%', md: '50%' } }}
             >
               Driven by the art of storytelling, we collaborate with brands, creators, and agencies to craft compelling
@@ -223,7 +174,6 @@ export const HeroSection = () => {
           </Box>
         </FadeIn>
 
-        {/* Video/Image Container */}
         <Box
           sx={{
             position: { xs: 'relative', md: 'absolute' },
@@ -239,9 +189,25 @@ export const HeroSection = () => {
             order: { xs: 1, md: 2 },
           }}
         >
-          {isImageEditable && (
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'top center',
+            }}
+          >
+            <source src="https://cdn.wolfstudios.ai/homepage/Sexy+Hair+Reel.mp4" type="video/mp4" />
+          </video>
+
+          {/* Admin Edit Icon for Second Video */}
+          {isAdmin && (
             <IconButton
-              onClick={() => setUploadImage({ open: true, order: 2 })}
+              onClick={() => handleEditVideo('product')}
               sx={{
                 position: 'absolute',
                 top: 16,
@@ -251,46 +217,26 @@ export const HeroSection = () => {
                 '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' },
               }}
             >
-              <Iconify icon="iconamoon:edit-thin" sx={{ color: 'var(--mui-palette-neutral-900)' }} />
+              <EditIcon />
             </IconButton>
-          )}
-          {order2?.type === 'IMAGE' ? (
-            // Image background
-            <Box
-              component="img"
-              src={order2?.url}
-              sx={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'top center',
-              }}
-            />
-          ) : (
-            // Video background
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'top center',
-              }}
-            >
-              <source src={order2?.url || 'https://cdn.wolfstudios.ai/homepage/Sexy+Hair+Reel.mp4'} type="video/mp4" />
-            </video>
           )}
         </Box>
       </Stack>
 
-      <MediaUploader
-        open={uploadImage?.open}
-        onClose={() => setUploadImage((prev) => ({ ...prev, open: false }))}
-        onSave={(paths) => handleImageChange(paths)}
-        multiple={false}
+      {/* Video Modal Implementation */}
+      <VideoUploadModal
+        open={!!activeVideo}
+        onClose={() => setActiveVideo(null)}
+        title={`Upload ${activeVideo === 'hero' ? 'Hero' : 'Product'} Video`}
+        onSave={(file) => {
+          console.log('Uploaded video file:', file);
+          // Save to backend or update video preview state
+        }}
+        existingVideoUrl={
+          activeVideo === 'hero'
+            ? 'https://cdn.wolfstudios.ai/homepage/hero_bg_v2.mp4'
+            : 'https://cdn.wolfstudios.ai/homepage/Sexy+Hair+Reel.mp4'
+        }
       />
     </>
   );

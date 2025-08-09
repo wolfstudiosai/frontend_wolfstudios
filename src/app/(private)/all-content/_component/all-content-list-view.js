@@ -1,7 +1,5 @@
 'use client';
 
-import * as React from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import AddIcon from '@mui/icons-material/Add';
 import TableReorderIcon from '@mui/icons-material/Reorder';
 import { Checkbox, FormControlLabel, FormGroup, IconButton, Popover, TextField } from '@mui/material';
@@ -9,12 +7,13 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import { alpha, useTheme } from '@mui/material/styles';
+import { useRouter, useSearchParams } from 'next/navigation';
+import * as React from 'react';
 import { toast } from 'sonner';
-import { mutate } from 'swr';
 
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
-import TableSortBuilder from '/src/components/common/table-sort-builder';
 import TableView from '/src/components/common/table-view';
+import TableSortBuilder from '/src/components/common/table-sort-builder';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { EditableDataTable } from '/src/components/data-table/editable-data-table';
@@ -25,88 +24,62 @@ import {
   createContentAsync,
   createContentView,
   deleteBulkContentAsync,
+  getContentList,
+  getContentViews,
   getSingleContentView,
   updateContentAsync,
   updateContentView,
 } from '../_lib/all-content.actions';
 import { defaultContent } from '../_lib/all-content.types';
-import { MediaUploader } from '../../../../components/uploaders/media-uploader';
-import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
-import { useContentColumns } from '../hooks/use-content-columns';
-import { useContentView } from '../hooks/use-content-view';
-import { useContentViews } from '../hooks/use-content-views';
-import { useRecordContentList } from '../hooks/use-record-content-list';
+import { getContentColumns } from '../_utils/get-content-columns';
 
 export default function AllContentListView() {
   const theme = useTheme();
   const router = useRouter();
   const anchorEl = React.useRef(null);
-  const hasInitialized = React.useRef(false);
-  const singleImageField = ['thumbnailImage'];
   const [anchorElHide, setAnchorElHide] = React.useState(null);
-  const [isImageUploadOpen, setIsImageUploadOpen] = React.useState(false);
-  const [mediaToShow, setMediaToShow] = React.useState({
-    type: '',
-    url: '',
-  });
-  const [imageUpdatedField, setImageUpdatedField] = React.useState(null);
+  const [imageToShow, setImageToShow] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const searchParams = useSearchParams();
   const viewId = searchParams.get('view');
 
-  const handleUploadModalOpen = React.useCallback((data, field, uploadOpen) => {
-    setOpen(true);
-    setImageUpdatedField(field);
-    setUpdatedRow(data);
-    setIsImageUploadOpen(uploadOpen);
-  }, []);
-
-  const handleClosePopover = () => {
-    anchorEl.current = null;
-    setMediaToShow({
-      type: '',
-      url: '',
-    });
-  };
-
   const handleClosePopoverHide = () => {
     setAnchorElHide(null);
     setSearchColumns(allColumns);
-    setNewVisibleColumns(visibleColumns);
   };
 
-  const handleUploadImage = async (images) => {
+  async function fetchList(props) {
+    const filter = props ? props : filters;
+    const paginationData = props ? props.pagination : pagination;
     try {
-      const finalData = convertArrayObjIntoArrOfStr(updatedRow, [
-        'campaigns',
-        'cities',
-        'products',
-        'tags',
-        'stakeholders',
-        'partners',
-        'retailPartners',
-      ]);
+      setLoading(true);
+      const response = await getContentList(
+        {
+          page: paginationData.pageNo,
+          rowsPerPage: paginationData.limit,
+        },
+        filter,
+        gate
+      );
 
-      if (singleImageField.includes(imageUpdatedField)) {
-        finalData[imageUpdatedField] = images[0];
-      } else {
-        finalData[imageUpdatedField] = [...finalData[imageUpdatedField], ...images];
-        for (const key of singleImageField) {
-          finalData[key] = Array.isArray(finalData[key]) ? finalData[key][0] : finalData[key];
+      if (response?.success) {
+        if (viewId) {
+          setMetaData(response.meta);
+        } else {
+          setRecords(response.data.map((row) => defaultContent(row)) || []);
+          setTotalRecords(response.totalRecords);
+          setMetaData(response.meta);
         }
-      }
-
-      const response = await updateContentAsync(updatedRow, finalData);
-      if (response.success) {
-        setOpen(false);
-        refreshAllContentView();
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
-  };
+  }
 
   const [records, setRecords] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -115,6 +88,7 @@ export default function AllContentListView() {
   // View
   const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([]);
+  const [viewsLoading, setViewsLoading] = React.useState(false);
   const [selectedViewId, setSelectedViewId] = React.useState(null);
   const [selectedViewData, setSelectedViewData] = React.useState(null);
 
@@ -127,17 +101,29 @@ export default function AllContentListView() {
   // table columns
   const [allColumns, setAllColumns] = React.useState([]);
   const [visibleColumns, setVisibleColumns] = React.useState([]);
-  const [newVisibleColumns, setNewVisibleColumns] = React.useState([]);
   const [searchColumns, setSearchColumns] = React.useState([]);
-  const columns = useContentColumns(anchorEl, visibleColumns, setMediaToShow, handleUploadModalOpen);
+  const columns = React.useMemo(() => getContentColumns(visibleColumns), [visibleColumns]);
 
-  // swr
-  const { viewsData, isViewsLoading } = useContentViews();
-  const { contentMeta, columns: contentColumns, isContentLoading } = useRecordContentList();
-  const { singleView, isSingleViewLoading, refreshViewData, refreshAllContentView } = useContentView(
-    selectedViewId,
-    pagination
-  );
+  // get single view
+  const getSingleView = async (viewId, paginationProps) => {
+    try {
+      setLoading(true);
+      const viewPagination = paginationProps ? paginationProps : pagination;
+      const res = await getSingleContentView(viewId, viewPagination);
+      if (res.success) {
+        setRecords(res.data.data.map((row) => defaultContent(row)) || []);
+        setTotalRecords(res.data.count);
+        setSelectedViewData(res.data);
+        setFilters(res.data.meta?.filters || []);
+        setGate(res.data.meta?.gate || 'and');
+        setSort(res.data.meta?.sort || []);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   async function updateView(props) {
     const viewFilters = props.filters ? props.filters : filters;
@@ -159,90 +145,76 @@ export default function AllContentListView() {
 
   // ******************************data grid handler starts*********************
 
-  const handlePaginationModelChange = React.useCallback((newPaginationModel) => {
+  const handlePaginationModelChange = (newPaginationModel) => {
     const { page, pageSize } = newPaginationModel;
     const newPagination = { pageNo: page + 1, limit: pageSize };
     setPagination(newPagination);
-  }, []);
+    if (viewId) {
+      getSingleView(viewId, newPagination);
+    } else {
+      fetchList({ pagination: newPagination });
+    }
+  };
 
-  const processRowUpdate = React.useCallback(
-    async (newRow, oldRow) => {
-      if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
+  const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
+    if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
 
-      const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
-      let res;
-      if (isTemporaryId) {
-        if (!newRow.name) {
-          toast.error('Please enter name');
-          return newRow;
-        }
-        res = await createContentAsync(newRow);
-      } else {
-        const finalData = convertArrayObjIntoArrOfStr(newRow, [
-          'campaigns',
-          'cities',
-          'products',
-          'tags',
-          'stakeholders',
-          'partners',
-          'retailPartners',
-        ]);
-
-        finalData.thumbnailImage = Array.isArray(finalData.thumbnailImage)
-          ? finalData.thumbnailImage[0]
-          : finalData.thumbnailImage;
-
-        const numberFields = [
-          'uppromoteConversion',
-          'partnerIGTotalComments',
-          'partnerIGTotalLikes',
-          'partnerIGTotalShares',
-          'partnerIGTotalViews',
-          'pinterestTotalPinClicks',
-          'pinterestTotalViews',
-          'partnerTTShares',
-          'partnerTTSaves',
-          'partnerTTViews',
-          'partnerTTLikes',
-          'revoTTViews',
-          'partnerTTComments',
-          'ytClubREVOTotalViews',
-          'ytPartnerTotalSaves',
-          'ytPartnerTotalViews',
-          'ytPartnerTotalComments',
-          'ytPartnerTotalLikes',
-          'ytREVOMADICTotalShares',
-          'ytREVOMADICTotalViews',
-          'ytREVOMADICTotalLikes',
-          'ytREVOMADICTotalComments',
-          'ytClubREVOTotalLikes',
-          'totalContributedEngagement',
-          'revoTTLikes',
-          'revoTTComments',
-          'revoTTSaves',
-          'revoTTShares',
-          'revoIGTotalViews',
-          'revoIGTotalShares',
-          'revoIGTotalComments',
-          'revoIGTotalLikes',
-        ];
-
-        for (const key of numberFields) {
-          finalData[key] = Number(finalData[key]);
-        }
-
-        res = await updateContentAsync(oldRow, finalData);
-      }
-
-      if (res.success) {
-        refreshAllContentView();
+    const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
+    if (isTemporaryId) {
+      if (!newRow.name) {
+        toast.error('Please enter name');
         return newRow;
       }
 
-      return oldRow;
-    },
-    [viewId]
-  );
+      if (!newRow.revoPinterest) {
+        toast.error('Please enter pinterest status');
+        return newRow;
+      }
+
+      if (!newRow.pinAccountsUsed) {
+        toast.error('Please enter pin accounts used');
+        return newRow;
+      }
+
+      if (!newRow.googleDriveFiles) {
+        toast.error('Please enter google drive files');
+        return newRow;
+      }
+
+      if (!newRow.playbookLink) {
+        toast.error('Please enter playbook link');
+        return newRow;
+      }
+
+      if (!newRow.monthUploaded) {
+        toast.error('Please enter month uploaded');
+        return newRow;
+      }
+
+      if (!newRow.assetStatus) {
+        toast.error('Please enter asset status');
+        return newRow;
+      }
+
+      if (!newRow.revoInstagram) {
+        toast.error('Please enter instagram status');
+        return newRow;
+      }
+
+      if (!newRow.creatorStatus) {
+        toast.error('Please enter creator status');
+        return newRow;
+      }
+
+      await createContentAsync(newRow);
+      fetchList();
+    } else {
+      await updateContentAsync(newRow);
+      fetchList();
+    }
+
+    return newRow;
+  }, []);
 
   // console.log(data)
 
@@ -250,13 +222,10 @@ export default function AllContentListView() {
     console.log({ children: error.message, severity: 'error' });
   }, []);
 
-  const handleRowSelection = React.useCallback(
-    (newRowSelectionModel) => {
-      const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
-      setSelectedRows(selectedData);
-    },
-    [records]
-  );
+  const handleRowSelection = (newRowSelectionModel) => {
+    const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
+    setSelectedRows(selectedData);
+  };
 
   // ******************************data grid handler ends*********************
 
@@ -266,41 +235,25 @@ export default function AllContentListView() {
     setRecords([newRecord, ...records]);
   };
 
-  const handleDelete = async () => refreshAllContentView();
+  const handleDelete = async () => {
+    fetchList();
+  };
 
   // Column handler
   // handle column change
   const handleColumnChange = async (e, col) => {
-    let columns = [...newVisibleColumns];
+    let newVisibleColumns = [];
     if (e.target.checked) {
-      const exists = columns.some((c) => c.columnName === col.columnName);
+      // Add column
+      const exists = visibleColumns.some((c) => c.columnName === col.columnName);
       if (exists) return;
-      columns = [...columns, col];
+      newVisibleColumns = [...visibleColumns, col];
     } else {
-      columns = columns.filter((c) => c.columnName !== col.columnName);
+      // Remove column
+      newVisibleColumns = visibleColumns.filter((c) => c.columnName !== col.columnName);
     }
-    setNewVisibleColumns(columns);
-  };
+    setVisibleColumns(newVisibleColumns);
 
-  // handle Column Search
-  const handleColumnSearch = (e) => {
-    const searchValue = e.target.value.toLowerCase();
-    setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
-  };
-
-  // handle show all columns
-  const showAllColumns = async () => {
-    const newVisibleColumns = allColumns;
-    setNewVisibleColumns(newVisibleColumns);
-  };
-
-  // handle hide all columns
-  const hideAllColumns = async () => {
-    const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
-    setNewVisibleColumns(newVisibleColumns);
-  };
-
-  const handleSaveColumns = async () => {
     if (viewId) {
       const data = {
         columns: newVisibleColumns.map((c) => c.columnName),
@@ -314,65 +267,136 @@ export default function AllContentListView() {
         groups: selectedViewData?.meta?.groups,
       };
 
-      const res = await updateProductionViewAsync(viewId, data);
+      const res = await updateContentView(viewId, data);
       if (res.success) {
-        refreshViewData();
-        handleClosePopoverHide();
+        getSingleView(viewId);
       }
     }
   };
+
+  // handle Column Search
+  const handleColumnSearch = (e) => {
+    const searchValue = e.target.value.toLowerCase();
+    setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
+  };
+
+  const showAllColumns = async () => {
+    const newVisibleColumns = allColumns;
+    setVisibleColumns(newVisibleColumns);
+
+    if (viewId) {
+      const data = {
+        columns: allColumns.map((c) => c.columnName),
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
+        gate,
+        filters,
+        sort,
+        groups: selectedViewData?.meta?.groups,
+      };
+
+      const res = await updateContentView(viewId, data);
+      if (res.success) {
+        getSingleView(viewId);
+      }
+    }
+  };
+
+  const hideAllColumns = async () => {
+    const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
+    setVisibleColumns(newVisibleColumns);
+
+    if (viewId) {
+      const data = {
+        columns: ['id'],
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
+        gate,
+        filters,
+        sort,
+        groups: selectedViewData?.meta?.groups,
+      };
+
+      const res = await updateContentView(viewId, data);
+      if (res.success) {
+        getSingleView(viewId);
+      }
+    }
+  };
+
 
   // FILTERS
   // handle filter apply
   const handleFilterApply = async () => {
     if (viewId) {
-      const res = await updateView({ filters });
-      if (res.success) {
-        refreshViewData();
-      }
+      updateView({ filters }).then(() => {
+        getSingleView(viewId);
+      });
+    } else {
+      fetchList(filters);
     }
   };
 
   // handle remove filter condition
-  const handleRemoveFilterCondition = async (index) => {
+  const handleRemoveFilterCondition = (index) => {
     const newFilters = filters.filter((_, i) => i !== index);
     setFilters(newFilters);
     if (viewId) {
-      const res = await updateView({ filters: newFilters });
-      if (res.success) {
-        refreshViewData();
-      }
+      updateView({ filters: newFilters }).then(() => {
+        getSingleView(viewId);
+      });
+    } else {
+      fetchList(newFilters);
     }
   };
 
   // handle clear filters
-  const handleClearFilters = async () => {
+  const handleClearFilters = () => {
     setFilters([]);
     if (viewId) {
-      const res = await updateView({ filters: [] });
-      if (res.success) {
-        refreshViewData();
-      }
+      updateView({ filters: [] }).then(() => {
+        getSingleView(viewId);
+      });
+    } else {
+      fetchList([]);
     }
   };
+
 
   // initialize
   const initialize = async () => {
     try {
+      setLoading(true);
+      const campaigns = await getContentList({
+        page: 1,
+        rowsPerPage: 1,
+      });
+
       // set meta data
-      setMetaData(contentMeta);
-      setAllColumns(contentColumns);
+      setMetaData(campaigns.meta);
+      const columns = campaigns.meta.map((obj) => {
+        const key = Object.keys(obj)[0];
+        return {
+          label: obj[key].label,
+          columnName: key,
+          type: obj[key].type,
+          depth: obj[key].depth,
+        };
+      });
+
+      setAllColumns(columns);
 
       // set views
+      const viewsData = await getContentViews();
       setViews(viewsData.data);
-
       if (viewsData.success) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
-        setSelectedViewId(firstView?.id);
-
-        if (!viewId) {
-          router.push(`?tab=content&view=${firstView?.id}`);
-        }
+        await getSingleView(firstView?.id, pagination);
+        router.push(`?tab=content&view=${firstView?.id}`);
       } else {
         const payload = {
           label: 'Default View',
@@ -381,7 +405,7 @@ export default function AllContentListView() {
           gate: 'and',
           isPublic: true,
           filters: [],
-          columns: contentColumns.map((col) => col.columnName),
+          columns: columns.map((col) => col.columnName),
           sort: [],
           groups: [],
         };
@@ -401,57 +425,42 @@ export default function AllContentListView() {
               createdAt: createViewData?.createdAt,
             },
           ]);
-
-          mutate('contentViews');
-          setSelectedViewId(res.data.id);
-          router.replace(`?tab=content&view=${res.data.id}`);
+          await getSingleView(res.data.id, pagination);
+          router.push(`?tab=content&view=${res.data.id}`);
         }
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  /// Watch for URL viewId change
+  // update visible columns
+  React.useEffect(() => {
+    if (allColumns.length === 0) return;
+    if (viewId && selectedViewData) {
+      const selectedColumnNames = selectedViewData.meta?.columns || [];
+      const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
+      setVisibleColumns(filtered);
+    } else {
+      setVisibleColumns(allColumns);
+    }
+    setSearchColumns(allColumns);
+  }, [viewId, selectedViewData, allColumns]);
+
+  // Watch for URL viewId change
   React.useEffect(() => {
     setPagination((prev) => ({ ...prev, pageNo: 1 }));
-    if (searchParams.get('tab') !== 'content') return;
-    if (contentMeta && viewsData && !hasInitialized.current) {
-      hasInitialized.current = true;
-      initialize();
-    }
-  }, [contentMeta, viewsData, searchParams]);
-
-  // store isView sidebar is open or not on local storage
-  const handleOpenViewSidebar = () => {
-    setShowView(!showView);
-    localStorage.setItem('isRecordViewOpen', !showView);
-  };
+    initialize();
+  }, []);
 
   React.useEffect(() => {
-    if (singleView) {
-      setRecords(singleView?.data?.data?.map((row) => defaultContent(row)) || []);
-      setTotalRecords(singleView?.data?.count);
-      setSelectedViewData(singleView?.data);
-      setFilters(singleView?.data?.meta?.filters || []);
-      setGate(singleView?.data?.meta?.gate || 'and');
-      setSort(singleView?.data?.meta?.sort || []);
-
-      const selectedColumnNames = singleView?.data?.meta?.columns || [];
-      const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
-
-      setVisibleColumns(filtered);
-      setNewVisibleColumns(filtered);
-      setSearchColumns(allColumns);
+    if (selectedViewId) {
+      getSingleView(selectedViewId, pagination);
     }
-  }, [singleView]);
+  }, [selectedViewId]);
 
-  React.useEffect(() => {
-    const isViewOpen = localStorage.getItem('isRecordViewOpen');
-    if (isViewOpen === 'true') {
-      setShowView(true);
-    }
-  }, [showView]);
 
   return (
     <PageContainer>
@@ -486,19 +495,19 @@ export default function AllContentListView() {
               handleFilterApply={handleFilterApply}
               handleRemoveFilterCondition={handleRemoveFilterCondition}
               handleClearFilters={handleClearFilters}
-              loading={isSingleViewLoading || isContentLoading || isViewsLoading}
+              loading={loading}
             />
 
             <Button startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />} variant="text" size="small">
               Group
             </Button>
-
             <TableSortBuilder
               allColumns={allColumns}
               sort={sort}
               setSort={setSort}
               updateView={updateView}
-              refreshViewData={refreshViewData}
+              fetchList={fetchList}
+              getSingleView={getSingleView}
             />
           </Box>
 
@@ -507,7 +516,7 @@ export default function AllContentListView() {
               <AddIcon />
             </IconButton>
             <Box>
-              <RefreshPlugin onClick={() => mutate(['contentView', viewId, pagination])} />
+              <RefreshPlugin onClick={fetchList} />
             </Box>
             <DeleteConfirmationPasswordPopover
               title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
@@ -533,7 +542,7 @@ export default function AllContentListView() {
             columns={allColumns}
             selectedView={selectedViewData}
             setSelectedViewId={setSelectedViewId}
-            viewsLoading={isViewsLoading}
+            viewsLoading={viewsLoading}
           />
 
           <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
@@ -542,45 +551,18 @@ export default function AllContentListView() {
               rows={records}
               processRowUpdate={processRowUpdate}
               onProcessRowUpdateError={handleProcessRowUpdateError}
-              loading={isSingleViewLoading || isContentLoading || isViewsLoading}
+              loading={loading}
               rowCount={totalRecords}
-              checkboxSelection
-              pageSizeOptions={[20, 30, 50]}
+              pageSizeOptions={[20, 50, 100]}
               paginationModel={{ page: pagination.pageNo - 1, pageSize: pagination.limit }}
               onPageChange={handlePaginationModelChange}
               onRowSelectionModelChange={handleRowSelection}
+              checkboxSelection
             />
           </Box>
         </Box>
       </Card>
       {/* </PageLoader> */}
-
-      {/* Image upload popover */}
-      <Popover
-        open={Boolean(anchorEl.current)}
-        anchorEl={anchorEl.current}
-        onClose={handleClosePopover}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        disableAutoFocus
-        disableEnforceFocus
-        disablePortal
-      >
-        <Box sx={{ p: 1.5 }}>
-          {mediaToShow?.type === 'image' && (
-            <Image src={mediaToShow?.url} alt="Preview" width={300} height={300} style={{ borderRadius: 8 }} />
-          )}
-          {mediaToShow?.type === 'video' && (
-            <video src={mediaToShow?.url} controls style={{ height: 300, width: 300, borderRadius: 8 }} />
-          )}
-        </Box>
-      </Popover>
 
       {/* Hide fields popover */}
       <Popover
@@ -632,7 +614,7 @@ export default function AllContentListView() {
                     key={col.field}
                     control={
                       <Checkbox
-                        checked={newVisibleColumns.some((c) => c.columnName === col.columnName)}
+                        checked={visibleColumns.some((c) => c.columnName === col.columnName)}
                         onChange={(e) => handleColumnChange(e, col)}
                       />
                     }
@@ -642,31 +624,15 @@ export default function AllContentListView() {
               })}
           </FormGroup>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Button variant="outlined" size="small" onClick={hideAllColumns}>
-                Hide all
-              </Button>
-              <Button variant="outlined" size="small" onClick={showAllColumns}>
-                Show all
-              </Button>
-            </Box>
-            <Button variant="contained" size="small" onClick={handleSaveColumns}>
-              Save
+            <Button variant="outlined" size="small" onClick={hideAllColumns}>
+              Hide all
+            </Button>
+            <Button variant="contained" size="small" onClick={showAllColumns}>
+              Show all
             </Button>
           </Box>
         </Box>
       </Popover>
-
-      {/* Image upload dialog */}
-      <MediaUploader
-        multiple={!singleImageField.includes(imageUpdatedField)}
-        open={open}
-        onClose={() => setOpen(false)}
-        onSave={(paths) => handleUploadImage([...paths])}
-        hideVideoUploader={isImageUploadOpen}
-        hideImageUploader={!isImageUploadOpen}
-        folderName="content-HQ"
-      />
     </PageContainer>
   );
 }

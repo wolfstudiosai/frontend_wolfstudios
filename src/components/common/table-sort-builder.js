@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import {
     Button,
     IconButton,
@@ -15,7 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Iconify } from '/src/components/iconify/iconify';
 import { useSearchParams } from 'next/navigation';
 
-const TableSortBuilder = ({ allColumns, sort, setSort, updateView, refreshViewData }) => {
+const TableSortBuilder = ({ allColumns, sort, setSort, updateView, fetchList, getSingleView, handleSortApply }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [searchText, setSearchText] = useState('');
     const searchParams = useSearchParams();
@@ -34,28 +34,30 @@ const TableSortBuilder = ({ allColumns, sort, setSort, updateView, refreshViewDa
     const handleOpen = (event) => setAnchorEl(event.currentTarget);
     const handleClose = () => setAnchorEl(null);
 
-    const handleSortChange = async (value, key) => {
+    const handleSortChange = (value, key) => {
         if (!sort[0]) return;
         const updated = { ...sort[0], [key]: key === 'key' ? value.columnName : value.value };
         setSort([updated]);
 
         const view = searchParams.get('view');
         if (view) {
-            const res = await updateView({ sort: [updated] });
-            if (res.success) {
-                refreshViewData();
-            }
+            updateView({ sort: [updated] }).then(() => {
+                getSingleView(view)
+            });
+        } else {
+            // fetchList(updated);
         }
     };
 
-    const handleRemoveSort = async () => {
+    const handleRemoveSort = () => {
         setSort([]);
         const view = searchParams.get('view');
         if (view) {
-            const res = await updateView({ sort: [] });
-            if (res.success) {
-                refreshViewData();
-            }
+            updateView({ sort: [] }).then(() => {
+                getSingleView(view)
+            });
+        } else {
+            // fetchList(updated);
         }
     };
 

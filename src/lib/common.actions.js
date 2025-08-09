@@ -1,16 +1,11 @@
-import { toast } from 'sonner';
+import { getSearchQuery } from "../utils/helper";
+import { api } from "../utils/api";
+import { toast } from "sonner";
 
-import { api } from '../utils/api';
-import { getSearchQuery } from '../utils/helper';
-
-export const getCityListAsync = async (queryParams, searchValue) => {
+export const getCityListAsync = async (queryParams) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    let url = `/cities${searchQuery}`;
-    if (searchValue) {
-      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`;
-    }
-    const res = await api.get(url);
+    const res = await api.get(`/cities${searchQuery}`);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     toast.error(error.message);
@@ -18,14 +13,10 @@ export const getCityListAsync = async (queryParams, searchValue) => {
   }
 };
 
-export const getProductListAsync = async (queryParams, searchValue) => {
+export const getProductListAsync = async (queryParams) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    let url = `/products${searchQuery}`;
-    if (searchValue) {
-      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`;
-    }
-    const res = await api.get(url);
+    const res = await api.get(`/products${searchQuery}`);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     toast.error(error.message);
@@ -33,14 +24,10 @@ export const getProductListAsync = async (queryParams, searchValue) => {
   }
 };
 
-export const getTagListAsync = async (queryParams, searchValue) => {
+export const getTagListAsync = async (queryParams) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    let url = `/tags${searchQuery}`;
-    if (searchValue) {
-      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`;
-    }
-    const res = await api.get(url);
+    const res = await api.get(`/tags${searchQuery}`);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     toast.error(error.message);
@@ -51,9 +38,9 @@ export const getTagListAsync = async (queryParams, searchValue) => {
 export const getStakeHolderListAsync = async (queryParams, searchValue) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    let url = `/stakeholders${searchQuery}`;
+    let url = `/stakeholders${searchQuery}`
     if (searchValue) {
-      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`;
+      url += `&gate=and&fields[0][key]=Name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
     }
     const res = await api.get(url);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
@@ -66,9 +53,9 @@ export const getStakeHolderListAsync = async (queryParams, searchValue) => {
 export const getCountryListAsync = async (queryParams, searchValue) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    let url = `/countries${searchQuery}`;
+    let url = `/countries${searchQuery}`
     if (searchValue) {
-      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`;
+      url += `&gate=and&fields[0][key]=Name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
     }
     const res = await api.get(url);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
@@ -81,9 +68,9 @@ export const getCountryListAsync = async (queryParams, searchValue) => {
 export const getStateListAsync = async (queryParams, searchValue) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    let url = `/states${searchQuery}`;
+    let url = `/states${searchQuery}`
     if (searchValue) {
-      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`;
+      url += `&gate=and&fields[0][key]=Name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
     }
     const res = await api.get(url);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
@@ -96,9 +83,9 @@ export const getStateListAsync = async (queryParams, searchValue) => {
 export const getRetailPartnerListAsync = async (queryParams, searchValue) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    let url = `/retail-partners${searchQuery}`;
+    let url = `/retail-partners${searchQuery}`
     if (searchValue) {
-      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`;
+      url += `&gate=and&fields[0][key]=Name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
     }
     const res = await api.get(url);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
@@ -111,62 +98,14 @@ export const getRetailPartnerListAsync = async (queryParams, searchValue) => {
 export const getCaseStudyListAsync = async (queryParams, searchValue) => {
   try {
     const searchQuery = getSearchQuery(queryParams);
-    let url = `/case-studies${searchQuery}`;
+    let url = `/case-studies${searchQuery}`
     if (searchValue) {
-      url += `&gate=and&fields[0][key]=Name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`;
+      url += `&gate=and&fields[0][key]=Name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`
     }
     const res = await api.get(url);
     return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
   } catch (error) {
     // toast.error(error.response.data.message);
-    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
-  }
-};
-
-export const getDestinationListAsync = async (queryParams, searchValue) => {
-  try {
-    const searchQuery = getSearchQuery(queryParams);
-    let url = `/destinations${searchQuery}`;
-    if (searchValue) {
-      url += `&gate=and&fields[0][key]=name&fields[0][operator]=contains&fields[0][type]=string&fields[0][value]=${searchValue}`;
-    }
-    const res = await api.get(url);
-    return { success: true, data: res.data.data.data, totalRecords: res.data.data.count };
-  } catch (error) {
-    // toast.error(error.response.data.message);
-    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
-  }
-};
-
-export const getHomepageContentAsync = async () => {
-  try {
-    const res = await api.get(`/homepage-contents`);
-
-    return { success: true, data: res.data.data?.data, count: res.data.data.count };
-  } catch (error) {
-    // toast.error(error.response.data.message);
-    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
-  }
-};
-
-export const createHomepageContentAsync = async (payload) => {
-  try {
-    const res = await api.post(`/homepage-contents`, payload);
-
-    return { success: true, data: res.data.data };
-  } catch (error) {
-    toast.error(error.response.data.message);
-    return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
-  }
-};
-
-export const updateHomepageContentAsync = async (order, payload) => {
-  try {
-    const res = await api.patch(`/homepage-contents/${order}`, payload);
-
-    return { success: true, data: res.data.data };
-  } catch (error) {
-    toast.error(error.response.data.message);
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };

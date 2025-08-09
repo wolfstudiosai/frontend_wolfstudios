@@ -2,8 +2,7 @@ import { Box, Card, CardContent, CardHeader, Chip, Grid2, Paper, Stack, Typograp
 
 import { Iconify } from '/src/components/iconify/iconify';
 
-export const CampaignDetails = ({ partner }) => {
-
+export default function CampaignDetails({ partner }) {
   return (
     <Grid2 item size={{ xs: 12, md: 6 }}>
       <Card
@@ -21,12 +20,12 @@ export const CampaignDetails = ({ partner }) => {
               <Typography variant="subtitle2" gutterBottom color="text.secondary">
                 Proposed Campaigns
               </Typography>
-              {partner?.proposedCampaigns?.length > 0 ? (
+              {partner?.ByCampaignsProposedPartners?.length > 0 ? (
                 <Stack spacing={0.5}>
-                  {partner?.proposedCampaigns?.map((campaign, index) => (
+                  {partner?.ByCampaignsProposedPartners?.map((campaign, index) => (
                     <Box key={index} display="flex" alignItems="center" gap={1}>
                       <Iconify icon="mdi:calendar-blank-outline" />
-                      <Typography variant="body2">{campaign.name}</Typography>
+                      <Typography variant="body2">{campaign.ByCampaigns.Name}</Typography>
                     </Box>
                   ))}
                 </Stack>
@@ -41,12 +40,12 @@ export const CampaignDetails = ({ partner }) => {
               <Typography variant="subtitle2" gutterBottom color="text.secondary">
                 Products
               </Typography>
-              {partner?.products?.length > 0 ? (
+              {partner?.ByProductPartnerHQ?.length > 0 ? (
                 <Stack spacing={0.5}>
-                  {partner?.products?.map((product, index) => (
+                  {partner?.ByProductPartnerHQ?.map((product, index) => (
                     <Box key={index} display="flex" alignItems="center" gap={1}>
                       <Iconify icon="mdi:shopping-outline" />
-                      <Typography variant="body2">{product.name}</Typography>
+                      <Typography variant="body2">{product.ByProduct.Name}</Typography>
                     </Box>
                   ))}
                 </Stack>
@@ -59,16 +58,16 @@ export const CampaignDetails = ({ partner }) => {
 
             <Box>
               <Typography variant="subtitle2" gutterBottom color="text.secondary">
-                Campaign Months
+                Campaign Month
               </Typography>
               <Typography variant="body2">
-                {partner?.campaignMonth?.length > 0
-                  ? partner?.campaignMonth?.map((month, index) => (
-                    <Box key={index} display="flex" alignItems="center" gap={1}>
-                      <Iconify icon="mdi:calendar-blank-outline" />
-                      <Typography variant="body2">{month}</Typography>
-                    </Box>
-                  ))
+                {partner?.CampaignMonth?.length > 0
+                  ? partner?.CampaignMonth?.map((month, index) => (
+                      <Box key={index} display="flex" alignItems="center" gap={1}>
+                        <Iconify icon="mdi:calendar-blank-outline" />
+                        <Typography variant="body2">{month}</Typography>
+                      </Box>
+                    ))
                   : 'N/A'}
               </Typography>
             </Box>
@@ -78,15 +77,14 @@ export const CampaignDetails = ({ partner }) => {
                 Tags
               </Typography>
               <Box display="flex" flexWrap="wrap" gap={1}>
-                {partner?.tags?.length > 0 ? (
-                  partner?.tags?.map((tag, i) => (
+                {partner?.Tags?.length > 0 ? (
+                  partner?.Tags?.map((tag, i) => (
                     <Chip
                       key={i}
-                      label={tag?.name}
+                      label={tag?.Name}
                       size="small"
-                      color="primary"
-                      variant="outlined"
                       icon={<Iconify icon="mdi:tag-outline" fontSize="small" />}
+                      sx={{ backgroundColor: theme.palette.grey[100] }}
                     />
                   ))
                 ) : (
@@ -101,4 +99,4 @@ export const CampaignDetails = ({ partner }) => {
       </Card>
     </Grid2>
   );
-};
+}

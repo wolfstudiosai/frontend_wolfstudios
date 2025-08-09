@@ -73,7 +73,7 @@ export const getSearchQueryPortfolio = (queryParams) => {
 
 export const isVideoContent = (url) => {
   const videoKeywords = ['vimeo', 'playback', 'video', 'mp4', 'webm', 'ogg'];
-  return videoKeywords.some((keyword) => url?.includes(keyword));
+  return videoKeywords.some((keyword) => url.includes(keyword));
 };
 
 export const sliderToGridColsCoverter = (sliderCols) => {
@@ -145,20 +145,16 @@ export function capitalizeFirstLetter(string) {
 
 export const formatCompactNumber = (number) => {
   const num = Number(number || 0);
-  const absNum = Math.abs(num);
-  const sign = num < 0 ? '-' : '';
-
-  if (absNum >= 1_000_000_000) {
-    return sign + (absNum / 1_000_000_000).toFixed(2) + 'B';
-  } else if (absNum >= 1_000_000) {
-    return sign + (absNum / 1_000_000).toFixed(2) + 'M';
-  } else if (absNum >= 1_000) {
-    return sign + (absNum / 1_000).toFixed(2) + 'K';
+  if (num >= 1_000_000_000) {
+    return (num / 1_000_000_000).toFixed(1) + 'B';
+  } else if (num >= 1_000_000) {
+    return (num / 1_000_000).toFixed(1) + 'M';
+  } else if (num >= 1_000) {
+    return (num / 1_000).toFixed(1) + 'K';
   }
 
-  return num.toFixed(2);
+  return num.toString();
 };
-
 
 export const handleCopy = async (text) => {
   if (text.length === 0) {
@@ -239,7 +235,7 @@ export function buildQueryParams(filters, gate) {
     // Handle value based on type
     if (filter.type === 'relation' && Array.isArray(filter.value)) {
       filter.value.forEach((item, itemIndex) => {
-        params.append(`fields[${index}][value][${itemIndex}]`, item?.value || item);
+        params.append(`fields[${index}][value][${itemIndex}]`, item.value);
       });
     } else if (filter.type === 'array' && Array.isArray(filter.value)) {
       filter.value.forEach((item, itemIndex) => {

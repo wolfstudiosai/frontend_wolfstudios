@@ -1,3 +1,4 @@
+import { useContext, useRef, useState } from 'react';
 import { Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
@@ -10,12 +11,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { useContext, useRef, useState } from 'react';
 
-import { AvatarWithActiveStatus } from '/src/components/core/avatar-with-active-status';
-import { Iconify } from '/src/components/iconify/iconify';
 import { ChatContext } from '/src/contexts/chat';
 import useAuth from '/src/hooks/useAuth';
+import { AvatarWithActiveStatus } from '/src/components/core/avatar-with-active-status';
+import { Iconify } from '/src/components/iconify/iconify';
 
 import { AddMemberToWorkspace } from './add-member-to-workspace';
 import { CreateChannelDialog } from './create-channel-dialog';
@@ -121,6 +121,9 @@ export const LeftSidebar = ({ isMobile }) => {
             <Typography variant="h6" fontWeight={600}>
               {workspaceInfo.name}
             </Typography>
+            {/* <IconButton size="small" title="Add member" onClick={() => setOpenAddMemberDialog(true)}>
+              <Iconify icon="mdi:plus" />
+            </IconButton> */}
           </SidebarHeader>
           <ScrollableContent>
             <List dense disablePadding>
@@ -144,6 +147,43 @@ export const LeftSidebar = ({ isMobile }) => {
                 </ListItem>
               ))}
             </List>
+
+            {/* <SectionHeader>
+              <SectionTitle>Favorites</SectionTitle>
+              <IconButton size="small" onClick={() => handleToggle('favorites')}>
+                {openSections.favorites ? <Iconify icon="mdi:chevron-up" /> : <Iconify icon="mdi:chevron-down" />}
+              </IconButton>
+            </SectionHeader> */}
+
+            {/* <Collapse in={openSections.favorites} timeout="auto" unmountOnExit>
+              <List dense disablePadding>
+                {[
+                  {
+                    label: 'Sophia Wilson',
+                    icon: 'mdi:account',
+                    count: 2,
+                    tag: null,
+                  },
+                  {
+                    label: 'Front-end',
+                    icon: 'mdi:pound',
+                    count: 4,
+                    tag: null,
+                  },
+                ].map((item, index) => (
+                  <ListItem key={index} disablePadding>
+                    <StyledListItemButton>
+                      <StyledListItemIcon>
+                        <Iconify icon={item.icon} />
+                      </StyledListItemIcon>
+                      <StyledListItemText primary={item.label} />
+                      {item.tag && <TagChip label={item.tag} size="small" />}
+                      {item.count > 0 && <CountChip label={item.count} size="small" />}
+                    </StyledListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </Collapse> */}
 
             <SectionHeader>
               <SectionTitle>Channels</SectionTitle>
@@ -179,6 +219,33 @@ export const LeftSidebar = ({ isMobile }) => {
                     </StyledListItemButton>
                   </ListItem>
                 ))}
+
+                {/* <ListItem disablePadding>
+                  <StyledListItemButton>
+                    <StyledListItemIcon>
+                      <Iconify icon="mdi:pound" />
+                    </StyledListItemIcon>
+                    <StyledListItemText primary="v2.0 - actual version" />
+                  </StyledListItemButton>
+                </ListItem>
+
+                <ListItem disablePadding>
+                  <StyledListItemButton>
+                    <StyledListItemIcon>
+                      <Iconify icon="mdi:lightbulb-outline" />
+                    </StyledListItemIcon>
+                    <StyledListItemText primary="Strategy" />
+                  </StyledListItemButton>
+                </ListItem>
+
+                <ListItem disablePadding>
+                  <StyledListItemButton>
+                    <StyledListItemIcon>
+                      <Iconify icon="mdi:calendar" color="#f44336" />
+                    </StyledListItemIcon>
+                    <StyledListItemText primary="Events" />
+                  </StyledListItemButton>
+                </ListItem> */}
               </List>
             </Collapse>
 

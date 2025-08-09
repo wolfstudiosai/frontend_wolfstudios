@@ -1,26 +1,25 @@
 'use client';
 
-import React, { useEffect, useRef, useCallback } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import React from 'react';
+import { CircularProgress } from '@mui/material';
 
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
 
-import { paths } from '../../../paths';
-import { useContentList } from '../../../services/content/useContentList';
 import AllContentGridView from './_component/all-content-grid-view';
-import { AllContentRightPanel } from './_component/all-content-right-panel';
-import ContentTags from './_component/content-tags';
-import PageLoader from '/src/components/loaders/PageLoader';
-import AllContentFeaturedView from './_component/all-content-featured-view';
-import { useSettings } from '/src/hooks/use-settings';
-import FeaturedSkeleton from './_component/featured-content-skelton';
+import AllContentListView from './_component/all-content-list-view';
+import { ManageContentRightPanel } from './_component/manage-content-right-panel';
+import { getContentList } from './_lib/all-content.actions';
+import { defaultContent } from './_lib/all-content.types';
+import { sliderToGridColsCoverter } from '/src/utils/helper';
 
 export const AllContentView = () => {
-  const { setBreadcrumbs } = useSettings();
-  const [selectedTag, setSelectedTag] = React.useState([]);
-  const [showTags, setShowTags] = React.useState(false);
-  const [openPanel, setOpenPanel] = React.useState(false);
+  const observerRef = React.useRef(null);
+  const [loading, setLoading] = React.useState(false);
+  const [isFetching, setIsFetching] = React.useState(false);
+  const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 100 });
+  const [totalRecords, setTotalRecords] = React.useState(0);
+  const [data, setData] = React.useState([]);
   const [filters, setFilters] = React.useState({
     COL: 4,
     TAG: [],
@@ -30,141 +29,117 @@ export const AllContentView = () => {
     ADD: false,
   });
 
-  const {
-    data,
-    isLoading,
-    isLoadingMore,
-    error,
-    totalRecords,
-    hasMore,
-    loadMore,
-  } = useContentList('', selectedTag);
+  async function fetchList(paginateData = pagination) {
+    if (isFetching) return;
+    setIsFetching(true);
 
-  const { data: featuredData, isLoading: featuredLoading } = useContentList('featured');
+    try {
+      const response = await getContentList({
+        page: paginateData.pageNo,
+        rowsPerPage: paginateData.limit,
+      });
 
-  const observerRef = useRef(null);
-  const bottomRef = useRef(null);
+      if (response.success) {
+        setData((prev) => [...prev, ...response.data]);
+        setTotalRecords(response.totalRecords);
+        setPagination((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }));
+      }
+    } catch (error) {
+      console.error('Error fetching contents:', error);
+    } finally {
+      setIsFetching(false);
+      setLoading(false);
+    }
+  }
 
   const handleFilterChange = (type, value) => {
     setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
-  useEffect(() => {
-    setBreadcrumbs([
-      { title: 'Dashboard', href: paths.private.overview },
-      { title: 'All Content', href: paths.private.all_content },
-    ]);
-  }, []);
+  const handleContentCreated = () => {
+    setFilters((prev) => ({ ...prev, ADD: false }));
+    refreshListView();
+  };
 
-  // Infinite Scroll Intersection Observer
-  const handleObserver = useCallback(
-    (entries) => {
-      const target = entries[0];
-      if (target.isIntersecting && hasMore && !isLoadingMore) {
-        loadMore();
-      }
-    },
-    [hasMore, isLoadingMore, loadMore]
-  );
-
-  useEffect(() => {
-    const current = bottomRef.current;
-    const scrollContainer = document.querySelector('[data-scrollable-content]');
-
-    if (!current || !scrollContainer) return;
-
-    const observer = new IntersectionObserver(handleObserver, {
-      root: scrollContainer,
-      rootMargin: '300px',
-      threshold: 0,
+  const refreshListView = async () => {
+    const response = await getContentList({
+      page: 1,
+      rowsPerPage: 10,
     });
 
-    observer.observe(current);
-    observerRef.current = observer;
+    if (response.success) {
+      setData(response.data);
+      setTotalRecords(response.totalRecords);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchList();
+  }, []);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetching && data.length < totalRecords) {
+          fetchList();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
 
     return () => {
-      if (observerRef.current) observerRef.current.disconnect();
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
     };
-  }, [handleObserver]);
-
+  }, [data, isFetching, totalRecords]);
 
   return (
     <PageContainer>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <PageHeader
-          title="Contents"
-          values={filters}
-          onFilterChange={handleFilterChange}
-          showFilters={false}
-          showColSlider={false}
+      <PageHeader
+        title="Contents"
+        values={filters}
+        onFilterChange={handleFilterChange}
+        showFilters={false}
+        showColSlider={false}
+        totalRecords={totalRecords}
+        showAdd={true}
+      />
+      {filters.VIEW === 'grid' ? (
+        <>
+          <AllContentGridView
+            data={data}
+            loading={loading}
+            columns={sliderToGridColsCoverter(filters.COL)}
+            fetchList={refreshListView}
+          />
+          <div ref={observerRef} style={{ height: 10, textAlign: 'center' }}>
+            {isFetching && <CircularProgress size="30px" />}
+          </div>
+        </>
+      ) : (
+        <AllContentListView
+          setPagination={setPagination}
           totalRecords={totalRecords}
-          showAdd={true}
-          setOpenPanel={setOpenPanel}
+          data={data}
+          setData={setData}
+          loading={loading}
+          fetchList={fetchList}
         />
-
-        <Button
-          variant="contained"
-          size="small"
-          sx={{ display: { lg: 'none' } }}
-          onClick={() => setShowTags(true)}
-        >
-          Tags
-        </Button>
-      </Box>
-
-      <Box
-        data-scrollable-content
-        sx={{
-          display: 'flex',
-          gap: 2,
-          height: {
-            xs: '100%',
-            lg: 'calc(100vh - 170px)',
-          },
-          overflow: 'auto',
-          '&::-webkit-scrollbar': { display: 'none' },
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-        }}
-      >
-        <ContentTags
-          showTags={showTags}
-          setShowTags={setShowTags}
-          selectedTag={selectedTag}
-          setSelectedTag={setSelectedTag}
-        />
-
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {featuredLoading ? (
-            <FeaturedSkeleton />
-          ) : featuredData?.length > 0 && featuredData[0] !== undefined ? (
-            <AllContentFeaturedView data={featuredData} />
-          ) : null}
-
-          <PageLoader loading={isLoading} error={error}>
-            {data?.length > 0 && data[0] !== undefined ? (
-              <>
-                <AllContentGridView data={data} />
-                {/* Infinite Scroll Trigger Element */}
-                {hasMore && <div ref={bottomRef} style={{ height: '1px' }} />}
-                {isLoadingMore && (
-                  <Typography textAlign="center" variant="body2" color="textSecondary" my={2}>
-                    Loading more...
-                  </Typography>
-                )}
-              </>
-            ) : (
-              <Box textAlign="center">
-                <Typography variant="h6">No Contents Found</Typography>
-              </Box>
-            )}
-          </PageLoader>
-        </Box>
-      </Box>
-
-      {openPanel && (
-        <AllContentRightPanel onClose={() => setOpenPanel(false)} id={null} open={openPanel} view="ADD" />
       )}
+      <ManageContentRightPanel
+        view="EDIT"
+        width="70%"
+        showAdd={false}
+        data={defaultContent}
+        fetchList={refreshListView}
+        open={filters.ADD}
+        onClose={handleContentCreated}
+      />
     </PageContainer>
   );
 };

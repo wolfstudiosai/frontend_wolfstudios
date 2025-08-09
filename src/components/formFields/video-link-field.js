@@ -56,7 +56,7 @@ export const VideoLinkField = ({ name, label, value, setFieldValue }) => {
         }}
       />
       <Stack direction="row" gap={1} sx={{ flexWrap: 'wrap', mt: 2 }}>
-        {value?.map((item, index) => (
+        {value.map((item, index) => (
           <Box key={index} sx={{ width: '49.5%', position: 'relative' }}>
             <Box
               component="video"

@@ -1,10 +1,11 @@
 'use client'
 
-import React from 'react'
 import { Box, Chip, Collapse, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Popover, Typography } from '@mui/material';
-import { usePathname, useRouter } from 'next/navigation';
-import { Fragment, useEffect, useRef, useState } from 'react';
 import { Iconify } from '/src/components/iconify/iconify';
+import { Fragment } from 'react';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
+import { useState, useRef, useEffect } from 'react';
 
 // Utility to generate workspaces tab
 export function getWorkspacesTab(userInfo) {
@@ -117,7 +118,7 @@ const SidebarMenuItems = ({
     : { minWidth: 40 };
 
   const textStyles = {
-    color: 'white',
+    color: 'text.primary',
     fontWeight: isDesktop ? 800 : 700,
   };
 
@@ -150,9 +151,9 @@ const SidebarMenuItems = ({
                 <ListItemIcon sx={iconStyles} title={isDesktop && !isOpen ? item.title : ''}>
                   <Iconify
                     icon={item.icon}
-                    width={20}
-                    height={20}
-                    color="white"
+                    width={isDesktop && !isOpen ? 24 : 20}
+                    height={isDesktop && !isOpen ? 24 : 20}
+                    color="text.primary"
                   />
                 </ListItemIcon>
                 {(isDesktop ? isOpen : true) && <ListItemText primary={item.title} sx={textStyles} />}
@@ -171,7 +172,7 @@ const SidebarMenuItems = ({
                     icon={isExpanded ? 'icon-park-solid:up-one' : 'prime:sort-down-fill'}
                     width={10}
                     height={10}
-                    color="white"
+                    color="text.secondary"
                   />
                 </IconButton>
               )}

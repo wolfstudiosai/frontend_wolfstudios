@@ -21,8 +21,6 @@ export const SettingsContext = React.createContext({
   toggleMenuItem: () => { },
   debouncedSearch: '',
   setSearch: () => { },
-  breadcrumbs: [],
-  setBreadcrumbs: (newBreadcrumbs) => { },
 });
 
 export function SettingsProvider({ children, settings: initialSettings }) {
@@ -31,7 +29,6 @@ export function SettingsProvider({ children, settings: initialSettings }) {
   const [openSubNav, setOpenSubNav] = React.useState(isLogin ? true : false);
   const [isFeaturedCardVisible, setIsFeaturedCardVisible] = React.useState(false);
   const [openMenus, setOpenMenus] = React.useState({});
-  const [breadcrumbs, setBreadcrumbs] = React.useState([]);
 
   // GLOBAL SEARCH
   const [search, setSearch] = React.useState('');
@@ -68,8 +65,6 @@ export function SettingsProvider({ children, settings: initialSettings }) {
         toggleMenuItem,
         debouncedSearch,
         setSearch,
-        breadcrumbs,
-        setBreadcrumbs,
       }}
     >
       {children}

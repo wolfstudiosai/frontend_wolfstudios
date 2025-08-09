@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { Icon } from '@iconify/react';
 import { Box, Button, IconButton, Popover, TextField, Typography } from '@mui/material';
+
+import { Iconify } from '../iconify/iconify';
 
 export const DeleteConfirmationPasswordPopover = ({
   id,
@@ -23,7 +24,7 @@ export const DeleteConfirmationPasswordPopover = ({
     setError('');
     try {
       const res = await deleteFn(id, passwordInput ? password : null);
-
+      console.log(res);
       if (res.success) {
         setOpen(false);
         setPassword('');
@@ -42,7 +43,7 @@ export const DeleteConfirmationPasswordPopover = ({
   return (
     <>
       <IconButton ref={anchorRef} onClick={() => setOpen(true)} title="Delete" disabled={disabled} color="error">
-        <Icon icon="ic:outline-delete" width={24} height={24} color="error" />
+        <Iconify icon="ic:outline-delete" width={24} height={24} color="error" />
       </IconButton>
 
       <Popover

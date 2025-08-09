@@ -1,8 +1,8 @@
 'use client';
 
+import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
-import * as React from 'react';
 import { ForgotPasswordForm } from '/src/app/auth/_components/FogotPasswordForm';
 import { LoginForm } from '/src/app/auth/_components/LoginForm';
 import { SignupForm } from '/src/app/auth/_components/SignupForm';
@@ -19,13 +19,14 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
+import { MenuIcon } from 'lucide-react';
 
 import { paths } from '/src/paths';
 
 import { RightPanel } from '../rightPanel/right-panel';
 import { MobileNav } from './mobile-nav';
 import { NavSearch } from './nav-search';
-import { navData } from '/src/router';
+import { dashboardNavData, navData } from '/src/router';
 
 const LOGIN = 'Login';
 const SIGNUP = 'Signup';

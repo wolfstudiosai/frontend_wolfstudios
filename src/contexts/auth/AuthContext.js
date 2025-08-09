@@ -8,7 +8,6 @@ import { toast } from 'sonner';
 import { api, server_base_api } from '/src/utils/api';
 import { setTokenInCookies, removeTokenFromCookies } from '/src/utils/axios-api.helpers';
 import { signOut } from "next-auth/react"
-import { useRouter } from 'next/navigation';
 
 // ---- Initial User State ----
 const INITIAL_AUTH_STATE = {
@@ -54,7 +53,6 @@ const extractUserData = (data) => ({
 });
 
 export const AuthProvider = ({ children }) => {
-  const router = useRouter();
   const [userInfo, setUserInfo] = useState(INITIAL_AUTH_STATE);
   const [loading, setLoading] = useState(true);
   const { data: session } = useSession();
@@ -65,7 +63,6 @@ export const AuthProvider = ({ children }) => {
     let payload = {
       authType: authType,
       authId: user.id,
-      email: user.email,
     }
 
     if (type === 'SIGNUP') {
@@ -130,7 +127,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const payload = authType === 'EMAIL_PASSWORD'
         ? { email, password, authType }
-        : { authId, authType, email };
+        : { authId, authType };
 
       const res = await server_base_api.post('/auth/login', payload);
       const userData = extractUserData(res.data.data);
@@ -158,7 +155,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.clear();
     removeTokenFromCookies();
     setUserInfo(INITIAL_AUTH_STATE);
-    router.push('/');
     if (session?.user?.id) {
       signOut();
     } else {

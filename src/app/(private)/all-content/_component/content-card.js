@@ -1,12 +1,13 @@
-import { Box, Card, Chip, Stack, Typography } from '@mui/material';
-import React from 'react';
+import { Avatar, Box, Card, Chip, Stack, Typography } from '@mui/material';
+import dayjs from 'dayjs';
 
 import { IconWithText } from '/src/components/utils/icon-text';
 
-import { AllContentRightPanel } from './all-content-right-panel';
+import { ManageContentRightPanel } from './manage-content-right-panel';
+import React from 'react';
 
-export const ContentCard = ({ content }) => {
-  const [openRightPanel, setOpenRightPanel] = React.useState(false);
+export const ContentCard = ({ content, fetchList }) => {
+  const [openRightPanel, setOpenRightPanel] = React.useState(null);
   return (
     <>
       <Card
@@ -14,12 +15,12 @@ export const ContentCard = ({ content }) => {
           border: '1px solid var(--mui-palette-divider)',
           borderRadius: '0',
         }}
-        onClick={() => setOpenRightPanel(true)}
+        onClick={() => setOpenRightPanel(content)}
       >
         <Box
           component="img"
-          src={content?.thumbnailImage ?? '/assets/image-placeholder.jpg'}
-          alt={content?.name}
+          src={content?.Image?.at(0) || '/assets/image-placeholder.jpg'}
+          alt={content?.Name}
           sx={{ width: '100%', height: '260px', objectFit: 'cover' }}
         />
         <Stack direction="column" justifyContent="space-between" gap={2} sx={{ p: 2 }}>
@@ -29,30 +30,42 @@ export const ContentCard = ({ content }) => {
               component="h4"
               sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'secondary.main' }}
             >
-              {content?.name}
+              {content?.Name}
             </Typography>
-            <Stack direction="row" gap={1} flexWrap="wrap">
-              {content?.stakeholders?.map((stakeholder) => (
-                <Chip key={stakeholder.Id} label={stakeholder.name} size="small" variant="outlined" />
-              ))}
+            <Stack direction="row" alignItems="center" gap={1}>
+              <Avatar
+                src={content?.ContentHQStakeholder?.at(0)?.Stakeholder?.StakeholderThumbnailImage?.at(0) || '/'}
+              />
+              <Box>
+                <Typography variant="subtitle2">{content?.ContentHQStakeholder?.at(0)?.Stakeholder?.Name}</Typography>
+                <Stack>
+                  <IconWithText icon="solar:calendar-linear" text={content?.MonthUploaded} />
+                </Stack>
+              </Box>
+            </Stack>
+            <Typography variant="body2">{content?.PostingQuality}</Typography>
+            <Stack direction="row" gap={1} sx={{ flexWrap: 'wrap' }}>
+              {content?.ByProductContentHQ &&
+                content?.ByProductContentHQ.map((product) => (
+                  <Chip key={product?.ByProduct?.Name} size="small" variant="soft" label={product?.ByProduct?.Name} />
+                ))}
             </Stack>
           </Stack>
           <Stack direction={'row'} gap={1}>
-            <IconWithText icon="hugeicons:instagram" text={content?.partnerIGTotalViews} />
-            <IconWithText icon="hugeicons:youtube" text={content?.ytPartnerTotalViews} />
-            <IconWithText icon="basil:pinterest-outline" text={content?.pinterestTotalViews} />
+            <IconWithText icon="hugeicons:instagram" text={content?.IGTotalViews} />
+            <IconWithText icon="hugeicons:youtube" text={content?.YTClubREVOTotalViews} />
+            <IconWithText icon="basil:pinterest-outline" text={content?.PinterestTotalViews} />
           </Stack>
         </Stack>
       </Card>
-
-      {openRightPanel && (
-        <AllContentRightPanel
-          onClose={() => setOpenRightPanel(false)}
-          open={openRightPanel}
-          id={content?.id}
-          view={'QUICK'}
-        />
-      )}
+      <ManageContentRightPanel
+        view={'QUICK'}
+        width="70%"
+        fetchList={fetchList}
+        open={openRightPanel ? true : false}
+        data={openRightPanel}
+        onClose={() => setOpenRightPanel(false)}
+      />
     </>
   );
 };

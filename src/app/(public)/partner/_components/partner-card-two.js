@@ -1,16 +1,16 @@
 'use client';
 
-import React from 'react';
-import { Box, Card, CardContent, Divider, Stack, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import { useState } from 'react';
+import { Avatar, Box, Card, CardContent, Divider, Grid, Stack, Typography } from '@mui/material';
 
 import { IconWithoutText } from '/src/components/utils/icon-text';
 
 import { PartnerRightPanel } from './partner-right-panel';
 import { formatCompactNumber } from '/src/utils/helper';
 
-export const PartnerCardTwo = ({ content }) => {
-  const [openRightPanel, setOpenRightPanel] = React.useState(false);
+export const PartnerCardTwo = ({ partner, fetchList }) => {
+  const [selectedItemId, setSelectedItemId] = useState(null);
+  const [openPartnerPanel, setOpenPartnerPanel] = useState(null);
 
   return (
     <Box>
@@ -22,17 +22,28 @@ export const PartnerCardTwo = ({ content }) => {
           boxShadow: 2,
           borderRadius: 0,
           bgcolor: 'background.paper',
-          width: { xs: '100%', sm: '350px', md: '380px', lg: '408px' },
+          width: { xs: '400px', sm: '370px', md: '330px', lg: '234px' },
           maxWidth: '100%',
         }}
-        onClick={() => setOpenRightPanel(true)}
+        onClick={() => {
+          setSelectedItemId(partner.id);
+          setOpenPartnerPanel(true);
+        }}
       >
-        <Box
-          component="img"
-          src={content?.thumbnailImage ?? '/assets/image-placeholder.jpg'}
-          alt={content?.name}
-          sx={{ width: '100%', height: '260px', objectFit: 'cover' }}
-        />
+        {/* Large Profile Image */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Avatar
+            src={partner.ProfileImage[0] ? partner.ProfileImage[0] : '/src/assets/images/placeholder.png'}
+            variant="square"
+            p={0}
+            sx={{
+              width: '100%',
+              height: 200,
+              p: 0,
+              borderRadius: 0,
+            }}
+          />
+        </Box>
 
         <CardContent sx={{ pt: 2, textAlign: 'center' }}>
           <Typography
@@ -46,30 +57,30 @@ export const PartnerCardTwo = ({ content }) => {
               whiteSpace: 'nowrap',
             }}
           >
-            {content?.name ? content?.name : '....'}
+            {partner.Name ? partner.Name : '....'}
           </Typography>
           <Typography variant="body1" color="text.secondary" gutterBottom>
-            {content?.occupation ? content?.occupation : 'N/A'}
+            {partner?.Occupation ? partner.Occupation : 'N/A'}
           </Typography>
 
           <Stack direction="row" spacing={2} sx={{ my: 1.5, height: '32px' }} justifyContent="center">
-            {content?.email && (
-              <IconWithoutText icon="mage:email" value={content?.email} type={'email'} sx={{ color: '#4267B2' }} />
+            {partner?.Email && (
+              <IconWithoutText icon="mage:email" value={partner?.Email} type={'email'} sx={{ color: '#4267B2' }} />
             )}
-            {content?.instagram && (
-              <IconWithoutText icon="mdi:instagram" value={content?.instagram} type={'url'} sx={{ color: '#E1306C' }} />
+            {partner?.Instagram && (
+              <IconWithoutText icon="mdi:instagram" value={partner?.Instagram} type={'url'} sx={{ color: '#E1306C' }} />
             )}
-            {/* {content?.Facebook && (
-              <IconWithoutText icon="mdi:facebook" value={content?.Facebook} type={'url'} sx={{ color: '#4267B2' }} />
+            {/* {partner?.Facebook && (
+              <IconWithoutText icon="mdi:facebook" value={partner?.Facebook} type={'url'} sx={{ color: '#4267B2' }} />
             )} */}
-            {content?.youtube && (
-              <IconWithoutText icon="mdi:youtube" value={content?.youtube} type={'url'} sx={{ color: '#FF0000' }} />
+            {partner?.Youtube && (
+              <IconWithoutText icon="mdi:youtube" value={partner?.Youtube} type={'url'} sx={{ color: '#FF0000' }} />
             )}
-            {content?.linkedin && (
-              <IconWithoutText icon="mdi:linkedin" value={content?.linkedin} type={'url'} sx={{ color: '#0077B5' }} />
+            {partner?.LinkedIn && (
+              <IconWithoutText icon="mdi:linkedin" value={partner?.LinkedIn} type={'url'} sx={{ color: '#0077B5' }} />
             )}
-            {content?.website && (
-              <IconWithoutText icon="mdi:web" value={content?.website} type={'url'} sx={{ color: '#4267B2' }} />
+            {partner?.Website && (
+              <IconWithoutText icon="mdi:web" value={partner?.Website} type={'url'} sx={{ color: '#4267B2' }} />
             )}
           </Stack>
 
@@ -81,7 +92,7 @@ export const PartnerCardTwo = ({ content }) => {
                 Audience
               </Typography>
               <Typography variant="h6">
-                {content?.totalAudience ? formatCompactNumber(content.totalAudience) : '-'}
+                {partner?.TotalAudience ? formatCompactNumber(partner.TotalAudience) : '-'}
               </Typography>
             </Grid>
             <Grid item xs={6}>
@@ -89,7 +100,7 @@ export const PartnerCardTwo = ({ content }) => {
                 Credits
               </Typography>
               <Typography variant="h6">
-                {content?.remainingCredits ? formatCompactNumber(content.remainingCredits) : '-'}
+                {partner?.RemainingCredits ? formatCompactNumber(partner.RemainingCredits) : '-'}
               </Typography>
             </Grid>
           </Grid>
@@ -100,7 +111,7 @@ export const PartnerCardTwo = ({ content }) => {
                 Rate (h)
               </Typography>
               <Typography variant="h6">
-                {content?.hourlyRate ? '$' + formatCompactNumber(content.hourlyRate) : '-'}
+                {partner?.HourlyRate ? '$' + formatCompactNumber(partner.HourlyRate) : '-'}
               </Typography>
             </Grid>
             <Grid item xs={6}>
@@ -108,19 +119,23 @@ export const PartnerCardTwo = ({ content }) => {
                 Views
               </Typography>
               <Typography variant="h6">
-                {content?.partnerPostViews ? formatCompactNumber(content.partnerPostViews) : '-'}
+                {partner?.PartnerPostViews ? formatCompactNumber(partner.PartnerPostViews) : '-'}
               </Typography>
             </Grid>
           </Grid>
         </CardContent>
       </Card>
 
-      {openRightPanel && (
+      {/* Right Panel Component */}
+      {openPartnerPanel && (
         <PartnerRightPanel
-          onClose={() => setOpenRightPanel(false)}
-          open={openRightPanel}
-          view={'QUICK'}
-          id={content?.id}
+          onClose={() => {
+            setSelectedItemId(null);
+            setOpenPartnerPanel(false);
+          }}
+          fetchList={fetchList}
+          id={selectedItemId}
+          open={openPartnerPanel}
         />
       )}
     </Box>

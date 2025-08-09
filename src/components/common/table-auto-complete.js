@@ -1,27 +1,26 @@
 'use client'
 
 import { Autocomplete, Chip, TextField } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
-import { getContentListAsync } from '/src/app/(private)/all-content/_lib/all-content.actions';
-import { getCampaignListAsync } from '/src/app/(public)/campaign/_lib/campaign.actions';
 import { getPartnerListAsync } from '/src/app/(public)/partner/_lib/partner.actions';
 import { getPortfolioCategoryListAsync } from '/src/app/(public)/portfolio/_lib/portfolio.actions';
-import { getProductionListAsync } from '../../app/(public)/production/_lib/production.actions';
-import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
-import { useDebounce } from '/src/hooks/use-debounce';
+import { getCampaignListAsync } from '/src/app/(public)/campaign/_lib/campaign.actions';
+import { useEffect, useState } from 'react';
 import {
-    getCaseStudyListAsync,
-    getCityListAsync,
     getCountryListAsync,
-    getProductListAsync,
-    getRetailPartnerListAsync,
-    getStakeHolderListAsync,
     getStateListAsync,
+    getCaseStudyListAsync,
+    getStakeHolderListAsync,
+    getRetailPartnerListAsync,
+    getProductListAsync,
+    getCityListAsync,
     getTagListAsync
 } from '/src/lib/common.actions';
+import { useDebounce } from '/src/hooks/use-debounce';
+import { getSpaceListAsync } from '/src/app/(public)/spaces/_lib/space.actions';
+import { getContentList } from '/src/app/(private)/all-content/_lib/all-content.actions';
 
 const fetchOptions = async (key, searchValue) => {
-    const getNameMapping = (item) => ({ value: item.id, label: item.name });
+    const getNameMapping = (item) => ({ value: item.id, label: item.Name });
 
     const configMap = {
         partnerHQ: {
@@ -29,14 +28,6 @@ const fetchOptions = async (key, searchValue) => {
             filterable: true
         },
         partners: {
-            fetch: getPartnerListAsync,
-            filterable: true
-        },
-        proposedPartners: {
-            fetch: getPartnerListAsync,
-            filterable: true
-        },
-        contributedPartners: {
             fetch: getPartnerListAsync,
             filterable: true
         },
@@ -57,7 +48,7 @@ const fetchOptions = async (key, searchValue) => {
             fetch: getCountryListAsync
         },
         contentHQ: {
-            fetch: getContentListAsync,
+            fetch: getContentList,
             filterable: true
         },
         states: {
@@ -72,12 +63,6 @@ const fetchOptions = async (key, searchValue) => {
         retailPartners: {
             fetch: getRetailPartnerListAsync
         },
-        retailPartners2: {
-            fetch: getRetailPartnerListAsync
-        },
-        retailPartners3: {
-            fetch: getRetailPartnerListAsync
-        },
         product: {
             fetch: getProductListAsync
         },
@@ -88,10 +73,9 @@ const fetchOptions = async (key, searchValue) => {
             fetch: getSpaceListAsync,
             filterable: true
         },
-        productionHQ: {
-            fetch: getProductionListAsync,
-            filterable: true
-        }
+        // proposedPartners: {
+        //     fetch: getProposedPartnerListAsync
+        // }
     };
 
     const config = configMap[key];
@@ -128,41 +112,16 @@ export default function TableAutoComplete({
     const debounceValue = useDebounce(searchValue, 500);
 
     useEffect(() => {
-        let active = true;
-
         const getOptions = async () => {
             setLoading(true);
             const options = await fetchOptions(filterKey, debounceValue);
-
-            if (active) {
-                setOptions(options);
-                setLoading(false);
-            }
-        };
-
+            setOptions(options);
+            setLoading(false);
+        }
         if (operators.includes(operator)) {
             getOptions();
         }
-
-        return () => {
-            active = false;
-        };
     }, [filterKey, operator, debounceValue]);
-
-    const normalizedValue = useMemo(() => {
-        if (!value) return multiple ? [] : null;
-        const ids = Array.isArray(value) ? value : [value];
-        const matched = options.filter((opt) => ids.includes(opt.value));
-        return multiple ? matched : matched[0] || null;
-    }, [value, options, multiple]);
-
-    const handleChange = (event, newValue) => {
-        const result = multiple
-            ? newValue.map((opt) => opt.value)
-            : newValue?.value ?? null;
-        onChange?.(event, result);
-        setSearchValue('');
-    };
 
     return (
         <Autocomplete
@@ -175,14 +134,9 @@ export default function TableAutoComplete({
                 typeof option === 'string' ? option : option?.label || ''
             }
             isOptionEqualToValue={(option, value) => option.value === value.value}
-            value={normalizedValue}
-            onChange={handleChange}
-            inputValue={searchValue}
-            onInputChange={(event, newValue, reason) => {
-                if (reason === 'input') {
-                    setSearchValue(newValue);
-                }
-            }}
+            value={multiple ? (value || []) : value || null}
+            onChange={(event, newValue) => onChange?.(event, newValue)}
+            onInputChange={(event, newValue) => setSearchValue(newValue)}
             renderTags={(value, getTagProps) =>
                 value.map((option, index) => {
                     const tagProps = getTagProps({ index });

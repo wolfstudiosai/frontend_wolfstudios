@@ -1,7 +1,7 @@
-import { Box, Button, IconButton, Popover, Typography } from '@mui/material';
 import React from 'react';
+import { Delete } from '@mui/icons-material';
+import { Box, Button, IconButton, Popover, Typography } from '@mui/material';
 import { Iconify } from '../iconify/iconify';
-import { Icon } from '@iconify/react';
 
 export const DeleteConfirmationPopover = ({ onDelete, title, disabled = false }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -22,7 +22,7 @@ export const DeleteConfirmationPopover = ({ onDelete, title, disabled = false })
   return (
     <>
       <IconButton size="small" color="error" onClick={handleOpen} title="Delete" disabled={disabled} >
-        <Icon icon="ic:outline-delete" width={24} height={24} color="error" />
+        <Iconify icon="ic:outline-delete" width={24} height={24} color="error" />
       </IconButton>
       <Popover
         anchorEl={anchorEl}

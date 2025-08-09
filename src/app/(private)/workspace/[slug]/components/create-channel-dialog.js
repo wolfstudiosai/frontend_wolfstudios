@@ -31,7 +31,7 @@ export const CreateChannelDialog = (props) => {
           errors.type = formConstants.required;
         }
 
-        if (values.type === 'PRIVATE' && values.members?.length === 0) {
+        if (values.type === 'PRIVATE' && values.members.length === 0) {
           errors.members = formConstants.required;
         }
 

@@ -10,7 +10,6 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import { useTheme } from '@mui/material/styles';
 import { toast } from 'sonner';
-import { mutate } from 'swr';
 
 import TableFilterBuilder from '/src/components/common/table-filter-builder';
 import TableSortBuilder from '/src/components/common/table-sort-builder';
@@ -26,71 +25,78 @@ import {
   createCampaignAsync,
   createCampaignView,
   deleteCampaignBulkAsync,
+  getCampaignListAsync,
+  getCampaignViews,
+  getSingleCampaignView,
   updateCampaignAsync,
   updateCampaignView,
 } from '../_lib/campaign.actions';
-import { campaignPayload } from '../_lib/campaign.payload';
 import { defaultCampaign } from '../_lib/campaign.types';
-import { useCampaignColumns } from '../hook/use-campaign-columns';
-import { useRecordCampaignList } from '../hook/use-record-campaign-list';
-import { useCampaignViews } from '../hook/use-campaign-views';
-import { useCampaignView } from '../hook/use-campaign-view';
+import { getCampaignColumns } from '../_utils/get-campaign-columns';
 
 export const CampaignListView = () => {
   const theme = useTheme();
   const router = useRouter();
   const anchorEl = React.useRef(null);
-  const hasInitialized = React.useRef(false);
-  const singleImageField = ['thumbnailImage'];
   const [anchorElHide, setAnchorElHide] = React.useState(null);
-  const [isImageUploadOpen, setIsImageUploadOpen] = React.useState(false);
-  const [mediaToShow, setMediaToShow] = React.useState({
-    type: '',
-    url: '',
-  });
-  const [imageUpdatedField, setImageUpdatedField] = React.useState(null);
+  const [imageToShow, setImageToShow] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const searchParams = useSearchParams();
   const viewId = searchParams.get('view');
 
-  const handleUploadModalOpen = React.useCallback((data, field, uploadOpen) => {
+  const handleUploadModalOpen = (data) => {
     setOpen(true);
-    setImageUpdatedField(field);
     setUpdatedRow(data);
-    setIsImageUploadOpen(uploadOpen);
-  }, []);
-
+  };
 
   const handleClosePopover = () => {
     anchorEl.current = null;
-    setMediaToShow({
-      type: '',
-      url: '',
-    });
+    setImageToShow(null);
   };
 
   const handleClosePopoverHide = () => {
     setAnchorElHide(null);
-    setNewVisibleColumns(visibleColumns);
     setSearchColumns(allColumns);
   };
+
+  async function fetchList(props) {
+    const filter = props ? props : filters;
+    const paginationData = props ? props.pagination : pagination;
+    try {
+      setLoading(true);
+      const response = await getCampaignListAsync(
+        {
+          page: paginationData.pageNo,
+          rowsPerPage: paginationData.limit,
+        },
+        filter,
+        gate
+      );
+
+      if (response?.success) {
+        if (viewId) {
+          setMetaData(response.meta);
+        } else {
+          setRecords(response.data.map((row) => defaultCampaign(row)) || []);
+          setTotalRecords(response.totalRecords);
+          setMetaData(response.meta);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   // handle upload image
   const handleUploadImage = async (images) => {
     try {
-      const finalData = await campaignPayload(updatedRow, false);
-
-      if (singleImageField.includes(imageUpdatedField)) {
-        finalData[imageUpdatedField] = images[0];
-      } else {
-        finalData[imageUpdatedField] = [...finalData[imageUpdatedField], ...images];
-      }
-
-      const response = await updateCampaignAsync(updatedRow, finalData);
-
+      const response = await updateCampaignAsync(updatedRow.id, { ...updatedRow, campaignImage: images });
       if (response.success) {
+        toast.success('Campaign updated successfully');
         setOpen(false);
-        refreshAllCampaignView();
+        fetchList();
       }
     } catch (error) {
       console.log(error);
@@ -98,6 +104,7 @@ export const CampaignListView = () => {
   };
 
   const [records, setRecords] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -106,6 +113,7 @@ export const CampaignListView = () => {
   // View
   const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([]);
+  const [viewsLoading, setViewsLoading] = React.useState(false);
   const [selectedViewId, setSelectedViewId] = React.useState(null);
   const [selectedViewData, setSelectedViewData] = React.useState(null);
 
@@ -118,14 +126,32 @@ export const CampaignListView = () => {
   // table columns
   const [allColumns, setAllColumns] = React.useState([]);
   const [visibleColumns, setVisibleColumns] = React.useState([]);
-  const [newVisibleColumns, setNewVisibleColumns] = React.useState(visibleColumns);
   const [searchColumns, setSearchColumns] = React.useState([]);
-  const columns = useCampaignColumns(anchorEl, visibleColumns, setMediaToShow, handleUploadModalOpen);
+  const columns = React.useMemo(
+    () => getCampaignColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns),
+    [visibleColumns]
+  );
 
-  // swr
-  const { viewsData, isViewsLoading } = useCampaignViews();
-  const { campaignMeta, columns: campaignColumns, isCampaignsLoading } = useRecordCampaignList();
-  const { singleView, isSingleViewLoading, refreshViewData, refreshAllCampaignView } = useCampaignView(selectedViewId, pagination);
+  // get single view
+  const getSingleView = async (viewId, paginationProps) => {
+    try {
+      setLoading(true);
+      const viewPagination = paginationProps ? paginationProps : pagination;
+      const res = await getSingleCampaignView(viewId, viewPagination);
+      if (res.success) {
+        setRecords(res.data.data.map((row) => defaultCampaign(row)) || []);
+        setTotalRecords(res.data.count);
+        setSelectedViewData(res.data);
+        setFilters(res.data.meta?.filters || []);
+        setGate(res.data.meta?.gate || 'and');
+        setSort(res.data.meta?.sort || []);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   async function updateView(props) {
     const viewFilters = props.filters ? props.filters : filters;
@@ -147,19 +173,21 @@ export const CampaignListView = () => {
 
   // ******************************data grid handler starts*********************
 
-  // handle pagination model change
-  const handlePaginationModelChange = React.useCallback((newPaginationModel) => {
+  const handlePaginationModelChange = (newPaginationModel) => {
     const { page, pageSize } = newPaginationModel;
     const newPagination = { pageNo: page + 1, limit: pageSize };
     setPagination(newPagination);
-  }, []);
+    if (viewId) {
+      getSingleView(viewId, newPagination);
+    } else {
+      fetchList({ pagination: newPagination });
+    }
+  };
 
-
-  // process row update
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
+
     const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
-    let res;
 
     if (isTemporaryId) {
       if (!newRow.name) {
@@ -167,78 +195,114 @@ export const CampaignListView = () => {
         return newRow;
       }
 
-      res = await createCampaignAsync(newRow);
+      if (!newRow.status) {
+        toast.error('Please select campaign status');
+        return newRow;
+      }
+
+      if (!newRow.notes) {
+        toast.error('Please enter notes');
+        return newRow;
+      }
+
+      if (!newRow.description) {
+        toast.error('Please enter description');
+        return newRow;
+      }
+
+      if (!newRow.client) {
+        toast.error('Please enter client');
+        return newRow;
+      }
+
+      if (!newRow.guidelines) {
+        toast.error('Please enter guidelines');
+        return newRow;
+      }
+
+      await createCampaignAsync(newRow);
+      fetchList();
     } else {
-      const finalData = await campaignPayload(newRow);
+      const finalData = {
+        ...newRow,
+      };
 
-      res = await updateCampaignAsync(oldRow, finalData);
+      const imageFields = ['campaignImage'];
+      for (const field of imageFields) {
+        const value = newRow[field];
+        if (value instanceof File) {
+          const res = await imageUploader(
+            [
+              {
+                file: value,
+                fileName: value.name.split('.').slice(0, -1).join('.'),
+                fileType: value.type.split('/')[1],
+              },
+            ],
+            'campaigns'
+          );
+
+          finalData[field] = res;
+        } else if (typeof value === 'string') {
+          finalData[field] = [value];
+        }
+      }
+
+      const arrayFields = ['contentHQ', 'stakeholders', 'retailPartners', 'proposedPartners', 'spaces'];
+      for (const field of arrayFields) {
+        const value = newRow[field];
+        if (value.length > 0) {
+          const arrOfStr = value.map((item) => item.value);
+          finalData[field] = arrOfStr;
+        }
+      }
+
+      if (finalData.goals && typeof finalData.goals === 'string') {
+        finalData.goals = finalData.goals.split(',').map((item) => item.trim());
+      }
+      await updateCampaignAsync(newRow.id, finalData);
+      fetchList();
     }
 
-    if (res.success) {
-      refreshAllCampaignView();
-      return newRow;
-    }
+    return newRow;
+  }, []);
 
-    return oldRow;
-  }, [viewId]);
-
-  // handle row selection
-  const handleRowSelection = React.useCallback((newRowSelectionModel) => {
+  const handleRowSelection = (newRowSelectionModel) => {
     const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
     setSelectedRows(selectedData);
-  }, [records]);
+  };
 
-
-  // handle process row update error
   const handleProcessRowUpdateError = React.useCallback((error) => {
     console.log({ children: error.message, severity: 'error' });
   }, []);
 
   // ******************************data grid handler ends*********************
 
-  // handle add new item
   const handleAddNewItem = () => {
     const tempId = `temp_${Date.now()}`;
     const newRecord = { ...defaultCampaign(), id: tempId };
     setRecords([newRecord, ...records]);
   };
 
-  // handle row delete
-  const handleDelete = async () => refreshAllCampaignView();
+  const handleDelete = async () => {
+    fetchList();
+  };
 
   // Column handler
   // handle column change
   const handleColumnChange = async (e, col) => {
-    let columns = [...newVisibleColumns];
+    let newVisibleColumns = [];
     if (e.target.checked) {
-      const exists = columns.some((c) => c.columnName === col.columnName);
+      // Add column
+      const exists = visibleColumns.some((c) => c.columnName === col.columnName);
       if (exists) return;
-      columns = [...columns, col];
+      newVisibleColumns = [...visibleColumns, col];
     } else {
-      columns = columns.filter((c) => c.columnName !== col.columnName);
+      // Remove column
+      newVisibleColumns = visibleColumns.filter((c) => c.columnName !== col.columnName);
     }
-    setNewVisibleColumns(columns);
-  };
+    setVisibleColumns(newVisibleColumns);
 
-  // handle Column Search
-  const handleColumnSearch = (e) => {
-    const searchValue = e.target.value.toLowerCase();
-    setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
-  };
-
-  // handle show all columns
-  const showAllColumns = async () => {
-    const newVisibleColumns = allColumns;
-    setNewVisibleColumns(newVisibleColumns);
-  };
-
-  // handle hide all columns
-  const hideAllColumns = async () => {
-    const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
-    setNewVisibleColumns(newVisibleColumns);
-  };
-
-  const handleSaveColumns = async () => {
     if (viewId) {
       const data = {
         columns: newVisibleColumns.map((c) => c.columnName),
@@ -254,8 +318,61 @@ export const CampaignListView = () => {
 
       const res = await updateCampaignView(viewId, data);
       if (res.success) {
-        refreshViewData();
-        handleClosePopoverHide();
+        getSingleView(viewId);
+      }
+    }
+  };
+
+  // handle Column Search
+  const handleColumnSearch = (e) => {
+    const searchValue = e.target.value.toLowerCase();
+    setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
+  };
+
+  const showAllColumns = async () => {
+    const newVisibleColumns = allColumns;
+    setVisibleColumns(newVisibleColumns);
+
+    if (viewId) {
+      const data = {
+        columns: allColumns.map((c) => c.columnName),
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
+        gate,
+        filters,
+        sort,
+        groups: selectedViewData?.meta?.groups,
+      };
+
+      const res = await updateCampaignView(viewId, data);
+      if (res.success) {
+        getSingleView(viewId);
+      }
+    }
+  };
+
+  const hideAllColumns = async () => {
+    const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
+    setVisibleColumns(newVisibleColumns);
+
+    if (viewId) {
+      const data = {
+        columns: ['id'],
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
+        gate,
+        filters,
+        sort,
+        groups: selectedViewData?.meta?.groups,
+      };
+
+      const res = await updateCampaignView(viewId, data);
+      if (res.success) {
+        getSingleView(viewId);
       }
     }
   };
@@ -264,52 +381,71 @@ export const CampaignListView = () => {
   // handle filter apply
   const handleFilterApply = async () => {
     if (viewId) {
-      const res = await updateView({ filters });
-      if (res.success) {
-        refreshViewData();
-      }
+      updateView({ filters }).then(() => {
+        getSingleView(viewId);
+      });
+    } else {
+      fetchList(filters);
     }
   };
 
   // handle remove filter condition
-  const handleRemoveFilterCondition = async (index) => {
+  const handleRemoveFilterCondition = (index) => {
     const newFilters = filters.filter((_, i) => i !== index);
     setFilters(newFilters);
     if (viewId) {
-      const res = await updateView({ filters: newFilters });
-      if (res.success) {
-        refreshViewData();
-      }
+      updateView({ filters: newFilters }).then(() => {
+        getSingleView(viewId);
+      });
+    } else {
+      fetchList(newFilters);
     }
   };
 
   // handle clear filters
-  const handleClearFilters = async () => {
+  const handleClearFilters = () => {
     setFilters([]);
     if (viewId) {
-      const res = await updateView({ filters: [] });
-      if (res.success) {
-        refreshViewData();
-      }
+      updateView({ filters: [] }).then(() => {
+        getSingleView(viewId);
+      });
+    } else {
+      fetchList([]);
     }
   };
 
   // initialize
   const initialize = async () => {
     try {
+      setLoading(true);
+      const campaigns = await getCampaignListAsync({
+        page: 1,
+        rowsPerPage: 1,
+      });
+
       // set meta data
-      setMetaData(campaignMeta);
-      setAllColumns(campaignColumns);
+      setMetaData(campaigns.meta);
+      const columns = campaigns.meta.map((obj) => {
+        const key = Object.keys(obj)[0];
+        return {
+          label: obj[key].label,
+          columnName: key,
+          type: obj[key].type,
+          depth: obj[key].depth,
+        };
+      });
+
+      setAllColumns(columns);
 
       // set views
+      const viewsData = await getCampaignViews();
       setViews(viewsData.data);
-
-      if (viewsData.success && viewsData?.data?.length > 0) {
-        const firstView = viewsData?.data?.find((view) => view?.id === viewId) || viewsData?.data[0];
-        setSelectedViewId(firstView?.id);
-
+      if (viewsData.success) {
+        const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
+        await getSingleView(firstView?.id, pagination);
         if (!viewId) {
-          router.push(`?tab=campaign&view=${firstView?.id}`);
+          const currentTab = searchParams.get('tab') || 'campaign';
+          router.push(`?tab=${currentTab}&view=${firstView?.id}`);
         }
       } else {
         const payload = {
@@ -319,7 +455,7 @@ export const CampaignListView = () => {
           gate: 'and',
           isPublic: true,
           filters: [],
-          columns: campaignColumns.map((col) => col.columnName),
+          columns: columns.map((col) => col.columnName),
           sort: [],
           groups: [],
         };
@@ -339,58 +475,41 @@ export const CampaignListView = () => {
               createdAt: createViewData?.createdAt,
             },
           ]);
-
-          mutate('campaignViews');
-          setSelectedViewId(res.data.id);
-          router.replace(`?tab=campaign&view=${res.data.id}`);
+          await getSingleView(res.data.id, pagination);
+          router.push(`?tab=campaign&view=${res.data.id}`);
         }
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  // update visible columns
+  React.useEffect(() => {
+    if (allColumns.length === 0) return;
+    if (viewId && selectedViewData) {
+      const selectedColumnNames = selectedViewData.meta?.columns || [];
+      const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
+      setVisibleColumns(filtered);
+    } else {
+      setVisibleColumns(allColumns);
+    }
+    setSearchColumns(allColumns);
+  }, [viewId, selectedViewData, allColumns]);
 
   // Watch for URL viewId change
   React.useEffect(() => {
     setPagination((prev) => ({ ...prev, pageNo: 1 }));
-    if (searchParams.get('tab') !== 'campaign') return;
-    if (campaignMeta && viewsData && !hasInitialized.current) {
-      hasInitialized.current = true;
-      initialize();
-    }
-  }, [campaignMeta, viewsData, searchParams]);
-
-  // store isView sidebar is open or not on local storage
-  const handleOpenViewSidebar = () => {
-    setShowView(!showView);
-    localStorage.setItem('isRecordViewOpen', !showView);
-  };
+    initialize();
+  }, []);
 
   React.useEffect(() => {
-    if (singleView) {
-      setRecords(singleView?.data?.data?.map((row) => defaultCampaign(row)) || []);
-      setTotalRecords(singleView?.data?.count);
-      setSelectedViewData(singleView?.data);
-      setFilters(singleView?.data?.meta?.filters || []);
-      setGate(singleView?.data?.meta?.gate || 'and');
-      setSort(singleView?.data?.meta?.sort || []);
-
-      const selectedColumnNames = singleView?.data?.meta?.columns || [];
-      const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
-
-      setVisibleColumns(filtered);
-      setNewVisibleColumns(filtered);
-      setSearchColumns(allColumns);
+    if (selectedViewId) {
+      getSingleView(selectedViewId, pagination);
     }
-  }, [singleView]);
-
-  React.useEffect(() => {
-    const isViewOpen = localStorage.getItem('isRecordViewOpen');
-    if (isViewOpen === 'true') {
-      setShowView(true);
-    }
-  }, [showView]);
-
+  }, [selectedViewId]);
 
   return (
     <PageContainer>
@@ -401,7 +520,7 @@ export const CampaignListView = () => {
               startIcon={<TableReorderIcon />}
               variant="text"
               size="small"
-              onClick={handleOpenViewSidebar}
+              onClick={() => setShowView((prev) => !prev)}
               sx={{ bgcolor: showView ? alpha(theme.palette.primary.main, 0.08) : 'background.paper' }}
             >
               View
@@ -425,7 +544,7 @@ export const CampaignListView = () => {
               handleFilterApply={handleFilterApply}
               handleRemoveFilterCondition={handleRemoveFilterCondition}
               handleClearFilters={handleClearFilters}
-              loading={isSingleViewLoading || isCampaignsLoading || isViewsLoading}
+              loading={loading}
             />
 
             <Button startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />} variant="text" size="small">
@@ -437,7 +556,8 @@ export const CampaignListView = () => {
               sort={sort}
               setSort={setSort}
               updateView={updateView}
-              refreshViewData={refreshViewData}
+              fetchList={fetchList}
+              getSingleView={getSingleView}
             />
           </Box>
 
@@ -446,7 +566,7 @@ export const CampaignListView = () => {
               <AddIcon />
             </IconButton>
             <Box>
-              <RefreshPlugin onClick={() => mutate(['campaignView', viewId, pagination])} />
+              <RefreshPlugin onClick={fetchList} />
             </Box>
             <DeleteConfirmationPasswordPopover
               title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
@@ -472,7 +592,7 @@ export const CampaignListView = () => {
             columns={allColumns}
             selectedView={selectedViewData}
             setSelectedViewId={setSelectedViewId}
-            viewsLoading={isViewsLoading}
+            viewsLoading={viewsLoading}
           />
 
           {/* Table */}
@@ -482,7 +602,7 @@ export const CampaignListView = () => {
               rows={records}
               processRowUpdate={processRowUpdate}
               onProcessRowUpdateError={handleProcessRowUpdateError}
-              loading={isSingleViewLoading || isCampaignsLoading || isViewsLoading}
+              loading={loading}
               rowCount={totalRecords}
               checkboxSelection
               pageSizeOptions={[20, 30, 50]}
@@ -512,11 +632,8 @@ export const CampaignListView = () => {
         disablePortal
       >
         <Box sx={{ p: 1.5 }}>
-          {mediaToShow?.type === 'image' && (
-            <Image src={mediaToShow?.url} alt="Preview" width={300} height={300} style={{ borderRadius: 8 }} />
-          )}
-          {mediaToShow?.type === 'video' && (
-            <video src={mediaToShow?.url} controls style={{ height: 300, width: 300, borderRadius: 8 }} />
+          {imageToShow && (
+            <Image src={imageToShow} alt="Preview" width={300} height={300} style={{ borderRadius: 8 }} />
           )}
         </Box>
       </Popover>
@@ -571,7 +688,7 @@ export const CampaignListView = () => {
                     key={col.field}
                     control={
                       <Checkbox
-                        checked={newVisibleColumns.some((c) => c.columnName === col.columnName)}
+                        checked={visibleColumns.some((c) => c.columnName === col.columnName)}
                         onChange={(e) => handleColumnChange(e, col)}
                       />
                     }
@@ -581,16 +698,11 @@ export const CampaignListView = () => {
               })}
           </FormGroup>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Button variant="outlined" size="small" onClick={hideAllColumns}>
-                Hide all
-              </Button>
-              <Button variant="outlined" size="small" onClick={showAllColumns}>
-                Show all
-              </Button>
-            </Box>
-            <Button variant="contained" size="small" onClick={handleSaveColumns}>
-              Save
+            <Button variant="outlined" size="small" onClick={hideAllColumns}>
+              Hide all
+            </Button>
+            <Button variant="contained" size="small" onClick={showAllColumns}>
+              Show all
             </Button>
           </Box>
         </Box>
@@ -598,13 +710,12 @@ export const CampaignListView = () => {
 
       {/* Image upload dialog */}
       <MediaUploader
-        multiple={!singleImageField.includes(imageUpdatedField)}
         open={open}
         onClose={() => setOpen(false)}
         onSave={(paths) => handleUploadImage([...paths])}
-        hideVideoUploader={isImageUploadOpen}
-        hideImageUploader={!isImageUploadOpen}
-        folderName="campaigns"
+        multiple
+        hideVideoUploader={true}
+        folderName="partner-HQ"
       />
     </PageContainer>
   );

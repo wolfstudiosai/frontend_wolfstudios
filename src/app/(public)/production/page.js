@@ -1,5 +1,3 @@
-import { Box } from '@mui/material';
-
 import { config } from '/src/config';
 
 import { ProductionView } from './production-view';

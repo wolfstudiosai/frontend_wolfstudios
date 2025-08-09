@@ -3,6 +3,8 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Logo } from '/src/components/core/logo';
+import { publicRoutes } from '/src/router';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -15,10 +17,8 @@ import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
 import { paths } from '/src/paths';
 import { isNavItemActive } from '/src/lib/is-nav-item-active';
-import { Logo } from '/src/components/core/logo';
 
 import { NavSearch } from './nav-search';
-import { publicRoutes } from '/src/router';
 
 // todo: remove navItems later
 const navItems = [

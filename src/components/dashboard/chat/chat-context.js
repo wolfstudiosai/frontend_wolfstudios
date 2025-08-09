@@ -160,6 +160,8 @@ useEffect(() => {
     'postgres_changes',
     { event: 'INSERT', schema: 'public', table: 'messages' },
     async (payload) => {
+      console.log('Message Payload received:', payload.new);
+
       // Fetch user data
       const { data: user, error } = await supabase
         .from('users')
@@ -209,6 +211,8 @@ useEffect(() => {
         updatedMessages.set(payload.new.thread_id, updatedThreadMessages);
         return updatedMessages;
       });
+
+      console.log('Message updated:', payload.new);
     }
   )
   .subscribe();
@@ -218,7 +222,9 @@ useEffect(() => {
     .on(
       'postgres_changes',
       { event: 'INSERT', schema: 'public', table: 'threads' },
-      async (payload) => {  
+      async (payload) => {
+        console.log("Thread Payload received:", payload);
+  
         // Fetch participants for the new thread
         const { data: participants, error } = await supabase
           .from('thread_participants')
@@ -311,6 +317,7 @@ const handleReplyMessage = useCallback(
         updatedMessages.set(response.data.data.thread_id, [...threadMessages, response.data.data]);
         return updatedMessages;
       });
+      console.log('Message replied:', response.data);
     } catch (err) {
       console.error('Error replying to message:', err);
       throw err;
@@ -334,6 +341,7 @@ const handleDeleteMessage = useCallback(
         }
         return updatedMessages;
       });
+      console.log('Message deleted');
     } catch (err) {
       console.error('Error deleting message:', err);
       throw err;

@@ -1,204 +1,175 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
-import { Icon } from '@iconify/react';
 import { Button, FormControlLabel, IconButton, Switch } from '@mui/material';
 import { useFormik } from 'formik';
 
-import useAuth from '/src/hooks/useAuth';
-import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { DrawerContainer } from '/src/components/drawer/drawer';
-import PageLoader from '/src/components/loaders/PageLoader';
-
-import { createProductionAsync, deleteSingleProductionAsync, updateProductionAsync } from '../_lib/production.actions';
+import {
+    createProductionAsync,
+    deleteProductionAsync,
+    getProductionAsync,
+    updateProductionAsync
+} from '../_lib/production.action';
 import { defaultProduction } from '../_lib/production.types';
-import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
 import { ProductionForm } from './production-form';
 import { ProductionQuickView } from './production-quickview';
 import { formConstants } from '/src/app/constants/form-constants';
-import { useGetProductionData } from '/src/services/production/useProductionData';
-import { useProductionList } from '/src/services/production/useProductionList';
+import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
+import { DrawerContainer } from '/src/components/drawer/drawer';
+import { Iconify } from '/src/components/iconify/iconify';
+import useAuth from '/src/hooks/useAuth';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import PageLoader from '/src/components/loaders/PageLoader';
 
-export const ProductionRightPanel = ({ onClose, id, open, view = 'QUICK' }) => {
-  const { mutate: mutateProductionList } = useProductionList();
-  const { data: productionData, isLoading, mutate } = useGetProductionData(id);
-  const { isLogin } = useAuth();
-  const [isFeatured, setIsFeatured] = React.useState(false);
-  const [panelView, setPanelView] = React.useState(view);
-  const [loading, setLoading] = React.useState(false);
-  const router = useRouter();
+export const ProductionRightPanel = ({ open, onClose, fetchList, id, view = 'QUICK' }) => {
+    const isUpdate = id ? true : false;
+    const { isLogin } = useAuth();
+    const router = useRouter();
 
-  // ***************** Formik *******************************
-  const { values, errors, handleChange, handleSubmit, setValues, setFieldValue, resetForm } = useFormik({
-    initialValues: defaultProduction(),
-    validate: (values) => {
-      const errors = {};
-      if (!values.name) {
-        errors.name = formConstants.required;
-      }
+    const [sidebarView, setSidebarView] = React.useState(view)
+    const [file, setFile] = React.useState(null);
+    const [loading, setLoading] = React.useState(false);
+    const [data, setData] = React.useState(null);
 
-      return errors;
-    },
-    onSubmit: async (values) => {
-      setLoading(true);
-      try {
-        const finalData = convertArrayObjIntoArrOfStr(values, [
-          'spaces',
-          'stakeholders',
-          'contributingPartners',
-          'campaigns',
-          'products',
-          'proposedSpaces',
-          'proposedPartners',
-        ]);
+    const { values, errors, handleChange, handleSubmit, setValues, setFieldValue, isValid, resetForm } =
+        useFormik({
+            initialValues: defaultProduction(),
+            validate: (values) => {
+                const errors = {};
+                if (!values.name) {
+                    errors.name = formConstants.required;
+                }
 
-        const { id, ...rest } = finalData;
-        const createPayload = {
-          ...rest,
-          thumbnailImage: Array.isArray(finalData.thumbnailImage)
-            ? finalData.thumbnailImage[0]
-            : finalData.thumbnailImage,
-          videoLink: Array.isArray(finalData.videoLink) ? finalData.videoLink[0] || null : finalData.videoLink || null,
-        };
+                return errors;
+            },
+            onSubmit: async (values) => {
+                console.log(values, 'values');
 
-        const res = id
-          ? await updateProductionAsync(productionData?.data, {
-            ...finalData,
-            thumbnailImage: Array.isArray(finalData.thumbnailImage)
-              ? finalData.thumbnailImage[0] || ''
-              : finalData.thumbnailImage || '',
-            videoLink: Array.isArray(finalData.videoLink)
-              ? finalData.videoLink[0] || null
-              : finalData.videoLink || null,
-          })
-          : await createProductionAsync(createPayload);
-        if (res.success) {
-          onClose?.();
-          resetForm();
-          mutate();
-          mutateProductionList();
-        } else {
-          console.error('Operation failed:', res.message);
+                setLoading(true);
+                try {
+                    const res = isUpdate ? await updateProductionAsync(file, values) : await createProductionAsync(file, values);
+                    if (res.success) {
+                        onClose?.();
+                        fetchList?.();
+                        resetForm();
+                        router.refresh()
+                    } else {
+                        console.error('Operation failed:', res.message);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                } finally {
+                    setLoading(false);
+                }
+            },
+        });
+
+
+    const handleDelete = async (password) => {
+        const response = await deleteProductionAsync([id]);
+        if (response.success) {
+            fetchList?.();
+            onClose?.();
+            router.refresh()
         }
-      } catch (error) {
-        console.error('Error:', error);
-      } finally {
-        setLoading(false);
-      }
-    },
-  });
+    };
 
-  React.useEffect(() => {
-    if (productionData?.data) {
-      setIsFeatured(productionData?.data?.isFeatured);
-      setValues(defaultProduction(productionData?.data));
-    }
-  }, [productionData]);
+    const handleDeleteThumbnail = () => {
+        setFieldValue('thumbnail', '');
+        setFile(null);
+    };
 
-  const handleDelete = async () => {
-    mutateProductionList();
-    onClose?.();
-  };
+    const handleFeatured = async (featured) => {
+        setFieldValue('featured', featured);
+        await updateProductionAsync(file, { ...values, featured });
+        fetchList?.();
+    };
 
-  const handleFeatured = async (featured) => {
-    try {
-      setIsFeatured(featured);
-      const finalData = convertArrayObjIntoArrOfStr(values, [
-        'spaces',
-        'stakeholders',
-        'contributingPartners',
-        'campaigns',
-        'products',
-        'proposedSpaces',
-        'proposedPartners',
-      ]);
-
-      await updateProductionAsync(productionData?.data, {
-        ...finalData,
-        isFeatured: featured,
-        thumbnailImage: Array.isArray(finalData.thumbnailImage)
-          ? finalData.thumbnailImage[0] || ''
-          : finalData.thumbnailImage || '',
-      });
-      mutate();
-      mutateProductionList();
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
-  // *****************Action Buttons*******************************
-  const actionButtons = (
-    <>
-      {isLogin && (
+    // *****************Action Buttons*******************************
+    const actionButtons = (
         <>
-          {panelView !== 'QUICK' && (
-            <Button size="small" variant="contained" color="primary" disabled={loading} onClick={() => handleSubmit()}>
-              Save
-            </Button>
-          )}
-          {panelView === 'EDIT' && id ? (
-            <IconButton onClick={() => setPanelView('QUICK')} title="Edit">
-              <Icon icon="solar:eye-broken" />
-            </IconButton>
-          ) : (
-            id && (
-              <IconButton onClick={() => setPanelView('EDIT')} title="Quick">
-                <Icon icon="mynaui:edit-one" />
-              </IconButton>
-            )
-          )}
+            {isLogin && (
+                <>
+                    {sidebarView === 'QUICK' ? (
+                        <>
+                            <IconButton onClick={() => setSidebarView('EDIT')} title="Edit">
+                                <Iconify icon="mynaui:edit-one" />
+                            </IconButton>
+                        </>
+                    ) : (
+                        data !== null && (
+                            <IconButton onClick={() => setSidebarView('QUICK')} title="Quick View">
+                                <Iconify icon="lets-icons:view-light" />
+                            </IconButton>
+                        )
+                    )}
 
-          {panelView !== 'ADD' && (
-            <IconButton
-              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              onClick={() => router.push(`/production/${id}`)}
-              title="Analytics"
-            >
-              <Icon icon="mdi:analytics" />
-            </IconButton>
-          )}
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                size="small"
+                                checked={values?.featured}
+                                onChange={() => handleFeatured(!values?.featured)}
+                                color="primary"
+                            />
+                        }
+                        label="Featured"
+                    />
 
-          {panelView !== 'ADD' && (
-            <DeleteConfirmationPasswordPopover
-              id={id}
-              title="Are you sure you want to delete?"
-              deleteFn={deleteSingleProductionAsync}
-              passwordInput
-              onDelete={handleDelete}
-              disabled={!id}
-            />
-          )}
+                    <DeleteConfirmationPasswordPopover title={`Want to delete ${data?.project_title}?`} onDelete={(password) => handleDelete(password)} passwordInput />
 
-          {panelView !== 'ADD' && (
-            <FormControlLabel
-              control={
-                <Switch
-                  size="small"
-                  checked={isFeatured}
-                  onChange={(e) => handleFeatured(e.target.checked)}
-                  color="primary"
-                />
-              }
-              label="Featured"
-            />
-          )}
+                    {sidebarView === 'EDIT' && (
+                        <Button size="small" variant="contained" color="primary" disabled={loading} onClick={handleSubmit}>
+                            Save
+                        </Button>
+                    )}
+                </>
+            )}
         </>
-      )}
-    </>
-  );
+    );
 
 
-  return (
-    <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
-      {panelView === 'QUICK' ? (
-        <PageLoader loading={isLoading}>
-          <ProductionQuickView data={productionData?.data} />
-        </PageLoader>
-      ) : (
-        <ProductionForm formikProps={{ values, setValues, errors, handleChange, setFieldValue }} />
-      )}
-    </DrawerContainer>
-  );
-};
+    // *****************Use Effects*******************************
+
+    React.useEffect(() => {
+        const getSingleData = async () => {
+            setLoading(true);
+            try {
+                console.log(id, 'id');
+                const response = await getProductionAsync(id);
+                console.log(response.data, 'response.data');
+                if (response.data) {
+                    setData(response.data);
+                    setValues(defaultProduction(response.data));
+                }
+            } catch (error) {
+                console.error('Error fetching production data:', error);
+                return null;
+            } finally {
+                setLoading(false);
+            }
+        };
+        getSingleData()
+    }, [id]);
+
+    return (
+        <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons}>
+            <PageLoader loading={loading}>
+                {sidebarView === 'QUICK' ? (
+                    <ProductionQuickView data={data} />
+                ) : (
+                    <ProductionForm
+                        values={values}
+                        errors={errors}
+                        onSubmit={handleSubmit}
+                        onChange={handleChange}
+                        onSetFile={setFile}
+                        onDeleteThumbnail={handleDeleteThumbnail}
+                        setFieldValue={setFieldValue}
+                    />
+                )}
+            </PageLoader>
+        </DrawerContainer>
+    );
+}

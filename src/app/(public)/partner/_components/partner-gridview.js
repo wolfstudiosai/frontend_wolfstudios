@@ -7,28 +7,22 @@ import Grid from '@mui/material/Grid2';
 import { Iconify } from '/src/components/iconify/iconify';
 import { PageLoader } from '/src/components/loaders/PageLoader';
 
+import { PartnerCard } from './partner-card';
 import { PartnerCardTwo } from './partner-card-two';
 
-export const PartnerGridView = ({ data, loading }) => {
+export const PartnerGridView = ({ data, colums, fetchList, loading, handlePagination }) => {
   return (
-    <PageLoader loading={loading} error={null}>
-      <Grid container spacing={0.5}>
-        {data?.map((content, index) => (
-          <Grid
-            key={content.id}
-            size={{
-              xs: 12,
-              sm: 6,
-              md: 4,
-              lg: 3,
-              xl: 2,
-            }}
-          >
-            <PartnerCardTwo content={content} />
-          </Grid>
-        ))}
-      </Grid>
-    </PageLoader>
+    <Box>
+      <PageLoader loading={loading} error={null}>
+        <Grid container spacing={0.5}>
+          {data?.map((partner, index) => (
+            <Grid key={index} item xs={12} sm={4} md={4} lg={2} xl={2}>
+              <PartnerCardTwo partner={partner} fetchList={fetchList} />
+            </Grid>
+          ))}
+        </Grid>
+      </PageLoader>
+    </Box>
   );
 };
 

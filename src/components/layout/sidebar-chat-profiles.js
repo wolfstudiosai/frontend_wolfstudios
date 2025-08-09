@@ -17,7 +17,6 @@ import { useContext, useEffect, useState } from "react";
 import useAuth from '/src/hooks/useAuth';
 import { chatApi } from "../../utils/api";
 import { ChatContext } from "/src/contexts/chat";
-import Divider from "@mui/material/Divider";
 
 export default function SidebarChatProfiles({ isOpen }) {
     const { userInfo, isLogin } = useAuth();
@@ -59,7 +58,7 @@ export default function SidebarChatProfiles({ isOpen }) {
                         display: 'flex',
                         flexDirection: 'column',
                         gap: isOpen ? 0 : 0.5,
-                        minHeight: 180,
+                        minHeight: 200,
                         overflowY: 'auto',
                         scrollbarWidth: 'none',
                         '&::-webkit-scrollbar': {
@@ -159,8 +158,6 @@ export default function SidebarChatProfiles({ isOpen }) {
             ) : (
                 <></>
             )}
-
-            {directChannels?.length > 0 && <Divider />}
         </>
     )
 }

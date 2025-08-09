@@ -26,78 +26,82 @@ import {
   createPortfolioAsync,
   createPortfolioView,
   deletePortfolioAsync,
+  getPortfolioListAsync,
+  getPortfolioViews,
+  getSinglePortfolioView,
   updatePortfolioAsync,
   updatePortfolioView,
 } from '../_lib/portfolio.actions';
 import { defaultPortfolio } from '../_lib/portfolio.types';
-import { usePortfolioColumns } from '../hooks/use-portfolio-columns';
-import { convertArrayObjIntoArrOfStr } from '../../../../utils/convertRelationArrays';
-import { useRecordPortfolioList } from '../hooks/use-record-portfolio-list';
-import { usePortfolioView } from '../hooks/use-portfolio-view';
-import { usePortfolioViews } from '../hooks/use-portfolio-views';
-import { mutate } from 'swr';
+import { getPortfolioColumns } from '../_utils/get-portfolio-columns';
 
 export const PortfolioListView = () => {
   const theme = useTheme();
   const router = useRouter();
   const anchorEl = React.useRef(null);
-  const hasInitialized = React.useRef(false);
   const [anchorElHide, setAnchorElHide] = React.useState(null);
-  const [mediaToShow, setMediaToShow] = React.useState({
-    type: '',
-    url: '',
-  });
-  const singleImageField = ['thumbnailImage', 'videoLink'];
-  const [imageUpdatedField, setImageUpdatedField] = React.useState(null);
-  const [isImageUploadOpen, setIsImageUploadOpen] = React.useState(false);
+  const [imageToShow, setImageToShow] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const searchParams = useSearchParams();
   const viewId = searchParams.get('view');
 
-  const handleUploadModalOpen = React.useCallback((data, field, uploadOpen) => {
+  const handleUploadModalOpen = (data) => {
     setOpen(true);
     setUpdatedRow(data);
-    setImageUpdatedField(field);
-    setIsImageUploadOpen(uploadOpen);
-  }, []);
+  };
 
   const handleClosePopover = () => {
     anchorEl.current = null;
-    setMediaToShow({
-      type: '',
-      url: '',
-    });
+    setImageToShow(null);
   };
 
   const handleClosePopoverHide = () => {
     setAnchorElHide(null);
     setSearchColumns(allColumns);
-    setNewVisibleColumns(visibleColumns);
   };
+
+  async function fetchList(props) {
+    try {
+      setLoading(true);
+
+      const filter = props ? props : filters;
+      const paginationData = props ? props.pagination : pagination;
+
+      const response = await getPortfolioListAsync(
+        {
+          page: paginationData.pageNo,
+          rowsPerPage: paginationData.limit,
+        },
+        filter,
+        gate
+      );
+
+      if (response.success) {
+        if (viewId) {
+          setMetaData(response.meta);
+        } else {
+          setRecords(response.data.map((row) => defaultPortfolio(row)) || []);
+          setTotalRecords(response.totalRecords);
+          setMetaData(response.meta);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const handleUploadImage = async (images) => {
     try {
-      const finalData = convertArrayObjIntoArrOfStr(updatedRow, [
-        'portfolioCategories',
-        'states',
-        'countries',
-        'partnerHQ',
-        'caseStudies',
-      ]);
-
-      if (singleImageField.includes(imageUpdatedField)) {
-        finalData[imageUpdatedField] = images[0];
-      } else {
-        finalData[imageUpdatedField] = [...finalData[imageUpdatedField], ...images];
-        for (const key of singleImageField) {
-          finalData[key] = Array.isArray(finalData[key]) ? finalData[key][0] : finalData[key];
-        }
-      }
-
-      const response = await updatePortfolioAsync(updatedRow, finalData);
+      const response = await updatePortfolioAsync(updatedRow.id, {
+        ...updatedRow,
+        campaignImage: [...updatedRow.campaignImage, ...images],
+      });
       if (response.success) {
+        toast.success('Portfolio updated successfully');
+        fetchList();
         setOpen(false);
-        refreshAllPortfolioView();
       }
     } catch (error) {
       console.error(error);
@@ -106,6 +110,7 @@ export const PortfolioListView = () => {
 
   // table columns
   const [records, setRecords] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 20 });
   const [totalRecords, setTotalRecords] = React.useState(0);
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -114,6 +119,7 @@ export const PortfolioListView = () => {
   // View
   const [showView, setShowView] = React.useState(false);
   const [views, setViews] = React.useState([]);
+  const [viewsLoading, setViewsLoading] = React.useState(false);
   const [selectedViewId, setSelectedViewId] = React.useState(null);
   const [selectedViewData, setSelectedViewData] = React.useState(null);
 
@@ -126,14 +132,34 @@ export const PortfolioListView = () => {
   // table columns
   const [allColumns, setAllColumns] = React.useState([]);
   const [visibleColumns, setVisibleColumns] = React.useState([]);
-  const [newVisibleColumns, setNewVisibleColumns] = React.useState(visibleColumns);
   const [searchColumns, setSearchColumns] = React.useState([]);
-  const columns = usePortfolioColumns(anchorEl, visibleColumns, setMediaToShow, handleUploadModalOpen);
+  const columns = React.useMemo(
+    () => getPortfolioColumns(anchorEl, setImageToShow, handleUploadModalOpen, visibleColumns),
+    [visibleColumns]
+  );
 
-  // SWR
-  const { portfolioMeta, columns: portfolioColumns, isPortfoliosLoading } = useRecordPortfolioList();
-  const { singleView, isSingleViewLoading, refreshViewData, refreshAllPortfolioView } = usePortfolioView(selectedViewId, pagination);
-  const { viewsData, isViewsLoading } = usePortfolioViews();
+  // get single view
+  const getSingleView = async (viewId, paginationProps) => {
+    try {
+      setLoading(true);
+      const viewPagination = paginationProps ? paginationProps : pagination;
+      const res = await getSinglePortfolioView(viewId, viewPagination);
+      if (res.success) {
+        setRecords(res.data.data.map((row) => defaultPortfolio(row)) || []);
+        setTotalRecords(res.data.count);
+        setSelectedViewData(res.data);
+        setFilters(res.data.meta?.filters || []);
+        setGate(res.data.meta?.gate || 'and');
+        setSort(res.data.meta?.sort || []);
+      }
+
+      return res?.data?.data;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   async function updateView(props) {
     const viewFilters = props.filters ? props.filters : filters;
@@ -150,24 +176,26 @@ export const PortfolioListView = () => {
       sort: viewSort,
       groups: selectedViewData?.meta?.groups,
     };
-    const result = await updatePortfolioView(viewId, data);
-    return result;
+    await updatePortfolioView(viewId, data);
   }
 
   // ******************************data grid handler starts*********************
 
-  const handlePaginationModelChange = React.useCallback((newPaginationModel) => {
+  const handlePaginationModelChange = (newPaginationModel) => {
     const { page, pageSize } = newPaginationModel;
     const newPagination = { pageNo: page + 1, limit: pageSize };
     setPagination(newPagination);
-  }, []);
+    if (viewId) {
+      getSingleView(viewId, newPagination);
+    } else {
+      fetchList({ pagination: newPagination });
+    }
+  };
 
   const processRowUpdate = React.useCallback(async (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
 
     const isTemporaryId = typeof newRow.id === 'string' && newRow.id.startsWith('temp_');
-
-    let res;
 
     if (isTemporaryId) {
       if (!newRow.projectTitle) {
@@ -175,42 +203,43 @@ export const PortfolioListView = () => {
         return newRow;
       }
 
-      res = await createPortfolioAsync(newRow);
-    } else {
-      const finalData = convertArrayObjIntoArrOfStr(newRow, [
-        'portfolioCategories',
-        'states',
-        'countries',
-        'partnerHQ',
-        'caseStudies',
-      ]);
-
-      for (const key of singleImageField) {
-        finalData[key] = Array.isArray(finalData[key]) ? finalData[key][0] : finalData[key];
+      if (!newRow.videoLink) {
+        toast.error('Please enter video link');
+        return newRow;
       }
 
-      res = await updatePortfolioAsync(oldRow, finalData);
+      if (!newRow.date) {
+        toast.error('Please enter date');
+        return newRow;
+      }
+
+      await createPortfolioAsync(newRow);
+      fetchList();
+    } else {
+      const arrayFields = ['portfolioCategories', 'states', 'countries', 'partnerHQ'];
+      for (const field of arrayFields) {
+        const value = newRow[field];
+        if (value.length > 0) {
+          const arrOfStr = value.map((item) => item.label);
+          newRow[field] = arrOfStr;
+        }
+      }
+      await updatePortfolioAsync(newRow.id, newRow);
+      fetchList();
     }
 
-    if (res.success) {
-      refreshAllPortfolioView();
-      return newRow;
-    }
+    return newRow;
+  }, []);
 
-    return oldRow;
-  }, [viewId]);
-
-  // handle row selection
-  const handleRowSelection = React.useCallback((newRowSelectionModel) => {
+  const handleRowSelection = (newRowSelectionModel) => {
     const selectedData = newRowSelectionModel.map((id) => records.find((row) => row.id === id));
     setSelectedRows(selectedData);
-  }, [records]);
+  };
 
-
-  // handle process row update error
   const handleProcessRowUpdateError = React.useCallback((error) => {
-    console.log({ children: error.message, severity: 'error' });
+    console.error({ children: error.message, severity: 'error' });
   }, []);
+
   // ******************************data grid handler ends*********************
 
   const handleAddNewItem = () => {
@@ -219,41 +248,24 @@ export const PortfolioListView = () => {
     setRecords([newRecord, ...records]);
   };
 
-  const handleDelete = async () => refreshAllPortfolioView();
+  const handleDelete = async () => {
+    fetchList();
+  };
 
-  // Column handler
   // handle column change
   const handleColumnChange = async (e, col) => {
-    let columns = [...newVisibleColumns];
+    let newVisibleColumns = [];
     if (e.target.checked) {
-      const exists = columns.some((c) => c.columnName === col.columnName);
+      // Add column
+      const exists = visibleColumns.some((c) => c.columnName === col.columnName);
       if (exists) return;
-      columns = [...columns, col];
+      newVisibleColumns = [...visibleColumns, col];
     } else {
-      columns = columns.filter((c) => c.columnName !== col.columnName);
+      // Remove column
+      newVisibleColumns = visibleColumns.filter((c) => c.columnName !== col.columnName);
     }
-    setNewVisibleColumns(columns);
-  };
+    setVisibleColumns(newVisibleColumns);
 
-  // handle Column Search
-  const handleColumnSearch = (e) => {
-    const searchValue = e.target.value.toLowerCase();
-    setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
-  };
-
-  // handle show all columns
-  const showAllColumns = async () => {
-    const newVisibleColumns = allColumns;
-    setNewVisibleColumns(newVisibleColumns);
-  };
-
-  // handle hide all columns
-  const hideAllColumns = async () => {
-    const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
-    setNewVisibleColumns(newVisibleColumns);
-  };
-
-  const handleSaveColumns = async () => {
     if (viewId) {
       const data = {
         columns: newVisibleColumns.map((c) => c.columnName),
@@ -269,8 +281,61 @@ export const PortfolioListView = () => {
 
       const res = await updatePortfolioView(viewId, data);
       if (res.success) {
-        refreshViewData();
-        handleClosePopoverHide();
+        getSingleView(viewId);
+      }
+    }
+  };
+
+  // handle Column Search
+  const handleColumnSearch = (e) => {
+    const searchValue = e.target.value.toLowerCase();
+    setSearchColumns(allColumns.filter((col) => col.label.toLowerCase().includes(searchValue)));
+  };
+
+  const showAllColumns = async () => {
+    const newVisibleColumns = allColumns;
+    setVisibleColumns(newVisibleColumns);
+
+    if (viewId) {
+      const data = {
+        columns: allColumns.map((c) => c.columnName),
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
+        gate,
+        filters,
+        sort,
+        groups: selectedViewData?.meta?.groups,
+      };
+
+      const res = await updatePortfolioView(viewId, data);
+      if (res.success) {
+        getSingleView(viewId);
+      }
+    }
+  };
+
+  const hideAllColumns = async () => {
+    const newVisibleColumns = visibleColumns.filter((col) => col.columnName === 'id');
+    setVisibleColumns(newVisibleColumns);
+
+    if (viewId) {
+      const data = {
+        columns: ['id'],
+        label: selectedViewData?.meta?.label,
+        description: selectedViewData?.meta?.description,
+        table: selectedViewData?.meta?.table,
+        isPublic: selectedViewData?.meta?.isPublic,
+        gate,
+        filters,
+        sort,
+        groups: selectedViewData?.meta?.groups,
+      };
+
+      const res = await updatePortfolioView(viewId, data);
+      if (res.success) {
+        getSingleView(viewId);
       }
     }
   };
@@ -279,53 +344,69 @@ export const PortfolioListView = () => {
   // handle filter apply
   const handleFilterApply = async () => {
     if (viewId) {
-      const res = await updateView({ filters })
-      if (res.success) {
-        refreshViewData();
-      }
+      updateView({ filters }).then(() => {
+        getSingleView(viewId);
+      });
+    } else {
+      fetchList(filters);
     }
   };
 
   // handle remove filter condition
-  const handleRemoveFilterCondition = async (index) => {
+  const handleRemoveFilterCondition = (index) => {
     const newFilters = filters.filter((_, i) => i !== index);
     setFilters(newFilters);
     if (viewId) {
-      const res = await updateView({ filters: newFilters });
-      if (res.success) {
-        refreshViewData();
-      }
+      updateView({ filters: newFilters }).then(() => {
+        getSingleView(viewId);
+      });
+    } else {
+      fetchList(newFilters);
     }
   };
 
   // handle clear filters
-  const handleClearFilters = async () => {
+  const handleClearFilters = () => {
     setFilters([]);
     if (viewId) {
-      const res = await updateView({ filters: [] });
-      if (res.success) {
-        refreshViewData();
-      }
+      updateView({ filters: [] }).then(() => {
+        getSingleView(viewId);
+      });
+    } else {
+      fetchList([]);
     }
   };
 
   // initialize
   const initialize = async () => {
     try {
+      setLoading(true);
+      const portfolios = await getPortfolioListAsync({
+        page: 1,
+        rowsPerPage: 1,
+      });
+
       // set meta data
-      setMetaData(portfolioMeta);
-      setAllColumns(portfolioColumns);
+      setMetaData(portfolios.meta);
+      const columns = portfolios.meta.map((obj) => {
+        const key = Object.keys(obj)[0];
+        return {
+          label: obj[key].label,
+          columnName: key,
+          type: obj[key].type,
+          depth: obj[key].depth,
+        };
+      });
+
+      setAllColumns(columns);
 
       // set views
+      const viewsData = await getPortfolioViews();
       setViews(viewsData.data);
-
-      if (viewsData.success && viewsData?.data?.length > 0) {
+      if (viewsData.success) {
         const firstView = viewsData.data?.find((view) => view?.id === viewId) || viewsData.data[0];
-        setSelectedViewId(firstView?.id);
-
-        if (!viewId) {
-          router.push(`?tab=portfolio&view=${firstView?.id}`);
-        }
+        await getSingleView(firstView?.id, pagination);
+        router.push(`?tab=portfolio&view=${firstView?.id}`);
       } else {
         const payload = {
           label: 'Default View',
@@ -334,7 +415,7 @@ export const PortfolioListView = () => {
           gate: 'and',
           isPublic: true,
           filters: [],
-          columns: portfolioColumns.map((col) => col.columnName),
+          columns: columns.map((col) => col.columnName),
           sort: [],
           groups: [],
         };
@@ -354,58 +435,41 @@ export const PortfolioListView = () => {
               createdAt: createViewData?.createdAt,
             },
           ]);
-
-          mutate('portfolioViews');
-          setSelectedViewId(res.data.id);
-          router.replace(`?tab=portfolio&view=${res.data.id}`);
+          await getSingleView(res.data.id, pagination);
+          router.push(`?tab=portfolio&view=${res.data.id}`);
         }
       }
     } catch (error) {
       console.error(error);
     } finally {
+      setLoading(false);
     }
   };
+
+  // update visible columns
+  React.useEffect(() => {
+    if (allColumns.length === 0) return;
+    if (viewId && selectedViewData) {
+      const selectedColumnNames = selectedViewData.meta?.columns || [];
+      const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
+      setVisibleColumns(filtered);
+    } else {
+      setVisibleColumns(allColumns);
+    }
+    setSearchColumns(allColumns);
+  }, [viewId, selectedViewData, allColumns]);
 
   // Watch for URL viewId change
   React.useEffect(() => {
     setPagination((prev) => ({ ...prev, pageNo: 1 }));
-    if (searchParams.get('tab') !== 'portfolio') return;
-    if (portfolioMeta && viewsData && !hasInitialized.current) {
-      hasInitialized.current = true;
-      initialize();
-    }
-  }, [portfolioMeta, viewsData, searchParams]);
-
-  // store isView sidebar is open or not on local storage
-  const handleOpenViewSidebar = () => {
-    setShowView(!showView);
-    localStorage.setItem('isRecordViewOpen', !showView);
-  };
+    initialize();
+  }, []);
 
   React.useEffect(() => {
-    if (singleView) {
-      setRecords(singleView?.data?.data?.map((row) => defaultPortfolio(row)) || []);
-      setTotalRecords(singleView?.data?.count);
-      setSelectedViewData(singleView?.data);
-      setFilters(singleView?.data?.meta?.filters || []);
-      setGate(singleView?.data?.meta?.gate || 'and');
-      setSort(singleView?.data?.meta?.sort || []);
-
-      const selectedColumnNames = singleView?.data?.meta?.columns || [];
-      const filtered = allColumns.filter((col) => selectedColumnNames.includes(col.columnName));
-
-      setVisibleColumns(filtered);
-      setNewVisibleColumns(filtered);
-      setSearchColumns(allColumns);
+    if (selectedViewId) {
+      getSingleView(selectedViewId, pagination);
     }
-  }, [singleView]);
-
-  React.useEffect(() => {
-    const isViewOpen = localStorage.getItem('isRecordViewOpen');
-    if (isViewOpen === 'true') {
-      setShowView(true);
-    }
-  }, [showView]);
+  }, [selectedViewId]);
 
   return (
     <PageContainer>
@@ -440,7 +504,6 @@ export const PortfolioListView = () => {
               handleFilterApply={handleFilterApply}
               handleRemoveFilterCondition={handleRemoveFilterCondition}
               handleClearFilters={handleClearFilters}
-              loading={isSingleViewLoading || isPortfoliosLoading || isViewsLoading}
             />
 
             <Button startIcon={<Iconify icon="eva:grid-outline" width={16} height={16} />} variant="text" size="small">
@@ -451,7 +514,8 @@ export const PortfolioListView = () => {
               sort={sort}
               setSort={setSort}
               updateView={updateView}
-              refreshViewData={refreshViewData}
+              fetchList={fetchList}
+              getSingleView={getSingleView}
             />
           </Box>
 
@@ -460,7 +524,7 @@ export const PortfolioListView = () => {
               <AddIcon />
             </IconButton>
             <Box>
-              <RefreshPlugin onClick={() => mutate(['portfolioView', viewId, pagination])} />
+              <RefreshPlugin onClick={fetchList} />
             </Box>
             <DeleteConfirmationPasswordPopover
               title={`Are you sure you want to delete ${selectedRows.length} record(s)?`}
@@ -486,16 +550,15 @@ export const PortfolioListView = () => {
             columns={allColumns}
             selectedView={selectedViewData}
             setSelectedViewId={setSelectedViewId}
-            viewsLoading={isViewsLoading}
+            viewsLoading={viewsLoading}
           />
-
           <Box sx={{ overflowX: 'auto', height: '100%', width: '100%' }}>
             <EditableDataTable
               columns={columns}
               rows={records}
               processRowUpdate={processRowUpdate}
               onProcessRowUpdateError={handleProcessRowUpdateError}
-              loading={isSingleViewLoading || isPortfoliosLoading || isViewsLoading}
+              loading={loading}
               rowCount={totalRecords}
               checkboxSelection
               pagination
@@ -558,7 +621,7 @@ export const PortfolioListView = () => {
                     key={col.field}
                     control={
                       <Checkbox
-                        checked={newVisibleColumns.some((c) => c.columnName === col.columnName)}
+                        checked={visibleColumns.some((c) => c.columnName === col.columnName)}
                         onChange={(e) => handleColumnChange(e, col)}
                       />
                     }
@@ -568,16 +631,11 @@ export const PortfolioListView = () => {
               })}
           </FormGroup>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Button variant="outlined" size="small" onClick={hideAllColumns}>
-                Hide all
-              </Button>
-              <Button variant="outlined" size="small" onClick={showAllColumns}>
-                Show all
-              </Button>
-            </Box>
-            <Button variant="contained" size="small" onClick={handleSaveColumns}>
-              Save
+            <Button variant="outlined" size="small" onClick={hideAllColumns}>
+              Hide all
+            </Button>
+            <Button variant="contained" size="small" onClick={showAllColumns}>
+              Show all
             </Button>
           </Box>
         </Box>
@@ -601,24 +659,20 @@ export const PortfolioListView = () => {
         disablePortal
       >
         <Box sx={{ p: 1.5 }}>
-          {mediaToShow?.type === 'image' && (
-            <Image src={mediaToShow?.url} alt="Preview" width={300} height={300} style={{ borderRadius: 8, }} />
-          )}
-          {mediaToShow?.type === 'video' && (
-            <video src={mediaToShow?.url} controls style={{ height: 300, width: 300, borderRadius: 8 }} />
+          {imageToShow && (
+            <Image src={imageToShow} alt="Preview" width={300} height={300} style={{ borderRadius: 8 }} />
           )}
         </Box>
       </Popover>
 
       {/* Image upload dialog */}
       <MediaUploader
-        multiple={singleImageField.includes(imageUpdatedField) ? false : true}
         open={open}
         onClose={() => setOpen(false)}
         onSave={(paths) => handleUploadImage([...paths])}
-        hideVideoUploader={isImageUploadOpen}
-        hideImageUploader={!isImageUploadOpen}
-        folderName="portfolios"
+        multiple
+        hideVideoUploader={true}
+        folderName="partner-HQ"
       />
     </PageContainer>
   );

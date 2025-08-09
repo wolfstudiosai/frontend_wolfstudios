@@ -1,4 +1,3 @@
-import React, { useRef } from 'react';
 import {
   Box,
   Button,
@@ -14,9 +13,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import React from 'react';
+import { isVideoContent, pxToRem } from '/src/utils/helper';
 
 import { Iconify } from '../iconify/iconify';
-import { isVideoContent, pxToRem } from '/src/utils/helper';
 import { imageUploader } from '/src/utils/upload-file';
 
 export const MediaUploader = ({
@@ -26,23 +26,15 @@ export const MediaUploader = ({
   multiple = true,
   hideImageUploader = false,
   hideVideoUploader = false,
-  folderName = 'content-HQ',
+  folderName = "content-HQ"
 }) => {
-  const availableTabs = [
-    !hideImageUploader && { label: 'Add Image', type: 'image' },
-    !hideVideoUploader && { label: 'Add Video', type: 'video' },
-  ].filter(Boolean);
 
-  const fileInputRef = useRef(null);
-
-  const [tab, setTab] = React.useState(0);
+  const [tab, setTab] = React.useState(hideImageUploader ? 1 : 0);
   const [urls, setUrls] = React.useState([]);
   const [files, setFiles] = React.useState([]);
   const [uploading, setUploading] = React.useState(false);
   const [url, setUrl] = React.useState('');
   const [videoUrls, setVideoUrls] = React.useState([]);
-
-  const shouldInputFieldDisabled = !multiple && (files?.length > 0 || urls?.length > 0 || videoUrls?.length > 0);
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
@@ -90,8 +82,7 @@ export const MediaUploader = ({
         setUrls(urls.filter((url) => url !== item));
       }
     } else {
-      setFiles(files?.filter((file) => file?.name !== item?.name));
-      fileInputRef.current.value = null;
+      setFiles(files.filter((file) => file?.name !== item?.name));
     }
   };
 
@@ -99,25 +90,20 @@ export const MediaUploader = ({
     setUploading(true);
     try {
       let uploadedPaths = [];
-      if (files?.length > 0) {
+      if (files.length > 0) {
         const formData = new FormData();
-        files?.forEach((file) => {
+        files.forEach((file) => {
           formData.append('files', file);
         });
 
         // File upload in the server
         for (const file of files) {
           if (file instanceof File) {
-            const res = await imageUploader(
-              [
-                {
-                  file,
-                  fileName: file.name.split('.').slice(0, -1).join('.'),
-                  fileType: file.type.split('/')[1],
-                },
-              ],
-              folderName
-            );
+            const res = await imageUploader([{
+              file,
+              fileName: file.name.split('.').slice(0, -1).join('.'),
+              fileType: file.type.split('/')[1],
+            }], folderName);
 
             uploadedPaths = [...uploadedPaths, ...res];
           }
@@ -134,6 +120,9 @@ export const MediaUploader = ({
         // }
       }
       onSave([...uploadedPaths, ...urls, ...videoUrls]);
+      console.log(uploadedPaths, 'uploadded paths')
+      console.log(urls, 'urls')
+      console.log(videoUrls, 'videoUrls')
       handleClose();
       setUploading(false);
     } catch (err) {
@@ -157,25 +146,21 @@ export const MediaUploader = ({
     return new Promise((resolve) => setTimeout(() => resolve(URL.createObjectURL(file)), 1000));
   };
 
-  if (availableTabs?.length === 0) return null;
-
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       <DialogTitle>Media Uploader</DialogTitle>
       <DialogContent>
         <Tabs value={tab} onChange={handleTabChange} centered>
-          {availableTabs?.map((t, index) => (
-            <Tab key={index} label={t.label} />
-          ))}
+          {!hideImageUploader && <Tab label="Add Image" />}
+          {!hideVideoUploader && <Tab label="Add Video" />}
         </Tabs>
         <Box mt={2}>
-          {availableTabs[tab]?.type === 'image' && (
+          {tab === 0 && !hideImageUploader && (
             <>
               <Stack direction="row" gap={2}>
                 <Button
                   component="label"
                   variant="outlined"
-                  disabled={shouldInputFieldDisabled}
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -192,17 +177,9 @@ export const MediaUploader = ({
                     <Iconify icon="akar-icons:cloud-upload" width={24} height={24} />
                     <Typography>Upload Image</Typography>
                   </Stack>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    multiple={multiple}
-                    onChange={handleFileChange}
-                  />
+                  <input type="file" accept="image/*" hidden multiple={multiple} onChange={handleFileChange} />
                 </Button>
                 <TextField
-                  disabled={shouldInputFieldDisabled}
                   value={url || ''}
                   onChange={(e) => setUrl(e.target.value)}
                   onKeyDown={(e) => handleKeyDown(e)}
@@ -252,11 +229,10 @@ export const MediaUploader = ({
               </Stack>
             </>
           )}
-          {availableTabs[tab]?.type === 'video' && (
+          {tab === 1 && (
             <>
               <TextField
                 value={url || ''}
-                disabled={shouldInputFieldDisabled}
                 onChange={(e) => setUrl(e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e)}
                 InputProps={{

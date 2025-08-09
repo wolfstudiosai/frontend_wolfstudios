@@ -1,27 +1,39 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { SwiperSlide } from 'swiper/react';
 
 import { FadeIn } from '/src/components/animation/fade-in';
 import { Iconify } from '/src/components/iconify/iconify';
-import { SliderWrapper } from '/src/components/slider/slider-wrapper';
-
-import { useFeaturedPartnerList } from '../../../../services/partner/useFeaturedPartner';
+import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { PartnerRightPanel } from '../../partner/_components/partner-right-panel';
 
 export const PartnerSectionNew = () => {
-  const { data: partnersData, isLoading } = useFeaturedPartnerList();
-  const count = 12;
-  const shouldDisplaySecondRow = partnersData?.data?.length > count;
-  const firstRowData = partnersData?.data?.slice(0, count);
-  const secondRowData = partnersData?.data?.slice(count);
+  const [partners, setPartners] = useState([]);
+
   const router = useRouter();
 
-  if (isLoading) return;
+  const fetchPartners = async () => {
+    try {
+      const filters = [{ key: "isFeatured", type: "boolean", operator: "is", value: true }];
+      const response = await getPartnerListAsync({
+        page: 1,
+        rowsPerPage: 20,
+      }, filters, 'and');
+
+      if (response?.success) {
+        setPartners(response.data);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPartners();
+  }, []);
 
   return (
     <Grid container alignItems="center">
@@ -41,7 +53,7 @@ export const PartnerSectionNew = () => {
                 </Typography>
                 <Button
                   variant="text"
-                  onClick={() => router.push('/partner')}
+                  onClick={() => router.push('/portfolio')}
                   endIcon={<Iconify icon="material-symbols:arrow-right-alt-rounded" />}
                   sx={{
                     margin: 0,
@@ -67,108 +79,56 @@ export const PartnerSectionNew = () => {
           </FadeIn>
         </Stack>
       </Grid>
-
-      <Grid size={12}>
-        <Stack>
-          <SliderWrapper
-            loop={false}
-            breakpoints={{
-              0: {
-                slidesPerView: 1,
-                spaceBetween: 16,
-              },
-              768: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-              },
-              1024: {
-                slidesPerView: 3,
-                spaceBetween: 24,
-              },
-              1440: {
-                slidesPerView: 4,
-                spaceBetween: 28,
-              },
-            }}
-            sx={{
-              '& .swiper-wrapper': {
-                gap: '5px',
-              },
-              '& .swiper-slide': {
-                width: 'auto !important',
-                marginRight: '0 !important',
-                height: 'auto',
-              },
-            }}
-          >
-            {firstRowData?.length > 0 &&
-              firstRowData?.map((partner) => (
-                <SwiperSlide key={partner.id}>
-                  <FadeIn>
-                    <Box sx={{ height: { xs: '300px', md: '400px' }, width: '100%' }}>
-                      <Card card={partner} />
-                    </Box>
-                  </FadeIn>
-                </SwiperSlide>
-              ))}
-          </SliderWrapper>
-        </Stack>
+      <Grid md={12} xs={12}>
+        <StaticGridView partners={partners} />
       </Grid>
-      {shouldDisplaySecondRow && (
-        <Grid size={12} sx={{ mt: 0.5 }}>
-          <Stack>
-            <SliderWrapper
-              loop={false}
-              breakpoints={{
-                0: {
-                  slidesPerView: 1,
-                  spaceBetween: 16,
-                },
-                768: {
-                  slidesPerView: 2,
-                  spaceBetween: 20,
-                },
-                1024: {
-                  slidesPerView: 3,
-                  spaceBetween: 24,
-                },
-                1440: {
-                  slidesPerView: 4,
-                  spaceBetween: 28,
-                },
-              }}
-              sx={{
-                '& .swiper-wrapper': {
-                  gap: '5px',
-                },
-                '& .swiper-slide': {
-                  width: 'auto !important',
-                  marginRight: '0 !important',
-                  height: 'auto',
-                },
-              }}
-            >
-              {secondRowData.length > 0 &&
-                secondRowData.map((partner) => (
-                  <SwiperSlide key={partner.id}>
-                    <FadeIn>
-                      <Box sx={{ height: { xs: '300px', md: '400px' }, width: '100%' }}>
-                        <Card card={partner} />
-                      </Box>
-                    </FadeIn>
-                  </SwiperSlide>
-                ))}
-            </SliderWrapper>
-          </Stack>
-        </Grid>
-      )}
     </Grid>
   );
 };
 
-const Card = ({ card }) => {
-  const [openPartnerRightPanel, setOpenPartnerRightPanel] = useState(false);
+const StaticGridView = ({ partners }) => {
+  return (
+    <Box
+      sx={{
+        overflowX: 'auto',
+        whiteSpace: 'nowrap',
+        // py: 2,
+        '&::-webkit-scrollbar': { display: 'none' },
+      }}
+    >
+      <Box
+        sx={{
+          display: 'inline-flex',
+          gap: '0px',
+          width: 'auto',
+          minWidth: '100%',
+          alignItems: 'flex-start',
+          gap: { md: 0.5 },
+        }}
+      >
+        {partners.map((partner, index) => (
+          <Box
+            key={partner.id}
+            sx={{
+              display: 'inline-block',
+              minWidth: { xs: '300px', sm: '280px', md: '260px' },
+              width: { xs: '300px', sm: '280px', md: '260px' },
+              flexShrink: 0,
+            }}
+          >
+            <Stack spacing={0.5}>
+              <Card card={partner} fetchList={partners} />
+            </Stack>
+          </Box>
+        ))}
+      </Box>
+    </Box>
+  );
+};
 
+const Card = ({ card, fetchList }) => {
+  const [openPartnerRightPanel, setOpenPartnerRightPanel] = useState(null);
+  const [selectedItemId, setSelectedItemId] = useState(null);
   return (
     <>
       <Box
@@ -181,24 +141,50 @@ const Card = ({ card }) => {
           transition: 'transform 300ms ease',
           border: '1px solid var(--mui-palette-divider)',
         }}
-        onClick={() => setOpenPartnerRightPanel(true)}
+        onClick={() => {
+          setSelectedItemId(card.id)
+          setOpenPartnerRightPanel(true)
+        }}
       >
-        {/* Background Image */}
-        <Box
-          className="image"
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 0,
-            backgroundImage: `url("${encodeURI(card?.thumbnailImage)}")`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            transition: 'transform 300ms ease',
-          }}
-        />
+        {/* Background Image or Video */}
+        {card?.video ? (
+          <Box
+            component="video"
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+            autoPlay
+            loop
+            muted
+          >
+            <source src={card.video} type="video/mp4" />
+            Your browser does not support the video tag.
+          </Box>
+        ) : (
+          <Box
+            className="image"
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 0,
+              backgroundImage: `url(${card?.ProfileImage?.[0]})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              transition: 'transform 300ms ease',
+            }}
+          />
+        )}
 
         {/* Gradient Overlay */}
         <Box
@@ -235,7 +221,7 @@ const Card = ({ card }) => {
               marginBottom: '7px',
             }}
           >
-            {card?.name?.split(' ').length > 4 ? card?.name?.split(' ').slice(0, 4).join(' ') + '...' : card?.name}
+            {card?.Name?.split(' ').length > 4 ? card?.Name?.split(' ').slice(0, 4).join(' ') + '...' : card?.Name}
           </Typography>
 
           {/* Thin Line */}
@@ -263,7 +249,28 @@ const Card = ({ card }) => {
                 marginRight: 'auto',
               }}
             >
-              {card.states?.map((state) => state?.name).join(', ')}
+              {card.ByStatesPartnerHQ?.map((state) => state?.ByStates?.Name).join(', ')}
+            </Typography>
+            <Typography
+              sx={{
+                color: 'rgba(255, 255, 255, 0.8)',
+                fontSize: { xs: '0.675rem', md: '0.9rem' },
+                fontFamily: 'Crimson Text, serif',
+                lineHeight: 1.2,
+                marginRight: '10px',
+              }}
+            >
+              {card.subtext2}
+            </Typography>
+            <Typography
+              sx={{
+                color: 'rgba(255, 255, 255, 0.8)',
+                fontSize: { xs: '0.675rem', md: '0.9rem' },
+                fontFamily: 'Crimson Text, serif',
+                lineHeight: 1.2,
+              }}
+            >
+              {card.subtext2}
             </Typography>
           </Stack>
 
@@ -277,19 +284,42 @@ const Card = ({ card }) => {
                 marginRight: 'auto',
               }}
             >
-              {card.countries?.map((country) => country?.name).join(', ')}
+              {card.ByCityPartnerHQ?.map((country) => country?.ByCity?.Name).join(', ')}
+            </Typography>
+            <Typography
+              sx={{
+                color: 'rgba(255, 255, 255, 0.8)',
+                fontSize: { xs: '0.675rem', md: '0.9rem' },
+                fontFamily: 'Crimson Text, serif',
+                lineHeight: 1.2,
+                marginRight: '10px',
+              }}
+            >
+              {card.subtext2}
+            </Typography>
+            <Typography
+              sx={{
+                color: 'rgba(255, 255, 255, 0.8)',
+                fontSize: { xs: '0.675rem', md: '0.9rem' },
+                fontFamily: 'Crimson Text, serif',
+                lineHeight: 1.2,
+              }}
+            >
+              {card.subtext2}
             </Typography>
           </Stack>
           {/* Add new text elements here */}
         </Box>
       </Box>
-
       {openPartnerRightPanel && (
         <PartnerRightPanel
-          view="QUICK"
+          onClose={() => {
+            setSelectedItemId(null)
+            setOpenPartnerRightPanel(false)
+          }}
+          fetchList={fetchList}
+          id={selectedItemId}
           open={openPartnerRightPanel}
-          id={card?.id}
-          onClose={() => setOpenPartnerRightPanel(false)}
         />
       )}
     </>

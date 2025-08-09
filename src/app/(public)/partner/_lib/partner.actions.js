@@ -1,8 +1,7 @@
 import { toast } from 'sonner';
 
 import { api } from '/src/utils/api';
-import { getDirtyFields } from '/src/utils/get-dirty-fields';
-import { buildQueryParams, validateFilters } from '/src/utils/helper';
+import { validateFilters, buildQueryParams } from '/src/utils/helper';
 
 export const getPartnerListAsync = async (queryParams, filters, gate) => {
   try {
@@ -38,7 +37,8 @@ export const getPartnerAsync = async (id) => {
 
 export const createPartnerAsync = async (data) => {
   try {
-    const partnerResponse = await api.post('/partner-HQ', data);
+    const { id, ...rest } = partnerPayload(data);
+    const partnerResponse = await api.post('/partner-HQ', rest);
     toast.success(partnerResponse.data.message);
     return { success: true, data: partnerResponse.data.data };
   } catch (error) {
@@ -48,10 +48,9 @@ export const createPartnerAsync = async (data) => {
   }
 };
 
-export const updatePartnerAsync = async (oldData, newData) => {
+export const updatePartnerAsync = async (data) => {
   try {
-    const modifiedDataOnly = getDirtyFields(oldData, newData);
-    const { id, ...rest } = modifiedDataOnly;
+    const { id, ...rest } = partnerPayload(data);
     const res = await api.patch(`/partner-HQ/${id}`, rest);
     toast.success(res.data.message);
     return { success: true, data: res.data.data };
@@ -93,33 +92,16 @@ export const deleteFileAsync = async (paths) => {
 
 const partnerPayload = (data) => {
   const { created_by, user_id, updated_at, ...rest } = data;
-
   return {
     ...rest,
-    profileStatus: rest.profileStatus?.map((i) => i.value) || [],
-    currentStatus: rest.currentStatus?.map((i) => i.value) || [],
-    platformDeliverables: rest.platformDeliverables?.map((i) => i.value) || [],
-    platforms: rest.platforms?.map((i) => i.value) || [],
-    ageBracket: rest.ageBracket?.map((i) => i.value) || [],
-    affiliatePlatform: rest.affiliatePlatform?.map((i) => i.value) || [],
-    sourcedFrom: rest.sourcedFrom?.map((i) => i.value) || [],
-    stakeholders: rest.stakeholders?.map((i) => i.value) || [],
-    contentHQ: rest.contentHQ?.map((i) => i.value) || [],
-    profileCategory: rest.profileCategory?.map((i) => i.value) || [],
-    portfolios: rest.portfolios?.map((i) => i.value) || [],
-    state: rest.state?.map((i) => i.value) || [],
-    city: rest.city?.map((i) => i.value) || [],
-    services: rest.services?.map((i) => i.value) || [],
-    caseStudies: rest.caseStudies?.map((i) => i.value) || [],
-    productionHQ: rest.productionHQ?.map((i) => i.value) || [],
-    products: rest.products?.map((i) => i.value) || [],
-    contributedCampaigns: rest.contributedCampaigns?.map((i) => i.value) || [],
-    country: rest.country?.map((i) => i.value) || [],
-    tags: rest.tags?.map((i) => i.value) || [],
-    retailPartners: rest.retailPartners?.map((i) => i.value) || [],
-    destinations: rest.destinations?.map((i) => i.value) || [],
-    proposedCampaigns: rest.proposedCampaigns?.map((i) => i.value) || [],
-    productionHQ2: rest.productionHQ2?.map((i) => i.value) || [],
+    platformDeliverables: rest.platformDeliverables.map((i) => i.value),
+    affiliatePlatform: rest.affiliatePlatform.map((i) => i.value),
+    ageBracket: rest.ageBracket.map((i) => i.value),
+    contracts: rest.contracts.map((i) => i.value),
+    currentStatus: rest.currentStatus.map((i) => i.value),
+    platforms: rest.platforms.url,
+    profileStatus: rest.profileStatus.url,
+    sourcedFrom: rest.sourcedFrom.url,
   };
 };
 
@@ -134,9 +116,9 @@ export const getPartnerViews = async () => {
   }
 };
 
-export const getSinglePartnerView = async (id, pagination) => {
+export const getSinglePartnerView = async (id) => {
   try {
-    const res = await api.get(`/views/${id}?page=${pagination.pageNo}&size=${pagination.limit}`);
+    const res = await api.get(`/views/${id}`);
     return { success: true, data: res.data.data };
   } catch (error) {
     toast.error(error.response.data.message);
@@ -165,6 +147,7 @@ export const updatePartnerView = async (id, data) => {
     return { success: false, error: error.response ? error.response.data : 'An unknown error occurred' };
   }
 };
+
 
 export const deletePartnerView = async (id) => {
   try {

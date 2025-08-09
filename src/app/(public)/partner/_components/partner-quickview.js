@@ -3,11 +3,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Box, Card, Divider, IconButton, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
+import { SwiperSlide } from 'swiper/react';
 
 import useAuth from '/src/hooks/useAuth';
 import { CustomChip } from '/src/components/core/custom-chip';
 import { SectionTitle } from '/src/components/core/section-title';
 import { Iconify } from '/src/components/iconify/iconify';
+import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
 import { SocialIconWithText } from './partner-gridview';
 import { formatCompactNumber, handleCopy, isVideoContent } from '/src/utils/helper';
@@ -22,58 +25,84 @@ const isValidNumber = (value) => {
   return !isNaN(value) && value !== '';
 };
 
-export const PartnerQuickView = ({ data, isEdit }) => {
+export const PartnerQuickView = ({ data, isEdit, onUpdate }) => {
   const { isLogin } = useAuth();
 
+  const mediaArr = [
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670d11d77dff7fcc24e16f1c_2_DSC03975.jpeg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/6712275879e29b61d2c2dc79_DSC05709%20(1).jpg',
+    'https://player.vimeo.com/progressive_redirect/playback/1008919226/rendition/1080p/file.mp4?loc=external&signature=bf4233dc5593395173302057f4757f83ccb3c307dd4c49f373ecf1e8f5d31ffb',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/67023b95692662e57485fae7_1ACCCEF7-605C-4365-B7D4-5084FDC835C6_1_105_c.jpeg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/6715276ce15620dc4dd4440f_12957620_1589024814746137_4884333050968345441_o.jpg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57cef550fb1eff420953_6704c33770670bf02efed363_DSC02976.jpeg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/6700cebb14edd020aabfc239_66e46ffa64b6346acab2aff8_MjlmMg.jpeg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/6714acdd01014c6861e52708_DSC09507.jpg',
+    'https://player.vimeo.com/progressive_redirect/playback/1008947433/rendition/1080p/file.mp4?loc=external&signature=395c363decf2b9c5efa59010005a9ccc97b2524fab8fcba75bd44be7e72e16f7',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66f8d1a7375ebfdf94f49c3c_H4GHJcXPb_zOb6Lw8Kx-4jALSl7doDJy2V30K63_o2g.jpeg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/67170dd5c7259b4b76267d1f_DSC00747.jpg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671a2d4f4cbbc6d3e7c13aa5_DSC02474s.jpg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671a0ffb65f22701e5420fe0_DSC05443.jpg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66f8e5f0d68063b6f16d6d55_z8pS_CpmIatuha7Fa9oHmwtlWlJy5F3v9blibpSrOkQ-p-800.jpeg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670f57d47703bf6e5069bcb3_6704c1ab0db136d6b6183dab_DSC09888.jpeg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671c9306a2d018d04d75a44c_00000.jpg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671f73189e8433871403c301_6700ce647b1bae09a801a438_101F0090-2A4F-4A34-8EA5-5A160A35AC3A_1_105_c.jpeg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671a2467ecc2b689879d3288_DSC01190-p-800.jpg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/672a68398a0546bb263ef24a_IMG_2156-p-800.jpg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/66fcecf5793a3e5d867d6d4b_F18F2EBD-DD3E-4D35-B35F-B16E1E6AEF5D_1_105_c.jpeg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/671a166f1260d41c15c305c7_670f57d45ad541aa5f58e9a3_67040092fc0406aea44cf646_DSC08662-p-800.jpeg',
+    'https://cdn.prod.website-files.com/66836d311a49ad62d048361e/670be14aa60fa816cf457054_19055002_1812151462433470_492009593312992502_o-p-500.jpeg',
+  ];
+
   const socialProfiles = [
-    data?.instagram && { platform: 'Instagram', url: data.instagram },
-    data?.tiktok && { platform: 'TikTok', url: data.tiktok },
+    data?.Instagram && { platform: 'Instagram', url: data.Instagram },
+    data?.Tiktok && { platform: 'TikTok', url: data.Tiktok },
     // data?.Youtube && { platform: 'YouTube', url: data.Youtube },
-    data?.x && { platform: 'X', url: data.x },
-    data?.facebook && { platform: 'Facebook', url: data.facebook },
-    data?.pinterest && { platform: 'Pinterest', url: data.pinterest },
-    data?.linkedin && { platform: 'LinkedIn', url: data.linkedin },
+    data?.X && { platform: 'X', url: data.X },
+    data?.Facebook && { platform: 'Facebook', url: data.Facebook },
+    data?.Pinterest && { platform: 'Pinterest', url: data.Pinterest },
+    data?.LinkedIn && { platform: 'LinkedIn', url: data.LinkedIn },
   ].filter(Boolean);
 
   const [personalInfo, setPersonalInfo] = useState({
-    States: data?.states?.map((item) => item?.name)?.join(', ') || 'N/A',
-    Country: data?.countries?.map((item) => item?.name)?.join(', ') || 'N/A',
-    City: data?.cities?.map((item) => item?.name)?.join(', ') || 'N/A',
-    MailingAddress: data?.mailingAddress || 'N/A',
-    Website: data?.website || 'N/A',
-    AgeRange: data?.ageBracket?.join(', ') || 'N/A',
+    States: data?.ByStatesPartnerHQ?.map((item) => item?.ByStates?.Name)?.join(', ') || 'N/A',
+    Country: data?.ByCountryPartners?.map((item) => item?.ByCountry?.Name)?.join(', ') || 'N/A',
+    City: data?.ByCityPartnerHQ?.map((item) => item?.ByCity?.Name)?.join(', ') || 'N/A',
+    MailingAddress: data?.MailingAddress || 'N/A',
+    Website: data?.Website || 'N/A',
+    AgeRange: data?.AgeBracket?.join(', ') || 'N/A',
   });
 
   const [contractInfo, setContractInfo] = useState({
-    // Contract: data?.Contracts?.join(', ') || 'N/A',
-    // ProfileCategory: data?.PartnerHQProfileCategory?.map((item) => item?.ProfileCategory?.Name)?.join(', ') || 'N/A',
-    AffiliatePlatform: data?.affiliatePlatform?.join(', ') || 'N/A',
-    Stakeholder: data?.stakeholders?.map((item) => item?.name)?.join(', ') || 'N/A',
-    TotalAudience: data?.totalAudience?.toLocaleString() || 'N/A',
-    Products: data?.products?.map((item) => item?.name)?.join(', ') || 'N/A',
-    ContributedCampaigns: data?.contributedCampaigns?.map((item) => item?.name)?.join(', ') || 'N/A',
+    Contract: data?.Contracts?.join(', ') || 'N/A',
+    ProfileCategory: data?.PartnerHQProfileCategory?.map((item) => item?.ProfileCategory?.Name)?.join(', ') || 'N/A',
+    AffiliatePlatform: data?.AffiliatePlatform?.join(', ') || 'N/A',
+    Stakeholder: data?.PartnerHQStakeholder?.map((item) => item?.Stakeholder?.Name)?.join(', ') || 'N/A',
+    TotalAudience: data?.TotalAudience?.toLocaleString() || 'N/A',
+    Products: data?.ByProductPartnerHQ?.map((item) => item?.ByProduct?.Name)?.join(', ') || 'N/A',
+    ContributedCampaigns:
+      data?.ByCampaignsProposedPartners?.map((item) => item?.ByCampaigns?.Name)?.join(', ') || 'N/A',
     LiveCampaign: 'N/A',
-    // OpenToGifting: data?.openToGifting || 'N/A',
-    // OpenToWhitelisting: data?.openToWhitelisting || 'N/A',
+    OpenToGifting: data?.OpentoGifting || 'N/A',
+    OpenToWhitelisting: data?.OpentoWhitelisting || 'N/A',
   });
 
   const [otherInfo, setOtherInfo] = useState({
-    Source: data?.sourcedFrom?.join(', ') || 'N/A',
-    PaymentLink: data?.paymentLink || 'N/A',
-    Tags: data?.tags?.map((tag) => tag?.name)?.join(', ') || 'N/A',
-    Note: data?.notes || 'N/A',
-    Podcast: data?.podcast || 'N/A',
-    RefusalReason: data?.refusalReason || 'N/A',
-    // Receipts: data?.receipts?.length > 0 ? data?.receipts : 'N/A',
-    // MediaKit: data?.mediaKit?.length > 0 ? data?.mediaKit : 'N/A',
+    Source: data?.SourcedFrom?.join(', ') || 'N/A',
+    PaymentLink: data?.PaymentLink || 'N/A',
+    Tags: data?.ByTagsPartnerHQ?.map((tag) => tag?.ByTags?.Name)?.join(', ') || 'N/A',
+    Note: data?.Notes || 'N/A',
+    Podcast: data?.Podcast || 'N/A',
+    RefusalReason: data?.RefusalReason || 'N/A',
+    Receipts: data?.Receipts?.length > 0 ? data?.Receipts : 'N/A',
+    MediaKit: data?.MediaKit?.length > 0 ? data?.MediaKit : 'N/A',
   });
 
   const [amazonInfo, setAmazonInfo] = useState({
-    REVOAmazonOrderConfirmationNumber: data?.revoAmazonOrderConfirmationNumber || 'N/A',
-    AmazonReviewLink: data?.amazonReviewLink || 'N/A',
-    AmazonReviewCupper: data?.amazonReviewCupper || 'N/A',
-    AmazonReviewThePill: data?.amazonReviewThePill || 'N/A',
-    AmazonStorefront: data?.amazonStorefront || 'N/A',
+    REVOAmazonOrderConfirmationNumber: data?.REVOAmazonOrderConfirmationNumber || 'N/A',
+    AmazonReviewLink: data?.AmazonReviewLink || 'N/A',
+    AmazonReviewCupper: data?.AmazonReviewCupper || 'N/A',
+    AmazonReviewThePill: data?.AmazonReviewThePill || 'N/A',
+    AmazonStorefront: data?.AmazonStorefront || 'N/A',
   });
 
   const handleChange = (section, field, value) => {
@@ -201,34 +230,34 @@ export const PartnerQuickView = ({ data, isEdit }) => {
         {/* Personal Info */}
         <Stack direction="row" alignItems="center" gap={2}>
           <Typography fontSize={{ xs: '22px', md: '26px' }} fontWeight={800}>
-            {data?.name}
+            {data?.Name}
           </Typography>
 
           {/* Contacts Link */}
           <Stack direction="row" alignItems="center">
-            <IconButton size="small" onClick={() => handleCopy(data?.phone || '')}>
+            <IconButton size="small" onClick={() => handleCopy(data?.Phone || '')}>
               <Iconify icon="solar:phone-outline" />
             </IconButton>
-            <IconButton size="small" onClick={() => handleCopy(data?.whatsapp || '')}>
+            <IconButton size="small" onClick={() => handleCopy(data?.WhatsApp || '')}>
               <Iconify icon="ic:twotone-whatsapp" />
             </IconButton>
-            <IconButton size="small" onClick={() => handleCopy(data?.email || '')}>
+            <IconButton size="small" onClick={() => handleCopy(data?.Email || '')}>
               <Iconify icon="mage:email" />
             </IconButton>
-            <IconButton size="small" onClick={() => handleCopy(data?.website || '')}>
+            <IconButton size="small" onClick={() => handleCopy(data?.Website || '')}>
               <Iconify icon="mynaui:globe" />
             </IconButton>
-            <IconButton size="small" onClick={() => handleCopy(data?.amazonReviewLink || '')}>
+            <IconButton size="small" onClick={() => handleCopy(data?.AmazonReviewLink || '')}>
               <Iconify icon="ri:amazon-fill" />
             </IconButton>
           </Stack>
 
           {/* Status */}
           <Stack direction={'row'} spacing={0.5}>
-            {data?.profileStatus?.length > 0 &&
-              data?.profileStatus?.map((status, index) => <CustomChip key={index} label={status} />)}
-            {data?.currentStatus?.length > 0 &&
-              data?.currentStatus?.map((status, index) => <CustomChip key={index} label={status} />)}
+            {data?.ProfileStatus?.length > 0 &&
+              data?.ProfileStatus?.map((status, index) => <CustomChip key={index} label={status} />)}
+            {data?.CurrentStatus?.length > 0 &&
+              data?.CurrentStatus?.map((status, index) => <CustomChip key={index} label={status} />)}
           </Stack>
         </Stack>
 
@@ -237,10 +266,10 @@ export const PartnerQuickView = ({ data, isEdit }) => {
           alignItems="center"
           divider={<Iconify icon="pepicons-pop:line-y" sx={{ color: 'grey.300' }} />}
         >
-          <Typography fontSize="14px">{formatCompactNumber(data?.totalAudience)}</Typography>
-          <Typography fontSize="14px">Hourly Rate: {data?.hourlyRate || 'N/A'}</Typography>
-          <Typography fontSize="14px">Partner 360 Rate: {data?.partner360Rate || 'N/A'}</Typography>
-          {data?.occupation && <CustomChip label={data?.occupation} />}
+          <Typography fontSize="14px">{formatCompactNumber(data?.TotalAudience)}</Typography>
+          <Typography fontSize="14px">Hourly Rate: {data?.HourlyRate || 'N/A'}</Typography>
+          <Typography fontSize="14px">Partner 360 Rate: {data?.Partner360Rate || 'N/A'}</Typography>
+          {data?.Occupation && <CustomChip label={data?.Occupation} />}
         </Stack>
 
         {/* Social Media Stats */}
@@ -249,64 +278,64 @@ export const PartnerQuickView = ({ data, isEdit }) => {
             data?.Instagram && data?.Instagram !== 'Not Found' && data?.Instagram !== 'Not Provided' && (
               <SocialIconWithText
                 icon="hugeicons:instagram"
-                url={data?.instagram}
-                text={`${data?.instagramFollowing?.toLocaleString()}`}
-                value={`$${data?.partnerIGRate}`}
+                url={data?.Instagram}
+                text={`${data?.InstagramFollowing?.toLocaleString()}`}
+                value={`$${data?.PartnerIGRate}`}
               />
             ),
-            data?.tiktok && data?.tiktok !== 'Not Found' && data?.tiktok !== 'Not Provided' && (
+            data?.Tiktok && data?.Tiktok !== 'Not Found' && data?.Tiktok !== 'Not Provided' && (
               <SocialIconWithText
                 icon="hugeicons:tiktok"
-                url={data?.tiktok}
-                text={`${data?.tiktokFollowing?.toLocaleString()}`}
-                value={`$${data?.partnerTTRate}`}
+                url={data?.Tiktok}
+                text={`${data?.TiktokFollowing?.toLocaleString()}`}
+                value={`$${data?.PartnerTTRate}`}
               />
             ),
-            data?.youtube && data?.youtube !== 'Not Found' && data?.youtube !== 'Not Provided' && (
+            data?.Youtube && data?.Youtube !== 'Not Found' && data?.Youtube !== 'Not Provided' && (
               <SocialIconWithText
                 icon="hugeicons:youtube"
-                url={data?.youtube}
-                text={`${data?.youtubeFollowing?.toLocaleString()}`}
-                value={`$${data?.partnerYTRate}`}
+                url={data?.Youtube}
+                text={`${data?.YoutubeFollowing?.toLocaleString()}`}
+                value={`$${data?.PartnerYTRate}`}
               />
             ),
-            data?.x && data?.x !== 'Not Found' && data?.x !== 'Not Provided' && (
+            data?.X && data?.X !== 'Not Found' && data?.X !== 'Not Provided' && (
               <SocialIconWithText
                 icon="hugeicons:new-twitter-ellipse"
-                url={data?.x}
-                text={`${data?.xFollowing?.toLocaleString()}`}
+                url={data?.X}
+                text={`${data?.XFollowing?.toLocaleString()}`}
                 value={'N/A'}
               />
             ),
-            data?.facebook && data?.facebook !== 'Not Found' && data?.facebook !== 'Not Provided' && (
+            data?.Facebook && data?.Facebook !== 'Not Found' && data?.Facebook !== 'Not Provided' && (
               <SocialIconWithText
                 icon="mingcute:facebook-line"
-                url={data?.facebook}
-                text={`${data?.facebookFollowing?.toLocaleString()}`}
+                url={data?.Facebook}
+                text={`${data?.FacebookFollowing?.toLocaleString()}`}
                 value={'N/A'}
               />
             ),
-            data?.pinterest && data?.pinterest !== 'Not Found' && data?.pinterest !== 'Not Provided' && (
+            data?.Pinterest && data?.Pinterest !== 'Not Found' && data?.Pinterest !== 'Not Provided' && (
               <SocialIconWithText
                 icon="hugeicons:pinterest"
-                url={data?.pinterest}
-                text={`${data?.pinterestFollowing?.toLocaleString()}`}
+                url={data?.Pinterest}
+                text={`${data?.PinterestFollowing?.toLocaleString()}`}
                 value={'N/A'}
               />
             ),
-            data?.snapchat && data?.snapchat !== 'Not Found' && data?.snapchat !== 'Not Provided' && (
+            data?.Snapchat && data?.Snapchat !== 'Not Found' && data?.Snapchat !== 'Not Provided' && (
               <SocialIconWithText
                 icon="hhugeicons:snapchat"
-                url={data?.snapchat}
-                text={`${data?.snapchatFollowing?.toLocaleString()}`}
+                url={data?.Snapchat}
+                text={`${data?.SnapchatFollowing?.toLocaleString()}`}
                 value={'N/A'}
               />
             ),
-            data?.linkedin && data?.linkedin !== 'Not Found' && data?.linkedin !== 'Not Provided' && (
+            data?.Linkedin && data?.Linkedin !== 'Not Found' && data?.Linkedin !== 'Not Provided' && (
               <SocialIconWithText
                 icon="circum:linkedin"
-                url={data?.linkedin}
-                text={`${data?.linkedinConnections?.toLocaleString()}`}
+                url={data?.Linkedin}
+                text={`${data?.LinkedinConnection?.toLocaleString()}`}
                 value={'N/A'}
               />
             ),
@@ -378,7 +407,7 @@ export const PartnerQuickView = ({ data, isEdit }) => {
         >
           <Box
             component="img"
-            src={data?.thumbnailImage ?? '/assets/image-placeholder.jpg'}
+            src={data?.ProfileImage?.at(0) ?? '/assets/image-placeholder.jpg'}
             alt={data?.Name}
             sx={{
               width: '100%',
@@ -386,6 +415,7 @@ export const PartnerQuickView = ({ data, isEdit }) => {
               objectFit: 'cover',
               borderBottom: '1px solid var(--mui-palette-divider)',
             }}
+            onClick={() => setOpenPartnerRightPanel(item)}
           />
         </Box>
         {socialProfiles.length > 0 && <PartnerIframes profiles={socialProfiles} />}
@@ -463,7 +493,7 @@ export const PartnerSliderCard = ({ item, sx = {} }) => {
     <Card
       sx={{
         width: '100%',
-        aspectRatio: '9 / 13',
+        aspectRatio: '9 / 16',
         border: 'unset',
         overflow: 'hidden',
         position: 'relative',
@@ -547,7 +577,9 @@ export const PartnerSliderCard = ({ item, sx = {} }) => {
 
 export const PartnerIframes = ({ profiles }) => {
   const getEmbedUrl = (url) => {
+
     if (url && url?.includes('instagram.com')) {
+
       const cleanUrl = url.split('?')[0];
 
       const postMatch = cleanUrl.match(/instagram\.com\/p\/([^\/]+)/);
@@ -557,8 +589,8 @@ export const PartnerIframes = ({ profiles }) => {
       }
       // Profile fallback
       const parts = cleanUrl.split('/').filter(Boolean);
-      const instagramIndex = parts.findIndex((part) => part.includes('instagram.com'));
-      const username = parts[instagramIndex + 1];
+      const instagramIndex = parts.findIndex(part => part.includes('instagram.com'));
+      const username = parts[instagramIndex + 1]; 
       return `https://www.instagram.com/${username}/embed`;
     }
     if (url && url?.includes('tiktok.com')) {
@@ -615,13 +647,14 @@ export const EmbedCard = ({ platform, embedUrl }) => {
   })();
 
   const isFallback =
-    (!embedUrl || ['Not Found', 'Not found', 'unknown', 'Not Provided'].includes(embedUrl) || hasError) && !isInstagram;
+    (!embedUrl || ['Not Found', 'Not found', 'unknown', 'Not Provided'].includes(embedUrl) || hasError) &&
+    !isInstagram;
 
   const shouldShowInstagramFallback = isInstagram && isInstagramWithoutUsername;
 
   const renderPlatformFallback = () => {
     let icon, color, message;
-
+    
     switch (platform.toLowerCase()) {
       case 'instagram':
         icon = 'mdi:instagram';
@@ -692,8 +725,7 @@ export const EmbedCard = ({ platform, embedUrl }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor:
-          hasError || isFallback || shouldShowInstagramFallback || isUnsupportedEmbed ? '#f9f9f9' : 'white',
+        backgroundColor: hasError || isFallback || shouldShowInstagramFallback || isUnsupportedEmbed ? '#f9f9f9' : 'white',
       }}
     >
       {isFallback || shouldShowInstagramFallback || isUnsupportedEmbed ? (

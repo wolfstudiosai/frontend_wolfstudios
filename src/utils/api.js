@@ -1,6 +1,13 @@
 import axios from 'axios';
 
-import { clearUserSessionFromLocalStore, getAuthTokenFromLocalStore } from './axios-api.helpers';
+import { isValidToken } from '/src/contexts/auth/AuthContext';
+
+import {
+  clearUserSessionFromLocalStore,
+  getAuthTokenFromLocalStore,
+  getTokenFromCookies,
+  removeTokenFromCookies,
+} from './axios-api.helpers';
 
 export const apiBaseurl = process.env['NEXT_PUBLIC_BACKEND_API'] || 'https://api.wolfstudios.ai/api';
 export const chatApiBaseurl = process.env['NEXT_PUBLIC_CHAT_API'] || 'https://chat.wolfstudios.ai/api';

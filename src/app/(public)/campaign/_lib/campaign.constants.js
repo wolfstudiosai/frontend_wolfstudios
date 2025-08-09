@@ -44,4 +44,5 @@ export const campaignProgressStatus = [
   { value: 'NEEDS_CASE_STUDY', label: 'Needs Case Study' },
   { value: 'NEEDS_PARTNERS', label: 'Needs Partners' },
   { value: 'ONBOARDING_PARTNERS', label: 'Onboarding Partners' },
+  { label: 'Others', value: '' },
 ];

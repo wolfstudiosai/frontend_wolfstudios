@@ -1,55 +1,17 @@
 'use client';
 
-import { Assessment, AttachMoney, Flag, People } from '@mui/icons-material';
-import {
-  Box,
-  Button,
-  Chip,
-  Divider,
-  LinearProgress,
-  List,
-  ListItem,
-  ListItemText,
-  Paper,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import Image from 'next/image';
+import { Box, Button, Stack, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { A11y, Navigation, Scrollbar, Pagination as SwiperPagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 
-import { formatCompactNumber } from '../../../../utils/helper';
 import { isVideoContent, pxToRem } from '/src/utils/helper';
-import useAuth from '/src/hooks/useAuth';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
 
-export const CampaignQuickView = ({ data, isEdit, onUpdate }) => {
-  const { isLogin } = useAuth();
-  const router = useRouter()
-  const mediaArr = [
-    ...(data?.imageInspirationGallery || []),
-    ...(data?.videoInspirationGallery || []),
-    ...(data?.campaignImage || []),
-    data?.thumbnailImage,
-  ];
-  const budgetUsed = data?.budget === 0 ? 0 : (data?.totalExpense / data?.budget) * 100;
-  const remainingBudget = data?.budget - data?.totalExpense;
-
-  const handleJoin = () => {
-    if (!isLogin) {
-      toast.error('Please login to join the campaign');
-      router.push('/auth/sign-in');
-    }
-  };
+export const CampaignQuickView = ({ data }) => {
+  const mediaArr = [...(data?.ImageInspirationGallery || []), ...(data?.VideoInspirationGallery || [])];
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -62,13 +24,13 @@ export const CampaignQuickView = ({ data, isEdit, onUpdate }) => {
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Box>
             <Typography variant="h5" fontWeight={600} gutterBottom>
-              {data?.name || 'Untitled'} <Chip color="primary" label={data?.campaignStatus || 'Draft'} size="small" />
+              {data?.Name || 'Untitled'}
             </Typography>
             <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              {data?.campaignDescription || 'No description available.'}
+              {data?.CampaignDescription || 'No description available.'}
             </Typography>
           </Box>
-          <Button variant="contained" onClick={handleJoin}>Join</Button>
+          <Button variant="contained">Join</Button>
         </Stack>
       </Box>
 
@@ -122,274 +84,126 @@ export const CampaignQuickView = ({ data, isEdit, onUpdate }) => {
         </SliderWrapper>
       </Box>
 
-      {/* Campaign Overview */}
-      <Paper elevation={0} sx={{ p: 3, my: 1, borderRadius: 0.5 }}>
-        <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
-          <Assessment sx={{ mr: 1 }} />
-          Campaign Overview
-        </Typography>
-        <Grid container spacing={3} mt={2}>
-          <Grid item xs={12} sm={6} md={3}>
-            <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default' }}>
-              <Typography variant="h4" sx={{ color: 'primary', fontWeight: 700 }}>
-                {formatCompactNumber(data?.budget)}
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'primary' }}>
-                Total Budget
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default' }}>
-              <Typography variant="h4" sx={{ color: 'warning', fontWeight: 700 }}>
-                {formatCompactNumber(data?.totalExpense)}
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'warning' }}>
-                Total Spent
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default' }}>
-              <Typography variant="h4" sx={{ color: 'success', fontWeight: 700 }}>
-                {formatCompactNumber(data?.campaignROI)}x
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'success' }}>
-                ROI
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default' }}>
-              <Typography variant="h4" sx={{ color: 'info', fontWeight: 700 }}>
-                {formatCompactNumber(data?.totalContentEngagement)}
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'info' }}>
-                Engagement
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
-      </Paper>
-
-      {/* Financial Breakdown */}
-      <Paper elevation={0} sx={{ p: 3, mb: 2, borderRadius: 0.5 }}>
-        <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
-          <AttachMoney sx={{ mr: 1 }} />
-          Financial Breakdown
-        </Typography>
-        <Box sx={{ mb: 3 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-            <Typography variant="body1">Budget Utilization</Typography>
-            <Typography variant="body1" fontWeight="bold">
-              {budgetUsed.toFixed(1)}%
+      {/* add further design from here */}
+      <Grid container spacing={2} my={1} sx={{ bgcolor: 'var(--mui-palette-background-paper)', p: 2 }}>
+        <Grid
+          size={{ xs: 12, md: 4 }}
+          sx={{
+            bgcolor: 'var(--mui-palette-background-default)',
+            border: '1px solid var(--mui-palette-divider)',
+            p: 2,
+          }}
+        >
+          <Box>
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              CAMPAIGN INFO
             </Typography>
+            <Stack spacing={2}>
+              {trendingNews.map((item, index) => (
+                <Box key={index}>
+                  <Typography variant="caption" color="text.secondary">
+                    {item.category} • <strong>{item.tag}</strong>
+                  </Typography>
+                  <Typography variant="body2" fontWeight={500}>
+                    {item.title}
+                  </Typography>
+                </Box>
+              ))}
+            </Stack>
           </Box>
-          <LinearProgress
-            variant="determinate"
-            value={budgetUsed}
-            sx={{
-              height: 12,
-              borderRadius: 6,
-              backgroundColor: 'grey.200',
-              '& .MuiLinearProgress-bar': {
-                borderRadius: 6,
-                background: 'primary.main',
-              },
-            }}
-          />
-        </Box>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ backgroundColor: 'transparent !important' }}>Category</TableCell>
-                <TableCell align="right" sx={{ backgroundColor: 'transparent !important' }}>
-                  Amount
-                </TableCell>
-                <TableCell align="right" sx={{ backgroundColor: 'transparent !important' }}>
-                  Percentage
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell>Total Budget</TableCell>
-                <TableCell align="right">{formatCompactNumber(data?.budget)}</TableCell>
-                <TableCell align="right">100%</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Total Expense</TableCell>
-                <TableCell align="right">{formatCompactNumber(data?.totalExpense)}</TableCell>
-                <TableCell align="right">{budgetUsed.toFixed(1)}%</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Product Expense</TableCell>
-                <TableCell align="right">{formatCompactNumber(data?.productExpense)}</TableCell>
-                <TableCell align="right">{((data?.productExpense / data?.budget) * 100).toFixed(1)}%</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell sx={{ fontWeight: 'bold' }}>Remaining Budget</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 'bold' }}>
-                  {formatCompactNumber(remainingBudget)}
-                </TableCell>
-                <TableCell align="right" sx={{ fontWeight: 'bold' }}>
-                  {(100 - budgetUsed).toFixed(1)}%
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
+        </Grid>
 
-      {/* Campaign Goals */}
-      <Paper elevation={0} sx={{ p: 3, mb: 2, borderRadius: 0.5 }}>
-        <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
-          <Flag sx={{ mr: 1 }} />
-          Campaign Goals & Guidelines
-        </Typography>
-        <Box sx={{ mb: 3 }}>
-          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-            {data?.campaignGoals?.map((goal, index) => (
-              <Chip key={index} label={goal} variant="outlined" />
-            ))}
-          </Stack>
-        </Box>
-        <Box>
-          <Typography variant="subtitle1" gutterBottom>
-            Guidelines
-          </Typography>
-          <Typography variant="body1" sx={{ p: 2, borderRadius: 1 }}>
-            {data?.campaignGuidelines || 'No guidelines available.'}
-          </Typography>
-        </Box>
-      </Paper>
+        {/* RIGHT: Campaign Tips */}
+        <Grid
+          size={{ xs: 12, md: 8 }}
+          sx={{
+            bgcolor: 'var(--mui-palette-background-default)',
+            border: '1px solid var(--mui-palette-divider)',
+            p: 2,
+          }}
+        >
+          <Box>
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              CAMPAIGN TIPS
+            </Typography>
+            <Typography variant="body2" color="text.secondary" mb={2}>
+              This Is A Section For Campaign Tips And Trips. Partners Will Refer Here To Ensure
+            </Typography>
 
-      {/* Team & Stakeholders */}
-      <Paper elevation={0} sx={{ p: 3, mb: 2, borderRadius: 0.5 }}>
-        <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
-          <People sx={{ mr: 1 }} />
-          Team & Stakeholders
-        </Typography>
-
-        <Box>
-          <Typography variant="subtitle1">Stakeholders ({data?.stakeholders?.length})</Typography>
-          <List dense>
-            {data?.stakeholders?.map((stakeholder) => (
-              <ListItem key={stakeholder.id} sx={{ p: 0 }}>
-                <ListItemText
-                  primary={stakeholder.name}
-                  slotProps={{
-                    primary: {
-                      color: 'text.secondary',
-                    },
-                  }}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-
-        <Divider sx={{ my: 1 }} />
-
-        <Box>
-          <Typography variant="subtitle1">Content HQ ({data?.contentHQ?.length})</Typography>
-          <List dense>
-            {data?.contentHQ?.map((content) => (
-              <ListItem key={content.id} sx={{ p: 0 }}>
-                <ListItemText
-                  primary={content.name}
-                  slotProps={{
-                    primary: {
-                      color: 'text.secondary',
-                    },
-                  }}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-
-        <Divider sx={{ my: 1 }} />
-
-        <Box>
-          <Typography variant="subtitle1">Production HQ ({data?.productionHQ?.length})</Typography>
-          <List dense>
-            {data?.productionHQ?.map((production) => (
-              <ListItem key={production.id} sx={{ p: 0 }}>
-                <ListItemText
-                  primary={production.name}
-                  slotProps={{
-                    primary: {
-                      color: 'text.secondary',
-                    },
-                  }}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-
-        <Divider sx={{ my: 1 }} />
-
-        <Box>
-          <Typography variant="subtitle1">Proposed Partner ({data?.proposedPartners?.length})</Typography>
-          <List dense>
-            {data?.proposedPartners?.map((partner) => (
-              <ListItem key={partner.id} sx={{ p: 0 }}>
-                <ListItemText
-                  primary={partner.name}
-                  slotProps={{
-                    primary: {
-                      color: 'text.secondary',
-                    },
-                  }}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-
-        <Divider sx={{ my: 1 }} />
-
-        <Box>
-          <Typography variant="subtitle1">Contributed Partner ({data?.contributedPartners?.length})</Typography>
-          <List dense>
-            {data?.contributedPartners?.map((partner) => (
-              <ListItem key={partner.id} sx={{ p: 0 }}>
-                <ListItemText
-                  primary={partner.name}
-                  slotProps={{
-                    primary: {
-                      color: 'text.secondary',
-                    },
-                  }}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-
-        <Divider sx={{ my: 1 }} />
-
-        <Box>
-          <Typography variant="subtitle1">Spaces ({data?.spaces?.length})</Typography>
-          <List dense>
-            {data?.spaces?.map((space) => (
-              <ListItem key={space.id} sx={{ p: 0 }}>
-                <ListItemText
-                  primary={space.name}
-                  slotProps={{
-                    primary: {
-                      color: 'text.secondary',
-                    },
-                  }}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </Paper>
+            <Stack direction="row" flexWrap="wrap" gap={2}>
+              {campaignTips.map((tip, index) => (
+                <Box key={index} sx={{ width: { xs: '100%', md: '30%' }, flex: '1 1 auto' }}>
+                  <Box sx={{ position: 'relative', width: '100%', height: 140, mb: 1 }}>
+                    <Image
+                      src={tip.image || '/assets/image-placeholder.jpg'}
+                      alt={tip.title}
+                      fill
+                      style={{ objectFit: 'cover', borderRadius: 8 }}
+                    />
+                  </Box>
+                  <Typography variant="caption" color="text.secondary">
+                    {tip.category}
+                  </Typography>
+                  <Typography variant="body2" fontWeight={600}>
+                    {tip.title}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {tip.author} • {tip.time}
+                  </Typography>
+                </Box>
+              ))}
+            </Stack>
+          </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 };
+
+const trendingNews = [
+  {
+    category: 'Category 1',
+    tag: 'TIPS',
+    title: 'Tiger Woods, in a Stirring Return to the Top, Captures the Masters at 43',
+    image: '',
+  },
+  { category: 'Category', tag: 'DELIVERABLES', title: '10 Years After an Exercise Study, Benefits Persist', image: '' },
+  {
+    category: 'Category 2',
+    tag: 'COMPENSATION',
+    title: 'Buying a Tesla Seems Easy. But There Are a Few Things to Know.',
+    image: '',
+  },
+  { category: 'Category 3', tag: 'GUIDELINES', title: 'What to cook this week, Top 15 Breakfasts', image: '' },
+  { category: 'Category', tag: 'CONTENT SUBMISSION', title: "Roger Federer's 101 Titles: By the Numbers", image: '' },
+  {
+    category: 'Category',
+    tag: 'CONTRACT',
+    title: 'Gene-Edited Babies: What a Chinese Scientist Told an American Mentor',
+    image: '',
+  },
+];
+
+const campaignTips = [
+  {
+    category: 'Category 1',
+    title: 'Campaign title one',
+    author: 'Marcie Stephens',
+    time: '1 min ago',
+    image: '',
+  },
+  {
+    category: 'Category 2',
+    title: 'Campaign title two',
+    author: 'Zain Dorwart',
+    time: '5 min ago',
+    image: '',
+  },
+  {
+    category: 'Category 3',
+    title: 'Campaign title three',
+    author: 'Marcie Stephens',
+    time: '1 min ago',
+    image: '',
+  },
+];

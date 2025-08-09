@@ -1,15 +1,19 @@
 'use client';
 
+import * as React from 'react';
+import RouterLink from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { Button, Popover } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
-import { default as Link, default as RouterLink } from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import * as React from 'react';
 
+import { paths } from '/src/paths';
+import { isNavItemActive } from '/src/lib/is-nav-item-active';
+import { SettingsContext } from '/src/contexts/settings';
+import useAuth from '/src/hooks/useAuth';
 import SocialLogin from '/src/components/common/social-login';
 import { Dropdown } from '/src/components/core/dropdown/dropdown';
 import { DropdownPopover } from '/src/components/core/dropdown/dropdown-popover';
@@ -17,18 +21,16 @@ import { DropdownTrigger } from '/src/components/core/dropdown/dropdown-trigger'
 import { Logo } from '/src/components/core/logo';
 import { Iconify } from '/src/components/iconify/iconify';
 import { NavSearch } from '/src/components/navbar/nav-search';
-import { SettingsContext } from '/src/contexts/settings';
-import useAuth from '/src/hooks/useAuth';
-import { isNavItemActive } from '/src/lib/is-nav-item-active';
-import { paths } from '/src/paths';
 
+import { ChatSidePanel } from '../dashboard/layout/_components/chat-side-panel';
 import { NotificationPopover } from '../dashboard/layout/_components/notificaiton-popover';
+import { SettingsGear } from '../dashboard/layout/_components/settings-gear';
+import { UserInfoPopover } from '../dashboard/layout/_components/user-info-popover';
 import { MobileSideNav } from './mobile-side-nav';
 import { LoginForm } from '/src/app/auth/_components/LoginForm';
 import { publicRoutes } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
-import { useSettings } from '/src/hooks/use-settings';
-import { CustomBreadcrumbs } from '../custom-breadcumbs';
+import Link from 'next/link';
 
 export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const {
@@ -39,7 +41,6 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
   const [chatOpen, setChatOpen] = React.useState(false);
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false);
-  const { breadcrumbs } = useSettings();
   const router = useRouter();
 
   const { isLogin } = useAuth();
@@ -80,12 +81,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
     const updatedRoutes = publicRoutes.map((group) => ({
       ...group,
       items: group.items
-        .filter(
-          (item) =>
-            (isLogin && item.key !== 'portfolio') ||
-            (isLogin && item.key !== 'partner') ||
-            (!isLogin && item.key !== 'content')
-        )
+        .filter((item) => (isLogin && item.key !== 'portfolio') || (isLogin && item.key !== 'partner') || (!isLogin && item.key !== 'content'))
         .map((item) => {
           const auth = localStorage.getItem('auth');
           if (auth) {
@@ -192,13 +188,8 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
               <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
                 <Logo height={40} width={120} />
               </Box>
-
-              {breadcrumbs.length > 0 && (
-                <CustomBreadcrumbs items={breadcrumbs} />
-              )}
-
               {/* nav items */}
-              {/* <Stack
+              <Stack
                 component="ul"
                 direction="row"
                 spacing={1}
@@ -217,7 +208,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                     />
                   ))
                 )}
-              </Stack> */}
+              </Stack>
             </Box>
 
             {/* Right Section: Search, Notifications, Sign In/UserButton, setting gear */}
@@ -235,7 +226,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                 sx={{
                   flex: 1,
                   justifyContent: 'flex-end',
-                  maxWidth: pxToRem(600),
+                  minWidth: pxToRem(150),
                   display: { xs: 'none', lg: 'inline-flex' },
                 }}
               >
@@ -251,6 +242,13 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                   },
                 }}
               >
+                {/* Settings */}
+                <SettingsGear />
+                {/* Chat sidebar */}
+                {isLogin && (
+                  <ChatSidePanel open={chatOpen} onClose={() => setChatOpen(false)} onToggle={handleChatToggle} />
+                )}
+                {/* Notifications */}
                 {isLogin ? (
                   <React.Fragment>
                     <NotificationPopover />
@@ -267,6 +265,7 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
                 )}
               </Box>
               {/* user popover */}
+              {isLogin && <UserInfoPopover />}
             </Stack>
           </Stack>
         </Container>
@@ -314,8 +313,8 @@ export const MainNavV2 = ({ onToggle, onFeatureCardVisible }) => {
           </Typography>
 
           <Stack spacing={2} direction="row" alignItems="center" justifyContent="space-between">
-            <SocialLogin type="LOGIN|OTP" style={{ paddingY: '10px' }}>
-              <Iconify icon="meteor-icons:message" />
+            <SocialLogin provider="facebook" type="LOGIN|FACEBOOK" style={{ paddingY: '10px' }}>
+              <Iconify icon="logos:facebook" />
             </SocialLogin>
             <SocialLogin provider="google" type="LOGIN|GOOGLE" style={{ paddingY: '10px' }}>
               <Iconify icon="devicon:google" />

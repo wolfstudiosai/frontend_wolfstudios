@@ -1,15 +1,15 @@
 'use client';
 
+import * as React from 'react';
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
-import * as React from 'react';
 
-import { ThinnerFooter } from '/src/components/navbar/thinner-footer';
 import { useSettings } from '/src/hooks/use-settings';
 import useAuth from '/src/hooks/useAuth';
+import { ThinnerFooter } from '/src/components/navbar/thinner-footer';
 
-import { DesktopSideNav } from './desktop-side-nav';
 import { MainNavV2 } from './main-nav-v2';
+import { DesktopSideNav, SideNavV2 } from './desktop-side-nav';
 import { NotificationCards } from '/src/app/(public)/notification-card';
 import { pxToRem } from '/src/utils/helper';
 
@@ -41,7 +41,7 @@ export function LayoutView({ children }) {
           body: {
             '--MainNav-height': '56px',
             '--MainNav-zIndex': 1000,
-            '--SideNav-width': openSidebar ? pxToRem(250) : pxToRem(40),
+            '--SideNav-width': openSidebar ? pxToRem(250) : pxToRem(50),
             '--SideNav-zIndex': 1100,
             '--MobileNav-width': '320px',
             '--MobileNav-zIndex': 1100,
@@ -50,25 +50,15 @@ export function LayoutView({ children }) {
       />
 
       <Box display={isLogin ? 'flex' : 'block'} width="100vw" height="100vh" overflow="hidden">
-        <Box
-          display={isLogin ? 'flex' : 'none'}
-          justifyContent="center"
-          alignItems="center"
-          width="auto"
-          bgcolor="#5C6954"
-          sx={{ p: { xs: 0, lg: 1 } }}
-        >
+        <Box display={isLogin ? 'flex' : 'none'} justifyContent="center" alignItems="center" width='auto' bgcolor="var(--mui-palette-background-default)" sx={{ border: '1px solid var(--mui-palette-divider)', p: { xs: 0, lg: 1 } }}>
           <DesktopSideNav color={settings.navColor} open={openSidebar} isFeaturedCardVisible={isFeaturedCardVisible} />
         </Box>
-        <Box
-          id="scrollable_container"
-          sx={{ flex: 1, height: '100%', position: 'relative', overflowX: 'hidden', overflowY: 'auto' }}
-        >
+        <Box id='scrollable_container' sx={{ flex: 1, height: '100%', position: 'relative', overflowX: 'hidden', overflowY: 'auto' }}>
           <MainNavV2 onToggle={handleSidebarToggle} onFeatureCardVisible={setIsFeaturedCardVisible} />
           {isLogin && (
             <Box
               sx={{
-                backgroundColor: 'var(--mui-palet˝te-background-default)',
+                backgroundColor: 'var(--mui-palette-background-default)',
                 transform: isFeaturedCardVisible ? 'translateY(100)' : 'translateY(-100%)',
                 opacity: isFeaturedCardVisible ? 1 : 0,
                 transition: 'transform 0.5s ease, opacity 0.5s ease',
@@ -81,6 +71,7 @@ export function LayoutView({ children }) {
               {isFeaturedCardVisible ? <NotificationCards /> : <Box />}
             </Box>
           )}
+
 
           <Box
             component="main"

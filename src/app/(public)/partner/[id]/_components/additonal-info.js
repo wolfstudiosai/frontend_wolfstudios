@@ -1,10 +1,9 @@
-import Link from 'next/link';
 import { Box, Card, CardContent, CardHeader, Chip, Grid2, Stack, Typography } from '@mui/material';
+import Link from 'next/link';
 
 import { Iconify } from '/src/components/iconify/iconify';
-import { Person } from '@mui/icons-material';
 
-export const AdditionalInfo = ({ partner }) => {
+export default function AdditionalInfo({ partner }) {
   return (
     <Grid2 item size={{ xs: 12, md: 6 }}>
       <Card
@@ -22,8 +21,8 @@ export const AdditionalInfo = ({ partner }) => {
               <Typography variant="subtitle2" gutterBottom color="text.secondary">
                 Medium
               </Typography>
-              {partner?.medium ? (
-                <Link href={partner?.medium} target="_blank" rel="noopener noreferrer">
+              {partner?.Medium ? (
+                <Link href={partner?.Medium} target="_blank" rel="noopener noreferrer">
                   View
                 </Link>
               ) : (
@@ -35,8 +34,8 @@ export const AdditionalInfo = ({ partner }) => {
               <Typography variant="subtitle2" gutterBottom color="text.secondary">
                 Linktree
               </Typography>
-              {partner?.linktree ? (
-                <Link href={partner?.linktree} target="_blank" rel="noopener noreferrer">
+              {partner?.Linktree ? (
+                <Link href={partner?.Linktree} target="_blank" rel="noopener noreferrer">
                   View
                 </Link>
               ) : (
@@ -48,8 +47,8 @@ export const AdditionalInfo = ({ partner }) => {
               <Typography variant="subtitle2" gutterBottom color="text.secondary">
                 Snapchat
               </Typography>
-              {partner?.snapchat ? (
-                <Link href={partner?.snapchat} target="_blank" rel="noopener noreferrer">
+              {partner?.Snapchat ? (
+                <Link href={partner?.Snapchat} target="_blank" rel="noopener noreferrer">
                   View
                 </Link>
               ) : (
@@ -61,8 +60,8 @@ export const AdditionalInfo = ({ partner }) => {
               <Typography variant="subtitle2" gutterBottom color="text.secondary">
                 Google Drive Files
               </Typography>
-              {partner?.googleDriveFiles ? (
-                <Link href={partner?.googleDriveFiles} target="_blank" rel="noopener noreferrer">
+              {partner?.GoogleDriveFiles ? (
+                <Link href={partner?.GoogleDriveFiles} target="_blank" rel="noopener noreferrer">
                   View
                 </Link>
               ) : (
@@ -74,8 +73,8 @@ export const AdditionalInfo = ({ partner }) => {
               <Typography variant="subtitle2" gutterBottom color="text.secondary">
                 Booking Link
               </Typography>
-              {partner?.bookingLink ? (
-                <Link href={partner?.bookingLink} target="_blank" rel="noopener noreferrer">
+              {partner?.BookingLink ? (
+                <Link href={partner?.BookingLink} target="_blank" rel="noopener noreferrer">
                   View
                 </Link>
               ) : (
@@ -87,7 +86,7 @@ export const AdditionalInfo = ({ partner }) => {
               <Typography variant="subtitle2" gutterBottom color="text.secondary">
                 Notes
               </Typography>
-              <Typography variant="body2">{partner?.notes || 'N/A'}</Typography>
+              <Typography variant="body2">{partner?.Notes || 'N/A'}</Typography>
             </Box>
 
             <Box display="flex" justifyContent="space-between">
@@ -95,11 +94,11 @@ export const AdditionalInfo = ({ partner }) => {
                 Stakeholders
               </Typography>
               <Box display="flex" flexWrap="wrap" gap={1}>
-                {partner?.stakeholders?.length > 0 ? (
-                  partner?.stakeholders?.map((stakeholder, index) => (
+                {partner?.Stakeholders?.length > 0 ? (
+                  partner?.Stakeholders?.map((stakeholder, index) => (
                     <Chip
                       key={index}
-                      label={stakeholder?.name}
+                      label={stakeholder?.Name}
                       size="small"
                       icon={<Person fontSize="small" />}
                       variant="outlined"
@@ -115,7 +114,7 @@ export const AdditionalInfo = ({ partner }) => {
               <Typography variant="subtitle2" gutterBottom color="text.secondary">
                 Deliverables
               </Typography>
-              <Typography variant="body2">{partner?.deliverables || 'N/A'}</Typography>
+              <Typography variant="body2">{partner?.Deliverables || 'N/A'}</Typography>
             </Box>
 
             <Box display="flex" justifyContent="space-between">
@@ -123,20 +122,20 @@ export const AdditionalInfo = ({ partner }) => {
                 Location
               </Typography>
               <Box display="flex" flexWrap="wrap" gap={1}>
-                {partner?.cities?.map((city, i) => (
+                {partner?.ByCityPartnerHQ?.map((city, i) => (
                   <Chip
                     key={i}
-                    label={city.name}
+                    label={city.ByCity.Name}
                     size="small"
                     icon={<Iconify icon="eva:location-outline" />}
                     variant="outlined"
                   />
                 ))}
-                {partner?.states?.map((state, i) => (
-                  <Chip key={i} label={state.name} size="small" variant="outlined" />
+                {partner?.ByStatesPartnerHQ?.map((state, i) => (
+                  <Chip key={i} label={state.ByStates.Name} size="small" variant="outlined" />
                 ))}
-                {partner?.countries?.map((country, i) => (
-                  <Chip key={i} label={country.name} size="small" variant="outlined" />
+                {partner?.ByCountryPartners?.map((country, i) => (
+                  <Chip key={i} label={country.ByCountry.Name} size="small" variant="outlined" />
                 ))}
               </Box>
             </Box>
@@ -145,18 +144,18 @@ export const AdditionalInfo = ({ partner }) => {
               <Typography variant="subtitle2" gutterBottom color="text.secondary">
                 Mailing Address
               </Typography>
-              <Typography variant="body2">{partner?.mailingAddress || 'N/A'}</Typography>
+              <Typography variant="body2">{partner?.MailingAddress || 'N/A'}</Typography>
             </Box>
 
             <Box display="flex" justifyContent="space-between">
               <Typography variant="subtitle2" gutterBottom color="text.secondary">
                 Journey Step
               </Typography>
-              <Typography variant="body2">{partner?.journeyStep || 'N/A'}</Typography>
+              <Typography variant="body2">{partner?.JourneyStep || 'N/A'}</Typography>
             </Box>
           </Stack>
         </CardContent>
       </Card>
     </Grid2>
   );
-};
+}

@@ -1,20 +1,14 @@
 import React from 'react';
 import RouterLink from 'next/link';
-import { Avatar, Box, Divider, List, ListItemIcon, MenuItem, Popover, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Divider, List, ListItemIcon, MenuItem, Popover, Typography } from '@mui/material';
 
 import { paths } from '/src/paths';
 import useAuth from '/src/hooks/useAuth';
 import { Iconify } from '/src/components/iconify/iconify';
 
-export const UserInfoPopover = ({ isSidebarOpen = false }) => {
+export const UserInfoPopover = ({ sidebar = false }) => {
   const { userInfo, logout } = useAuth();
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
-  const avatarSize = isSidebarOpen ? 35 : 28;
-
-  const handleLogout = () => {
-    setMenuAnchorEl(null);
-    logout();
-  };
 
   return (
     <>
@@ -24,19 +18,7 @@ export const UserInfoPopover = ({ isSidebarOpen = false }) => {
         ref={menuAnchorEl}
         sx={{ border: 'none', background: 'transparent', cursor: 'pointer', p: 0 }}
       >
-        <Stack direction={'row'} alignItems={'center'} justifyContent={'center'} spacing={1}>
-          <Avatar sx={{ width: avatarSize, height: avatarSize, bgcolor: 'white', color: 'black' }} src={userInfo.profile_pic} />
-          {isSidebarOpen && (
-            <Box sx={{ textAlign: 'start' }}>
-              <Typography color="white" variant="body2">
-                {userInfo.name || 'Unknown'}
-              </Typography>
-              <Typography color="white" variant="body2">
-                {userInfo.email}
-              </Typography>
-            </Box>
-          )}
-        </Stack>
+        <Avatar sx={{ width: 34, height: 34 }} src={userInfo.profile_pic} />
       </Box>
       <Popover
         anchorEl={menuAnchorEl}
@@ -47,28 +29,33 @@ export const UserInfoPopover = ({ isSidebarOpen = false }) => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
         <Box sx={{ backgroundColor: 'var(--mui-palette-background-default)' }}>
-          <List sx={{ p: 1 }}>
+          <Box sx={{ p: 2 }}>
+            <Typography>{userInfo.name}</Typography>
+            <Typography color="text.secondary" variant="body2">
+              {userInfo.email}
+            </Typography>
+            <Typography color="text.secondary" variant="body2">
+              {userInfo.role}
+            </Typography>
+          </Box>
+          <Divider />
+          <List sx={{ p: 1, display: sidebar ? 'none' : 'block' }}>
             <MenuItem component={RouterLink} href={paths.dashboard.profile} onClick={() => setMenuAnchorEl(null)}>
               <ListItemIcon>
                 <Iconify icon="solar:user-linear" />
               </ListItemIcon>
               Profile
             </MenuItem>
-
+            <MenuItem component={RouterLink} href={paths.dashboard.security} onClick={() => setMenuAnchorEl(null)}>
+              <ListItemIcon>
+                <Iconify icon="ph:gear-light" />
+              </ListItemIcon>
+              Settings
+            </MenuItem>
           </List>
           <Divider />
           <Box sx={{ p: 1 }}>
-            <MenuItem
-              component="div"
-              onClick={handleLogout}
-              sx={{
-                justifyContent: 'center',
-                py: 0,
-                px: 1,
-                fontSize: '0.875rem',
-                minHeight: 'unset',
-              }}
-            >
+            <MenuItem component="div" onClick={logout} sx={{ justifyContent: 'center' }}>
               Sign out
             </MenuItem>
           </Box>

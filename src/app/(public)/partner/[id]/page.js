@@ -1,13 +1,10 @@
 import { PageContainer } from '/src/components/container/PageContainer';
-
-import { PartnerAnalyticsView } from './partner-analytics-view';
-// import PartnerAnalyticsViewV2 from './partner-analytics-view-v2';
+import PartnerAnalyticsView from './partner-analytics-view';
 
 export default function Page() {
-  return (
-    <PageContainer>
-      <PartnerAnalyticsView />
-      {/* <PartnerAnalyticsViewV2 /> */}
-    </PageContainer>
-  );
-}
+    return (
+        <PageContainer>
+            <PartnerAnalyticsView />
+        </PageContainer>
+    );
+};

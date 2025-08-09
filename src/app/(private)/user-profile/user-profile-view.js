@@ -22,10 +22,6 @@ export const UserProfileView = () => {
       validate: (values) => {
         const errors = {};
 
-        if (values.contactNumber && !/^\d+$/.test(values.contactNumber)) {
-          errors.contactNumber = 'Contact number must contain only digits';
-        }
-
         return errors;
       },
       onSubmit: async (values) => {

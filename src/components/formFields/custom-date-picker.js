@@ -16,7 +16,7 @@ export const CustomDatePicker = ({ format = 'YYYY-MM-DD', label, error, value, o
             onChange(formattedDate);
           }
         }}
-        value={value ? dayjs(value, format) : null}
+        value={value ? dayjs(value) : null}
       />
     </FormControl>
   );
