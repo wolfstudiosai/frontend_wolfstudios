@@ -51,6 +51,8 @@ export const CreateChannelDialog = (props) => {
       },
     });
 
+  console.log('values......', values);
+
   return (
     <Dialog title="Create Channel" onClose={onClose} open={open}>
       <form onSubmit={handleSubmit}>
@@ -76,7 +78,7 @@ export const CreateChannelDialog = (props) => {
               <CustomAutoComplete
                 label="Members"
                 value={values.members}
-                onChange={(_, value) => setFieldValue('members', value)}
+                onChange={(value) => setFieldValue('members', value)}
                 options={workspaceInfo?.members?.map((member) => ({
                   value: member.id,
                   label: `${member.firstName} ${member.lastName}`,

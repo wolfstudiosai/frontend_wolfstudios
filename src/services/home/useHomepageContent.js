@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 
-import { getHomepageContentAsync } from '../../lib/common.actions';
+import { getHomepageContentAsync } from '../../actions/common.actions';
 
 export const useHomepageContent = () => {
   const { data, error, isLoading, mutate } = useSWR(

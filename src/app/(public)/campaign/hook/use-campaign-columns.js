@@ -17,7 +17,7 @@ import {
   getProductListAsync,
   getRetailPartnerListAsync,
   getStakeHolderListAsync,
-} from '../../../../lib/common.actions';
+} from '../../../../actions/common.actions';
 import { getContentListAsync } from '../../../(private)/all-content/_lib/all-content.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getProductionListAsync } from '../../production/_lib/production.actions';

@@ -9,7 +9,7 @@ import { MultiSelectEditCell } from '/src/components/data-table/multi-select-edi
 import { formatCompactNumber } from '../../../../utils/helper';
 import SelectEditCell from '/src/components/data-table/select-edit-cell';
 import { getCampaignListAsync } from '../../../(public)/campaign/_lib/campaign.actions';
-import { getCityListAsync, getProductListAsync, getRetailPartnerListAsync, getStakeHolderListAsync, getTagListAsync } from '../../../../lib/common.actions';
+import { getCityListAsync, getProductListAsync, getRetailPartnerListAsync, getStakeHolderListAsync, getTagListAsync } from '../../../../actions/common.actions';
 import { getPartnerListAsync } from '../../../(public)/partner/_lib/partner.actions';
 import { renderAutoCompleteCell, renderAutoCompleteEditCell } from '../../../../components/data-table/render-auto-complete-edit-cell';
 

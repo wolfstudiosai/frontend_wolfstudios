@@ -9,7 +9,7 @@ import AttachFile from '@mui/icons-material/AttachFile';
 import { Box } from '@mui/material';
 import { MultipleTextInputEditCell } from '/src/components/data-table/multiple-text-input-edit';
 import { getSpaceListAsync } from '../../spaces/_lib/space.actions';
-import { getProductListAsync, getStakeHolderListAsync } from '../../../../lib/common.actions';
+import { getProductListAsync, getStakeHolderListAsync } from '../../../../actions/common.actions';
 import { getPartnerListAsync } from '../../partner/_lib/partner.actions';
 import { getCampaignListAsync } from '../../campaign/_lib/campaign.actions';
 import { renderAutoCompleteCell, renderAutoCompleteEditCell } from '../../../../components/data-table/render-auto-complete-edit-cell';

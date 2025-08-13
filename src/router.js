@@ -266,4 +266,11 @@ export const privateRoutesV3 = [
     href: paths.private.users,
     allowedRoles: ['admin', 'super_admin'],
   },
+  {
+    key: 'newsletter',
+    title: 'Newsletters',
+    icon: 'cil:envelope-letter',
+    href: paths.private.newsletters,
+    allowedRoles: ['admin', 'super_admin'],
+  },
 ];
