@@ -53,7 +53,7 @@ export const MessageForm = ({ sx = {} }) => {
 
   const attachmentRef = useRef(null);
   const inputRef = useRef(null);
-  const [notifyMethod, setNotifyMethod] = useState({ email: true, sms: false });
+  const [notifyMethod, setNotifyMethod] = useState({ email: false, sms: false });
 
   const handleFileSelect = (event) => {
     if (event.target.files?.length) {
@@ -92,7 +92,10 @@ export const MessageForm = ({ sx = {} }) => {
       if (activeTab?.type === 'channel') {
         createChannelMessage(messageContent, undefined, attachments);
       } else {
-        createDirectMessage(messageContent, undefined, attachments);
+        createDirectMessage(messageContent, undefined, attachments, {
+          isEmail: notifyMethod.email,
+          isSms: notifyMethod.sms,
+        });
       }
 
       setMessageContent('');
@@ -251,15 +254,17 @@ export const MessageForm = ({ sx = {} }) => {
           endAdornment={
             <InputAdornment position="end" sx={{ display: 'flex', gap: 0.2 }}>
               <Stack direction="row">
-                <IconButton
-                  color="inherit"
-                  title="Notify user by email"
-                  onClick={() => handleNotifyUser('email')}
-                  sx={{ borderRadius: '50%' }}
-                >
-                  <Iconify icon="mdi-light:email" sx={{ color: notifyMethod.email ? 'primary.main' : 'grey.800' }} />
-                </IconButton>
-                <IconButton
+                {activeTab?.type === 'direct' && (
+                  <IconButton
+                    color="inherit"
+                    title="Notify user by email"
+                    onClick={() => handleNotifyUser('email')}
+                    sx={{ borderRadius: '50%' }}
+                  >
+                    <Iconify icon="mdi-light:email" sx={{ color: notifyMethod.email ? 'primary.main' : 'grey.800' }} />
+                  </IconButton>
+                )}
+                {/* <IconButton
                   color="inherit"
                   title="Notify user by SMS"
                   onClick={() => handleNotifyUser('sms')}
@@ -269,7 +274,7 @@ export const MessageForm = ({ sx = {} }) => {
                     icon="fa6-solid:comment-sms"
                     sx={{ color: notifyMethod.sms ? 'primary.main' : 'grey.800' }}
                   />
-                </IconButton>
+                </IconButton> */}
               </Stack>
               {!messageIdToEdit && (
                 <IconButton size="small" sx={{ borderRadius: '50%' }} onClick={() => attachmentRef?.current?.click()}>

@@ -159,7 +159,6 @@ export const formatCompactNumber = (number) => {
   return num.toFixed(2);
 };
 
-
 export const handleCopy = async (text) => {
   if (text.length === 0) {
     toast.error('No text to copy.');
@@ -173,7 +172,6 @@ export const handleCopy = async (text) => {
     console.error('Error copying text:', err);
   }
 };
-
 
 export function isFilterValid(filter) {
   const requiredKeys = ['key', 'type', 'operator', 'value'];
@@ -199,7 +197,7 @@ export function validateFilters(filters) {
 
     // 2. value is required for string or number types
     if (
-      (['string', 'number'].includes(type)) &&
+      ['string', 'number'].includes(type) &&
       !notRequiredFilters.includes(operator) &&
       (value === undefined || value === null || value.toString().trim() === '')
     ) {
@@ -224,7 +222,6 @@ export function validateFilters(filters) {
 
   return { valid: true };
 }
-
 
 export function buildQueryParams(filters, gate) {
   const params = new URLSearchParams();
@@ -252,3 +249,21 @@ export function buildQueryParams(filters, gate) {
 
   return params.toString();
 }
+
+export const urlBase64ToUint8Array = (base64String) => {
+  try {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  } catch (error) {
+    console.error('Error converting VAPID key:', error);
+    throw new Error('Invalid VAPID key format');
+  }
+};
