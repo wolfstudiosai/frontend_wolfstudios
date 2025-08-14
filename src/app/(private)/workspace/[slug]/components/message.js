@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { toast } from 'sonner';
 
 import { ChatContext } from '/src/contexts/chat';
 import useAuth from '/src/hooks/useAuth';
@@ -38,6 +39,7 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
     deleteDirectMessage,
     pinChannelMessage,
     pinDirectMessage,
+    notifyDirectMessage,
   } = useContext(ChatContext);
 
   const { userInfo } = useAuth();
@@ -99,6 +101,16 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
 
   const isYourMessage =
     activeTab?.type === 'channel' ? message?.User?.id === userInfo?.id : message?.Sender?.id === userInfo?.id;
+
+  const notifyUserByEmail = async () => {
+    try {
+      await notifyDirectMessage(message?.id, 'email');
+      toast.success('Email sent to user');
+    } catch (err) {
+      console.log({ err });
+      toast.error('Failed to send email');
+    }
+  };
 
   return (
     <Stack
@@ -244,12 +256,19 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
             transition: 'opacity 0.2s ease-in-out',
           }}
         >
-          <IconButton color="inherit" title="Notify user by email" sx={{ borderRadius: '50%' }}>
-            <Iconify icon="mdi-light:email" />
-          </IconButton>
-          <IconButton color="inherit" title="Notify user by SMS">
+          {activeTab?.type === 'direct' && (
+            <IconButton
+              color="inherit"
+              title="Notify user by email"
+              sx={{ borderRadius: '50%' }}
+              onClick={notifyUserByEmail}
+            >
+              <Iconify icon="mdi-light:email" />
+            </IconButton>
+          )}
+          {/* <IconButton color="inherit" title="Notify user by SMS">
             <Iconify icon="fa6-solid:comment-sms" />
-          </IconButton>
+          </IconButton> */}
           {isYourMessage && (
             <IconButton title="Edit" onClick={() => handleEditMessage(message || null)}>
               <Iconify icon="material-symbols:edit-outline-rounded" />

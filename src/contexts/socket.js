@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
+import { toast } from 'sonner';
 
 const SocketContext = createContext(null);
 
@@ -18,12 +19,12 @@ export const SocketProvider = ({ children }) => {
     });
 
     socketRef.current.on('connect', () => {
-      console.log('Socket connected');
+      toast.success('Chat connected');
       setConnected(true);
     });
 
     socketRef.current.on('disconnect', () => {
-      console.log('Socket disconnected');
+      toast.error('Chat disconnected');
       setConnected(false);
     });
 
@@ -74,8 +75,8 @@ export const SocketProvider = ({ children }) => {
       stopTyping: (channelId) => {
         socketRef.current.emit('stop-typing', { channelId });
       },
-      sendDirectMessage: ({ directChannelId, message, replyId, attachments }) => {
-        socketRef.current.emit('send-direct-message', { directChannelId, message, replyId, attachments });
+      sendDirectMessage: ({ directChannelId, message, replyId, attachments, options }) => {
+        socketRef.current.emit('send-direct-message', { directChannelId, message, replyId, attachments, options });
       },
       editDirectMessage: ({ directChannelId, messageId, content, replyId }) => {
         socketRef.current.emit('edit-direct-message', { directChannelId, messageId, content, replyId });
