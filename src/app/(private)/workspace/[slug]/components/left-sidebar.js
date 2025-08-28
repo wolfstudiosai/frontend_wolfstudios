@@ -18,6 +18,7 @@ import { AvatarWithActiveStatus } from '/src/components/core/avatar-with-active-
 import { Iconify } from '/src/components/iconify/iconify';
 
 import { AddMemberToWorkspace } from './add-member-to-workspace';
+import { AIAssistantRightPanel } from './ai-assistant-right-panel';
 import { CreateChannelDialog } from './create-channel-dialog';
 import { CountChip, MemberInfo, MemberItem, MemberName, MemberRole, ScrollableContent } from './custom-component';
 import { UserListPopover } from './user-list-popover';
@@ -101,6 +102,7 @@ export const LeftSidebar = ({ isMobile }) => {
   const [openCreateChannelDialog, setOpenCreateChannelDialog] = useState(false);
   const [openAddMemberDialog, setOpenAddMemberDialog] = useState(false);
   const [openUserList, setOpenUserList] = useState(false);
+  const [openAiAssistant, setOpenAiAssistant] = useState(false);
 
   const anchorRef = useRef(null);
 
@@ -116,6 +118,10 @@ export const LeftSidebar = ({ isMobile }) => {
       ...openSections,
       [section]: !openSections[section],
     });
+  };
+
+  const handleAiAssistantClick = () => {
+    setOpenAiAssistant(!openAiAssistant);
   };
 
   return (
@@ -147,9 +153,10 @@ export const LeftSidebar = ({ isMobile }) => {
                   icon: 'mingcute:ai-line',
                   count: 0,
                   tag: 'COMING SOON',
+                  onClick: handleAiAssistantClick,
                 },
               ].map((item, index) => (
-                <ListItem key={index} disablePadding>
+                <ListItem key={index} disablePadding onClick={item.onClick}>
                   <StyledListItemButton>
                     <StyledListItemIcon>
                       <Iconify icon={item.icon} />
@@ -306,6 +313,8 @@ export const LeftSidebar = ({ isMobile }) => {
         anchorRef={anchorRef}
         title="Direct Messages"
       />
+
+      <AIAssistantRightPanel open={openAiAssistant} onClose={() => setOpenAiAssistant(false)} />
     </>
   );
 };
