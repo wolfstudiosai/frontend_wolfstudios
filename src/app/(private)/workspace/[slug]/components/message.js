@@ -9,6 +9,7 @@ import {
   Paper,
   Popover,
   Popper,
+  Skeleton,
   Stack,
   Typography,
 } from '@mui/material';
@@ -25,6 +26,14 @@ dayjs.extend(relativeTime);
 
 const reactionOptions = ['👍', '❤️', '😂', '🎉', '😮'];
 
+const demoSuggestedReplies = [
+  'Sure, I’ll get back to you on that!',
+  'Can you clarify a bit more?',
+  'Got it, thanks for sharing.',
+  'That makes sense.',
+  'Let’s schedule a call to discuss further.',
+];
+
 export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false }) => {
   const {
     setActiveChannelThread,
@@ -40,6 +49,7 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
     pinChannelMessage,
     pinDirectMessage,
     notifyDirectMessage,
+    setMessageContent,
   } = useContext(ChatContext);
 
   const { userInfo } = useAuth();
@@ -48,6 +58,23 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
   const popperRef = useRef(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const confirmDialogRef = useRef(null);
+
+  // --- AI Reply state (JS version: no types) ---
+  const [aiReplyAnchor, setAiReplyAnchor] = useState(null);
+  const [replyLoading, setReplyLoading] = useState(false);
+  const [suggestedReplies, setSuggestedReplies] = useState([]);
+
+  const handleAiReplyClick = (event) => {
+    setAiReplyAnchor(aiReplyAnchor ? null : event.currentTarget);
+    setReplyLoading(true);
+    setTimeout(() => setReplyLoading(false), 2000);
+    setSuggestedReplies(demoSuggestedReplies);
+  };
+
+  const handleSelectReply = (text) => {
+    setMessageContent(text);
+    setAiReplyAnchor(null);
+  };
 
   const handleDelete = () => {
     if (activeTab?.type === 'channel') {
@@ -266,9 +293,12 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
               <Iconify icon="mdi-light:email" />
             </IconButton>
           )}
-          {/* <IconButton color="inherit" title="Notify user by SMS">
-            <Iconify icon="fa6-solid:comment-sms" />
-          </IconButton> */}
+
+          {/* AI Reply Button */}
+          <IconButton color="inherit" title="AI Reply" onClick={handleAiReplyClick}>
+            <Iconify icon="mingcute:ai-line" />
+          </IconButton>
+
           {isYourMessage && (
             <IconButton title="Edit" onClick={() => handleEditMessage(message || null)}>
               <Iconify icon="material-symbols:edit-outline-rounded" />
@@ -280,6 +310,7 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
               <Iconify icon="material-symbols:delete-outline-rounded" />
             </IconButton>
           )}
+
           {!threadTab && (
             <IconButton
               title="Reply in thread"
@@ -328,19 +359,54 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
         </Popper>
       )}
 
-      {/* Delte confirmation popover */}
+      {/* AI Reply Popover */}
+      <Popover
+        open={Boolean(aiReplyAnchor)}
+        anchorEl={aiReplyAnchor}
+        onClose={() => setAiReplyAnchor(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Box sx={{ p: 1, minWidth: 260 }}>
+          <Typography variant="subtitle2" sx={{ mb: 1 }}>
+            Suggested Replies
+          </Typography>
+          <Stack spacing={1}>
+            {replyLoading ? (
+              Array(5)
+                .fill(0)
+                .map((_, index) => (
+                  <Skeleton key={index} variant="rectangular" width="100%" height={30} sx={{ borderRadius: 1 }} />
+                ))
+            ) : suggestedReplies?.length > 0 ? (
+              suggestedReplies.map((reply, i) => (
+                <Button
+                  key={i}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  onClick={() => handleSelectReply(reply)}
+                  sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
+                >
+                  {reply}
+                </Button>
+              ))
+            ) : (
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                No replies found
+              </Typography>
+            )}
+          </Stack>
+        </Box>
+      </Popover>
+
+      {/* Delete confirmation popover */}
       <Popover
         open={openConfirmDialog}
         onClose={() => setOpenConfirmDialog(false)}
-        anchorEl={confirmDialogRef.current}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
+        anchorEl={confirmDialogRef?.current}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <Box sx={{ p: 2, width: 300 }}>
           <Typography variant="subtitle1" gutterBottom>

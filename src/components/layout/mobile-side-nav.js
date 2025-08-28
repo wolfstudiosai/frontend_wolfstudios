@@ -8,10 +8,10 @@ import useAuth from '/src/hooks/useAuth';
 import { Logo } from '/src/components/core/logo';
 import { NavSearch } from '/src/components/navbar/nav-search';
 
+import { UserInfoPopover } from '../dashboard/layout/_components/user-info-popover';
+import { SettingsPopover } from '../settings-popover';
 import { privateRoutesV3 } from '/src/router';
 import SidebarMenuItems, { getWorkspacesTab } from '/src/utils/nav-utils';
-import { SettingsPopover } from '../settings-popover';
-import { UserInfoPopover } from '../dashboard/layout/_components/user-info-popover';
 
 export function MobileSideNav({ open, onClose }) {
   const pathname = usePathname();
