@@ -9,6 +9,7 @@ import {
   Paper,
   Popover,
   Popper,
+  Skeleton,
   Stack,
   Typography,
 } from '@mui/material';
@@ -25,6 +26,14 @@ dayjs.extend(relativeTime);
 
 const reactionOptions = ['👍', '❤️', '😂', '🎉', '😮'];
 
+const demoSuggestedReplies = [
+  'Sure, I’ll get back to you on that!',
+  'Can you clarify a bit more?',
+  'Got it, thanks for sharing.',
+  'That makes sense.',
+  'Let’s schedule a call to discuss further.',
+];
+
 export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false }) => {
   const {
     setActiveChannelThread,
@@ -40,6 +49,7 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
     pinChannelMessage,
     pinDirectMessage,
     notifyDirectMessage,
+    setMessageContent,
   } = useContext(ChatContext);
 
   const { userInfo } = useAuth();
@@ -51,21 +61,18 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
 
   // --- AI Reply state (JS version: no types) ---
   const [aiReplyAnchor, setAiReplyAnchor] = useState(null);
-  const suggestedReplies = [
-    'Sure, I’ll get back to you on that!',
-    'Can you clarify a bit more?',
-    'Got it, thanks for sharing.',
-    'That makes sense.',
-    'Let’s schedule a call to discuss further.',
-  ];
+  const [replyLoading, setReplyLoading] = useState(false);
+  const [suggestedReplies, setSuggestedReplies] = useState([]);
 
   const handleAiReplyClick = (event) => {
     setAiReplyAnchor(aiReplyAnchor ? null : event.currentTarget);
+    setReplyLoading(true);
+    setTimeout(() => setReplyLoading(false), 2000);
+    setSuggestedReplies(demoSuggestedReplies);
   };
 
   const handleSelectReply = (text) => {
-    // TODO: insert into your chat input or send
-    console.log('Selected AI Reply:', text);
+    setMessageContent(text);
     setAiReplyAnchor(null);
   };
 
@@ -365,18 +372,30 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
             Suggested Replies
           </Typography>
           <Stack spacing={1}>
-            {suggestedReplies.map((reply, i) => (
-              <Button
-                key={i}
-                variant="outlined"
-                size="small"
-                fullWidth
-                onClick={() => handleSelectReply(reply)}
-                sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
-              >
-                {reply}
-              </Button>
-            ))}
+            {replyLoading ? (
+              Array(5)
+                .fill(0)
+                .map((_, index) => (
+                  <Skeleton key={index} variant="rectangular" width="100%" height={30} sx={{ borderRadius: 1 }} />
+                ))
+            ) : suggestedReplies?.length > 0 ? (
+              suggestedReplies.map((reply, i) => (
+                <Button
+                  key={i}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  onClick={() => handleSelectReply(reply)}
+                  sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
+                >
+                  {reply}
+                </Button>
+              ))
+            ) : (
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                No replies found
+              </Typography>
+            )}
           </Stack>
         </Box>
       </Popover>
