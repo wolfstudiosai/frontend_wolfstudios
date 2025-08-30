@@ -50,6 +50,7 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
     pinDirectMessage,
     notifyDirectMessage,
     setMessageContent,
+    getAIReplies,
   } = useContext(ChatContext);
 
   const { userInfo } = useAuth();
@@ -64,11 +65,19 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
   const [replyLoading, setReplyLoading] = useState(false);
   const [suggestedReplies, setSuggestedReplies] = useState([]);
 
-  const handleAiReplyClick = (event) => {
-    setAiReplyAnchor(aiReplyAnchor ? null : event.currentTarget);
-    setReplyLoading(true);
-    setTimeout(() => setReplyLoading(false), 2000);
-    setSuggestedReplies(demoSuggestedReplies);
+  const handleAiReplyClick = async (event) => {
+    try {
+      setReplyLoading(true);
+      setAiReplyAnchor(aiReplyAnchor ? null : event.currentTarget);
+      const replies = await getAIReplies(message?.content);
+      setSuggestedReplies(replies);
+    } catch (err) {
+      toast.error('Failed to get AI replies');
+      setAiReplyAnchor(null);
+      console.log(err);
+    } finally {
+      setReplyLoading(false);
+    }
   };
 
   const handleSelectReply = (text) => {
@@ -283,7 +292,7 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
             transition: 'opacity 0.2s ease-in-out',
           }}
         >
-          {activeTab?.type === 'direct' && (
+          {activeTab?.type === 'direct' && isYourMessage && (
             <IconButton
               color="inherit"
               title="Notify user by email"
@@ -293,24 +302,22 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
               <Iconify icon="mdi-light:email" />
             </IconButton>
           )}
-
           {/* AI Reply Button */}
-          <IconButton color="inherit" title="AI Reply" onClick={handleAiReplyClick}>
-            <Iconify icon="mingcute:ai-line" />
-          </IconButton>
-
+          {!isYourMessage && (
+            <IconButton color="inherit" title="AI Reply" onClick={handleAiReplyClick}>
+              <Iconify icon="mingcute:ai-line" />
+            </IconButton>
+          )}
           {isYourMessage && (
             <IconButton title="Edit" onClick={() => handleEditMessage(message || null)}>
               <Iconify icon="material-symbols:edit-outline-rounded" />
             </IconButton>
           )}
-
           {isYourMessage && (
             <IconButton title="Delete" ref={confirmDialogRef} onClick={() => setOpenConfirmDialog(true)}>
               <Iconify icon="material-symbols:delete-outline-rounded" />
             </IconButton>
           )}
-
           {!threadTab && (
             <IconButton
               title="Reply in thread"
@@ -371,7 +378,7 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
           <Typography variant="subtitle2" sx={{ mb: 1 }}>
             Suggested Replies
           </Typography>
-          <Stack spacing={1}>
+          <Stack spacing={1} sx={{ maxHeight: '300px', overflow: 'auto' }}>
             {replyLoading ? (
               Array(5)
                 .fill(0)
@@ -386,7 +393,13 @@ export const Message = ({ message, sidebar, pinnedTab = false, threadTab = false
                   size="small"
                   fullWidth
                   onClick={() => handleSelectReply(reply)}
-                  sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
+                  sx={{
+                    justifyContent: 'flex-start',
+                    textTransform: 'none',
+                    wordWrap: 'break-word',
+                    width: '300px',
+                    textAlign: 'left',
+                  }}
                 >
                   {reply}
                 </Button>
