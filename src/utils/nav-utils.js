@@ -1,9 +1,20 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { Box, Chip, Collapse, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Popover, Typography } from '@mui/material';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import {
+  Box,
+  Chip,
+  Collapse,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  MenuList,
+  Popover,
+  Typography,
+} from '@mui/material';
+
 import { Iconify } from '/src/components/iconify/iconify';
 
 // Utility to generate workspaces tab
@@ -24,32 +35,25 @@ export function getWorkspacesTab(userInfo) {
 }
 
 // MenuItems Component
-const SidebarMenuItems = ({
-  items,
-  level = 0,
-  openMenus,
-  toggleMenuItem,
-  isDesktop = false,
-  isOpen = true,
-}) => {
+const SidebarMenuItems = ({ items, level = 0, openMenus, toggleMenuItem, isDesktop = false, isOpen = true }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [openSubmenuKey, setOpenSubmenuKey] = useState(null)
+  const [openSubmenuKey, setOpenSubmenuKey] = useState(null);
   const [submenuAnchorEl, setSubmenuAnchorEl] = useState(null);
   const [hoveredItem, setHoveredItem] = useState(null);
 
   // Ref to store the hover timeout
-  const hoverTimeoutRef = useRef(null)
+  const hoverTimeoutRef = useRef(null);
 
   // Clean up on unmount
   useEffect(() => {
     return () => {
       if (hoverTimeoutRef?.current) {
-        clearTimeout(hoverTimeoutRef.current)
+        clearTimeout(hoverTimeoutRef.current);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   const handleClickMenu = (event, item) => {
     if (isOpen && item.href) {
@@ -104,16 +108,16 @@ const SidebarMenuItems = ({
 
   const iconStyles = isDesktop
     ? {
-      justifyContent: 'flex-start',
-      ...(!isOpen && {
-        // border: '1px solid var(--mui-palette-divider)',
-        // boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
-        borderRadius: 1,
-        p: 0.5,
-        ml: 0.9,
-        // backgroundColor: 'background.paper',
-      }),
-    }
+        justifyContent: 'flex-start',
+        ...(!isOpen && {
+          // border: '1px solid var(--mui-palette-divider)',
+          // boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+          borderRadius: 1,
+          p: 0.5,
+          ml: 0.9,
+          // backgroundColor: 'background.paper',
+        }),
+      }
     : { minWidth: 40 };
 
   const textStyles = {
@@ -131,7 +135,13 @@ const SidebarMenuItems = ({
         return (
           <Fragment key={item.key}>
             <Box
-              sx={{ display: 'flex', alignItems: 'center', width: '100%', position: 'relative' }}>
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                width: '100%',
+                position: 'relative',
+              }}
+            >
               <MenuItem
                 selected={isActive}
                 onClick={(e) => handleClickMenu(e, item)}
@@ -148,12 +158,7 @@ const SidebarMenuItems = ({
                 }}
               >
                 <ListItemIcon sx={iconStyles} title={isDesktop && !isOpen ? item.title : ''}>
-                  <Iconify
-                    icon={item.icon}
-                    width={20}
-                    height={20}
-                    color="white"
-                  />
+                  <Iconify icon={item.icon} width={20} height={20} color="white" />
                 </ListItemIcon>
                 {(isDesktop ? isOpen : true) && <ListItemText primary={item.title} sx={textStyles} />}
                 {isDesktop && !isOpen && item.count && (
@@ -196,115 +201,118 @@ const SidebarMenuItems = ({
         );
       })}
 
-      {!isOpen && isDesktop && items.map((item) => {
-        if (!item.items?.length) return null;
+      {!isOpen &&
+        isDesktop &&
+        items.map((item) => {
+          if (!item.items?.length) return null;
 
-        const handleSubmenuEnter = (event, itemKey) => {
-          setHoveredItem(itemKey);
-          setSubmenuAnchorEl(event.currentTarget);
-        };
+          const handleSubmenuEnter = (event, itemKey) => {
+            setHoveredItem(itemKey);
+            setSubmenuAnchorEl(event.currentTarget);
+          };
 
-        const handleSubmenuLeave = () => {
-          setHoveredItem(null);
-          setSubmenuAnchorEl(null);
-        };
+          const handleSubmenuLeave = () => {
+            setHoveredItem(null);
+            setSubmenuAnchorEl(null);
+          };
 
-        return (
-          <Popover
-            key={item.key}
-            open={openSubmenuKey === item.key && Boolean(anchorEl)}
-            anchorEl={anchorEl}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-            onClose={closeSubmenu}
-            disableRestoreFocus
-            sx={{ pointerEvents: 'none' }}
-            slotProps={{
-              paper: {
-                onMouseEnter: cancelCloseSubmenu,
-                onMouseLeave: closeSubmenu,
-                sx: {
-                  pointerEvents: 'auto',
-                  boxShadow: 3,
-                  p: 0.5,
-                  bgcolor: 'background.paper',
-                  borderRadius: 1,
-                  minWidth: 200,
-                }
-              }
-            }}
-          >
-            <Box>
-              <Box
-                onClick={() => item.href && router.push(item.href)}
-                sx={{
-                  px: 2,
-                  py: 1,
-                  cursor: 'pointer',
-                  bgcolor: item.href && pathname === item.href ? 'action.hover' : 'transparent',
-                  '&:hover': { bgcolor: 'action.hover' },
-                }}>
-                <Typography variant="body2" noWrap>
-                  {item.title}
-                </Typography>
+          return (
+            <Popover
+              key={item.key}
+              open={openSubmenuKey === item.key && Boolean(anchorEl)}
+              anchorEl={anchorEl}
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+              onClose={closeSubmenu}
+              disableRestoreFocus
+              sx={{ pointerEvents: 'none' }}
+              slotProps={{
+                paper: {
+                  onMouseEnter: cancelCloseSubmenu,
+                  onMouseLeave: closeSubmenu,
+                  sx: {
+                    pointerEvents: 'auto',
+                    boxShadow: 3,
+                    p: 0.5,
+                    bgcolor: 'background.paper',
+                    borderRadius: 1,
+                    minWidth: 200,
+                  },
+                },
+              }}
+            >
+              <Box>
+                <Box
+                  onClick={() => item.href && router.push(item.href)}
+                  sx={{
+                    px: 2,
+                    py: 1,
+                    cursor: 'pointer',
+                    bgcolor: item.href && pathname === item.href ? 'action.hover' : 'transparent',
+                    '&:hover': { bgcolor: 'action.hover' },
+                  }}
+                >
+                  <Typography variant="body2" noWrap>
+                    {item.title}
+                  </Typography>
+                </Box>
+                {item.items.map((child) => {
+                  const isActive = child.href && pathname === child.href;
+                  return (
+                    <Box
+                      key={child.key}
+                      onMouseEnter={(e) => handleSubmenuEnter(e, child.key)}
+                      onMouseLeave={handleSubmenuLeave}
+                      onClick={() => child.href && router.push(child.href)}
+                      sx={{
+                        px: 2,
+                        py: 1,
+                        cursor: 'pointer',
+                        bgcolor: isActive ? 'action.hover' : 'transparent',
+                        '&:hover': { bgcolor: 'action.hover' },
+                      }}
+                    >
+                      <Typography variant="body2" noWrap>
+                        {child.title}
+                      </Typography>
+
+                      {/* Recursive Submenu Popover */}
+                      {child.items?.length > 0 && hoveredItem === child.key && (
+                        <Popover
+                          open={Boolean(submenuAnchorEl)}
+                          anchorEl={submenuAnchorEl}
+                          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                          transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                          onClose={handleSubmenuLeave}
+                          disableRestoreFocus
+                          sx={{ pointerEvents: 'none' }}
+                          slotProps={{
+                            paper: {
+                              onMouseEnter: () => {
+                                clearTimeout(hoverTimeoutRef.current);
+                              },
+                              onMouseLeave: handleSubmenuLeave,
+                              sx: {
+                                pointerEvents: 'auto',
+                                p: 0.5,
+                                minWidth: 200,
+                                bgcolor: 'background.paper',
+                              },
+                            },
+                          }}
+                        >
+                          {child.items?.map((item) => (
+                            <SidebarPopoverItem key={item.key} item={item} />
+                          ))}
+                        </Popover>
+                      )}
+                    </Box>
+                  );
+                })}
               </Box>
-              {item.items.map((child) => {
-                const isActive = child.href && pathname === child.href;
-                return (
-                  <Box
-                    key={child.key}
-                    onMouseEnter={(e) => handleSubmenuEnter(e, child.key)}
-                    onMouseLeave={handleSubmenuLeave}
-                    onClick={() => child.href && router.push(child.href)}
-                    sx={{
-                      px: 2,
-                      py: 1,
-                      cursor: 'pointer',
-                      bgcolor: isActive ? 'action.hover' : 'transparent',
-                      '&:hover': { bgcolor: 'action.hover' },
-                    }}
-                  >
-                    <Typography variant="body2" noWrap>
-                      {child.title}
-                    </Typography>
-
-                    {/* Recursive Submenu Popover */}
-                    {child.items?.length > 0 && hoveredItem === child.key && (
-                      <Popover
-                        open={Boolean(submenuAnchorEl)}
-                        anchorEl={submenuAnchorEl}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-                        onClose={handleSubmenuLeave}
-                        disableRestoreFocus
-                        sx={{ pointerEvents: 'none' }}
-                        slotProps={{
-                          paper: {
-                            onMouseEnter: () => {
-                              clearTimeout(hoverTimeoutRef.current);
-                            },
-                            onMouseLeave: handleSubmenuLeave,
-                            sx: {
-                              pointerEvents: 'auto',
-                              p: 0.5,
-                              minWidth: 200,
-                              bgcolor: 'background.paper',
-                            },
-                          }
-                        }}
-                      >
-                        {child.items?.map((item) => <SidebarPopoverItem key={item.key} item={item} />)}
-                      </Popover>
-                    )}
-                  </Box>
-                )
-              })}
-            </Box>
-          </Popover>
-        );
-      })}
-
-
+            </Popover>
+          );
+        })}
     </>
   );
 };
@@ -325,7 +333,7 @@ export const SidebarPopoverItem = ({ item }) => {
           py: 1,
           cursor: 'pointer',
           bgcolor: isActive ? 'action.hover' : 'transparent',
-          '&:hover': { bgcolor: 'action.hover' }
+          '&:hover': { bgcolor: 'action.hover' },
         }}
       >
         <Typography variant="body2" noWrap>
@@ -335,6 +343,5 @@ export const SidebarPopoverItem = ({ item }) => {
     </Box>
   );
 };
-
 
 export default SidebarMenuItems;

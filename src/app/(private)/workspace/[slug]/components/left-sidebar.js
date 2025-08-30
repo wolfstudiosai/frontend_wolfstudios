@@ -1,4 +1,5 @@
-import { Stack } from '@mui/material';
+import { useContext, useRef, useState } from 'react';
+import { Button, Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Collapse from '@mui/material/Collapse';
@@ -10,17 +11,33 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { useContext, useRef, useState } from 'react';
 
-import { AvatarWithActiveStatus } from '/src/components/core/avatar-with-active-status';
-import { Iconify } from '/src/components/iconify/iconify';
 import { ChatContext } from '/src/contexts/chat';
 import useAuth from '/src/hooks/useAuth';
+import { AvatarWithActiveStatus } from '/src/components/core/avatar-with-active-status';
+import { Iconify } from '/src/components/iconify/iconify';
 
 import { AddMemberToWorkspace } from './add-member-to-workspace';
+import { AIAssistantRightPanel } from './ai-assistant-right-panel';
 import { CreateChannelDialog } from './create-channel-dialog';
 import { CountChip, MemberInfo, MemberItem, MemberName, MemberRole, ScrollableContent } from './custom-component';
 import { UserListPopover } from './user-list-popover';
+
+const SLACK_CHANNEL_DEMO = [
+  {
+    id: 1,
+    icon: 'material-symbols:ac-unit',
+    label: 'General',
+    count: 5,
+  },
+  {
+    id: 1,
+    icon: 'material-symbols:account-tree-outline-rounded',
+    tag: 'New',
+    label: 'Sample Channel',
+    count: 0,
+  },
+];
 
 // Update the SidebarHeader to be sticky
 const SidebarHeader = styled(Box)(({ theme }) => ({
@@ -85,6 +102,7 @@ export const LeftSidebar = ({ isMobile }) => {
   const [openCreateChannelDialog, setOpenCreateChannelDialog] = useState(false);
   const [openAddMemberDialog, setOpenAddMemberDialog] = useState(false);
   const [openUserList, setOpenUserList] = useState(false);
+  const [openAiAssistant, setOpenAiAssistant] = useState(false);
 
   const anchorRef = useRef(null);
 
@@ -92,6 +110,7 @@ export const LeftSidebar = ({ isMobile }) => {
     favorites: true,
     channels: true,
     directMessages: true,
+    slackChannel: true,
   });
 
   const handleToggle = (section) => {
@@ -99,6 +118,10 @@ export const LeftSidebar = ({ isMobile }) => {
       ...openSections,
       [section]: !openSections[section],
     });
+  };
+
+  const handleAiAssistantClick = () => {
+    setOpenAiAssistant(!openAiAssistant);
   };
 
   return (
@@ -130,9 +153,10 @@ export const LeftSidebar = ({ isMobile }) => {
                   icon: 'mingcute:ai-line',
                   count: 0,
                   tag: 'COMING SOON',
+                  onClick: handleAiAssistantClick,
                 },
               ].map((item, index) => (
-                <ListItem key={index} disablePadding>
+                <ListItem key={index} disablePadding onClick={item.onClick}>
                   <StyledListItemButton>
                     <StyledListItemIcon>
                       <Iconify icon={item.icon} />
@@ -179,6 +203,40 @@ export const LeftSidebar = ({ isMobile }) => {
                     </StyledListItemButton>
                   </ListItem>
                 ))}
+              </List>
+            </Collapse>
+
+            <SectionHeader>
+              <SectionTitle>Slack Channels</SectionTitle>
+              <Box display="flex">
+                <IconButton size="small" onClick={() => handleToggle('slackChannel')}>
+                  {openSections.slackChannel ? <Iconify icon="mdi:chevron-up" /> : <Iconify icon="mdi:chevron-down" />}
+                </IconButton>
+              </Box>
+            </SectionHeader>
+
+            <Collapse in={openSections.slackChannel} timeout="auto" unmountOnExit>
+              <List dense disablePadding>
+                {SLACK_CHANNEL_DEMO.length > 0 ? (
+                  SLACK_CHANNEL_DEMO.map((item, index) => (
+                    <ListItem key={index} disablePadding onClick={() => setActiveTab({ type: 'channel', id: item.id })}>
+                      <StyledListItemButton active={item.id === activeTab?.id}>
+                        <StyledListItemIcon>
+                          <Iconify icon={item.icon} />
+                        </StyledListItemIcon>
+                        <StyledListItemText primary={item.label} />
+                        {item.tag && <TagChip label={item.tag} size="small" />}
+                        {item.count > 0 && <CountChip label={item.count} size="small" />}
+                      </StyledListItemButton>
+                    </ListItem>
+                  ))
+                ) : (
+                  <Stack direction="column" alignItems="center" justifyContent="center" sx={{ height: '100%' }}>
+                    <Button size="small" variant="text">
+                      Connect slack
+                    </Button>
+                  </Stack>
+                )}
               </List>
             </Collapse>
 
@@ -255,6 +313,8 @@ export const LeftSidebar = ({ isMobile }) => {
         anchorRef={anchorRef}
         title="Direct Messages"
       />
+
+      <AIAssistantRightPanel open={openAiAssistant} onClose={() => setOpenAiAssistant(false)} />
     </>
   );
 };
