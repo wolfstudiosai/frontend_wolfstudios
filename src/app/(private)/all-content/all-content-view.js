@@ -134,7 +134,7 @@ export const AllContentView = () => {
           setSelectedTag={setSelectedTag}
         />
 
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box sx={{ minWidth: 0, flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
           {featuredLoading ? (
             <FeaturedSkeleton />
           ) : featuredData?.length > 0 && featuredData[0] !== undefined ? (
