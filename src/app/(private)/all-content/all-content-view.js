@@ -1,22 +1,44 @@
 'use client';
 
-import React, { useEffect, useRef, useCallback } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { Box, Button, IconButton, Stack, TextField, Typography, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
+import { useSettings } from '/src/hooks/use-settings';
 import { PageContainer } from '/src/components/container/PageContainer';
 import { PageHeader } from '/src/components/core/page-header';
+import PageLoader from '/src/components/loaders/PageLoader';
 
+import { Iconify } from '../../../components/iconify/iconify';
 import { paths } from '../../../paths';
 import { useContentList } from '../../../services/content/useContentList';
+import AllContentFeaturedView from './_component/all-content-featured-view';
 import AllContentGridView from './_component/all-content-grid-view';
 import { AllContentRightPanel } from './_component/all-content-right-panel';
 import ContentTags from './_component/content-tags';
-import PageLoader from '/src/components/loaders/PageLoader';
-import AllContentFeaturedView from './_component/all-content-featured-view';
-import { useSettings } from '/src/hooks/use-settings';
 import FeaturedSkeleton from './_component/featured-content-skelton';
 
+const MOCK_DATA = [
+  {
+    id: 1,
+    title: 'Sports Grid',
+    description: 'Friday MLB Best Bets & Predictions for Tonights Games',
+    icon: 'https://yt3.googleusercontent.com/bMHXmGrmT__If7T5MtiYTFMeYmhzKY-EbZnuLDHXtk3TbgjhtyvUN4ZUYtyC6VQSrapTQT7YE4c=s900-c-k-c0x00ffffff-no-rj',
+    thumbnail:
+      'https://yt3.googleusercontent.com/bMHXmGrmT__If7T5MtiYTFMeYmhzKY-EbZnuLDHXtk3TbgjhtyvUN4ZUYtyC6VQSrapTQT7YE4c=s900-c-k-c0x00ffffff-no-rj',
+  },
+  {
+    id: 2,
+    title: 'Sports Grid',
+    description: 'Friday MLB Best Bets & Predictions for Tonights Games',
+    icon: 'https://yt3.googleusercontent.com/bMHXmGrmT__If7T5MtiYTFMeYmhzKY-EbZnuLDHXtk3TbgjhtyvUN4ZUYtyC6VQSrapTQT7YE4c=s900-c-k-c0x00ffffff-no-rj',
+    thumbnail:
+      'https://yt3.googleusercontent.com/bMHXmGrmT__If7T5MtiYTFMeYmhzKY-EbZnuLDHXtk3TbgjhtyvUN4ZUYtyC6VQSrapTQT7YE4c=s900-c-k-c0x00ffffff-no-rj',
+  },
+];
+
 export const AllContentView = () => {
+  const theme = useTheme();
   const { setBreadcrumbs } = useSettings();
   const [selectedTag, setSelectedTag] = React.useState([]);
   const [showTags, setShowTags] = React.useState(false);
@@ -29,16 +51,11 @@ export const AllContentView = () => {
     VIEW: 'grid',
     ADD: false,
   });
+  const [search, setSearch] = React.useState('');
 
-  const {
-    data,
-    isLoading,
-    isLoadingMore,
-    error,
-    totalRecords,
-    hasMore,
-    loadMore,
-  } = useContentList('', selectedTag);
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
+
+  const { data, isLoading, isLoadingMore, error, totalRecords, hasMore, loadMore } = useContentList('', selectedTag);
 
   const { data: featuredData, isLoading: featuredLoading } = useContentList('featured');
 
@@ -87,6 +104,67 @@ export const AllContentView = () => {
     };
   }, [handleObserver]);
 
+  const renderContent = () => (
+    <>
+      <Typography sx={{ fontWeight: 500, fontSize: '18px' }}>Discover any software for any need</Typography>
+      <Box sx={{ mb: 1, position: 'sticky', top: 0, zIndex: 1, backgroundColor: 'background.default' }}>
+        <TextField
+          fullWidth
+          placeholder="Find tags..."
+          variant="outlined"
+          size="small"
+          sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          slotProps={{
+            input: {
+              endAdornment: search && (
+                <InputAdornment position="end">
+                  <IconButton size="small" onClick={() => setSearch('')} edge="end">
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+      </Box>
+      <Stack direction="column" gap={2}>
+        {MOCK_DATA.map((i, index) => (
+          <Stack key={index} direction="row" gap={1} alignItems="flex-start">
+            <Box component="img" src={i.icon} alt={i.title} sx={{ width: 30, height: 30, borderRadius: 0.4 }} />
+            <Stack direction="column" gap={1}>
+              <Stack direction="row" alignItems="center" gap={1}>
+                <Typography>{i.title}</Typography>
+                <Iconify icon="flowbite:badge-check-solid" />
+                <Button variant="outlined" size="small">
+                  Follow
+                </Button>
+              </Stack>
+              <Typography sx={{ fontWeight: 500 }}>{i.description}</Typography>
+              <Box
+                component="img"
+                src={i.thumbnail}
+                alt={i.title}
+                sx={{ width: '100%', height: 150, borderRadius: 0.4, objectFit: 'cover' }}
+              />
+            </Stack>
+            <Stack direction="column" justifyContent="flex-end" sx={{ height: '100%' }}>
+              <IconButton size="small">
+                <Iconify icon="mdi:heart-outline" />
+              </IconButton>
+              <IconButton size="small">
+                <Iconify icon="material-symbols:bookmark-outline" />
+              </IconButton>
+              <IconButton size="small">
+                <Iconify icon="mdi:forward-outline" />
+              </IconButton>
+            </Stack>
+          </Stack>
+        ))}
+      </Stack>
+    </>
+  );
 
   return (
     <PageContainer>
@@ -102,12 +180,7 @@ export const AllContentView = () => {
           setOpenPanel={setOpenPanel}
         />
 
-        <Button
-          variant="contained"
-          size="small"
-          sx={{ display: { lg: 'none' } }}
-          onClick={() => setShowTags(true)}
-        >
+        <Button variant="contained" size="small" sx={{ display: { lg: 'none' } }} onClick={() => setShowTags(true)}>
           Tags
         </Button>
       </Box>
@@ -134,11 +207,24 @@ export const AllContentView = () => {
           setSelectedTag={setSelectedTag}
         />
 
+        {isLargeScreen && (
+          <Stack direction="column" gap={1} sx={{ width: '300px' }}>
+            {renderContent()}
+          </Stack>
+        )}
+
         <Box sx={{ minWidth: 0, flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
           {featuredLoading ? (
             <FeaturedSkeleton />
           ) : featuredData?.length > 0 && featuredData[0] !== undefined ? (
-            <AllContentFeaturedView data={featuredData} />
+            <>
+              {!isLargeScreen && (
+                <Stack direction="column" gap={1} sx={{ width: '300px' }}>
+                  {renderContent()}
+                </Stack>
+              )}
+              <AllContentFeaturedView data={featuredData} />
+            </>
           ) : null}
 
           <PageLoader loading={isLoading} error={error}>
@@ -162,9 +248,7 @@ export const AllContentView = () => {
         </Box>
       </Box>
 
-      {openPanel && (
-        <AllContentRightPanel onClose={() => setOpenPanel(false)} id={null} open={openPanel} view="ADD" />
-      )}
+      {openPanel && <AllContentRightPanel onClose={() => setOpenPanel(false)} id={null} open={openPanel} view="ADD" />}
     </PageContainer>
   );
 };
