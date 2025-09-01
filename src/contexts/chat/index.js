@@ -1,7 +1,6 @@
 'use client';
 
 import { createContext, useEffect, useState } from 'react';
-import { ElectricScooterSharp } from '@mui/icons-material';
 import { toast } from 'sonner';
 
 import { useSocket } from '/src/contexts/socket';
@@ -356,6 +355,16 @@ export const ChatProvider = ({ children }) => {
         type,
       });
       return response.data;
+    } catch (error) {
+      console.error('Error fetching channel messages:', error);
+      throw error;
+    }
+  };
+
+  const getAIReplies = async (message) => {
+    try {
+      const response = await chatApi.get(`/ai/recommended-replies?message=${message}`);
+      return response.data?.data;
     } catch (error) {
       console.error('Error fetching channel messages:', error);
       throw error;
@@ -924,7 +933,6 @@ export const ChatProvider = ({ children }) => {
     messageIdToEdit,
     messageReplyContent,
     setMessageReplyContent,
-    handleEditMessage,
     replyMessageIdToEdit,
     handleEditReplyMessage,
     createDirectChannel,
@@ -940,6 +948,7 @@ export const ChatProvider = ({ children }) => {
     pinChannelMessage,
     pinDirectMessage,
     notifyDirectMessage,
+    getAIReplies,
   };
 
   return <ChatContext.Provider value={contextValue}>{children}</ChatContext.Provider>;
