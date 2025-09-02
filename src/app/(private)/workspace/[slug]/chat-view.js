@@ -1,13 +1,13 @@
-import { useContext, useEffect, useState } from 'react';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Box, Fab, Menu, MenuItem, Stack, useMediaQuery } from '@mui/material';
+import { useContext, useEffect, useState } from 'react';
 
 import { ChatContext } from '/src/contexts/chat';
+import { useSettings } from '/src/hooks/use-settings';
 
-import { CustomBreadcrumbs } from '../../../../components/custom-breadcumbs';
 import { paths } from '../../../../paths';
 import { Content } from './components/content';
 import { LeftSidebar } from './components/left-sidebar';
@@ -21,6 +21,7 @@ export const ChatView = ({ slug }) => {
   const [mobilePanel, setMobilePanel] = useState('content'); // 'sidebar', 'content', 'right'
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const showReplies = activeChannelThread !== null || activeDirectThread !== null;
+  const { setBreadcrumbs } = useSettings();
 
   useEffect(() => {
     if (slug) {
@@ -48,6 +49,13 @@ export const ChatView = ({ slug }) => {
     setMobilePanel(panel);
     setMenuAnchorEl(null);
   };
+
+  useEffect(() => {
+    setBreadcrumbs([
+      { title: 'Dashboard', href: paths.private.overview },
+      { title: 'Chat', href: '' },
+    ]);
+  }, []);
 
   if (isMobile) {
     return (
@@ -153,13 +161,16 @@ export const ChatView = ({ slug }) => {
   // Desktop layout
   return (
     <>
-      <CustomBreadcrumbs
+      {/* <CustomBreadcrumbs
         items={[
           { title: 'Dashboard', href: paths.private.overview },
           { title: 'Chat', href: '' },
         ]}
-      />
-      <Stack direction="row" sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, width: '100%', mt: 1 }}>
+      /> */}
+      <Stack
+        direction="row"
+        sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, width: '100%', mt: 1 }}
+      >
         <LeftSidebar isMobile={isMobile} />
         {activeTab ? <Content isMobile={isMobile} /> : <ContentSkeleton isMobile={isMobile} />}
         {showReplies ? <RepliesSection isMobile={isMobile} /> : <RightSidebar isMobile={isMobile} />}
