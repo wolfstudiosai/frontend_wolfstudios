@@ -51,7 +51,7 @@ export default function SidebarChatProfiles({ isOpen }) {
             display: 'flex',
             flexDirection: 'column',
             gap: isOpen ? 0 : 0.5,
-            minHeight: 180,
+            // minHeight: 180,
             overflowY: 'auto',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
@@ -157,7 +157,7 @@ export default function SidebarChatProfiles({ isOpen }) {
         <></>
       )}
 
-      {directChannels?.length > 0 && <Divider sx={{ borderColor: 'white' }} />}
+      {directChannels?.length > 0 && <Divider sx={{ borderColor: '#6c7865' }} />}
     </>
   );
 }
