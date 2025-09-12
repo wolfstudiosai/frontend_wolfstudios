@@ -56,7 +56,7 @@ export const DrawerContainer = ({ children, open, handleDrawerClose, actionButto
               bottom: 0,
               left: 0,
               backgroundColor: 'var(--mui-palette-background-paper)',
-              py: 1,
+              p: 1,
               zIndex: 4,
             }}
           >
