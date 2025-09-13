@@ -1,30 +1,36 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
-import { Divider, Grid2 as Grid } from '@mui/material';
+import { Divider, Drawer, Grid2 as Grid } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-
-import { DrawerContainer } from '../../../../components/drawer/drawer';
 import { ServiceTiers } from './service-tiers';
+import { api } from '/src/utils/api';
 
 export const ServiceRightPanel = ({ open, onClose, service }) => {
-  const [selectedTier, setSelectedTier] = useState([]);
+  const [selectedTier, setSelectedTier] = React.useState([]);
 
-  const actionButtons = [
-    <Button variant="contained" color="primary">
-      Proceed to checkout
-    </Button>,
-    <Button variant="text" color="primary" onClick={onClose}>
-      Cancel
-    </Button>,
-  ];
+  const handleCheckout = async () => {
+    try {
+      const res = await api.post('/payment/create-checkout-session', {
+        serviceName: service.title,
+        selectedTiers: selectedTier,
+        servicePrice: Number(service.price),
+      });
+
+      if (res.data.success) {
+        window.location.href = res.data.data.checkoutUrl;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
-    <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons} width="30vw">
-      <Box pb={5}>
+    <Drawer open={open} onClose={onClose} anchor="right">
+      <Box p={2} pb={5} width="30vw">
         <Grid container spacing={1}>
           {service.gallery.map((image, index) => (
             <Grid size={{ xs: 12, md: 6 }} key={index}>
@@ -84,11 +90,20 @@ export const ServiceRightPanel = ({ open, onClose, service }) => {
               Total
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              ${selectedTier.reduce((total, tier) => total + tier.amount, Number(service.price))}
+              {selectedTier.reduce((total, tier) => total + tier.amount, Number(service.price))}
             </Typography>
           </Box>
         </Box>
+
+        <Box display="flex" gap={2} mt={5}>
+          <Button onClick={handleCheckout} variant="contained" color="primary">
+            Proceed to checkout
+          </Button>
+          <Button variant="text" color="primary" onClick={onClose}>
+            Cancel
+          </Button>
+        </Box>
       </Box>
-    </DrawerContainer>
+    </Drawer>
   );
 };

@@ -1,14 +1,18 @@
-import { useState } from 'react';
+'use client';
+
 import { Grid2 as Grid } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import { ServiceRightPanel } from './service-right-panel';
+import { useCheckout } from '/src/contexts/checkout';
+import React from 'react';
 
 export const ServiceCard = ({ service }) => {
-  const [openServicePanel, setOpenServicePanel] = useState(false);
-  const [selectedService, setSelectedService] = useState(null);
+  const [openServicePanel, setOpenServicePanel] = React.useState(false);
+  const { selectedService, addServiceToCart } = useCheckout();
+
   return (
     <Grid size={12}>
       <Box sx={{ mb: 6 }}>
@@ -93,7 +97,7 @@ export const ServiceCard = ({ service }) => {
                   size="small"
                   onClick={() => {
                     setOpenServicePanel(true);
-                    setSelectedService(subService);
+                    addServiceToCart(subService);
                   }}
                 >
                   Purchase Now
