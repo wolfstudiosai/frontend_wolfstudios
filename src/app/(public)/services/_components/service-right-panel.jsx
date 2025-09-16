@@ -14,7 +14,7 @@ export const ServiceRightPanel = ({ open, onClose, service }) => {
 
   const handleCheckout = async () => {
     try {
-      const res = await api.post('/payment/create-checkout-session', {
+      const res = await api.post('/payments', {
         serviceName: service.title,
         serviceTiers: selectedTier,
         servicePrice: Number(service.price),

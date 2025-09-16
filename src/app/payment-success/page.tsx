@@ -10,9 +10,14 @@ import {
 } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Link from 'next/link';
+import { verifyPayment } from '../../services/payment/verify-payment';
 
 const PaymentSuccess = async ({ searchParams }) => {
-    const { amount } = await searchParams;
+    const { session_id, amount } = await searchParams;
+
+    const data = await verifyPayment(session_id);
+    console.log(data);
+
     return (
         <Container maxWidth="sm" sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Paper elevation={3} sx={{ p: 4, borderRadius: 3, width: '100%', textAlign: 'center' }}>
