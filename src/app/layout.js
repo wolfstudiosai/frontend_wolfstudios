@@ -25,7 +25,6 @@ import { SettingsProvider } from '/src/contexts/settings';
 import { SessionProvider } from "next-auth/react"
 import { ChatProvider } from '/src/contexts/chat';
 import { SocketProvider } from '/src/contexts/socket';
-import { CheckoutProvider } from '/src/contexts/checkout';
 
 export const metadata = { title: config.site.name };
 
@@ -54,9 +53,7 @@ export default async function Layout({ children }) {
                         <AuthGuard>
                           <SocketProvider>
                             <ChatProvider>
-                              <CheckoutProvider>
-                                <LayoutView>{children}</LayoutView>
-                              </CheckoutProvider>
+                              <LayoutView>{children}</LayoutView>
                             </ChatProvider>
                           </SocketProvider>
                         </AuthGuard>

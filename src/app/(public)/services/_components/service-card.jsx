@@ -6,12 +6,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import { ServiceRightPanel } from './service-right-panel';
-import { useCheckout } from '/src/contexts/checkout';
-import React from 'react';
+import React, { useState } from 'react';
 
 export const ServiceCard = ({ service }) => {
   const [openServicePanel, setOpenServicePanel] = React.useState(false);
-  const { selectedService, addServiceToCart } = useCheckout();
+  const [selectedService, setSelectedService] = useState(null);
 
   return (
     <Grid size={12}>
@@ -97,7 +96,7 @@ export const ServiceCard = ({ service }) => {
                   size="small"
                   onClick={() => {
                     setOpenServicePanel(true);
-                    addServiceToCart(subService);
+                    setSelectedService(subService);
                   }}
                 >
                   Purchase Now
