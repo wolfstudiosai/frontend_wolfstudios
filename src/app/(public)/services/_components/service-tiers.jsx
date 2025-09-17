@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -17,10 +17,9 @@ const data = [
 ];
 
 export const ServiceTiers = ({ selectedTier, setSelectedTier }) => {
+
   const handleSelect = (row) => {
-    setSelectedTier((prev) =>
-      prev.some((item) => item.id === row.id) ? prev.filter((item) => item.id !== row.id) : [...prev, row]
-    );
+    setSelectedTier(prev => prev.some((item) => item.id === row.id) ? prev.filter((item) => item.id !== row.id) : [...prev, row]);
   };
 
   return (

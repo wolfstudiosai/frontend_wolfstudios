@@ -1,14 +1,17 @@
-import { useState } from 'react';
+'use client';
+
 import { Grid2 as Grid } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import { ServiceRightPanel } from './service-right-panel';
+import React, { useState } from 'react';
 
 export const ServiceCard = ({ service }) => {
-  const [openServicePanel, setOpenServicePanel] = useState(false);
+  const [openServicePanel, setOpenServicePanel] = React.useState(false);
   const [selectedService, setSelectedService] = useState(null);
+
   return (
     <Grid size={12}>
       <Box sx={{ mb: 6 }}>
