@@ -1,30 +1,57 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import Image from 'next/image';
-import { Divider, Grid2 as Grid } from '@mui/material';
+import { useRouter } from 'next/navigation';
+import { Divider, Drawer, Grid2 as Grid } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-import { DrawerContainer } from '../../../../components/drawer/drawer';
+import { AuthContext } from '../../../../contexts/auth/AuthContext';
 import { ServiceTiers } from './service-tiers';
+import { api } from '/src/utils/api';
 
 export const ServiceRightPanel = ({ open, onClose, service }) => {
-  const [selectedTier, setSelectedTier] = useState([]);
+  const [selectedTier, setSelectedTier] = React.useState([]);
+  const { userInfo } = useContext(AuthContext);
+  const router = useRouter();
 
-  const actionButtons = [
-    <Button variant="contained" color="primary">
-      Proceed to checkout
-    </Button>,
-    <Button variant="text" color="primary" onClick={onClose}>
-      Cancel
-    </Button>,
-  ];
+  const handleCheckout = async () => {
+    try {
+      if (!userInfo.email) {
+        router.push('/auth/sign-in');
+      }
+
+      console.log(userInfo);
+      const amount = Number(service.price) + selectedTier.reduce((total, item) => total + item.amount, 0);
+
+      const information = {
+        name: userInfo.name || 'Unknown',
+        email: userInfo.email,
+        amount,
+        currency: 'USD',
+        services: [
+          {
+            name: service.title,
+            addons: selectedTier.map((item) => ({ name: item.category, price: item.amount })),
+          },
+        ],
+      };
+
+      const res = await api.post('/payments', information);
+
+      if (res.data.success) {
+        window.location.href = res.data.data.url;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <DrawerContainer open={open} handleDrawerClose={onClose} actionButtons={actionButtons} width="30vw">
-      <Box pb={5}>
+    <Drawer open={open} onClose={onClose} anchor="right">
+      <Box p={2} pb={5} width="30vw">
         <Grid container spacing={1}>
           {service.gallery.map((image, index) => (
             <Grid size={{ xs: 12, md: 6 }} key={index}>
@@ -66,8 +93,8 @@ export const ServiceRightPanel = ({ open, onClose, service }) => {
               </Typography>
 
               <Box display="flex" flexDirection="column" gap={1}>
-                {selectedTier.map((tier) => (
-                  <Box display="flex" alignItems="center" justifyContent="space-between">
+                {selectedTier.map((tier, index) => (
+                  <Box display="flex" key={index} alignItems="center" justifyContent="space-between">
                     <Typography variant="body1">{tier.category}</Typography>
                     <Typography variant="body1" color="text.secondary">
                       $ {tier.amount}
@@ -84,11 +111,20 @@ export const ServiceRightPanel = ({ open, onClose, service }) => {
               Total
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              ${selectedTier.reduce((total, tier) => total + tier.amount, Number(service.price))}
+              {selectedTier.reduce((total, tier) => total + tier.amount, Number(service.price))}
             </Typography>
           </Box>
         </Box>
+
+        <Box display="flex" gap={2} mt={5}>
+          <Button onClick={handleCheckout} variant="contained" color="primary">
+            {userInfo.email ? 'Checkout' : 'Login to checkout'}
+          </Button>
+          <Button variant="text" color="primary" onClick={onClose}>
+            Cancel
+          </Button>
+        </Box>
       </Box>
-    </DrawerContainer>
+    </Drawer>
   );
 };
