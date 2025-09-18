@@ -1,34 +1,37 @@
 'use client';
 
-import React, { useContext } from 'react';
+import React from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { Divider, Drawer, Grid2 as Grid } from '@mui/material';
+import { Divider, Drawer, Grid2 as Grid, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-import { AuthContext } from '../../../../contexts/auth/AuthContext';
 import { ServiceTiers } from './service-tiers';
 import { api } from '/src/utils/api';
 
 export const ServiceRightPanel = ({ open, onClose, service }) => {
   const [selectedTier, setSelectedTier] = React.useState([]);
-  const { userInfo } = useContext(AuthContext);
-  const router = useRouter();
+  const [formData, setFormData] = React.useState({
+    name: '',
+    email: '',
+  });
 
-  const handleCheckout = async () => {
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleCheckout = async (e) => {
+    e.preventDefault();
     try {
-      if (!userInfo.email) {
-        router.push('/auth/sign-in');
-      }
-
-      console.log(userInfo);
       const amount = Number(service.price) + selectedTier.reduce((total, item) => total + item.amount, 0);
 
       const information = {
-        name: userInfo.name || 'Unknown',
-        email: userInfo.email,
+        name: formData.name,
+        email: formData.email,
         amount,
         currency: 'USD',
         services: [
@@ -116,13 +119,41 @@ export const ServiceRightPanel = ({ open, onClose, service }) => {
           </Box>
         </Box>
 
-        <Box display="flex" gap={2} mt={5}>
-          <Button onClick={handleCheckout} variant="contained" color="primary">
-            {userInfo.email ? 'Checkout' : 'Login to checkout'}
-          </Button>
-          <Button variant="text" color="primary" onClick={onClose}>
-            Cancel
-          </Button>
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h6" gutterBottom>
+            Enter Your Details
+          </Typography>
+          <Box component="form" onSubmit={handleCheckout} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <TextField
+              size="small"
+              label="Name"
+              name="name"
+              variant="outlined"
+              fullWidth
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+            <TextField
+              size="small"
+              label="Email"
+              name="email"
+              type="email"
+              variant="outlined"
+              fullWidth
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            <Box display="flex" gap={2}>
+              <Button type="submit" variant="contained" color="primary">
+                Checkout
+              </Button>
+              <Button type="button" variant="text" color="primary" onClick={onClose}>
+                Cancel
+              </Button>
+            </Box>
+          </Box>
         </Box>
       </Box>
     </Drawer>
