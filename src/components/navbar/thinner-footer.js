@@ -1,14 +1,13 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import { Box, Button, Popover, Stack, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
-import { Box, Button, Container, Popover, Stack, TextField, Typography } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
-import { paths } from '/src/paths';
 import { createNewsletterSignup } from '/src/actions/common.actions';
+import { paths } from '/src/paths';
 
-import { PageContainer } from '../container/PageContainer';
 import { footerRoutes } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
 import { SidebarPopoverItem } from '/src/utils/nav-utils';
