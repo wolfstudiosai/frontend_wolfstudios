@@ -1,32 +1,53 @@
 'use client';
 
-import React from 'react';
+import React, { useContext } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Divider, Drawer, Grid2 as Grid } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+
+import { AuthContext } from '../../../../contexts/auth/AuthContext';
 import { ServiceTiers } from './service-tiers';
 import { api } from '/src/utils/api';
 
 export const ServiceRightPanel = ({ open, onClose, service }) => {
   const [selectedTier, setSelectedTier] = React.useState([]);
+  const { userInfo } = useContext(AuthContext);
+  const router = useRouter();
 
   const handleCheckout = async () => {
     try {
-      const res = await api.post('/payments', {
-        serviceName: service.title,
-        serviceTiers: selectedTier,
-        servicePrice: Number(service.price),
-      });
+      if (!userInfo.email) {
+        router.push('/auth/sign-in');
+      }
+
+      console.log(userInfo);
+      const amount = Number(service.price) + selectedTier.reduce((total, item) => total + item.amount, 0);
+
+      const information = {
+        name: userInfo.name || 'Unknown',
+        email: userInfo.email,
+        amount,
+        currency: 'USD',
+        services: [
+          {
+            name: service.title,
+            addons: selectedTier.map((item) => ({ name: item.category, price: item.amount })),
+          },
+        ],
+      };
+
+      const res = await api.post('/payments', information);
 
       if (res.data.success) {
-        window.location.href = res.data.data.checkoutUrl;
+        window.location.href = res.data.data.url;
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <Drawer open={open} onClose={onClose} anchor="right">
@@ -72,8 +93,8 @@ export const ServiceRightPanel = ({ open, onClose, service }) => {
               </Typography>
 
               <Box display="flex" flexDirection="column" gap={1}>
-                {selectedTier.map((tier) => (
-                  <Box display="flex" alignItems="center" justifyContent="space-between">
+                {selectedTier.map((tier, index) => (
+                  <Box display="flex" key={index} alignItems="center" justifyContent="space-between">
                     <Typography variant="body1">{tier.category}</Typography>
                     <Typography variant="body1" color="text.secondary">
                       $ {tier.amount}
@@ -97,7 +118,7 @@ export const ServiceRightPanel = ({ open, onClose, service }) => {
 
         <Box display="flex" gap={2} mt={5}>
           <Button onClick={handleCheckout} variant="contained" color="primary">
-            Proceed to checkout
+            {userInfo.email ? 'Checkout' : 'Login to checkout'}
           </Button>
           <Button variant="text" color="primary" onClick={onClose}>
             Cancel
