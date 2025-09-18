@@ -77,6 +77,7 @@ export const footerRoutes = [
   { label: 'Shop', href: '/shop' },
   { label: 'Collaborate', href: '/collaborate' },
   { label: 'Services', href: '/services' },
+  { label: 'Privacy', href: '/privacy-policy' },
 ];
 
 export const workspacesItems = [
