@@ -76,6 +76,7 @@ export const ThinnerFooter = () => {
     <Box
       sx={{
         mx: { xs: 0.9, md: 1.5 },
+        mt: 1,
       }}
     >
       <Box
