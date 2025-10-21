@@ -1,15 +1,21 @@
 import * as React from 'react';
+import RouterLink from 'next/link';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { DynamicLogo } from '../core/logo';
-import RouterLink from 'next/link';
 
+import { DynamicLogo } from '../core/logo';
 
 export function SplitLayout({ children }) {
   return (
-    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '1fr 800px' }, minHeight: '100%' }}>
-      
+    <Box
+      sx={{
+        display: 'grid',
+        mb: 1,
+        gridTemplateColumns: { xs: '1fr', lg: '1fr 800px' },
+        minHeight: '100%',
+      }}
+    >
       <Box
         sx={{
           alignItems: 'start',
@@ -19,19 +25,20 @@ export function SplitLayout({ children }) {
           flexDirection: 'column',
           p: 3,
           gap: 3,
-          minHeight: "calc(100vh - 120px)",
+          minHeight: 'calc(100vh - 120px)',
         }}
       >
         <div>
-          <Box component={RouterLink} href={"/"} sx={{ display: 'inline-block', fontSize: 0 }}>
-            <DynamicLogo colorDark="light" colorLight="dark" height={32} width={122} />
+          <Box component={RouterLink} href={'/'} sx={{ display: 'inline-block', fontSize: 0 }}>
+            <DynamicLogo colorDark="light" colorLight="dark" height={32} width="122px" />
           </Box>
         </div>
         <Stack spacing={4} sx={{ maxWidth: '700px' }}>
           <Stack spacing={1}>
             <Typography variant="h4">Welcome to The Wolf Studios LA</Typography>
             <Typography color="text.secondary">
-              We provide custom solution to our customers. We run your social media so that you can focus on your core business
+              We provide custom solution to our customers. We run your social media so that you can focus on your core
+              business
             </Typography>
           </Stack>
           <Stack
