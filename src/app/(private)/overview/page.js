@@ -46,7 +46,7 @@ export default function Page() {
             </Button>
           </div>
         </Stack>
-        <Grid container spacing={{ xs: 1, md: 3, lg: 4 }}>
+        <Grid container spacing={{ xs: 1, md: 3 }}>
           <Grid
             size={{
               md: 4,
