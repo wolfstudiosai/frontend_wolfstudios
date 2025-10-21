@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import {
   Avatar,
   AvatarGroup,
@@ -17,9 +18,8 @@ import {
   useTheme,
 } from '@mui/material';
 
-import { Iconify } from '/src/components/iconify/iconify';
 import { FadeIn } from '/src/components/animation/fade-in';
-import Link from 'next/link';
+import { Iconify } from '/src/components/iconify/iconify';
 
 export function ContentSection() {
   const theme = useTheme();
@@ -288,17 +288,18 @@ export function ContentSection() {
                 bgcolor: 'rgba(255, 255, 255, 0.2)',
                 backdropFilter: 'blur(5px)',
                 p: { xs: 0.5, sm: 1 },
-                borderRadius: '50px',
+                borderRadius: isMobile ? '20px' : '50px',
                 display: 'flex',
                 alignItems: 'center',
                 flexDirection: { xs: isMobile ? 'column' : 'row', sm: 'row' },
-                gap: { xs: isMobile ? 1 : 0, sm: 0 },
+                gap: { xs: 0, sm: 0 },
               }}
             >
               <TextField
                 placeholder="Enter your email"
                 variant="standard"
                 fullWidth
+                size={isMobile ? 'small' : 'medium'}
                 sx={{
                   flex: 1,
                   px: 1,
