@@ -117,11 +117,11 @@ body {
   border-color: transparent;
 }
 
-.fc .fc-scrollgrid-section-header>th {
+.fc .fc-scrollgrid-section-header > th {
   border-color: transparent;
 }
 
-.fc .fc-scrollgrid-section-body>td {
+.fc .fc-scrollgrid-section-body > td {
   border-color: transparent;
 }
 
@@ -308,4 +308,15 @@ body {
   #page1 {
     height: 100px;
   }
+}
+
+#nprogress .bar {
+  background: #3a43fa !important;
+  height: 3px !important;
+}
+
+#nprogress .peg {
+  box-shadow:
+    0 0 10px #3143fa,
+    0 0 5px #3a43fa !important;
 }

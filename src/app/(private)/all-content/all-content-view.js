@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Box, Button, IconButton, Stack, TextField, Typography, useMediaQuery } from '@mui/material';
+import { Box, Button, Grid2 as Grid, IconButton, Stack, TextField, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 import { useSettings } from '/src/hooks/use-settings';
@@ -129,40 +129,42 @@ export const AllContentView = () => {
           }}
         />
       </Box>
-      <Stack direction="column" gap={2}>
+      <Grid container spacing={2} sx={{ width: '100%' }}>
         {MOCK_DATA.map((i, index) => (
-          <Stack key={index} direction="row" gap={1} alignItems="flex-start">
-            <Box component="img" src={i.icon} alt={i.title} sx={{ width: 30, height: 30, borderRadius: 0.4 }} />
-            <Stack direction="column" gap={1}>
-              <Stack direction="row" alignItems="center" gap={1}>
-                <Typography>{i.title}</Typography>
-                <Iconify icon="flowbite:badge-check-solid" />
-                <Button variant="outlined" size="small">
-                  Follow
-                </Button>
+          <Grid size={{ xs: 12, sm: 6, lg: 12 }} key={index}>
+            <Stack direction="row" gap={1} alignItems="flex-start">
+              <Box component="img" src={i.icon} alt={i.title} sx={{ width: 30, height: 30, borderRadius: 0.4 }} />
+              <Stack direction="column" gap={1}>
+                <Stack direction="row" alignItems="center" gap={1}>
+                  <Typography>{i.title}</Typography>
+                  <Iconify icon="flowbite:badge-check-solid" />
+                  <Button variant="outlined" size="small">
+                    Follow
+                  </Button>
+                </Stack>
+                <Typography sx={{ fontWeight: 500 }}>{i.description}</Typography>
+                <Box
+                  component="img"
+                  src={i.thumbnail}
+                  alt={i.title}
+                  sx={{ width: '100%', height: 150, borderRadius: 0.4, objectFit: 'cover' }}
+                />
               </Stack>
-              <Typography sx={{ fontWeight: 500 }}>{i.description}</Typography>
-              <Box
-                component="img"
-                src={i.thumbnail}
-                alt={i.title}
-                sx={{ width: '100%', height: 150, borderRadius: 0.4, objectFit: 'cover' }}
-              />
+              <Stack direction="column" justifyContent="flex-end" sx={{ height: '100%' }}>
+                <IconButton size="small">
+                  <Iconify icon="mdi:heart-outline" />
+                </IconButton>
+                <IconButton size="small">
+                  <Iconify icon="material-symbols:bookmark-outline" />
+                </IconButton>
+                <IconButton size="small">
+                  <Iconify icon="mdi:forward-outline" />
+                </IconButton>
+              </Stack>
             </Stack>
-            <Stack direction="column" justifyContent="flex-end" sx={{ height: '100%' }}>
-              <IconButton size="small">
-                <Iconify icon="mdi:heart-outline" />
-              </IconButton>
-              <IconButton size="small">
-                <Iconify icon="material-symbols:bookmark-outline" />
-              </IconButton>
-              <IconButton size="small">
-                <Iconify icon="mdi:forward-outline" />
-              </IconButton>
-            </Stack>
-          </Stack>
+          </Grid>
         ))}
-      </Stack>
+      </Grid>
     </>
   );
 
@@ -219,7 +221,7 @@ export const AllContentView = () => {
           ) : featuredData?.length > 0 && featuredData[0] !== undefined ? (
             <>
               {!isLargeScreen && (
-                <Stack direction="column" gap={1} sx={{ width: '300px' }}>
+                <Stack direction="column" gap={1} sx={{ width: { xs: '100%', lg: '300px' } }}>
                   {renderContent()}
                 </Stack>
               )}

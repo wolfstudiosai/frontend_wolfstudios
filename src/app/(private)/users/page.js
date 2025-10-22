@@ -1,5 +1,7 @@
 'use client';
 
+import * as React from 'react';
+import RouterLink from 'next/link';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -10,24 +12,20 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { PencilSimple as PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
-import RouterLink from 'next/link';
-import * as React from 'react';
 
+import { paths } from '/src/paths';
+import { dayjs } from '/src/lib/dayjs';
+import { useDebounce } from '/src/hooks/use-debounce';
 import { RefreshPlugin } from '/src/components/core/plugins/RefreshPlugin';
 import { DataTable } from '/src/components/data-table/data-table';
 import { DeleteConfirmationPasswordPopover } from '/src/components/dialog/delete-dialog-pass-popup';
-import { useDebounce } from '/src/hooks/use-debounce';
-import { dayjs } from '/src/lib/dayjs';
-import { paths } from '/src/paths';
 
-
+import { useAllUser } from '../../../services//users/useAllUser';
 import { deleteUserAsync } from './_lib/user.actions';
 import { defaultUser } from './_lib/user.types';
 import { ManageUserDialog } from './manage-user-dialog';
-import {useAllUser} from "../../../services//users/useAllUser"
 
-
-export default function Page({  }) {
+export default function Page({}) {
   const [openModal, setOpenModal] = React.useState(false);
   const [modalData, setModalData] = React.useState(null);
   const [pagination, setPagination] = React.useState({ pageNo: 1, limit: 10 });
@@ -123,7 +121,7 @@ export default function Page({  }) {
       }}
     >
       <Stack spacing={4}>
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} sx={{ alignItems: 'flex-start' }}>
+        <Stack direction="row" spacing={3} sx={{ alignItems: 'flex-start' }}>
           <Box sx={{ flex: '1 1 auto' }}>
             <Typography variant="h4">Users</Typography>
           </Box>

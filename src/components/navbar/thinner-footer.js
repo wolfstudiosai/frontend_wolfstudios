@@ -1,12 +1,12 @@
 'use client';
 
-import { Box, Button, Popover, Stack, TextField, Typography } from '@mui/material';
-import Link from 'next/link';
 import React, { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import { Box, Button, Popover, Stack, TextField, Typography } from '@mui/material';
 import { toast } from 'sonner';
 
-import { createNewsletterSignup } from '/src/actions/common.actions';
 import { paths } from '/src/paths';
+import { createNewsletterSignup } from '/src/actions/common.actions';
 
 import { footerRoutes } from '/src/router';
 import { pxToRem } from '/src/utils/helper';
@@ -75,13 +75,15 @@ export const ThinnerFooter = () => {
   return (
     <Box
       sx={{
-        mx: 1.5,
+        mx: { xs: 0.9, md: 1.5 },
+        mt: 1,
       }}
     >
       <Box
         sx={{
           width: '100%',
           py: 8,
+          px: 1,
           bgcolor: 'background.paper',
           color: '#fff',
           textAlign: 'center',

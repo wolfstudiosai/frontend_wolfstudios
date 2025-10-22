@@ -3,8 +3,9 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { services } from './_lib/constant';
+
 import { ServiceCard } from './_components/service-card';
+import { services } from './_lib/constant';
 
 export const ServicesPage = () => {
   return (
@@ -23,9 +24,9 @@ export const ServicesPage = () => {
 
       {/* Services Grid */}
       <Box sx={{ py: 0 }}>
-        <Box sx={{ width: '100%', px: 2 }}>
+        <Box sx={{ width: '100%' }}>
           {/* Service Categories */}
-          <Grid container spacing={4}>
+          <Grid container>
             {services.map((service, index) => (
               <ServiceCard service={service} key={index} />
             ))}
