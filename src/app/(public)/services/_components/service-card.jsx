@@ -1,12 +1,12 @@
 'use client';
 
+import React, { useState } from 'react';
 import { Grid2 as Grid } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import { ServiceRightPanel } from './service-right-panel';
-import React, { useState } from 'react';
 
 export const ServiceCard = ({ service }) => {
   const [openServicePanel, setOpenServicePanel] = React.useState(false);
@@ -14,7 +14,7 @@ export const ServiceCard = ({ service }) => {
 
   return (
     <Grid size={12}>
-      <Box sx={{ mb: 6 }}>
+      <Box sx={{ mb: 2 }}>
         <Box
           sx={{
             height: '300px',
@@ -44,9 +44,9 @@ export const ServiceCard = ({ service }) => {
         </Box>
 
         {/* Sub-service Grid */}
-        <Grid container spacing={2}>
+        <Grid container spacing={{ xs: 1, md: 2 }}>
           {service.subServices.map((subService, subIndex) => (
-            <Grid size={{ xs: 6, md: 3 }} key={subIndex}>
+            <Grid size={{ xs: 6, md: 3, xl: 2.4 }} key={subIndex}>
               <Box
                 sx={{
                   p: 2,

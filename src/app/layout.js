@@ -6,25 +6,26 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-import { AuthGuard } from '/src/app/auth/guard/auth-guard';
+import { SessionProvider } from 'next-auth/react';
+
+import { config } from '/src/config';
+import { applyDefaultSettings } from '/src/lib/settings/apply-default-settings';
+import { getSettings as getPersistedSettings } from '/src/lib/settings/get-settings';
+import { AuthProvider } from '/src/contexts/auth/AuthContext';
+import { UserProvider } from '/src/contexts/auth/user-context';
+import { ChatProvider } from '/src/contexts/chat';
+import { SettingsProvider } from '/src/contexts/settings';
+import { SocketProvider } from '/src/contexts/socket';
 import { Analytics } from '/src/components/core/analytics';
 import { I18nProvider } from '/src/components/core/i18n-provider';
 import { LocalizationProvider } from '/src/components/core/localization-provider';
 import { ThemeProvider } from '/src/components/core/theme-provider/theme-provider';
 import { Toaster } from '/src/components/core/toaster';
-import { LayoutView } from '../components/layout/layout-view';
 import { Progressbar } from '/src/components/utils/Progressbar';
 
-import { config } from '/src/config';
-import { applyDefaultSettings } from '/src/lib/settings/apply-default-settings';
-import { getSettings as getPersistedSettings } from '/src/lib/settings/get-settings';
-
-import { AuthProvider } from '/src/contexts/auth/AuthContext';
-import { UserProvider } from '/src/contexts/auth/user-context';
-import { SettingsProvider } from '/src/contexts/settings';
-import { SessionProvider } from "next-auth/react"
-import { ChatProvider } from '/src/contexts/chat';
-import { SocketProvider } from '/src/contexts/socket';
+import { LayoutView } from '../components/layout/layout-view';
+import RouteLoader from '../components/loaders/route-loader';
+import { AuthGuard } from '/src/app/auth/guard/auth-guard';
 
 export const metadata = { title: config.site.name };
 
@@ -53,7 +54,10 @@ export default async function Layout({ children }) {
                         <AuthGuard>
                           <SocketProvider>
                             <ChatProvider>
-                              <LayoutView>{children}</LayoutView>
+                              <LayoutView>
+                                <RouteLoader />
+                                {children}
+                              </LayoutView>
                             </ChatProvider>
                           </SocketProvider>
                         </AuthGuard>

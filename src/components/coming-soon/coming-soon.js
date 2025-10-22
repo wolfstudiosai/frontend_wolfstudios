@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Box, Button, Container, Typography } from '@mui/material';
-import  Grid  from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid2';
 
 import { Iconify } from '../iconify/iconify';
 
@@ -60,14 +60,12 @@ export const ComingSoon = ({ pageName }) => {
 
       {/* Countdown Timer */}
 
-      <Typography variant="h2" sx={{ fontWeight: 'bold', mb: 1 }}>
-        Coming Soon!
-      </Typography>
+      <Typography sx={{ fontWeight: 'bold', mb: 1, fontSize: { xs: '2rem', md: '3rem' } }}>Coming Soon!</Typography>
 
-      <Typography variant="h6" sx={{ color: 'text.secondary', mb: 3 }}>
+      <Typography sx={{ color: 'text.secondary', mb: 3 }}>
         {pageName ? (
           <>
-            We are working hard to bring the {' '}
+            We are working hard to bring the{' '}
             <Typography component="span" sx={{ fontWeight: 'bold' }}>
               {pageName}
             </Typography>{' '}
@@ -77,7 +75,7 @@ export const ComingSoon = ({ pageName }) => {
           "We're working hard to bring this page to life. Stay tuned!"
         )}
       </Typography>
-      <Grid container spacing={2} justifyContent="center" sx={{ mb: 4 }}>
+      <Grid container spacing={{ xs: 1, md: 2 }} justifyContent="center" sx={{ mb: 4 }}>
         {[
           { label: 'Days', value: timeLeft.days },
           { label: 'Hours', value: timeLeft.hours },
@@ -87,8 +85,8 @@ export const ComingSoon = ({ pageName }) => {
           <Grid key={label}>
             <Box
               sx={{
-                width: 80,
-                height: 100,
+                width: { xs: 64, md: 80 },
+                height: { xs: 80, md: 100 },
                 bgcolor: 'primary.main',
                 color: 'white',
                 display: 'flex',
