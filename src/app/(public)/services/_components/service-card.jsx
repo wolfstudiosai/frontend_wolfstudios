@@ -46,7 +46,7 @@ export const ServiceCard = ({ service }) => {
         {/* Sub-service Grid */}
         <Grid container spacing={{ xs: 1, md: 2 }}>
           {service.subServices.map((subService, subIndex) => (
-            <Grid size={{ xs: 6, md: 3 }} key={subIndex}>
+            <Grid size={{ xs: 6, md: 3, xl: 2.4 }} key={subIndex}>
               <Box
                 sx={{
                   p: 2,
