@@ -13,6 +13,10 @@ const config = {
         protocol: 'https',
         hostname: '**', // allow all hostnames
       },
+      {
+        protocol: 'https',
+        hostname: 'source.unsplash.com',
+      },
     ],
   },
 };

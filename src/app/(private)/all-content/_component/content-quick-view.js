@@ -13,12 +13,51 @@ import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import dayjs from 'dayjs';
+import Grid from '@mui/material/Grid2';
 
 import { SectionTitle } from '/src/components/core/section-title';
 import { Iconify } from '/src/components/iconify/iconify';
 
 import { createCommentAsync } from '../_lib/all-content.actions';
 import { handleCopy } from '/src/utils/helper';
+import { ContentLineChart } from './content-line-chart';
+import { FeaturedSlider } from './featured-slider';
+import { ContentImageGallery } from './content-image-gallery';
+
+const cardData = [
+  {
+    label: 'Instagram Likes',
+    value: 1240,
+  },
+  {
+    label: 'Instagram Comments',
+    value: 780,
+  },
+  {
+    label: 'Instagram Shares',
+    value: 124,
+  },
+  {
+    label: 'Instagram Views',
+    value: 80,
+  },
+  {
+    label: 'Instagram Social Sets Used',
+    value: 116,
+  },
+  {
+    label: 'Revo Twitter',
+    value: 400,
+  },
+  {
+    label: 'Revo Tiktok',
+    value: 640,
+  },
+  {
+    label: 'Revo Tiktok Views',
+    value: 620,
+  },
+];
 
 // Add validation functions
 const isValidUrl = (url) => {
@@ -196,9 +235,9 @@ export const ContentQuickView = ({ data, isEdit }) => {
   };
 
   return (
-    <>
-      <Stack direction="row" gap={1}>
-        <Stack sx={{ width: '50%' }}>
+    <Box>
+      <Stack direction={{ xs: "column", md: "row" }} alignItems="start" gap={1}>
+        <Stack sx={{ width: { xs: '100%', md: '50%' } }}>
           <Box
             component="img"
             src={data?.thumbnailImage || '/assets/image-placeholder.jpg'}
@@ -285,7 +324,7 @@ export const ContentQuickView = ({ data, isEdit }) => {
                   <Divider sx={{ borderStyle: 'dashed', my: 1 }} />
                 </>
               )}
-              <FormControl variant="standard">
+              {/* <FormControl variant="standard">
                 <Input
                   placeholder="Add a comment..."
                   value={newComment}
@@ -328,45 +367,39 @@ export const ContentQuickView = ({ data, isEdit }) => {
                   }
                   sx={{ borderBottom: '1px solid', borderColor: 'divider', px: 0, pb: 1, borderRadius: 0 }}
                 />
-              </FormControl>
+              </FormControl> */}
             </Stack>
           </Stack>
         </Stack>
-        <Stack sx={{ width: '50%' }}>
-          <Typography variant="h6">{data?.name}</Typography>
-          <Stack direction="row" alignItems="center" gap={1}>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {data?.monthUploaded} by Combina key
-            </Typography>
-            {data?.postingQuality?.map((p, i) => (
-              <Chip key={i} size="small" label={p} />
-            ))}
-          </Stack>
-          <Stack direction="row" alignItems="center">
-            <IconButton
-              size="small"
-              onClick={() => handleCopy(data?.googleDriveFiles || '')}
-              sx={{ borderRadius: '50%' }}
-            >
-              <Icon icon="mingcute:drive-fill" style={{ color: 'text.secondary' }} />
-            </IconButton>
-            <IconButton size="small" onClick={() => handleCopy(data?.playbookLink || '')} sx={{ borderRadius: '50%' }}>
-              <Icon icon="solar:book-bold" style={{ color: 'text.secondary' }} />
-            </IconButton>
-          </Stack>
 
-          <Stack direction="row" gap={1} sx={{ mt: 1 }}>
-            <Box sx={{ width: '50%' }}>
-              <SectionTitle title="Content Information" sx={{ px: 2, py: 1, fontSize: '0.9rem' }} />
-              <Box sx={{ ml: 1, mt: 1 }}>{Object.keys(contentInfo).map((key) => renderField('content', key))}</Box>
-            </Box>
-            <Box sx={{ width: '50%' }}>
-              <SectionTitle title="Partner Information" sx={{ px: 2, py: 1, fontSize: '0.9rem' }} />
-              <Box sx={{ ml: 1, mt: 1 }}>{Object.keys(partnerInfo).map((key) => renderField('partner', key))}</Box>
-            </Box>
-          </Stack>
-        </Stack>
+        <Grid container spacing={1}>
+          {cardData.map((item) => (
+            <Grid key={item.label} size={6} sx={{ border: 1, borderColor: 'divider' }}>
+              <Box sx={{ p: 2.5 }}>
+                <Typography variant="body2" sx={{ mb: 1.5 }}>
+                  {item.label}
+                </Typography>
+                <Typography variant="h4">
+                  {item.value}
+                </Typography>
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
+
       </Stack>
+
+      {/* Slider */}
+      <FeaturedSlider />
+
+      {/* Image Gallery */}
+      <ContentImageGallery />
+
+
+      {/* Line Chart */}
+      <ContentLineChart />
+
+
       {/* File input (Hidden) */}
       <input
         ref={attachmentRef}
@@ -376,6 +409,6 @@ export const ContentQuickView = ({ data, isEdit }) => {
         onChange={handleFileSelect}
         multiple
       />
-    </>
+    </Box>
   );
 };
