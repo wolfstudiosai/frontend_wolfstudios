@@ -19,7 +19,7 @@ export const ContentLineChart = () => {
     const { mode } = useColorScheme();
 
     return (
-        <Box height={350} width="100%">
+        <Box height={350} width="100%" mt={2}>
             <ResponsiveContainer width="100%" height="100%">
                 <LineChart
                     data={data}

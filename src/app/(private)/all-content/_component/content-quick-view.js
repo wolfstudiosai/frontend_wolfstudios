@@ -235,8 +235,8 @@ export const ContentQuickView = ({ data, isEdit }) => {
 
   return (
     <Box>
-      <Stack direction="row" alignItems="start" gap={1}>
-        <Stack sx={{ width: '50%' }}>
+      <Stack direction={{ xs: "column", md: "row" }} alignItems="start" gap={1}>
+        <Stack sx={{ width: { xs: '100%', md: '50%' } }}>
           <Box
             component="img"
             src={data?.thumbnailImage || '/assets/image-placeholder.jpg'}
@@ -373,7 +373,7 @@ export const ContentQuickView = ({ data, isEdit }) => {
 
         <Grid container spacing={1}>
           {cardData.map((item) => (
-            <Grid key={item.label} size={{ xs: 12, sm: 6 }} sx={{ border: 1, borderColor: 'divider' }}>
+            <Grid key={item.label} size={6} sx={{ border: 1, borderColor: 'divider' }}>
               <Box sx={{ p: 2.5 }}>
                 <Typography variant="body2" sx={{ mb: 1.5 }}>
                   {item.label}
