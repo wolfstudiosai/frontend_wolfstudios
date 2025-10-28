@@ -21,7 +21,8 @@ import { Iconify } from '/src/components/iconify/iconify';
 import { createCommentAsync } from '../_lib/all-content.actions';
 import { handleCopy } from '/src/utils/helper';
 import { ContentLineChart } from './content-line-chart';
-import { ContentSlider } from './content-slider';
+import { FeaturedSlider } from './featured-slider';
+import { ContentImageGallery } from './content-image-gallery';
 
 const cardData = [
   {
@@ -388,11 +389,15 @@ export const ContentQuickView = ({ data, isEdit }) => {
 
       </Stack>
 
+      {/* Image Gallery */}
+      <ContentImageGallery />
+
+      {/* Slider */}
+      <FeaturedSlider />
+
       {/* Line Chart */}
       <ContentLineChart />
 
-      {/* Slider */}
-      <ContentSlider />
 
       {/* File input (Hidden) */}
       <input
