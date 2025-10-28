@@ -3,6 +3,8 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Box, Button, Grid2 as Grid, IconButton, Stack, TextField, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { InputAdornment } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { useSettings } from '/src/hooks/use-settings';
 import { PageContainer } from '/src/components/container/PageContainer';
