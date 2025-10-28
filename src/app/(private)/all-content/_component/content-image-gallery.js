@@ -1,7 +1,9 @@
-import { useMediaQuery, useTheme } from "@mui/material";
+import { useMediaQuery, useTheme, Dialog, IconButton } from "@mui/material";
 import { useState } from "react";
-import { Box, Button, ImageList, ImageListItem } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import Image from "next/image";
+import CloseIcon from "@mui/icons-material/Close";
 
 const images = [
     { src: "https://images.unsplash.com/photo-1511485977113-f34c92461ad9?w=600", alt: "Image 1" },
@@ -24,40 +26,102 @@ const images = [
 
 export const ContentImageGallery = () => {
     const [showAll, setShowAll] = useState(false);
-    const theme = useTheme();
-
-    const isXs = useMediaQuery(theme.breakpoints.down("sm"));
-    const isSm = useMediaQuery(theme.breakpoints.between("sm", "md"));
-    const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
-
-    let cols = 4;
-    if (isXs) cols = 2;
-    else if (isSm) cols = 3;
-    else if (isMdUp) cols = 4;
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const displayedImages = showAll ? images : images.slice(0, 8);
 
+    const handleOpenModal = (image) => {
+        setSelectedImage(image);
+        setOpenModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+        setSelectedImage(null);
+    };
+
     return (
-        <Box>
-            <ImageList variant="masonry" cols={cols} gap={8}>
+        <Box mb={5}>
+            <Grid container spacing={2}>
                 {displayedImages.map((item, index) => (
-                    <ImageListItem key={index}>
-                        <Image
-                            src={item.src}
-                            alt={item.alt}
-                            width={600}
-                            height={400}
-                            style={{ width: "100%", display: "block", borderRadius: "6px", objectFit: "cover" }}
-                        />
-                    </ImageListItem>
+                    <Grid size={{ xs: 6, sm: 4, md: 3 }} key={index}>
+                        <Box
+                            onClick={() => handleOpenModal(item)}
+                            sx={{ cursor: "pointer", width: "100%", position: "relative", paddingTop: "66.66%" }}
+                        >
+                            <Image
+                                src={item.src}
+                                alt={item.alt}
+                                fill
+                                style={{
+                                    objectFit: "cover",
+                                    borderRadius: "6px",
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                }}
+                            />
+                        </Box>
+                    </Grid>
                 ))}
-            </ImageList>
+            </Grid>
 
             <Box display="flex" justifyContent="center" mt={2}>
                 <Button variant="outlined" onClick={() => setShowAll((prev) => !prev)}>
                     {showAll ? "Show Less" : "View All"}
                 </Button>
             </Box>
+
+            {/* Modal */}
+            <Dialog
+                open={openModal}
+                onClose={handleCloseModal}
+                fullWidth
+                sx={{
+                    "& .MuiDialog-paper": {
+                        backgroundColor: "transparent",
+                        boxShadow: "none",
+                    },
+                }}
+            >
+                <Box
+                    position="relative"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    width="100%"
+                    height="100%"
+                    p={2}
+                >
+                    <IconButton
+                        onClick={handleCloseModal}
+                        sx={{
+                            position: "absolute",
+                            top: 16,
+                            right: 16,
+                            color: "white",
+                            zIndex: 10,
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                    {selectedImage && (
+                        <Image
+                            src={selectedImage.src}
+                            alt={selectedImage.alt}
+                            width={1600}
+                            height={900}
+                            style={{
+                                width: "100%",
+                                height: "80vh",
+                                objectFit: "contain",
+                                borderRadius: "8px",
+                            }}
+                        />
+                    )}
+                </Box>
+            </Dialog>
         </Box>
     );
 };

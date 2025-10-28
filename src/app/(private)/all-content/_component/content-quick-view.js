@@ -389,11 +389,12 @@ export const ContentQuickView = ({ data, isEdit }) => {
 
       </Stack>
 
+      {/* Slider */}
+      <FeaturedSlider />
+
       {/* Image Gallery */}
       <ContentImageGallery />
 
-      {/* Slider */}
-      <FeaturedSlider />
 
       {/* Line Chart */}
       <ContentLineChart />
