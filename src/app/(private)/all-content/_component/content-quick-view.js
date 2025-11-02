@@ -8,21 +8,14 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineItem, { timelineItemClasses } from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import { Avatar, Box, Chip, Divider, IconButton, Stack, TextField, Typography } from '@mui/material';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
+import { Avatar, Box, Divider, Stack, TextField, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import Grid from '@mui/material/Grid2';
 
-import { SectionTitle } from '/src/components/core/section-title';
-import { Iconify } from '/src/components/iconify/iconify';
-
 import { createCommentAsync } from '../_lib/all-content.actions';
-import { handleCopy } from '/src/utils/helper';
 import { ContentLineChart } from './content-line-chart';
-import { FeaturedSlider } from './featured-slider';
 import { ContentImageGallery } from './content-image-gallery';
+import { FavoritesSlider } from './favorites-slider';
 
 const cardData = [
   {
@@ -390,7 +383,7 @@ export const ContentQuickView = ({ data, isEdit }) => {
       </Stack>
 
       {/* Slider */}
-      <FeaturedSlider />
+      <FavoritesSlider />
 
       {/* Image Gallery */}
       <ContentImageGallery />
