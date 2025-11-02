@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import {
@@ -7,8 +7,8 @@ import {
     Avatar,
     Button,
 } from "@mui/material";
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -24,12 +24,16 @@ const partners = [
     { id: 8, date: "5/1/2025", img: "https://via.placeholder.com/120x120" },
 ];
 
-export const FeaturedSlider = () => {
+export const FavoritesSlider = () => {
+    const [isBeginning, setIsBeginning] = useState(true);
+    const [isEnd, setIsEnd] = useState(false);
+
     return (
         <Box mt={5}>
             <Typography variant="h5" sx={{ mb: 2 }}>
-                Featured Images
+                Favorites Images
             </Typography>
+
             <Box sx={{ width: "100%", p: 2, mb: 5, position: "relative" }}>
                 <Swiper
                     navigation={{
@@ -48,56 +52,49 @@ export const FeaturedSlider = () => {
                         900: { slidesPerView: 3 },
                         1200: { slidesPerView: 4.5 },
                     }}
+                    onSwiper={(swiper) => {
+                        setIsBeginning(swiper.isBeginning);
+                        setIsEnd(swiper.isEnd);
+                    }}
+                    onSlideChange={(swiper) => {
+                        setIsBeginning(swiper.isBeginning);
+                        setIsEnd(swiper.isEnd);
+                    }}
                 >
-                    {partners.map((p) => {
-                        return (
-                            <SwiperSlide key={p.id}>
+                    {partners.map((p) => (
+                        <SwiperSlide key={p.id}>
+                            <Box
+                                sx={{
+                                    backgroundColor: "background.paper",
+                                    p: 1.5,
+                                    height: "100%",
+                                    textAlign: "center",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "space-between",
+                                }}
+                            >
                                 <Box
                                     sx={{
-                                        backgroundColor: "background.paper",
-                                        p: 1.5,
-                                        height: "100%",
-                                        textAlign: "center",
                                         display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "space-between",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        mb: 1.5,
                                     }}
                                 >
-                                    <Box
+                                    <Avatar
+                                        src={p.img}
+                                        alt={p.date}
                                         sx={{
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                            mb: 1.5,
+                                            width: "100%",
+                                            height: "180px",
+                                            borderRadius: 0,
                                         }}
-                                    >
-                                        {p.img ? (
-                                            <Avatar src={p.img} alt={p.date} sx={{ width: "100%", height: "180px", borderRadius: 0 }} />
-                                        ) : (
-                                            <Avatar
-                                                sx={{
-                                                    width: 80,
-                                                    height: 80,
-                                                    bgcolor: "#f2f2f2",
-                                                    color: "#888",
-                                                    fontSize: 12,
-                                                }}
-                                            >
-                                                No Image
-                                            </Avatar>
-                                        )}
-                                    </Box>
-
-                                    <Typography
-                                        variant="caption"
-                                        sx={{ color: "#888", mb: 1, display: "block" }}
-                                    >
-                                        {p.date}
-                                    </Typography>
+                                    />
                                 </Box>
-                            </SwiperSlide>
-                        );
-                    })}
+                            </Box>
+                        </SwiperSlide>
+                    ))}
                 </Swiper>
 
                 {/* Custom Navigation Buttons */}
@@ -110,12 +107,15 @@ export const FeaturedSlider = () => {
                         position: "absolute",
                         bottom: 7,
                         right: 20,
+                        zIndex: 10,
+                        pointerEvents: "auto",
                     }}
                 >
                     <Button
                         size="small"
                         variant="text"
                         className="prev-button"
+                        disabled={isBeginning}
                     >
                         <KeyboardBackspaceIcon fontSize="small" /> Prev
                     </Button>
@@ -124,6 +124,7 @@ export const FeaturedSlider = () => {
                         size="small"
                         variant="text"
                         className="next-button"
+                        disabled={isEnd}
                     >
                         Next <ArrowRightAltIcon fontSize="small" />
                     </Button>
