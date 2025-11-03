@@ -1,0 +1,98 @@
+export const blogListData = [
+    {
+        id: 1,
+        category: "Technology",
+        date: "Jan 13, 2023",
+        ispublished: true,
+        title: "iPhone is bound to make an impact in your business",
+        image: "https://cdn.prod.website-files.com/6513981fe0b8553d4c894da5/6513981fe0b8553d4c894e15_main_1.jpg",
+        description:
+            "Mauris sodales faucibus risus donec. Eu, nibh morbi egestas et congue a odio velit massa.",
+    },
+    {
+        id: 2,
+        category: "Life Style",
+        date: "Jan 13, 2023",
+        ispublished: true,
+        title: "Are you embarrassed by your car skills? Here's what to do",
+        image: "https://cdn.prod.website-files.com/6513981fe0b8553d4c894da5/6513981fe0b8553d4c894e14_main_2.jpg",
+        description:
+            "Lacus blandit massa risus, mauris tempor. Tortor mauris, neque ac mauris vitae eget et.",
+    },
+    {
+        id: 3,
+        category: "Photographs",
+        date: "Jan 13, 2023",
+        ispublished: true,
+        title: "How 7 things will change the way you approach photographs",
+        image: "https://cdn.prod.website-files.com/6513981fe0b8553d4c894da5/6513981fe0b8553d4c894e12_thumbnail_3.jpg",
+        description:
+            "Tincidunt dolor neque, risus aliquet ac cursus sodales placerat.",
+    },
+    {
+        id: 4,
+        category: "Technology",
+        date: "Jan 13, 2023",
+        ispublished: false,
+        title: "Cosmonauts prep for spacewalk",
+        image: "https://cdn.prod.website-files.com/6513981fe0b8553d4c894da5/6513981fe0b8553d4c894e10_thumbnail_4.jpg",
+        description:
+            "Morbi nisi, pellentesque enim amet, vitae adipiscing elit. Sollicitudin feugiat.",
+    },
+    {
+        id: 5,
+        category: "Design",
+        date: "Jan 13, 2023",
+        ispublished: true,
+        title: "Online professional animation courses for beginners",
+        image: "https://cdn.prod.website-files.com/6513981fe0b8553d4c894da5/6513981fe0b8553d4c894e0e_thumbnail_5.jpg",
+        description: "Turpis pulvinar quam nec porta faucibus blandit nulla dui amet.",
+    },
+    {
+        id: 6,
+        category: "Interior",
+        date: "Jan 13, 2023",
+        ispublished: true,
+        title: "10 Top commercial interior design firms to watch",
+        image: "https://cdn.prod.website-files.com/6513981fe0b8553d4c894da5/6513981fe0b8553d4c894e0c_thumbnail_6.jpg",
+        description:
+            "Facilisis sed amet id euismod volutpat. Sollicitudin urna, lacus viverra risus auctor.",
+    },
+    {
+        id: 7,
+        category: "Photographs",
+        date: "Jan 13, 2023",
+        ispublished: false,
+        title: "Photographs doesn't have to be hard. Read these 9 tips",
+        image: "https://cdn.prod.website-files.com/6513981fe0b8553d4c894da5/6513981fe0b8553d4c894e0a_thumbnail_7.jpg",
+        description: "Cras semper feugiat turpis gravida ut augue luctus netus.",
+    },
+    {
+        id: 8,
+        category: "Life Style",
+        date: "Jan 13, 2023",
+        ispublished: true,
+        title: "Believe in your car skills but never stop improving",
+        image: "https://cdn.prod.website-files.com/6513981fe0b8553d4c894da5/6513981fe0b8553d4c894e08_thumbnail_8.jpg",
+        description: "Cras hendrerit turpis gravida ut augue luctus netus.",
+    },
+    {
+        id: 9,
+        category: "Technology",
+        date: "Jan 13, 2023",
+        ispublished: true,
+        title: "Another great tech insight",
+        image: "https://cdn.prod.website-files.com/6513981fe0b8553d4c894da5/6513981fe0b8553d4c894e06_thumbnail_9.jpg",
+        description:
+            "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod.",
+    },
+    {
+        id: 10,
+        category: "Design",
+        date: "Jan 13, 2023",
+        ispublished: true,
+        title: "Creative design trends to follow",
+        image: "https://cdn.prod.website-files.com/6513981fe0b8553d4c894da5/6513981fe0b8553d4c894e04_thumbnail_10.jpg",
+        description: "Ut enim ad minim veniam quis nostrud exercitation ullamco.",
+    },
+];
