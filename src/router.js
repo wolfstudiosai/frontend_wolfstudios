@@ -78,6 +78,7 @@ export const footerRoutes = [
   { label: 'Collaborate', href: '/collaborate' },
   { label: 'Services', href: '/services' },
   { label: 'Privacy', href: '/privacy-policy' },
+  { label: 'Blog', href: '/blog' },
 ];
 
 export const workspacesItems = [

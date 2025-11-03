@@ -186,7 +186,7 @@ export const ThinnerFooter = () => {
         {/* Links Section */}
         <Stack
           direction="row"
-          spacing={{ xs: 0.5, md: 2 }}
+          spacing={{ xs: 0.5, md: 1 }}
           alignItems="center"
           flexWrap="wrap"
           width={'100%'}
