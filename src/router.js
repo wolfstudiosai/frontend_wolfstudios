@@ -131,6 +131,13 @@ export const workspacesItems = [
         href: '/by-client',
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
+      {
+        key: 'analytics',
+        title: 'Analytics',
+        icon: 'ph:dot-fill',
+        href: '/portfolio/analytics',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
     ],
   },
   {
