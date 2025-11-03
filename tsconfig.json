@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -23,7 +27,11 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/app/(private)/all-content/analytics/page.js"
+    "src/app/(private)/all-content/analytics/page.js",
+    "src/app/(public)/portfolio/analytics/_components/portfolio-analytics-card.js",
+    "src/app/(public)/portfolio/analytics/_components/refunded.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

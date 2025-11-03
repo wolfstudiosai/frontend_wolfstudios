@@ -1,5 +1,14 @@
-import { ComingSoon } from '../../../components/coming-soon/coming-soon';
+"use client";
+
+import React from "react";
+import BlogHeader from "./_components/blog-header";
+import { BlogList } from "./_components/blog-list";
 
 export const BlogView = () => {
-  return <ComingSoon pageName={'Blog'} />;
+  return (
+    <>
+      <BlogHeader />
+      <BlogList />
+    </>
+  );
 };

@@ -2,12 +2,8 @@
 
 import { useState } from 'react';
 import {
-  Avatar,
   Box,
   Button,
-  Card,
-  CardContent,
-  CircularProgress,
   Divider,
   Grid2 as Grid,
   IconButton,
@@ -16,12 +12,16 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { motion } from 'framer-motion';
 import { Search } from 'lucide-react';
 
 import { PartnerCard } from './_components/partner-card';
+import { StatisticsCard } from './_components/statistics-card';
 import { PartnerPerformanceCard } from './_components/partner-performance-card';
 import { PerformanceChart } from './_components/performance-chart';
+import { GoogleAddsPerformance } from './_components/google-adds-performance';
+import { FacebookAddsPerformance } from './_components/facebook-adds-performance';
+import { TiktokShopVideos } from './_components/tiktok-shop-videos';
+import { TiktokShopProducts } from './_components/tiktok-shop-products';
 
 export default function ContentAnalyticsPage() {
   const [loading, setLoading] = useState(false);
@@ -80,9 +80,19 @@ export default function ContentAnalyticsPage() {
     },
   ];
 
+  const data = [
+    { label: 'Apr 2025', value: 4000 },
+    { label: 'May 2025', value: 3000 },
+    { label: 'Jun 2025', value: 2000 },
+    { label: 'Jul 2025', value: 2780 },
+    { label: 'Aug 2025', value: 1890 },
+    { label: 'Sep 2025', value: 2390 },
+    { label: 'Oct 2025', value: 3490 },
+  ];
+
   // startIcon={<Sync size={18} />}
   return (
-    <Box sx={{ p: 3 }}>
+    <Box>
       {/* Header */}
       <Box>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -128,21 +138,7 @@ export default function ContentAnalyticsPage() {
         <Grid container spacing={2} mt={3}>
           {statCards.map((stat, i) => (
             <Grid size={{ xs: 12, sm: 6, md: 3 }} key={i}>
-              <Card
-                component={motion.div}
-                whileHover={{ scale: 1.03 }}
-                transition={{ duration: 0.3 }}
-                sx={{ height: '100%' }}
-              >
-                <CardContent>
-                  <Typography variant="body2" color="text.secondary" fontWeight={500}>
-                    {stat.label}
-                  </Typography>
-                  <Typography variant="h5" fontWeight={700}>
-                    {stat.value}
-                  </Typography>
-                </CardContent>
-              </Card>
+              <StatisticsCard state={stat} />
             </Grid>
           ))}
         </Grid>
@@ -203,21 +199,7 @@ export default function ContentAnalyticsPage() {
         <Grid container spacing={2} mt={3}>
           {impactStatCards.map((stat, i) => (
             <Grid size={{ xs: 12, sm: 6, md: 3 }} key={i}>
-              <Card
-                component={motion.div}
-                whileHover={{ scale: 1.03 }}
-                transition={{ duration: 0.3 }}
-                sx={{ height: '100%' }}
-              >
-                <CardContent>
-                  <Typography variant="body2" color="text.secondary" fontWeight={500}>
-                    {stat.label}
-                  </Typography>
-                  <Typography variant="h5" fontWeight={700}>
-                    {stat.value}
-                  </Typography>
-                </CardContent>
-              </Card>
+              <StatisticsCard state={stat} />
             </Grid>
           ))}
         </Grid>
@@ -241,6 +223,18 @@ export default function ContentAnalyticsPage() {
           </Grid>
         </Box>
       </Box>
+
+      {/* Google Adds Performance */}
+      <GoogleAddsPerformance />
+
+      {/* Facebook Adds Performance */}
+      <FacebookAddsPerformance />
+
+      {/* Tiktok Shop Videos */}
+      <TiktokShopVideos />
+
+      {/* Tiktok Shop Products */}
+      <TiktokShopProducts />
     </Box>
   );
 }

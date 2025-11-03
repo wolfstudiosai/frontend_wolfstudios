@@ -78,6 +78,7 @@ export const footerRoutes = [
   { label: 'Collaborate', href: '/collaborate' },
   { label: 'Services', href: '/services' },
   { label: 'Privacy', href: '/privacy-policy' },
+  { label: 'Blog', href: '/blog' },
 ];
 
 export const workspacesItems = [
@@ -129,6 +130,13 @@ export const workspacesItems = [
         title: 'Genre',
         icon: 'ph:dot-fill',
         href: '/by-client',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'analytics',
+        title: 'Analytics',
+        icon: 'ph:dot-fill',
+        href: '/portfolio/analytics',
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
     ],
