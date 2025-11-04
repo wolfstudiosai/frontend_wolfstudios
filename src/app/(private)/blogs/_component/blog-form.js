@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {
-  Avatar,
+  Box,
   Button,
   CircularProgress,
   FormControl,
@@ -11,11 +11,14 @@ import {
   OutlinedInput,
   Stack,
   Switch,
-  TextField,
   Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
+// Quill imports
+import ReactQuill from 'react-quill';
 import * as Yup from 'yup';
+
+import 'react-quill/dist/quill.snow.css';
 
 import { MediaUploaderTrigger } from '../../../../components/uploaders/media-uploader-trigger';
 
@@ -27,14 +30,8 @@ const validationSchema = Yup.object().shape({
 
 const BlogForm = () => {
   const [loading, setLoading] = React.useState(false);
-  const [thumbnailPreview, setThumbnailPreview] = React.useState(null);
   const [uploaderStates, setUploaderStates] = React.useState({
     thumbnailImage: false,
-    horizontalGallery: false,
-    verticalGallery: false,
-    singlePageHeroImage: false,
-    imageField: false,
-    videoLink: false,
   });
 
   const formik = useFormik({
@@ -48,11 +45,9 @@ const BlogForm = () => {
     validationSchema,
     onSubmit: async (values) => {
       setLoading(true);
-
       try {
         const formData = new FormData();
         formData.append('title', values.title);
-        formData.append('slug', values.slug);
         formData.append('content', values.content);
         formData.append('published', String(values.published));
         formData.append('featured', String(values.featured));
@@ -72,13 +67,35 @@ const BlogForm = () => {
 
   const { values, errors, handleChange, handleSubmit, setFieldValue } = formik;
 
-  const handleThumbnailChange = (e) => {
-    const file = e.target.files?.[0];
-    setFieldValue('thumbnail', file);
+  // Quill modules configuration
+  const modules = {
+    toolbar: {
+      container: [
+        [{ header: [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'link'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['blockquote', 'code-block'],
+        ['clean'],
+      ],
+    },
+  };
 
-    if (file) {
-      setThumbnailPreview(URL.createObjectURL(file));
-    }
+  const formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'blockquote',
+    'code-block',
+  ];
+
+  const handleContentChange = (content) => {
+    setFieldValue('content', content);
   };
 
   return (
@@ -90,7 +107,7 @@ const BlogForm = () => {
             open={uploaderStates.thumbnailImage}
             onClose={() => setUploaderStates((prev) => ({ ...prev, thumbnailImage: false }))}
             onSave={(urls) => setFieldValue('thumbnail', urls)}
-            value={values?.thumbnailImage}
+            value={values?.thumbnail}
             label="Thumbnail Image"
             onAdd={() => setUploaderStates((prev) => ({ ...prev, thumbnailImage: true }))}
             onDelete={(filteredUrls) => setFieldValue('thumbnail', filteredUrls)}
@@ -108,18 +125,35 @@ const BlogForm = () => {
           </FormControl>
         </Grid>
 
-        {/* Content Field */}
+        {/* Content Field — Replaced with Quill */}
         <Grid size={12}>
-          <TextField
-            fullWidth
-            multiline
-            rows={5}
-            label="Content"
-            name="content"
-            value={values.content}
-            onChange={handleChange}
-            error={Boolean(errors.content)}
-          />
+          <Typography variant="subtitle1" sx={{ mb: 1 }}>
+            Content
+          </Typography>
+          <Box
+            sx={{
+              border: '1px solid',
+              borderColor: errors.content ? 'error.main' : 'divider',
+              borderRadius: 2,
+              overflow: 'hidden',
+            }}
+          >
+            <ReactQuill
+              theme="snow"
+              value={values.content}
+              onChange={handleContentChange}
+              modules={modules}
+              formats={formats}
+              style={{
+                height: '300px',
+              }}
+            />
+          </Box>
+          {errors.content && (
+            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+              {errors.content}
+            </Typography>
+          )}
         </Grid>
 
         {/* Published */}
@@ -134,7 +168,7 @@ const BlogForm = () => {
         <Grid size={12}>
           <Stack direction="row" alignItems="center" spacing={1}>
             <Switch checked={values.featured} onChange={(e) => setFieldValue('featured', e.target.checked)} />
-            <Typography>Make this product featured</Typography>
+            <Typography>Make this blog featured</Typography>
           </Stack>
         </Grid>
 
