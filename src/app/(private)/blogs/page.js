@@ -245,7 +245,7 @@ export default function Page({}) {
             <Typography variant="h4">Blogs</Typography>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button startIcon={<PlusIcon />} variant="contained">
+            <Button LinkComponent={RouterLink} href="/blogs/add" startIcon={<PlusIcon />} variant="contained">
               Add
             </Button>
           </Box>
