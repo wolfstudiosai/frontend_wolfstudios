@@ -284,6 +284,13 @@ export const privateRoutesV3 = [
     allowedRoles: ['admin', 'super_admin'],
   },
   {
+    key: 'blogs',
+    title: 'Blogs',
+    icon: 'quill:paper',
+    href: paths.private.blogs,
+    allowedRoles: ['admin', 'super_admin'],
+  },
+  {
     key: 'newsletter',
     title: 'Newsletters',
     icon: 'cil:envelope-letter',

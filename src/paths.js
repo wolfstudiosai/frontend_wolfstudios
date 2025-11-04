@@ -141,6 +141,7 @@ export const paths = {
     notification: '/notification',
     record: '/records',
     users: '/users',
+    blogs: '/blogs',
     newsletters: '/newsletters',
     archive_analytics: '/archive/analytics',
     expense: '/expense',
