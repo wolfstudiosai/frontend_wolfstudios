@@ -1,18 +1,11 @@
 import React from 'react';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Container, Stack, Typography } from '@mui/material';
 
 import BlogForm from '../_component/blog-form';
 
 const AddBlogPage = () => {
   return (
-    <Box
-      sx={{
-        maxWidth: 'var(--Content-maxWidth)',
-        m: 'var(--Content-margin)',
-        p: 'var(--Content-padding)',
-        width: 'var(--Content-width)',
-      }}
-    >
+    <Container maxWidth="xl" sx={{ py: 4 }}>
       <Stack spacing={4}>
         <Stack direction="row" spacing={3} sx={{ alignItems: 'flex-start' }}>
           <Box sx={{ flex: '1 1 auto' }}>
@@ -23,7 +16,7 @@ const AddBlogPage = () => {
       <Box sx={{ mt: 4 }}>
         <BlogForm />
       </Box>
-    </Box>
+    </Container>
   );
 };
 

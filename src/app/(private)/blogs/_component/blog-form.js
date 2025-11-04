@@ -17,6 +17,8 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
+import { MediaUploaderTrigger } from '../../../../components/uploaders/media-uploader-trigger';
+
 const validationSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   content: Yup.string().required('Content is required'),
@@ -26,6 +28,14 @@ const validationSchema = Yup.object().shape({
 const BlogForm = () => {
   const [loading, setLoading] = React.useState(false);
   const [thumbnailPreview, setThumbnailPreview] = React.useState(null);
+  const [uploaderStates, setUploaderStates] = React.useState({
+    thumbnailImage: false,
+    horizontalGallery: false,
+    verticalGallery: false,
+    singlePageHeroImage: false,
+    imageField: false,
+    videoLink: false,
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -75,20 +85,19 @@ const BlogForm = () => {
     <form onSubmit={handleSubmit}>
       <Grid container spacing={2}>
         {/* Thumbnail upload */}
-        <Grid size={12}>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Button variant="outlined" component="label">
-              Upload Thumbnail
-              <input type="file" hidden accept="image/*" onChange={handleThumbnailChange} />
-            </Button>
-
-            {thumbnailPreview && <Avatar src={thumbnailPreview} variant="rounded" sx={{ width: 80, height: 80 }} />}
-          </Stack>
-          {errors.thumbnail && (
-            <Typography color="error" variant="body2">
-              {errors.thumbnail}
-            </Typography>
-          )}
+        <Grid size={{ xs: 12 }}>
+          <MediaUploaderTrigger
+            open={uploaderStates.thumbnailImage}
+            onClose={() => setUploaderStates((prev) => ({ ...prev, thumbnailImage: false }))}
+            onSave={(urls) => setFieldValue('thumbnail', urls)}
+            value={values?.thumbnailImage}
+            label="Thumbnail Image"
+            onAdd={() => setUploaderStates((prev) => ({ ...prev, thumbnailImage: true }))}
+            onDelete={(filteredUrls) => setFieldValue('thumbnail', filteredUrls)}
+            folderName="campaigns"
+            hideVideoUploader
+            hideImageUploader={false}
+          />
         </Grid>
 
         {/* Title */}
@@ -114,18 +123,18 @@ const BlogForm = () => {
         </Grid>
 
         {/* Published */}
-        <Grid size={6}>
+        <Grid size={12}>
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>Published</Typography>
             <Switch checked={values.published} onChange={(e) => setFieldValue('published', e.target.checked)} />
+            <Typography>Publish the blog</Typography>
           </Stack>
         </Grid>
 
         {/* Featured */}
-        <Grid size={6}>
+        <Grid size={12}>
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>Featured</Typography>
             <Switch checked={values.featured} onChange={(e) => setFieldValue('featured', e.target.checked)} />
+            <Typography>Make this product featured</Typography>
           </Stack>
         </Grid>
 
