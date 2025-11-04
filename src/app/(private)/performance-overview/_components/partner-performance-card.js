@@ -3,8 +3,6 @@
 import React from 'react';
 import { Box, Card, CardContent, Chip, Stack, Typography } from '@mui/material';
 
-import { pxToRem } from '../../../../../utils/helper';
-
 export const PartnerPerformanceCard = () => {
   return (
     <Box>
@@ -38,7 +36,7 @@ export const PartnerPerformanceCard = () => {
               size="small"
               sx={{
                 color: 'text.secondary',
-                fontSize: pxToRem(12),
+                fontSize: '12px',
                 padding: 0,
                 bgcolor: 'background.paper',
                 border: '1px solid var(--mui-palette-divider)',
@@ -48,11 +46,11 @@ export const PartnerPerformanceCard = () => {
           </Stack>
           <Stack direction="column" alignItems="flex-start" sx={{ mt: 1 }}>
             <Typography sx={{ color: 'text.secondary', fontSize: '12px' }}>Start Date</Typography>
-            <Typography sx={{ fontSize: pxToRem(12) }}>8/1/2025</Typography>
+            <Typography sx={{ fontSize: '12px' }}>8/1/2025</Typography>
           </Stack>
           <Stack direction="column" alignItems="flex-start" sx={{ mt: 1 }}>
             <Typography sx={{ color: 'text.secondary', fontSize: '12px' }}>End Date</Typography>
-            <Typography sx={{ fontSize: pxToRem(12) }}>8/1/2025</Typography>
+            <Typography sx={{ fontSize: '12px' }}>8/1/2025</Typography>
           </Stack>
         </CardContent>
       </Card>

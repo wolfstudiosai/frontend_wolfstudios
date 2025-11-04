@@ -255,6 +255,29 @@ export const privateRoutesV3 = [
     allowedRoles: ['admin', 'user', 'super_admin'],
   },
   {
+    key: 'performance-overview',
+    title: 'Performance Overview',
+    icon: 'heroicons:chart-bar-solid',
+    href: paths.private.performance_overview,
+    allowedRoles: ['admin', 'user', 'super_admin'],
+    items: [
+      {
+        key: 'performance-affiliate-ads',
+        title: 'Affiliate & Ads Performance',
+        icon: 'heroicons:chart-bar-solid',
+        href: paths.private.performance_overview,
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
+        key: 'organic-social-performance',
+        title: 'Organic Social Performance',
+        icon: 'heroicons:chart-bar-solid',
+        href: paths.private.organic_social_performance,
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+    ],
+  },
+  {
     key: 'analytics',
     title: 'Analytics',
     icon: 'streamline:money-graph-arrow-increase-ascend-growth-up-arrow-stats-graph-right-grow',

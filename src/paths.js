@@ -185,6 +185,11 @@ export const paths = {
     // archive
     archive: '/archive',
     archive_records: '/records',
+
+    // performance overview
+    performance_overview: '/performance-overview',
+    organic_social_performance: '/organic-social-performance',
+    
   },
   dashboardPublic: {
     // HQs
