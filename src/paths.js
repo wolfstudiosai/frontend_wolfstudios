@@ -188,7 +188,8 @@ export const paths = {
 
     // performance overview
     performance_overview: '/performance-overview',
-    organic_social_performance: '/organic-social-performance',
+    // affiliate_and_ads_performance: '/performance/affiliate-ads',
+    organic_social_performance: '/organic-social',
     
   },
   dashboardPublic: {
