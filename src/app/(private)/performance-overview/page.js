@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 import { Search } from 'lucide-react';
 
-import { PartnerCard } from './_components/partner-card';
 import { StatisticsCard } from './_components/statistics-card';
 import { PartnerPerformanceCard } from './_components/partner-performance-card';
 import { PerformanceChart } from './_components/performance-chart';
@@ -22,8 +21,9 @@ import { GoogleAddsPerformance } from './_components/google-adds-performance';
 import { FacebookAddsPerformance } from './_components/facebook-adds-performance';
 import { TiktokShopVideos } from './_components/tiktok-shop-videos';
 import { TiktokShopProducts } from './_components/tiktok-shop-products';
+import { PartnerCard } from './_components/partner-card';
 
-export default function ContentAnalyticsPage() {
+export default function PerformanceOverviewPage() {
   const [loading, setLoading] = useState(false);
 
   const handleSync = () => {
@@ -145,18 +145,11 @@ export default function ContentAnalyticsPage() {
 
         <Box sx={{ mt: 4 }}>
           <Grid container spacing={2}>
-            <Grid size={{ xs: 12, md: 3 }}>
-              <PartnerCard />
-            </Grid>
-            <Grid size={{ xs: 12, md: 3 }}>
-              <PartnerCard />
-            </Grid>
-            <Grid size={{ xs: 12, md: 3 }}>
-              <PartnerCard />
-            </Grid>
-            <Grid size={{ xs: 12, md: 3 }}>
-              <PartnerCard />
-            </Grid>
+            {[...Array(4)].map((_, i) => (
+              <Grid size={{ xs: 12, md: 3 }} key={i}>
+                <PartnerCard />
+              </Grid>
+            ))}
           </Grid>
         </Box>
       </Box>
@@ -208,18 +201,11 @@ export default function ContentAnalyticsPage() {
 
         <Box sx={{ mt: 4 }}>
           <Grid container spacing={2}>
-            <Grid size={{ xs: 12, md: 3 }}>
-              <PartnerPerformanceCard />
-            </Grid>
-            <Grid size={{ xs: 12, md: 3 }}>
-              <PartnerPerformanceCard />
-            </Grid>
-            <Grid size={{ xs: 12, md: 3 }}>
-              <PartnerPerformanceCard />
-            </Grid>
-            <Grid size={{ xs: 12, md: 3 }}>
-              <PartnerPerformanceCard />
-            </Grid>
+            {[...Array(4)].map((_, i) => (
+              <Grid size={{ xs: 12, md: 3 }} key={i}>
+                <PartnerPerformanceCard />
+              </Grid>
+            ))}
           </Grid>
         </Box>
       </Box>

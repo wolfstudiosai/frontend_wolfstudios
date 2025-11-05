@@ -141,6 +141,7 @@ export const paths = {
     notification: '/notification',
     record: '/records',
     users: '/users',
+    blogs: '/blogs',
     newsletters: '/newsletters',
     archive_analytics: '/archive/analytics',
     expense: '/expense',
@@ -184,6 +185,15 @@ export const paths = {
     // archive
     archive: '/archive',
     archive_records: '/records',
+
+    // performance overview
+    performance_overview: '/performance-overview',
+    organic_social_performance: '/organic-social',
+
+    // expense overview
+    expense_overview: '/expense-overview',
+    expense_report: '/expense-report',
+    
   },
   dashboardPublic: {
     // HQs

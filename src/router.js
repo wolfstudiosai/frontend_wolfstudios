@@ -254,6 +254,52 @@ export const privateRoutesV3 = [
     href: paths.private.record,
     allowedRoles: ['admin', 'user', 'super_admin'],
   },
+    {
+      key: 'performance-overview',
+      title: 'Performance Overview',
+      icon: 'heroicons:chart-bar-solid',
+      href: paths.private.performance_overview,
+      allowedRoles: ['admin', 'user', 'super_admin'],
+      items: [
+        {
+          key: 'performance-affiliate-ads',
+          title: 'Affiliate & Ads Performance',
+          icon: 'heroicons:chart-bar-solid',
+          href: paths.private.performance_overview,
+          allowedRoles: ['admin', 'user', 'super_admin'],
+        },
+        {
+          key: 'organic-social-performance',
+          title: 'Organic Social Performance',
+          icon: 'heroicons:chart-bar-solid',
+          href: paths.private.organic_social_performance,
+          allowedRoles: ['admin', 'user', 'super_admin'],
+        },
+      ],
+    },
+  {
+      key: 'expense-overview',
+      title: 'Expense Overview',
+      icon: 'heroicons:chart-bar-solid',
+      href: paths.private.expense_overview,
+      allowedRoles: ['admin', 'user', 'super_admin'],
+      items: [
+        {
+          key: 'new-expense-form',
+          title: 'New Expense Form',
+          icon: 'heroicons:chart-bar-solid',
+          href: paths.private.expense_overview,
+          allowedRoles: ['admin', 'user', 'super_admin'],
+        },
+        {
+          key: 'expense-report',
+          title: 'Expense Report',
+          icon: 'heroicons:chart-bar-solid',
+          href: paths.private.expense_report,
+          allowedRoles: ['admin', 'user', 'super_admin'],
+        },
+      ],
+    },
   {
     key: 'analytics',
     title: 'Analytics',
@@ -281,6 +327,13 @@ export const privateRoutesV3 = [
     title: 'Users',
     icon: 'mynaui:users',
     href: paths.private.users,
+    allowedRoles: ['admin', 'super_admin'],
+  },
+  {
+    key: 'blogs',
+    title: 'Blogs',
+    icon: 'quill:paper',
+    href: paths.private.blogs,
     allowedRoles: ['admin', 'super_admin'],
   },
   {

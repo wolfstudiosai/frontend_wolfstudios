@@ -3,9 +3,7 @@
 import React from 'react';
 import { Box, Card, CardContent, Chip, Typography } from '@mui/material';
 
-import { pxToRem } from '../../../../../utils/helper';
-
-export const PartnerCard = ({ content }) => {
+export const PartnerCard = () => {
   return (
     <Box>
       <Card
@@ -23,7 +21,7 @@ export const PartnerCard = ({ content }) => {
         <Box
           component="img"
           src={'/assets/image-placeholder.jpg'}
-          alt={content?.name}
+          alt="Partner"
           sx={{ width: '100%', height: '260px', objectFit: 'cover' }}
         />
 
@@ -37,20 +35,20 @@ export const PartnerCard = ({ content }) => {
             sx={{
               mt: 2,
               color: 'text.secondary',
-              fontSize: pxToRem(12),
+              fontSize: 12,
               padding: 0,
               bgcolor: 'background.paper',
               border: '1px solid var(--mui-palette-divider)',
               borderRadius: 1,
             }}
           />
-          <Typography sx={{ mt: 1, fontSize: pxToRem(12) }}>8/1/2025</Typography>
+          <Typography sx={{ mt: 1, fontSize: 12 }}>8/1/2025</Typography>
           <Chip
             label="Active - Top Performer"
             size="small"
             sx={{
               mt: 2,
-              fontSize: pxToRem(12),
+              fontSize: 12,
               padding: 0,
               border: '1px solid var(--mui-palette-divider)',
             }}
