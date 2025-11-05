@@ -16,8 +16,6 @@ import { Image as ImageIcon } from '@phosphor-icons/react/dist/ssr/Image';
 import { Paperclip as PaperclipIcon } from '@phosphor-icons/react/dist/ssr/Paperclip';
 import { X as XIcon } from '@phosphor-icons/react/dist/ssr/X';
 
-import { TextEditor } from '/src/components/core/text-editor/text-editor';
-
 export function Composer({ onClose, open }) {
   const [isMaximized, setIsMaximized] = React.useState(false);
   const [message, setMessage] = React.useState('');
@@ -86,9 +84,6 @@ export function Composer({ onClose, open }) {
         <Divider />
         <Input onChange={handleSubjectChange} placeholder="Subject" value={subject} />
         <Divider />
-        <Box sx={{ '& .tiptap-root': { border: 'none', borderRadius: 0 }, '& .tiptap-container': { height: '300px' } }}>
-          <TextEditor content={message} onUpdate={handleMessageChange} placeholder="Leave a message" />
-        </Box>
         <Divider />
         <Stack direction="row" spacing={3} sx={{ alignItems: 'center', justifyContent: 'space-between', p: 2 }}>
           <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>

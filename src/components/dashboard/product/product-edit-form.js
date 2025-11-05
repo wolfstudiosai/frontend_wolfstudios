@@ -1,8 +1,5 @@
 'use client';
 
-import * as React from 'react';
-import RouterLink from 'next/link';
-import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -26,16 +23,18 @@ import Typography from '@mui/material/Typography';
 import { Image as ImageIcon } from '@phosphor-icons/react/dist/ssr/Image';
 import { Info as InfoIcon } from '@phosphor-icons/react/dist/ssr/Info';
 import { Trash as TrashIcon } from '@phosphor-icons/react/dist/ssr/Trash';
+import RouterLink from 'next/link';
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { paths } from '/src/paths';
-import { logger } from '/src/lib/default-logger';
-import { DataTable } from '/src/components/data-table/data-table';
 import { FileDropzone } from '/src/components/core/file-dropzone';
 import { Option } from '/src/components/core/option';
-import { TextEditor } from '/src/components/core/text-editor/text-editor';
 import { toast } from '/src/components/core/toaster';
+import { DataTable } from '/src/components/data-table/data-table';
+import { logger } from '/src/lib/default-logger';
+import { paths } from '/src/paths';
 
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
@@ -291,29 +290,7 @@ export function ProductEditForm({ product }) {
                         )}
                       />
                     </Grid>
-                    <Grid size={12}>
-                      <Controller
-                        control={control}
-                        name="description"
-                        render={({ field }) => (
-                          <FormControl error={Boolean(errors.description)} fullWidth>
-                            <InputLabel>Description</InputLabel>
-                            <Box sx={{ mt: '8px', '& .tiptap-container': { height: '400px' } }}>
-                              <TextEditor
-                                content={field.value ?? ''}
-                                onUpdate={({ editor }) => {
-                                  field.onChange(editor.getText());
-                                }}
-                                placeholder="Write something"
-                              />
-                            </Box>
-                            {errors.description ? (
-                              <FormHelperText error>{errors.description.message}</FormHelperText>
-                            ) : null}
-                          </FormControl>
-                        )}
-                      />
-                    </Grid>
+
                     <Grid size={12}>
                       <Controller
                         control={control}

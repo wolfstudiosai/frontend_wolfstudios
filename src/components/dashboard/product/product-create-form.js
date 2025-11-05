@@ -1,10 +1,6 @@
 'use client';
 
-import * as React from 'react';
-import RouterLink from 'next/link';
-import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -18,14 +14,16 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import RouterLink from 'next/link';
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { paths } from '/src/paths';
-import { logger } from '/src/lib/default-logger';
 import { Option } from '/src/components/core/option';
-import { TextEditor } from '/src/components/core/text-editor/text-editor';
 import { toast } from '/src/components/core/toaster';
+import { logger } from '/src/lib/default-logger';
+import { paths } from '/src/paths';
 
 const schema = zod.object({
   name: zod.string().min(1, 'Name is required').max(255),
@@ -157,29 +155,7 @@ export function ProductCreateForm() {
                     )}
                   />
                 </Grid>
-                <Grid size={12}>
-                  <Controller
-                    control={control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormControl error={Boolean(errors.description)} fullWidth>
-                        <InputLabel>Description</InputLabel>
-                        <Box sx={{ mt: '8px', '& .tiptap-container': { height: '400px' } }}>
-                          <TextEditor
-                            content={field.value ?? ''}
-                            onUpdate={({ editor }) => {
-                              field.onChange(editor.getText());
-                            }}
-                            placeholder="Write something"
-                          />
-                        </Box>
-                        {errors.description ? (
-                          <FormHelperText error>{errors.description.message}</FormHelperText>
-                        ) : null}
-                      </FormControl>
-                    )}
-                  />
-                </Grid>
+
                 <Grid size={12}>
                   <Controller
                     control={control}
