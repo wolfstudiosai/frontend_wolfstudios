@@ -41,10 +41,6 @@ const donutData = [
         <Typography variant="h6" fontWeight={600}>
           Instagram Performance
         </Typography>
-
-        <Button variant="contained" size="small">
-          Sync for the month
-        </Button>
       </Stack>
 
       {/* Filters */}

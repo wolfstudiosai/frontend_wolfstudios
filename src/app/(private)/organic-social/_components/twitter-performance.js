@@ -15,8 +15,8 @@ import { Search } from 'lucide-react';
 import { StatisticsCard } from '../../performance-overview/_components/statistics-card';
 import { CustomDonutChart } from "/src/components/bar-chart/custom-donut-chart";
 
-export const PinterestPerformance = () => {
-  const pinterestStatCards = [
+export const TwitterPerformance = () => {
+  const twitterStatCards = [
     { label: 'Comments', value: '$460,108.64' },
     { label: 'Shares', value: '$460,108.64' },
     { label: 'Reactions', value: '$460,108.64' },
@@ -41,7 +41,7 @@ const donutData = [
     <Box display="flex" flexDirection="column" gap={2}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Typography variant="h6" fontWeight={600}>
-          Pinterest Performance
+          Twitter Performance
         </Typography>
       </Stack>
 
@@ -66,7 +66,7 @@ const donutData = [
 
       {/* Stats */}
       <Grid container spacing={2}>
-        {pinterestStatCards.map((stat, i) => (
+        {twitterStatCards.map((stat, i) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={i}>
             <StatisticsCard state={stat} />
           </Grid>

@@ -3,7 +3,6 @@
 import React from 'react';
 import {
   Box,
-  Button,
   Card,
   CardContent,
   Grid2 as Grid,
@@ -53,7 +52,7 @@ export const YoutubePerformance = () => {
   const data = [
     { name: 'A', value: 4000, scatterVal: 240 },
     { name: 'B', value: 3000, scatterVal: 139 },
-    { name: 'C', value: 2000, scatterVal: 980 },
+    { name: 'C', value: 2000, scatterVal: 2980 },
     { name: 'D', value: 2780, scatterVal: 390 },
     { name: 'E', value: 1890, scatterVal: 480 },
   ];
@@ -64,10 +63,6 @@ export const YoutubePerformance = () => {
         <Typography variant="h6" fontWeight={600}>
           Youtube Performance
         </Typography>
-
-        <Button variant="contained" size="small">
-          Sync for the month
-        </Button>
       </Stack>
 
       {/* Filters */}
@@ -106,7 +101,12 @@ export const YoutubePerformance = () => {
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
-          <NoSsr fallback={<Box sx={{ height: '400px' }} />}>
+         <Card sx={{ height: '100%', borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
+          <CardContent>
+            <Typography variant="h6" sx={{ marginBottom: '16px' }}>
+              Content by Total Engagement
+            </Typography>
+             <NoSsr fallback={<Box sx={{ height: '400px' }} />}>
             <ResponsiveContainer width="100%" height={400}>
               <ComposedChart data={data} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
                 <CartesianGrid stroke="#f5f5f5" />
@@ -123,6 +123,8 @@ export const YoutubePerformance = () => {
               </ComposedChart>
             </ResponsiveContainer>
           </NoSsr>
+          </CardContent>
+         </Card>
         </Grid>
       </Grid>
     </Box>
