@@ -101,30 +101,30 @@ export const YoutubePerformance = () => {
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
-         <Card sx={{ height: '100%', borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
-          <CardContent>
-            <Typography variant="h6" sx={{ marginBottom: '16px' }}>
-              Content by Total Engagement
-            </Typography>
-             <NoSsr fallback={<Box sx={{ height: '400px' }} />}>
-            <ResponsiveContainer width="100%" height={400}>
-              <ComposedChart data={data} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-                <CartesianGrid stroke="#f5f5f5" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
+          <Card sx={{ height: '100%', borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ marginBottom: '16px' }}>
+                Content by Total Engagement
+              </Typography>
+              <NoSsr fallback={<Box sx={{ height: '400px' }} />}>
+                <ResponsiveContainer width="100%" height={400}>
+                  <ComposedChart data={data} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                    <CartesianGrid stroke="#f5f5f5" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
 
-                {/* Bar chart */}
-                <Bar dataKey="value" barSize={40} fill="#413ea0" name="Bar Value" />
+                    {/* Bar chart */}
+                    <Bar dataKey="value" barSize={40} fill="#413ea0" name="Bar Value" />
 
-                {/* Scatter chart */}
-                <Scatter dataKey="scatterVal" fill="#ff7300" name="Scatter Value" />
-              </ComposedChart>
-            </ResponsiveContainer>
-          </NoSsr>
-          </CardContent>
-         </Card>
+                    {/* Scatter chart */}
+                    <Scatter dataKey="scatterVal" fill="#ff7300" name="Scatter Value" />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </NoSsr>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
     </Box>

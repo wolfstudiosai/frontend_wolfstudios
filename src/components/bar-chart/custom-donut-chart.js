@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react';
 import { Stack, Box } from "@mui/material";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { NoSsr } from '/src/components/core/no-ssr';
