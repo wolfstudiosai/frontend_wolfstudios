@@ -1,7 +1,7 @@
 import { NoSsr } from '/src/components/core/no-ssr';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import { ResponsiveContainer, ComposedChart, Area, Line, } from 'recharts';
+import { ResponsiveContainer, ComposedChart, Area, } from 'recharts';
 import { Iconify } from '/src/components/iconify/iconify';
 import { alpha } from '@mui/material/styles';
 

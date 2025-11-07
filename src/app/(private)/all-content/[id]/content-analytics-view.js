@@ -2,13 +2,18 @@
 
 import PageLoader from '/src/components/loaders/PageLoader';
 import { StatisticsAreaChart } from '/src/components/statistics-area-chart';
-import { Grid2 as Grid, Typography, Box } from '@mui/material';
+import { Grid2 as Grid, Typography, Box, alpha } from '@mui/material';
 
 import { CustomDonutChart } from '/src/components/bar-chart/custom-donut-chart';;
 import { ContentBarChart } from './_components/content-bar-chart';
 import { AnalyticsBanner } from './_components/analytics-banner';
 import { AnalyticsMarquee } from './_components/analytics-marquee';
 import { CustomAreaChart } from '/src/components/custom-area-chart';
+import { useContentList } from '../../../../services/content/useContentList';
+import AllContentFeaturedView from '../_component/all-content-featured-view';
+import { NoSsr } from '/src/components/core/no-ssr';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Legend } from 'recharts';
+import { Iconify } from '/src/components/iconify/iconify';
 
 const statistics = [
     {
@@ -93,7 +98,6 @@ const statistics = [
     },
 ];
 
-
 // Sample Data
 const data = [
     { name: 'Jan', uv: 4000, },
@@ -105,95 +109,224 @@ const data = [
     { name: 'Jul', uv: 3490, },
 ];
 
-const donutData = [
-    { label: 'Likes', percent: 25, values: 250, color: '#FF6F61' },
-    { label: 'Comments', percent: 15, values: 150, color: '#6B5B95' },
-    { label: 'Shares', percent: 10, values: 100, color: '#88B04B' },
-    { label: 'Views', percent: 30, values: 300, color: '#FFA500' },
-    { label: 'Reactions', percent: 8, values: 80, color: '#0096C7' },
-    { label: 'Engagements', percent: 5, values: 50, color: '#FFB6C1' },
-    { label: 'Clicks', percent: 4, values: 40, color: '#8A2BE2' },
-    { label: 'Follows', percent: 2, values: 20, color: '#00FA9A' },
-    { label: 'Saves', percent: 1, values: 10, color: '#FFD700' },
+const donutData1 = [
+    { label: 'Likes', values: 250, color: '#FF6F61' },
+    { label: 'Comments', values: 150, color: '#6B5B95' },
+    { label: 'Shares', values: 100, color: '#88B04B' },
+    { label: 'Views', values: 300, color: '#FFA500' },
+    { label: 'Reactions', values: 80, color: '#0096C7' },
+    { label: 'Engagements', values: 50, color: '#FFB6C1' },
+    { label: 'Clicks', values: 40, color: '#8A2BE2' },
+    { label: 'Follows', values: 20, color: '#00FA9A' },
+    { label: 'Saves', values: 10, color: '#FFD700' },
 ];
 
 const donutData2 = [
-    { label: 'Likes', percent: 25, values: 250, color: '#FF6F61' },
-    { label: 'Comments', percent: 15, values: 150, color: '#6B5B95' },
-    { label: 'Shares', percent: 10, values: 100, color: '#88B04B' },
-    { label: 'Views', percent: 30, values: 300, color: '#FFA500' },
-    { label: 'Reactions', percent: 8, values: 80, color: '#0096C7' },
-    { label: 'Engagements', percent: 5, values: 50, color: '#FFB6C1' },
-    { label: 'Clicks', percent: 4, values: 40, color: '#8A2BE2' },
-    { label: 'Follows', percent: 2, values: 20, color: '#00FA9A' },
-    { label: 'Saves', percent: 1, values: 10, color: '#FFD700' },
+    { label: 'Subscriptions', values: 180, color: '#FFB347' },
+    { label: 'Downloads', values: 120, color: '#B19CD9' },
+    { label: 'Feedback', values: 90, color: '#77DD77' },
+    { label: 'Page Visits', values: 240, color: '#FDFD96' },
+    { label: 'Messages', values: 110, color: '#AEC6CF' },
+    { label: 'Reports', values: 70, color: '#FF6961' },
+    { label: 'Mentions', values: 50, color: '#C23B22' },
+    { label: 'Bookmarks', values: 40, color: '#779ECB' },
+    { label: 'Downloads', values: 30, color: '#FFD1DC' },
+];
+
+const verticalBarChartData = [
+    { label: 'Jan', value: 4000 },
+    { label: 'Feb', value: 3000 },
+    { label: 'Mar', value: 2000 },
+    { label: 'Apr', value: 2780 },
+    { label: 'May', value: 1890 },
+    { label: 'Jun', value: 2390 },
+    { label: 'Jul', value: 3490 },
+    { label: 'Aug', value: 2780 },
+    { label: 'Sep', value: 1890 },
+    { label: 'Oct', value: 2390 },
+    { label: 'Nov', value: 3490 },
+    { label: 'Dec', value: 2780 },
+];
+
+const quickStats = [
+    { label: 'Likes', value: 250, icon: 'streamline:money-graph-arrow-increase-ascend-growth-up-arrow-stats-graph-right-grow', color: '#FF6F61' },
+    { label: 'Comments', value: 150, icon: 'streamline:money-graph-arrow-increase-ascend-growth-up-arrow-stats-graph-right-grow', color: '#6B5B95' },
+    { label: 'Shares', value: 100, icon: 'streamline:money-graph-arrow-increase-ascend-growth-up-arrow-stats-graph-right-grow', color: '#88B04B' },
+    { label: 'Views', value: 300, icon: 'streamline:money-graph-arrow-increase-ascend-growth-up-arrow-stats-graph-right-grow', color: '#FFA500' },
 ];
 
 export default function ContentAnalyticsView() {
+    const { data: featuredData, isLoading: featuredLoading } = useContentList('featured');
+
     return (
-        <PageLoader loading={false}>
-            <AnalyticsBanner />
-            <AnalyticsMarquee />
-            <Grid container spacing={1} mt={1} columns={{ xs: 2, md: 3, lg: 4, xl: 5 }}>
-                {statistics.map((statistic) => (
-                    <Grid size={1}>
-                        <StatisticsAreaChart
-                            data={statistic.data}
-                            dataKey="uv"
-                            color={statistic.color}
-                            icon={statistic.icon}
-                            title={statistic.title}
-                            value={statistic.value}
-                            growth={statistic.growth}
-                        />
+        <PageLoader loading={featuredLoading}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <AnalyticsBanner />
+                <AnalyticsMarquee />
+                <AllContentFeaturedView data={[...featuredData, ...featuredData]} />
+
+                <Grid container spacing={1}>
+                    <Grid size={{ xs: 12, lg: 8 }} sx={{ display: 'flex', gap: 1 }}>
+                        {quickStats.map((statistic) => (
+                            <Box
+                                key={statistic.label}
+                                flex={1}
+                                border={1}
+                                borderColor="divider"
+                                p={2}
+                                display="flex"
+                                justifyContent="center"
+                                alignItems="center"
+                                flexDirection="column"
+                                gap={1}
+                            >
+                                <Box
+                                    p={2}
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    height={30}
+                                    width={30}
+                                    bgcolor={alpha(statistic.color, 0.3)}
+                                    borderRadius={1}
+                                >
+                                    <Iconify
+                                        color={statistic.color}
+                                        icon={statistic.icon}
+                                    />
+                                </Box>
+                                <Typography variant="subtitle2" fontWeight={500} color="text.secondary">{statistic.label}</Typography>
+                                <Typography variant="h4">{statistic.value}</Typography>
+                            </Box>
+                        ))}
                     </Grid>
-                ))}
-            </Grid>
 
-            <Grid container spacing={1} mt={1}>
-                 <Grid size={{ xs: 12, md: 6 }} sx={{ height: 450, borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
-                    <Box p={2}>
-                        <Typography variant="h5">Content Bar Chart</Typography>
-                         <Typography variant="body1" color="text.secondary">
-                             Visual summary of content metrics and campaign insights.
-                        </Typography>
+                    <Grid size={{ xs: 12, lg: 4 }} p={2} border={1} borderColor="divider">
+                        <Box display="flex" alignItems="start" gap={1}>
+                            <Iconify color="#FF6F61" icon="ic:sharp-sports-volleyball" height={28} width={28} />
+                            <Box>
+                                <Typography variant="h6">Sports Grid</Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                    Friday MLB Best Bets & Predictions for Tonights Games
+                                </Typography>
+                            </Box>
                         </Box>
-                     <ContentBarChart />
+
+                        <Box display="flex" alignItems="start" gap={1} mt={2}>
+                            <Iconify color="#6B5B95" icon="solar:revote-bold" height={28} width={28} />
+                            <Box>
+                                <Typography variant="h6">Revo ROI</Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                    12.5%
+                                </Typography>
+                            </Box>
+                        </Box>
+                    </Grid>
                 </Grid>
 
-                <Grid size={{ xs: 12, md: 6 }} sx={{ height: 450, borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
-                    <Box p={2}>
-                        <Typography variant="h5">Content Bar Chart</Typography>
-                         <Typography variant="body1" color="text.secondary">
-                             Visual summary of content metrics and campaign insights.
-                        </Typography>
-                        </Box>
-                    <CustomDonutChart data={donutData} />
+                <Grid container spacing={1} columns={{ xs: 2, md: 3, lg: 4, xl: 5 }}>
+                    {statistics.map((statistic) => (
+                        <Grid size={1}>
+                            <StatisticsAreaChart
+                                data={statistic.data}
+                                dataKey="uv"
+                                color={statistic.color}
+                                icon={statistic.icon}
+                                title={statistic.title}
+                                value={statistic.value}
+                                growth={statistic.growth}
+                            />
+                        </Grid>
+                    ))}
                 </Grid>
-               
-            </Grid>
 
-            <Grid container spacing={1} mt={1}>
-                 <Grid size={{ xs: 12, md: 6 }} sx={{ height: 450, borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
-                    <Box p={2}>
-                        <Typography variant="h5">Content Bar Chart</Typography>
-                         <Typography variant="body1" color="text.secondary">
-                             Visual summary of content metrics and campaign insights.
-                        </Typography>
+                <Grid container spacing={1}>
+                    <Grid size={{ xs: 12, md: 6, lg: 4 }} sx={{ height: 450, borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
+                        <Box p={2}>
+                            <Typography variant="h5">Content Bar Chart</Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                Visual summary of content metrics and campaign insights.
+                            </Typography>
                         </Box>
-                    <CustomDonutChart data={donutData2} />
-                </Grid> 
+                        <CustomDonutChart data={donutData1} chartHeight={280} />
+                    </Grid>
 
-                <Grid size={{ xs: 12, md: 6 }} sx={{ height: 450, borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
-                    <Box p={2}>
-                        <Typography variant="h5">Content Bar Chart</Typography>
-                         <Typography variant="body1" color="text.secondary">
-                             Visual summary of content metrics and campaign insights.
-                        </Typography>
+                    <Grid size={{ xs: 12, md: 6, lg: 4 }} sx={{ height: 450, borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
+                        <Box p={2}>
+                            <Typography variant="h5">Content Bar Chart</Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                Visual summary of content metrics and campaign insights.
+                            </Typography>
                         </Box>
-                    <CustomAreaChart data={data} color="#0061FE" />
-                </Grid>              
-            </Grid>
+
+                        <Box pr={2}>
+                            <NoSsr fallback={<Box sx={{ height: 300 }} />}>
+                                <ResponsiveContainer width="100%" height={300}>
+                                    <BarChart
+                                        data={verticalBarChartData}
+                                        layout="vertical"
+                                    >
+                                        <XAxis type="number" axisLine={false} tickLine={false} />
+                                        <YAxis
+                                            type="category"
+                                            dataKey="label"
+                                            axisLine={false}
+                                            tickLine={false}
+                                            tick={{ fontSize: 12 }}
+                                        />
+                                        <Legend />
+                                        <defs>
+                                            <linearGradient id="barGradient" x1="0" y1="0" x2="1" y2="0">
+                                                <stop offset="0%" stopColor="#8253F2" stopOpacity={0.2} />
+                                                <stop offset="100%" stopColor="#8253F2" stopOpacity={1} />
+                                            </linearGradient>
+                                        </defs>
+                                        <Bar
+                                            dataKey="value"
+                                            barSize={20}
+                                            fill="url(#barGradient)"
+                                            radius={[0, 6, 6, 0]}
+                                        />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </NoSsr>
+                        </Box>
+                    </Grid>
+
+                    <Grid size={{ xs: 12, md: 6, lg: 4 }} sx={{ height: 450, borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
+                        <Box p={2}>
+                            <Typography variant="h5">Content Bar Chart</Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                Visual summary of content metrics and campaign insights.
+                            </Typography>
+                        </Box>
+                        <CustomDonutChart data={donutData2} chartHeight={280} />
+                    </Grid>
+
+                </Grid>
+
+                <Grid container spacing={1}>
+                    <Grid size={{ xs: 12, md: 6 }} sx={{ height: 450, borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
+                        <Box p={2}>
+                            <Typography variant="h5">Content Bar Chart</Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                Visual summary of content metrics and campaign insights.
+                            </Typography>
+                        </Box>
+                        <ContentBarChart />
+                    </Grid>
+
+                    <Grid size={{ xs: 12, md: 6 }} sx={{ height: 450, borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
+                        <Box p={2}>
+                            <Typography variant="h5">Content Bar Chart</Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                Visual summary of content metrics and campaign insights.
+                            </Typography>
+                        </Box>
+                        <CustomAreaChart data={data} color="#0061FE" />
+                    </Grid>
+                </Grid>
+            </Box>
         </PageLoader>
     );
 }
