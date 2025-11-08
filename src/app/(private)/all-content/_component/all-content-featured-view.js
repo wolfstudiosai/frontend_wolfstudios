@@ -19,7 +19,7 @@ const AllContentFeaturedView = ({ data }) => {
                     }}
                 >
 
-                    <Typography variant="h6" sx={{ marginBottom: '16px' }}>
+                    <Typography variant="h5" sx={{ marginBottom: '16px' }}>
                         Featured Content
                     </Typography>
                     <Stack spacing={2}>
