@@ -169,7 +169,6 @@ export default function ContentAnalyticsView() {
                 <AllContentFeaturedView data={[...featuredData, ...featuredData]} />
 
                 <Box>
-                    <Typography variant="h5" gutterBottom>Quick Stats</Typography>
                     <Grid container spacing={1}>
                         <Grid size={{ xs: 12, lg: 8 }} sx={{ display: 'flex', gap: 1 }}>
                             {quickStats.map((statistic) => (
@@ -207,6 +206,7 @@ export default function ContentAnalyticsView() {
                         </Grid>
 
                         <Grid size={{ xs: 12, lg: 4 }} p={2} border={1} borderColor="divider">
+                            <Typography variant="h6" mb={2}>Incoming contents</Typography>
                             <Box display="flex" alignItems="start" gap={1}>
                                 <Iconify color="#FF6F61" icon="ic:sharp-sports-volleyball" height={28} width={28} />
                                 <Box>

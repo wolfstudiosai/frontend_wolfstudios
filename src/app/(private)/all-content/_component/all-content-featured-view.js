@@ -6,6 +6,8 @@ import { AllContentRightPanel } from './all-content-right-panel';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 import { SwiperSlide } from 'swiper/react';
 import { FadeIn } from '/src/components/animation/fade-in';
+import { Iconify } from '/src/components/iconify/iconify';
+import { alpha } from '@mui/material/styles';
 
 const AllContentFeaturedView = ({ data }) => {
     return (
@@ -19,9 +21,32 @@ const AllContentFeaturedView = ({ data }) => {
                     }}
                 >
 
-                    <Typography variant="h5" sx={{ marginBottom: '16px' }}>
-                        Featured Content
-                    </Typography>
+                    <Box
+                        display="flex"
+                        alignItems="center"
+                        gap={2}
+                        mb={2}
+                    >
+                        <Box sx={{
+                            height: 36,
+                            width: 36,
+                            backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.3),
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontWeight: 'bold',
+                        }}>
+                            <Iconify
+                                height={24}
+                                width={24}
+                                color="primary.main"
+                                icon="carbon:badge" />
+                        </Box>
+
+                        <Typography variant="h5">
+                            Featured Content
+                        </Typography>
+                    </Box>
                     <Stack spacing={2}>
                         <SliderWrapper
                             loop={false}

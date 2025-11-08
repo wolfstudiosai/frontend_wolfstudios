@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { Stack } from '@mui/material';
@@ -7,6 +9,7 @@ import { SwiperSlide } from 'swiper/react';
 import { FadeIn } from '/src/components/animation/fade-in';
 import { CampaignRightPanel } from '../../_components/campaign-right-panel';
 import { alpha } from '@mui/material/styles';
+import { Iconify } from '/src/components/iconify/iconify';
 
 export const FeaturedCampaign = ({ data }) => {
     return (
@@ -33,10 +36,14 @@ export const FeaturedCampaign = ({ data }) => {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            color: (theme) => theme.palette.primary.main,
-                            fontSize: '16px',
                             fontWeight: 'bold',
-                        }}>C</Box>
+                        }}>
+                            <Iconify
+                                height={24}
+                                width={24}
+                                color="primary.main"
+                                icon="carbon:badge" />
+                        </Box>
 
                         <Typography variant="h5">
                             Featured Campaigns

@@ -1,16 +1,14 @@
 'use client';
 
+import React from 'react';
 import { Box, Grid2 as Grid, Typography } from "@mui/material";
-import PageLoader from "../../../../../components/loaders/PageLoader";
-import { AnalyticsBanner } from "../../../../(private)/all-content/[id]/_components/analytics-banner";
-import { AnalyticsMarquee } from "../../../../(private)/all-content/[id]/_components/analytics-marquee";
-import { useCampaignList } from "../../../../../services/campaign/useCampaignList";
-import { FeaturedCampaign } from "./featured-campaign";
-import { StatisticsAreaChart } from '../../../../../components/statistics-area-chart';
-import { NoSsr } from '../../../../../components/core/no-ssr';
-
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend, AreaChart, Area } from 'recharts';
-import { ContentLineChart } from "../../../../(private)/all-content/_component/content-line-chart";
+import { StatisticsAreaChart } from '/src/components/statistics-area-chart';
+import { NoSsr } from '/src/components/core/no-ssr';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend, AreaChart, Area, ComposedChart, Line } from 'recharts';
+import PageLoader from '/src/components/loaders/PageLoader';
+import { AnalyticsBanner } from '/src/app/(private)/all-content/[id]/_components/analytics-banner';
+import { AnalyticsMarquee } from '/src/app/(private)/all-content/[id]/_components/analytics-marquee';
+import { CustomDonutChart } from '/src/components/bar-chart/custom-donut-chart';;
 
 const statistics = [
     {
@@ -157,18 +155,36 @@ const campaignExpenseByCategory = [
     },
 ];
 
-export const CampaignAnalyticsPageView = () => {
-    const { data: campaignData, isLoading } = useCampaignList('', 'featured');
+const donutData = [
+    { label: 'Comments', values: 150, color: '#6B5B95' },
+    { label: 'Shares', values: 100, color: '#88B04B' },
+    { label: 'Views', values: 190, color: '#FFA500' },
+    { label: 'Reactions', values: 80, color: '#0096C7' },
+    { label: 'Clicks', values: 40, color: '#8A2BE2' },
+    { label: 'Follows', values: 90, color: '#00FA9A' },
+    { label: 'Saves', values: 10, color: '#FFD700' },
+];
+
+const data = [
+    { name: 'Jan', revenue: 800, },
+    { name: 'Feb', revenue: 4000, },
+    { name: 'Mar', revenue: 2000, },
+    { name: 'Apr', revenue: 2780, },
+    { name: 'May', revenue: 1890, },
+    { name: 'Jun', revenue: 2390, },
+    { name: 'Jul', revenue: 3490, },
+];
+
+export const ProductionAnalyticsPageView = () => {
 
     return (
-        <PageLoader loading={isLoading}>
+        <PageLoader loading={false}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 <AnalyticsBanner
-                    title="Campaign performance analytics"
-                    description="A detailed overview of your performance and analytics."
+                    title="Production performance analytics"
+                    description="A detailed overview of your production performance and analytics."
                 />
                 <AnalyticsMarquee />
-                <FeaturedCampaign data={campaignData} />
 
                 <Grid container spacing={1} columns={{ xs: 2, md: 3, lg: 4, xl: 5 }}>
                     {statistics.map((statistic) => (
@@ -189,17 +205,58 @@ export const CampaignAnalyticsPageView = () => {
                 <Grid container spacing={1}>
                     <Grid size={{ xs: 12, md: 6 }} sx={{ height: 400, borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
                         <Box p={2}>
-                            <Typography variant="h5">Campaigns Expense by Category</Typography>
+                            <Typography variant="h5">Production Expense by Category</Typography>
                             <Typography variant="body1" color="text.secondary">
                                 Visual summary of content metrics and campaign insights.
                             </Typography>
                         </Box>
-                        <ContentLineChart />
+
+                        <NoSsr fallback={<Box sx={{ height: 300 }} />}>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <ComposedChart
+                                    data={data}
+                                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                                >
+                                    <defs>
+                                        {/* Define gradient */}
+                                        <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stopColor="#9233FF" stopOpacity={0.8} />
+                                            <stop offset="100%" stopColor="#9233FF" stopOpacity={0} />
+                                        </linearGradient>
+                                    </defs>
+
+                                    <XAxis dataKey="name" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+
+                                    {/* Area with gradient fill */}
+                                    <Area
+                                        type="monotone"
+                                        dataKey="revenue"
+                                        stroke="#9233FF"
+                                        fill="url(#colorRevenue)"
+                                        name="Revenue"
+                                        legendType="none"
+                                    />
+
+                                    {/* Line overlay */}
+                                    <Line
+                                        type="monotone"
+                                        dataKey="revenue"
+                                        stroke="#9233FF"
+                                        strokeWidth={2}
+                                        name="Revenue"
+                                    />
+                                </ComposedChart>
+                            </ResponsiveContainer>
+                        </NoSsr>
+
                     </Grid>
 
                     <Grid size={{ xs: 12, md: 6 }} sx={{ height: 400, borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
                         <Box p={2}>
-                            <Typography variant="h5">Campaigns Expense by Golas</Typography>
+                            <Typography variant="h5">Production Expense by Goal</Typography>
                             <Typography variant="body1" color="text.secondary">
                                 Visual summary of content metrics and campaign insights.
                             </Typography>
@@ -228,8 +285,8 @@ export const CampaignAnalyticsPageView = () => {
                                         <Legend />
                                         <Bar
                                             dataKey="value"
-                                            barSize={25}
-                                            fill="#455de6ff"
+                                            barSize={5}
+                                            fill="#F8931A"
                                             radius={[0, 6, 6, 0]}
                                         />
                                     </BarChart>
@@ -242,48 +299,18 @@ export const CampaignAnalyticsPageView = () => {
                 <Grid container spacing={1}>
                     <Grid size={{ xs: 12, md: 6 }} sx={{ height: 400, borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
                         <Box p={2}>
-                            <Typography variant="h5">Campaigns Expense by Status</Typography>
+                            <Typography variant="h5">Production Expense by Status</Typography>
                             <Typography variant="body1" color="text.secondary">
                                 Visual summary of content metrics and campaign insights.
                             </Typography>
                         </Box>
 
-                        <Box pr={3}>
-                            <NoSsr fallback={<Box sx={{ height: 300 }} />}>
-                                <ResponsiveContainer width="100%" height={300}>
-                                    <BarChart
-                                        barGap={4}
-                                        data={campaignExpenseByStatus}
-                                        layout="vertical"
-                                        margin={{ top: 10, right: 10, bottom: 10, left: 0 }}
-                                    >
-                                        <CartesianGrid horizontal={false} vertical={false} strokeDasharray="2 4" />
-                                        <XAxis type="number" axisLine={false} tickLine={false} />
-                                        <YAxis
-                                            type="category"
-                                            dataKey="label"
-                                            axisLine={false}
-                                            tickLine={false}
-                                            width={130}
-                                            tick={{ fontSize: 12 }}
-                                        />
-                                        <Tooltip animationDuration={50} cursor={false} />
-                                        <Legend />
-                                        <Bar
-                                            dataKey="value"
-                                            barSize={25}
-                                            fill="#455de6ff"
-                                            radius={[0, 6, 6, 0]}
-                                        />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </NoSsr>
-                        </Box>
+                        <CustomDonutChart data={donutData} chartHeight={280} />
                     </Grid>
 
                     <Grid size={{ xs: 12, md: 6 }} sx={{ height: 400, borderRadius: 0, border: '1px solid var(--mui-palette-divider)' }}>
                         <Box p={2}>
-                            <Typography variant="h5">Campaigns Expense by Category</Typography>
+                            <Typography variant="h5">Production Expense by Category</Typography>
                             <Typography variant="body1" color="text.secondary">
                                 Visual summary of content metrics and campaign insights.
                             </Typography>

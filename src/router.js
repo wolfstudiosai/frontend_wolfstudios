@@ -154,6 +154,13 @@ export const workspacesItems = [
         href: '/production/reporting',
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
+      {
+        key: 'production-analytics',
+        title: 'Analytics',
+        icon: 'ph:dot-fill',
+        href: '/production/analytics',
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      }
     ],
   },
   {
