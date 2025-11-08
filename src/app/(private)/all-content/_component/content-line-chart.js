@@ -19,13 +19,13 @@ export const ContentLineChart = () => {
     const { mode } = useColorScheme();
 
     return (
-        <Box height={350} width="100%" mt={2}>
-            <ResponsiveContainer width="100%" height="100%">
+        <Box height={400} width="100%" mt={2}>
+            <ResponsiveContainer width="100%" height={300}>
                 <LineChart
                     data={data}
                     margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                 >
-                    <CartesianGrid strokeDasharray="3 3" />
+                    {/* <CartesianGrid strokeDasharray="3 3" /> */}
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip contentStyle={{ backgroundColor: mode === 'dark' ? '#1e1e1e' : '#fff' }} />

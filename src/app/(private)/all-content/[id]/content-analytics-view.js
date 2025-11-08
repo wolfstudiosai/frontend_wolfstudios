@@ -161,68 +161,74 @@ export default function ContentAnalyticsView() {
     return (
         <PageLoader loading={featuredLoading}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <AnalyticsBanner />
+                <AnalyticsBanner
+                    title="Content performance analytics"
+                    description="A detailed overview of your performance and analytics."
+                />
                 <AnalyticsMarquee />
                 <AllContentFeaturedView data={[...featuredData, ...featuredData]} />
 
-                <Grid container spacing={1}>
-                    <Grid size={{ xs: 12, lg: 8 }} sx={{ display: 'flex', gap: 1 }}>
-                        {quickStats.map((statistic) => (
-                            <Box
-                                key={statistic.label}
-                                flex={1}
-                                border={1}
-                                borderColor="divider"
-                                p={2}
-                                display="flex"
-                                justifyContent="center"
-                                alignItems="center"
-                                flexDirection="column"
-                                gap={1}
-                            >
+                <Box>
+                    <Grid container spacing={1}>
+                        <Grid size={{ xs: 12, lg: 8 }} sx={{ display: 'flex', gap: 1 }}>
+                            {quickStats.map((statistic) => (
                                 <Box
+                                    key={statistic.label}
+                                    flex={1}
+                                    border={1}
+                                    borderColor="divider"
                                     p={2}
                                     display="flex"
-                                    alignItems="center"
                                     justifyContent="center"
-                                    height={30}
-                                    width={30}
-                                    bgcolor={alpha(statistic.color, 0.3)}
-                                    borderRadius={1}
+                                    alignItems="center"
+                                    flexDirection="column"
+                                    gap={1}
                                 >
-                                    <Iconify
-                                        color={statistic.color}
-                                        icon={statistic.icon}
-                                    />
+                                    <Box
+                                        p={2}
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        height={30}
+                                        width={30}
+                                        bgcolor={alpha(statistic.color, 0.3)}
+                                        borderRadius={1}
+                                    >
+                                        <Iconify
+                                            color={statistic.color}
+                                            icon={statistic.icon}
+                                        />
+                                    </Box>
+                                    <Typography variant="subtitle2" fontWeight={500} color="text.secondary">{statistic.label}</Typography>
+                                    <Typography variant="h4">{statistic.value}</Typography>
                                 </Box>
-                                <Typography variant="subtitle2" fontWeight={500} color="text.secondary">{statistic.label}</Typography>
-                                <Typography variant="h4">{statistic.value}</Typography>
-                            </Box>
-                        ))}
-                    </Grid>
+                            ))}
+                        </Grid>
 
-                    <Grid size={{ xs: 12, lg: 4 }} p={2} border={1} borderColor="divider">
-                        <Box display="flex" alignItems="start" gap={1}>
-                            <Iconify color="#FF6F61" icon="ic:sharp-sports-volleyball" height={28} width={28} />
-                            <Box>
-                                <Typography variant="h6">Sports Grid</Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    Friday MLB Best Bets & Predictions for Tonights Games
-                                </Typography>
+                        <Grid size={{ xs: 12, lg: 4 }} p={2} border={1} borderColor="divider">
+                            <Typography variant="h6" mb={2}>Incoming contents</Typography>
+                            <Box display="flex" alignItems="start" gap={1}>
+                                <Iconify color="#FF6F61" icon="ic:sharp-sports-volleyball" height={28} width={28} />
+                                <Box>
+                                    <Typography variant="h6">Sports Grid</Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        Friday MLB Best Bets & Predictions for Tonights Games
+                                    </Typography>
+                                </Box>
                             </Box>
-                        </Box>
 
-                        <Box display="flex" alignItems="start" gap={1} mt={2}>
-                            <Iconify color="#6B5B95" icon="solar:revote-bold" height={28} width={28} />
-                            <Box>
-                                <Typography variant="h6">Revo ROI</Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    12.5%
-                                </Typography>
+                            <Box display="flex" alignItems="start" gap={1} mt={2}>
+                                <Iconify color="#6B5B95" icon="solar:revote-bold" height={28} width={28} />
+                                <Box>
+                                    <Typography variant="h6">Revo ROI</Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        12.5%
+                                    </Typography>
+                                </Box>
                             </Box>
-                        </Box>
+                        </Grid>
                     </Grid>
-                </Grid>
+                </Box>
 
                 <Grid container spacing={1} columns={{ xs: 2, md: 3, lg: 4, xl: 5 }}>
                     {statistics.map((statistic) => (

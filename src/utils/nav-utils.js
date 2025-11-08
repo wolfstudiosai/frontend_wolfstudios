@@ -108,16 +108,16 @@ const SidebarMenuItems = ({ items, level = 0, openMenus, toggleMenuItem, isDeskt
 
   const iconStyles = isDesktop
     ? {
-        justifyContent: 'flex-start',
-        ...(!isOpen && {
-          // border: '1px solid var(--mui-palette-divider)',
-          // boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
-          borderRadius: 1,
-          p: 0.5,
-          ml: 0.9,
-          // backgroundColor: 'background.paper',
-        }),
-      }
+      justifyContent: 'flex-start',
+      ...(!isOpen && {
+        // border: '1px solid var(--mui-palette-divider)',
+        // boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+        borderRadius: 1,
+        p: 0.5,
+        ml: 0.9,
+        // backgroundColor: 'background.paper',
+      }),
+    }
     : { minWidth: 40 };
 
   const textStyles = {
@@ -327,7 +327,10 @@ export const SidebarPopoverItem = ({ item }) => {
     <Box>
       <Box
         key={item.key}
-        onClick={() => item.href && router.push(item.href)}
+        onClick={(e) => {
+          e.stopPropagation();
+          item.href && router.push(item.href)
+        }}
         sx={{
           px: 2,
           py: 1,

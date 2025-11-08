@@ -1,15 +1,17 @@
+'use client';
+
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { Stack } from '@mui/material';
 import { useState } from 'react';
-import { AllContentRightPanel } from './all-content-right-panel';
 import { SliderWrapper } from '/src/components/slider/slider-wrapper';
 import { SwiperSlide } from 'swiper/react';
 import { FadeIn } from '/src/components/animation/fade-in';
-import { Iconify } from '/src/components/iconify/iconify';
+import { CampaignRightPanel } from '../../_components/campaign-right-panel';
 import { alpha } from '@mui/material/styles';
+import { Iconify } from '/src/components/iconify/iconify';
 
-const AllContentFeaturedView = ({ data }) => {
+export const FeaturedCampaign = ({ data }) => {
     return (
         <Box>
             {data?.length > 0 && data[0] !== undefined && (
@@ -44,7 +46,7 @@ const AllContentFeaturedView = ({ data }) => {
                         </Box>
 
                         <Typography variant="h5">
-                            Featured Content
+                            Featured Campaigns
                         </Typography>
                     </Box>
                     <Stack spacing={2}>
@@ -177,7 +179,7 @@ const ContentFeaturedCard = ({ content }) => {
             </Box>
 
             {openRightPanel && (
-                <AllContentRightPanel
+                <CampaignRightPanel
                     view="QUICK"
                     open={openRightPanel}
                     id={content?.id}
@@ -188,5 +190,3 @@ const ContentFeaturedCard = ({ content }) => {
         </>
     );
 };
-
-export default AllContentFeaturedView;
