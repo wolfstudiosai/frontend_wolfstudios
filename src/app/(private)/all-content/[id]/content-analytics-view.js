@@ -161,7 +161,10 @@ export default function ContentAnalyticsView() {
     return (
         <PageLoader loading={featuredLoading}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <AnalyticsBanner />
+                <AnalyticsBanner
+                    title="Content performance analytics"
+                    description="A detailed overview of your performance and analytics."
+                />
                 <AnalyticsMarquee />
                 <AllContentFeaturedView data={[...featuredData, ...featuredData]} />
 

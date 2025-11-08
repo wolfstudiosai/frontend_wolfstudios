@@ -3,7 +3,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 
-export const AnalyticsBanner = () => {
+export const AnalyticsBanner = ({ title, description }) => {
   return (
     <Box
       sx={{
@@ -37,9 +37,9 @@ export const AnalyticsBanner = () => {
         gap={1}
       >
         <Typography variant="h3" color="white" fontWeight={600}>
-          Content performance analytics
+          {title}
         </Typography>
-        <Typography variant="h5">A detailed overview of your performance and analytics. </Typography>
+        <Typography variant="h5">{description}</Typography>
       </Box>
     </Box>
   );
