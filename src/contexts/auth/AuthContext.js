@@ -9,6 +9,7 @@ import { api, server_base_api } from '/src/utils/api';
 import { setTokenInCookies, removeTokenFromCookies } from '/src/utils/axios-api.helpers';
 import { signOut } from "next-auth/react"
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 // ---- Initial User State ----
 const INITIAL_AUTH_STATE = {
@@ -91,6 +92,9 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('auth', JSON.stringify(userData));
       localStorage.setItem('accessToken', userData.token);
 
+      Cookies.set('auth', JSON.stringify(userData));
+      Cookies.set('accessToken', userData.token);
+
       setTokenInCookies(userData.token);
       setUserInfo(userData);
     } catch (err) {
@@ -141,6 +145,9 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('auth', JSON.stringify(userData));
       localStorage.setItem('accessToken', userData.token);
 
+      Cookies.set('auth', JSON.stringify(userData));
+      Cookies.set('accessToken', userData.token);
+
       setTokenInCookies(userData.token);
       setUserInfo(userData);
 
@@ -159,6 +166,9 @@ export const AuthProvider = ({ children }) => {
     removeTokenFromCookies();
     setUserInfo(INITIAL_AUTH_STATE);
     router.push('/');
+
+    Cookies.remove('auth');
+    Cookies.remove('accessToken');
     if (session?.user?.id) {
       signOut();
     } else {
