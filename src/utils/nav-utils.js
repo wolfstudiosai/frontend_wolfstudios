@@ -1,7 +1,8 @@
 'use client';
 
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import {
   Box,
   Chip,
@@ -122,7 +123,7 @@ const SidebarMenuItems = ({ items, level = 0, openMenus, toggleMenuItem, isDeskt
 
   const textStyles = {
     color: 'white',
-    fontWeight: isDesktop ? 800 : 700,
+    fontWeight: isDesktop ? 600 : 500,
   };
 
   return (
@@ -152,15 +153,15 @@ const SidebarMenuItems = ({ items, level = 0, openMenus, toggleMenuItem, isDeskt
                   justifyContent: 'flex-start',
                   minWidth: 0,
                   flexGrow: 1,
-                  py: 1,
+                  py: "6px",
                   pl: isDesktop && !isOpen ? 0 : 1.5,
                   ml: level === 0 ? 0 : level + 1,
                 }}
               >
                 <ListItemIcon sx={iconStyles} title={isDesktop && !isOpen ? item.title : ''}>
-                  <Iconify icon={item.icon} width={20} height={20} color="white" />
+                  <Iconify icon={item.icon} width={18} height={18} color="white" />
                 </ListItemIcon>
-                {(isDesktop ? isOpen : true) && <ListItemText primary={item.title} sx={textStyles} />}
+                {(isDesktop ? isOpen : true) && <ListItemText primary={item.title} sx={textStyles} slotProps={{ primary: { sx: { fontSize: 13 } } }} />}
                 {isDesktop && !isOpen && item.count && (
                   <Chip
                     label={item.count}
