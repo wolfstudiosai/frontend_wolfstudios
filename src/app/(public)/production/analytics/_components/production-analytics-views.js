@@ -171,7 +171,7 @@ const data = [
 ];
 
 export const ProductionAnalyticsPageView = () => {
-    const { data, isLoading, } = useProductionList();
+    const { data: productions, isLoading, } = useProductionList();
 
     return (
         <PageLoader loading={isLoading}>
@@ -188,7 +188,7 @@ export const ProductionAnalyticsPageView = () => {
                         <Button variant="text" size="small" LinkComponent={Link} href="/production">View all</Button>
                     </Box>
                     <Grid container spacing={0.5}>
-                        {data.slice(0, 12).map((content, index) => (
+                        {productions.slice(0, 12).map((production, index) => (
                             <Grid
                                 key={index}
                                 size={{
@@ -199,7 +199,7 @@ export const ProductionAnalyticsPageView = () => {
                                     xl: 2,
                                 }}
                             >
-                                <ProductionCard content={content} />
+                                <ProductionCard content={production} />
                             </Grid>
                         ))}
                     </Grid>

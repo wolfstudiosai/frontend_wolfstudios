@@ -45,6 +45,7 @@ export function LoginForm({ onLoginSuccess, redirectToHome = false }) {
             setError(error);
           },
         });
+
         setLoading(false);
 
         if (res.success) {
