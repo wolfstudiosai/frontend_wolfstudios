@@ -8,6 +8,7 @@ import { useCampaignList } from "../../../../../services/campaign/useCampaignLis
 import { FeaturedCampaign } from "./featured-campaign";
 import { StatisticsAreaChart } from '../../../../../components/statistics-area-chart';
 import { NoSsr } from '../../../../../components/core/no-ssr';
+import { CampaignGallery } from "./campaign-gallery";
 
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend, AreaChart, Area } from 'recharts';
 import { ContentLineChart } from "../../../../(private)/all-content/_component/content-line-chart";
@@ -169,6 +170,7 @@ export const CampaignAnalyticsPageView = () => {
                 />
                 <AnalyticsMarquee />
                 <FeaturedCampaign data={campaignData} />
+                <CampaignGallery />
 
                 <Grid container spacing={1} columns={{ xs: 2, md: 3, lg: 4, xl: 5 }}>
                     {statistics.map((statistic) => (
