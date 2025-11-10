@@ -1,14 +1,17 @@
 'use client';
 
 import React from 'react';
-import { Box, Grid2 as Grid, Typography } from "@mui/material";
+import { Box, Button, Grid2 as Grid, Typography } from "@mui/material";
 import { StatisticsAreaChart } from '/src/components/statistics-area-chart';
 import { NoSsr } from '/src/components/core/no-ssr';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend, AreaChart, Area, ComposedChart, Line } from 'recharts';
 import PageLoader from '/src/components/loaders/PageLoader';
 import { AnalyticsBanner } from '/src/app/(private)/all-content/[id]/_components/analytics-banner';
 import { AnalyticsMarquee } from '/src/app/(private)/all-content/[id]/_components/analytics-marquee';
-import { CustomDonutChart } from '/src/components/bar-chart/custom-donut-chart';;
+import { CustomDonutChart } from '/src/components/bar-chart/custom-donut-chart'; import { useProductionList } from '../../../../../services/production/useProductionList';
+import { ProductionCard } from '../../_components/production-card';
+import Link from 'next/link';
+;
 
 const statistics = [
     {
@@ -93,14 +96,6 @@ const statistics = [
     },
 ];
 
-const campaignExpenseByStatus = [
-    { label: 'Upcoming', value: 10 },
-    { label: 'Onboarding Partners', value: 20 },
-    { label: 'Needs Case Study', value: 150 },
-    { label: 'Closed', value: 70 },
-    { label: 'Archived', value: 120 },
-];
-
 const campaignExpenseByGoal = [
     { label: 'Content Generation', value: 10 },
     { label: 'Lead Generation', value: 20 },
@@ -176,15 +171,39 @@ const data = [
 ];
 
 export const ProductionAnalyticsPageView = () => {
+    const { data, isLoading, } = useProductionList();
 
     return (
-        <PageLoader loading={false}>
+        <PageLoader loading={isLoading}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 <AnalyticsBanner
                     title="Production performance analytics"
                     description="A detailed overview of your production performance and analytics."
                 />
                 <AnalyticsMarquee />
+
+                <Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                        <Typography variant="h5">Top Productions</Typography>
+                        <Button variant="text" size="small" LinkComponent={Link} href="/production">View all</Button>
+                    </Box>
+                    <Grid container spacing={0.5}>
+                        {data.slice(0, 12).map((content, index) => (
+                            <Grid
+                                key={index}
+                                size={{
+                                    xs: 12,
+                                    sm: 6,
+                                    md: 4,
+                                    lg: 3,
+                                    xl: 2,
+                                }}
+                            >
+                                <ProductionCard content={content} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
 
                 <Grid container spacing={1} columns={{ xs: 2, md: 3, lg: 4, xl: 5 }}>
                     {statistics.map((statistic) => (
