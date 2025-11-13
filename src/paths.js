@@ -192,8 +192,9 @@ export const paths = {
 
     // expense overview
     expense_overview: '/expense-overview',
+    expense_new_form: '/expense-form',
     expense_report: '/expense-report',
-    
+
   },
   dashboardPublic: {
     // HQs
