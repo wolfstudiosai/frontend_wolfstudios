@@ -299,10 +299,17 @@ export const privateRoutesV3 = [
     allowedRoles: ['admin', 'user', 'super_admin'],
     items: [
       {
+        key: 'expense-overview',
+        title: 'Expense Overview',
+        icon: 'heroicons:chart-bar-solid',
+        href: paths.private.expense_overview,
+        allowedRoles: ['admin', 'user', 'super_admin'],
+      },
+      {
         key: 'new-expense-form',
         title: 'New Expense Form',
         icon: 'heroicons:chart-bar-solid',
-        href: paths.private.expense_overview,
+        href: paths.private.expense_new_form,
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
       {
