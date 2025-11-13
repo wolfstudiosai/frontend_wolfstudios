@@ -271,21 +271,21 @@ export const privateRoutesV3 = [
   {
     key: 'performance-overview',
     title: 'Performance Overview',
-    icon: 'heroicons:chart-bar-solid',
+    icon: 'mingcute:performance-line',
     href: paths.private.performance_overview,
     allowedRoles: ['admin', 'user', 'super_admin'],
     items: [
       {
         key: 'performance-affiliate-ads',
         title: 'Affiliate & Ads Performance',
-        icon: 'heroicons:chart-bar-solid',
+        icon: 'tabler:affiliate',
         href: paths.private.performance_overview,
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
       {
         key: 'organic-social-performance',
         title: 'Organic Social Performance',
-        icon: 'heroicons:chart-bar-solid',
+        icon: 'mdi:organic-outline',
         href: paths.private.organic_social_performance,
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
@@ -294,21 +294,21 @@ export const privateRoutesV3 = [
   {
     key: 'expense-overview',
     title: 'Expense Overview',
-    icon: 'heroicons:chart-bar-solid',
+    icon: 'icon-park-outline:expenses',
     href: paths.private.expense_overview,
     allowedRoles: ['admin', 'user', 'super_admin'],
     items: [
       {
         key: 'expense-overview',
         title: 'Expense Overview',
-        icon: 'heroicons:chart-bar-solid',
+        icon: 'healthicons:low-income-level-outline-24px',
         href: paths.private.expense_overview,
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
       {
         key: 'new-expense-form',
         title: 'New Expense Form',
-        icon: 'heroicons:chart-bar-solid',
+        icon: 'line-md:document-report',
         href: paths.private.expense_new_form,
         allowedRoles: ['admin', 'user', 'super_admin'],
       },
