@@ -297,4 +297,20 @@ export const paths = {
   internalServerError: '/errors/internal-server-error',
   docs: 'https://material-kit-pro-react-docs.devias.io',
   purchase: 'https://mui.com/store/items/devias-kit-pro',
+
+
+  // User Private Routes
+  user: {
+    analytics: '/user/analytics',
+    campaign: '/user/campaign',
+    content: '/user/content',
+    brands: '/user/brands',
+    affiliate: '/user/affiliate',
+    portfolio: '/user/portfolio',
+    payment: '/user/payment',
+    meeting: '/user/meeting',
+    profile: '/user/profile',
+    my_content: '/user/my-content',
+    feedback: '/user/feedback',
+  }
 };

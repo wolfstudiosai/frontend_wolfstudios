@@ -46,7 +46,7 @@ const isValidToken = (token) => {
 const extractUserData = (data) => ({
   id: data.id,
   token: data.accessToken,
-  name: data.name,
+  name: data.firstName + ' ' + data.lastName,
   email: data.email,
   contact_number: data.contactNumber,
   profile_pic: data.profileImage,
