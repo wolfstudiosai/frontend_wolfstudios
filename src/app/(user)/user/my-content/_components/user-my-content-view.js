@@ -1,76 +1,109 @@
 "use client"
 
 import React from "react";
-import { Box, Typography, Avatar } from "@mui/material";
+import { Box, Typography, Avatar, Button } from "@mui/material";
 import { DataTable } from "/src/components/data-table/data-table";
-
-// Sample my-content data
-const myContent = [
-  {
-    id: 1,
-    name: "Summer Fashion Campaign",
-    image: "/images/campaign1.jpg",
-    startDate: "2025-11-20",
-    status: "Accepted",
-  },
-  {
-    id: 2,
-    name: "Fitness Influencer Campaign",
-    image: "/images/campaign2.jpg",
-    startDate: "2025-11-25",
-    status: "Pending",
-  },
-  {
-    id: 3,
-    name: "Tech Gadget Launch",
-    image: "/images/campaign3.jpg",
-    startDate: "2025-12-05",
-    status: "Rejected",
-  },
-];
+import { useContentList } from "/src/services/content/useContentList";
+import { AllContentRightPanel } from "../../../../(private)/all-content/_component/all-content-right-panel";
+import PageLoader from "../../../../../components/loaders/PageLoader";
 
 export const UserMyContentView = () => {
+  const { isLoading, data } = useContentList();
+  const [selectedContent, setSelectedContent] = React.useState(null);
+  const [openRightPanel, setOpenRightPanel] = React.useState(false);
+
+  console.log(data)
 
   // Define columns for DataTable
   const columns = [
     {
       name: "Image",
-      field: "image",
+      field: "thumbnailImage",
       width: 10,
       formatter: (row) => (
-        <Avatar src={row.image} variant="rounded" sx={{ width: 40, height: 40 }} />
+        <Avatar src={row.thumbnailImage} variant="rounded" sx={{ width: 40, height: 40 }} />
       ),
     },
     {
-      name: "Campaign Name",
+      name: "Content Name",
       field: "name",
       width: 250,
       formatter: (row) => <Typography fontWeight={500}>{row.name}</Typography>,
     },
     {
-      name: "Start Date",
-      field: "startDate",
+      name: "Comment",
+      field: "partnerIGTotalComments",
       width: 150,
+      formatter: (row) => <Typography fontWeight={500}>{row.partnerIGTotalComments}</Typography>,
     },
+    {
+      name: "Like",
+      field: "partnerIGTotalLikes",
+      width: 150,
+      formatter: (row) => <Typography fontWeight={500}>{row.partnerIGTotalLikes}</Typography>,
+    },
+    {
+      name: "Share",
+      field: "partnerIGTotalShares",
+      width: 150,
+      formatter: (row) => <Typography fontWeight={500}>{row.partnerIGTotalShares}</Typography>,
+    },
+    {
+      name: "Views",
+      field: "partnerIGTotalViews",
+      width: 150,
+      formatter: (row) => <Typography fontWeight={500}>{row.partnerIGTotalViews}</Typography>,
+    },
+    {
+      name: "Actions",
+      field: "actions",
+      width: 150,
+      formatter: (row) => (
+        <Box>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="small"
+            onClick={() => {
+              setSelectedContent(row);
+              setOpenRightPanel(true);
+            }}
+          >
+            View
+          </Button>
+        </Box>
+      ),
+    }
   ];
 
   return (
-    <Box>
-      <Typography variant="h4" fontWeight={500} sx={{ mb: 1 }}>
-        My Content
-      </Typography>
+    <PageLoader isLoading={isLoading}>
+      <Box>
+        <Typography variant="h4" fontWeight={500} sx={{ mb: 2 }}>
+          My Content
+        </Typography>
 
-      <DataTable
-        columns={columns}
-        rows={myContent}
-        uniqueRowId={(row) => row.id}
-        selectionMode="none"
-        hover
-        isPagination={true}
-        pageNo={1}
-        totalRecords={myContent.length}
-        rowsPerPage={5}
-      />
-    </Box>
+        <DataTable
+          columns={columns}
+          rows={data}
+          uniqueRowId={(row) => row.id}
+          selectionMode="none"
+          hover
+          isPagination={false}
+          pageNo={1}
+          totalRecords={data?.length}
+          rowsPerPage={5}
+        />
+
+        {openRightPanel && (
+          <AllContentRightPanel
+            onClose={() => setOpenRightPanel(false)}
+            open={openRightPanel}
+            id={selectedContent?.id}
+            view={'QUICK'}
+          />
+        )}
+      </Box>
+    </PageLoader>
   )
 }

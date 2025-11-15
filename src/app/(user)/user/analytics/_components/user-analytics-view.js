@@ -50,7 +50,7 @@ export const UserAnalyticsView = () => {
   return (
     <Box>
       {/* Header */}
-      <Typography variant="h4" fontWeight={500} sx={{ mb: 1 }}>
+      <Typography variant="h4" fontWeight={500} sx={{ mb: 2 }}>
         Creator Dashboard
       </Typography>
 

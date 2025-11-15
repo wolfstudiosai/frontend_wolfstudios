@@ -70,7 +70,7 @@ export const UserCampaignView = () => {
   return (
     <PageLoader isLoading={isLoading}>
       <Box>
-        <Typography variant="h4" fontWeight={500} sx={{ mb: 1 }}>
+        <Typography variant="h4" fontWeight={500} sx={{ mb: 2 }}>
           My Campaigns
         </Typography>
         <DataTable
