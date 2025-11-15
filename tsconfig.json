@@ -31,7 +31,7 @@
     "src/app/(public)/portfolio/analytics/_components/portfolio-analytics-card.js",
     "src/app/(public)/portfolio/analytics/_components/refunded.js",
     "src/app/(public)/campaign/analytics/_components/campaign-analytics-page-view.js"
-  ],
+, "src/app/(user)/user/profile/_components/user-profile-page-view.js"  ],
   "exclude": [
     "node_modules"
   ]

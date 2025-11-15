@@ -12,8 +12,6 @@ export const UserMyContentView = () => {
   const [selectedContent, setSelectedContent] = React.useState(null);
   const [openRightPanel, setOpenRightPanel] = React.useState(false);
 
-  console.log(data)
-
   // Define columns for DataTable
   const columns = [
     {
