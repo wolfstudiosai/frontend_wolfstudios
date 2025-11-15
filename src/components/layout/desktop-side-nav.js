@@ -40,7 +40,7 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
     >
 
       {/* Admin */}
-      {userInfo.role === 'SUPER_ADMIN' && (
+      {userInfo.role === 'SUPER_ADMIN' || userInfo.role === 'ADMIN' && (
         <>
           <SidebarChatProfiles isOpen={open} />
           <MenuList>
