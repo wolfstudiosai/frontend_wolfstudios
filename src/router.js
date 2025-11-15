@@ -383,7 +383,7 @@ export const userPrivateRoutes = [
     key: 'content',
     title: 'Content',
     icon: 'bx:book-content',
-    href: paths.user.content,
+    // href: paths.user.content,
     items: [
       {
         key: 'my-content',
