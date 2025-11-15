@@ -10,7 +10,7 @@ import { NavSearch } from '/src/components/navbar/nav-search';
 
 import { UserInfoPopover } from '../dashboard/layout/_components/user-info-popover';
 import { SettingsPopover } from '../settings-popover';
-import { privateRoutesV3 } from '/src/router';
+import { adminPrivateRoutesV3 } from '/src/router';
 import SidebarMenuItems, { getWorkspacesTab } from '/src/utils/nav-utils';
 
 export function MobileSideNav({ open, onClose }) {
@@ -58,7 +58,7 @@ export function MobileSideNav({ open, onClose }) {
         <Divider sx={{ my: 1 }} />
         <MenuList>
           <SidebarMenuItems
-            items={privateRoutesV3}
+            items={adminPrivateRoutesV3}
             pathname={pathname}
             openMenus={openMenus}
             toggleMenuItem={toggleMenuItem}

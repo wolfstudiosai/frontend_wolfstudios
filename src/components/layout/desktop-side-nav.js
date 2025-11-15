@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Box, MenuList } from '@mui/material';
 import { useColorScheme } from '@mui/material/styles';
 
@@ -10,16 +11,14 @@ import { SettingsPopover } from '../../components/settings-popover';
 import { UserInfoPopover } from '../dashboard/layout/_components/user-info-popover';
 import { navColorStyles } from '../dashboard/layout/vertical/styles';
 import SidebarChatProfiles from './sidebar-chat-profiles';
-import { privateRoutesV3 } from '/src/router';
-import SidebarMenuItems, { getWorkspacesTab } from '/src/utils/nav-utils';
+import { adminPrivateRoutesV3, userPrivateRoutes } from '/src/router';
+import SidebarMenuItems from '/src/utils/nav-utils';
 
 export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible }) {
   const { colorScheme = 'light' } = useColorScheme();
   const styles = navColorStyles[colorScheme][color];
   const { userInfo } = useAuth();
   const { openMenus, toggleMenuItem } = useSettings();
-
-  const workspacesTab = getWorkspacesTab(userInfo);
 
   return (
     <Box
@@ -39,16 +38,39 @@ export function DesktopSideNav({ color = 'evident', open, isFeaturedCardVisible 
         },
       }}
     >
-      <SidebarChatProfiles isOpen={open} />
-      <MenuList>
-        <SidebarMenuItems
-          items={privateRoutesV3}
-          openMenus={openMenus}
-          toggleMenuItem={toggleMenuItem}
-          isDesktop={true}
-          isOpen={open}
-        />
-      </MenuList>
+
+      {/* Admin */}
+      {userInfo.role === 'SUPER_ADMIN' || userInfo.role === 'ADMIN' && (
+        <>
+          <SidebarChatProfiles isOpen={open} />
+          <MenuList>
+            <SidebarMenuItems
+              items={adminPrivateRoutesV3}
+              openMenus={openMenus}
+              toggleMenuItem={toggleMenuItem}
+              isDesktop={true}
+              isOpen={open}
+            />
+          </MenuList>
+        </>
+      )}
+
+      {/* User */}
+      {userInfo.role === 'USER' && (
+        <>
+          <SidebarChatProfiles isOpen={open} />
+          <MenuList>
+            <SidebarMenuItems
+              items={userPrivateRoutes}
+              openMenus={openMenus}
+              toggleMenuItem={toggleMenuItem}
+              isDesktop={true}
+              isOpen={open}
+            />
+          </MenuList>
+        </>
+      )}
+
       <Box
         sx={{
           mt: 'auto',

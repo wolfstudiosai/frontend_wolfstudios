@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import { Camera as CameraIcon } from '@phosphor-icons/react';
 import React from 'react';
 
-export default function ProfileUploader({ value, onFileSelect, onDelete, disabled = false }) {
+export default function ProfileUploader({ value, onFileSelect, disabled = false }) {
   const [previewUrl, setPreviewUrl] = React.useState('');
 
   const handleImageChange = (event) => {
