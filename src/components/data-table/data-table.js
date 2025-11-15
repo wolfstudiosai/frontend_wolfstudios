@@ -68,66 +68,68 @@ export function DataTable({
   const selectedSome = selectedRows.length > 0 && selectedRows.length < rows.length;
   const selectedAll = rows.length > 0 && selectedRows.length === rows.length;
 
-  const table = () => (<Table {...props}>
-    <TableHead sx={{ ...(hideHead && { visibility: 'collapse', '--TableCell-borderWidth': 0 }) }}>
-      <TableRow>
-        {selectionMode !== "none" && (
-          <TableCell padding="checkbox" sx={{ width: "40px" }}>
-            {selectionMode === "multiple" && (
-              <Checkbox
-                checked={selectedAll}
-                indeterminate={selectedSome}
-                onChange={handleSelectAll}
-              />
-            )}
-          </TableCell>
-        )}
-        {columns.map((column) => (
-          <TableCell key={column.name} sx={{ width: column.width, textAlign: column.align }}>
-            {column.hideName ? null : column.name}
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      {rows.map((row, index) => {
-        const rowId = row.id || uniqueRowId?.(row);
-        const isSelected = isRowSelected(rowId);
-
-        return (
-          <TableRow
-            key={rowId ?? index}
-            hover={hover}
-            selected={isSelected}
-            onClick={
-              onClick
-                ? (event) => onClick(event, row)
-                : undefined
-            }
-            sx={{ cursor: onClick ? "pointer" : "default" }}
-          >
-            {selectionMode !== "none" && (
-              <TableCell padding="checkbox">
+  const table = () => (
+    <Table sx={{ borderLeft: 1, borderRight: 1, borderColor: 'divider' }} {...props}>
+      <TableHead sx={{ ...(hideHead && { visibility: 'collapse', '--TableCell-borderWidth': 0 }) }}>
+        <TableRow>
+          {selectionMode !== "none" && (
+            <TableCell padding="checkbox" sx={{ width: "40px" }}>
+              {selectionMode === "multiple" && (
                 <Checkbox
-                  checked={isSelected}
-                  onChange={() => handleRowSelection(rowId, row, isSelected)}
+                  checked={selectedAll}
+                  indeterminate={selectedSome}
+                  onChange={handleSelectAll}
                 />
-              </TableCell>
-            )}
-            {columns.map((column) => (
-              <TableCell key={column.name}>
-                {column.formatter ? column.formatter(row, index) : row[column.field]}
-              </TableCell>
-            ))}
-          </TableRow>
-        );
-      })}
-    </TableBody>
-  </Table>)
+              )}
+            </TableCell>
+          )}
+          {columns.map((column) => (
+            <TableCell key={column.name} sx={{ width: column.width, textAlign: column.align }}>
+              {column.hideName ? null : column.name}
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {rows.map((row, index) => {
+          const rowId = row.id || uniqueRowId?.(row);
+          const isSelected = isRowSelected(rowId);
+
+          return (
+            <TableRow
+              key={rowId ?? index}
+              hover={hover}
+              selected={isSelected}
+              onClick={
+                onClick
+                  ? (event) => onClick(event, row)
+                  : undefined
+              }
+              sx={{ cursor: onClick ? "pointer" : "default" }}
+            >
+              {selectionMode !== "none" && (
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    checked={isSelected}
+                    onChange={() => handleRowSelection(rowId, row, isSelected)}
+                  />
+                </TableCell>
+              )}
+              {columns.map((column) => (
+                <TableCell key={column.name}>
+                  {column.formatter ? column.formatter(row, index) : row[column.field]}
+                </TableCell>
+              ))}
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
+  )
 
   return (
     <TableContainer>
-      <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
         <Box>{leftItems}</Box>
         <Box>{rightItems}</Box>
       </Box>
