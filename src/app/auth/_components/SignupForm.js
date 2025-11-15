@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
   username: Yup.string().required('Username is required'),
   contactNumber: Yup.string().required('Contact number is required'),
-  password: Yup.string().required('Password is required'),
+  password: Yup.string().required('Password is required').min(8, 'Password must be at least 8 characters'),
 });
 
 export function SignupForm({ redirect = null }) {
@@ -44,36 +44,36 @@ export function SignupForm({ redirect = null }) {
         ...values,
         authType: 'EMAIL_PASSWORD',
       };
-      const res = await createUser(payload, (error) => {
-        setError(error);
-      });
+      // const res = await createUser(payload, (error) => {
+      //   setError(error);
+      // });
 
-      if (res.success) {
-        const userData = {
-          id: res.data.id,
-          token: res.data.accessToken,
-          name: res.data.name,
-          email: res.data.email,
-          contact_number: res.data.contactNumber,
-          profile_pic: res.data.profileImage,
-          role: res.data.role,
-          workspaces: res?.WorkspaceMembers?.map((member) => member?.Workspace),
-        };
+      // if (res.success) {
+      //   const userData = {
+      //     id: res.data.id,
+      //     token: res.data.accessToken,
+      //     name: res.data.name,
+      //     email: res.data.email,
+      //     contact_number: res.data.contactNumber,
+      //     profile_pic: res.data.profileImage,
+      //     role: res.data.role,
+      //     workspaces: res?.WorkspaceMembers?.map((member) => member?.Workspace),
+      //   };
 
-        // save user data in local storage
-        localStorage.setItem('auth', JSON.stringify({ ...userData }));
-        localStorage.setItem('accessToken', res.data.accessToken);
+      //   // save user data in local storage
+      //   localStorage.setItem('auth', JSON.stringify({ ...userData }));
+      //   localStorage.setItem('accessToken', res.data.accessToken);
 
-        setTokenInCookies(res.data.accessToken);
-        setUserInfo(userData);
+      //   setTokenInCookies(res.data.accessToken);
+      //   setUserInfo(userData);
 
-        if (redirect) {
-          redirect();
-        } else {
-          router.push(paths.home);
-        }
-      }
-      setLoading(false);
+      //   if (redirect) {
+      //     redirect();
+      //   } else {
+      //     router.push(paths.home);
+      //   }
+      // }
+      // setLoading(false);
     },
   });
 

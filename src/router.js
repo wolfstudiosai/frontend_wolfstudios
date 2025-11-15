@@ -217,7 +217,7 @@ export const workspacesItems = [
   },
 ];
 
-export const privateRoutesV3 = [
+export const adminPrivateRoutesV3 = [
   {
     key: 'overview',
     title: 'Dashboard ',
@@ -363,5 +363,76 @@ export const privateRoutesV3 = [
     icon: 'cil:envelope-letter',
     href: paths.private.newsletters,
     allowedRoles: ['admin', 'super_admin'],
+  },
+];
+
+export const userPrivateRoutes = [
+  {
+    key: 'analytics',
+    title: 'Analytics',
+    icon: 'streamline:money-graph-arrow-increase-ascend-growth-up-arrow-stats-graph-right-grow',
+    href: paths.user.analytics,
+  },
+  {
+    key: 'campaign',
+    title: 'Campaign',
+    icon: 'material-symbols-light:campaign-outline',
+    href: paths.user.campaign,
+  },
+  {
+    key: 'content',
+    title: 'Content',
+    icon: 'bx:book-content',
+    // href: paths.user.content,
+    items: [
+      {
+        key: 'my-content',
+        title: 'My Content',
+        icon: 'heroicons:home-modern-solid',
+        href: paths.user.my_content,
+      },
+      {
+        key: 'feedback',
+        title: 'Feedback',
+        icon: 'jam:messages-f',
+        href: paths.user.feedback,
+      }
+    ]
+  },
+  {
+    key: 'brand',
+    title: 'Brand',
+    icon: 'jam:messages-f',
+    href: paths.user.brand,
+  },
+  {
+    key: 'affiliate',
+    title: 'Affiliate',
+    icon: 'jam:messages-f',
+    href: paths.user.affiliate,
+  },
+  {
+    key: 'portfolio',
+    title: 'Portfolio',
+    icon: 'uit:bag',
+    href: paths.user.portfolio,
+  },
+  {
+    key: 'payment',
+    title: 'Payment',
+    icon: 'jam:messages-f',
+    href: paths.user.payment,
+  },
+  {
+    key: 'meeting',
+    title: 'Meeting',
+    icon: 'jam:messages-f',
+    href: paths.user.meeting,
+  },
+  {
+    key: 'profile',
+    title: 'Profile',
+    icon: 'jam:messages-f',
+    href: paths.user.profile,
   },
 ];
